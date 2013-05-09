@@ -21,9 +21,9 @@ class Map(object):
     def __init__(self, location=None, width=950, height=450, fullscreen=False,
                  tiles='OpenStreetMap', API_key=None, max_zoom=18,
                  zoom_start=10, attr=None):
-        '''Create a Map with Treesnake and Leaflet.js
+        '''Create a Map with Folium and Leaflet.js
 
-        Treesnake supports OpenStreetMap, Mapbox, and Cloudmade tiles natively.
+        Folium supports OpenStreetMap, Mapbox, and Cloudmade tiles natively.
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter:
         http://{s}.yourtiles.com/{z}/{x}/{y}.png
