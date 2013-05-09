@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+   <!--[if lte IE 8]>
+       <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+   <![endif]-->
+
+<style>
+
+#map {
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+}
+
+</style>
+</head>
+<body>
+
+        <div id="map" style="width: 950px; height: 450px"></div>
+
+        <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+ 
+<script>
+
+        var map = L.map('map').setView([45.5236, -122.675], 10);
+
+        L.tileLayer(http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png, {
+            maxZoom: 18,
+            attribution: Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors
+        }).addTo(map);
+
+</script>
+
+</body>
+</html>
