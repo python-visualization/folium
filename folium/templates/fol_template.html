@@ -22,7 +22,7 @@
         <div id="map" {{ size }}></div>
 
         <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
- 
+
 <script>
 
         var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
@@ -31,6 +31,11 @@
             maxZoom: {{ max_zoom }},
             attribution: '{{ attr }}'
         }).addTo(map);
+
+        {% for mark, popup in markers %}
+        {{ mark }}
+        {{ popup }}
+        {% endfor %}
 
 </script>
 
