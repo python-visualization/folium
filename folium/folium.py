@@ -48,7 +48,7 @@ class Map(object):
             Maximum zoom depth for the map
         zoom_start: int, default 10
             Initial zoom level for the map
-        attribution: string, default None
+        attr: string, default None
             Map tile attribution; only required if passing custom tile URL
 
         Returns
@@ -111,6 +111,7 @@ class Map(object):
                                           .render())
         else:
             self.template_vars['Tiles'] = tiles
+            self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
     def simple_marker(self, location=None, popup_txt='Pop Text', popup=True):
@@ -180,6 +181,36 @@ class Map(object):
                                   self.mark_cnt['circle'])
 
         self.template_vars.setdefault('markers', []).append(marker)
+
+    def lat_lng_popover(self):
+        '''Enable popovers to display Lat and Lon on each click'''
+
+        latlng_temp = self.env.get_template('lat_lng_popover.txt')
+        self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
+
+    def click_for_marker(self, popup_txt=None):
+        '''Enable the addition of markers via clicking on the map. The marker
+        popup defaults to Lat/Lon, but custom text can be passed via the
+        popup_txt parameter. Doubleclick markers to remove them.
+
+        Parameters
+        ----------
+        popup_text:
+            Custom popup text
+
+        Example
+        -------
+        >>>map.click_for_marker(popup_txt='Your Custom Text')
+
+        '''
+        latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
+        click_temp = self.env.get_template('click_for_marker.txt')
+        if popup_txt:
+            popup = ''.join(['"', popup_txt, '"'])
+        else:
+            popup = latlng
+        click_str = click_temp.render({'popup': popup})
+        self.template_vars.update({'click_pop': click_str})
 
     def _build_map(self):
         '''Build HTML/JS/CSS from Templates'''
