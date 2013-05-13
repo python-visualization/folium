@@ -66,6 +66,9 @@ class Map(object):
 
         '''
 
+        #Map type, default base
+        self.map_type = 'base'
+
         #Mark counter
         self.mark_cnt = {}
 
@@ -212,10 +215,56 @@ class Map(object):
         click_str = click_temp.render({'popup': popup})
         self.template_vars.update({'click_pop': click_str})
 
-    def _build_map(self):
-        '''Build HTML/JS/CSS from Templates'''
+    def geo_json(self, data, line_color='black', line_weight=1,
+                 line_opacity=1, fill_color='blue', fill_opacity=0.6):
+        '''Apply a GeoJSON overlay to your map.
 
-        html_templ = self.env.get_template('fol_template.html')
+        Parameters
+        ----------
+        data: string
+            URL or File path to your GeoJSON data
+        line_color: string, default 'black'
+            GeoJSON geopath line color
+        line_weight: int, default 1
+            GeoJSON geopath line weight
+        line_opacity: float, default 1
+            GeoJSON geopath line opacity, range 0-1
+        fill_color: string, default 'blue'
+            Area fill color
+        fill_opacity: float, default 0.6
+            Area fill opacity, range 0-1
+
+        Output
+        ------
+        GeoJSON data layer in obj.template_vars
+
+        Example
+        -------
+        >>>map.geo_json('us-states.json', line_color='blue', line_weight=3)
+        '''
+
+        #Set map type to geo_json
+        self.map_type = 'geojson'
+
+        style_temp = self.env.get_template('geojson_style.txt')
+        style = style_temp.render({'line_color': line_color,
+                                   'line_weight': line_weight,
+                                   'line_opacity': line_opacity,
+                                   'fill_color': fill_color,
+                                   'fill_opacity': fill_opacity})
+
+        self.template_vars.update({'geo_json': data})
+        self.template_vars.update({'geo_style': style})
+
+    def _build_map(self):
+        '''Build HTML/JS/CSS from Templates given current map type'''
+        map_types = {'base': 'fol_template.html',
+                     'geojson': 'geojson_template.html'}
+
+        #Check current map type
+        type_temp = map_types[self.map_type]
+
+        html_templ = self.env.get_template(type_temp)
         self.HTML = html_templ.render(self.template_vars)
 
     def create_map(self, path='map.html'):
