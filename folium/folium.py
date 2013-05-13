@@ -48,7 +48,7 @@ class Map(object):
             Maximum zoom depth for the map
         zoom_start: int, default 10
             Initial zoom level for the map
-        attribution: string, default None
+        attr: string, default None
             Map tile attribution; only required if passing custom tile URL
 
         Returns
@@ -65,6 +65,9 @@ class Map(object):
                                    mapbox.control-room/{z}/{x}/{y}.png')
 
         '''
+
+        #Map type, default base
+        self.map_type = 'base'
 
         #Mark counter
         self.mark_cnt = {}
@@ -111,6 +114,7 @@ class Map(object):
                                           .render())
         else:
             self.template_vars['Tiles'] = tiles
+            self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
     def simple_marker(self, location=None, popup_txt='Pop Text', popup=True):
@@ -181,10 +185,86 @@ class Map(object):
 
         self.template_vars.setdefault('markers', []).append(marker)
 
-    def _build_map(self):
-        '''Build HTML/JS/CSS from Templates'''
+    def lat_lng_popover(self):
+        '''Enable popovers to display Lat and Lon on each click'''
 
-        html_templ = self.env.get_template('fol_template.html')
+        latlng_temp = self.env.get_template('lat_lng_popover.txt')
+        self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
+
+    def click_for_marker(self, popup_txt=None):
+        '''Enable the addition of markers via clicking on the map. The marker
+        popup defaults to Lat/Lon, but custom text can be passed via the
+        popup_txt parameter. Doubleclick markers to remove them.
+
+        Parameters
+        ----------
+        popup_text:
+            Custom popup text
+
+        Example
+        -------
+        >>>map.click_for_marker(popup_txt='Your Custom Text')
+
+        '''
+        latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
+        click_temp = self.env.get_template('click_for_marker.txt')
+        if popup_txt:
+            popup = ''.join(['"', popup_txt, '"'])
+        else:
+            popup = latlng
+        click_str = click_temp.render({'popup': popup})
+        self.template_vars.update({'click_pop': click_str})
+
+    def geo_json(self, data, line_color='black', line_weight=1,
+                 line_opacity=1, fill_color='blue', fill_opacity=0.6):
+        '''Apply a GeoJSON overlay to your map.
+
+        Parameters
+        ----------
+        data: string
+            URL or File path to your GeoJSON data
+        line_color: string, default 'black'
+            GeoJSON geopath line color
+        line_weight: int, default 1
+            GeoJSON geopath line weight
+        line_opacity: float, default 1
+            GeoJSON geopath line opacity, range 0-1
+        fill_color: string, default 'blue'
+            Area fill color
+        fill_opacity: float, default 0.6
+            Area fill opacity, range 0-1
+
+        Output
+        ------
+        GeoJSON data layer in obj.template_vars
+
+        Example
+        -------
+        >>>map.geo_json('us-states.json', line_color='blue', line_weight=3)
+        '''
+
+        #Set map type to geo_json
+        self.map_type = 'geojson'
+
+        style_temp = self.env.get_template('geojson_style.txt')
+        style = style_temp.render({'line_color': line_color,
+                                   'line_weight': line_weight,
+                                   'line_opacity': line_opacity,
+                                   'fill_color': fill_color,
+                                   'fill_opacity': fill_opacity})
+
+        self.template_vars.update({'geo_json': data})
+        self.template_vars.update({'geo_style': style})
+
+    def _build_map(self):
+        '''Build HTML/JS/CSS from Templates given current map type'''
+        map_types = {'base': 'fol_template.html',
+                     'geojson': 'geojson_template.html'}
+
+        #Check current map type
+        type_temp = map_types[self.map_type]
+
+        html_templ = self.env.get_template(type_temp)
         self.HTML = html_templ.render(self.template_vars)
 
     def create_map(self, path='map.html'):
