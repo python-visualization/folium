@@ -222,7 +222,7 @@ class Map(object):
         Plot a GeoJSON overlay on the base map. There is no requirement
         to bind data (passing just a GeoJSON plots a single-color overlay),
         but there is a data binding option to map your columnar data to
-        different feature layers on a color scale.
+        different feature objects with a color scale.
 
         If data is passed as a Pandas dataframe, the "columns" and "key-on"
         keywords must be included, the first to indicate which DataFrame
@@ -244,8 +244,8 @@ class Map(object):
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
-            If the data is a Pandas DataFrame, the columns to bind to. Assumes
-            that column 1 is the key, and column 2 the data
+            If the data is a Pandas DataFrame, the columns to bind to. Must
+            pass column 1 as the key, and column 2 the data
         quantize_range: list, default None
             Data range for D3 quantize scale. Defaults to [0, data.max()]
         key_on: string, default None
@@ -282,6 +282,7 @@ class Map(object):
                           'gjson_layers']
             for var in reset_vars:
                 self.template_vars.update({var: []})
+            self.mark_cnt['geo_json'] = 0
 
         def json_style(style_cnt, line_color, line_weight, line_opacity,
                        fill_color, fill_opacity, quant_fill):
@@ -299,11 +300,6 @@ class Map(object):
         #Set map type to geo_json
         self.map_type = 'geojson'
 
-        #Create DataFrame with only the relevant columns, save to JSON
-        if isinstance(data, pd.DataFrame):
-            data = pd.concat([data[columns[0]], data[columns[1]]], axis=1)
-        self.json_data = utilities.transform_data(data)
-
         #Set counter for GeoJSON and set iterations
         self.mark_cnt['geojson'] = self.mark_cnt.get('geojson', 0) + 1
 
@@ -314,6 +310,14 @@ class Map(object):
 
         #Get Data binding pieces if available
         if data is not None:
+
+            #Create DataFrame with only the relevant columns
+            if isinstance(data, pd.DataFrame):
+                data = pd.concat([data[columns[0]], data[columns[1]]], axis=1)
+
+            #Save data to JSON
+            self.json_data = utilities.transform_data(data)
+
             #Add data to queue
             d_path = ".defer(d3.json, '{0}')".format(data_path)
             self.template_vars.setdefault('json_paths', []).append(d_path)

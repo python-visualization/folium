@@ -4,9 +4,27 @@ Folium Tests
 -------
 
 '''
+import json
+import pandas as pd
 import nose.tools as nt
 import folium
 from jinja2 import Environment, PackageLoader
+
+def setup_data():
+    '''Import economic data for testing'''
+    with open('us-counties.json', 'r') as f:
+       get_id = json.load(f)
+
+    county_codes = [x['id'] for x in get_id['features']]
+    county_df = pd.DataFrame({'FIPS_Code': county_codes}, dtype=str)
+
+    #Read into Dataframe, cast to string for consistency
+    df = pd.read_csv('us_county_data.csv', na_values=[' '])
+    df['FIPS_Code'] = df['FIPS_Code'].astype(str)
+
+    #Perform an inner join, pad NA's with data from nearest county
+    merged = pd.merge(df, county_df, on='FIPS_Code', how='inner')
+    return merged.fillna(method='pad')
 
 
 class testFolium(object):
@@ -96,6 +114,7 @@ class testFolium(object):
                                     'lon': -122.8})
         popup_2 = popup_templ.render({'pop_name': 'marker_2',
                                       'pop_txt': 'Hi'})
+        assert self.map.mark_cnt['simple'] == 2
         assert self.map.template_vars['markers'][1][0] == mark_2
         assert self.map.template_vars['markers'][1][1] == popup_2
 
@@ -125,6 +144,87 @@ class testFolium(object):
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
         assert self.map.template_vars['markers'][1][0] == circle_2
+
+    def test_latlng_pop(self):
+        '''Test lat/lon popovers'''
+
+        self.map.lat_lng_popover()
+        pop_templ = self.env.get_template('lat_lng_popover.txt').render()
+        assert self.map.template_vars['lat_lng_pop'] == pop_templ
+
+    def test_click_for_marker(self):
+        '''Test click for marker functionality'''
+
+        #lat/lng popover
+        self.map.click_for_marker()
+        click_templ = self.env.get_template('click_for_marker.txt')
+        click = click_templ.render({'popup': ('"Latitude: " + lat + "<br>'
+                                              'Longitude: " + lng ')})
+        assert self.map.template_vars['click_pop'] == click
+
+        #Custom popover
+        self.map.click_for_marker(popup_txt='Test')
+        click_templ = self.env.get_template('click_for_marker.txt')
+        click = click_templ.render({'popup': '"Test"'})
+        assert self.map.template_vars['click_pop'] == click
+
+    def test_geo_json(self):
+        '''Test geojson  method'''
+
+        path = 'us-counties.json'
+        geo_path = ".defer(d3.json, '{0}')".format(path)
+
+        #No data binding
+        self.map.geo_json(path)
+        geo_path = ".defer(d3.json, '{0}')".format(path)
+        map_var = 'gjson_1'
+        style_temp = self.env.get_template('geojson_style.txt')
+        style = style_temp.render({'style': 'style_1',
+                                   'line_color': 'black',
+                                   'line_weight': 1,
+                                   'line_opacity': 1,
+                                   'fill_color': 'blue',
+                                   'fill_opacity': 0.6})
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+                 .format(1, map_var, 'style_1'))
+
+        templ = self.map.template_vars
+        assert self.map.map_type == 'geojson'
+        assert templ['func_vars'][0] == map_var
+        assert templ['geo_styles'][0] == style
+        assert templ['gjson_layers'][0] == layer
+        assert templ['json_paths'][0] == geo_path
+
+        #With DataFrame data binding, default quantize scale
+        data = setup_data()
+        self.map.geo_json(path, data=data,
+                          columns=['FIPS_Code', 'Unemployed_2011'],
+                          key_on='feature.id', fill_color='YlGnBu',
+                          reset=True)
+        geo_path = ".defer(d3.json, '{0}')".format(path)
+        data_path = ".defer(d3.json, '{0}')".format('data.json')
+        map_var = 'gjson_1'
+        data_var = 'data_1'
+        style_temp = self.env.get_template('geojson_style.txt')
+        color = 'color(matchKey(feature.id, data_1))'
+        style = style_temp.render({'style': 'style_1',
+                                   'line_color': 'black',
+                                   'line_weight': 1,
+                                   'line_opacity': 1,
+                                   'fill_color': color,
+                                   'fill_opacity': 0.6})
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+                 .format(1, map_var, 'style_1'))
+
+        templ = self.map.template_vars
+        assert templ['func_vars'] == [data_var, map_var]
+        assert templ['geo_styles'] == style
+        assert templ['gjson_layers'] == layer
+        assert templ['json_paths'] == [data_path, geo_path]
+        assert templ['']
+
+
+
 
 
 
