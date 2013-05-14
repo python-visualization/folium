@@ -20,7 +20,7 @@ import utilities
 class Map(object):
     '''Create a Map with Folium'''
 
-    def __init__(self, location=None, width=960, height=500, fullscreen=False,
+    def __init__(self, location=None, width=960, height=500,
                  tiles='OpenStreetMap', API_key=None, max_zoom=18,
                  zoom_start=10, attr=None):
         '''Create a Map with Folium and Leaflet.js
@@ -38,12 +38,9 @@ class Map(object):
             Width of the map
         height: int, default 500
             Height of the map
-        fill_window = boolean, default False
-            Pass True for map to fill entire browser window, rather than
-            be set to a width or height
         tiles: str, default 'OpenStreetMap'
             Map tileset to use. Can use "OpenStreetMap", "Cloudmade", "Mapbox",
-            or pass a custom URL
+            "Mapbox Dark", or pass a custom URL
         API_key: str, default None
             API key for Cloudmade tiles
         max_zoom: int, default 18
@@ -90,9 +87,6 @@ class Map(object):
         self.template_vars = {'lat': location[0], 'lon': location[1],
                               'size': self._size, 'max_zoom': max_zoom,
                               'zoom_level': zoom_start}
-        if fullscreen:
-            self.map_size = 'fullscreen'
-            self.template_vars.pop('size')
 
         #Tiles
         self.tiles = ''.join(tiles.lower().strip().split())
@@ -116,6 +110,8 @@ class Map(object):
                                           .render())
         else:
             self.template_vars['Tiles'] = tiles
+            if not attr:
+                raise ValueError('Custom tiles must also be passed an attribution')
             self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 

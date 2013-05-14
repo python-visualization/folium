@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<head>
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
+   <!--[if lte IE 8]>
+       <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
+   <![endif]-->
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+   <script src="http://d3js.org/queue.v1.min.js"></script>
+<style>
+
+#map {
+  position:absolute;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+}
+
+</style>
+</head>
+<body>
+
+        <div id="map" {{ size }}></div>
+
+        <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+
+<script>
+
+queue()
+    {%- for load_path in json_paths %}
+    {{ load_path }}
+    {%- endfor %}
+    .await(makeMap)
+
+function makeMap(error, {% for var in func_vars %}{{ var }}
+                 {%- if not loop.last %},{%- endif %}{%- endfor %}) {
+
+    function matchKey(datapoint, key_variable){
+        return(parseFloat(key_variable[0][datapoint]));
+    };
+
+    {% for scale in color_scales %}
+    {{ scale }}
+    {% endfor %}
+
+    var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
+
+    L.tileLayer('{{ Tiles }}', {
+        maxZoom: {{ max_zoom }},
+        attribution: '{{ attr }}'
+    }).addTo(map);
+
+    {% for mark, popup in markers %}
+    {{ mark }}
+    {{ popup }}
+    {% endfor %}
+
+    {{ lat_lng_pop }}
+
+    {{ click_pop }}
+
+    {% for style in geo_styles %}
+    {{ style }}
+    {% endfor %}
+
+    {% for layer in gjson_layers %}
+    {{ layer }}
+    {% endfor %}
+
+};
+
+</script>
+
+</body>
