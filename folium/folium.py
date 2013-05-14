@@ -10,9 +10,11 @@ Make beautiful, interactive maps with Python and Leaflet.js
 from __future__ import print_function
 from __future__ import division
 import codecs
+import json
+import pandas as pd
 from jinja2 import Environment, PackageLoader, Template
 import markers as mk
-import pdb
+import utilities
 
 
 class Map(object):
@@ -215,14 +217,45 @@ class Map(object):
         click_str = click_temp.render({'popup': popup})
         self.template_vars.update({'click_pop': click_str})
 
-    def geo_json(self, data, line_color='black', line_weight=1,
-                 line_opacity=1, fill_color='blue', fill_opacity=0.6):
-        '''Apply a GeoJSON overlay to your map.
+    def geo_json(self, path, data_path='data.json', data=None, columns=None,
+                 quantize_range=None, key_on=None, line_color='black',
+                 line_weight=1, line_opacity=1, fill_color='blue',
+                 fill_opacity=0.6, reset=False):
+        '''Apply a GeoJSON overlay to the map.
+
+        Plot a GeoJSON overlay on the base map. There is no requirement
+        to bind data (passing just a GeoJSON plots a single-color overlay),
+        but there is a data binding option to map your columnar data to
+        different feature layers on a color scale.
+
+        If data is passed as a Pandas dataframe, the "columns" and "key-on"
+        keywords must be included, the first to indicate which DataFrame
+        columns to use, the second to indicate the layer in the GeoJSON
+        on which to key the data. The 'columns' keyword does not need to be
+        passed for a Pandas series.
+
+        Colors are generated from color brewer (http://colorbrewer2.org/)
+        sequential palettes on a D3 quantize scale. The 'color_range'
+        sets the scale range, which defaults to [0: data.max()]
+
 
         Parameters
         ----------
-        data: string
+        path: string
             URL or File path to your GeoJSON data
+        data_path: string
+            Path to write Pandas DataFrame/Series to JSON if binding data
+        data: Pandas DataFrame or Series, default None
+            Data to bind to the GeoJSON.
+        columns: dict or tuple, default None
+            If the data is a Pandas DataFrame, the columns to bind to. Assumes
+            that column 1 is the key, and column 2 the data
+        quantize_range: list, default None
+            Data range for D3 quantize scale. Defaults to [0, data.max()]
+        key_on: string, default None
+            Variable in the GeoJSON file to bind the data to. Must always
+            start with 'feature' and be in JavaScript objection notation.
+            Ex: 'feature.id' or 'feature.properties.statename'
         line_color: string, default 'black'
             GeoJSON geopath line color
         line_weight: int, default 1
@@ -230,9 +263,14 @@ class Map(object):
         line_opacity: float, default 1
             GeoJSON geopath line opacity, range 0-1
         fill_color: string, default 'blue'
-            Area fill color
+            Area fill color. Can pass a hex code, or if you are binding data,
+            one of the following color brewer palettes:
+            'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
+            'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
         fill_opacity: float, default 0.6
             Area fill opacity, range 0-1
+        reset: boolean, default False
+            Remove all current geoJSON layers, start with new layer
 
         Output
         ------
@@ -243,18 +281,81 @@ class Map(object):
         >>>map.geo_json('us-states.json', line_color='blue', line_weight=3)
         '''
 
+        if reset:
+            reset_vars = ['json_paths', 'func_vars', 'color_scales', 'geo_styles',
+                          'gjson_layers']
+            for var in reset_vars:
+                self.template_vars.update({var: []})
+
+        def json_style(style_cnt, line_color, line_weight, line_opacity,
+                       fill_color, fill_opacity, quant_fill):
+            '''Generate JSON styling function from template'''
+            style_temp = self.env.get_template('geojson_style.txt')
+            style = style_temp.render({'style': style_cnt,
+                                       'line_color': line_color,
+                                       'line_weight': line_weight,
+                                       'line_opacity': line_opacity,
+                                       'fill_color': fill_color,
+                                       'fill_opacity': fill_opacity,
+                                       'quantize_fill': quant_fill})
+            return style
+
         #Set map type to geo_json
         self.map_type = 'geojson'
 
-        style_temp = self.env.get_template('geojson_style.txt')
-        style = style_temp.render({'line_color': line_color,
-                                   'line_weight': line_weight,
-                                   'line_opacity': line_opacity,
-                                   'fill_color': fill_color,
-                                   'fill_opacity': fill_opacity})
+        #Create DataFrame with only the relevant columns, save to JSON
+        if isinstance(data, pd.DataFrame):
+            data = pd.concat([data[columns[0]], data[columns[1]]], axis=1)
+        self.json_data = utilities.transform_data(data)
 
-        self.template_vars.update({'geo_json': data})
-        self.template_vars.update({'geo_style': style})
+        #Set counter for GeoJSON and set iterations
+        self.mark_cnt['geojson'] = self.mark_cnt.get('geojson', 0) + 1
+
+        #Get JSON map layer template pieces
+        geo_path = ".defer(d3.json, '{0}')".format(path)
+        map_var = '_'.join(['gjson', str(self.mark_cnt['geojson'])])
+        style_count = '_'.join(['style', str(self.mark_cnt['geojson'])])
+
+        #Get Data binding pieces if available
+        if data is not None:
+            #Add data to queue
+            d_path = ".defer(d3.json, '{0}')".format(data_path)
+            self.template_vars.setdefault('json_paths', []).append(d_path)
+
+            #Add data variable to makeMap function
+            data_var = '_'.join(['data', str(self.mark_cnt['geojson'])])
+            self.template_vars.setdefault('func_vars', []).append(data_var)
+
+            self.json_data = utilities.transform_data(data)
+            self.json_path = data_path
+
+            #D3 Color scale
+            domain = quantize_range or [0, data[columns[1]].max()]
+            if not utilities.color_brewer(fill_color):
+                raise ValueError('Please pass a valid color brewer code to '
+                                 'fill_local. See docstring for valid codes.')
+            d3range = utilities.color_brewer(fill_color)
+            color_temp = self.env.get_template('d3_quantize.txt')
+            scale = color_temp.render({'domain': domain,
+                                       'range': d3range})
+            self.template_vars.setdefault('color_scales', []).append(scale)
+
+            #Style with color brewer colors
+            matchColor = 'color(matchKey({0}, {1}))'.format(key_on, data_var)
+            style = json_style(style_count, line_color, line_weight,
+                               line_opacity, None, fill_opacity, matchColor)
+        else:
+            self.json_data = None
+            style = json_style(style_count, line_color, line_weight,
+                               line_opacity, fill_color, fill_opacity, None)
+
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+                 .format(self.mark_cnt['geojson'], map_var, style_count))
+
+        self.template_vars.setdefault('json_paths', []).append(geo_path)
+        self.template_vars.setdefault('func_vars', []).append(map_var)
+        self.template_vars.setdefault('geo_styles', []).append(style)
+        self.template_vars.setdefault('gjson_layers', []).append(layer)
 
     def _build_map(self):
         '''Build HTML/JS/CSS from Templates given current map type'''
@@ -268,9 +369,13 @@ class Map(object):
         self.HTML = html_templ.render(self.template_vars)
 
     def create_map(self, path='map.html'):
-        '''Write Map output to HTML'''
+        '''Write Map output to HTML and data output to JSON if available'''
 
         self._build_map()
 
         with codecs.open(path, 'w', 'utf-8') as f:
             f.write(self.HTML)
+
+        if self.json_data:
+            with open(self.json_path, 'w') as g:
+                json.dump(self.json_data, g)

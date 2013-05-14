@@ -1,9 +1,13 @@
-function style(feature) {
+function {{ style }}(feature) {
     return {
-        color: '{{ line_color }}',
+        {%- if quantize_fill %}
+        fillColor: {{ quantize_fill }},
+        {%- else %}
+        fillColor: '{{ fill_color }}',
+        {%- endif %}
         weight: {{ line_weight }},
         opacity: {{ line_opacity }},
-        fillColor: '{{ fill_color }}',
+        color: '{{ line_color }}',
         fillOpacity: {{ fill_opacity }}
     };
 }

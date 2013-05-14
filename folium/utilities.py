@@ -1,4 +1,4 @@
-'# -*- coding: utf-8 -*-'
+# -*- coding: utf-8 -*-
 '''
 GeoJson
 -------
@@ -7,8 +7,10 @@ Folium module to apply GeoJSON data to maps, as well as bind data for
 choropleth mapping.
 
 '''
+
 from __future__ import print_function
 from __future__ import division
+import pandas as pd
 from jinja2 import Environment, PackageLoader, Template
 
 
@@ -17,7 +19,7 @@ def get_templates():
     return Environment(loader=PackageLoader('folium', 'templates'))
 
 
-def color_brewer(len, scheme):
+def color_brewer(color_code):
     '''Generate a colorbrewer color scheme of length 'len', type 'scheme.
     Live examples can be seen at http://colorbrewer2.org/'''
 
@@ -46,8 +48,7 @@ def color_brewer(len, scheme):
                'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A',
                           '#E31A1C', '#B10026']}
 
-    colors = schemes[scheme]
-    return colors[0:len]
+    return schemes.get(color_code, None)
 
 def transform_data(data):
     '''Transform Pandas DataFrame into JSON format
@@ -63,8 +64,7 @@ def transform_data(data):
 
     Example
     -------
-    >>>vis.transform_data(df)
-    >>>vis.json_data
+    >>>transform_data(df)
 
     '''
 
@@ -90,3 +90,5 @@ def transform_data(data):
         json_data = [{type_check(x): type_check(y) for x, y in data.iteritems()}]
     elif isinstance(data, pd.DataFrame):
         json_data = [{y: z for x, y, z in data.itertuples()}]
+
+    return json_data

@@ -5,7 +5,7 @@
        <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
    <![endif]-->
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
+   <script src="http://d3js.org/queue.v1.min.js"></script>
 <style>
 
 #map {
@@ -26,9 +26,22 @@
 
 <script>
 
-d3.json('{{ geo_json }}', function(error, json) {
+queue()
+    {%- for load_path in json_paths %}
+    {{ load_path }}
+    {%- endfor %}
+    .await(makeMap)
 
-    mapdata = json;
+function makeMap(error, {% for var in func_vars %}{{ var }}
+                 {%- if not loop.last %},{%- endif %}{%- endfor %}) {
+
+    function matchKey(datapoint, key_variable){
+        return(parseFloat(key_variable[0][datapoint]));
+    };
+
+    {% for scale in color_scales %}
+    {{ scale }}
+    {% endfor %}
 
     var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
 
@@ -46,11 +59,15 @@ d3.json('{{ geo_json }}', function(error, json) {
 
     {{ click_pop }}
 
-    {{ geo_style }}
+    {% for style in geo_styles %}
+    {{ style }}
+    {% endfor %}
 
-    gJson_layer = L.geoJson(mapdata, {style: style}).addTo(map);
+    {% for layer in gjson_layers %}
+    {{ layer }}
+    {% endfor %}
 
-});
+};
 
 </script>
 
