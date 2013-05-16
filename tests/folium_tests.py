@@ -8,12 +8,14 @@ import json
 import pandas as pd
 import nose.tools as nt
 import folium
+import jinja2
 from jinja2 import Environment, PackageLoader
+
 
 def setup_data():
     '''Import economic data for testing'''
     with open('us-counties.json', 'r') as f:
-       get_id = json.load(f)
+        get_id = json.load(f)
 
     county_codes = [x['id'] for x in get_id['features']]
     county_df = pd.DataFrame({'FIPS_Code': county_codes}, dtype=str)
@@ -25,6 +27,13 @@ def setup_data():
     #Perform an inner join, pad NA's with data from nearest county
     merged = pd.merge(df, county_df, on='FIPS_Code', how='inner')
     return merged.fillna(method='pad')
+
+
+def test_get_templates():
+    '''Test template getting'''
+
+    env = folium.utilities.get_templates()
+    nt.assert_is_instance(env, jinja2.environment.Environment)
 
 
 class testFolium(object):
@@ -195,8 +204,14 @@ class testFolium(object):
         assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'][0] == geo_path
 
-        #With DataFrame data binding, default quantize scale
+        #Data binding incorrect color value error
         data = setup_data()
+        nt.assert_raises(ValueError, self.map.geo_json,
+                         path, data=data,
+                         columns=['FIPS_Code', 'Unemployed_2011'],
+                         key_on='feature.id', fill_color='blue')
+
+        #With DataFrame data binding, default quantize scale
         self.map.geo_json(path, data=data,
                           columns=['FIPS_Code', 'Unemployed_2011'],
                           key_on='feature.id', fill_color='YlGnBu',
@@ -205,43 +220,45 @@ class testFolium(object):
         data_path = ".defer(d3.json, '{0}')".format('data.json')
         map_var = 'gjson_1'
         data_var = 'data_1'
+
+        domain = [0, data['Unemployed_2011'].max()]
+        d3range = folium.utilities.color_brewer('YlGnBu')
+        color_temp = self.env.get_template('d3_quantize.txt')
+        scale = color_temp.render({'domain': domain,
+                                   'range': d3range})
+
         style_temp = self.env.get_template('geojson_style.txt')
         color = 'color(matchKey(feature.id, data_1))'
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
                                    'line_weight': 1,
                                    'line_opacity': 1,
-                                   'fill_color': color,
+                                   'quantize_fill': color,
                                    'fill_opacity': 0.6})
+
         layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
                  .format(1, map_var, 'style_1'))
 
         templ = self.map.template_vars
         assert templ['func_vars'] == [data_var, map_var]
-        assert templ['geo_styles'] == style
-        assert templ['gjson_layers'] == layer
+        assert templ['geo_styles'][0] == style
+        assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'] == [data_path, geo_path]
-        assert templ['']
+        assert templ['color_scales'][0] == scale
 
+    def test_map_build(self):
+        '''Test map build'''
 
+        #Standard map
+        self.map._build_map()
+        html_templ = self.env.get_template('fol_template.html')
 
+        tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'attr': (u'Map data \xa9 <a href="http://openstreetmap.org">'
+                'OpenStreetMap</a> contributors'),
+                'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
+                'size': 'style="width: 900px; height: 400px"',
+                'zoom_level': 4}
+        HTML = html_templ.render(tmpl)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        assert self.map.HTML == HTML
