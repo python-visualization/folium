@@ -10,6 +10,7 @@ choropleth mapping.
 
 from __future__ import print_function
 from __future__ import division
+import math
 import pandas as pd
 from jinja2 import Environment, PackageLoader, Template
 
@@ -92,3 +93,31 @@ def transform_data(data):
         json_data = [{y: z for x, y, z in data.itertuples()}]
 
     return json_data
+
+def split_six(series=None):
+  '''Given a Pandas Series, get a domain of values from zero to the 90% quantile
+  rounded to the nearest order-of-magnitude integer. For example, 2100 is rounded
+  to 2000, 2790 to 3000.
+
+  Parameters
+  ----------
+  series: Pandas series, default None
+
+  Returns
+  -------
+  list
+
+  '''
+
+  def base(x):
+    if x > 0:
+        base = pow(10, math.floor(math.log10(x)))
+        return round(x/base)*base
+    else:
+        return 0
+
+  quant_90 = series.quantile(q=0.9)
+  five = quant_90/5
+  return [int(base(y)) for y in range(0, int(quant_90), int(five))]
+
+

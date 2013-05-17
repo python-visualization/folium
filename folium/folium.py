@@ -215,9 +215,9 @@ class Map(object):
         self.template_vars.update({'click_pop': click_str})
 
     def geo_json(self, path, data_path='data.json', data=None, columns=None,
-                 quantize_range=None, key_on=None, line_color='black',
+                 threshold_range=None, key_on=None, line_color='black',
                  line_weight=1, line_opacity=1, fill_color='blue',
-                 fill_opacity=0.6, reset=False):
+                 fill_opacity=0.6, legend_name=None, reset=False):
         '''Apply a GeoJSON overlay to the map.
 
         Plot a GeoJSON overlay on the base map. There is no requirement
@@ -247,8 +247,10 @@ class Map(object):
         columns: dict or tuple, default None
             If the data is a Pandas DataFrame, the columns to bind to. Must
             pass column 1 as the key, and column 2 the data
-        quantize_range: list, default None
-            Data range for D3 quantize scale. Defaults to [0, data.max()]
+        threshold_range: list, default 'auto'
+            Data range for D3 threshold scale. Passing 'auto' will divide the
+            scale into 6 bins, rounding to nearest order-of-magnitude integer
+            to keep the legend clean. Ex: 2340 will round to 2000.
         key_on: string, default None
             Variable in the GeoJSON file to bind the data to. Must always
             start with 'feature' and be in JavaScript objection notation.
@@ -266,6 +268,8 @@ class Map(object):
             'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
         fill_opacity: float, default 0.6
             Area fill opacity, range 0-1
+        legend_name: string, default None
+            Title for data legend. If not passed, defaults to columns[1].
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
 
@@ -331,15 +335,25 @@ class Map(object):
             self.json_path = data_path
 
             #D3 Color scale
-            domain = quantize_range or [0, data[columns[1]].max()]
+            series = data[columns[1]]
+            domain = threshold_range or utilities.split_six(series=series)
             if not utilities.color_brewer(fill_color):
                 raise ValueError('Please pass a valid color brewer code to '
                                  'fill_local. See docstring for valid codes.')
-            d3range = utilities.color_brewer(fill_color)
-            color_temp = self.env.get_template('d3_quantize.txt')
-            scale = color_temp.render({'domain': domain,
-                                       'range': d3range})
-            self.template_vars.setdefault('color_scales', []).append(scale)
+
+            palette = utilities.color_brewer(fill_color)
+            d3range = palette[0: len(domain) + 1]
+
+            color_temp = self.env.get_template('d3_threshold.js')
+            d3scale = color_temp.render({'domain': domain,
+                                         'range': d3range})
+            self.template_vars.setdefault('color_scales', []).append(d3scale)
+
+            #Create legend
+            leg_templ = self.env.get_template('d3_map_legend.js')
+            legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
+                                       'caption': columns[1]})
+            self.template_vars.setdefault('map_legends', []).append(legend)
 
             #Style with color brewer colors
             matchColor = 'color(matchKey({0}, {1}))'.format(key_on, data_var)

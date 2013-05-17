@@ -1,3 +1,3 @@
-var color = d3.scale.quantize()
+var color = d3.scale.threshold()
               .domain({{ domain }})
               .range({{ range }});
