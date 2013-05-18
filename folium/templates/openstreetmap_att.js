@@ -1,0 +1,1 @@
+Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors

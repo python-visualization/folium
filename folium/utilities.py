@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 '''
-GeoJson
+Utilities
 -------
 
-Folium module to apply GeoJSON data to maps, as well as bind data for
-choropleth mapping.
+Utility module for Folium helper functions.
 
 '''
 
 from __future__ import print_function
 from __future__ import division
+import math
 import pandas as pd
 import numpy as np
 from jinja2 import Environment, PackageLoader, Template
@@ -18,6 +18,16 @@ from jinja2 import Environment, PackageLoader, Template
 def get_templates():
     '''Get Jinja templates'''
     return Environment(loader=PackageLoader('folium', 'templates'))
+
+
+def popup_render(popup_temp, mark_name, count, popup, popup_on=True):
+    '''Popup renderer'''
+    if popup_on:
+        popup = popup_temp.render({'pop_name': mark_name + str(count),
+                                   'pop_txt': popup})
+    else:
+        popup = 'var no_pop = null;'
+    return popup
 
 
 def color_brewer(color_code):
@@ -91,7 +101,32 @@ def transform_data(data):
     if isinstance(data, pd.Series):
         json_data = [{type_check(x): type_check(y) for x, y in data.iteritems()}]
     elif isinstance(data, pd.DataFrame):
-        json_data = [{type_check(y): type_check(z)
-                     for x, y, z in data.itertuples()}]
+        json_data = [{type_check(y): type_check(z) for x, y, z in data.itertuples()}]
 
     return json_data
+
+
+def split_six(series=None):
+    '''Given a Pandas Series, get a domain of values from zero to the 90% quantile
+    rounded to the nearest order-of-magnitude integer. For example, 2100 is rounded
+    to 2000, 2790 to 3000.
+
+    Parameters
+    ----------
+    series: Pandas series, default None
+
+    Returns
+    -------
+    list
+
+    '''
+
+    def base(x):
+        if x > 0:
+            base = pow(10, math.floor(math.log10(x)))
+            return round(x/base)*base
+        else:
+            return 0
+
+    quants = [0, 0.5, 0.75, 0.85, 0.9]
+    return [base(series.quantile(x)) for x in quants]

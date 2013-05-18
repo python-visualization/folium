@@ -6,12 +6,17 @@
    <script src="http://d3js.org/queue.v1.min.js"></script>
 <style>
 
-#map {
-  position:absolute;
-  top:0;
-  bottom:0;
-  right:0;
-  left:0;
+.legend {
+    padding: 0px 0px;
+    font: 10px sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.key path {
+  display: none;
 }
 
 </style>
@@ -61,6 +66,10 @@ function makeMap(error, {% for var in func_vars %}{{ var }}
 
     {% for layer in gjson_layers %}
     {{ layer }}
+    {% endfor %}
+
+    {% for legend in map_legends %}
+    {{ legend }}
     {% endfor %}
 
 };

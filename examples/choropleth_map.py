@@ -24,9 +24,19 @@ df['FIPS_Code'] = df['FIPS_Code'].astype(str)
 merged = pd.merge(df, county_df, on='FIPS_Code', how='inner')
 merged = merged.fillna(method='pad')
 
-map = folium.Map(location=[39.8282, -98.5795], zoom_start=4)
-map.geo_json(county_geo, data=merged,
-             columns=['FIPS_Code', 'Unemployed_2011'], key_on='feature.id',
-             fill_color='YlGnBu', line_opacity=0.4,
-             quantize_range=[0, 5000])
+#Number of employed with auto scale
+map = folium.Map(location=[48, -102], zoom_start=3)
+map.geo_json(geo_path=county_geo, data=merged,
+             columns=['FIPS_Code', 'Employed_2011'], key_on='feature.id',
+             fill_color='YlOrRd', fill_opacity=0.7, line_opacity=0.2)
+map.create_map()
+
+#Unemployment with custom defined scale
+map = folium.Map(location=[40, -99], zoom_start=4)
+map.geo_json(geo_path=county_geo, data=merged,
+             columns=['FIPS_Code', 'Unemployment_rate_2011'],
+             key_on='feature.id',
+             threshold_scale=[0, 5, 7, 9, 11, 13],
+             fill_color='YlGnBu', line_opacity=0.3,
+             legend_name='Unemployment Rate 2011 (%)')
 map.create_map()

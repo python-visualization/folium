@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <head>
    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
-   <!--[if lte IE 8]>
-       <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.ie.css" />
-   <![endif]-->
+   <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
    <script src="http://d3js.org/queue.v1.min.js"></script>
 <style>
 
-#map {
-  position:absolute;
-  top:0;
-  bottom:0;
-  right:0;
-  left:0;
+.legend {
+    padding: 0px 0px;
+    font: 10px sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+
+.key path {
+  display: none;
 }
 
 </style>
@@ -21,8 +24,6 @@
 <body>
 
         <div id="map" {{ size }}></div>
-
-        <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
 
 <script>
 
@@ -65,6 +66,10 @@ function makeMap(error, {% for var in func_vars %}{{ var }}
 
     {% for layer in gjson_layers %}
     {{ layer }}
+    {% endfor %}
+
+    {% for legend in map_legends %}
+    {{ legend }}
     {% endfor %}
 
 };
