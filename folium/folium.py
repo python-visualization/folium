@@ -12,8 +12,7 @@ from __future__ import division
 import codecs
 import json
 import pandas as pd
-from jinja2 import Environment, PackageLoader, Template
-import markers as mk
+from jinja2 import Environment, PackageLoader
 import utilities
 
 
@@ -33,22 +32,22 @@ class Map(object):
         Parameters
         ----------
         location: tuple or list, default None
-            Latitude and Longitude of Map (Northing, Easting)
+            Latitude and Longitude of Map (Northing, Easting).
         width: int, default 960
-            Width of the map
+            Width of the map.
         height: int, default 500
-            Height of the map
+            Height of the map.
         tiles: str, default 'OpenStreetMap'
             Map tileset to use. Can use "OpenStreetMap", "Cloudmade", "Mapbox",
-            "Mapbox Dark", or pass a custom URL
+            "Mapbox Dark", or pass a custom URL.
         API_key: str, default None
-            API key for Cloudmade tiles
+            API key for Cloudmade tiles.
         max_zoom: int, default 18
-            Maximum zoom depth for the map
+            Maximum zoom depth for the map.
         zoom_start: int, default 10
-            Initial zoom level for the map
+            Initial zoom level for the map.
         attr: string, default None
-            Map tile attribution; only required if passing custom tile URL
+            Map tile attribution; only required if passing custom tile URL.
 
         Returns
         -------
@@ -61,7 +60,8 @@ class Map(object):
                             tiles='Cloudmade', API_key='YourKey')
         >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
                             tiles='http://a.tiles.mapbox.com/v3/
-                                   mapbox.control-room/{z}/{x}/{y}.png')
+                                   mapbox.control-room/{z}/{x}/{y}.png',
+                            attr: 'Mapbox attribution')
 
         '''
 
@@ -100,9 +100,9 @@ class Map(object):
         self.tile_types = {}
         for tile in self.default_tiles:
             self.tile_types[tile] = {'templ':
-                                     self.env.get_template(tile + '_tiles.txt'),
+                                     self.env.get_template(tile + '_tiles.js'),
                                      'attr':
-                                     self.env.get_template(tile + '_att.txt')}
+                                     self.env.get_template(tile + '_att.js')}
 
         if self.tiles in self.tile_types:
             self.template_vars['Tiles'] = (self.tile_types[self.tiles]['templ']
@@ -116,7 +116,7 @@ class Map(object):
             self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
-    def simple_marker(self, location=None, popup_txt='Pop Text', popup=True):
+    def simple_marker(self, location=None, popup='Pop Text', popup_on=True):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text.
 
@@ -124,10 +124,10 @@ class Map(object):
         ----------
         location: tuple or list, default None
             Latitude and Longitude of Marker (Northing, Easting)
-        popup_txt: string, default 'Pop Text'
-            Input text for popup. HTML tags can be passed to style text:
-            "<b>Popup text</b><br>Line 2"
-        popup: boolean, default True
+        popup: string or Vincent object, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a Vincent object for visualization.
+        popup_on: boolean, default True
             Pass false for no popup information on the marker
 
         Returns
@@ -136,16 +136,25 @@ class Map(object):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup_txt='Portland, OR')
+        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
 
         '''
-        self.mark_cnt['simple'] = self.mark_cnt.get('simple', 0) + 1
-        marker = mk.simple_marker(location, popup_txt, popup,
-                                  self.mark_cnt['simple'])
-        self.template_vars.setdefault('markers', []).append(marker)
+        self.mark_cnt['simple'] = count = self.mark_cnt.get('simple', 0) + 1
 
-    def circle_marker(self, location=None, radius=500, popup_txt='Pop Text',
-                      popup=True, line_color='black', fill_color='black',
+        mark_temp = self.env.get_template('simple_marker.js')
+        popup_temp = self.env.get_template('simple_popup.js')
+
+        #Get marker and popup
+        marker = mark_temp.render({'marker': 'marker_' + str(count),
+                                   'lat': location[0], 'lon': location[1]})
+
+        popup = utilities.popup_render(popup_temp, 'marker_', count, popup,
+                                       popup_on=popup_on)
+
+        self.template_vars.setdefault('markers', []).append((marker, popup))
+
+    def circle_marker(self, location=None, radius=500, popup='Pop Text',
+                      popup_on=True, line_color='black', fill_color='black',
                       fill_opacity=0.6):
         '''Create a simple circle marker on the map, with optional popup text.
 
@@ -155,10 +164,10 @@ class Map(object):
             Latitude and Longitude of Marker (Northing, Easting)
         radius: int, default 500
             Circle radius, in pixels
-        popup_txt: string, default 'Pop Text'
-            Input text for popup. HTML tags can be passed to style text:
-            "<b>Popup text</b><br>Line 2"
-        popup: boolean, default True
+        popup: string or Vincent object, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a Vincent object for visualization.
+        popup_on: boolean, default True
             Pass false for no popup information on the marker
         line_color: string, default black
             Line color. Can pass hex value here as well.
@@ -177,23 +186,33 @@ class Map(object):
                              radius=1000, popup_txt='Portland, OR')
 
         '''
-        self.mark_cnt['circle'] = self.mark_cnt.get('circle', 0) + 1
-        marker = mk.circle_marker(location, radius, line_color, fill_color,
-                                  fill_opacity, popup_txt, popup,
-                                  self.mark_cnt['circle'])
+        self.mark_cnt['circle'] = count = self.mark_cnt.get('circle', 0) + 1
 
-        self.template_vars.setdefault('markers', []).append(marker)
+        circle_temp = self.env.get_template('circle_marker.js')
+        popup_temp = self.env.get_template('simple_popup.js')
+
+        circle = circle_temp.render({'circle': 'circle_' + str(count),
+                                     'radius': radius,
+                                     'lat': location[0], 'lon': location[1],
+                                     'line_color': line_color,
+                                     'fill_color': fill_color,
+                                     'fill_opacity': fill_opacity})
+
+        popup = utilities.popup_render(popup_temp, 'circle_', count, popup,
+                                       popup_on=popup_on)
+
+        self.template_vars.setdefault('markers', []).append((circle, popup))
 
     def lat_lng_popover(self):
         '''Enable popovers to display Lat and Lon on each click'''
 
-        latlng_temp = self.env.get_template('lat_lng_popover.txt')
+        latlng_temp = self.env.get_template('lat_lng_popover.js')
         self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
 
     def click_for_marker(self, popup_txt=None):
         '''Enable the addition of markers via clicking on the map. The marker
         popup defaults to Lat/Lon, but custom text can be passed via the
-        popup_txt parameter. Doubleclick markers to remove them.
+        popup_txt parameter. Double click markers to remove them.
 
         Parameters
         ----------
@@ -206,7 +225,7 @@ class Map(object):
 
         '''
         latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
-        click_temp = self.env.get_template('click_for_marker.txt')
+        click_temp = self.env.get_template('click_for_marker.js')
         if popup_txt:
             popup = ''.join(['"', popup_txt, '"'])
         else:
@@ -214,10 +233,11 @@ class Map(object):
         click_str = click_temp.render({'popup': popup})
         self.template_vars.update({'click_pop': click_str})
 
-    def geo_json(self, path, data_path='data.json', data=None, columns=None,
-                 threshold_range=None, key_on=None, line_color='black',
-                 line_weight=1, line_opacity=1, fill_color='blue',
-                 fill_opacity=0.6, legend_name=None, reset=False):
+    def geo_json(self, geo_path=None, data_path='data.json', data=None,
+                 columns=None, key_on=None, threshold_scale=None,
+                 fill_color='blue', fill_opacity=0.6, line_color='black',
+                 line_weight=1, line_opacity=1, legend_name=None,
+                 reset=False):
         '''Apply a GeoJSON overlay to the map.
 
         Plot a GeoJSON overlay on the base map. There is no requirement
@@ -232,42 +252,44 @@ class Map(object):
         passed for a Pandas series.
 
         Colors are generated from color brewer (http://colorbrewer2.org/)
-        sequential palettes on a D3 quantize scale. The 'color_range'
-        sets the scale range, which defaults to [0: data.max()]
+        sequential palettes on a D3 threshold scale. The scale defaults to the
+        following quantiles: [0, 0.5, 0.75, 0.85, 0.9]. A custom scale can be
+        passed to `threshold_scale` of length <=6, in order to match the
+        color brewer range.
 
 
         Parameters
         ----------
-        path: string
+        geo_path: string, default None
             URL or File path to your GeoJSON data
-        data_path: string
+        data_path: string, default 'data.json'
             Path to write Pandas DataFrame/Series to JSON if binding data
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
-            If the data is a Pandas DataFrame, the columns to bind to. Must
-            pass column 1 as the key, and column 2 the data
-        threshold_range: list, default 'auto'
-            Data range for D3 threshold scale. Passing 'auto' will divide the
-            scale into 6 bins, rounding to nearest order-of-magnitude integer
-            to keep the legend clean. Ex: 2340 will round to 2000.
+            If the data is a Pandas DataFrame, the columns of data to be bound.
+            Must pass column 1 as the key, and column 2 the values.
         key_on: string, default None
             Variable in the GeoJSON file to bind the data to. Must always
             start with 'feature' and be in JavaScript objection notation.
-            Ex: 'feature.id' or 'feature.properties.statename'
-        line_color: string, default 'black'
-            GeoJSON geopath line color
-        line_weight: int, default 1
-            GeoJSON geopath line weight
-        line_opacity: float, default 1
-            GeoJSON geopath line opacity, range 0-1
+            Ex: 'feature.id' or 'feature.properties.statename'.
+        threshold_scale: list, default None
+            Data range for D3 threshold scale. Defaults to the following range
+            of quantiles: [0, 0.5, 0.75, 0.85, 0.9], rounded to the nearest
+            order-of-magnitude integer. Ex: 270 rounds to 200, 5600 to 6000.
         fill_color: string, default 'blue'
-            Area fill color. Can pass a hex code, or if you are binding data,
-            one of the following color brewer palettes:
+            Area fill color. Can pass a hex code, color name, or if you are
+            binding data, one of the following color brewer palettes:
             'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
             'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
         fill_opacity: float, default 0.6
-            Area fill opacity, range 0-1
+            Area fill opacity, range 0-1.
+        line_color: string, default 'black'
+            GeoJSON geopath line color.
+        line_weight: int, default 1
+            GeoJSON geopath line weight.
+        line_opacity: float, default 1
+            GeoJSON geopath line opacity, range 0-1.
         legend_name: string, default None
             Title for data legend. If not passed, defaults to columns[1].
         reset: boolean, default False
@@ -279,12 +301,15 @@ class Map(object):
 
         Example
         -------
-        >>>map.geo_json('us-states.json', line_color='blue', line_weight=3)
+        >>>map.geo_json(geo_path='us-states.json', line_color='blue', line_weight=3)
+        >>>map_geo(geo_path='geo.json', data=df, columns=['Data 1', 'Data 2'],
+                   key_on='feature.properties.myvalue', fill_color='PuBu',
+                   threshold_scale=[0, 20, 30, 40, 50, 60])
         '''
 
         if reset:
             reset_vars = ['json_paths', 'func_vars', 'color_scales', 'geo_styles',
-                          'gjson_layers']
+                          'gjson_layers', 'map_legends']
             for var in reset_vars:
                 self.template_vars.update({var: []})
             self.mark_cnt['geo_json'] = 0
@@ -292,7 +317,7 @@ class Map(object):
         def json_style(style_cnt, line_color, line_weight, line_opacity,
                        fill_color, fill_opacity, quant_fill):
             '''Generate JSON styling function from template'''
-            style_temp = self.env.get_template('geojson_style.txt')
+            style_temp = self.env.get_template('geojson_style.js')
             style = style_temp.render({'style': style_cnt,
                                        'line_color': line_color,
                                        'line_weight': line_weight,
@@ -306,10 +331,10 @@ class Map(object):
         self.map_type = 'geojson'
 
         #Set counter for GeoJSON and set iterations
-        self.mark_cnt['geojson'] = self.mark_cnt.get('geojson', 0) + 1
+        self.mark_cnt['geojson'] = self.mark_cnt.get('geo_json', 0) + 1
 
         #Get JSON map layer template pieces
-        geo_path = ".defer(d3.json, '{0}')".format(path)
+        geo_path = ".defer(d3.json, '{0}')".format(geo_path)
         map_var = '_'.join(['gjson', str(self.mark_cnt['geojson'])])
         style_count = '_'.join(['style', str(self.mark_cnt['geojson'])])
 
@@ -336,7 +361,9 @@ class Map(object):
 
             #D3 Color scale
             series = data[columns[1]]
-            domain = threshold_range or utilities.split_six(series=series)
+            domain = threshold_scale or utilities.split_six(series=series)
+            if len(domain) > 6:
+                raise ValueError('The threshold scale must be of length <= 6')
             if not utilities.color_brewer(fill_color):
                 raise ValueError('Please pass a valid color brewer code to '
                                  'fill_local. See docstring for valid codes.')
@@ -350,9 +377,10 @@ class Map(object):
             self.template_vars.setdefault('color_scales', []).append(d3scale)
 
             #Create legend
+            name = legend_name or columns[1]
             leg_templ = self.env.get_template('d3_map_legend.js')
             legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
-                                       'caption': columns[1]})
+                                       'caption': name})
             self.template_vars.setdefault('map_legends', []).append(legend)
 
             #Style with color brewer colors

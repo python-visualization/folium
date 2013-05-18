@@ -57,7 +57,7 @@ class testFolium(object):
         nt.assert_raises(ValueError, callableObj=folium.Map)
 
         tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': (u'Map data \xa9 <a href="http://openstreetmap.org">'
+                'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
@@ -105,8 +105,8 @@ class testFolium(object):
     def test_simple_marker(self):
         '''Test simple marker addition'''
 
-        mark_templ = self.env.get_template('simple_marker.txt')
-        popup_templ = self.env.get_template('simple_popup.txt')
+        mark_templ = self.env.get_template('simple_marker.js')
+        popup_templ = self.env.get_template('simple_popup.js')
 
         #Single Simple marker
         self.map.simple_marker(location=[45.50, -122.7])
@@ -118,7 +118,7 @@ class testFolium(object):
         assert self.map.template_vars['markers'][0][1] == popup_1
 
         #Test Simple marker addition
-        self.map.simple_marker(location=[45.60, -122.8], popup_txt='Hi')
+        self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
         mark_2 = mark_templ.render({'marker': 'marker_2', 'lat': 45.60,
                                     'lon': -122.8})
         popup_2 = popup_templ.render({'pop_name': 'marker_2',
@@ -128,16 +128,16 @@ class testFolium(object):
         assert self.map.template_vars['markers'][1][1] == popup_2
 
         #Test no popup
-        self.map.simple_marker(location=[45.60, -122.8], popup=False)
-        assert self.map.template_vars['markers'][2][1] == 'var no_pop = null'
+        self.map.simple_marker(location=[45.60, -122.8], popup_on=False)
+        assert self.map.template_vars['markers'][2][1] == 'var no_pop = null;'
 
     def test_circle_marker(self):
         '''Test circle marker additions'''
 
-        circ_templ = self.env.get_template('circle_marker.txt')
+        circ_templ = self.env.get_template('circle_marker.js')
 
         #Single Circle marker
-        self.map.circle_marker(location=[45.60, -122.8], popup_txt='Hi')
+        self.map.circle_marker(location=[45.60, -122.8], popup='Hi')
         circle_1 = circ_templ.render({'circle': 'circle_1', 'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
                                       'line_color': 'black',
@@ -146,7 +146,7 @@ class testFolium(object):
         assert self.map.template_vars['markers'][0][0] == circle_1
 
         #Second circle marker
-        self.map.circle_marker(location=[45.70, -122.9], popup_txt='Hi')
+        self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
         circle_2 = circ_templ.render({'circle': 'circle_2', 'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
                                       'line_color': 'black',
@@ -158,7 +158,7 @@ class testFolium(object):
         '''Test lat/lon popovers'''
 
         self.map.lat_lng_popover()
-        pop_templ = self.env.get_template('lat_lng_popover.txt').render()
+        pop_templ = self.env.get_template('lat_lng_popover.js').render()
         assert self.map.template_vars['lat_lng_pop'] == pop_templ
 
     def test_click_for_marker(self):
@@ -166,14 +166,14 @@ class testFolium(object):
 
         #lat/lng popover
         self.map.click_for_marker()
-        click_templ = self.env.get_template('click_for_marker.txt')
+        click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': ('"Latitude: " + lat + "<br>'
                                               'Longitude: " + lng ')})
         assert self.map.template_vars['click_pop'] == click
 
         #Custom popover
         self.map.click_for_marker(popup_txt='Test')
-        click_templ = self.env.get_template('click_for_marker.txt')
+        click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': '"Test"'})
         assert self.map.template_vars['click_pop'] == click
 
@@ -184,10 +184,10 @@ class testFolium(object):
         geo_path = ".defer(d3.json, '{0}')".format(path)
 
         #No data binding
-        self.map.geo_json(path)
+        self.map.geo_json(geo_path=path)
         geo_path = ".defer(d3.json, '{0}')".format(path)
         map_var = 'gjson_1'
-        style_temp = self.env.get_template('geojson_style.txt')
+        style_temp = self.env.get_template('geojson_style.js')
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
                                    'line_weight': 1,
@@ -211,8 +211,17 @@ class testFolium(object):
                          columns=['FIPS_Code', 'Unemployed_2011'],
                          key_on='feature.id', fill_color='blue')
 
-        #With DataFrame data binding, default quantize scale
-        self.map.geo_json(path, data=data,
+        #Data binding threshold_scale too long
+        data = setup_data()
+        nt.assert_raises(ValueError, self.map.geo_json,
+                         path, data=data,
+                         columns=['FIPS_Code', 'Unemployed_2011'],
+                         key_on='feature.id',
+                         threshold_scale=[1, 2, 3, 4, 5, 6, 7],
+                         fill_color='YlGnBu')
+
+        #With DataFrame data binding, default threshold scale
+        self.map.geo_json(geo_path=path, data=data,
                           columns=['FIPS_Code', 'Unemployed_2011'],
                           key_on='feature.id', fill_color='YlGnBu',
                           reset=True)
@@ -221,13 +230,14 @@ class testFolium(object):
         map_var = 'gjson_1'
         data_var = 'data_1'
 
-        domain = [0, data['Unemployed_2011'].max()]
-        d3range = folium.utilities.color_brewer('YlGnBu')
-        color_temp = self.env.get_template('d3_quantize.txt')
+        domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
+        palette = folium.utilities.color_brewer('YlGnBu')
+        d3range = palette[0: len(domain) + 1]
+        color_temp = self.env.get_template('d3_threshold.js')
         scale = color_temp.render({'domain': domain,
                                    'range': d3range})
 
-        style_temp = self.env.get_template('geojson_style.txt')
+        style_temp = self.env.get_template('geojson_style.js')
         color = 'color(matchKey(feature.id, data_1))'
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
@@ -254,7 +264,7 @@ class testFolium(object):
         html_templ = self.env.get_template('fol_template.html')
 
         tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': (u'Map data \xa9 <a href="http://openstreetmap.org">'
+                'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
                 'OpenStreetMap</a> contributors'),
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
