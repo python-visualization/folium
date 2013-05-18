@@ -1,1 +1,1 @@
-var {{ marker }} = L.marker([{{ lat }}, {{ lon }}]).addTo(map);
+var {{ marker }} = L.marker([{{ lat }}, {{ lon }}]);

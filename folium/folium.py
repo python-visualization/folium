@@ -24,7 +24,7 @@ class Map(object):
                  zoom_start=10, attr=None):
         '''Create a Map with Folium and Leaflet.js
 
-        Folium supports OpenStreetMap, Mapbox, and Cloudmade tiles natively.
+        Folium supports OpenStreetMap, Stamen, and Cloudmade tiles natively.
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter:
         http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -38,8 +38,8 @@ class Map(object):
         height: int, default 500
             Height of the map.
         tiles: str, default 'OpenStreetMap'
-            Map tileset to use. Can use "OpenStreetMap", "Cloudmade", "Mapbox",
-            "Mapbox Dark", or pass a custom URL.
+            Map tileset to use. Can use "OpenStreetMap", "Cloudmade",
+            "Stamen Toner", "Stamen Terrain", or pass a custom URL.
         API_key: str, default None
             API key for Cloudmade tiles.
         max_zoom: int, default 18
@@ -96,14 +96,14 @@ class Map(object):
             raise ValueError('You must pass an API key if using Cloudmade'
                              ' tiles.')
 
-        self.default_tiles = ['openstreetmap', 'mapbox', 'cloudmade',
-                              'mapboxdark']
+        self.default_tiles = ['openstreetmap', 'cloudmade', 'stamenterrain',
+                              'stamentoner']
         self.tile_types = {}
         for tile in self.default_tiles:
             self.tile_types[tile] = {'templ':
-                                     self.env.get_template(tile + '_tiles.js'),
+                                     self.env.get_template(tile + '_tiles.txt'),
                                      'attr':
-                                     self.env.get_template(tile + '_att.js')}
+                                     self.env.get_template(tile + '_att.txt')}
 
         if self.tiles in self.tile_types:
             self.template_vars['Tiles'] = (self.tile_types[self.tiles]['templ']
@@ -143,16 +143,20 @@ class Map(object):
         self.mark_cnt['simple'] = count = self.mark_cnt.get('simple', 0) + 1
 
         mark_temp = self.env.get_template('simple_marker.js')
-        popup_temp = self.env.get_template('simple_popup.js')
 
         #Get marker and popup
         marker = mark_temp.render({'marker': 'marker_' + str(count),
                                    'lat': location[0], 'lon': location[1]})
 
-        popup = utilities.popup_render(popup_temp, 'marker_', count, popup,
+        popup_out = self._popup_render(popup=popup, mk_name='marker_',
+                                       count=count,
                                        popup_on=popup_on)
 
-        self.template_vars.setdefault('markers', []).append((marker, popup))
+        add_mark = 'map.addLayer(marker_{0})'.format(count)
+
+        self.template_vars.setdefault('markers', []).append((marker,
+                                                             popup_out,
+                                                             add_mark))
 
     def circle_marker(self, location=None, radius=500, popup='Pop Text',
                       popup_on=True, line_color='black', fill_color='black',
@@ -190,7 +194,6 @@ class Map(object):
         self.mark_cnt['circle'] = count = self.mark_cnt.get('circle', 0) + 1
 
         circle_temp = self.env.get_template('circle_marker.js')
-        popup_temp = self.env.get_template('simple_popup.js')
 
         circle = circle_temp.render({'circle': 'circle_' + str(count),
                                      'radius': radius,
@@ -199,10 +202,15 @@ class Map(object):
                                      'fill_color': fill_color,
                                      'fill_opacity': fill_opacity})
 
-        popup = utilities.popup_render(popup_temp, 'circle_', count, popup,
+        popup_out = self._popup_render(popup=popup, mk_name='marker_',
+                                       count=count,
                                        popup_on=popup_on)
 
-        self.template_vars.setdefault('markers', []).append((circle, popup))
+        add_mark = 'map.addLayer(circle_{0})'.format(count)
+
+        self.template_vars.setdefault('markers', []).append((circle,
+                                                             popup_out,
+                                                             add_mark))
 
     def lat_lng_popover(self):
         '''Enable popovers to display Lat and Lon on each click'''
@@ -210,7 +218,7 @@ class Map(object):
         latlng_temp = self.env.get_template('lat_lng_popover.js')
         self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
 
-    def click_for_marker(self, popup_txt=None):
+    def click_for_marker(self, popup=None):
         '''Enable the addition of markers via clicking on the map. The marker
         popup defaults to Lat/Lon, but custom text can be passed via the
         popup_txt parameter. Double click markers to remove them.
@@ -227,14 +235,62 @@ class Map(object):
         '''
         latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
         click_temp = self.env.get_template('click_for_marker.js')
-        if popup_txt:
-            popup = ''.join(['"', popup_txt, '"'])
+        if popup:
+            popup_txt = ''.join(['"', popup, '"'])
         else:
-            popup = latlng
-        click_str = click_temp.render({'popup': popup})
+            popup_txt = latlng
+        click_str = click_temp.render({'popup': popup_txt})
         self.template_vars.update({'click_pop': click_str})
 
-    def geo_json(self, geo_path=None, data_path='data.json', data=None,
+    def _popup_render(self, popup=None, mk_name=None, count=None,
+                      popup_on=True):
+        '''Popup renderer: either text or Vincent/Vega.
+
+        Parameters
+        ----------
+        popup: str or Vincent tuple, default None
+            String for text popup, or tuple of (Vincent object, json_path)
+        mk_name: str, default None
+            Type of marker. Simple, Circle, etc.
+        count: int, default None
+            Count of marker
+        popup_on: boolean, default True
+            If False, no popup will be rendered
+        '''
+        if not popup_on:
+            return 'var no_pop = null;'
+        else:
+            if isinstance(popup, str):
+                popup_temp = self.env.get_template('simple_popup.js')
+                return popup_temp.render({'pop_name': mk_name + str(count),
+                                          'pop_txt': popup})
+            elif isinstance(popup, tuple):
+                #Update template with JS libs
+                vega_temp = self.env.get_template('vega_ref.js').render()
+                jquery_temp = self.env.get_template('jquery_ref.js').render()
+                d3_temp = self.env.get_template('d3_ref.js').render()
+                vega_parse = self.env.get_template('vega_parse.js').render()
+                self.template_vars.update({'vega': vega_temp,
+                                           'd3': d3_temp,
+                                           'jquery': jquery_temp,
+                                           'vega_parse': vega_parse})
+
+                #Parameters for Vega template
+                vega = popup[0]
+                mark = ''.join([mk_name, str(count)])
+                json_out = popup[1]
+                div_id = popup[1].split('.')[0]
+                width, height = (vega.width + 75), (vega.height + 50)
+                max_width = self.map_size['width']
+                vega_id = '#' + div_id
+                popup_temp = self.env.get_template('vega_marker.js')
+                return popup_temp.render({'mark': mark, 'div_id': div_id,
+                                          'width': width, 'height': height,
+                                          'max_width': max_width,
+                                          'json_out': json_out,
+                                          'vega_id': vega_id})
+
+    def geo_json(self, geo_path=None, data_out='data.json', data=None,
                  columns=None, key_on=None, threshold_scale=None,
                  fill_color='blue', fill_opacity=0.6, line_color='black',
                  line_weight=1, line_opacity=1, legend_name=None,
@@ -263,7 +319,7 @@ class Map(object):
         ----------
         geo_path: string, default None
             URL or File path to your GeoJSON data
-        data_path: string, default 'data.json'
+        data_out: string, default 'data.json'
             Path to write Pandas DataFrame/Series to JSON if binding data
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
@@ -350,7 +406,7 @@ class Map(object):
             self.json_data = utilities.transform_data(data)
 
             #Add data to queue
-            d_path = ".defer(d3.json, '{0}')".format(data_path)
+            d_path = ".defer(d3.json, '{0}')".format(data_out)
             self.template_vars.setdefault('json_paths', []).append(d_path)
 
             #Add data variable to makeMap function
@@ -358,7 +414,7 @@ class Map(object):
             self.template_vars.setdefault('func_vars', []).append(data_var)
 
             self.json_data = utilities.transform_data(data)
-            self.json_path = data_path
+            self.json_path = data_out
 
             #D3 Color scale
             series = data[columns[1]]

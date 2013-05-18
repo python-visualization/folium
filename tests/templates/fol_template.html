@@ -2,8 +2,8 @@
 <head>
    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
-   {{ vega }}
    {{ d3 }}
+   {{ vega }}
    {{ jquery}}
 
 
@@ -25,6 +25,8 @@
 
 <script>
 
+{{ vega_parse }}
+
 var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
 
 L.tileLayer('{{ Tiles }}', {
@@ -32,9 +34,10 @@ L.tileLayer('{{ Tiles }}', {
     attribution: '{{ attr }}'
 }).addTo(map);
 
-{% for mark, popup in markers %}
+{% for mark, popup, add_mark in markers %}
 {{ mark }}
 {{ popup }}
+{{ add_mark }}
 {% endfor %}
 
 {{ lat_lng_pop }}

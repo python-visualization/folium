@@ -1,1 +1,0 @@
-Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, Imagery (c) <a href="http://mapbox.com">MapBox</a>

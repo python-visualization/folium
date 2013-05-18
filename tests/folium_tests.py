@@ -7,9 +7,10 @@ Folium Tests
 import json
 import pandas as pd
 import nose.tools as nt
-import folium
 import jinja2
 from jinja2 import Environment, PackageLoader
+import folium
+import vincent
 
 
 def setup_data():
@@ -79,7 +80,7 @@ class testFolium(object):
     def test_builtin_tile(self):
         '''Test custom maptiles'''
 
-        default_tiles = ['OpenStreetMap', 'Mapbox', 'Mapbox Dark']
+        default_tiles = ['OpenStreetMap', 'Stamen Terrain', 'Stamen Toner']
         for tiles in default_tiles:
             map = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
             tiles = ''.join(tiles.lower().strip().split())
@@ -172,10 +173,24 @@ class testFolium(object):
         assert self.map.template_vars['click_pop'] == click
 
         #Custom popover
-        self.map.click_for_marker(popup_txt='Test')
+        self.map.click_for_marker(popup='Test')
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': '"Test"'})
         assert self.map.template_vars['click_pop'] == click
+
+    def test_vega_popup(self):
+        '''Test vega popups'''
+
+        vis = vincent.Bar()
+
+        self.map.simple_marker(location=[45.60, -122.8], popup=(vis, 'vis.json'))
+        popup_temp = self.env.get_template('vega_marker.js')
+        vega = popup_temp.render({'mark': 'marker_1', 'div_id': 'vis',
+                                  'width': 475, 'height': 250,
+                                  'max_width': 900,
+                                  'json_out': 'vis.json',
+                                  'vega_id': '#vis'})
+        assert self.map.template_vars['markers'][0][1] == vega
 
     def test_geo_json(self):
         '''Test geojson  method'''

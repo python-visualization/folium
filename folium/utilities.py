@@ -20,16 +20,6 @@ def get_templates():
     return Environment(loader=PackageLoader('folium', 'templates'))
 
 
-def popup_render(popup_temp, mark_name, count, popup, popup_on=True):
-    '''Popup renderer'''
-    if popup_on:
-        popup = popup_temp.render({'pop_name': mark_name + str(count),
-                                   'pop_txt': popup})
-    else:
-        popup = 'var no_pop = null;'
-    return popup
-
-
 def color_brewer(color_code):
     '''Generate a colorbrewer color scheme of length 'len', type 'scheme.
     Live examples can be seen at http://colorbrewer2.org/'''
