@@ -65,8 +65,9 @@ class Map(object):
 
         '''
 
-        #Map type, default base
+        #Init Map type and JSON
         self.map_type = 'base'
+        self.json_data = None
 
         #Mark counter
         self.mark_cnt = {}
@@ -282,7 +283,7 @@ class Map(object):
                           'gjson_layers']
             for var in reset_vars:
                 self.template_vars.update({var: []})
-            self.mark_cnt['geo_json'] = 0
+            self.mark_cnt['geojson'] = 0
 
         def json_style(style_cnt, line_color, line_weight, line_opacity,
                        fill_color, fill_opacity, quant_fill):
@@ -376,6 +377,6 @@ class Map(object):
         with codecs.open(path, 'w', 'utf-8') as f:
             f.write(self.HTML)
 
-        if self.json_data:
+        if self.json_data is not None:
             with open(self.json_path, 'w') as g:
                 json.dump(self.json_data, g)

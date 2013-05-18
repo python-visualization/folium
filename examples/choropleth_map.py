@@ -24,7 +24,7 @@ df['FIPS_Code'] = df['FIPS_Code'].astype(str)
 merged = pd.merge(df, county_df, on='FIPS_Code', how='inner')
 merged = merged.fillna(method='pad')
 
-map = folium.Map(location=[45.5236, -122.6750], zoom_start=3)
+map = folium.Map(location=[39.8282, -98.5795], zoom_start=4)
 map.geo_json(county_geo, data=merged,
              columns=['FIPS_Code', 'Unemployed_2011'], key_on='feature.id',
              fill_color='YlGnBu', line_opacity=0.4,

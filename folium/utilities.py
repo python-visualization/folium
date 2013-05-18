@@ -11,6 +11,7 @@ choropleth mapping.
 from __future__ import print_function
 from __future__ import division
 import pandas as pd
+import numpy as np
 from jinja2 import Environment, PackageLoader, Template
 
 
@@ -49,6 +50,7 @@ def color_brewer(color_code):
                           '#E31A1C', '#B10026']}
 
     return schemes.get(color_code, None)
+
 
 def transform_data(data):
     '''Transform Pandas DataFrame into JSON format
@@ -89,6 +91,7 @@ def transform_data(data):
     if isinstance(data, pd.Series):
         json_data = [{type_check(x): type_check(y) for x, y in data.iteritems()}]
     elif isinstance(data, pd.DataFrame):
-        json_data = [{y: z for x, y, z in data.itertuples()}]
+        json_data = [{type_check(y): type_check(z)
+                     for x, y, z in data.itertuples()}]
 
     return json_data
