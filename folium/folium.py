@@ -69,8 +69,9 @@ class Map(object):
         self.map_type = 'base'
         self.json_data = None
 
-        #Mark counter
+        #Mark counter and JSON
         self.mark_cnt = {}
+        self.json_data = None
 
         #Location
         if not location:
