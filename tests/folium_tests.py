@@ -202,6 +202,7 @@ class testFolium(object):
         self.map.geo_json(geo_path=path)
         geo_path = ".defer(d3.json, '{0}')".format(path)
         map_var = 'gjson_1'
+        layer_var = 'gjson_1'
         style_temp = self.env.get_template('geojson_style.js')
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
@@ -210,7 +211,7 @@ class testFolium(object):
                                    'fill_color': 'blue',
                                    'fill_opacity': 0.6})
         layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
-                 .format(1, map_var, 'style_1'))
+                 .format(1, layer_var, 'style_1'))
 
         templ = self.map.template_vars
         assert self.map.map_type == 'geojson'
@@ -243,6 +244,7 @@ class testFolium(object):
         geo_path = ".defer(d3.json, '{0}')".format(path)
         data_path = ".defer(d3.json, '{0}')".format('data.json')
         map_var = 'gjson_1'
+        layer_var = 'gjson_1'
         data_var = 'data_1'
 
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
@@ -262,7 +264,7 @@ class testFolium(object):
                                    'fill_opacity': 0.6})
 
         layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
-                 .format(1, map_var, 'style_1'))
+                 .format(1, layer_var, 'style_1'))
 
         templ = self.map.template_vars
         assert templ['func_vars'] == [data_var, map_var]
@@ -270,6 +272,23 @@ class testFolium(object):
         assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'] == [data_path, geo_path]
         assert templ['color_scales'][0] == scale
+
+        #Adding TopoJSON as additional layer
+        path_2 = 'or_counties_topo.json'
+        self.map.geo_json(geo_path=path_2, topojson='objects.or_counties_geo')
+        geo_path_2 = ".defer(d3.json, '{0}')".format(path_2)
+        map_var_2 = 'tjson_2'
+        layer_var_2 = 'topo_2'
+        topo_func = ('topo_2 = topojson.feature(tjson_2,'
+                     ' tjson_2.objects.or_counties_geo);')
+        layer_2 = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+                   .format(2, layer_var_2, 'style_2'))
+
+        templ = self.map.template_vars
+        assert templ['func_vars'] == [data_var, map_var, map_var_2]
+        assert templ['gjson_layers'][1] == layer_2
+        assert templ['json_paths'] == [data_path, geo_path, geo_path_2]
+        assert templ['topo_convert'][0] == topo_func
 
     def test_map_build(self):
         '''Test map build'''

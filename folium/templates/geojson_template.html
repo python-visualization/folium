@@ -4,6 +4,7 @@
    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
    <script src="http://d3js.org/queue.v1.min.js"></script>
+   {{ topojson }}
    {{ vega }}
    {{ jquery }}
 <style>
@@ -37,6 +38,10 @@ queue()
 
 function makeMap(error, {% for var in func_vars %}{{ var }}
                  {%- if not loop.last %},{%- endif %}{%- endfor %}) {
+
+    {% for topo in topo_convert %}
+    {{ topo }}
+    {% endfor %}
 
     {{ vega_parse }}
 
