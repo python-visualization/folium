@@ -100,15 +100,16 @@ map_4.create_map(path='mtrainier.html')
 
 Folium also supports the Polygon marker set from the [Leaflet-DVF](https://github.com/humangeo/leaflet-dvf):
 ```python
-buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
-                      tiles='Stamen Terrain')
-buoy_map.polygon_marker(location=[47.3489, -124.708], fill_color='#43d9de',
-                        radius=12, popup=(vis1, 'vis1.json'))
-buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
-                        radius=12, popup=(vis2, 'vis2.json'))
-buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
-                        radius=12, popup=(vis3, 'vis3.json'))
-buoy_map.create_map(path='NOAA_buoys.html')
+map_5 = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
+map_5.polygon_marker(location=[45.5012, -122.6655], popup='Ross Island Bridge',
+                     fill_color='#132b5e', num_sides=3, radius=10)
+map_5.polygon_marker(location=[45.5132, -122.6708], popup='Hawthorne Bridge',
+                     fill_color='#45647d', num_sides=4, radius=10)
+map_5.polygon_marker(location=[45.5275, -122.6692], popup='Steel Bridge',
+                     fill_color='#769d96', num_sides=6, radius=10)
+map_5.polygon_marker(location=[45.5318, -122.6745], popup='Broadway Bridge',
+                     fill_color='#769d96', num_sides=8, radius=10)
+map_5.create_map(path='bridges.html')
 ```
 ![polygon](http://farm8.staticflickr.com/7405/8754817131_24285bff5f_c.jpg)
 
@@ -120,12 +121,12 @@ Folium enables passing [vincent](https://github.com/wrobstory/vincent) visualiza
 ```python
 buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
                       tiles='Stamen Terrain')
-buoy_map.polygon_marker([47.3489, -124.708], fill_color='#43d9de', radius=12,
-                        popup=(vis1, 'vis1.json'))
-buoy_map.polygon_marker([44.639, -124.5339], fill_color='#43d9de', radius=12,
-                        popup=(vis2, 'vis2.json'))
-buoy_map.polygon_marker([46.216, -124.1280], fill_color='#43d9de', radius=12,
-                        popup=(vis3, 'vis3.json'))
+buoy_map.polygon_marker(location=[47.3489, -124.708], fill_color='#43d9de',
+                        radius=12, popup=(vis1, 'vis1.json'))
+buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
+                        radius=12, popup=(vis2, 'vis2.json'))
+buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
+                        radius=12, popup=(vis3, 'vis3.json'))
 buoy_map.create_map(path='NOAA_buoys.html')
 ```
 ![vincent](http://farm4.staticflickr.com/3699/8754817119_4a14ebc3fe_c.jpg)
