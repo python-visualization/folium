@@ -256,6 +256,11 @@ class Map(object):
             Rotation angle in degrees
         radius: int, default 15
             Marker radius, in pixels
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'data_path.json')
+        popup_on: boolean, default True
+            Pass false for no popup information on the marker
 
         Returns
         -------

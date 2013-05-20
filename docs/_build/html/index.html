@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Folium: Python Data. Leaflet.js Maps. &mdash; Folium 0.1.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/f6.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Folium 0.1.1 documentation" href="#" /><link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic|Source+Code+Pro' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Folium 0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Folium: Python Data. Leaflet.js Maps.</a><ul>
+<li><a class="reference internal" href="#concept">Concept</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#base-maps">Base Maps</a><ul>
+<li><a class="reference internal" href="#tilesets">Tilesets</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#markers">Markers</a><ul>
+<li><a class="reference internal" href="#simple-markers">Simple Markers</a></li>
+<li><a class="reference internal" href="#circle-markers">Circle Markers</a></li>
+<li><a class="reference internal" href="#polygon-markers">Polygon Markers</a></li>
+<li><a class="reference internal" href="#lat-lng-popups">Lat/Lng Popups</a></li>
+<li><a class="reference internal" href="#click-for-marker">Click-for-Marker</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="folium-python-data-leaflet-js-maps">
+<h1>Folium: Python Data. Leaflet.js Maps.<a class="headerlink" href="#folium-python-data-leaflet-js-maps" title="Permalink to this headline">¶</a></h1>
+<p>Folium builds on the data wrangling strengths of the Python ecosystem and the mapping strengths of the Leaflet.js library. Manipulate your data in Python, then visualize it in on a Leaflet map via Folium.</p>
+<div class="section" id="concept">
+<h2>Concept<a class="headerlink" href="#concept" title="Permalink to this headline">¶</a></h2>
+<p>Folium makes it easy to visualize data that&#8217;s been manipulated in Python on an interactive Leaflet map. It enables both the binding of data to a map for choropleth visualizations as well as passing Vincent/Vega visualizations as markers on the map.</p>
+<p>The library has a number of built-in tilesets from OpenStreetMap, Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API keys. Folium supports both GeoJSON and TopoJSON overlays, as well as the binding of data to those overlays to create choropleth maps with color-brewer color schemes.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><pre>$pip install folium</pre>
+</div>
+</div>
+<div class="section" id="base-maps">
+<h2>Base Maps<a class="headerlink" href="#base-maps" title="Permalink to this headline">¶</a></h2>
+<p>To create a base map, simply pass starting coordinates to Folium, then create the map:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">folium</span>
+<span class="n">map_osm</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5236</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6750</span><span class="p">])</span>
+<span class="n">map_osm</span><span class="o">.</span><span class="n">create_map</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s">&#39;osm.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5545719">Live example</a></p>
+<p>Folium defaults to 960 x 500 pixels (to make it easy to generate maps for <a class="reference external" href="http://bl.ocks.org">bl.ocks</a> ). You can modify the width and height easily:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5236</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6750</span><span class="p">],</span>  <span class="n">width</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Folium also supports two zoom parameters:</p>
+<ul class="simple">
+<li>zoom_start:  The starting zoom level.</li>
+<li>max_zoom:  The maximum possible zoom.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5236</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6750</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">max_zoom</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="tilesets">
+<h3>Tilesets<a class="headerlink" href="#tilesets" title="Permalink to this headline">¶</a></h3>
+<p>Folium natively supports five tilesets with no API key or custom URL required. You can pass any of the following strings to the <cite>tiles</cite> keyword:</p>
+<ul class="simple">
+<li><cite>&#8216;OpenStreetMap&#8217;</cite></li>
+<li><cite>&#8216;Mapbox Bright&#8217;</cite>  (Limited levels of zoom)</li>
+<li><cite>&#8216;Mapbox Control Room&#8217;</cite> (Limited levels of zoom)</li>
+<li><cite>&#8216;Stamen Terrain&#8217;</cite></li>
+<li><cite>&#8216;Stamen Toner&#8217;</cite></li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s">&#39;Mapbox Control Room&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Folium also supports both Mapbox and Cloudmade tiles with an API key passed:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5236</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6750</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s">&#39;Mapbox&#39;</span><span class="p">,</span>
+                 <span class="n">API_key</span><span class="o">=</span><span class="s">&#39;wrobstory.map-12345678&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, Folium supports passing your own tile URL and attribution:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tileset</span> <span class="o">=</span> <span class="s">r&#39;http://{s}.tiles.yourtiles.com/{z}/{x}/{y}.png&#39;</span>
+<span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.372</span><span class="p">,</span> <span class="o">-</span><span class="mf">121.6972</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                 <span class="n">tiles</span><span class="o">=</span><span class="n">tileset</span><span class="p">,</span> <span class="n">attr</span><span class="o">=</span><span class="s">&#39;My Data Attribution&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="markers">
+<h2>Markers<a class="headerlink" href="#markers" title="Permalink to this headline">¶</a></h2>
+<p>Folium supports of a number of different marker types, including simple markers, circle markers, and polygon markers. All markers support both text and <a class="reference external" href="https://github.com/wrobstory/vincent">Vincent</a> visualizations as popups.</p>
+<div class="section" id="simple-markers">
+<h3>Simple Markers<a class="headerlink" href="#simple-markers" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609718">Live example</a></p>
+<p>The simplest type is the standard Leaflet marker, which is referred to as the <cite>simple_marker</cite> in Folium:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">simple_marker</span><span class="p">([</span><span class="mf">45.3288</span><span class="p">,</span> <span class="o">-</span><span class="mf">121.6625</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The marker can be passed a text string (which can be HTML formatted) for the popup message:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">map_1</span><span class="o">.</span><span class="n">simple_marker</span><span class="p">([</span><span class="mf">45.3288</span><span class="p">,</span> <span class="o">-</span><span class="mf">121.6625</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s">&#39;My Popup Message&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To turn the popup off, pass <cite>False</cite> to the <cite>popup_on</cite> keyword:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">map_1</span><span class="o">.</span><span class="n">simple_marker</span><span class="p">([</span><span class="mf">45.3288</span><span class="p">,</span> <span class="o">-</span><span class="mf">121.6625</span><span class="p">],</span> <span class="n">popup_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="circle-markers">
+<h3>Circle Markers<a class="headerlink" href="#circle-markers" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609747">Live example</a></p>
+<p>Circle markers are exactly what they sound like- simple circles on the map. The user can define the following parameters:</p>
+<ul class="simple">
+<li><cite>radius</cite>: Circle radius in pixels</li>
+<li><cite>line_color</cite>: Outer line color, either a simple color (blue, black, etc), or a hex string</li>
+<li><cite>fill_color</cite>: Inner fill color, again simple or hex</li>
+<li><cite>fill_opacity</cite>: Inner fill opacity</li>
+</ul>
+<p>The popup rules covered in simple markers apply for all other markers types:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">circle_marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5215</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6261</span><span class="p">],</span> <span class="n">radius</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                  <span class="n">popup</span><span class="o">=</span><span class="s">&#39;My Popup Info&#39;</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s">&#39;#3186cc&#39;</span><span class="p">,</span>
+                  <span class="n">fill_color</span><span class="o">=</span><span class="s">&#39;#3186cc&#39;</span><span class="p">,</span> <span class="n">fill_opacity</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="polygon-markers">
+<h3>Polygon Markers<a class="headerlink" href="#polygon-markers" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609786">Live example</a></p>
+<p>Polygon markers are based on the <a class="reference external" href="https://github.com/humangeo/leaflet-dvf">Leaflet DVF Framework</a>.They take a number of parameters that define their color and shape:</p>
+<ul class="simple">
+<li><cite>line_color</cite>: Outer line color, either a simple color (blue, black, etc), or a hex string</li>
+<li><cite>line_opacity</cite>: Outer line opacity</li>
+<li><cite>line_weight</cite>: Outer line weight, in pixels</li>
+<li><cite>fill_color</cite>: Inner fill color, again simple or hex</li>
+<li><cite>fill_opacity</cite>: Inner fill opacity</li>
+<li><cite>num_sides</cite>: Number of sides on the marker. <cite>3</cite> creates a triangle, <cite>6</cite> a hexagon, etc.</li>
+<li><cite>rotation</cite>: Rotation of the marker in degrees</li>
+<li><cite>radius</cite>: Circle radius in pixels</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">map_5</span><span class="o">.</span><span class="n">polygon_marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5012</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.6655</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s">&#39;Ross Island Bridge&#39;</span><span class="p">,</span>
+                     <span class="n">fill_color</span><span class="o">=</span><span class="s">&#39;#132b5e&#39;</span><span class="p">,</span> <span class="n">num_sides</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="lat-lng-popups">
+<h3>Lat/Lng Popups<a class="headerlink" href="#lat-lng-popups" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609756">Live example</a></p>
+<p>Folium supports a convenience function that will enable Lat/Lng popups anywhere you click on the map, using the following method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">lat_lng_popover</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="click-for-marker">
+<h3>Click-for-Marker<a class="headerlink" href="#click-for-marker" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609762">Live example</a></p>
+<p>Use the <cite>click_for_marker</cite> method to enable a marker on each map click, with custom text if desired:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">click_for_marker</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="s">&#39;Waypoint&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Contents:</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Folium 0.1.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Rob Story.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    </div>
+  </body>
+</html>
