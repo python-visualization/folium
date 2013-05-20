@@ -42,8 +42,10 @@ vis3.to_json('vis3.json')
 #Map all buoys
 buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
                       tiles='Stamen Terrain')
-buoy_map.lat_lng_popover()
-buoy_map.simple_marker([47.3489, -124.708], popup=(vis1, 'vis1.json'))
-buoy_map.simple_marker([44.639, -124.5339], popup=(vis2, 'vis2.json'))
-buoy_map.simple_marker([46.216, -124.1280], popup=(vis3, 'vis3.json'))
+buoy_map.polygon_marker([47.3489, -124.708], fill_color='#43d9de', radius=12,
+                        popup=(vis1, 'vis1.json'))
+buoy_map.polygon_marker([44.639, -124.5339], fill_color='#43d9de', radius=12,
+                        popup=(vis2, 'vis2.json'))
+buoy_map.polygon_marker([46.216, -124.1280], fill_color='#43d9de', radius=12,
+                        popup=(vis3, 'vis3.json'))
 buoy_map.create_map(path='NOAA_buoys.html')

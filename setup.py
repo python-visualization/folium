@@ -21,5 +21,8 @@ setup(
     package_data={'': ['*.js',
                        '*.css',
                        'templates/*.html',
-                       'templates/*.js']}
+                       'templates/*.js',
+                       'templates/*.txt',
+                       'plugins/*.css',
+                       'plugins/*.js']}
 )

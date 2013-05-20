@@ -155,6 +155,26 @@ class testFolium(object):
                                       'fill_opacity': 0.6})
         assert self.map.template_vars['markers'][1][0] == circle_2
 
+    def test_poly_marker(self):
+        '''Test polygon marker'''
+
+        poly_temp = self.env.get_template('poly_marker.js')
+
+        polygon = poly_temp.render({'marker': 'polygon_1',
+                                    'lat': 45.5,
+                                    'lon': -122.5,
+                                    'line_color': 'black',
+                                    'line_opacity': 1,
+                                    'line_weight': 2,
+                                    'fill_color': 'blue',
+                                    'fill_opacity': 1,
+                                    'num_sides': 4,
+                                    'rotation': 0,
+                                    'radius': 15})
+
+        self.map.polygon_marker(location=[45.5, -122.5])
+        assert self.map.template_vars['markers'][0][0] == polygon
+
     def test_latlng_pop(self):
         '''Test lat/lon popovers'''
 

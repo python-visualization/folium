@@ -13,6 +13,7 @@ import codecs
 import json
 import pandas as pd
 from jinja2 import Environment, PackageLoader
+from pkg_resources import resource_string, resource_filename
 import utilities
 
 
@@ -75,13 +76,13 @@ class Map(object):
 
         '''
 
-        #Init Map type and JSON
+        #Init Map type
         self.map_type = 'base'
-        self.json_data = None
 
-        #Mark counter and JSON
+        #Mark counter, JSON, Plugins
         self.mark_cnt = {}
         self.json_data = {}
+        self.plugins = {}
 
         #Location
         if not location:
@@ -228,6 +229,74 @@ class Map(object):
                                                              popup_out,
                                                              add_mark))
 
+    def polygon_marker(self, location=None, line_color='black', line_opacity=1,
+                       line_weight=2, fill_color='blue', fill_opacity=1,
+                       num_sides=4, rotation=0, radius=15, popup='Pop Text',
+                       popup_on=True):
+        '''Custom markers using the Leaflet Data Vis Framework.
+
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        line_color: string, default 'black'
+            Marker line color
+        line_opacity: float, default 1
+            Line opacity, scale 0-1
+        line_weight: int, default 2
+            Stroke weight in pixels
+        fill_color: string, default 'blue'
+            Marker fill color
+        fill_opacity: float, default 1
+            Marker fill opacity
+        num_sides: int, default 4
+            Number of polygon sides
+        rotation: int, default 0
+            Rotation angle in degrees
+        radius: int, default 15
+            Marker radius, in pixels
+
+        Returns
+        -------
+        Polygon marker names and HTML in obj.template_vars
+
+        '''
+
+        self.mark_cnt['polygon'] = count = self.mark_cnt.get('polygon', 0) + 1
+
+        poly_temp = self.env.get_template('poly_marker.js')
+
+        polygon = poly_temp.render({'marker': 'polygon_' + str(count),
+                                    'lat': location[0],
+                                    'lon': location[1],
+                                    'line_color': line_color,
+                                    'line_opacity': line_opacity,
+                                    'line_weight': line_weight,
+                                    'fill_color': fill_color,
+                                    'fill_opacity': fill_opacity,
+                                    'num_sides': num_sides,
+                                    'rotation': rotation,
+                                    'radius': radius})
+
+        popup_out = self._popup_render(popup=popup, mk_name='polygon_',
+                                       count=count,
+                                       popup_on=popup_on)
+
+        add_mark = 'map.addLayer(polygon_{0})'.format(count)
+
+        self.template_vars.setdefault('markers', []).append((polygon,
+                                                             popup_out,
+                                                             add_mark))
+        #Update JS/CSS and other Plugin files
+        js_temp = self.env.get_template('dvf_js_ref.txt').render()
+        self.template_vars.update({'dvf_js': js_temp})
+
+        polygon_js = resource_string('folium',
+                                     'plugins/leaflet-dvf.markers.min.js')
+
+        self.plugins.update({'leaflet-dvf.markers.min.js': polygon_js})
+
     def lat_lng_popover(self):
         '''Enable popovers to display Lat and Lon on each click'''
 
@@ -282,9 +351,9 @@ class Map(object):
                                           'pop_txt': popup})
             elif isinstance(popup, tuple):
                 #Update template with JS libs
-                vega_temp = self.env.get_template('vega_ref.js').render()
-                jquery_temp = self.env.get_template('jquery_ref.js').render()
-                d3_temp = self.env.get_template('d3_ref.js').render()
+                vega_temp = self.env.get_template('vega_ref.txt').render()
+                jquery_temp = self.env.get_template('jquery_ref.txt').render()
+                d3_temp = self.env.get_template('d3_ref.txt').render()
                 vega_parse = self.env.get_template('vega_parse.js').render()
                 self.template_vars.update({'vega': vega_temp,
                                            'd3': d3_temp,
@@ -329,6 +398,11 @@ class Map(object):
         following quantiles: [0, 0.5, 0.75, 0.85, 0.9]. A custom scale can be
         passed to `threshold_scale` of length <=6, in order to match the
         color brewer range.
+
+        TopoJSONs can be passed as "geo_path", but the "topojson" keyword must
+        also be passed with the reference to the topojson objects to convert.
+        See the topojson.feature method in the TopoJSON API reference:
+        https://github.com/mbostock/topojson/wiki/API-Reference
 
 
         Parameters
@@ -381,7 +455,7 @@ class Map(object):
         >>>map.geo_json(geo_path='geo.json', data=df, columns=['Data 1', 'Data 2'],
                         key_on='feature.properties.myvalue', fill_color='PuBu',
                         threshold_scale=[0, 20, 30, 40, 50, 60])
-        >>>map.geo_json(geo_path='countries.json', topojson='object.countries')
+        >>>map.geo_json(geo_path='countries.json', topojson='objects.countries')
         '''
 
         if reset:
@@ -423,7 +497,7 @@ class Map(object):
             topo_func = topo_templ.render({'map_var': layer_var,
                                            't_var': map_var,
                                            't_var_obj': topo_obj})
-            topo_lib = self.env.get_template('topojson_ref.js').render()
+            topo_lib = self.env.get_template('topojson_ref.txt').render()
             self.template_vars.update({'topojson': topo_lib})
             self.template_vars.setdefault('topo_convert',
                                           []).append(topo_func)
@@ -499,8 +573,18 @@ class Map(object):
         html_templ = self.env.get_template(type_temp)
         self.HTML = html_templ.render(self.template_vars)
 
-    def create_map(self, path='map.html'):
-        '''Write Map output to HTML and data output to JSON if available'''
+    def create_map(self, path='map.html', plugin_data_out=True):
+        '''Write Map output to HTML and data output to JSON if available
+
+        Parameters:
+        -----------
+        path: string, default 'map.html'
+            Path for HTML output for map
+        plugin_data_out: boolean, default True
+            If using plugins such as awesome markers, write all plugin
+            data such as JS/CSS/images to path
+
+        '''
 
         self._build_map()
 
@@ -511,3 +595,8 @@ class Map(object):
             for path, data in self.json_data.iteritems():
                 with open(path, 'w') as g:
                     json.dump(data, g)
+
+        if self.plugins and plugin_data_out:
+            for name, plugin in self.plugins.iteritems():
+                with open(name, 'w') as f:
+                    f.write(plugin)
