@@ -254,7 +254,7 @@
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;us_states.json&#39;</span><span class="p">,</span> <span class="n">topojson</span><span class="o">=</span><span class="s">&#39;objects.states&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, if using ogr2ogr to reproject, Leaflet works best with EPSG:4326, which is a geographic coordinate system with WGS84 datum. The ogr2ogr command could look something like this:</p>
+<p>Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, for this particular ogr2ogr-&gt;topoJSON workflow, I&#8217;ve had the best luck with EPSG:4326 (a geographic coordinate system with WGS84 datum) without having to muck around in Leaflet with projection settings. The ogr2ogr command could look something like this:</p>
 <div class="highlight-python"><pre>$ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' output.shp input.shp</pre>
 </div>
 <p>Converting with a TopoJSON command in it&#8217;s simplest form would look like the following:</p>

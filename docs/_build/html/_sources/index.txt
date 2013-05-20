@@ -174,7 +174,7 @@ TopoJSON is just as simple, but requires one additional parameter, which is the 
 
     map.geo_json(geo_path='us_states.json', topojson='objects.states')
 
-Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, if using ogr2ogr to reproject, Leaflet works best with EPSG:4326, which is a geographic coordinate system with WGS84 datum. The ogr2ogr command could look something like this::
+Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, for this particular ogr2ogr->topoJSON workflow, I've had the best luck with EPSG:4326 (a geographic coordinate system with WGS84 datum) without having to muck around in Leaflet with projection settings. The ogr2ogr command could look something like this::
 
     $ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' output.shp input.shp
 
