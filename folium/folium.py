@@ -140,7 +140,7 @@ class Map(object):
             Latitude and Longitude of Marker (Northing, Easting)
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'data_path.json')
+            or a tuple of the form (Vincent object, 'vis_path.json')
         popup_on: boolean, default True
             Pass false for no popup information on the marker
 
@@ -186,7 +186,7 @@ class Map(object):
             Circle radius, in pixels
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'data_path.json')
+            or a tuple of the form (Vincent object, 'vis_path.json')
         popup_on: boolean, default True
             Pass false for no popup information on the marker
         line_color: string, default black
@@ -258,7 +258,7 @@ class Map(object):
             Marker radius, in pixels
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'data_path.json')
+            or a tuple of the form (Vincent object, 'vis_path.json')
         popup_on: boolean, default True
             Pass false for no popup information on the marker
 

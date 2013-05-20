@@ -142,21 +142,139 @@ Click-for-Marker
 
 `Live example <http://bl.ocks.org/wrobstory/5609762>`_
 
-Use the `click_for_marker` method to enable a marker on each map click, with custom text if desired::
+Use the `click_for_marker` method to enable a marker on each map click, with custom text if desired. Double-click to remove the marker::
 
     map.click_for_marker(popup='Waypoint')
 
 Vincent Popups
---------------
+~~~~~~~~~~~~~~
 
-The popup parameter in any marker can be passed a `Vincent <https://github.com/wrobstory/vincent>`_ visualization as the popup. Vincent visualizations must be passed as a tuple of the form `(vincent_object, data_path)`::
+`Live example <http://bl.ocks.org/wrobstory/5609803>`_
 
-    map.polygon_marker(location=[45.5, -122.5], popup=(vis, 'data.json'))
+The popup parameter in any marker can be passed a `Vincent <https://github.com/wrobstory/vincent>`_ visualization as the popup. Vincent visualizations must be passed as a tuple of the form `(vincent_object, vis_path)`, where `vis_path` is the path to your Vincent.vega json output::
 
+    vis = vincent.Bar()
+    vis.tabular_data([10, 20, 30, 40, 30, 20])
+    vis.to_json('vis.json')
+    map.polygon_marker(location=[45.5, -122.5], popup=(vis, 'vis.json'))
 
+Data Mapping: GeoJSON and TopoJSON
+----------------------------------
 
+Folium allows you to plot a GeoJSON or TopoJSON overlay on the map. There is no requirement to bind data (passing just a Geo/TopoJSON will plot a single color overlay), but there is a data binding option to map Python Pandas columnar data to different feature objects on a color scale. Folium allows you to pass multiple Geo/TopoJSON datasets if you desire to create multiple overlays on a single map.
 
+Let's start with a simple GeoJSON. Just pass the path to your file, and it will be plotted as an overlay::
 
+    map.geo_json(geo_path='my_geo.json')
+
+A short primer on ogr2ogr and TopoJSON
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TopoJSON is just as simple, but requires one additional parameter, which is the object feature that will be converted in the browser to a GeoJSON. See the TopoJSON `topojson.feature` method `API reference <https://github.com/mbostock/topojson/wiki/API-Reference#wiki-feature>`_ for further details. The second passed parameter typically starts with `objects` in a standard TopoJSON conversion::
+
+    map.geo_json(geo_path='us_states.json', topojson='objects.states')
+
+Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, if using ogr2ogr to reproject, Leaflet works best with EPSG:4326, which is a geographic coordinate system with WGS84 datum. The ogr2ogr command could look something like this::
+
+    $ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' output.shp input.shp
+
+Converting with a TopoJSON command in it's simplest form would look like the following::
+
+    $topojson -o output.json input.shp
+
+If using those commands verbatim, the `geo_json` input would then look like the following::
+
+    map.geo_json(geo_path='ouput.json', topojson='objects.input')
+
+A more realistic dataset would look something like::
+
+    $ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' countries_4326.shp countries.shp
+    $topojson -o countries.json countries_4326.shp
+
+and then in Python::
+
+    map.geo_json(geo_path='countries.json', topojson='objects.countries_4326')
+
+Binding Data
+~~~~~~~~~~~~
+
+One of the key features of Folium is the ability to bind data from a Pandas DataFrame or Series to a GeoJSON or TopoJSON. Let's walk through the key parameters:
+
+- `data_out`: That data from the DataFrame/Series will be written to this path and read by Leaflet/D3
+- `data`: The Pandas DataFrame or Series
+- `columns`: A dict or tuple. The first value must reference the column with the "key" data, aka the value that needs to match that of the Geo/TopoJSON parameters. The second must reference the column of the values that are being mapped.
+- `key_on`: The value in the Geo/TopoJSON that is being bound to the Pandas data. This value must always start with `'feature'`. Ex: `'feature.id'` or `'feature.properties.statename'`
+
+::
+
+    map.geo_json(geo_path='geo.json', data_out='data.json', data=df,
+                 columns=['Keys', 'Values'], key_on='features.properties.key')
+
+As a more realistic example, here is what it would look like to map data from State Names to Unemployment levels::
+
+    map.geo_json(geo_path=state_geo, data=state_data,
+                 columns=['State', 'Unemployment'],
+                 key_on='feature.id',
+                 fill_color='YlGn', fill_opacity=0.7, line_opacity=0.2,
+                 legend_name='Unemployment Rate (%)')
+
+`Live example <http://bl.ocks.org/wrobstory/5609830>`_
+
+Color Scales
+~~~~~~~~~~~~
+
+Folium currently supports D3 threshold scales. By default, Folium uses the following range of quantiles as the scale values: `[0, 0.5, 0.75, 0.85, 0.9]`, with each rounded to the nearest order-of-magnitude integer. So, for instance, 270 rounds to 200, 5600 to 6000, and so on.
+
+Here's a live example of a `default threshold scale <http://bl.ocks.org/wrobstory/5609830>`_
+
+You are also free to pass your own scale to the `threshold_scale` keyword. For example::
+
+    map.geo_json(geo_path=state_geo, data=state_data,
+                 columns=['State', 'Unemployment'],
+                 threshold_scale=[5, 6, 7, 8, 9, 10],
+                 key_on='feature.id',
+                 fill_color='BuPu', fill_opacity=0.7, line_opacity=0.5,
+                 legend_name='Unemployment Rate (%)',
+                 reset=True)
+
+`Live example <http://bl.ocks.org/wrobstory/5609856>`_
+
+The colors for these scales come from the `color brewer <http://colorbrewer2.org/>`_ sequential scales. Any of the following can be passed to the `fill_color` keyword:
+
+- `BuGn`
+- `BuPu`
+- `GnBu`
+- `OrRd`
+- `PuBu`
+- `PuBuGn`
+- `PuRd`
+- `RdPu`
+- `YlGn`
+- `YlGnBu`
+- `YlOrBr`
+- `YlOrRd`
+
+Misc GeoJSON Parameters
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The following parameters will be of use when creating Geo/TopoJSON layers:
+
+- `legend_name`: Pass a custom name to the legend. Defaults to the DataFrame/Series column name
+- `reset`: Deletes all previous map data, starts fresh with new dataset being passed.
+
+Choropleth Examples
+~~~~~~~~~~~~~~~~~~~
+
+The following live examples demonstrate how to use multiple columns of the same dataframe with different color scales to visualize multiple datasets quickly:
+
+- `US Employed by county <http://bl.ocks.org/wrobstory/5609889>`_, `'YlOrRd'` colorbrew, default legend title and scale
+- `US Unemployed by county <http://bl.ocks.org/wrobstory/5609934>`_, `'YlGnBu'` colorbrew, custom scale and legend title
+- `US Median Household Income by county <http://bl.ocks.org/wrobstory/5609959>`_, `'PuRd'` colorbrew, custom scale and legend title
+
+Create Map
+----------
+
+The `create_map` method writes your HTML (and JSON/JS if necessary) to the path of your choice. The `plugin_data_out` parameter can be set to `'False`' if you don't wish to write any JavaScript plugin libraries to your path.
 
 
 Contents:
@@ -164,12 +282,8 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-
-
 Indices and tables
 ==================
 
-* :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
 

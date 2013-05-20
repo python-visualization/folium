@@ -52,9 +52,18 @@
 <li><a class="reference internal" href="#polygon-markers">Polygon Markers</a></li>
 <li><a class="reference internal" href="#lat-lng-popups">Lat/Lng Popups</a></li>
 <li><a class="reference internal" href="#click-for-marker">Click-for-Marker</a></li>
+<li><a class="reference internal" href="#vincent-popups">Vincent Popups</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#vincent-popups">Vincent Popups</a><ul>
+<li><a class="reference internal" href="#data-mapping-geojson-and-topojson">Data Mapping: GeoJSON and TopoJSON</a><ul>
+<li><a class="reference internal" href="#a-short-primer-on-ogr2ogr-and-topojson">A short primer on ogr2ogr and TopoJSON</a></li>
+<li><a class="reference internal" href="#binding-data">Binding Data</a></li>
+<li><a class="reference internal" href="#color-scales">Color Scales</a></li>
+<li><a class="reference internal" href="#misc-geojson-parameters">Misc GeoJSON Parameters</a></li>
+<li><a class="reference internal" href="#choropleth-examples">Choropleth Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#create-map">Create Map</a><ul>
 </ul>
 </li>
 </ul>
@@ -215,18 +224,130 @@
 <div class="section" id="click-for-marker">
 <h3>Click-for-Marker<a class="headerlink" href="#click-for-marker" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609762">Live example</a></p>
-<p>Use the <cite>click_for_marker</cite> method to enable a marker on each map click, with custom text if desired:</p>
+<p>Use the <cite>click_for_marker</cite> method to enable a marker on each map click, with custom text if desired. Double-click to remove the marker:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">click_for_marker</span><span class="p">(</span><span class="n">popup</span><span class="o">=</span><span class="s">&#39;Waypoint&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</div>
 <div class="section" id="vincent-popups">
-<h2>Vincent Popups<a class="headerlink" href="#vincent-popups" title="Permalink to this headline">¶</a></h2>
-<p>The popup parameter in any marker can be passed a <a class="reference external" href="https://github.com/wrobstory/vincent">Vincent</a> visualization as the popup. Vincent visualizations must be passed as a tuple of the form <a href="#id7"><span class="problematic" id="id8">`</span></a>(vincent_object, data_path):</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">polygon_marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.5</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="s">&#39;data.json&#39;</span><span class="p">))</span>
+<h3>Vincent Popups<a class="headerlink" href="#vincent-popups" title="Permalink to this headline">¶</a></h3>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609803">Live example</a></p>
+<p>The popup parameter in any marker can be passed a <a class="reference external" href="https://github.com/wrobstory/vincent">Vincent</a> visualization as the popup. Vincent visualizations must be passed as a tuple of the form <cite>(vincent_object, vis_path)</cite>, where <cite>vis_path</cite> is the path to your Vincent.vega json output:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vis</span> <span class="o">=</span> <span class="n">vincent</span><span class="o">.</span><span class="n">Bar</span><span class="p">()</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">tabular_data</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">20</span><span class="p">])</span>
+<span class="n">vis</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="s">&#39;vis.json&#39;</span><span class="p">)</span>
+<span class="nb">map</span><span class="o">.</span><span class="n">polygon_marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.5</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="p">(</span><span class="n">vis</span><span class="p">,</span> <span class="s">&#39;vis.json&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
+</div>
+</div>
+<div class="section" id="data-mapping-geojson-and-topojson">
+<h2>Data Mapping: GeoJSON and TopoJSON<a class="headerlink" href="#data-mapping-geojson-and-topojson" title="Permalink to this headline">¶</a></h2>
+<p>Folium allows you to plot a GeoJSON or TopoJSON overlay on the map. There is no requirement to bind data (passing just a Geo/TopoJSON will plot a single color overlay), but there is a data binding option to map Python Pandas columnar data to different feature objects on a color scale. Folium allows you to pass multiple Geo/TopoJSON datasets if you desire to create multiple overlays on a single map.</p>
+<p>Let&#8217;s start with a simple GeoJSON. Just pass the path to your file, and it will be plotted as an overlay:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;my_geo.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="section" id="a-short-primer-on-ogr2ogr-and-topojson">
+<h3>A short primer on ogr2ogr and TopoJSON<a class="headerlink" href="#a-short-primer-on-ogr2ogr-and-topojson" title="Permalink to this headline">¶</a></h3>
+<p>TopoJSON is just as simple, but requires one additional parameter, which is the object feature that will be converted in the browser to a GeoJSON. See the TopoJSON <cite>topojson.feature</cite> method <a class="reference external" href="https://github.com/mbostock/topojson/wiki/API-Reference#wiki-feature">API reference</a> for further details. The second passed parameter typically starts with <cite>objects</cite> in a standard TopoJSON conversion:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;us_states.json&#39;</span><span class="p">,</span> <span class="n">topojson</span><span class="o">=</span><span class="s">&#39;objects.states&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here are a couple tips to avoid headaches when working with Leaflet maps and geo files. First, if using ogr2ogr to reproject, Leaflet works best with EPSG:4326, which is a geographic coordinate system with WGS84 datum. The ogr2ogr command could look something like this:</p>
+<div class="highlight-python"><pre>$ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' output.shp input.shp</pre>
+</div>
+<p>Converting with a TopoJSON command in it&#8217;s simplest form would look like the following:</p>
+<div class="highlight-python"><pre>$topojson -o output.json input.shp</pre>
+</div>
+<p>If using those commands verbatim, the <cite>geo_json</cite> input would then look like the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;ouput.json&#39;</span><span class="p">,</span> <span class="n">topojson</span><span class="o">=</span><span class="s">&#39;objects.input&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A more realistic dataset would look something like:</p>
+<div class="highlight-python"><pre>$ogr2ogr -f 'ESRI Shapefile' -t_srs 'EPSG:4326' countries_4326.shp countries.shp
+$topojson -o countries.json countries_4326.shp</pre>
+</div>
+<p>and then in Python:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;countries.json&#39;</span><span class="p">,</span> <span class="n">topojson</span><span class="o">=</span><span class="s">&#39;objects.countries_4326&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="binding-data">
+<h3>Binding Data<a class="headerlink" href="#binding-data" title="Permalink to this headline">¶</a></h3>
+<p>One of the key features of Folium is the ability to bind data from a Pandas DataFrame or Series to a GeoJSON or TopoJSON. Let&#8217;s walk through the key parameters:</p>
+<ul class="simple">
+<li><cite>data_out</cite>: That data from the DataFrame/Series will be written to this path and read by Leaflet/D3</li>
+<li><cite>data</cite>: The Pandas DataFrame or Series</li>
+<li><cite>columns</cite>: A dict or tuple. The first value must reference the column with the &#8220;key&#8221; data, aka the value that needs to match that of the Geo/TopoJSON parameters. The second must reference the column of the values that are being mapped.</li>
+<li><cite>key_on</cite>: The value in the Geo/TopoJSON that is being bound to the Pandas data. This value must always start with <cite>&#8216;feature&#8217;</cite>. Ex: <cite>&#8216;feature.id&#8217;</cite> or <cite>&#8216;feature.properties.statename&#8217;</cite></li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="s">&#39;geo.json&#39;</span><span class="p">,</span> <span class="n">data_out</span><span class="o">=</span><span class="s">&#39;data.json&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Keys&#39;</span><span class="p">,</span> <span class="s">&#39;Values&#39;</span><span class="p">],</span> <span class="n">key_on</span><span class="o">=</span><span class="s">&#39;features.properties.key&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As a more realistic example, here is what it would look like to map data from State Names to Unemployment levels:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="n">state_geo</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">state_data</span><span class="p">,</span>
+             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;State&#39;</span><span class="p">,</span> <span class="s">&#39;Unemployment&#39;</span><span class="p">],</span>
+             <span class="n">key_on</span><span class="o">=</span><span class="s">&#39;feature.id&#39;</span><span class="p">,</span>
+             <span class="n">fill_color</span><span class="o">=</span><span class="s">&#39;YlGn&#39;</span><span class="p">,</span> <span class="n">fill_opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">line_opacity</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+             <span class="n">legend_name</span><span class="o">=</span><span class="s">&#39;Unemployment Rate (%)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609830">Live example</a></p>
+</div>
+<div class="section" id="color-scales">
+<h3>Color Scales<a class="headerlink" href="#color-scales" title="Permalink to this headline">¶</a></h3>
+<p>Folium currently supports D3 threshold scales. By default, Folium uses the following range of quantiles as the scale values: <cite>[0, 0.5, 0.75, 0.85, 0.9]</cite>, with each rounded to the nearest order-of-magnitude integer. So, for instance, 270 rounds to 200, 5600 to 6000, and so on.</p>
+<p>Here&#8217;s a live example of a <a class="reference external" href="http://bl.ocks.org/wrobstory/5609830">default threshold scale</a></p>
+<p>You are also free to pass your own scale to the <cite>threshold_scale</cite> keyword. For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">map</span><span class="o">.</span><span class="n">geo_json</span><span class="p">(</span><span class="n">geo_path</span><span class="o">=</span><span class="n">state_geo</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">state_data</span><span class="p">,</span>
+             <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;State&#39;</span><span class="p">,</span> <span class="s">&#39;Unemployment&#39;</span><span class="p">],</span>
+             <span class="n">threshold_scale</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+             <span class="n">key_on</span><span class="o">=</span><span class="s">&#39;feature.id&#39;</span><span class="p">,</span>
+             <span class="n">fill_color</span><span class="o">=</span><span class="s">&#39;BuPu&#39;</span><span class="p">,</span> <span class="n">fill_opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">line_opacity</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+             <span class="n">legend_name</span><span class="o">=</span><span class="s">&#39;Unemployment Rate (%)&#39;</span><span class="p">,</span>
+             <span class="n">reset</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="http://bl.ocks.org/wrobstory/5609856">Live example</a></p>
+<p>The colors for these scales come from the <a class="reference external" href="http://colorbrewer2.org/">color brewer</a> sequential scales. Any of the following can be passed to the <cite>fill_color</cite> keyword:</p>
+<ul class="simple">
+<li><cite>BuGn</cite></li>
+<li><cite>BuPu</cite></li>
+<li><cite>GnBu</cite></li>
+<li><cite>OrRd</cite></li>
+<li><cite>PuBu</cite></li>
+<li><cite>PuBuGn</cite></li>
+<li><cite>PuRd</cite></li>
+<li><cite>RdPu</cite></li>
+<li><cite>YlGn</cite></li>
+<li><cite>YlGnBu</cite></li>
+<li><cite>YlOrBr</cite></li>
+<li><cite>YlOrRd</cite></li>
+</ul>
+</div>
+<div class="section" id="misc-geojson-parameters">
+<h3>Misc GeoJSON Parameters<a class="headerlink" href="#misc-geojson-parameters" title="Permalink to this headline">¶</a></h3>
+<p>The following parameters will be of use when creating Geo/TopoJSON layers:</p>
+<ul class="simple">
+<li><cite>legend_name</cite>: Pass a custom name to the legend. Defaults to the DataFrame/Series column name</li>
+<li><cite>reset</cite>: Deletes all previous map data, starts fresh with new dataset being passed.</li>
+</ul>
+</div>
+<div class="section" id="choropleth-examples">
+<h3>Choropleth Examples<a class="headerlink" href="#choropleth-examples" title="Permalink to this headline">¶</a></h3>
+<p>The following live examples demonstrate how to use multiple columns of the same dataframe with different color scales to visualize multiple datasets quickly:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://bl.ocks.org/wrobstory/5609889">US Employed by county</a>, <cite>&#8216;YlOrRd&#8217;</cite> colorbrew, default legend title and scale</li>
+<li><a class="reference external" href="http://bl.ocks.org/wrobstory/5609934">US Unemployed by county</a>, <cite>&#8216;YlGnBu&#8217;</cite> colorbrew, custom scale and legend title</li>
+<li><a class="reference external" href="http://bl.ocks.org/wrobstory/5609959">US Median Household Income by county</a>, <cite>&#8216;PuRd&#8217;</cite> colorbrew, custom scale and legend title</li>
+</ul>
+</div>
+</div>
+<div class="section" id="create-map">
+<h2>Create Map<a class="headerlink" href="#create-map" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>create_map</cite> method writes your HTML (and JSON/JS if necessary) to the path of your choice. The <cite>plugin_data_out</cite> parameter can be set to <cite>&#8216;False</cite>&#8216; if you don&#8217;t wish to write any JavaScript plugin libraries to your path.</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul class="simple">
@@ -237,8 +358,6 @@
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
 <li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
 </ul>
 </div>
