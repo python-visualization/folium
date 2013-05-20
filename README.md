@@ -10,6 +10,12 @@ Folium makes it easy to visualize data that's been manipulated in Python on an i
 
 The library has a number of built-in tilesets from OpenStreetMap, Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API keys. Folium supports both GeoJSON and TopoJSON overlays, as well as the binding of data to those overlays to create choropleth maps with color-brewer color schemes.
 
+Installation
+---------------
+```shell
+$ pip install folium
+```
+
 Getting Started
 ---------------
 To create a base map, simply pass your starting coordinates to Folium:
@@ -245,7 +251,7 @@ Beta
 Docs
 ----
 
-Working on it. Docstrings are complete, and see examples folder for working examples.
+Working on it. Docstrings are complete (probably too complete), and see examples folder for working examples.
 
 
 
