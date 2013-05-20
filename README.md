@@ -250,7 +250,7 @@ Beta
 Docs
 ----
 
-Working on it. Docstrings are complete (probably too complete), and see examples folder for working examples.
+https://folium.readthedocs.org/
 
 
 
