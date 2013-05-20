@@ -149,9 +149,9 @@ Use the `click_for_marker` method to enable a marker on each map click, with cus
 Vincent Popups
 --------------
 
-The popup parameter in any marker can be passed a `Vincent <https://github.com/wrobstory/vincent>`_ visualization as the popup. Vincent visualizations must be passed as a tuple that has the Vincent object as the first item in the tuple, and the path that your Vincent vis is saving the json data to as the second:
+The popup parameter in any marker can be passed a `Vincent <https://github.com/wrobstory/vincent>`_ visualization as the popup. Vincent visualizations must be passed as a tuple of the form `(vincent_object, data_path)`::
 
-    map.polygon_marker()
+    map.polygon_marker(location=[45.5, -122.5], popup=(vis, 'data.json'))
 
 
 
