@@ -11,7 +11,6 @@ from __future__ import print_function
 from __future__ import division
 import codecs
 import json
-import pandas as pd
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string, resource_filename
 import utilities
@@ -511,6 +510,8 @@ class Map(object):
 
         #Get Data binding pieces if available
         if data is not None:
+
+            import pandas as pd
 
             #Create DataFrame with only the relevant columns
             if isinstance(data, pd.DataFrame):
