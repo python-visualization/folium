@@ -11,9 +11,22 @@ from __future__ import print_function
 from __future__ import division
 import codecs
 import json
+import functools
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string, resource_filename
 import utilities
+
+
+def iter_obj(type):
+    '''Decorator to keep count of different map object types in self.mk_cnt'''
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(self, *args, **kwargs):
+            self.mark_cnt[type] = self.mark_cnt.get(type, 0) + 1
+            func_result = func(self, *args, **kwargs)
+            return func_result
+        return wrapper
+    return decorator
 
 
 class Map(object):
@@ -129,6 +142,7 @@ class Map(object):
             self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
+    @iter_obj('simple')
     def simple_marker(self, location=None, popup='Pop Text', popup_on=True):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
@@ -153,7 +167,7 @@ class Map(object):
         >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
         '''
-        self.mark_cnt['simple'] = count = self.mark_cnt.get('simple', 0) + 1
+        count = self.mark_cnt['simple']
 
         mark_temp = self.env.get_template('simple_marker.js')
 
@@ -171,6 +185,7 @@ class Map(object):
                                                              popup_out,
                                                              add_mark))
 
+    @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup='Pop Text',
                       popup_on=True, line_color='black', fill_color='black',
                       fill_opacity=0.6):
@@ -207,7 +222,7 @@ class Map(object):
                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
         '''
-        self.mark_cnt['circle'] = count = self.mark_cnt.get('circle', 0) + 1
+        count = self.mark_cnt['circle']
 
         circle_temp = self.env.get_template('circle_marker.js')
 
@@ -228,6 +243,7 @@ class Map(object):
                                                              popup_out,
                                                              add_mark))
 
+    @iter_obj('polygon')
     def polygon_marker(self, location=None, line_color='black', line_opacity=1,
                        line_weight=2, fill_color='blue', fill_opacity=1,
                        num_sides=4, rotation=0, radius=15, popup='Pop Text',
@@ -267,7 +283,7 @@ class Map(object):
 
         '''
 
-        self.mark_cnt['polygon'] = count = self.mark_cnt.get('polygon', 0) + 1
+        count = self.mark_cnt['polygon']
 
         poly_temp = self.env.get_template('poly_marker.js')
 
@@ -379,6 +395,7 @@ class Map(object):
                                           'json_out': json_out,
                                           'vega_id': vega_id})
 
+    @iter_obj('geojson')
     def geo_json(self, geo_path=None, data_out='data.json', data=None,
                  columns=None, key_on=None, threshold_scale=None,
                  fill_color='blue', fill_opacity=0.6, line_color='black',
@@ -467,7 +484,7 @@ class Map(object):
                           'gjson_layers', 'map_legends', 'topo_convert']
             for var in reset_vars:
                 self.template_vars.update({var: []})
-            self.mark_cnt['geojson'] = 0
+            self.mark_cnt['geojson'] = 1
 
         def json_style(style_cnt, line_color, line_weight, line_opacity,
                        fill_color, fill_opacity, quant_fill):
@@ -484,9 +501,6 @@ class Map(object):
 
         #Set map type to geojson
         self.map_type = 'geojson'
-
-        #Set counter for GeoJSON and set iterations
-        self.mark_cnt['geojson'] = self.mark_cnt.get('geojson', 0) + 1
 
         #Get JSON map layer template pieces, convert TopoJSON if necessary
         geo_path = ".defer(d3.json, '{0}')".format(geo_path)
