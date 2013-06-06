@@ -582,18 +582,22 @@ class Map(object):
         self.template_vars.setdefault('geo_styles', []).append(style)
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
-    def _build_map(self):
+    def _build_map(self, html_templ=None):
         '''Build HTML/JS/CSS from Templates given current map type'''
-        map_types = {'base': 'fol_template.html',
-                     'geojson': 'geojson_template.html'}
+        if html_templ is None:
+            map_types = {'base': 'fol_template.html',
+                         'geojson': 'geojson_template.html'}
 
-        #Check current map type
-        type_temp = map_types[self.map_type]
+            #Check current map type
+            type_temp = map_types[self.map_type]
 
-        html_templ = self.env.get_template(type_temp)
+            html_templ = self.env.get_template(type_temp)
+        else:
+            html_templ = self.env.from_string(html_templ)
+
         self.HTML = html_templ.render(self.template_vars)
 
-    def create_map(self, path='map.html', plugin_data_out=True):
+    def create_map(self, path='map.html', plugin_data_out=True, template=None):
         '''Write Map output to HTML and data output to JSON if available
 
         Parameters:
@@ -603,10 +607,12 @@ class Map(object):
         plugin_data_out: boolean, default True
             If using plugins such as awesome markers, write all plugin
             data such as JS/CSS/images to path
+        template: string, default None
+            Custom template to render
 
         '''
 
-        self._build_map()
+        self._build_map(template)
 
         with codecs.open(path, 'w', 'utf-8') as f:
             f.write(self.HTML)
