@@ -41,6 +41,8 @@ class Map(object):
         tilesets or a custom tileset URL. The following tilesets are built-in
         to Folium. Pass any of the following to the "tiles" keyword:
             -"OpenStreetMap"
+            -"MapQuest Open"
+            -"MapQuest Open Aerial"
             -"Mapbox Bright" (Limited levels of zoom for free tiles)
             -"Mapbox Control Room" (Limited levels of zoom for free tiles)
             -"Stamen Terrain"
@@ -120,6 +122,7 @@ class Map(object):
                              ' or non-default Mapbox tiles.')
 
         self.default_tiles = ['openstreetmap', 'mapboxcontrolroom',
+                              'mapquestopen', 'mapquestopenaerial',
                               'mapboxbright', 'mapbox', 'cloudmade',
                               'stamenterrain', 'stamentoner']
         self.tile_types = {}
