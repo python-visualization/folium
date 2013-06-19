@@ -28,14 +28,12 @@ vis1.to_json('vis1.json')
 vis2 = vincent.Bar(width=600)
 vis2.tabular_data(ws_binned)
 vis2.axis_label(x_label='Wind Speed (m/s)', y_label='# of Obs')
-vis2 -= ('hover', 'marks', 0, 'properties')
 vis2.to_json('vis2.json')
 
 #NOAA 46243 Wave Height
 vis3 = vincent.Area(width=600)
 vis3.tabular_data(NOAA_46243, columns=['significant_wave_height (m)'],
                   axis_time='day')
-vis3 -= ('hover', 'marks', 0, 'properties')
 vis3.axis_label(x_label='Time', y_label='Significant Wave Height (m)')
 vis3.to_json('vis3.json')
 

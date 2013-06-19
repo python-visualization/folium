@@ -206,7 +206,7 @@ class testFolium(object):
         self.map.simple_marker(location=[45.60, -122.8], popup=(vis, 'vis.json'))
         popup_temp = self.env.get_template('vega_marker.js')
         vega = popup_temp.render({'mark': 'marker_1', 'div_id': 'vis',
-                                  'width': 475, 'height': 250,
+                                  'width': 675, 'height': 350,
                                   'max_width': 900,
                                   'json_out': 'vis.json',
                                   'vega_id': '#vis'})
@@ -275,7 +275,7 @@ class testFolium(object):
                                    'range': d3range})
 
         style_temp = self.env.get_template('geojson_style.js')
-        color = 'color(matchKey(feature.id, data_1))'
+        color = 'matchKey(feature.id, data_1)'
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
                                    'line_weight': 1,

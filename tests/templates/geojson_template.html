@@ -4,6 +4,7 @@
    <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
    <script src="http://d3js.org/queue.v1.min.js"></script>
+   {{ dvf_js }}
    {{ topojson }}
    {{ vega }}
    {{ jquery }}
@@ -46,7 +47,12 @@ function makeMap(error, {% for var in func_vars %}{{ var }}
     {{ vega_parse }}
 
     function matchKey(datapoint, key_variable){
-        return(parseFloat(key_variable[0][datapoint]));
+        if (typeof key_variable[0][datapoint] === 'undefined') {
+            return '#fff'
+        }
+        else {
+            return(color(parseFloat(key_variable[0][datapoint])));
+        };
     };
 
     {% for scale in color_scales %}
