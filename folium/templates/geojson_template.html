@@ -48,7 +48,7 @@ function makeMap(error, {% for var in func_vars %}{{ var }}
 
     function matchKey(datapoint, key_variable){
         if (typeof key_variable[0][datapoint] === 'undefined') {
-            return '#fff'
+            return null;
         }
         else {
             return(color(parseFloat(key_variable[0][datapoint])));
