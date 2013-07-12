@@ -10,9 +10,17 @@ Utility module for Folium helper functions.
 from __future__ import print_function
 from __future__ import division
 import math
-import pandas as pd
-import numpy as np
 from jinja2 import Environment, PackageLoader, Template
+
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 
 def get_templates():
@@ -70,6 +78,12 @@ def transform_data(data):
 
     '''
 
+    if pd is None:
+        raise ImportError("The Pandas package is required for this functionality")
+
+    if np is None:
+        raise ImportError("The NumPy package is required for this functionality")
+
     def type_check(value):
         '''Type check values for JSON serialization. Native Python JSON
         serialization will not recognize some Numpy data types properly,
@@ -110,6 +124,9 @@ def split_six(series=None):
     list
 
     '''
+
+    if pd is None:
+        raise ImportError("The Pandas package is required for this functionality")
 
     def base(x):
         if x > 0:

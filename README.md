@@ -240,9 +240,9 @@ Dependencies
 ---------------
 Jinja2
 
-Pandas (Data Binding)
+Pandas (Map Data Binding only)
 
-Numpy (Data Binding)
+Numpy (Map Data Binding only)
 
 Status
 -------
