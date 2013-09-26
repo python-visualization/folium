@@ -570,7 +570,7 @@ class Map(object):
             self.template_vars.setdefault('map_legends', []).append(legend)
 
             #Style with color brewer colors
-            matchColor = 'matchKey({0}, {1})'.format(key_on, data_var)
+            matchColor = 'color(matchKey({0}, {1}))'.format(key_on, data_var)
             style = json_style(style_count, line_color, line_weight,
                                line_opacity, None, fill_opacity, matchColor)
         else:
