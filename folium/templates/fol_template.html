@@ -1,50 +1,52 @@
 <!DOCTYPE html>
 <head>
-   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.5/leaflet.css" />
-   <script src="http://cdn.leafletjs.com/leaflet-0.5/leaflet.js"></script>
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+   <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+   
    {{ dvf_js }}
    {{ d3 }}
    {{ vega }}
-   {{ jquery}}
+   {{ jquery }}
 
 
-<style>
-
-#map {
-  position:absolute;
-  top:0;
-  bottom:0;
-  right:0;
-  left:0;
-}
-
-</style>
+   <style>
+      
+      #map {
+        position:absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+      }
+   
+   </style>
 </head>
+
 <body>
 
-        <div id="map" {{ size }}></div>
+   <div id="map" {{ size }}></div>
 
-<script>
+   <script>
 
-{{ vega_parse }}
-
-var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
-
-L.tileLayer('{{ Tiles }}', {
-    maxZoom: {{ max_zoom }},
-    attribution: '{{ attr }}'
-}).addTo(map);
-
-{% for mark, popup, add_mark in markers %}
-{{ mark }}
-{{ popup }}
-{{ add_mark }}
-{% endfor %}
-
-{{ lat_lng_pop }}
-
-{{ click_pop }}
-
-</script>
+      {{ vega_parse }}
+      
+      var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
+      
+      L.tileLayer('{{ Tiles }}', {
+          maxZoom: {{ max_zoom }},
+          attribution: '{{ attr }}'
+      }).addTo(map);
+      
+      {% for mark, popup, add_mark in markers %}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+      
+      {{ lat_lng_pop }}
+      
+      {{ click_pop }}
+   
+   </script>
 
 </body>
