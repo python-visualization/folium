@@ -188,6 +188,48 @@ class Map(object):
                                                              popup_out,
                                                              add_mark))
 
+    @iter_obj('line')
+    def line(self, locations, 
+             line_color=None, line_opacity=None, line_weight=None):
+        '''Add a line to the map with optional styles.
+
+        Parameters
+        ----------
+        locations: list of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        line_color: string, default Leaflet's default ('#03f')
+        line_opacity: float, default Leaflet's default (0.5)
+        line_weight: float, default Leaflet's default (5)
+
+        Note: If the optional styles are omitted, they will not be included
+        in the HTML output and will obtain the Leaflet defaults listed above.
+
+        Example
+        -------
+        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
+        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
+                    line_color='red', line_opacity=1.0)
+
+        '''
+        count = self.mark_cnt['line']
+
+        line_temp = self.env.get_template('polyline.js')
+
+        polyline_opts = {'color': line_color,
+                'weight': line_weight,
+                'opacity': line_opacity}
+
+        varname = 'line_{}'.format(count)
+        line_rendered = line_temp.render({'line': varname,
+                                          'locations': locations,
+                                          'options': polyline_opts})
+
+        add_line = 'map.addLayer({});'.format(varname)
+
+        self.template_vars.setdefault('lines', []).append((line_rendered,
+                                                           add_line))
+
+
     @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup='Pop Text',
                       popup_on=True, line_color='black', fill_color='black',
