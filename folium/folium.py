@@ -15,7 +15,24 @@ import functools
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string, resource_filename
 import utilities
+from uuid import uuid4
 
+
+ENV = Environment(loader=PackageLoader('folium', 'templates'))
+
+
+def initialize_notebook():
+    """Initialize the IPython notebook display elements"""
+    try:
+        from IPython.core.display import display, HTML
+    except ImportError:
+        print("IPython Notebook could not be loaded.")
+
+    lib_js = ENV.get_template('ipynb_init_js.html')
+    lib_css = ENV.get_template('ipynb_init_css.html')
+
+    display(HTML(lib_js.render()))
+    display(HTML(lib_css.render()))
 
 def iter_obj(type):
     '''Decorator to keep count of different map object types in self.mk_cnt'''
@@ -92,6 +109,7 @@ class Map(object):
 
         #Init Map type
         self.map_type = 'base'
+        self.map_id = '_'.join(['folium', uuid4().hex])
 
         #Mark counter, JSON, Plugins
         self.mark_cnt = {}
@@ -110,10 +128,11 @@ class Map(object):
                       .format(width, height))
 
         #Templates
-        self.env = Environment(loader=PackageLoader('folium', 'templates'))
+        self.env = ENV
         self.template_vars = {'lat': location[0], 'lon': location[1],
                               'size': self._size, 'max_zoom': max_zoom,
-                              'zoom_level': zoom_start}
+                              'zoom_level': zoom_start,
+                              'map_id': self.map_id}
 
         #Tiles
         self.tiles = ''.join(tiles.lower().strip().split())
@@ -189,7 +208,7 @@ class Map(object):
                                                              add_mark))
 
     @iter_obj('line')
-    def line(self, locations, 
+    def line(self, locations,
              line_color=None, line_opacity=None, line_weight=None):
         '''Add a line to the map with optional styles.
 

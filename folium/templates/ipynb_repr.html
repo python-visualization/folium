@@ -1,0 +1,44 @@
+
+<div id="{{ map_id }}" {{ size }}></div>
+
+<script>
+
+  var make_plot = function(){
+    if (typeof L === 'undefined'){
+      window.addEventListener('leaflet_libs_loaded', make_plot)
+      return;
+    }
+
+    var render_plot = (function(){
+
+      {{ vega_parse }}
+
+      var map = L.map('{{ map_id }}').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
+
+      L.tileLayer('{{ Tiles }}', {
+          maxZoom: {{ max_zoom }},
+          attribution: '{{ attr }}'
+      }).addTo(map);
+
+      {% for mark, popup, add_mark in markers %}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+
+      {% for line, add_line in lines %}
+      {{ line }}
+      {{ add_line }}
+      {% endfor %}
+
+      {{ lat_lng_pop }}
+
+      {{ click_pop }}
+
+    })();
+
+  };
+
+  make_plot();
+
+</script>

@@ -1,0 +1,37 @@
+<script>
+
+  var folium_event = new CustomEvent(
+    "folium_libs_loaded",
+    {bubbles: true, cancelable: true}
+  );
+
+  var load_folium_charts = function(){
+    window.dispatchEvent(folium_event);
+  };
+
+ function load_folium_libs(){
+    console.log('Loading all Folium libraries...')
+    $.getScript("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
+        load_folium_charts()
+    })
+
+ if(typeof define === "function" && define.amd){
+      if (window['d3'] === undefined){
+          require.config(
+              {paths: {d3: 'http://d3js.org/d3.v3.min'}
+              }
+            );
+          require(["d3"], function(d3){
+              console.log('Loading from require.js...')
+              window.d3 = d3;
+              load_folium_libs();
+          });
+      } else {
+        load_folium_libs();
+      }
+ }else{
+      console.log('Require.js not found!');
+      throw "Require.js not found!"
+ };
+
+</script>
