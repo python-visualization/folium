@@ -12,6 +12,7 @@
  var load_folium_libs = function(){
     console.log('Loading all Folium libraries...')
     $.getScript("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
+        $.getScript('https://wrobstory.github.io/leaflet-dvf/leaflet-dvf.markers.min.js')
         if (window['vg'] === undefined){
           $.getScript("http://trifacta.github.com/vega/vega.js", function(){
             load_folium_charts();

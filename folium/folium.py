@@ -30,9 +30,10 @@ def initialize_notebook():
 
     lib_css = ENV.get_template('ipynb_init_css.html')
     lib_js = ENV.get_template('ipynb_init_js.html')
+    leaflet_dvf = ENV.get_template('leaflet-dvf.markers.min.js')
 
     display(HTML(lib_css.render()))
-    display(HTML(lib_js.render()))
+    display(HTML(lib_js.render({'leaflet_dvf': leaflet_dvf.render()})))
 
 def iter_obj(type):
     '''Decorator to keep count of different map object types in self.mk_cnt'''
@@ -460,8 +461,8 @@ class Map(object):
                                           'vega_id': vega_id})
 
     @iter_obj('geojson')
-    def geo_json(self, geo_path=None, data_out='data.json', data=None,
-                 columns=None, key_on=None, threshold_scale=None,
+    def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
+                 data=None, columns=None, key_on=None, threshold_scale=None,
                  fill_color='blue', fill_opacity=0.6, line_color='black',
                  line_weight=1, line_opacity=1, legend_name=None,
                  topojson=None, reset=False):
@@ -494,6 +495,8 @@ class Map(object):
         ----------
         geo_path: string, default None
             URL or File path to your GeoJSON data
+        geo_str: string, default None
+            String of GeoJSON, alternative to geo_path
         data_out: string, default 'data.json'
             Path to write Pandas DataFrame/Series to JSON if binding data
         data: Pandas DataFrame or Series, default None
@@ -567,7 +570,13 @@ class Map(object):
         self.map_type = 'geojson'
 
         #Get JSON map layer template pieces, convert TopoJSON if necessary
-        geo_path = ".defer(d3.json, '{0}')".format(geo_path)
+        # geo_str is really a hack
+        if geo_path:
+            geo_path = ".defer(d3.json, '{0}')".format(geo_path)
+        elif geo_str:
+            geo_path = (".defer(function(callback)"
+                        "{{callback(null, JSON.parse('{}'))}})").format(geo_str)
+
         if topojson is None:
             map_var = '_'.join(['gjson', str(self.mark_cnt['geojson'])])
             layer_var = map_var

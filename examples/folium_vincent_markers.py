@@ -12,16 +12,17 @@ NOAA_46050 = pd.read_csv(r'data/NOAA_46050_WS.csv', index_col=3,
 NOAA_46243 = pd.read_csv(r'data/NOAA_46243.csv', index_col=3,
                          parse_dates=True)
 
+NOAA_46041 = NOAA_46041.dropna()
+
 #Binned wind speeds for NOAA 46050
 bins = range(0, 13, 1)
 cuts = pd.cut(NOAA_46050['wind_speed_cwind (m/s)'], bins)
 ws_binned = pd.value_counts(cuts).reindex(cuts.levels)
 
 #NOAA 46401 Wave Period
-vis1 = vincent.Line(width=600)
-vis1.tabular_data(NOAA_46041, columns=['dominant_wave_period (s)'],
-                  axis_time='day')
-vis1.axis_label(x_label='Time', y_label='Dominant Wave Period (s)')
+vis1 = vincent.Line(NOAA_46041['dominant_wave_period (s)'],
+                    width=300, height=200)
+vis1.axis_titles(x='Time', y='Dominant Wave Period (s)')
 vis1.to_json('vis1.json')
 
 #NOAA 46050 Binned Wind Speed

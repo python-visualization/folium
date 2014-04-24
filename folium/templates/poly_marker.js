@@ -8,4 +8,3 @@ var {{ marker }} = new L.RegularPolygonMarker(new L.LatLng({{ lat}}, {{ lon }}),
     rotation: {{ rotation }},
     radius: {{ radius }}
 });
-{{ marker }}._latlng = {{ marker }}._centerLatLng
