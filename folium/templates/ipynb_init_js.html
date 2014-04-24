@@ -9,22 +9,33 @@
     window.dispatchEvent(folium_event);
   };
 
- function load_folium_libs(){
+ var load_folium_libs = function(){
     console.log('Loading all Folium libraries...')
     $.getScript("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
-        load_folium_charts()
-    })
+        if (window['vg'] === undefined){
+          $.getScript("http://trifacta.github.com/vega/vega.js", function(){
+            load_folium_charts();
+          });
+        } else {
+          load_folium_charts();
+        }
+      });
+    };
 
  if(typeof define === "function" && define.amd){
       if (window['d3'] === undefined){
           require.config(
-              {paths: {d3: 'http://d3js.org/d3.v3.min'}
+              {paths: {d3: 'http://d3js.org/d3.v3.min',
+                       topojson:'http://d3js.org/topojson.v1.min'}
               }
             );
           require(["d3"], function(d3){
               console.log('Loading from require.js...')
               window.d3 = d3;
-              load_folium_libs();
+              require(["topojson"], function(topojson){
+                  window.topojson = topojson;
+                  load_folium_libs();
+              });
           });
       } else {
         load_folium_libs();

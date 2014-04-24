@@ -28,11 +28,11 @@ def initialize_notebook():
     except ImportError:
         print("IPython Notebook could not be loaded.")
 
-    lib_js = ENV.get_template('ipynb_init_js.html')
     lib_css = ENV.get_template('ipynb_init_css.html')
+    lib_js = ENV.get_template('ipynb_init_js.html')
 
-    display(HTML(lib_js.render()))
     display(HTML(lib_css.render()))
+    display(HTML(lib_js.render()))
 
 def iter_obj(type):
     '''Decorator to keep count of different map object types in self.mk_cnt'''
@@ -646,7 +646,7 @@ class Map(object):
         self.template_vars.setdefault('geo_styles', []).append(style)
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
-    def _build_map(self, html_templ=None):
+    def _build_map(self, html_templ=None, templ_type='string'):
         '''Build HTML/JS/CSS from Templates given current map type'''
         if html_templ is None:
             map_types = {'base': 'fol_template.html',
@@ -657,7 +657,8 @@ class Map(object):
 
             html_templ = self.env.get_template(type_temp)
         else:
-            html_templ = self.env.from_string(html_templ)
+            if templ_type == 'string':
+                html_templ = self.env.from_string(html_templ)
 
         self.HTML = html_templ.render(self.template_vars)
 
@@ -690,3 +691,20 @@ class Map(object):
             for name, plugin in self.plugins.iteritems():
                 with open(name, 'w') as f:
                     f.write(plugin)
+
+    def _repr_html_(self):
+        """Build the HTML representation for IPython."""
+        templ = self.env.get_template('ipynb_repr.html')
+        self._build_map(html_templ=templ, templ_type='temp')
+        return self.HTML
+
+    def display(self):
+        """Display the visualization inline in the IPython notebook.
+
+        This is deprecated, use the following instead::
+
+            from IPython.display import display
+            display(viz)
+        """
+        from IPython.core.display import display, HTML
+        display(HTML(self._repr_html_()))
