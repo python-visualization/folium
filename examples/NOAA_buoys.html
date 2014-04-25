@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
+   <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
+
+   <script src="https://wrobstory.github.io/leaflet-dvf/leaflet-dvf.markers.min.js"></script>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+   <script src="http://trifacta.github.io/vega/vega.js"></script>
+   <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+
+
+   <style>
+
+      #map {
+        position:absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
+      }
+
+   </style>
+</head>
+
+<body>
+
+   <div class="folium-map" id="folium_95ce8d8d91484896888f4ab5666d4fe4" style="width: 960px; height: 500px"></div>
+
+   <script>
+
+      function parse(spec, div) {
+
+    vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });
+
+}
+
+      var map = L.map('folium_95ce8d8d91484896888f4ab5666d4fe4').setView([46.3014, -123.739], 7);
+
+      L.tileLayer('http://{s}.tile.stamen.com/terrain/{z}/{x}/{y}.jpg', {
+          maxZoom: 18,
+          attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
+      }).addTo(map);
+
+      
+      var polygon_1 = new L.RegularPolygonMarker(new L.LatLng(47.3489, -124.708), {
+    color: 'black',
+    opacity: 1,
+    weight: 2,
+    fillColor: '#43d9de',
+    fillOpacity: 1,
+    numberOfSides: 4,
+    rotation: 0,
+    radius: 12
+});
+      polygon_1.on('click', function() {
+      var div = $('<div id="vis1" style="width: 475px; height: 250px;"></div>')[0];
+      polygon_1.bindPopup(div);
+      polygon_1._popup.options.maxWidth = 960;
+      polygon_1.openPopup();
+      parse('vis1.json', '#vis1');
+    });
+      map.addLayer(polygon_1)
+      
+      var polygon_2 = new L.RegularPolygonMarker(new L.LatLng(44.639, -124.5339), {
+    color: 'black',
+    opacity: 1,
+    weight: 2,
+    fillColor: '#43d9de',
+    fillOpacity: 1,
+    numberOfSides: 4,
+    rotation: 0,
+    radius: 12
+});
+      polygon_2.on('click', function() {
+      var div = $('<div id="vis2" style="width: 475px; height: 250px;"></div>')[0];
+      polygon_2.bindPopup(div);
+      polygon_2._popup.options.maxWidth = 960;
+      polygon_2.openPopup();
+      parse('vis2.json', '#vis2');
+    });
+      map.addLayer(polygon_2)
+      
+      var polygon_3 = new L.RegularPolygonMarker(new L.LatLng(46.216, -124.128), {
+    color: 'black',
+    opacity: 1,
+    weight: 2,
+    fillColor: '#43d9de',
+    fillOpacity: 1,
+    numberOfSides: 4,
+    rotation: 0,
+    radius: 12
+});
+      polygon_3.on('click', function() {
+      var div = $('<div id="vis3" style="width: 475px; height: 250px;"></div>')[0];
+      polygon_3.bindPopup(div);
+      polygon_3._popup.options.maxWidth = 960;
+      polygon_3.openPopup();
+      parse('vis3.json', '#vis3');
+    });
+      map.addLayer(polygon_3)
+      
+
+      
+
+      
+
+      
+
+   </script>
+
+</body>

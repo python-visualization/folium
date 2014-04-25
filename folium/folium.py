@@ -108,8 +108,9 @@ class Map(object):
 
         '''
 
-        #Init Map type
-        self.map_paht = None
+        #Inits
+        self.map_path = None
+        self.render_iframe = False
         self.map_type = 'base'
         self.map_id = '_'.join(['folium', uuid4().hex])
 
@@ -711,9 +712,11 @@ class Map(object):
 
         #Check current map type
         type_temp = map_types[self.map_type]
+        if self.render_iframe:
+            type_temp = 'ipynb_iframe.html'
         templ = self.env.get_template(type_temp)
         self._build_map(html_templ=templ, templ_type='temp')
-        if self.map_type == 'geojson':
+        if self.map_type == 'geojson' or self.render_iframe:
             if not self.map_path:
                 raise ValueError('Use create_map to set the path!')
             return templ.render(path=self.map_path, width=self.width,
