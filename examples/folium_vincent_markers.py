@@ -5,11 +5,11 @@ import pandas as pd
 import vincent
 import folium
 
-NOAA_46041 = pd.read_csv(r'data/NOAA_46041.csv', index_col=3,
+NOAA_46041 = pd.read_csv(r'files/NOAA_46041.csv', index_col=3,
                          parse_dates=True)
-NOAA_46050 = pd.read_csv(r'data/NOAA_46050_WS.csv', index_col=3,
+NOAA_46050 = pd.read_csv(r'files/NOAA_46050_WS.csv', index_col=3,
                          parse_dates=True)
-NOAA_46243 = pd.read_csv(r'data/NOAA_46243.csv', index_col=3,
+NOAA_46243 = pd.read_csv(r'files/NOAA_46243.csv', index_col=3,
                          parse_dates=True)
 
 NOAA_46041 = NOAA_46041.dropna()

@@ -109,6 +109,7 @@ class Map(object):
         '''
 
         #Init Map type
+        self.map_paht = None
         self.map_type = 'base'
         self.map_id = '_'.join(['folium', uuid4().hex])
 
@@ -124,6 +125,8 @@ class Map(object):
         self.location = location
 
         #Map Size Parameters
+        self.width = width
+        self.height = height
         self.map_size = {'width': width, 'height': height}
         self._size = ('style="width: {0}px; height: {1}px"'
                       .format(width, height))
@@ -685,7 +688,7 @@ class Map(object):
             Custom template to render
 
         '''
-
+        self.map_path = path
         self._build_map(template)
 
         with codecs.open(path, 'w', 'utf-8') as f:
@@ -703,8 +706,18 @@ class Map(object):
 
     def _repr_html_(self):
         """Build the HTML representation for IPython."""
-        templ = self.env.get_template('ipynb_repr.html')
+        map_types = {'base': 'ipynb_repr.html',
+                     'geojson': 'ipynb_iframe.html'}
+
+        #Check current map type
+        type_temp = map_types[self.map_type]
+        templ = self.env.get_template(type_temp)
         self._build_map(html_templ=templ, templ_type='temp')
+        if self.map_type == 'geojson':
+            if not self.map_path:
+                raise ValueError('Use create_map to set the path!')
+            return templ.render(path=self.map_path, width=self.width,
+                                height=self.height)
         return self.HTML
 
     def display(self):

@@ -8,8 +8,8 @@ GeoJSON via the US Census and Eric Celeste: http://eric.clst.org/Stuff/USGeoJSON
 import folium
 import pandas as pd
 
-county_data = r'data/us_county_data.csv'
-county_geo = r'data/us_counties_20m_topo.json'
+county_data = r'us_county_data.csv'
+county_geo = r'us_counties_20m_topo.json'
 
 #Read into Dataframe, cast to string for consistency
 df = pd.read_csv(county_data, na_values=[' '])

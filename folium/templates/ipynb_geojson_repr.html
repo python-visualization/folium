@@ -1,0 +1,84 @@
+
+<div id="{{ map_id }}" {{ size }}></div>
+
+<script>
+
+  var make_plot = function(){
+    if (typeof L === 'undefined'){
+      window.addEventListener('leaflet_libs_loaded', make_plot)
+      return;
+    }
+
+    var render_plot = (function(){
+
+      queue()
+          {%- for load_path in json_paths %}
+          {{ load_path }}
+          {%- endfor %}
+          .await(makeMap)
+
+      function makeMap(error, {% for var in func_vars %}{{ var }}
+                       {%- if not loop.last %},{%- endif %}{%- endfor %}) {
+
+          {% for topo in topo_convert %}
+          {{ topo }}
+          {% endfor %}
+
+          {{ vega_parse }}
+
+          function matchKey(datapoint, key_variable){
+              if (typeof key_variable[0][datapoint] === 'undefined') {
+                  return null;
+              }
+              else {
+                  return parseFloat(key_variable[0][datapoint]);
+              };
+          };
+
+          {% for scale in color_scales %}
+          {{ scale }}
+          {% endfor %}
+
+          var map = L.map('map').setView([{{ lat }}, {{ lon }}], {{ zoom_level }});
+
+          L.tileLayer('{{ Tiles }}', {
+              maxZoom: {{ max_zoom }},
+              attribution: '{{ attr }}'
+          }).addTo(map);
+
+          {% for mark, popup, add_mark in markers %}
+          {{ mark }}
+          {{ popup }}
+          {{ add_mark }}
+          {% endfor %}
+
+          {% for line, add_line in lines %}
+          {{ line }}
+          {{ add_line }}
+          {% endfor %}
+
+          {{ lat_lng_pop }}
+
+          {{ click_pop }}
+
+          {% for style in geo_styles %}
+          {{ style }}
+          {% endfor %}
+
+          {% for layer in gjson_layers %}
+          {{ layer }}
+          {% endfor %}
+
+          {% for legend in map_legends %}
+          {{ legend }}
+          {% endfor %}
+
+      };
+
+    })();
+
+  };
+
+  make_plot();
+
+</script>
