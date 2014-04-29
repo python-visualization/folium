@@ -127,6 +127,8 @@ def split_six(series=None):
 
     if pd is None:
         raise ImportError("The Pandas package is required for this functionality")
+    if np is None:
+        raise ImportError("The NumPy package is required for this functionality")
 
     def base(x):
         if x > 0:
@@ -135,5 +137,7 @@ def split_six(series=None):
         else:
             return 0
 
-    quants = [0, 0.5, 0.75, 0.85, 0.9]
-    return [base(series.quantile(x)) for x in quants]
+    quants = [0, 50, 75, 85, 90]
+    # Some weirdness in series quantiles a la 0.13
+    arr = series.values
+    return [base(np.percentile(arr, x)) for x in quants]

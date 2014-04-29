@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
+   <script src="http://cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
+   <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+   <script src="http://d3js.org/queue.v1.min.js"></script>
+
+   
+   
+   
+   
+
+   <style>
+
+      .legend {
+          padding: 0px 0px;
+          font: 10px sans-serif;
+          background: white;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 5px;
+      }
+
+      .key path {
+        display: none;
+      }
+
+   </style>
+</head>
+
+<body>
+
+   <div id="map" style="width: 960px; height: 500px"></div>
+
+   <script>
+
+      queue()
+          .defer(d3.json, 'data.json')
+          .defer(d3.json, 'us-states.json')
+          .await(makeMap)
+
+      function makeMap(error, data_1,gjson_1) {
+
+          
+
+          
+
+          function matchKey(datapoint, key_variable){
+              if (typeof key_variable[0][datapoint] === 'undefined') {
+                  return null;
+              }
+              else {
+                  return parseFloat(key_variable[0][datapoint]);
+              };
+          };
+
+          
+          var color = d3.scale.threshold()
+              .domain([5, 6, 7, 8, 9, 10])
+              .range(['#EDF8FB', '#BFD3E6', '#9EBCDA', '#8C96C6', '#8C6BB1', '#88419D', '#6E016B']);
+          
+
+          var map = L.map('map').setView([48, -102], 3);
+
+          L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+              maxZoom: 18,
+              attribution: 'Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+          }).addTo(map);
+
+          
+
+          
+
+          
+
+          
+
+          
+          function style_1(feature) {
+    return {
+        fillColor: color(matchKey(feature.id, data_1)),
+        weight: 1,
+        opacity: 0.5,
+        color: 'black',
+        fillOpacity: 0.7
+    };
+}
+          
+
+          
+          gJson_layer_1 = L.geoJson(gjson_1, {style: style_1}).addTo(map)
+          
+
+          
+              var legend = L.control({position: 'topright'});
+
+    legend.onAdd = function (map) {var div = L.DomUtil.create('div', 'legend'); return div};
+
+    legend.addTo(map);
+
+    var x = d3.scale.linear()
+    .domain([0, 11])
+    .range([0, 400]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("top")
+        .tickSize(1)
+        .tickValues(color.domain())
+
+    var svg = d3.select(".legend.leaflet-control").append("svg")
+        .attr("id", 'legend')
+        .attr("width", 450)
+        .attr("height", 40);
+
+    var g = svg.append("g")
+        .attr("class", "key")
+        .attr("transform", "translate(25,16)");
+
+    g.selectAll("rect")
+        .data(color.range().map(function(d, i) {
+          return {
+            x0: i ? x(color.domain()[i - 1]) : x.range()[0],
+            x1: i < color.domain().length ? x(color.domain()[i]) : x.range()[1],
+            z: d
+          };
+        }))
+      .enter().append("rect")
+        .attr("height", 10)
+        .attr("x", function(d) { return d.x0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .style("fill", function(d) { return d.z; });
+
+    g.call(xAxis).append("text")
+        .attr("class", "caption")
+        .attr("y", 21)
+        .text('Unemployment Rate (%)');
+          
+
+      };
+
+   </script>
+</body>
