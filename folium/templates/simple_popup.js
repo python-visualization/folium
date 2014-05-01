@@ -1,1 +1,1 @@
-{{ pop_name }}.bindPopup("{{ pop_txt }}");
+{{ pop_name }}.bindPopup({{ pop_txt }});

@@ -437,7 +437,7 @@ class Map(object):
             if isinstance(popup, str):
                 popup_temp = self.env.get_template('simple_popup.js')
                 return popup_temp.render({'pop_name': mk_name + str(count),
-                                          'pop_txt': popup})
+                                          'pop_txt': json.dumps(popup)})
             elif isinstance(popup, tuple):
                 #Update template with JS libs
                 vega_temp = self.env.get_template('vega_ref.txt').render()
