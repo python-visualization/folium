@@ -5,6 +5,7 @@ Folium Tests
 
 '''
 import json
+import mock
 import pandas as pd
 import nose.tools as nt
 import jinja2
@@ -42,9 +43,10 @@ class testFolium(object):
 
     def setup(self):
         '''Setup Folium Map'''
-
-        self.map = folium.Map(location=[45.5236, -122.6750], width=900,
-                              height=400, max_zoom=20, zoom_start=4)
+        with mock.patch('folium.folium.uuid4') as uuid4:
+            uuid4().hex = '0' * 32
+            self.map = folium.Map(location=[45.5236, -122.6750], width=900,
+                                  height=400, max_zoom=20, zoom_start=4)
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
@@ -60,6 +62,7 @@ class testFolium(object):
         tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
+                'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
                 'zoom_level': 4}
@@ -201,7 +204,7 @@ class testFolium(object):
     def test_vega_popup(self):
         '''Test vega popups'''
 
-        vis = vincent.Bar()
+        vis = vincent.Bar(width=675 - 75, height=350 - 50, no_data=True)
 
         self.map.simple_marker(location=[45.60, -122.8], popup=(vis, 'vis.json'))
         popup_temp = self.env.get_template('vega_marker.js')
@@ -275,7 +278,7 @@ class testFolium(object):
                                    'range': d3range})
 
         style_temp = self.env.get_template('geojson_style.js')
-        color = 'matchKey(feature.id, data_1)'
+        color = 'color(matchKey(feature.id, data_1))'
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
                                    'line_weight': 1,
@@ -320,6 +323,7 @@ class testFolium(object):
         tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
                 'OpenStreetMap</a> contributors'),
+                'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
                 'zoom_level': 4}
