@@ -622,14 +622,15 @@ class Map(object):
             #D3 Color scale
             series = data[columns[1]]
             domain = threshold_scale or utilities.split_six(series=series)
-            if len(domain) > 6:
-                raise ValueError('The threshold scale must be of length <= 6')
+            if len(domain) > 253:
+                raise ValueError('The threshold scale must be of length <= 253')
             if not utilities.color_brewer(fill_color):
                 raise ValueError('Please pass a valid color brewer code to '
                                  'fill_local. See docstring for valid codes.')
 
-            palette = utilities.color_brewer(fill_color)
+            palette = utilities.color_brewer(fill_color, len(domain))
             d3range = palette[0: len(domain) + 1]
+            tick_labels = utilities.legend_scaler(domain)
 
             color_temp = self.env.get_template('d3_threshold.js')
             d3scale = color_temp.render({'domain': domain,
@@ -640,6 +641,7 @@ class Map(object):
             name = legend_name or columns[1]
             leg_templ = self.env.get_template('d3_map_legend.js')
             legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
+                                       'tick_labels': tick_labels,
                                        'caption': name})
             self.template_vars.setdefault('map_legends', []).append(legend)
 

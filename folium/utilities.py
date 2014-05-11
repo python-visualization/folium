@@ -27,10 +27,70 @@ def get_templates():
     '''Get Jinja templates'''
     return Environment(loader=PackageLoader('folium', 'templates'))
 
+def legend_scaler(legend_values, max_labels=10.0):
+    '''
+    Downsamples the number of legend values so that there isn't a collision
+    of text on the legend colorbar (within reason). The colorbar seems to 
+    support ~10 entries as a maximum
+    '''
+    import math
 
-def color_brewer(color_code):
+    if len(legend_values)<max_labels:
+        legend_ticks = legend_values
+    else:
+        spacer = int(math.ceil(len(legend_values)/max_labels))
+        legend_ticks = []
+        for i in legend_values[::spacer]:
+            legend_ticks += [i]
+            legend_ticks += ['']*(spacer-1)
+    return legend_ticks
+
+
+def linear_gradient(hexList, nColors):
+    """Given a list of hexcode values, will return a list of length
+    nColors where the colors are linearly interpolated between the
+    (r, g, b) tuples that are given.
+
+    Example:
+    linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
+    """
+    def _scale(start, finish, length, i):
+        """Return the value correct value of a number that is inbetween start
+        and finish, for use in a loop of length *length*"""
+        base=16
+
+        fraction = float(i) / (length - 1)
+        raynge = int(finish, base) - int(start, base)
+        thex = hex(int(int(start, base) + fraction * raynge)).split('x')[-1]
+        if len(thex)!=2:
+            thex ='0' + thex
+        return thex
+
+
+    allColors = []
+    # separate (r, g, b) pairs
+    for start, end in zip(hexList[:-1], hexList[1:]):
+        # linearly intepolate between pair of hex ###### values and add to list
+        nInterpolate = 765 
+        for index in range(nInterpolate):
+            r = _scale(start[1:3], end[1:3], nInterpolate, index)
+            g = _scale(start[3:5], end[3:5], nInterpolate, index)
+            b = _scale(start[5:7], end[5:7], nInterpolate, index)
+            allColors.append(''.join(['#',r,g,b]))
+
+    # pick only nColors colors from the total list
+    result = []
+    for counter in range(nColors):
+        fraction = float(counter) / (nColors - 1)
+        index = int(fraction * (len(allColors) - 1)) 
+        result.append(allColors[index])
+    return result
+
+
+def color_brewer(color_code, n=6):
     '''Generate a colorbrewer color scheme of length 'len', type 'scheme.
     Live examples can be seen at http://colorbrewer2.org/'''
+    maximum_n = 253
 
     schemes = {'BuGn': ['#EDF8FB', '#CCECE6', '#CCECE6', '#66C2A4', '#41AE76',
                         '#238B45', '#005824'],
@@ -57,7 +117,24 @@ def color_brewer(color_code):
                'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A',
                           '#E31A1C', '#B10026']}
 
-    return schemes.get(color_code, None)
+    #Raise an error if the n requested is greater than the maximum
+    if n > maximum_n:
+        raise ValueError("The maximum number of colors in a ColorBrewer sequential color series is 253")
+
+    #Only if n is greater than six do we interpolate values
+    if n > 6:
+        if color_code not in schemes:
+            color_scheme= None
+        else:
+            color_scheme = linear_gradient(schemes.get(color_code), n)
+
+
+            #rgb_color_scheme = [hex_to_rgb(hex_code) for hex_code in schemes.get(color_code)]
+            #color_scheme = [rgb_to_hex(rgb_code) for rgb_code in linear_gradient(rgb_color_scheme, n)]
+    else:
+        color_scheme = schemes.get(color_code, None)
+    return color_scheme
+
 
 
 def transform_data(data):
