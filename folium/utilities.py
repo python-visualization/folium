@@ -92,6 +92,37 @@ def color_brewer(color_code, n=6):
     Live examples can be seen at http://colorbrewer2.org/'''
     maximum_n = 253
 
+    scheme_info = {'BuGn': 'Sequential',
+                   'BuPu': 'Sequential',
+                   'GnBu': 'Sequential',
+                   'OrRd': 'Sequential',
+                   'PuBu': 'Sequential',
+                   'PuBuGn': 'Sequential',
+                   'PuRd': 'Sequential',
+                   'RdPu': 'Sequential',
+                   'YlGn': 'Sequential',
+                   'YlGnBu': 'Sequential',
+                   'YlOrBr': 'Sequential',
+                   'YlOrRd': 'Sequential',
+                   'BrBg': 'Diverging',
+                   'PiYG': 'Diverging',
+                   'PRGn': 'Diverging',
+                   'PuOr': 'Diverging',
+                   'RdBu': 'Diverging',
+                   'RdGy': 'Diverging',
+                   'RdYlBu': 'Diverging',
+                   'RdYlGn': 'Diverging',
+                   'Spectral': 'Diverging',
+                   'Accent': 'Qualitative', 
+                   'Dark2': 'Qualitative',
+                   'Paired': 'Qualitative',
+                   'Pastel1': 'Qualitative',
+                   'Pastel2': 'Qualitative',
+                   'Set1': 'Qualitative',
+                   'Set2': 'Qualitative',
+                   'Set3': 'Qualitative',
+                   }
+
     schemes = {'BuGn': ['#EDF8FB', '#CCECE6', '#CCECE6', '#66C2A4', '#41AE76',
                         '#238B45', '#005824'],
                'BuPu': ['#EDF8FB', '#BFD3E6', '#9EBCDA', '#8C96C6', '#8C6BB1',
@@ -115,7 +146,25 @@ def color_brewer(color_code, n=6):
                'YlOrBr': ['#FFFFD4', '#FEE391', '#FEC44F', '#FE9929', '#EC7014',
                           '#CC4C02', '#8C2D04'],
                'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C', '#FD8D3C', '#FC4E2A',
-                          '#E31A1C', '#B10026']}
+                          '#E31A1C', '#B10026'],
+               'BrBg': ['#8c510a', '#d8b365', '#f6e8c3', '#c7eae5', '#5ab4ac', '#01665e'],
+               'PiYG': ['#c51b7d', '#e9a3c9', '#fde0ef', '#e6f5d0', '#a1d76a', '#4d9221'],
+               'PRGn': ['#762a83', '#af8dc3', '#e7d4e8', '#d9f0d3', '#7fbf7b', '#1b7837'],
+               'PuOr': ['#b35806', '#f1a340', '#fee0b6', '#d8daeb', '#998ec3', '#542788'],
+               'RdBu': ['#b2182b', '#ef8a62', '#fddbc7', '#d1e5f0', '#67a9cf', '#2166ac'],
+               'RdGy': ['#b2182b', '#ef8a62', '#fddbc7', '#e0e0e0', '#999999', '#4d4d4d'],
+               'RdYlBu': ['#d73027', '#fc8d59', '#fee090', '#e0f3f8', '#91bfdb', '#4575b4'],
+               'RdYlGn': ['#d73027', '#fc8d59', '#fee08b', '#d9ef8b', '#91cf60', '#1a9850'],
+               'Spectral': ['#d53e4f' '#fc8d59' '#fee08b' '#e6f598' '#99d594' '#3288bd'],
+               'Accent': ['#7fc97f', '#beaed4', '#fdc086', '#ffff99', '#386cb0', '#f0027f'],
+               'Dark2': ['#1b9e77', '#d95f02', '#7570b3', '#e7298a', '#66a61e', '#e6ab02'],
+               'Paired': ['#a6cee3', '#1f78b4', '#b2df8a', '#33a02c', '#fb9a99', '#e31a1c'],
+               'Pastel1': ['#fbb4ae', '#b3cde3', '#ccebc5', '#decbe4', '#fed9a6', '#ffffcc'],
+               'Pastel2': ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#e6f5c9', '#fff2ae'],
+               'Set1': ['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33'],
+               'Set2': ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854', '#ffd92f'],
+               'Set3': ['#8dd3c7', '#ffffb3', '#bebada', '#fb8072', '#80b1d3', '#fdb462'],
+               }
 
     #Raise an error if the n requested is greater than the maximum
     if n > maximum_n:
@@ -126,11 +175,11 @@ def color_brewer(color_code, n=6):
         if color_code not in schemes:
             color_scheme= None
         else:
-            color_scheme = linear_gradient(schemes.get(color_code), n)
-
-
-            #rgb_color_scheme = [hex_to_rgb(hex_code) for hex_code in schemes.get(color_code)]
-            #color_scheme = [rgb_to_hex(rgb_code) for rgb_code in linear_gradient(rgb_color_scheme, n)]
+            #Check to make sure that it is not a qualitative scheme
+            if scheme_info[color_code]=='Qualitative':
+                raise ValueError("Expanded color support is not available for Qualitative schemes, restrict number of colors to 6")
+            else:
+                color_scheme = linear_gradient(schemes.get(color_code), n)
     else:
         color_scheme = schemes.get(color_code, None)
     return color_scheme
