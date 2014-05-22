@@ -454,7 +454,14 @@ class Map(object):
                 mark = ''.join([mk_name, str(count)])
                 json_out = popup[1]
                 div_id = popup[1].split('.')[0]
-                width, height = (vega.width + 75), (vega.height + 50)
+                width = vega.width
+                height = vega.height
+                if isinstance(vega.padding, dict):
+                    width += vega.padding['left']+vega.padding['right']
+                    height += vega.padding['top']+vega.padding['bottom']
+                else:
+                    width += 75
+                    height += 50                    
                 max_width = self.map_size['width']
                 vega_id = '#' + div_id
                 popup_temp = self.env.get_template('vega_marker.js')
