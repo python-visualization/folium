@@ -12,7 +12,7 @@
         .scale(x)
         .orient("top")
         .tickSize(1)
-        .tickValues(color.domain())
+        .tickValues({{ tick_labels }});
 
     var svg = d3.select(".legend.leaflet-control").append("svg")
         .attr("id", 'legend')
