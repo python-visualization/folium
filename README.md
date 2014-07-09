@@ -61,6 +61,17 @@ map_1.create_map(path='mthood.html')
 
 [Live example](http://bl.ocks.org/wrobstory/5609718)
 
+Folium supports colors and marker icon types (from bootstrap)
+```python
+map_1 = folium.Map(location=[45.372, -121.6972], zoom_start=12,tiles='Stamen Terrain')
+map_1.simple_marker([45.3288, -121.6625], popup='Mt. Hood Meadows',marker_icon='cloud')
+map_1.simple_marker([45.3311, -121.7113], popup='Timberline Lodge',marker_color='green')
+map_1.simple_marker([45.3300, -121.6823], popup='Some Other Location',marker_color='red',marker_icon='info-sign')
+map_1.create_map(path='iconTest.html')
+```
+
+![iconTest](http://cl.ly/image/2b0l1K0v370P/icon_test.png)
+
 Folium also supports circle-style markers, with custom size and color:
 ```python
 map_2 = folium.Map(location=[45.5236, -122.6750], tiles='Stamen Toner',
