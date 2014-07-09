@@ -176,7 +176,7 @@ class Map(object):
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
     @iter_obj('simple')
-    def simple_marker(self, location=None, popup='Pop Text', popup_on=True):
+    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign'):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -189,6 +189,10 @@ class Map(object):
             or a tuple of the form (Vincent object, 'vis_path.json')
         popup_on: boolean, default True
             Pass false for no popup information on the marker
+        marker_color
+            color of marker you want
+        marker_icon
+            icon from (http://getbootstrap.com/components/) you want on the marker
 
         Returns
         -------
@@ -204,9 +208,21 @@ class Map(object):
 
         mark_temp = self.env.get_template('simple_marker.js')
 
+        marker_num = 'marker_{0}'.format(count)
+        add_line = "{'icon':"+marker_num+"_icon}"
+
+        icon_temp = self.env.get_template('simple_icon.js')
+        icon = icon_temp.render({'icon_name': marker_num+"_icon",
+                                   'icon': marker_icon,
+                                   'markerColor': marker_color
+                                })
+
         #Get marker and popup
         marker = mark_temp.render({'marker': 'marker_' + str(count),
-                                   'lat': location[0], 'lon': location[1]})
+                                   'lat': location[0], 
+                                   'lon': location[1],
+                                   'icon': add_line
+                                   })
 
         popup_out = self._popup_render(popup=popup, mk_name='marker_',
                                        count=count,
@@ -214,7 +230,8 @@ class Map(object):
 
         add_mark = 'map.addLayer(marker_{0})'.format(count)
 
-        self.template_vars.setdefault('markers', []).append((marker,
+        self.template_vars.setdefault('markers', []).append((icon,
+                                                             marker,
                                                              popup_out,
                                                              add_mark))
 
