@@ -1,1 +1,4 @@
-var {{ marker }} = L.marker([{{ lat }}, {{ lon }}]);
+var {{ marker }} = L.marker([{{ lat }}, 
+							{{ lon }}],
+							{{icon}}
+							);

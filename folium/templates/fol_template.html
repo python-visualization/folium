@@ -4,6 +4,17 @@
    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.css" />
    <script src="http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js"></script>
 
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+   <link rel="stylesheet" href="leaflet_awesome_markers/leaflet.awesome-markers.css">
+   <script src="leaflet_awesome_markers/leaflet.awesome-markers.js"></script>
+
+   
+
    {{ dvf_js }}
    {{ d3 }}
    {{ vega }}
@@ -45,7 +56,8 @@
           attribution: '{{ attr }}'
       }).addTo(map);
 
-      {% for mark, popup, add_mark in markers %}
+      {% for icon, mark, popup, add_mark in markers %}
+      {{ icon }}
       {{ mark }}
       {{ popup }}
       {{ add_mark }}
