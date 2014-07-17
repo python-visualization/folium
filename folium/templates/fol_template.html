@@ -13,6 +13,12 @@
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.css">
    <script src="//cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.js"></script>
 
+
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css">
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css">
+   <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+
    
 
    {{ dvf_js }}
@@ -55,6 +61,17 @@
           maxZoom: {{ max_zoom }},
           attribution: '{{ attr }}'
       }).addTo(map);
+
+      var markers = L.markerClusterGroup();
+
+      for (var i = 0; i < 5; i++) {
+        var title = "test";
+        var markerTest = L.marker(new L.LatLng(40+i, -68+i), { title: title });
+        markerTest.bindPopup(title);
+        markers.addLayer(markerTest);
+      }
+
+      map.addLayer(markers);
 
       {% for icon, mark, popup, add_mark in custom_markers %}
       {{ icon }}
