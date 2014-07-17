@@ -49,8 +49,14 @@
           attribution: '{{ attr }}'
       }).addTo(map);
 
-      {% for icon, mark, popup, add_mark in markers %}
+      {% for icon, mark, popup, add_mark in custom_markers %}
       {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+
+      {% for mark, popup, add_mark in markers %}
       {{ mark }}
       {{ popup }}
       {{ add_mark }}
