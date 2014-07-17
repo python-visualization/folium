@@ -224,7 +224,7 @@ class Map(object):
 
         add_mark = 'map.addLayer(marker_{0})'.format(count)
 
-        self.template_vars.setdefault('markers', []).append((icon,
+        self.template_vars.setdefault('custom_markers', []).append((icon,
                                                              marker,
                                                              popup_out,
                                                              add_mark))
