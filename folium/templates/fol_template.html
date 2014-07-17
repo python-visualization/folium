@@ -55,16 +55,17 @@
           attribution: '{{ attr }}'
       }).addTo(map);
 
-      var markers = L.markerClusterGroup();
-
-      for (var i = 0; i < 5; i++) {
-        var title = "test";
-        var markerTest = L.marker(new L.LatLng(40+i, -68+i), { title: title });
-        markerTest.bindPopup(title);
-        markers.addLayer(markerTest);
-      }
-
-      map.addLayer(markers);
+      //cluster group
+      var clusteredmarkers = L.markerClusterGroup();
+      //section for adding clustered markers
+      {% for icon, mark, popup, add_mark in cluster_markers %}
+      {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+      //add the clustered markers to the group anyway
+      map.addLayer(clusteredmarkers);
 
       {% for icon, mark, popup, add_mark in custom_markers %}
       {{ icon }}
