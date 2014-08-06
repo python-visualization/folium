@@ -170,7 +170,7 @@ class Map(object):
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
     @iter_obj('simple')
-    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign'):
+    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign',clustered_marker=False):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -187,6 +187,8 @@ class Map(object):
             color of marker you want
         marker_icon
             icon from (http://getbootstrap.com/components/) you want on the marker
+        clustered_marker
+            boolean of whether or not you want the marker clustered with other markers    
 
         Returns
         -------
@@ -222,9 +224,17 @@ class Map(object):
                                        count=count,
                                        popup_on=popup_on)
 
-        add_mark = 'map.addLayer(marker_{0})'.format(count)
+        
 
-        self.template_vars.setdefault('custom_markers', []).append((icon,
+        if clustered_marker:
+            add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
+            self.template_vars.setdefault('cluster_markers', []).append((icon,
+                                                             marker,
+                                                             popup_out,
+                                                             add_mark))
+        else:
+            add_mark = 'map.addLayer(marker_{0})'.format(count)
+            self.template_vars.setdefault('custom_markers', []).append((icon,
                                                              marker,
                                                              popup_out,
                                                              add_mark))

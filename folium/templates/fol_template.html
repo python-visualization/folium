@@ -13,6 +13,12 @@
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.css">
    <script src="//cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.0/leaflet.awesome-markers.js"></script>
 
+
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css">
+   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css">
+   <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
+   <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+
    
 
    {{ dvf_js }}
@@ -48,6 +54,18 @@
           maxZoom: {{ max_zoom }},
           attribution: '{{ attr }}'
       }).addTo(map);
+
+      //cluster group
+      var clusteredmarkers = L.markerClusterGroup();
+      //section for adding clustered markers
+      {% for icon, mark, popup, add_mark in cluster_markers %}
+      {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+      //add the clustered markers to the group anyway
+      map.addLayer(clusteredmarkers);
 
       {% for icon, mark, popup, add_mark in custom_markers %}
       {{ icon }}
