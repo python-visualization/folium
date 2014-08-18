@@ -169,8 +169,85 @@ class Map(object):
             self.template_vars['attr'] = unicode(attr, 'utf8')
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
+        self.added_layers = []
+        self.template_vars.setdefault('wms_layers', [])
+        self.template_vars.setdefault('tile_layers', [])
+
     @iter_obj('simple')
-    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign',clustered_marker=False):
+    def add_tile_layer(self, tile_name=None,tile_url=None,active=False):
+        '''adds a simple tile layer
+        Parameters
+        ----------
+        tile_name: string
+            name of the tile layer
+        tile_url: string
+            url location of the tile layer
+        active: boolean
+            should the layer be active when added
+        '''
+        if not tile_name in self.added_layers:
+            tile_name = tile_name.replace (" ", "_")
+            tile_temp = self.env.get_template('tile_layer.js')
+
+            tile = tile_temp.render({'tile_name': tile_name,
+                                       'tile_url': tile_url
+                                       })
+
+            self.template_vars.setdefault('tile_layers', []).append((tile))
+
+            self.added_layers.append({tile_name:tile_url})
+
+
+    @iter_obj('simple')
+    def add_wms_layer(self, wms_name=None,wms_url=None,wms_format=None,wms_layers=None,wms_transparent=True):
+        '''adds a simple tile layer
+        Parameters
+        ----------
+        wms_name: string
+            name of wms layer
+        wms_url : string
+            url of wms layer
+        '''
+        if not wms_name in self.added_layers:
+            wms_name = wms_name.replace (" ", "_")
+            wms_temp = self.env.get_template('wms_layer.js')
+
+            wms = wms_temp.render({'wms_name': wms_name,
+                                       'wms_url': wms_url,
+                                       'wms_format': wms_format,
+                                       'wms_layer_names':wms_layers,
+                                       'wms_transparent':str(wms_transparent).lower()
+                                       })
+
+            self.template_vars.setdefault('wms_layers', []).append((wms))
+
+            self.added_layers.append({wms_name:wms_url})
+
+    @iter_obj('simple')
+    def add_layers_to_map(self):
+        '''
+        Required function to actually add the layers to the html packet
+        '''
+        layers_temp = self.env.get_template('add_layers.js')
+
+        data_string = ''
+        for i, layer in enumerate(self.added_layers):                
+            name = layer.keys()[0]
+            data_string+='\"'
+            data_string+=name
+            data_string+='\"'
+            data_string+=': '
+            data_string+=name
+            if i < len(self.added_layers)-1:
+                data_string+=",\n"
+            else:
+                data_string+="\n"            
+
+        data_layers = layers_temp.render({'layers': data_string})
+        self.template_vars.setdefault('data_layers', []).append((data_string))
+
+    @iter_obj('simple')
+    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign',clustered_marker=False,icon_angle=0):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -210,7 +287,8 @@ class Map(object):
         icon_temp = self.env.get_template('simple_icon.js')
         icon = icon_temp.render({'icon_name': marker_num+"_icon",
                                    'icon': marker_icon,
-                                   'markerColor': marker_color
+                                   'markerColor': marker_color,
+                                   'icon_angle': icon_angle
                                 })
 
         #Get marker and popup
