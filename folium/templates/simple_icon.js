@@ -1,0 +1,1 @@
+var {{icon_name}} = L.AwesomeMarkers.icon({ icon: '{{icon}}',markerColor: '{{markerColor}}',prefix: 'glyphicon',extraClasses: 'fa-rotate-{{icon_angle}}'});

@@ -1,0 +1,1 @@
+var {{ tile_name }} = L.tileLayer('{{ tile_url }}');
