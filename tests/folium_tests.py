@@ -5,12 +5,14 @@ Folium Tests
 
 '''
 import json
+import mock
 import pandas as pd
 import nose.tools as nt
 import jinja2
 from jinja2 import Environment, PackageLoader
-import folium
 import vincent
+import folium
+from folium.six import PY3
 
 
 def setup_data():
@@ -42,9 +44,10 @@ class testFolium(object):
 
     def setup(self):
         '''Setup Folium Map'''
-
-        self.map = folium.Map(location=[45.5236, -122.6750], width=900,
-                              height=400, max_zoom=20, zoom_start=4)
+        with mock.patch('folium.folium.uuid4') as uuid4:
+            uuid4().hex = '0' * 32
+            self.map = folium.Map(location=[45.5236, -122.6750], width=900,
+                                  height=400, max_zoom=20, zoom_start=4)
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
@@ -57,9 +60,10 @@ class testFolium(object):
 
         nt.assert_raises(ValueError, callableObj=folium.Map)
 
-        tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
+        tmpl = {'Tiles': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
+                'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
                 'zoom_level': 4}
@@ -74,7 +78,7 @@ class testFolium(object):
 
         map = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
                          API_key='###')
-        assert map.template_vars['Tiles'] == (u'http://{s}.tile.cloudmade.com'
+        assert map.template_vars['Tiles'] == ('http://{s}.tile.cloudmade.com'
                                               '/###/997/256/{z}/{x}/{y}.png')
 
     def test_builtin_tile(self):
@@ -93,7 +97,7 @@ class testFolium(object):
     def test_custom_tile(self):
         '''Test custom tile URLs'''
 
-        url = u'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
+        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
         attr = 'Attribution for custom tiles'
 
         nt.assert_raises(ValueError, callableObj=folium.Map,
@@ -201,7 +205,7 @@ class testFolium(object):
     def test_vega_popup(self):
         '''Test vega popups'''
 
-        vis = vincent.Bar()
+        vis = vincent.Bar(width=675 - 75, height=350 - 50, no_data=True)
 
         self.map.simple_marker(location=[45.60, -122.8], popup=(vis, 'vis.json'))
         popup_temp = self.env.get_template('vega_marker.js')
@@ -213,7 +217,7 @@ class testFolium(object):
         assert self.map.template_vars['markers'][0][1] == vega
 
     def test_geo_json(self):
-        '''Test geojson  method'''
+        '''Test geojson method'''
 
         path = 'us-counties.json'
         geo_path = ".defer(d3.json, '{0}')".format(path)
@@ -275,7 +279,7 @@ class testFolium(object):
                                    'range': d3range})
 
         style_temp = self.env.get_template('geojson_style.js')
-        color = 'matchKey(feature.id, data_1)'
+        color = 'color(matchKey(feature.id, data_1))'
         style = style_temp.render({'style': 'style_1',
                                    'line_color': 'black',
                                    'line_weight': 1,
@@ -317,12 +321,52 @@ class testFolium(object):
         self.map._build_map()
         html_templ = self.env.get_template('fol_template.html')
 
-        tmpl = {'Tiles': u'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': (u'Map data (c) <a href="http://openstreetmap.org">'
+        tmpl = {'Tiles': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                 'OpenStreetMap</a> contributors'),
+                'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
                 'zoom_level': 4}
         HTML = html_templ.render(tmpl)
 
         assert self.map.HTML == HTML
+
+    def test_tile_attr_unicode(self):
+        '''Test tile attribution unicode
+
+        Test not cover b'юникод'
+        because for python 3 bytes can only contain ASCII literal characters.
+        '''
+
+        if not PY3:
+            map = folium.Map(location=[45.5236, -122.6750],
+                             tiles='test', attr=b'unicode')
+            map._build_map()
+        else:
+            map = folium.Map(location=[45.5236, -122.6750],
+                             tiles='test', attr=u'юникод')
+            map._build_map()
+        map = folium.Map(location=[45.5236, -122.6750],
+                         tiles='test', attr='юникод')
+        map._build_map()
+
+    def test_create_map(self):
+        '''Test create map'''
+
+        map = folium.Map(location=[45.5236, -122.6750],
+                         tiles='test', attr='юникод')
+
+        # Add json data
+        path = 'us-counties.json'
+        data = setup_data()
+        map.geo_json(geo_path=path, data=data,
+                     columns=['FIPS_Code', 'Unemployed_2011'],
+                     key_on='feature.id', fill_color='YlGnBu',
+                     reset=True)
+
+        # Add plugins
+        map.polygon_marker(location=[45.5, -122.5])
+
+        # Test write
+        map.create_map()

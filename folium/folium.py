@@ -7,6 +7,7 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 '''
 
+from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 import codecs
@@ -14,8 +15,9 @@ import json
 import functools
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string, resource_filename
-import utilities
 from uuid import uuid4
+from folium import utilities
+from folium.six import text_type, binary_type, iteritems
 
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
@@ -166,7 +168,9 @@ class Map(object):
             if not attr:
                 raise ValueError('Custom tiles must'
                                  ' also be passed an attribution')
-            self.template_vars['attr'] = unicode(attr, 'utf8')
+            if isinstance(attr, binary_type):
+                attr = text_type(attr, 'utf8')
+            self.template_vars['attr'] = attr
             self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
 
     @iter_obj('simple')
@@ -461,7 +465,7 @@ class Map(object):
                     height += vega.padding['top']+vega.padding['bottom']
                 else:
                     width += 75
-                    height += 50                    
+                    height += 50
                 max_width = self.map_size['width']
                 vega_id = '#' + div_id
                 popup_temp = self.env.get_template('vega_marker.js')
@@ -701,17 +705,19 @@ class Map(object):
         self.map_path = path
         self._build_map(template)
 
-        with codecs.open(path, 'w', 'utf-8') as f:
+        with codecs.open(path, 'w', 'utf8') as f:
             f.write(self.HTML)
 
         if self.json_data:
-            for path, data in self.json_data.iteritems():
+            for path, data in iteritems(self.json_data):
                 with open(path, 'w') as g:
                     json.dump(data, g)
 
         if self.plugins and plugin_data_out:
-            for name, plugin in self.plugins.iteritems():
+            for name, plugin in iteritems(self.plugins):
                 with open(name, 'w') as f:
+                    if isinstance(plugin, binary_type):
+                        plugin = text_type(plugin, 'utf8')
                     f.write(plugin)
 
     def _repr_html_(self):

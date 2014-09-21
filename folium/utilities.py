@@ -7,6 +7,7 @@ Utility module for Folium helper functions.
 
 '''
 
+from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 import math
@@ -21,6 +22,8 @@ try:
     import numpy as np
 except ImportError:
     np = None
+
+from folium.six import iteritems
 
 
 def get_templates():
@@ -229,7 +232,7 @@ def transform_data(data):
             return value
 
     if isinstance(data, pd.Series):
-        json_data = [{type_check(x): type_check(y) for x, y in data.iteritems()}]
+        json_data = [{type_check(x): type_check(y) for x, y in iteritems(data)}]
     elif isinstance(data, pd.DataFrame):
         json_data = [{type_check(y): type_check(z) for x, y, z in data.itertuples()}]
 
