@@ -10,13 +10,16 @@ Make beautiful, interactive maps with Python and Leaflet.js
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
+
 import codecs
-import json
 import functools
+import json
 import os
+from uuid import uuid4
+
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string, resource_filename
-from uuid import uuid4
+
 from folium import utilities
 from folium.six import text_type, binary_type, iteritems
 
@@ -173,7 +176,8 @@ class Map(object):
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.template_vars['attr'] = attr
-            self.tile_types.update({'Custom': {'template': tiles, 'attr': attr}})
+            self.tile_types.update({'Custom': {'template': tiles,
+                                               'attr': attr}})
 
         self.added_layers = []
         self.template_vars.setdefault('wms_layers', [])
@@ -205,7 +209,8 @@ class Map(object):
 
 
     @iter_obj('simple')
-    def add_wms_layer(self, wms_name=None,wms_url=None,wms_format=None,wms_layers=None,wms_transparent=True):
+    def add_wms_layer(self, wms_name=None, wms_url=None, wms_format=None,
+                      wms_layers=None, wms_transparent=True):
         '''adds a simple tile layer
         Parameters
         ----------
@@ -218,12 +223,12 @@ class Map(object):
             wms_name = wms_name.replace (" ", "_")
             wms_temp = self.env.get_template('wms_layer.js')
 
-            wms = wms_temp.render({'wms_name': wms_name,
-                                       'wms_url': wms_url,
-                                       'wms_format': wms_format,
-                                       'wms_layer_names':wms_layers,
-                                       'wms_transparent':str(wms_transparent).lower()
-                                       })
+            wms = wms_temp.render({
+                'wms_name': wms_name,
+                'wms_url': wms_url,
+                'wms_format': wms_format,
+                'wms_layer_names':wms_layers,
+                'wms_transparent':str(wms_transparent).lower()})
 
             self.template_vars.setdefault('wms_layers', []).append((wms))
 
@@ -237,7 +242,7 @@ class Map(object):
         layers_temp = self.env.get_template('add_layers.js')
 
         data_string = ''
-        for i, layer in enumerate(self.added_layers):                
+        for i, layer in enumerate(self.added_layers):
             name = layer.keys()[0]
             data_string+='\"'
             data_string+=name
@@ -247,13 +252,15 @@ class Map(object):
             if i < len(self.added_layers)-1:
                 data_string+=",\n"
             else:
-                data_string+="\n"            
+                data_string+="\n"
 
         data_layers = layers_temp.render({'layers': data_string})
         self.template_vars.setdefault('data_layers', []).append((data_string))
 
     @iter_obj('simple')
-    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,marker_color='blue',marker_icon='info-sign',clustered_marker=False,icon_angle=0):
+    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,
+                      marker_color='blue', marker_icon='info-sign',
+                      clustered_marker=False, icon_angle=0):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -271,7 +278,8 @@ class Map(object):
         marker_icon
             icon from (http://getbootstrap.com/components/) you want on the marker
         clustered_marker
-            boolean of whether or not you want the marker clustered with other markers    
+            boolean of whether or not you want the marker clustered with
+            other markers
 
         Returns
         -------
@@ -299,7 +307,7 @@ class Map(object):
 
         #Get marker and popup
         marker = mark_temp.render({'marker': 'marker_' + str(count),
-                                   'lat': location[0], 
+                                   'lat': location[0],
                                    'lon': location[1],
                                    'icon': add_line
                                    })
@@ -308,7 +316,7 @@ class Map(object):
                                        count=count,
                                        popup_on=popup_on)
 
-        
+
 
         if clustered_marker:
             add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
@@ -661,16 +669,19 @@ class Map(object):
 
         Example
         -------
-        >>>map.geo_json(geo_path='us-states.json', line_color='blue', line_weight=3)
-        >>>map.geo_json(geo_path='geo.json', data=df, columns=['Data 1', 'Data 2'],
+        >>>map.geo_json(geo_path='us-states.json', line_color='blue',
+                        line_weight=3)
+        >>>map.geo_json(geo_path='geo.json', data=df,
+                        columns=['Data 1', 'Data 2'],
                         key_on='feature.properties.myvalue', fill_color='PuBu',
                         threshold_scale=[0, 20, 30, 40, 50, 60])
         >>>map.geo_json(geo_path='countries.json', topojson='objects.countries')
         '''
 
         if reset:
-            reset_vars = ['json_paths', 'func_vars', 'color_scales', 'geo_styles',
-                          'gjson_layers', 'map_legends', 'topo_convert']
+            reset_vars = ['json_paths', 'func_vars', 'color_scales',
+                          'geo_styles', 'gjson_layers', 'map_legends',
+                          'topo_convert']
             for var in reset_vars:
                 self.template_vars.update({var: []})
             self.mark_cnt['geojson'] = 1
