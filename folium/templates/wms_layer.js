@@ -1,0 +1,1 @@
+var {{ wms_name }} = L.tileLayer.wms('{{ wms_url }}',{format:'{{wms_format}}',transparent: {{wms_transparent}},layers:'{{wms_layer_names}}'});
