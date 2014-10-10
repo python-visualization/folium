@@ -1,9 +1,26 @@
 # -*- coding: utf-8 -*-
+import os
 
 try:
     from setuptools import setup
 except ImportError:
     from distutils.core import setup
+
+def walk_subpkg(name):
+    data_files = []
+    package_dir = 'folium'
+    for parent, dirs, files in os.walk(os.path.join(package_dir, name)):
+        sub_dir = os.sep.join(parent.split(os.sep)[1:]) # remove package_dir from the path
+        for f in files:
+            data_files.append(os.path.join(sub_dir, f))
+    return data_files
+
+pkg_data = {
+'': ['*.js',
+     'templates/*.html',
+     'templates/*.js',
+     'templates/*.txt'] + walk_subpkg('templates/tiles')
+}
 
 setup(
     name='folium',
@@ -18,9 +35,5 @@ setup(
                  'Programming Language :: Python :: 2.7',
                  'License :: OSI Approved :: MIT License'],
     packages=['folium'],
-    package_data={'': ['*.js',
-                       'templates/*.html',
-                       'templates/*.js',
-                       'templates/*.txt',
-                       'plugins/*.js']}
+    package_data=pkg_data
 )
