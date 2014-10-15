@@ -58,7 +58,8 @@ class Map(object):
 
     def __init__(self, location=None, width=960, height=500,
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-                 zoom_start=10, attr=None):
+                 zoom_start=10, attr=None, min_lat=-90, max_lat=90, min_long=-180,
+                 max_long = 180):
         '''Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -144,7 +145,11 @@ class Map(object):
                               'size': self._size, 'max_zoom': max_zoom,
                               'zoom_level': zoom_start,
                               'map_id': self.map_id,
-                              'min_zoom': min_zoom
+                              'min_zoom': min_zoom,
+                              'min_lat':min_lat,
+                              'max_lat':max_lat,
+                              'min_long':min_long,
+                              'max_long':max_long
                               }
 
         #Tiles
