@@ -57,8 +57,9 @@ class Map(object):
     '''Create a Map with Folium'''
 
     def __init__(self, location=None, width=960, height=500,
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18,
-                 zoom_start=10, attr=None):
+                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
+                 zoom_start=10, attr=None, min_lat=-90, max_lat=90, min_long=-180,
+                 max_long = 180):
         '''Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -143,7 +144,13 @@ class Map(object):
         self.template_vars = {'lat': location[0], 'lon': location[1],
                               'size': self._size, 'max_zoom': max_zoom,
                               'zoom_level': zoom_start,
-                              'map_id': self.map_id}
+                              'map_id': self.map_id,
+                              'min_zoom': min_zoom,
+                              'min_lat':min_lat,
+                              'max_lat':max_lat,
+                              'min_long':min_long,
+                              'max_long':max_long
+                              }
 
         #Tiles
         self.tiles = ''.join(tiles.lower().strip().split())
@@ -157,10 +164,11 @@ class Map(object):
                               'stamenterrain', 'stamentoner']
         self.tile_types = {}
         for tile in self.default_tiles:
-            join_tile_path = functools.partial(os.path.join, 'tiles', tile)
+            template_tiles = '/tiles/' + tile + '/tiles.txt'
+            template_attr = '/tiles/' + tile + '/attr.txt'
             self.tile_types[tile] = {
-                'templ': self.env.get_template(join_tile_path('tiles.txt')),
-                'attr': self.env.get_template(join_tile_path('attr.txt')),
+                'templ': self.env.get_template(template_tiles),
+                'attr': self.env.get_template(template_attr),
             }
 
         if self.tiles in self.tile_types:

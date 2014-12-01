@@ -58,6 +58,7 @@
 
       var base_tile = L.tileLayer('{{ Tiles }}', {
           maxZoom: {{ max_zoom }},
+          minZoom: {{ min_zoom }},
           attribution: '{{ attr }}'
       });
 
@@ -92,9 +93,14 @@
       /*
       Creates the map and adds the selected layers
       */
+      var southWest = L.latLng({{ min_lat }}, {{ min_long }}),
+          northEast = L.latLng({{ max_lat }}, {{ max_long }}),
+          bounds = L.latLngBounds(southWest, northEast);
+
       var map = L.map('{{ map_id }}', {
                                        center:[{{ lat }}, {{ lon }}],
                                        zoom: {{ zoom_level }},
+                                       maxBounds: bounds,
                                        layers: [base_tile]
                                      });
 
