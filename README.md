@@ -4,10 +4,6 @@
 
 Folium builds on the data wrangling strengths of the Python ecosystem and the mapping strengths of the Leaflet.js library. Manipulate your data in Python, then visualize it in on a Leaflet map via Folium.
 
-Do you want to own this project?
---------------------------------
-Folium is looking for a new owner/maintainer. Interested? You can find my email on my Github profile.
-
 Concept
 -------
 Folium makes it easy to visualize data that's been manipulated in Python on an interactive Leaflet map. It enables both the binding of data to a map for choropleth visualizations as well as passing Vincent/Vega visualizations as markers on the map.
