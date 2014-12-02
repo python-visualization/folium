@@ -116,25 +116,27 @@ class testFolium(object):
         #Single Simple marker
         self.map.simple_marker(location=[45.50, -122.7])
         mark_1 = mark_templ.render({'marker': 'marker_1', 'lat': 45.50,
-                                    'lon': -122.7})
+                                    'lon': -122.7,
+                                    'icon': "{'icon':marker_1_icon}"})
         popup_1 = popup_templ.render({'pop_name': 'marker_1',
-                                      'pop_txt': 'Pop Text'})
-        assert self.map.template_vars['markers'][0][0] == mark_1
-        assert self.map.template_vars['markers'][0][1] == popup_1
+                                      'pop_txt': json.dumps('Pop Text')})
+        assert self.map.template_vars['custom_markers'][0][1] == mark_1
+        assert self.map.template_vars['custom_markers'][0][2] == popup_1
 
         #Test Simple marker addition
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
         mark_2 = mark_templ.render({'marker': 'marker_2', 'lat': 45.60,
-                                    'lon': -122.8})
+                                    'lon': -122.8,
+                                    'icon': "{'icon':marker_2_icon}"})
         popup_2 = popup_templ.render({'pop_name': 'marker_2',
-                                      'pop_txt': 'Hi'})
+                                      'pop_txt': json.dumps('Hi')})
         assert self.map.mark_cnt['simple'] == 2
-        assert self.map.template_vars['markers'][1][0] == mark_2
-        assert self.map.template_vars['markers'][1][1] == popup_2
+        assert self.map.template_vars['custom_markers'][1][1] == mark_2
+        assert self.map.template_vars['custom_markers'][1][2] == popup_2
 
         #Test no popup
         self.map.simple_marker(location=[45.60, -122.8], popup_on=False)
-        assert self.map.template_vars['markers'][2][1] == 'var no_pop = null;'
+        assert self.map.template_vars['custom_markers'][2][2] == 'var no_pop = null;'
 
     def test_circle_marker(self):
         '''Test circle marker additions'''
@@ -214,7 +216,7 @@ class testFolium(object):
                                   'max_width': 900,
                                   'json_out': 'vis.json',
                                   'vega_id': '#vis'})
-        assert self.map.template_vars['markers'][0][1] == vega
+        assert self.map.template_vars['custom_markers'][0][2] == vega
 
     def test_geo_json(self):
         '''Test geojson method'''
