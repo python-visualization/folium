@@ -14,7 +14,7 @@ before_install:
     - conda config --set always_yes yes
     - conda update conda
     - conda info -a
-    - travis_retry conda create -n test $CONDA pip jinja2 pandas mock six
+    - travis_retry conda create -n test $CONDA pip jinja2 pandas mock six nose
     - source activate test
     - travis_retry pip install vincent
 
