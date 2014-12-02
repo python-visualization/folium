@@ -243,7 +243,7 @@ class Map(object):
 
         data_string = ''
         for i, layer in enumerate(self.added_layers):
-            name = layer.keys()[0]
+            name = list(layer.keys())[0]
             data_string+='\"'
             data_string+=name
             data_string+='\"'
