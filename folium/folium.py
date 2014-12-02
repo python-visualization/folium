@@ -299,10 +299,10 @@ class Map(object):
         add_line = "{'icon':"+marker_num+"_icon}"
 
         icon_temp = self.env.get_template('simple_icon.js')
-        icon = icon_temp.render({'icon_name': marker_num+"_icon",
-                                   'icon': marker_icon,
-                                   'markerColor': marker_color,
-                                   'icon_angle': icon_angle
+        icon = icon_temp.render({'icon': marker_icon,
+                                 'icon_name': marker_num+"_icon",
+                                 'markerColor': marker_color,
+                                 'icon_angle': icon_angle
                                 })
 
         #Get marker and popup
@@ -750,6 +750,8 @@ class Map(object):
 
             #D3 Color scale
             series = data[columns[1]]
+            if threshold_scale and len(threshold_scale) > 6:
+                raise ValueError
             domain = threshold_scale or utilities.split_six(series=series)
             if len(domain) > 253:
                 raise ValueError('The threshold scale must be of length <= 253')
