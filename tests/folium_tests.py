@@ -23,11 +23,11 @@ def setup_data():
     county_codes = [x['id'] for x in get_id['features']]
     county_df = pd.DataFrame({'FIPS_Code': county_codes}, dtype=str)
 
-    #Read into Dataframe, cast to string for consistency
+    # Read into Dataframe, cast to string for consistency.
     df = pd.read_csv('us_county_data.csv', na_values=[' '])
     df['FIPS_Code'] = df['FIPS_Code'].astype(str)
 
-    #Perform an inner join, pad NA's with data from nearest county
+    # Perform an inner join, pad NA's with data from nearest county.
     merged = pd.merge(df, county_df, on='FIPS_Code', how='inner')
     return merged.fillna(method='pad')
 
@@ -107,13 +107,36 @@ class testFolium(object):
         assert map.template_vars['Tiles'] == url
         assert map.template_vars['attr'] == attr
 
+    def test_wms_layer(self):
+        '''Test wms layer URLs'''
+
+        map = folium.Map(location=[44, -73], zoom_start=3)
+        wms_url = 'http://gis.srh.noaa.gov/arcgis/services/NDFDTemps/'
+        wms_url += 'MapServer/WMSServer'
+        wms_name = "Temperature"
+        wms_layers = 16
+        wms_format = "image/png"
+        map.add_wms_layer(wms_name=wms_name,
+                          wms_url=wms_url,
+                          wms_format=wms_format,
+                          wms_layers=wms_layers,
+                          wms_transparent=True)
+
+        wms_temp = self.env.get_template('wms_layer.js')
+        wms = wms_temp.render({'wms_name': wms_name,
+                               'wms_url': wms_url,
+                               'wms_format': wms_format,
+                               'wms_layer_names': wms_layers,
+                               'wms_transparent': 'true'})
+        assert map.template_vars['wms_layers'][0] == wms
+
     def test_simple_marker(self):
         '''Test simple marker addition'''
 
         mark_templ = self.env.get_template('simple_marker.js')
         popup_templ = self.env.get_template('simple_popup.js')
 
-        #Single Simple marker
+        # Single Simple marker.
         self.map.simple_marker(location=[45.50, -122.7])
         mark_1 = mark_templ.render({'marker': 'marker_1', 'lat': 45.50,
                                     'lon': -122.7,
@@ -123,7 +146,7 @@ class testFolium(object):
         assert self.map.template_vars['custom_markers'][0][1] == mark_1
         assert self.map.template_vars['custom_markers'][0][2] == popup_1
 
-        #Test Simple marker addition
+        # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
         mark_2 = mark_templ.render({'marker': 'marker_2', 'lat': 45.60,
                                     'lon': -122.8,
@@ -134,16 +157,17 @@ class testFolium(object):
         assert self.map.template_vars['custom_markers'][1][1] == mark_2
         assert self.map.template_vars['custom_markers'][1][2] == popup_2
 
-        #Test no popup
+        # Test no popup.
         self.map.simple_marker(location=[45.60, -122.8], popup_on=False)
-        assert self.map.template_vars['custom_markers'][2][2] == 'var no_pop = null;'
+        nopopup = 'var no_pop = null;'
+        assert self.map.template_vars['custom_markers'][2][2] == nopopup
 
     def test_circle_marker(self):
         '''Test circle marker additions'''
 
         circ_templ = self.env.get_template('circle_marker.js')
 
-        #Single Circle marker
+        # Single Circle marker.
         self.map.circle_marker(location=[45.60, -122.8], popup='Hi')
         circle_1 = circ_templ.render({'circle': 'circle_1', 'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
@@ -152,7 +176,7 @@ class testFolium(object):
                                       'fill_opacity': 0.6})
         assert self.map.template_vars['markers'][0][0] == circle_1
 
-        #Second circle marker
+        # Second circle marker.
         self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
         circle_2 = circ_templ.render({'circle': 'circle_2', 'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
@@ -191,14 +215,14 @@ class testFolium(object):
     def test_click_for_marker(self):
         '''Test click for marker functionality'''
 
-        #lat/lng popover
+        # Lat/lon popover.
         self.map.click_for_marker()
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': ('"Latitude: " + lat + "<br>'
                                               'Longitude: " + lng ')})
         assert self.map.template_vars['click_pop'] == click
 
-        #Custom popover
+        # Custom popover.
         self.map.click_for_marker(popup='Test')
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': '"Test"'})
@@ -209,7 +233,8 @@ class testFolium(object):
 
         vis = vincent.Bar(width=675 - 75, height=350 - 50, no_data=True)
 
-        self.map.simple_marker(location=[45.60, -122.8], popup=(vis, 'vis.json'))
+        self.map.simple_marker(location=[45.60, -122.8],
+                               popup=(vis, 'vis.json'))
         popup_temp = self.env.get_template('vega_marker.js')
         vega = popup_temp.render({'mark': 'marker_1', 'div_id': 'vis',
                                   'width': 675, 'height': 350,
@@ -224,7 +249,7 @@ class testFolium(object):
         path = 'us-counties.json'
         geo_path = ".defer(d3.json, '{0}')".format(path)
 
-        #No data binding
+        # No data binding.
         self.map.geo_json(geo_path=path)
         geo_path = ".defer(d3.json, '{0}')".format(path)
         map_var = 'gjson_1'
@@ -246,14 +271,14 @@ class testFolium(object):
         assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'][0] == geo_path
 
-        #Data binding incorrect color value error
+        # Data binding incorrect color value error.
         data = setup_data()
         nt.assert_raises(ValueError, self.map.geo_json,
                          path, data=data,
                          columns=['FIPS_Code', 'Unemployed_2011'],
                          key_on='feature.id', fill_color='blue')
 
-        #Data binding threshold_scale too long
+        # Data binding threshold_scale too long.
         data = setup_data()
         nt.assert_raises(ValueError, self.map.geo_json,
                          path, data=data,
@@ -262,7 +287,7 @@ class testFolium(object):
                          threshold_scale=[1, 2, 3, 4, 5, 6, 7],
                          fill_color='YlGnBu')
 
-        #With DataFrame data binding, default threshold scale
+        # With DataFrame data binding, default threshold scale.
         self.map.geo_json(geo_path=path, data=data,
                           columns=['FIPS_Code', 'Unemployed_2011'],
                           key_on='feature.id', fill_color='YlGnBu',
@@ -299,7 +324,7 @@ class testFolium(object):
         assert templ['json_paths'] == [data_path, geo_path]
         assert templ['color_scales'][0] == scale
 
-        #Adding TopoJSON as additional layer
+        # Adding TopoJSON as additional layer.
         path_2 = 'or_counties_topo.json'
         self.map.geo_json(geo_path=path_2, topojson='objects.or_counties_geo')
         geo_path_2 = ".defer(d3.json, '{0}')".format(path_2)
@@ -307,8 +332,8 @@ class testFolium(object):
         layer_var_2 = 'topo_2'
         topo_func = ('topo_2 = topojson.feature(tjson_2,'
                      ' tjson_2.objects.or_counties_geo);')
-        layer_2 = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
-                   .format(2, layer_var_2, 'style_2'))
+        fmt = 'gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+        layer_2 = fmt.format(2, layer_var_2, 'style_2')
 
         templ = self.map.template_vars
         assert templ['func_vars'] == [data_var, map_var, map_var_2]
@@ -319,13 +344,13 @@ class testFolium(object):
     def test_map_build(self):
         '''Test map build'''
 
-        #Standard map
+        # Standard map.
         self.map._build_map()
         html_templ = self.env.get_template('fol_template.html')
 
         tmpl = {'Tiles': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
-                'OpenStreetMap</a> contributors'),
+                         'OpenStreetMap</a> contributors'),
                 'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
