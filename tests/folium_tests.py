@@ -66,7 +66,7 @@ class testFolium(object):
                 'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
-                'zoom_level': 4}
+                'zoom_level': 4, 'tile_layers': [], 'wms_layers': []}
 
         assert self.map.template_vars == tmpl
 
