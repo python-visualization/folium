@@ -25,7 +25,7 @@ pkg_data = {
 
 setup(
     name='folium',
-    version='0.1.2',
+    version='0.1.3',
     description='Make beautiful maps with Leaflet.js & Python',
     author='Rob Story',
     author_email='wrobstory@gmail.com',
