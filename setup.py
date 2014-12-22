@@ -42,7 +42,7 @@ setup(
     author='Rob Story',
     author_email='wrobstory@gmail.com',
     license='MIT License',
-    url='https://github.com/wrobstory/folium',
+    url='https://github.com/python-visualization/folium',
     keywords='data visualization',
     classifiers=['Development Status :: 4 - Beta',
                  'Programming Language :: Python :: 2.7',
