@@ -14,7 +14,6 @@ from __future__ import division
 import codecs
 import functools
 import json
-import os
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader
@@ -157,10 +156,12 @@ class Map(object):
                               'stamenterrain', 'stamentoner']
         self.tile_types = {}
         for tile in self.default_tiles:
-            join_tile_path = functools.partial(os.path.join, 'tiles', tile)
+            tile_path = 'tiles/%s' % tile
             self.tile_types[tile] = {
-                'templ': self.env.get_template(join_tile_path('tiles.txt')),
-                'attr': self.env.get_template(join_tile_path('attr.txt')),
+                'templ': self.env.get_template('%s/%s' % (tile_path,
+                                                          'tiles.txt')),
+                'attr': self.env.get_template('%s/%s' % (tile_path,
+                                                         'attr.txt')),
             }
 
         if self.tiles in self.tile_types:
