@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
-
 import re
+import sys
+
 VERSIONFILE = "folium/__init__.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
@@ -10,6 +11,16 @@ if mo:
     verstr = mo.group(1)
 else:
     raise RuntimeError("Unable to find version string in %s." % (VERSIONFILE,))
+
+
+if sys.argv[-1] == 'publish':
+    os.system("python setup.py sdist upload")
+    print("Remember to also tag the version.")
+    sys.exit()
+elif sys.argv[-1] == 'tag':
+    os.system("git tag -a %s -m 'version %s'" % (verstr, verstr))
+    os.system("git push --tags")
+    sys.exit()
 
 try:
     from setuptools import setup
