@@ -58,21 +58,22 @@
 
       var base_tile = L.tileLayer('{{ Tiles }}', {
           maxZoom: {{ max_zoom }},
+          minZoom: {{ min_zoom }},
           attribution: '{{ attr }}'
       });
 
-      var baseLayer = {        
+      var baseLayer = {
         "Base Layer": base_tile
       };
 
       /*
       addition of the wms layers
-      */ 
+      */
 
       {% for wms in wms_layers %}
       {{ wms }}
       {% endfor %}
-      
+
       /*
       addition of the tile layers
       */
@@ -82,7 +83,7 @@
 
       /*
       list of layers to be added
-      */ 
+      */
       var layer_list = {
       {% for data_string in data_layers %}
       {{ data_string }}
@@ -90,11 +91,19 @@
       };
 
       /*
+      Bounding box.
+      */
+      var southWest = L.latLng({{ min_lat }}, {{ min_lon }}),
+          northEast = L.latLng({{ max_lat }}, {{ max_lon }}),
+          bounds = L.latLngBounds(southWest, northEast);
+
+      /*
       Creates the map and adds the selected layers
       */
       var map = L.map('{{ map_id }}', {
                                        center:[{{ lat }}, {{ lon }}],
                                        zoom: {{ zoom_level }},
+                                       maxBounds: bounds,
                                        layers: [base_tile]
                                      });
 

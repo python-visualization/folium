@@ -64,9 +64,18 @@ class testFolium(object):
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
                 'map_id': 'folium_' + '0' * 32,
-                'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
+                'lat': 45.5236,
+                'lon': -122.675,
+                'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
-                'zoom_level': 4, 'tile_layers': [], 'wms_layers': []}
+                'zoom_level': 4,
+                'tile_layers': [],
+                'wms_layers': [],
+                'min_zoom': 1,
+                'min_lat': -90,
+                'max_lat': 90,
+                'min_lon': -180,
+                'max_lon': 180}
 
         assert self.map.template_vars == tmpl
 
@@ -354,7 +363,12 @@ class testFolium(object):
                 'map_id': 'folium_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
                 'size': 'style="width: 900px; height: 400px"',
-                'zoom_level': 4}
+                'zoom_level': 4,
+                'min_zoom': 1,
+                'min_lat': -90,
+                'max_lat': 90,
+                'min_lon': -180,
+                'max_lon': 180}
         HTML = html_templ.render(tmpl)
 
         assert self.map.HTML == HTML
