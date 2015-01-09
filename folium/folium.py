@@ -269,7 +269,7 @@ class Map(object):
     @iter_obj('simple')
     def simple_marker(self, location=None, popup='Pop Text', popup_on=True,
                       marker_color='blue', marker_icon='info-sign',
-                      clustered_marker=False, icon_angle=0):
+                      clustered_marker=False, icon_angle=0, width=300):
         '''Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -280,6 +280,8 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `width`.  (Leaflet default is 300px.)
         popup_on: boolean, default True
             Pass false for no popup information on the marker
         marker_color
@@ -322,8 +324,8 @@ class Map(object):
                                    })
 
         popup_out = self._popup_render(popup=popup, mk_name='marker_',
-                                       count=count,
-                                       popup_on=popup_on)
+                                       count=count, popup_on=popup_on,
+                                       width=width)
 
 
 
@@ -545,7 +547,7 @@ class Map(object):
         self.template_vars.update({'click_pop': click_str})
 
     def _popup_render(self, popup=None, mk_name=None, count=None,
-                      popup_on=True):
+                      popup_on=True, width=300):
         '''Popup renderer: either text or Vincent/Vega.
 
         Parameters
@@ -565,7 +567,8 @@ class Map(object):
             if isinstance(popup, str):
                 popup_temp = self.env.get_template('simple_popup.js')
                 return popup_temp.render({'pop_name': mk_name + str(count),
-                                          'pop_txt': json.dumps(popup)})
+                                          'pop_txt': json.dumps(popup),
+                                          'width': width})
             elif isinstance(popup, tuple):
                 #Update template with JS libs
                 vega_temp = self.env.get_template('vega_ref.txt').render()
