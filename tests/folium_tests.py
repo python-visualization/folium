@@ -151,7 +151,8 @@ class testFolium(object):
                                     'lon': -122.7,
                                     'icon': "{'icon':marker_1_icon}"})
         popup_1 = popup_templ.render({'pop_name': 'marker_1',
-                                      'pop_txt': json.dumps('Pop Text')})
+                                      'pop_txt': json.dumps('Pop Text'),
+                                      'width': 300})
         assert self.map.template_vars['custom_markers'][0][1] == mark_1
         assert self.map.template_vars['custom_markers'][0][2] == popup_1
 
@@ -161,7 +162,8 @@ class testFolium(object):
                                     'lon': -122.8,
                                     'icon': "{'icon':marker_2_icon}"})
         popup_2 = popup_templ.render({'pop_name': 'marker_2',
-                                      'pop_txt': json.dumps('Hi')})
+                                      'pop_txt': json.dumps('Hi'),
+                                      'width': 300})
         assert self.map.mark_cnt['simple'] == 2
         assert self.map.template_vars['custom_markers'][1][1] == mark_2
         assert self.map.template_vars['custom_markers'][1][2] == popup_2
