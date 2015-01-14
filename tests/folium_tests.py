@@ -411,3 +411,27 @@ class testFolium(object):
 
         # Test write
         map.create_map()
+
+    def test_multi_polyline(self):
+        '''Test multi_polyline'''
+
+        multiline_temp = self.env.get_template('multi_polyline.js')
+
+        multiline_opts = {'color': 'blue',
+                'weight': 2,
+                'opacity': 1}
+        locations = [
+                        [[45.5236, -122.6750], [45.5236, -122.6751]],
+                        [[45.5237, -122.6750], [45.5237, -122.6751]],
+                        [[45.5238, -122.6750], [45.5238, -122.6751]]
+                    ]
+        multiline_rendered = multiline_temp.render({'multiline': 'multiline_1',
+                                                    'locations': locations,
+                                                    'options': multiline_opts})
+
+        self.map.multiline(locations=locations,
+                           line_color=multiline_opts['color'],
+                           line_weight=multiline_opts['weight'],
+                           line_opacity=multiline_opts['opacity'])
+        assert self.map.template_vars['multilines'][0][0] == multiline_rendered
+

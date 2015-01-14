@@ -382,6 +382,58 @@ class Map(object):
                                                            add_line))
 
 
+    @iter_obj('multiline')
+    def multiline(self, locations,
+             line_color=None, line_opacity=None, line_weight=None):
+        '''Add a multiPolyline to the map with optional styles.
+
+        A multiPolyline is single layer that consists of several polylines that
+        share styling/popup.
+
+        Parameters
+        ----------
+        locations: list of lists of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        line_color: string, default Leaflet's default ('#03f')
+        line_opacity: float, default Leaflet's default (0.5)
+        line_weight: float, default Leaflet's default (5)
+
+        Note: If the optional styles are omitted, they will not be included
+        in the HTML output and will obtain the Leaflet defaults listed above.
+
+        Example
+        -------
+        >>>map.multiline(locations=[[(45.5236, -122.6750), (45.5236, -122.6751)],
+                                    [(45.5237, -122.6750), (45.5237, -122.6751)],
+                                    [(45.5238, -122.6750), (45.5238, -122.6751)]])
+        >>>map.multiline(locations=[[(45.5236, -122.6750), (45.5236, -122.6751)],
+                                    [(45.5237, -122.6750), (45.5237, -122.6751)],
+                                    [(45.5238, -122.6750), (45.5238, -122.6751)]],
+                                    line_color='red',
+                                    line_weight=2,
+                                    line_opacity=1.0)
+        '''
+
+        count = self.mark_cnt['multiline']
+
+        multiline_temp = self.env.get_template('multi_polyline.js')
+
+        multiline_opts = {'color': line_color,
+                'weight': line_weight,
+                'opacity': line_opacity}
+
+        varname = 'multiline_{}'.format(count)
+        multiline_rendered = multiline_temp.render({'multiline': varname,
+                                          'locations': locations,
+                                          'options': multiline_opts})
+
+        add_multiline = 'map.addLayer({});'.format(varname)
+
+        self.template_vars.setdefault('multilines', []).append((multiline_rendered,
+                                                           add_multiline))
+
+
+
     @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup='Pop Text',
                       popup_on=True, line_color='black', fill_color='black',
