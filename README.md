@@ -255,6 +255,8 @@ Pandas (Map Data Binding only)
 
 Numpy (Map Data Binding only)
 
+Vincent (Map Data Binding only)
+
 Status
 -------
 Beta
@@ -263,7 +265,4 @@ Docs
 ----
 
 https://folium.readthedocs.org/
-
-
-
 
