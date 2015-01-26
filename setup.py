@@ -61,5 +61,6 @@ setup(
                  'Programming Language :: Python :: 3.4',
                  'License :: OSI Approved :: MIT License'],
     packages=['folium'],
-    package_data=pkg_data
+    package_data=pkg_data,
+    zip_safe=False
 )
