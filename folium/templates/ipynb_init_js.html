@@ -11,10 +11,10 @@
 
  var load_folium_libs = function(){
     console.log('Loading all Folium libraries...')
-    $.getScript("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
-      $.getScript('https://wrobstory.github.io/leaflet-dvf/leaflet-dvf.markers.min.js', function(){
+    $.getScript("//cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
+      $.getScript('//wrobstory.github.io/leaflet-dvf/leaflet-dvf.markers.min.js', function(){
           if (window['vg'] === undefined){
-            $.getScript("http://wrobstory.github.io/vega/vega.v1.3.3.js", function(){
+            $.getScript("//wrobstory.github.io/vega/vega.v1.3.3.js", function(){
               load_folium_charts();
           });
         } else {
@@ -27,9 +27,9 @@
  if(typeof define === "function" && define.amd){
       var load_paths = {
         paths: {
-          topojson:'http://d3js.org/topojson.v1.min',
-          queue: 'http://d3js.org/queue.v1.min',
-          d3: 'http://d3js.org/d3.v3.min'
+          topojson:'//d3js.org/topojson.v1.min',
+          queue: '//d3js.org/queue.v1.min',
+          d3: '//d3js.org/d3.v3.min'
         }
       };
       var libs = ['d3', 'queue', 'topojson'];
