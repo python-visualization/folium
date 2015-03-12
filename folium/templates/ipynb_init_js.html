@@ -11,10 +11,10 @@
 
  var load_folium_libs = function(){
     console.log('Loading all Folium libraries...')
-    $.getScript("http://cdn.leafletjs.com/leaflet-0.7.2/leaflet.js", function(){
-      $.getScript('https://wrobstory.github.io/leaflet-dvf/leaflet-dvf.markers.min.js', function(){
+    $.getScript("//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js", function(){
+      $.getScript('//cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js', function(){
           if (window['vg'] === undefined){
-            $.getScript("http://wrobstory.github.io/vega/vega.v1.3.3.js", function(){
+            $.getScript("//cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js", function(){
               load_folium_charts();
           });
         } else {
@@ -27,9 +27,9 @@
  if(typeof define === "function" && define.amd){
       var load_paths = {
         paths: {
-          topojson:'http://d3js.org/topojson.v1.min',
-          queue: 'http://d3js.org/queue.v1.min',
-          d3: 'http://d3js.org/d3.v3.min'
+          topojson:'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js',
+          queue: 'https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js',
+          d3: 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'
         }
       };
       var libs = ['d3', 'queue', 'topojson'];
