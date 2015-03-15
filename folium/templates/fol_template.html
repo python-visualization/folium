@@ -4,7 +4,7 @@
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 
-   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -20,6 +20,22 @@
    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css">
    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
    <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+
+   <script src="https://raw.githubusercontent.com/hallahan/LeafletPlayback/master/dist/LeafletPlayback.min.js"></script>
+
+   <script src="https://raw.githubusercontent.com/hallahan/LeafletPlayback/master/data/demo/demo-tracks.js"></script>
+
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet" type="text/css" />  
+
+    <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />    
+
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />    
+    
+    <link href="http://jdewit.github.io/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
+
+   <script src="https://raw.githubusercontent.com/hallahan/LeafletPlayback/master/examples/example_2_control.js"></script>
+
+   <link rel="stylesheet" href="https://raw.githubusercontent.com/hallahan/LeafletPlayback/master/examples/example_2.css">
 
    <link rel="stylesheet" href="//birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
 
@@ -65,7 +81,7 @@
       var baseLayer = {
         "Base Layer": base_tile
       };
-
+      
       /*
       addition of the wms layers
       */
@@ -108,6 +124,64 @@
                                      });
 
       L.control.layers(baseLayer, layer_list).addTo(map);
+
+      // Colors for AwesomeMarkers
+      var _colorIdx = 0,
+          _colors = [
+            'orange',
+            'green',
+            'blue',
+            'purple',
+            'darkred',
+            'cadetblue',
+            'red',
+            'darkgreen',
+            'darkblue',
+            'darkpurple'
+          ];
+          
+      function _assignColor() {
+          return _colors[_colorIdx++%10];
+      }
+
+      // Playback options
+      var playbackOptions = {        
+          // layer and marker options
+          layer: {
+              pointToLayer : function(featureData, latlng){
+                  var result = {};
+                  
+                  if (featureData && featureData.properties && featureData.properties.path_options){
+                      result = featureData.properties.path_options;
+                  }
+                  
+                  if (!result.radius){
+                      result.radius = 5;
+                  }
+                  
+                  return new L.CircleMarker(latlng, result);
+              }
+          },
+          
+          marker: function(){
+              return {
+                  icon: L.AwesomeMarkers.icon({
+                      prefix: 'fa',
+                      icon: 'bullseye', 
+                      markerColor: _assignColor()
+                  }) 
+              };
+          }        
+      };
+
+      var playback = new L.Playback(map, demoTracks, null, playbackOptions);
+
+       // Initialize custom control
+      var control = new L.Playback.Control(playback);
+      control.addTo(map);
+
+      // Add data
+      playback.addData(blueMountain);
 
       //cluster group
       var clusteredmarkers = L.markerClusterGroup();
