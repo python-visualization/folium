@@ -22,6 +22,9 @@ from pkg_resources import resource_string, resource_filename
 from folium import utilities
 from folium.six import text_type, binary_type, iteritems
 
+import datetime
+import pytz
+
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -36,6 +39,8 @@ def initialize_notebook():
     lib_css = ENV.get_template('ipynb_init_css.html')
     lib_js = ENV.get_template('ipynb_init_js.html')
     leaflet_dvf = ENV.get_template('leaflet-dvf.markers.min.js')
+    leaflet_playback = ENV.get_template('LeafletPlayback.min.js')
+
 
     display(HTML(lib_css.render()))
     display(HTML(lib_js.render({'leaflet_dvf': leaflet_dvf.render()})))
@@ -58,7 +63,7 @@ class Map(object):
     def __init__(self, location=None, width=960, height=500,
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180):
+                 min_lon=-180, max_lon=180,playback=False):
         '''Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -150,7 +155,8 @@ class Map(object):
                                   min_lat=min_lat,
                                   max_lat=max_lat,
                                   min_lon=min_lon,
-                                  max_lon=max_lon)
+                                  max_lon=max_lon,
+                                  playback=playback)
 
         #Tiles
         self.tiles = ''.join(tiles.lower().strip().split())
@@ -191,6 +197,7 @@ class Map(object):
         self.added_layers = []
         self.template_vars.setdefault('wms_layers', [])
         self.template_vars.setdefault('tile_layers', [])
+        self.template_vars.setdefault('playback_markers', [])
 
     @iter_obj('simple')
     def add_tile_layer(self, tile_name=None,tile_url=None,active=False):
@@ -265,6 +272,17 @@ class Map(object):
 
         data_layers = layers_temp.render({'layers': data_string})
         self.template_vars.setdefault('data_layers', []).append((data_string))
+
+    @iter_obj('playback')
+    def playback_marker(self, location=None, popup='Pop Text', popup_on=True,
+                      marker_color='blue', marker_icon='info-sign',
+                      playback_marker=True, time=datetime.datetime.now(), icon_angle=0, width=300):
+        '''Create a time enabled Leaflet marker on the map, with optional
+        popup text or Vincent visualization.        
+        '''
+        print ('create playback marker')
+        pass
+
 
     @iter_obj('simple')
     def simple_marker(self, location=None, popup='Pop Text', popup_on=True,
