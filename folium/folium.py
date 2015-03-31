@@ -22,6 +22,8 @@ from pkg_resources import resource_string, resource_filename
 from folium import utilities
 from folium.six import text_type, binary_type, iteritems
 
+import sys
+
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -616,10 +618,21 @@ class Map(object):
         if not popup_on:
             return 'var no_pop = null;'
         else:
-            if isinstance(popup, str):
+            if sys.version_info >= (3,0):
+                utype, stype = str, bytes
+            else:
+                utype, stype = unicode, str
+
+            if isinstance(popup, (utype, stype)):
                 popup_temp = self.env.get_template('simple_popup.js')
+                if isinstance(popup, utype):
+                    popup_txt = popup.encode('ascii', 'xmlcharrefreplace')
+                else:
+                    popup_txt = popup
+                if sys.version_info >= (3,0):
+                    popup_txt = popup_txt.decode()
                 return popup_temp.render({'pop_name': mk_name + str(count),
-                                          'pop_txt': json.dumps(popup),
+                                          'pop_txt': json.dumps(str(popup_txt)),
                                           'width': width})
             elif isinstance(popup, tuple):
                 #Update template with JS libs
@@ -653,6 +666,8 @@ class Map(object):
                                           'max_width': max_width,
                                           'json_out': json_out,
                                           'vega_id': vega_id})
+            else:
+                raise TypeError("Unrecognized popup type: {!r}".format(popup))
 
     @iter_obj('geojson')
     def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
