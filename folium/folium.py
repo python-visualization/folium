@@ -66,15 +66,14 @@ class Map(object):
         Generate a base map of given width and height with either default
         tilesets or a custom tileset URL. The following tilesets are built-in
         to Folium. Pass any of the following to the "tiles" keyword:
-            -"OpenStreetMap"
-            -"MapQuest Open"
-            -"MapQuest Open Aerial"
-            -"Mapbox Bright" (Limited levels of zoom for free tiles)
-            -"Mapbox Control Room" (Limited levels of zoom for free tiles)
-            -"Stamen Terrain"
-            -"Stamen Toner"
-            -"Cloudmade" (Must pass API key)
-            -"Mapbox" (Must pass API key)
+            - "OpenStreetMap"
+            - "MapQuest Open"
+            - "MapQuest Open Aerial"
+            - "Mapbox Bright" (Limited levels of zoom for free tiles)
+            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+            - "Stamen" (Terrain, Toner, and Watercolor)
+            - "Cloudmade" (Must pass API key)
+            - "Mapbox" (Must pass API key)
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter:
         http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -163,7 +162,8 @@ class Map(object):
         self.default_tiles = ['openstreetmap', 'mapboxcontrolroom',
                               'mapquestopen', 'mapquestopenaerial',
                               'mapboxbright', 'mapbox', 'cloudmade',
-                              'stamenterrain', 'stamentoner']
+                              'stamenterrain', 'stamentoner',
+                              'stamenwatercolor']
         self.tile_types = {}
         for tile in self.default_tiles:
             tile_path = 'tiles/%s' % tile
