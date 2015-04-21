@@ -60,7 +60,7 @@ class testFolium(object):
 
         nt.assert_raises(ValueError, callableObj=folium.Map)
 
-        tmpl = {'Tiles': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        tmpl = {'Tiles': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
                 'map_id': 'folium_' + '0' * 32,
@@ -359,7 +359,7 @@ class testFolium(object):
         self.map._build_map()
         html_templ = self.env.get_template('fol_template.html')
 
-        tmpl = {'Tiles': 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        tmpl = {'Tiles': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
                 'map_id': 'folium_' + '0' * 32,
