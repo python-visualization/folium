@@ -48,6 +48,13 @@
           {%- endfor %}
           .await(makeMap)
 
+      function onEachFeature(feature, layer) {
+          // does this feature have a property named popupContent?
+          if (feature.properties && feature.properties.popupContent) {
+              layer.bindPopup(feature.properties.popupContent);
+              }
+          };
+
       function makeMap(error, {% for var in func_vars %}{{ var }}
                        {%- if not loop.last %},{%- endif %}{%- endfor %}) {
 

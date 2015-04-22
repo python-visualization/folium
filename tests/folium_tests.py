@@ -272,7 +272,8 @@ class testFolium(object):
                                    'line_opacity': 1,
                                    'fill_color': 'blue',
                                    'fill_opacity': 0.6})
-        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
+                 'onEachFeature: onEachFeature}}).addTo(map)'
                  .format(1, layer_var, 'style_1'))
 
         templ = self.map.template_vars
@@ -325,7 +326,8 @@ class testFolium(object):
                                    'quantize_fill': color,
                                    'fill_opacity': 0.6})
 
-        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
+                 'onEachFeature: onEachFeature}}).addTo(map)'
                  .format(1, layer_var, 'style_1'))
 
         templ = self.map.template_vars
@@ -343,7 +345,8 @@ class testFolium(object):
         layer_var_2 = 'topo_2'
         topo_func = ('topo_2 = topojson.feature(tjson_2,'
                      ' tjson_2.objects.or_counties_geo);')
-        fmt = 'gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+        fmt = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
+               'onEachFeature: onEachFeature}}).addTo(map)')
         layer_2 = fmt.format(2, layer_var_2, 'style_2')
 
         templ = self.map.template_vars

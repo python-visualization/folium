@@ -850,7 +850,8 @@ class Map(object):
             style = json_style(style_count, line_color, line_weight,
                                line_opacity, fill_color, fill_opacity, None)
 
-        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2}}}).addTo(map)'
+        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
+                 'onEachFeature: onEachFeature}}).addTo(map)'
                  .format(self.mark_cnt['geojson'], layer_var, style_count))
 
         self.template_vars.setdefault('json_paths', []).append(geo_path)
