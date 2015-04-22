@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Folium
 -------
 
 Make beautiful, interactive maps with Python and Leaflet.js
 
-'''
+"""
 
 from __future__ import absolute_import
 from __future__ import print_function
@@ -17,7 +17,7 @@ import json
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader
-from pkg_resources import resource_string, resource_filename
+from pkg_resources import resource_string
 
 from folium import utilities
 from folium.six import text_type, binary_type, iteritems
@@ -29,7 +29,7 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
 def initialize_notebook():
-    """Initialize the IPython notebook display elements"""
+    """Initialize the IPython notebook display elements."""
     try:
         from IPython.core.display import display, HTML
     except ImportError:
@@ -42,8 +42,9 @@ def initialize_notebook():
     display(HTML(lib_css.render()))
     display(HTML(lib_js.render({'leaflet_dvf': leaflet_dvf.render()})))
 
+
 def iter_obj(type):
-    '''Decorator to keep count of different map object types in self.mk_cnt'''
+    """Decorator to keep count of different map object types in self.mk_cnt."""
     def decorator(func):
         @functools.wraps(func)
         def wrapper(self, *args, **kwargs):
@@ -55,13 +56,13 @@ def iter_obj(type):
 
 
 class Map(object):
-    '''Create a Map with Folium'''
+    """Create a Map with Folium."""
 
     def __init__(self, location=None, width=960, height=500,
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180):
-        '''Create a Map with Folium and Leaflet.js
+        """Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
         tilesets or a custom tileset URL. The following tilesets are built-in
@@ -74,6 +75,7 @@ class Map(object):
             - "Stamen" (Terrain, Toner, and Watercolor)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
+            - "CartoDB" (positron and dark_matter)
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter:
         http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -113,33 +115,33 @@ class Map(object):
                                     'mapbox.control-room/{z}/{x}/{y}.png'),
                             attr='Mapbox attribution')
 
-        '''
+        """
 
-        #Inits
+        # Inits.
         self.map_path = None
         self.render_iframe = False
         self.map_type = 'base'
         self.map_id = '_'.join(['folium', uuid4().hex])
 
-        #Mark counter, JSON, Plugins
+        # Mark counter, JSON, Plugins.
         self.mark_cnt = {}
         self.json_data = {}
         self.plugins = {}
 
-        #Location
+        # Location.
         if not location:
             raise ValueError('You must pass a Lat/Lon location to initialize'
                              ' your map')
         self.location = location
 
-        #Map Size Parameters
+        # Map Size Parameters.
         self.width = width
         self.height = height
         self.map_size = {'width': width, 'height': height}
         self._size = ('style="width: {0}px; height: {1}px"'
                       .format(width, height))
 
-        #Templates
+        # Templates.
         self.env = ENV
         self.template_vars = dict(lat=location[0],
                                   lon=location[1],
@@ -153,7 +155,7 @@ class Map(object):
                                   min_lon=min_lon,
                                   max_lon=max_lon)
 
-        #Tiles
+        # Tiles.
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
@@ -163,7 +165,8 @@ class Map(object):
                               'mapquestopen', 'mapquestopenaerial',
                               'mapboxbright', 'mapbox', 'cloudmade',
                               'stamenterrain', 'stamentoner',
-                              'stamenwatercolor']
+                              'stamenwatercolor',
+                              'cartodbpositron', 'cartodbdark_matter']
         self.tile_types = {}
         for tile in self.default_tiles:
             tile_path = 'tiles/%s' % tile
@@ -195,8 +198,9 @@ class Map(object):
         self.template_vars.setdefault('tile_layers', [])
 
     @iter_obj('simple')
-    def add_tile_layer(self, tile_name=None,tile_url=None,active=False):
-        '''adds a simple tile layer
+    def add_tile_layer(self, tile_name=None, tile_url=None, active=False):
+        """Adds a simple tile layer.
+
         Parameters
         ----------
         tile_name: string
@@ -205,65 +209,62 @@ class Map(object):
             url location of the tile layer
         active: boolean
             should the layer be active when added
-        '''
-        if not tile_name in self.added_layers:
-            tile_name = tile_name.replace (" ", "_")
+        """
+        if tile_name not in self.added_layers:
+            tile_name = tile_name.replace(" ", "_")
             tile_temp = self.env.get_template('tile_layer.js')
 
             tile = tile_temp.render({'tile_name': tile_name,
-                                       'tile_url': tile_url
-                                       })
+                                     'tile_url': tile_url})
 
             self.template_vars.setdefault('tile_layers', []).append((tile))
 
-            self.added_layers.append({tile_name:tile_url})
-
+            self.added_layers.append({tile_name: tile_url})
 
     @iter_obj('simple')
     def add_wms_layer(self, wms_name=None, wms_url=None, wms_format=None,
                       wms_layers=None, wms_transparent=True):
-        '''adds a simple tile layer
+        """Adds a simple tile layer.
+
         Parameters
         ----------
         wms_name: string
             name of wms layer
         wms_url : string
             url of wms layer
-        '''
-        if not wms_name in self.added_layers:
-            wms_name = wms_name.replace (" ", "_")
+        """
+        if wms_name not in self.added_layers:
+            wms_name = wms_name.replace(" ", "_")
             wms_temp = self.env.get_template('wms_layer.js')
 
             wms = wms_temp.render({
                 'wms_name': wms_name,
                 'wms_url': wms_url,
                 'wms_format': wms_format,
-                'wms_layer_names':wms_layers,
-                'wms_transparent':str(wms_transparent).lower()})
-
+                'wms_layer_names': wms_layers,
+                'wms_transparent': str(wms_transparent).lower()})
             self.template_vars.setdefault('wms_layers', []).append((wms))
-
-            self.added_layers.append({wms_name:wms_url})
+            self.added_layers.append({wms_name: wms_url})
 
     @iter_obj('simple')
     def add_layers_to_map(self):
-        '''
-        Required function to actually add the layers to the html packet
-        '''
+        """
+        Required function to actually add the layers to the HTML packet.
+        """
         layers_temp = self.env.get_template('add_layers.js')
 
         data_string = ''
         for i, layer in enumerate(self.added_layers):
             name = list(layer.keys())[0]
-            data_string+='\"'
-            data_string+=name
-            data_string+='\"'
-            data_string+=': '
-            data_string+=name
+            data_string += '\"'
+            data_string += name
+            data_string += '\"'
+            data_string += ': '
+            data_string += name
             if i < len(self.added_layers)-1:
-                data_string+=",\n"
+                data_string += ",\n"
             else:
-                data_string+="\n"
+                data_string += "\n"
 
         data_layers = layers_temp.render({'layers': data_string})
         self.template_vars.setdefault('data_layers', []).append((data_string))
@@ -272,7 +273,7 @@ class Map(object):
     def simple_marker(self, location=None, popup='Pop Text', popup_on=True,
                       marker_color='blue', marker_icon='info-sign',
                       clustered_marker=False, icon_angle=0, width=300):
-        '''Create a simple stock Leaflet marker on the map, with optional
+        """Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
         Parameters
@@ -289,7 +290,8 @@ class Map(object):
         marker_color
             color of marker you want
         marker_icon
-            icon from (http://getbootstrap.com/components/) you want on the marker
+            icon from (http://getbootstrap.com/components/) you want on the
+            marker
         clustered_marker
             boolean of whether or not you want the marker clustered with
             other markers
@@ -303,7 +305,7 @@ class Map(object):
         >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
         >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
-        '''
+        """
         count = self.mark_cnt['simple']
 
         mark_temp = self.env.get_template('simple_marker.js')
@@ -315,10 +317,9 @@ class Map(object):
         icon = icon_temp.render({'icon': marker_icon,
                                  'icon_name': marker_num+"_icon",
                                  'markerColor': marker_color,
-                                 'icon_angle': icon_angle
-                                })
+                                 'icon_angle': icon_angle})
 
-        #Get marker and popup
+        # Get marker and popup.
         marker = mark_temp.render({'marker': 'marker_' + str(count),
                                    'lat': location[0],
                                    'lon': location[1],
@@ -328,26 +329,19 @@ class Map(object):
         popup_out = self._popup_render(popup=popup, mk_name='marker_',
                                        count=count, popup_on=popup_on,
                                        width=width)
-
-
-
         if clustered_marker:
             add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
-            self.template_vars.setdefault('cluster_markers', []).append((icon,
-                                                             marker,
-                                                             popup_out,
-                                                             add_mark))
+            name = 'cluster_markers'
         else:
             add_mark = 'map.addLayer(marker_{0})'.format(count)
-            self.template_vars.setdefault('custom_markers', []).append((icon,
-                                                             marker,
-                                                             popup_out,
-                                                             add_mark))
+            name = 'custom_markers'
+        append = (icon, marker, popup_out, add_mark)
+        self.template_vars.setdefault(name, []).append(append)
 
     @iter_obj('line')
     def line(self, locations,
              line_color=None, line_opacity=None, line_weight=None):
-        '''Add a line to the map with optional styles.
+        """Add a line to the map with optional styles.
 
         Parameters
         ----------
@@ -366,14 +360,13 @@ class Map(object):
         >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
                     line_color='red', line_opacity=1.0)
 
-        '''
+        """
         count = self.mark_cnt['line']
 
         line_temp = self.env.get_template('polyline.js')
 
-        polyline_opts = {'color': line_color,
-                'weight': line_weight,
-                'opacity': line_opacity}
+        polyline_opts = {'color': line_color, 'weight': line_weight,
+                         'opacity': line_opacity}
 
         varname = 'line_{}'.format(count)
         line_rendered = line_temp.render({'line': varname,
@@ -381,15 +374,13 @@ class Map(object):
                                           'options': polyline_opts})
 
         add_line = 'map.addLayer({});'.format(varname)
-
         self.template_vars.setdefault('lines', []).append((line_rendered,
                                                            add_line))
 
-
     @iter_obj('multiline')
-    def multiline(self, locations,
-             line_color=None, line_opacity=None, line_weight=None):
-        '''Add a multiPolyline to the map with optional styles.
+    def multiline(self, locations, line_color=None, line_opacity=None,
+                  line_weight=None):
+        """Add a multiPolyline to the map with optional styles.
 
         A multiPolyline is single layer that consists of several polylines that
         share styling/popup.
@@ -407,42 +398,38 @@ class Map(object):
 
         Example
         -------
-        >>>map.multiline(locations=[[(45.5236, -122.6750), (45.5236, -122.6751)],
-                                    [(45.5237, -122.6750), (45.5237, -122.6751)],
-                                    [(45.5238, -122.6750), (45.5238, -122.6751)]])
-        >>>map.multiline(locations=[[(45.5236, -122.6750), (45.5236, -122.6751)],
-                                    [(45.5237, -122.6750), (45.5237, -122.6751)],
-                                    [(45.5238, -122.6750), (45.5238, -122.6751)]],
-                                    line_color='red',
-                                    line_weight=2,
-                                    line_opacity=1.0)
-        '''
+        # FIXME: Add another example.
+        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
+                                   [(45.5237, -122.675), (45.5237, -122.675)],
+                                   [(45.5238, -122.675), (45.5238, -122.675)]])
+        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
+                                   [(45.5237, -122.675), (45.5237, -122.675)],
+                                   [(45.5238, -122.675), (45.5238, -122.675)]],
+                                   line_color='red', line_weight=2,
+                                   line_opacity=1.0)
+        """
 
         count = self.mark_cnt['multiline']
 
         multiline_temp = self.env.get_template('multi_polyline.js')
 
-        multiline_opts = {'color': line_color,
-                'weight': line_weight,
-                'opacity': line_opacity}
+        multiline_opts = {'color': line_color, 'weight': line_weight,
+                          'opacity': line_opacity}
 
         varname = 'multiline_{}'.format(count)
         multiline_rendered = multiline_temp.render({'multiline': varname,
-                                          'locations': locations,
-                                          'options': multiline_opts})
+                                                    'locations': locations,
+                                                    'options': multiline_opts})
 
         add_multiline = 'map.addLayer({});'.format(varname)
-
-        self.template_vars.setdefault('multilines', []).append((multiline_rendered,
-                                                           add_multiline))
-
-
+        append = (multiline_rendered, add_multiline)
+        self.template_vars.setdefault('multilines', []).append(append)
 
     @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup='Pop Text',
                       popup_on=True, line_color='black', fill_color='black',
                       fill_opacity=0.6):
-        '''Create a simple circle marker on the map, with optional popup text
+        """Create a simple circle marker on the map, with optional popup text
         or Vincent visualization.
 
         Parameters
@@ -474,7 +461,7 @@ class Map(object):
         >>>map.circle_marker(location=[45.5, -122.3],
                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
-        '''
+        """
         count = self.mark_cnt['circle']
 
         circle_temp = self.env.get_template('circle_marker.js')
@@ -501,7 +488,7 @@ class Map(object):
                        line_weight=2, fill_color='blue', fill_opacity=1,
                        num_sides=4, rotation=0, radius=15, popup='Pop Text',
                        popup_on=True):
-        '''Custom markers using the Leaflet Data Vis Framework.
+        """Custom markers using the Leaflet Data Vis Framework.
 
 
         Parameters
@@ -534,7 +521,7 @@ class Map(object):
         -------
         Polygon marker names and HTML in obj.template_vars
 
-        '''
+        """
 
         count = self.mark_cnt['polygon']
 
@@ -561,7 +548,7 @@ class Map(object):
         self.template_vars.setdefault('markers', []).append((polygon,
                                                              popup_out,
                                                              add_mark))
-        #Update JS/CSS and other Plugin files
+        # Update JS/CSS and other Plugin files.
         js_temp = self.env.get_template('dvf_js_ref.txt').render()
         self.template_vars.update({'dvf_js': js_temp})
 
@@ -571,13 +558,13 @@ class Map(object):
         self.plugins.update({'leaflet-dvf.markers.min.js': polygon_js})
 
     def lat_lng_popover(self):
-        '''Enable popovers to display Lat and Lon on each click'''
+        """Enable popovers to display Lat and Lon on each click."""
 
         latlng_temp = self.env.get_template('lat_lng_popover.js')
         self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
 
     def click_for_marker(self, popup=None):
-        '''Enable the addition of markers via clicking on the map. The marker
+        """Enable the addition of markers via clicking on the map. The marker
         popup defaults to Lat/Lon, but custom text can be passed via the
         popup parameter. Double click markers to remove them.
 
@@ -590,7 +577,7 @@ class Map(object):
         -------
         >>>map.click_for_marker(popup='Your Custom Text')
 
-        '''
+        """
         latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
         click_temp = self.env.get_template('click_for_marker.js')
         if popup:
@@ -602,7 +589,7 @@ class Map(object):
 
     def _popup_render(self, popup=None, mk_name=None, count=None,
                       popup_on=True, width=300):
-        '''Popup renderer: either text or Vincent/Vega.
+        """Popup renderer: either text or Vincent/Vega.
 
         Parameters
         ----------
@@ -614,11 +601,11 @@ class Map(object):
             Count of marker
         popup_on: boolean, default True
             If False, no popup will be rendered
-        '''
+        """
         if not popup_on:
             return 'var no_pop = null;'
         else:
-            if sys.version_info >= (3,0):
+            if sys.version_info >= (3, 0):
                 utype, stype = str, bytes
             else:
                 utype, stype = unicode, str
@@ -629,13 +616,13 @@ class Map(object):
                     popup_txt = popup.encode('ascii', 'xmlcharrefreplace')
                 else:
                     popup_txt = popup
-                if sys.version_info >= (3,0):
+                if sys.version_info >= (3, 0):
                     popup_txt = popup_txt.decode()
+                pop_txt = json.dumps(str(popup_txt))
                 return popup_temp.render({'pop_name': mk_name + str(count),
-                                          'pop_txt': json.dumps(str(popup_txt)),
-                                          'width': width})
+                                          'pop_txt': pop_txt, 'width': width})
             elif isinstance(popup, tuple):
-                #Update template with JS libs
+                # Update template with JS libs.
                 vega_temp = self.env.get_template('vega_ref.txt').render()
                 jquery_temp = self.env.get_template('jquery_ref.txt').render()
                 d3_temp = self.env.get_template('d3_ref.txt').render()
@@ -645,7 +632,7 @@ class Map(object):
                                            'jquery': jquery_temp,
                                            'vega_parse': vega_parse})
 
-                #Parameters for Vega template
+                # Parameters for Vega template.
                 vega = popup[0]
                 mark = ''.join([mk_name, str(count)])
                 json_out = popup[1]
@@ -675,7 +662,7 @@ class Map(object):
                  fill_color='blue', fill_opacity=0.6, line_color='black',
                  line_weight=1, line_opacity=1, legend_name=None,
                  topojson=None, reset=False):
-        '''Apply a GeoJSON overlay to the map.
+        """Apply a GeoJSON overlay to the map.
 
         Plot a GeoJSON overlay on the base map. There is no requirement
         to bind data (passing just a GeoJSON plots a single-color overlay),
@@ -748,14 +735,14 @@ class Map(object):
 
         Example
         -------
-        >>>map.geo_json(geo_path='us-states.json', line_color='blue',
-                        line_weight=3)
-        >>>map.geo_json(geo_path='geo.json', data=df,
-                        columns=['Data 1', 'Data 2'],
-                        key_on='feature.properties.myvalue', fill_color='PuBu',
-                        threshold_scale=[0, 20, 30, 40, 50, 60])
-        >>>map.geo_json(geo_path='countries.json', topojson='objects.countries')
-        '''
+        >>> m.geo_json(geo_path='us-states.json', line_color='blue',
+                      line_weight=3)
+        >>> m.geo_json(geo_path='geo.json', data=df,
+                      columns=['Data 1', 'Data 2'],
+                      key_on='feature.properties.myvalue', fill_color='PuBu',
+                      threshold_scale=[0, 20, 30, 40, 50, 60])
+        >>> m.geo_json(geo_path='countries.json', topojson='objects.countries')
+        """
 
         if reset:
             reset_vars = ['json_paths', 'func_vars', 'color_scales',
@@ -767,7 +754,7 @@ class Map(object):
 
         def json_style(style_cnt, line_color, line_weight, line_opacity,
                        fill_color, fill_opacity, quant_fill):
-            '''Generate JSON styling function from template'''
+            """Generate JSON styling function from template"""
             style_temp = self.env.get_template('geojson_style.js')
             style = style_temp.render({'style': style_cnt,
                                        'line_color': line_color,
@@ -778,17 +765,17 @@ class Map(object):
                                        'quantize_fill': quant_fill})
             return style
 
-        #Set map type to geojson
+        # Set map type to geojson.
         self.map_type = 'geojson'
 
-        #Get JSON map layer template pieces, convert TopoJSON if necessary
-        # geo_str is really a hack
+        # Get JSON map layer template pieces, convert TopoJSON if necessary.
+        # geo_str is really a hack.
         if geo_path:
             geo_path = ".defer(d3.json, '{0}')".format(geo_path)
         elif geo_str:
-            geo_path = (".defer(function(callback)"
-                        "{{callback(null, JSON.parse('{}'))}})").format(geo_str)
-
+            fmt = (".defer(function(callback)"
+                   "{{callback(null, JSON.parse('{}'))}})").format
+            geo_path = fmt(geo_str)
         if topojson is None:
             map_var = '_'.join(['gjson', str(self.mark_cnt['geojson'])])
             layer_var = map_var
@@ -807,33 +794,33 @@ class Map(object):
 
         style_count = '_'.join(['style', str(self.mark_cnt['geojson'])])
 
-        #Get Data binding pieces if available
+        # Get Data binding pieces if available.
         if data is not None:
 
             import pandas as pd
 
-            #Create DataFrame with only the relevant columns
+            # Create DataFrame with only the relevant columns.
             if isinstance(data, pd.DataFrame):
                 data = pd.concat([data[columns[0]], data[columns[1]]], axis=1)
 
-            #Save data to JSON
+            # Save data to JSON.
             self.json_data[data_out] = utilities.transform_data(data)
 
-            #Add data to queue
+            # Add data to queue.
             d_path = ".defer(d3.json, '{0}')".format(data_out)
             self.template_vars.setdefault('json_paths', []).append(d_path)
 
-            #Add data variable to makeMap function
+            # Add data variable to makeMap function.
             data_var = '_'.join(['data', str(self.mark_cnt['geojson'])])
             self.template_vars.setdefault('func_vars', []).append(data_var)
 
-            #D3 Color scale
+            # D3 Color scale.
             series = data[columns[1]]
             if threshold_scale and len(threshold_scale) > 6:
                 raise ValueError
             domain = threshold_scale or utilities.split_six(series=series)
             if len(domain) > 253:
-                raise ValueError('The threshold scale must be of length <= 253')
+                raise ValueError('The threshold scale must be length <= 253')
             if not utilities.color_brewer(fill_color):
                 raise ValueError('Please pass a valid color brewer code to '
                                  'fill_local. See docstring for valid codes.')
@@ -847,7 +834,7 @@ class Map(object):
                                          'range': d3range})
             self.template_vars.setdefault('color_scales', []).append(d3scale)
 
-            #Create legend
+            # Create legend.
             name = legend_name or columns[1]
             leg_templ = self.env.get_template('d3_map_legend.js')
             legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
@@ -855,7 +842,7 @@ class Map(object):
                                        'caption': name})
             self.template_vars.setdefault('map_legends', []).append(legend)
 
-            #Style with color brewer colors
+            # Style with color brewer colors.
             matchColor = 'color(matchKey({0}, {1}))'.format(key_on, data_var)
             style = json_style(style_count, line_color, line_weight,
                                line_opacity, None, fill_opacity, matchColor)
@@ -872,12 +859,12 @@ class Map(object):
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
     def _build_map(self, html_templ=None, templ_type='string'):
-        '''Build HTML/JS/CSS from Templates given current map type'''
+        """Build HTML/JS/CSS from Templates given current map type."""
         if html_templ is None:
             map_types = {'base': 'fol_template.html',
                          'geojson': 'geojson_template.html'}
 
-            #Check current map type
+            # Check current map type.
             type_temp = map_types[self.map_type]
 
             html_templ = self.env.get_template(type_temp)
@@ -888,7 +875,7 @@ class Map(object):
         self.HTML = html_templ.render(self.template_vars)
 
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
-        '''Write Map output to HTML and data output to JSON if available
+        """Write Map output to HTML and data output to JSON if available.
 
         Parameters:
         -----------
@@ -900,7 +887,7 @@ class Map(object):
         template: string, default None
             Custom template to render
 
-        '''
+        """
         self.map_path = path
         self._build_map(template)
 
@@ -924,7 +911,7 @@ class Map(object):
         map_types = {'base': 'ipynb_repr.html',
                      'geojson': 'ipynb_iframe.html'}
 
-        #Check current map type
+        # Check current map type.
         type_temp = map_types[self.map_type]
         if self.render_iframe:
             type_temp = 'ipynb_iframe.html'
