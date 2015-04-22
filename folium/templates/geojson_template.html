@@ -78,6 +78,18 @@
               attribution: '{{ attr }}'
           }).addTo(map);
 
+          {% for style in geo_styles %}
+          {{ style }}
+          {% endfor %}
+
+          {% for layer in gjson_layers %}
+          {{ layer }}
+          {% endfor %}
+
+          {% for legend in map_legends %}
+          {{ legend }}
+          {% endfor %}
+
           {% for mark, popup, add_mark in markers %}
           {{ mark }}
           {{ popup }}
@@ -97,19 +109,6 @@
           {{ lat_lng_pop }}
 
           {{ click_pop }}
-
-          {% for style in geo_styles %}
-          {{ style }}
-          {% endfor %}
-
-          {% for layer in gjson_layers %}
-          {{ layer }}
-          {% endfor %}
-
-          {% for legend in map_legends %}
-          {{ legend }}
-          {% endfor %}
-
       };
 
    </script>
