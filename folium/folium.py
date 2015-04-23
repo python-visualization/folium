@@ -84,9 +84,9 @@ class Map(object):
         ----------
         location: tuple or list, default None
             Latitude and Longitude of Map (Northing, Easting).
-        width: int, default 960
+        width: pixel int or percentage string (default 960)
             Width of the map.
-        height: int, default 500
+        height: pixel int or percentage string (default 500)
             Height of the map.
         tiles: str, default 'OpenStreetMap'
             Map tileset to use. Can use defaults or pass a custom URL.
@@ -135,12 +135,35 @@ class Map(object):
         self.location = location
 
         # Map Size Parameters.
+        try:
+            if isinstance(width, int):
+                width_type = 'px'
+                assert width > 0
+            else:
+                width_type = '%'
+                width = int(width.strip('%'))
+                assert 0 <= width <= 100
+        except:
+            msg = "Cannot parse width {!r} as {!r}".format
+            raise ValueError(msg(width, width_type))
         self.width = width
-        self.height = height
-        self.map_size = {'width': width, 'height': height}
-        self._size = ('style="width: {0}px; height: {1}px"'
-                      .format(width, height))
 
+        try:
+            if isinstance(height, int):
+                height_type = 'px'
+                assert height > 0
+            else:
+                height_type = '%'
+                height = int(height.strip('%'))
+                assert 0 <= height <= 100
+        except:
+            msg = "Cannot parse height {!r} as {!r}".format
+            raise ValueError(msg(height, height_type))
+        self.height = height
+
+        self.map_size = {'width': width, 'height': height}
+        self._size = ('style="width: {0}{1}; height: {2}{3}"'
+                      .format(width, width_type, height, height_type))
         # Templates.
         self.env = ENV
         self.template_vars = dict(lat=location[0],
