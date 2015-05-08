@@ -58,7 +58,7 @@ def iter_obj(type):
 class Map(object):
     """Create a Map with Folium."""
 
-    def __init__(self, location=None, width=960, height=500,
+    def __init__(self, location=None, width='100%', height='100%',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180):
@@ -84,9 +84,9 @@ class Map(object):
         ----------
         location: tuple or list, default None
             Latitude and Longitude of Map (Northing, Easting).
-        width: pixel int or percentage string (default 960)
+        width: pixel int or percentage string (default: '100%')
             Width of the map.
-        height: pixel int or percentage string (default 500)
+        height: pixel int or percentage string (default: '100%')
             Height of the map.
         tiles: str, default 'OpenStreetMap'
             Map tileset to use. Can use defaults or pass a custom URL.
