@@ -440,3 +440,24 @@ class testFolium(object):
                            line_opacity=multiline_opts['opacity'])
         assert self.map.template_vars['multilines'][0][0] == multiline_rendered
 
+    def test_fit_bounds(self):
+        """Test fit_bounds"""
+        bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
+        fit_bounds_tpl = self.env.get_template('fit_bounds.js')
+        fit_bounds_rendered = fit_bounds_tpl.render({
+           'bounds': json.dumps(bounds),
+           'fit_bounds_options': {},
+        })
+
+        self.map.fit_bounds(bounds)
+        assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
+
+        fit_bounds_tpl = self.env.get_template('fit_bounds.js')
+        fit_bounds_rendered = fit_bounds_tpl.render({
+           'bounds': json.dumps(bounds),
+           'fit_bounds_options': json.dumps({'padding': (3,3), 'maxZoom': 15}),
+        })
+
+        self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
+        assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
+
