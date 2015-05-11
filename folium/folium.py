@@ -363,7 +363,8 @@ class Map(object):
 
     @iter_obj('line')
     def line(self, locations,
-             line_color=None, line_opacity=None, line_weight=None):
+             line_color=None, line_opacity=None, line_weight=None,
+             popup='Pop Text', popup_on=True, popup_width=300):
         """Add a line to the map with optional styles.
 
         Parameters
@@ -373,6 +374,11 @@ class Map(object):
         line_color: string, default Leaflet's default ('#03f')
         line_opacity: float, default Leaflet's default (0.5)
         line_weight: float, default Leaflet's default (5)
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+        popup_on: boolean, default True
+            Pass false for no popup information on the marker
 
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
@@ -396,9 +402,13 @@ class Map(object):
                                           'locations': locations,
                                           'options': polyline_opts})
 
+        popup_out = self._popup_render(popup=popup, mk_name='line_',
+                                       count=count, popup_on=popup_on,
+                                       width=popup_width)
+
         add_line = 'map.addLayer({});'.format(varname)
-        self.template_vars.setdefault('lines', []).append((line_rendered,
-                                                           add_line))
+        append = (line_rendered, popup_out, add_line)
+        self.template_vars.setdefault('lines', []).append((append))
 
     @iter_obj('multiline')
     def multiline(self, locations, line_color=None, line_opacity=None,
