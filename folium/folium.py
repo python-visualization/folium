@@ -90,13 +90,14 @@ class Map(object):
 
         Examples
         --------
-        >>>map = folium.Map(location=[45.523, -122.675], width=750, height=500)
-        >>>map = folium.Map(location=[45.523, -122.675],
-                            tiles='Mapbox Control Room')
-        >>>map = folium.Map(location=(45.523, -122.675), max_zoom=20,
-                            tiles='Cloudmade', API_key='YourKey')
-        >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
-                            tiles=('http://{s}.tiles.mapbox.com/v3/'
+        >>> map = folium.Map(location=[45.523, -122.675], width=750,
+        ...                  height=500)
+        >>> map = folium.Map(location=[45.523, -122.675],
+                             tiles='Mapbox Control Room')
+        >>> map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+                             tiles='Cloudmade', API_key='YourKey')
+        >>> map = folium.Map(location=[45.523, -122.675], zoom_start=2,
+                             tiles=('http://{s}.tiles.mapbox.com/v3/'
                                     'mapbox.control-room/{z}/{x}/{y}.png'),
                             attr='Mapbox attribution')
 
@@ -209,8 +210,9 @@ class Map(object):
         self.template_vars.setdefault('image_layers', [])
 
     @iter_obj('simple')
-    def add_tile_layer(self, tile_name=None, tile_url=None, active=False):
-        """Adds a simple tile layer.
+    def add_tile_layer(self, tile_name=None, tile_url=None, **kw):
+        """
+        Adds a simple tile layer.
 
         Parameters
         ----------
@@ -218,15 +220,36 @@ class Map(object):
             name of the tile layer
         tile_url: string
             url location of the tile layer
-        active: boolean
-            should the layer be active when added
+
+        For the available options see:
+            http://leafletjs.com/reference.html#tilelayer
+
         """
+        # Same defaults.
+        tms = kw.pop('tms', 'false')
+        minZoom = kw.pop('minZoom', 0)
+        opacity = kw.pop('opacity', 1)
+        maxZoom = kw.pop('maxZoom', 18)
+        noWrap = kw.pop('noWrap', 'false')
+        zoomOffset = kw.pop('zoomOffset', 0)
+        zoomReverse = kw.pop('zoomReverse', 'false')
+        continuousWorld = kw.pop('continuousWorld', 'false')
+
         if tile_name not in self.added_layers:
             tile_name = tile_name.replace(" ", "_")
             tile_temp = self.env.get_template('tile_layer.js')
-
-            tile = tile_temp.render({'tile_name': tile_name,
-                                     'tile_url': tile_url})
+            tile = tile_temp.render({
+                'tile_name': tile_name,
+                'tile_url': tile_url,
+                'minZoom': minZoom,
+                'maxZoom': maxZoom,
+                'tms': str(tms).lower(),
+                'continuousWorld': str(continuousWorld).lower(),
+                'noWrap': str(noWrap).lower(),
+                'zoomOffset': zoomOffset,
+                'zoomReverse': str(zoomReverse).lower(),
+                'opacity': opacity,
+                })
 
             self.template_vars.setdefault('tile_layers', []).append((tile))
 
@@ -305,8 +328,8 @@ class Map(object):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
+        >>> map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>> map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
         """
         count = self.mark_cnt['simple']
@@ -364,8 +387,8 @@ class Map(object):
 
         Example
         -------
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
                     line_color='red', line_opacity=1.0)
 
         """
@@ -409,7 +432,6 @@ class Map(object):
 
         Example
         -------
-        # FIXME: Add another example.
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
                                    [(45.5238, -122.675), (45.5238, -122.675)]])
@@ -467,9 +489,9 @@ class Map(object):
 
         Example
         -------
-        >>>map.circle_marker(location=[45.5, -122.3],
+        >>> map.circle_marker(location=[45.5, -122.3],
                              radius=1000, popup='Portland, OR')
-        >>>map.circle_marker(location=[45.5, -122.3],
+        >>> map.circle_marker(location=[45.5, -122.3],
                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
         """
@@ -584,7 +606,7 @@ class Map(object):
 
         Example
         -------
-        >>>map.click_for_marker(popup='Your Custom Text')
+        >>> map.click_for_marker(popup='Your Custom Text')
 
         """
         latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
