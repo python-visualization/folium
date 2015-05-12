@@ -139,6 +139,38 @@ class testFolium(object):
                                'wms_transparent': 'true'})
         assert map.template_vars['wms_layers'][0] == wms
 
+    def test_add_tile_layer(self):
+        '''Test add_layer URLs'''
+
+        map = folium.Map(location=[44, -73], zoom_start=3)
+        tile_name = "Temperature"
+        tile_url = 'http://gis.srh.noaa.gov/arcgis/services/NDFDTemps/'
+        tile_url += 'MapServer/WMSServer'
+        minZoom = 1
+        maxZoom = 5
+        tms = True
+        continuousWorld = False
+        noWrap = True
+        zoomOffset = 1
+        zoomReverse = True
+        opacity = 2
+        map.add_tile_layer(tile_name=tile_name, tile_url=tile_url, active=True, minZoom=minZoom,
+                        maxZoom=maxZoom, tms=tms, continuousWorld=continuousWorld, noWrap=noWrap, zoomOffset=zoomOffset,
+                        zoomReverse=zoomReverse, opacity=opacity, attribution='Leaflet')
+        tile_temp = self.env.get_template('tile_layer.js')
+        tile = tile_temp.render({'tile_name': tile_name,
+                          'tile_url': tile_url,
+                          'minZoom': minZoom,
+                          'maxZoom': maxZoom,
+                          'tms': str(tms).lower(),
+                          'continuousWorld': str(continuousWorld).lower(),
+                          'noWrap': str(noWrap).lower(),
+                          'zoomOffset': zoomOffset,
+                          'zoomReverse': str(zoomReverse).lower(),
+                          'opacity': opacity,
+                      })
+        assert map.template_vars['tile_layers'][0] == tile
+
     def test_simple_marker(self):
         '''Test simple marker addition'''
 
