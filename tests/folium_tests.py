@@ -416,7 +416,7 @@ class testFolium(object):
         map.create_map()
 
     def test_line(self):
-        '''Test multi_polyline'''
+        '''Test line'''
 
         line_temp = self.env.get_template('polyline.js')
 
