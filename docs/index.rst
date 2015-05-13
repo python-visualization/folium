@@ -158,6 +158,27 @@ The popup parameter in any marker can be passed a `Vincent <https://github.com/w
     vis.to_json('vis.json')
     map.polygon_marker(location=[45.5, -122.5], popup=(vis, 'vis.json'))
 
+Other features
+--------------
+
+Polyline
+~~~~~~~~
+
+You can plot a line by simply passing an iterable of coordinates to the method `line`::
+
+    map.line(locations=[[45.3288, -121.6625],
+        [45.324224, -121.657763]
+        [45.318702, -121.652871]])
+
+You can specify the following parameters:
+
+- `line_color`: line color, either a simple color (blue, black, etc), or a hex string
+- `line_weight`: line weight, in pixels
+- `line_opacity`: fill opacity
+
+Polylines also support popups, through the `popup` and `popup_on` parameters, similarly to markers.
+
+
 Data Mapping: GeoJSON and TopoJSON
 ----------------------------------
 
