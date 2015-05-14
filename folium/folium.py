@@ -128,11 +128,13 @@ class Map(object):
         self.json_data = {}
         self.plugins = {}
 
-        # Location.
-        if not location:
-            raise ValueError('You must pass a Lat/Lon location to initialize'
-                             ' your map')
+        # No location means we will use automatic bounds and ignore zoom
         self.location = location
+
+        # If location is not passed, we center the map at 0,0
+        if not location:
+            location = [0, 0]
+            zoom_start = min_zoom
 
         # Map Size Parameters.
         try:
@@ -664,6 +666,31 @@ class Map(object):
         self.template_vars.update({'fit_bounds': fit_bounds_str})
 
 
+    def _auto_bounds(self):
+        if 'fit_bounds' in self.template_vars:
+            return
+        # Get count for each feature type
+        ft_names = ["marker", "line", "circle", "polygon", "multiline"]
+        ft_names = [i for i in ft_names if i in self.mark_cnt]
+
+        # Make a comprehensive list of all the features we want to fit
+        feat_str = ["{name}_{count}".format(name=ft_name,
+                                            count=self.mark_cnt[ft_name])
+                    for ft_name in ft_names
+                    for count in range(1, self.mark_cnt[ft_name]+1)
+        ]
+        feat_str = "[" + ', '.join(feat_str) + "]"
+
+        fit_bounds = self.env.get_template('fit_bounds.js')
+        fit_bounds_str = fit_bounds.render({
+            'autobounds': not self.location,
+            'features': feat_str,
+            'fit_bounds_options': json.dumps({'padding' : [30, 30]}),
+        })
+
+        self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
+
+
     def _popup_render(self, popup=None, mk_name=None, count=None,
                       popup_on=True, width=300):
         """Popup renderer: either text or Vincent/Vega.
@@ -937,6 +964,7 @@ class Map(object):
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
     def _build_map(self, html_templ=None, templ_type='string'):
+        self._auto_bounds()
         """Build HTML/JS/CSS from Templates given current map type."""
         if html_templ is None:
             map_types = {'base': 'fol_template.html',

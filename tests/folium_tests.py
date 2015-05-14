@@ -58,8 +58,6 @@ class testFolium(object):
         assert self.map.location == [45.5236, -122.6750]
         assert self.map.map_size == {'width': 900, 'height': 400}
 
-        nt.assert_raises(ValueError, callableObj=folium.Map)
-
         tmpl = {'Tiles': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
