@@ -154,7 +154,7 @@ class testFolium(object):
                                       'pop_txt': json.dumps('Pop Text'),
                                       'width': 300})
         assert self.map.template_vars['custom_markers'][0][1] == mark_1
-        assert self.map.template_vars['custom_markers'][0][2] == popup_1
+        assert self.map.template_vars['custom_markers'][0][2] == ""
 
         # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
@@ -169,8 +169,8 @@ class testFolium(object):
         assert self.map.template_vars['custom_markers'][1][2] == popup_2
 
         # Test no popup.
-        self.map.simple_marker(location=[45.60, -122.8], popup_on=False)
-        nopopup = 'var no_pop = null;'
+        self.map.simple_marker(location=[45.60, -122.8])
+        nopopup = ''
         assert self.map.template_vars['custom_markers'][2][2] == nopopup
 
     def test_circle_marker(self):

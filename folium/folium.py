@@ -293,7 +293,7 @@ class Map(object):
         self.template_vars.setdefault('data_layers', []).append((data_string))
 
     @iter_obj('simple')
-    def simple_marker(self, location=None, popup='Pop Text', popup_on=True,
+    def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
                       clustered_marker=False, icon_angle=0, width=300):
         """Create a simple stock Leaflet marker on the map, with optional
@@ -308,8 +308,6 @@ class Map(object):
             or a tuple of the form (Vincent object, 'vis_path.json')
             It is possible to adjust the width of text/HTML popups
             using the optional keywords `width`.  (Leaflet default is 300px.)
-        popup_on: boolean, default True
-            Pass false for no popup information on the marker
         marker_color
             color of marker you want
         marker_icon
@@ -350,8 +348,7 @@ class Map(object):
                                    })
 
         popup_out = self._popup_render(popup=popup, mk_name='marker_',
-                                       count=count, popup_on=popup_on,
-                                       width=width)
+                                       count=count, width=width)
         if clustered_marker:
             add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
             name = 'cluster_markers'
@@ -364,7 +361,7 @@ class Map(object):
     @iter_obj('line')
     def line(self, locations,
              line_color=None, line_opacity=None, line_weight=None,
-             popup='Pop Text', popup_on=True, popup_width=300):
+             popup=None, popup_width=300):
         """Add a line to the map with optional styles.
 
         Parameters
@@ -377,8 +374,6 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
-        popup_on: boolean, default True
-            Pass false for no popup information on the marker
 
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
@@ -403,8 +398,7 @@ class Map(object):
                                           'options': polyline_opts})
 
         popup_out = self._popup_render(popup=popup, mk_name='line_',
-                                       count=count, popup_on=popup_on,
-                                       width=popup_width)
+                                       count=count, width=popup_width)
 
         add_line = 'map.addLayer({});'.format(varname)
         append = (line_rendered, popup_out, add_line)
@@ -459,8 +453,8 @@ class Map(object):
         self.template_vars.setdefault('multilines', []).append(append)
 
     @iter_obj('circle')
-    def circle_marker(self, location=None, radius=500, popup='Pop Text',
-                      popup_on=True, line_color='black', fill_color='black',
+    def circle_marker(self, location=None, radius=500, popup=None,
+                      line_color='black', fill_color='black',
                       fill_opacity=0.6):
         """Create a simple circle marker on the map, with optional popup text
         or Vincent visualization.
@@ -474,8 +468,6 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
-        popup_on: boolean, default True
-            Pass false for no popup information on the marker
         line_color: string, default black
             Line color. Can pass hex value here as well.
         fill_color: string, default black
@@ -507,8 +499,7 @@ class Map(object):
                                      'fill_opacity': fill_opacity})
 
         popup_out = self._popup_render(popup=popup, mk_name='circle_',
-                                       count=count,
-                                       popup_on=popup_on)
+                                       count=count)
 
         add_mark = 'map.addLayer(circle_{0})'.format(count)
 
@@ -519,8 +510,7 @@ class Map(object):
     @iter_obj('polygon')
     def polygon_marker(self, location=None, line_color='black', line_opacity=1,
                        line_weight=2, fill_color='blue', fill_opacity=1,
-                       num_sides=4, rotation=0, radius=15, popup='Pop Text',
-                       popup_on=True):
+                       num_sides=4, rotation=0, radius=15, popup=None):
         """Custom markers using the Leaflet Data Vis Framework.
 
 
@@ -547,8 +537,6 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
-        popup_on: boolean, default True
-            Pass false for no popup information on the marker
 
         Returns
         -------
@@ -573,8 +561,7 @@ class Map(object):
                                     'radius': radius})
 
         popup_out = self._popup_render(popup=popup, mk_name='polygon_',
-                                       count=count,
-                                       popup_on=popup_on)
+                                       count=count)
 
         add_mark = 'map.addLayer(polygon_{0})'.format(count)
 
@@ -665,7 +652,7 @@ class Map(object):
 
 
     def _popup_render(self, popup=None, mk_name=None, count=None,
-                      popup_on=True, width=300):
+                      width=300):
         """Popup renderer: either text or Vincent/Vega.
 
         Parameters
@@ -676,11 +663,9 @@ class Map(object):
             Type of marker. Simple, Circle, etc.
         count: int, default None
             Count of marker
-        popup_on: boolean, default True
-            If False, no popup will be rendered
         """
-        if not popup_on:
-            return 'var no_pop = null;'
+        if not popup:
+            return ''
         else:
             if sys.version_info >= (3, 0):
                 utype, stype = str, bytes
