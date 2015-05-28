@@ -46,7 +46,7 @@ pkg_data = {'': ['*.js',
 
 LICENSE = read('LICENSE.txt')
 version = find_version('folium', '__init__.py')
-long_description = '{}\n{}'.format(read('README.txt'), read('CHANGES.txt'))
+long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
 
 config = dict(name='folium',
               version=version,

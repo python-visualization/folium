@@ -1,3 +1,9 @@
+.. image:: https://badge.fury.io/py/folium.png
+   :target: http://badge.fury.io/py/folium
+.. image:: https://api.travis-ci.org/python-visualization/folium.png?branch=master
+   :target: https://travis-ci.org/python-visualization/folium
+
+
 Folium
 ======
 
