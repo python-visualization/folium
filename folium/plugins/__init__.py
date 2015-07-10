@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from uuid import uuid4
+import json
 
 class ScrollZoomToggler():
     """Adds a button to enable/disable zoom scrolling."""
@@ -56,4 +57,49 @@ class ScrollZoomToggler():
         """
         if not self.zoom_enabled:
             out += "\n        toggleScroll();"
+        return out
+
+class MarkerCluster():
+    """Adds a MarkerCluster layer on the map."""
+    def __init__(self, data):
+        """Creates a MarkerCluster plugin to append into a map with
+        Map.add_plugin.
+
+        Parameters
+        ----------
+            data: list of list or array of shape (n,3).
+                Data points of the form [[lat, lng, popup]].
+        """
+        self.data = [tuple(x) for x in data]
+        self.name = "MarkerCluster_"+uuid4().hex
+
+    def render_html(self):
+        """Generates the HTML part of the plugin."""
+        return """
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+	    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+        """
+
+    def render_css(self):
+        """Generates the CSS part of the plugin."""
+        return ""
+
+    def render_js(self):
+        """Generates the Javascript part of the plugin."""
+        out = """
+        var addressPoints = """+json.dumps(self.data)+""";
+
+        var markers = L.markerClusterGroup();
+
+		for (var i = 0; i < addressPoints.length; i++) {
+			var a = addressPoints[i];
+			var title = a[2];
+			var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
+			marker.bindPopup(title);
+			markers.addLayer(marker);
+		}
+
+		map.addLayer(markers);
+		"""
         return out
