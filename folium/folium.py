@@ -61,7 +61,7 @@ class Map(object):
     def __init__(self, location=None, width='100%', height='100%',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180):
+                 min_lon=-180, max_lon=180, zoom_toggler=False):
         """Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -98,6 +98,8 @@ class Map(object):
             Initial zoom level for the map.
         attr: string, default None
             Map tile attribution; only required if passing custom tile URL.
+        zoom_toggler: bool, default False
+            Add a button on the map to enable/disable scrolling zoom.
 
         Returns
         -------
@@ -221,6 +223,7 @@ class Map(object):
         self.added_layers = []
         self.template_vars.setdefault('wms_layers', [])
         self.template_vars.setdefault('tile_layers', [])
+        self.template_vars['zoom_toggler'] = zoom_toggler
 
     @iter_obj('simple')
     def add_tile_layer(self, tile_name=None, tile_url=None, active=False):

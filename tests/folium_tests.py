@@ -73,7 +73,8 @@ class testFolium(object):
                 'min_lat': -90,
                 'max_lat': 90,
                 'min_lon': -180,
-                'max_lon': 180}
+                'max_lon': 180,
+                'zoom_toggler' : False}
 
         assert self.map.template_vars == tmpl
 
