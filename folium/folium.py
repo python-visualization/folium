@@ -655,6 +655,16 @@ class Map(object):
 
         self.template_vars.update({'fit_bounds': fit_bounds_str})
 
+    def add_plugin(self, plugin):
+        """Adds a plugin to the map.
+
+        Parameters
+        ----------
+            plugin: folium.plugins object
+                A plugin to be added to the map. It has to implement the methods
+                `render_html`, `render_css` and `render_js`.
+        """
+        self.plugins[plugin.name] = plugin
 
     def _auto_bounds(self):
         if 'fit_bounds' in self.template_vars:
@@ -966,7 +976,7 @@ class Map(object):
             if templ_type == 'string':
                 html_templ = self.env.from_string(html_templ)
 
-        self.HTML = html_templ.render(self.template_vars)
+        self.HTML = html_templ.render(self.template_vars, plugins=self.plugins)
 
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML and data output to JSON if available.
