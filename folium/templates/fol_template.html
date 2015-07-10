@@ -45,6 +45,7 @@
         left:0;
       }
 
+    {% if zoom_toggler %}
       #toggle_scroll {
         position:absolute;
         width:35px;
@@ -56,6 +57,7 @@
         line-height:35px;
         vertical-align: middle;
       }
+    {% endif %}
    </style>
 </head>
 
@@ -63,9 +65,11 @@
 
    <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
 
+    {% if zoom_toggler %}
    <img id="toggle_scroll" alt="scroll"
       src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/png/512/arrow-move.png"
       onclick="toggleScroll()"></img>
+    {% endif %}
 
    <script>
 
@@ -122,6 +126,7 @@
                                        layers: [base_tile]
                                      });
 
+    {% if zoom_toggler %}
       map.scrollEnabled = true;
 
       var toggleScroll = function() {
@@ -144,6 +149,7 @@
         };
 
       toggleScroll();
+    {% endif %}
 
       L.control.layers(baseLayer, layer_list).addTo(map);
 
