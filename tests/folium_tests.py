@@ -13,6 +13,7 @@ from jinja2 import Environment, PackageLoader
 import vincent
 import folium
 from folium.six import PY3
+from folium.plugins import ScrollZoomToggler, MarkerCluster
 
 
 def setup_data():
@@ -372,7 +373,7 @@ class testFolium(object):
                 'max_lat': 90,
                 'min_lon': -180,
                 'max_lon': 180}
-        HTML = html_templ.render(tmpl)
+        HTML = html_templ.render(tmpl, plugins={})
 
         assert self.map.HTML == HTML
 
@@ -483,3 +484,19 @@ class testFolium(object):
         self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
         assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
 
+    def test_scroll_zoom_toggler_plugin(self):
+        "test ScrollZoomToggler plugin"""
+        a_map = folium.Map([45,3], zoom_start=4)
+        a_map.add_plugin(ScrollZoomToggler(False))
+        a_map._build_map()
+
+    def test_marker_cluster_plugin(self):
+        "test MarkerCluster plugin"""
+        data = [(35,-12,"lower left"),
+                (35, 30,"lower right"),
+                (60,-12,"upper left"),
+                (60, 30,"upper right"),
+                ]
+        a_map = folium.Map([0,0], zoom_start=0)
+        a_map.add_plugin(MarkerCluster(data))
+        a_map._build_map()
