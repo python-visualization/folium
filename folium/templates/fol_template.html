@@ -23,6 +23,10 @@
 
    <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
 
+    {% for name, plugin in plugins.items() %}
+        {{plugin.render_header()}}
+    {% endfor %}
+
    {{ dvf_js }}
    {{ d3 }}
    {{ vega }}
@@ -45,12 +49,20 @@
         left:0;
       }
 
+    {% for name, plugin in plugins.items() %}
+        {{plugin.render_css()}}
+    {% endfor %}
+
    </style>
 </head>
 
 <body>
 
    <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
+
+    {% for name, plugin in plugins.items() %}
+        {{plugin.render_html()}}
+    {% endfor %}
 
    <script>
 
@@ -150,6 +162,10 @@
       {{ click_pop }}
 
 {% if fit_bounds %}{{ fit_bounds }}{% endif %}
+
+    {% for name, plugin in plugins.items() %}
+        {{plugin.render_js()}}
+    {% endfor %}
 
    </script>
 
