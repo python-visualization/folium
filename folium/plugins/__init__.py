@@ -3,7 +3,30 @@
 from uuid import uuid4
 import json
 
-class ScrollZoomToggler():
+class Plugin():
+    """Basic plugin object that does nothing.
+    Other plugins may inherit from this one."""
+    def __init__(self):
+        """Creates a plugin to append into a map with Map.add_plugin. """
+        self.name = "Plugin_"+uuid4().hex
+
+    def render_html(self):
+        """Generates the HTML part of the plugin."""
+        return ""
+
+    def render_css(self):
+        """Generates the CSS part of the plugin."""
+        return ""
+
+    def render_js(self):
+        """Generates the Javascript part of the plugin."""
+        return ""
+    def render_header(self):
+        """Generates the Header part of the plugin."""
+        return ""
+
+
+class ScrollZoomToggler(Plugin):
     """Adds a button to enable/disable zoom scrolling."""
     def __init__(self, zoom_enabled=False):
         """Creates a ScrollZoomToggler plugin to append into a map with
@@ -59,7 +82,7 @@ class ScrollZoomToggler():
             out += "\n        toggleScroll();"
         return out
 
-class MarkerCluster():
+class MarkerCluster(Plugin):
     """Adds a MarkerCluster layer on the map."""
     def __init__(self, data):
         """Creates a MarkerCluster plugin to append into a map with
@@ -73,17 +96,13 @@ class MarkerCluster():
         self.data = [tuple(x) for x in data]
         self.name = "MarkerCluster_"+uuid4().hex
 
-    def render_html(self):
+    def render_header(self):
         """Generates the HTML part of the plugin."""
         return """
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
 	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
         """
-
-    def render_css(self):
-        """Generates the CSS part of the plugin."""
-        return ""
 
     def render_js(self):
         """Generates the Javascript part of the plugin."""

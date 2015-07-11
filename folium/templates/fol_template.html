@@ -23,6 +23,10 @@
 
    <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
 
+    {% for name, plugin in plugins.iteritems() %}
+        {{plugin.render_header()}}
+    {% endfor %}
+
    {{ dvf_js }}
    {{ d3 }}
    {{ vega }}
