@@ -24,7 +24,11 @@
    <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
 
     {% for name, plugin in plugins.items() %}
-        {{plugin.render_header()}}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_header(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
     {% endfor %}
 
    {{ dvf_js }}
@@ -50,7 +54,11 @@
       }
 
     {% for name, plugin in plugins.items() %}
-        {{plugin.render_css()}}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_css(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
     {% endfor %}
 
    </style>
@@ -61,7 +69,11 @@
    <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
 
     {% for name, plugin in plugins.items() %}
-        {{plugin.render_html()}}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_html(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
     {% endfor %}
 
    <script>
@@ -119,7 +131,7 @@
                                        layers: [base_tile]
                                      });
 
-      L.control.layers(baseLayer, layer_list).addTo(map);
+      // L.control.layers(baseLayer, layer_list).addTo(map);
 
       //cluster group
       var clusteredmarkers = L.markerClusterGroup();
@@ -164,7 +176,11 @@
 {% if fit_bounds %}{{ fit_bounds }}{% endif %}
 
     {% for name, plugin in plugins.items() %}
-        {{plugin.render_js()}}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_js(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
     {% endfor %}
 
    </script>

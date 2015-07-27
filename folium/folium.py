@@ -661,7 +661,7 @@ class Map(object):
                 A plugin to be added to the map. It has to implement the methods
                 `render_html`, `render_css` and `render_js`.
         """
-        self.plugins[plugin.name] = plugin
+        plugin.add_to_map(self)
 
     def _auto_bounds(self):
         if 'fit_bounds' in self.template_vars:

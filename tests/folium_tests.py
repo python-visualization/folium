@@ -14,7 +14,7 @@ import vincent
 import folium
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
-
+from test_plugins import testPlugins
 
 def setup_data():
     '''Import economic data for testing'''
@@ -487,7 +487,7 @@ class testFolium(object):
     def test_scroll_zoom_toggler_plugin(self):
         "test ScrollZoomToggler plugin"""
         a_map = folium.Map([45,3], zoom_start=4)
-        a_map.add_plugin(ScrollZoomToggler(False))
+        a_map.add_plugin(ScrollZoomToggler())
         a_map._build_map()
 
     def test_marker_cluster_plugin(self):
