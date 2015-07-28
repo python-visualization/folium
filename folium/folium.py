@@ -647,7 +647,8 @@ class Map(object):
         fit_bounds = self.env.get_template('fit_bounds.js')
         fit_bounds_str = fit_bounds.render({
             'bounds': json.dumps(bounds),
-            'fit_bounds_options': json.dumps(fit_bounds_options),
+            'fit_bounds_options': json.dumps(fit_bounds_options,
+                                             sort_keys=True),
         })
 
         self.template_vars.update({'fit_bounds': fit_bounds_str})
