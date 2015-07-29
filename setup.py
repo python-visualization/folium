@@ -40,6 +40,9 @@ def walk_subpkg(name):
 
 pkg_data = {'': ['*.js',
                  'plugins/*.js',
+                 'plugins/*.html',
+                 'plugins/*.css',
+                 'plugins/*.tpl',
                  'templates/*.html',
                  'templates/*.js',
                  'templates/*.txt'] + walk_subpkg('templates/tiles')}

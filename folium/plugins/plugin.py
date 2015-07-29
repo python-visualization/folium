@@ -9,6 +9,9 @@ Other plugins may inherit from this one.
 """
 from uuid import uuid4
 
+from jinja2 import Environment, PackageLoader
+ENV = Environment(loader=PackageLoader('folium', 'plugins'))
+
 class Plugin(object):
     """Basic plugin object that does nothing.
     Other plugins may inherit from this one."""
@@ -16,6 +19,7 @@ class Plugin(object):
         """Creates a plugin to append into a map with Map.add_plugin. """
         self.plugin_name = 'Plugin'
         self.object_name = uuid4().hex
+        self.env = ENV
 
     def add_to_map(self, map):
         """Adds the plugin on a folium.map object."""
