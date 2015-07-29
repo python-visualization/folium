@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Folium Tests
 -------
 
-'''
+"""
 import json
 import mock
 import pandas as pd
@@ -16,7 +16,7 @@ from folium.six import PY3
 
 
 def setup_data():
-    '''Import economic data for testing'''
+    """Import economic data for testing."""
     with open('us-counties.json', 'r') as f:
         get_id = json.load(f)
 
@@ -33,17 +33,17 @@ def setup_data():
 
 
 def test_get_templates():
-    '''Test template getting'''
+    """Test template getting."""
 
     env = folium.utilities.get_templates()
     nt.assert_is_instance(env, jinja2.environment.Environment)
 
 
 class testFolium(object):
-    '''Test class for the Folium library'''
+    """Test class for the Folium library."""
 
     def setup(self):
-        '''Setup Folium Map'''
+        """Setup Folium Map."""
         with mock.patch('folium.folium.uuid4') as uuid4:
             uuid4().hex = '0' * 32
             self.map = folium.Map(location=[45.5236, -122.6750], width=900,
@@ -51,7 +51,7 @@ class testFolium(object):
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
-        '''Test map initialization'''
+        """Test map initialization."""
 
         assert self.map.map_type == 'base'
         assert self.map.mark_cnt == {}
@@ -78,7 +78,7 @@ class testFolium(object):
         assert self.map.template_vars == tmpl
 
     def test_cloudmade(self):
-        '''Test cloudmade tiles and the API key'''
+        """Test cloudmade tiles and the API key."""
 
         nt.assert_raises(ValueError, callableObj=folium.Map,
                          location=[45.5236, -122.6750], tiles='cloudmade')
@@ -89,7 +89,7 @@ class testFolium(object):
                                               '/###/997/256/{z}/{x}/{y}.png')
 
     def test_builtin_tile(self):
-        '''Test custom maptiles'''
+        """Test custom maptiles."""
 
         default_tiles = ['OpenStreetMap', 'Stamen Terrain', 'Stamen Toner']
         for tiles in default_tiles:
@@ -102,7 +102,7 @@ class testFolium(object):
             assert map.template_vars['attr'] == attr
 
     def test_custom_tile(self):
-        '''Test custom tile URLs'''
+        """Test custom tile URLs."""
 
         url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
         attr = 'Attribution for custom tiles'
@@ -115,7 +115,7 @@ class testFolium(object):
         assert map.template_vars['attr'] == attr
 
     def test_wms_layer(self):
-        '''Test wms layer URLs'''
+        """Test WMS layer URLs."""
 
         map = folium.Map(location=[44, -73], zoom_start=3)
         wms_url = 'http://gis.srh.noaa.gov/arcgis/services/NDFDTemps/'
@@ -138,7 +138,7 @@ class testFolium(object):
         assert map.template_vars['wms_layers'][0] == wms
 
     def test_simple_marker(self):
-        '''Test simple marker addition'''
+        """Test simple marker addition."""
 
         mark_templ = self.env.get_template('simple_marker.js')
         popup_templ = self.env.get_template('simple_popup.js')
@@ -148,9 +148,6 @@ class testFolium(object):
         mark_1 = mark_templ.render({'marker': 'marker_1', 'lat': 45.50,
                                     'lon': -122.7,
                                     'icon': "{'icon':marker_1_icon}"})
-        popup_1 = popup_templ.render({'pop_name': 'marker_1',
-                                      'pop_txt': json.dumps('Pop Text'),
-                                      'width': 300})
         assert self.map.template_vars['custom_markers'][0][1] == mark_1
         assert self.map.template_vars['custom_markers'][0][2] == ""
 
@@ -172,7 +169,7 @@ class testFolium(object):
         assert self.map.template_vars['custom_markers'][2][2] == nopopup
 
     def test_circle_marker(self):
-        '''Test circle marker additions'''
+        """Test circle marker additions."""
 
         circ_templ = self.env.get_template('circle_marker.js')
 
@@ -195,7 +192,7 @@ class testFolium(object):
         assert self.map.template_vars['markers'][1][0] == circle_2
 
     def test_poly_marker(self):
-        '''Test polygon marker'''
+        """Test polygon marker."""
 
         poly_temp = self.env.get_template('poly_marker.js')
 
@@ -215,14 +212,14 @@ class testFolium(object):
         assert self.map.template_vars['markers'][0][0] == polygon
 
     def test_latlng_pop(self):
-        '''Test lat/lon popovers'''
+        """Test lat/lon popovers."""
 
         self.map.lat_lng_popover()
         pop_templ = self.env.get_template('lat_lng_popover.js').render()
         assert self.map.template_vars['lat_lng_pop'] == pop_templ
 
     def test_click_for_marker(self):
-        '''Test click for marker functionality'''
+        """Test click for marker functionality."""
 
         # Lat/lon popover.
         self.map.click_for_marker()
@@ -238,7 +235,7 @@ class testFolium(object):
         assert self.map.template_vars['click_pop'] == click
 
     def test_vega_popup(self):
-        '''Test vega popups'''
+        """Test vega popups."""
 
         vis = vincent.Bar(width=675 - 75, height=350 - 50, no_data=True)
 
@@ -253,7 +250,7 @@ class testFolium(object):
         assert self.map.template_vars['custom_markers'][0][2] == vega
 
     def test_geo_json(self):
-        '''Test geojson method'''
+        """Test geojson method."""
 
         path = 'us-counties.json'
         geo_path = ".defer(d3.json, '{0}')".format(path)
@@ -354,7 +351,7 @@ class testFolium(object):
         assert templ['topo_convert'][0] == topo_func
 
     def test_map_build(self):
-        '''Test map build'''
+        """Test map build."""
 
         # Standard map.
         self.map._build_map()
@@ -377,11 +374,11 @@ class testFolium(object):
         assert self.map.HTML == HTML
 
     def test_tile_attr_unicode(self):
-        '''Test tile attribution unicode
+        """Test tile attribution unicode
 
         Test not cover b'юникод'
         because for python 3 bytes can only contain ASCII literal characters.
-        '''
+        """
 
         if not PY3:
             map = folium.Map(location=[45.5236, -122.6750],
@@ -396,12 +393,12 @@ class testFolium(object):
         map._build_map()
 
     def test_create_map(self):
-        '''Test create map'''
+        """Test create map."""
 
         map = folium.Map(location=[45.5236, -122.6750],
                          tiles='test', attr='юникод')
 
-        # Add json data
+        # Add json data.
         path = 'us-counties.json'
         data = setup_data()
         map.geo_json(geo_path=path, data=data,
@@ -409,14 +406,14 @@ class testFolium(object):
                      key_on='feature.id', fill_color='YlGnBu',
                      reset=True)
 
-        # Add plugins
+        # Add plugins.
         map.polygon_marker(location=[45.5, -122.5])
 
-        # Test write
+        # Test write.
         map.create_map()
 
     def test_line(self):
-        '''Test multi_polyline'''
+        """Test line."""
 
         line_temp = self.env.get_template('polyline.js')
 
@@ -431,27 +428,26 @@ class testFolium(object):
             [[45.5238, -122.6750], [45.5238, -122.6751]]
         ]
         line_rendered = line_temp.render({'line': 'line_1',
-            'locations': locations, 'options': line_opts})
+                                          'locations': locations,
+                                          'options': line_opts})
 
         self.map.line(locations=locations,
-           line_color=line_opts['color'],
-           line_weight=line_opts['weight'],
-           line_opacity=line_opts['opacity'])
+                      line_color=line_opts['color'],
+                      line_weight=line_opts['weight'],
+                      line_opacity=line_opts['opacity'])
         assert self.map.template_vars['lines'][0][0] == line_rendered
 
     def test_multi_polyline(self):
-        '''Test multi_polyline'''
+        """Test multi_polyline."""
 
         multiline_temp = self.env.get_template('multi_polyline.js')
 
         multiline_opts = {'color': 'blue',
-                'weight': 2,
-                'opacity': 1}
-        locations = [
-                        [[45.5236, -122.6750], [45.5236, -122.6751]],
-                        [[45.5237, -122.6750], [45.5237, -122.6751]],
-                        [[45.5238, -122.6750], [45.5238, -122.6751]]
-                    ]
+                          'weight': 2,
+                          'opacity': 1}
+        locations = [[[45.5236, -122.6750], [45.5236, -122.6751]],
+                     [[45.5237, -122.6750], [45.5237, -122.6751]],
+                     [[45.5238, -122.6750], [45.5238, -122.6751]]]
         multiline_rendered = multiline_temp.render({'multiline': 'multiline_1',
                                                     'locations': locations,
                                                     'options': multiline_opts})
@@ -463,23 +459,22 @@ class testFolium(object):
         assert self.map.template_vars['multilines'][0][0] == multiline_rendered
 
     def test_fit_bounds(self):
-        """Test fit_bounds"""
+        """Test fit_bounds."""
         bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
-           'bounds': json.dumps(bounds),
-           'fit_bounds_options': {},
-        })
+            'bounds': json.dumps(bounds),
+            'fit_bounds_options': {}, })
 
         self.map.fit_bounds(bounds)
         assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
-           'bounds': json.dumps(bounds),
-           'fit_bounds_options': json.dumps({'padding': (3,3), 'maxZoom': 15}),
-        })
+            'bounds': json.dumps(bounds),
+            'fit_bounds_options': json.dumps({'maxZoom': 15,
+                                              'padding': (3, 3), }),
+        }, sort_keys=True)
 
         self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
         assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
-
