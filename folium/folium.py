@@ -297,7 +297,7 @@ class Map(object):
     @iter_obj('simple')
     def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
-                      clustered_marker=False, icon_angle=0, width=300):
+                      clustered_marker=False, icon_angle=0, popup_width=300):
         """Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -309,7 +309,7 @@ class Map(object):
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
             It is possible to adjust the width of text/HTML popups
-            using the optional keywords `width`.  (Leaflet default is 300px.)
+            using the optional keywords `popup_width` (default is 300px).
         marker_color
             color of marker you want
         marker_icon
@@ -350,7 +350,7 @@ class Map(object):
                                    })
 
         popup_out = self._popup_render(popup=popup, mk_name='marker_',
-                                       count=count, width=width)
+                                       count=count, width=popup_width)
         if clustered_marker:
             add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
             name = 'cluster_markers'
@@ -376,6 +376,8 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
 
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
@@ -457,7 +459,7 @@ class Map(object):
     @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup=None,
                       line_color='black', fill_color='black',
-                      fill_opacity=0.6):
+                      fill_opacity=0.6, popup_width=300):
         """Create a simple circle marker on the map, with optional popup text
         or Vincent visualization.
 
@@ -470,6 +472,8 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
         line_color: string, default black
             Line color. Can pass hex value here as well.
         fill_color: string, default black
@@ -501,7 +505,7 @@ class Map(object):
                                      'fill_opacity': fill_opacity})
 
         popup_out = self._popup_render(popup=popup, mk_name='circle_',
-                                       count=count)
+                                       count=count, width=popup_width)
 
         add_mark = 'map.addLayer(circle_{0})'.format(count)
 
@@ -512,7 +516,8 @@ class Map(object):
     @iter_obj('polygon')
     def polygon_marker(self, location=None, line_color='black', line_opacity=1,
                        line_weight=2, fill_color='blue', fill_opacity=1,
-                       num_sides=4, rotation=0, radius=15, popup=None):
+                       num_sides=4, rotation=0, radius=15, popup=None,
+                       popup_width=300):
         """Custom markers using the Leaflet Data Vis Framework.
 
 
@@ -539,6 +544,8 @@ class Map(object):
         popup: string or tuple, default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
 
         Returns
         -------
@@ -563,7 +570,7 @@ class Map(object):
                                     'radius': radius})
 
         popup_out = self._popup_render(popup=popup, mk_name='polygon_',
-                                       count=count)
+                                       count=count, width=popup_width)
 
         add_mark = 'map.addLayer(polygon_{0})'.format(count)
 
@@ -610,7 +617,7 @@ class Map(object):
         self.template_vars.update({'click_pop': click_str})
 
     def fit_bounds(self, bounds, padding_top_left=None,
-            padding_bottom_right=None, padding=None, max_zoom=None):
+                   padding_bottom_right=None, padding=None, max_zoom=None):
         """Fit the map to contain a bounding box with the maximum zoom level possible.
 
         Parameters
@@ -653,7 +660,6 @@ class Map(object):
 
         self.template_vars.update({'fit_bounds': fit_bounds_str})
 
-
     def _auto_bounds(self):
         if 'fit_bounds' in self.template_vars:
             return
@@ -664,20 +670,18 @@ class Map(object):
         # Make a comprehensive list of all the features we want to fit
         feat_str = ["{name}_{count}".format(name=ft_name,
                                             count=self.mark_cnt[ft_name])
-                    for ft_name in ft_names
-                    for count in range(1, self.mark_cnt[ft_name]+1)
-        ]
+                    for ft_name in ft_names for
+                    count in range(1, self.mark_cnt[ft_name]+1)]
         feat_str = "[" + ', '.join(feat_str) + "]"
 
         fit_bounds = self.env.get_template('fit_bounds.js')
         fit_bounds_str = fit_bounds.render({
             'autobounds': not self.location,
             'features': feat_str,
-            'fit_bounds_options': json.dumps({'padding' : [30, 30]}),
+            'fit_bounds_options': json.dumps({'padding': [30, 30]}),
         })
 
         self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
-
 
     def _popup_render(self, popup=None, mk_name=None, count=None,
                       width=300):
