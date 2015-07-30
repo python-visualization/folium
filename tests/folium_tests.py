@@ -69,6 +69,7 @@ class testFolium(object):
                 'zoom_level': 4,
                 'tile_layers': [],
                 'wms_layers': [],
+                'image_layers': [],
                 'min_zoom': 1,
                 'min_lat': -90,
                 'max_lat': 90,
@@ -473,8 +474,48 @@ class testFolium(object):
         fit_bounds_rendered = fit_bounds_tpl.render({
             'bounds': json.dumps(bounds),
             'fit_bounds_options': json.dumps({'maxZoom': 15,
-                                              'padding': (3, 3), }),
-        }, sort_keys=True)
+                                              'padding': (3, 3), }, sort_keys=True),
+        })
 
         self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
+
         assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
+
+    def test_image_overlay(self):
+        """Test image overlay"""
+        from numpy.random import random
+        from folium.utilities import write_png
+        import base64
+        
+        data = random((100,100))
+        png_str = write_png(data)
+        with open('data.png', 'wb') as f:
+            f.write(png_str)
+        inline_image_url = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
+        
+        image_tpl = self.env.get_template('image_layer.js')
+        image_name = 'Image_Overlay'
+        image_opacity = 0.25
+        image_url = 'data.png'
+        min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
+        image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]  
+        
+        image_rendered = image_tpl.render({'image_name': image_name,
+                                           'image_url': image_url,
+                                           'image_bounds': image_bounds,
+                                           'image_opacity': image_opacity
+        })
+
+        self.map.image_overlay(data, filename=image_url)
+        assert image_rendered in self.map.template_vars['image_layers']
+
+
+        image_rendered = image_tpl.render({'image_name': image_name,
+                                           'image_url': inline_image_url,
+                                           'image_bounds': image_bounds,
+                                           'image_opacity': image_opacity
+        })
+
+        self.map.image_overlay(data)
+        assert image_rendered in self.map.template_vars['image_layers']
+

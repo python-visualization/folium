@@ -109,6 +109,13 @@
 
       L.control.layers(baseLayer, layer_list).addTo(map);
 
+      /*
+      addition of the image layers
+      */
+      {% for image in image_layers %}
+      {{ image }}
+      {% endfor %}
+      
       //cluster group
       var clusteredmarkers = L.markerClusterGroup();
       //section for adding clustered markers

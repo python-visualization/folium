@@ -12,6 +12,7 @@ from __future__ import print_function
 from __future__ import division
 import math
 from jinja2 import Environment, PackageLoader, Template
+import struct, zlib
 
 try:
     import pandas as pd
@@ -270,3 +271,77 @@ def split_six(series=None):
     # Some weirdness in series quantiles a la 0.13
     arr = series.values
     return [base(np.percentile(arr, x)) for x in quants]
+        
+def write_png(array):
+    """Format a numpy array as a PNG byte string.
+    This can be writen to disk using binary I/O, or encoded using base64
+    for an inline png like this:  
+    
+    >>> png_str = write_png(array)
+    >>> "data:image/png;base64,"+base64.b64encode(png_str)
+
+    Taken from 
+    http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
+    
+    Parameters
+    ----------
+
+    array: numpy array
+         Must be NxM (mono), NxMx3 (rgb) or NxMx4 (rgba)
+    
+    Returns
+    -------
+    PNG formatted byte string
+    """
+    import numpy as np
+
+    array = np.atleast_3d(array)
+    if array.shape[2] not in [1, 3, 4]:
+        raise ValueError("Data must be NxM (mono), " + \
+            "NxMx3 (rgb), or NxMx4 (rgba)")
+
+    # have to broadcast up into a full rgba array
+    array_full = np.empty((array.shape[0], array.shape[1], 4))
+    # NxM -> NxMx4
+    if array.shape[2] == 1:
+        array_full[:,:,0] = array[:,:,0]
+        array_full[:,:,1] = array[:,:,0]
+        array_full[:,:,2] = array[:,:,0]
+        array_full[:,:,3] = 1
+    # NxMx3 -> NxMx4
+    elif array.shape[2] == 3:
+        array_full[:,:,0] = array[:,:,0]
+        array_full[:,:,1] = array[:,:,1]
+        array_full[:,:,2] = array[:,:,2]
+        array_full[:,:,3] = 1
+    # NxMx4 -> keep
+    else:
+        array_full = array
+    
+    # normalize to uint8 if it isn't already
+    if array_full.dtype != 'uint8':
+        for component in range(4):
+            frame = array_full[:,:,component]
+            array_full[:,:,component] = (frame / frame.max() * 255)
+        array_full = array_full.astype('uint8')
+    width, height = array_full.shape[:2]
+
+    array_full = array_full.tobytes()
+    
+    # reverse the vertical line order and add null bytes at the start
+    width_byte_4 = width * 4
+    raw_data = b''.join(b'\x00' + array_full[span:span + width_byte_4]
+                    for span in range((height - 1) * width * 4, -1, - width_byte_4))
+
+    def png_pack(png_tag, data):
+        chunk_head = png_tag + data
+        return (struct.pack("!I", len(data)) +
+                chunk_head +
+                struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head)))
+
+    return b''.join([
+        b'\x89PNG\r\n\x1a\n',
+        png_pack(b'IHDR', struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
+        png_pack(b'IDAT', zlib.compress(raw_data, 9)),
+        png_pack(b'IEND', b'')])
+ 

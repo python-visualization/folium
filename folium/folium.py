@@ -23,7 +23,7 @@ from folium import utilities
 from folium.six import text_type, binary_type, iteritems
 
 import sys
-
+import base64
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -221,6 +221,7 @@ class Map(object):
         self.added_layers = []
         self.template_vars.setdefault('wms_layers', [])
         self.template_vars.setdefault('tile_layers', [])
+        self.template_vars.setdefault('image_layers', [])
 
     @iter_obj('simple')
     def add_tile_layer(self, tile_name=None, tile_url=None, active=False):
@@ -281,18 +282,14 @@ class Map(object):
         data_string = ''
         for i, layer in enumerate(self.added_layers):
             name = list(layer.keys())[0]
-            data_string += '\"'
-            data_string += name
-            data_string += '\"'
-            data_string += ': '
-            data_string += name
             if i < len(self.added_layers)-1:
-                data_string += ",\n"
+                term_string = ",\n"
             else:
-                data_string += "\n"
+                term_string += "\n"
+            data_string += '\"{}\": {}'.format(name, name, term_string)
 
         data_layers = layers_temp.render({'layers': data_string})
-        self.template_vars.setdefault('data_layers', []).append((data_string))
+        self.template_vars.setdefault('data_layers', []).append((data_layers))
 
     @iter_obj('simple')
     def simple_marker(self, location=None, popup=None,
@@ -953,6 +950,92 @@ class Map(object):
         self.template_vars.setdefault('geo_styles', []).append(style)
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
+    @iter_obj('image_overlay')
+    def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
+                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None):
+        """Simple image overlay of raster data from a numpy array.  This is a lightweight
+        way to overlay geospatial data on top of a map.  If your data is high res, consider
+        implementing a WMS server and adding a WMS layer.
+
+        This function works by generating a PNG file from a numpy array.  If you do not
+        specifiy a filename, it will embed the image inline.  Otherwise, it saves the file in the
+        current directory, and then adds it as an image overlay layer in leaflet.js.
+        By default, the image is placed and stretched using bounds that cover the 
+        entire globe.
+
+        Parameters
+        ----------
+        data: numpy array OR url string, required.  
+            if numpy array, must be a image format, i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
+            if url, must be a valid url to a image (local or external)
+        opacity: float, default 0.25
+            Image layer opacity in range 0 (completely transparent) to 1 (opaque)
+        min_lat: float, default -90.0
+        max_lat: float, default  90.0
+        min_lon: float, default -180.0
+        max_lon: float, default  180.0
+        image_name: string, default None
+            The name of the layer object in leaflet.js
+        filename: string, default None
+            Optional file name of output.png for image overlay.  If None, we use a 
+            inline PNG.
+
+        Output
+        ------
+        Image overlay data layer in obj.template_vars
+
+        Examples
+        -------
+        # assumes a map object `m` has been created
+        >>> import numpy as np
+        >>> data = np.random.random((100,100))
+        
+        # to make a rgba from a specific matplotlib colormap:
+        >>> import matplotlib.cm as cm
+        >>> cmapper = cm.cm.ColorMapper('jet')
+        >>> data2 = cmapper.to_rgba(np.random.random((100,100)))
+
+        # place the data over all of the globe (will be pretty pixelated!)
+        >>> m.image_overlay(data)
+
+        # put it only over a single city (Paris)
+        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970, min_lon=2.25214, max_lon=2.44731)
+        
+        """
+
+        if isinstance(data, str):
+            filename = data
+        else:
+            try:
+                png_str = utilities.write_png(data)
+            except Exception as e:
+                raise e
+
+            if filename is not None:
+                with open(filename, 'wb') as fd:
+                    fd.write(png_str)
+            else:
+                filename = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
+
+        if image_name not in self.added_layers:
+            if image_name is None:
+                image_name = "Image_Overlay"
+            else:
+                image_name = image_name.replace(" ", "_")
+            image_url = filename
+            image_bounds = [[min_lat, min_lon], [max_lat, max_lon]]
+            image_opacity = opacity
+            
+            image_temp = self.env.get_template('image_layer.js')
+
+            image = image_temp.render({'image_name': image_name,
+                                       'image_url': image_url,
+                                       'image_bounds': image_bounds,
+                                       'image_opacity': image_opacity})
+
+            self.template_vars['image_layers'].append(image)
+            self.added_layers.append(image_name)
+        
     def _build_map(self, html_templ=None, templ_type='string'):
         self._auto_bounds()
         """Build HTML/JS/CSS from Templates given current map type."""
