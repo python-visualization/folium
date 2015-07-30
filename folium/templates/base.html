@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<head>
+    {% block head %}
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+    {% endblock head %}
+
+    <style>
+      {% block style %}
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      {% endblock style %}
+    </style>
+
+</head>
+
+<body>
+   {% block mapdiv %}
+   <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
+   {% endblock mapdiv %}
+
+   <script>
+      {% block jscode %}
+
+      {{ dvf_js }}
+      {{ d3 }}
+      {{ vega }}
+      {{ jquery }}
+
+      {{ vega_parse }}
+
+      var base_tile = L.tileLayer('{{ Tiles }}', {
+          maxZoom: {{ max_zoom }},
+          minZoom: {{ min_zoom }},
+          attribution: '{{ attr }}'
+      });
+
+      var baseLayer = {
+        "Base Layer": base_tile
+      };
+
+      /*
+      addition of the wms layers
+      */
+
+      {% for wms in wms_layers %}
+      {{ wms }}
+      {% endfor %}
+
+      /*
+      addition of the tile layers
+      */
+      {% for tile in tile_layers %}
+      {{ tile }}
+      {% endfor %}
+
+      /*
+      list of layers to be added
+      */
+      var layer_list = {
+      {% for data_string in data_layers %}
+      {{ data_string }}
+      {% endfor %}
+      };
+
+      /*
+      Bounding box.
+      */
+      var southWest = L.latLng({{ min_lat }}, {{ min_lon }}),
+          northEast = L.latLng({{ max_lat }}, {{ max_lon }}),
+          bounds = L.latLngBounds(southWest, northEast);
+
+      /*
+      Creates the map and adds the selected layers
+      */
+      var map = L.map('{{ map_id }}', {
+                                       center:[{{ lat }}, {{ lon }}],
+                                       zoom: {{ zoom_level }},
+                                       maxBounds: bounds,
+                                       layers: [base_tile]
+                                     });
+
+      L.control.layers(baseLayer, layer_list).addTo(map);
+
+      //cluster group
+      var clusteredmarkers = L.markerClusterGroup();
+      //section for adding clustered markers
+      {% for icon, mark, popup, add_mark in cluster_markers %}
+      {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+      //add the clustered markers to the group anyway
+      map.addLayer(clusteredmarkers);
+
+      {% for icon, mark, popup, add_mark in custom_markers %}
+      {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+
+      {% for mark, popup, add_mark in markers %}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+
+      {% for line, popup, add_line in lines %}
+      {{ line }}
+      {{ popup }}
+      {{ add_line }}
+      {% endfor %}
+
+      {% for multiline, add_multiline in multilines %}
+      {{ multiline }}
+      {{ add_multiline }}
+      {% endfor %}
+
+      {{ lat_lng_pop }}
+
+      {{ click_pop }}
+
+      {% if fit_bounds %}{{ fit_bounds }}{% endif %}
+
+      {% endblock jscode %}
+
+   </script>
+</body>
