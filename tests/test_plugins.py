@@ -104,3 +104,70 @@ class testPlugins(object):
         mapd.add_plugin(plugins.GeoJson(open('geojson_plugin_test2.json')))
         mapd._build_map()
 
+    def test_timestamped_geo_json(self):
+        data = {
+            "type": "FeatureCollection",
+                "features": [
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [0,0],
+                            },
+                        "properties": {
+                            "times": [1435708800000+12*86400000]
+                            }
+                        },
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "MultiPoint",
+                            "coordinates": [[lon,-25] for lon in np.linspace(-150,150,49)],
+                            },
+                        "properties": {
+                            "times": [1435708800000+i*86400000 for i in np.linspace(0,25,49)]
+                            }
+                        },
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "LineString",
+                            "coordinates": [[lon,25] for lon in np.linspace(-150,150,25)],
+                            },
+                        "properties": {
+                            "times": [1435708800000+i*86400000 for i in np.linspace(0,25,25)]
+                            }
+                        },
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "MultiLineString",
+                            "coordinates": [[[lon-4*np.sin(theta),47+3*np.cos(theta)]\
+                                                 for theta in np.linspace(0,2*np.pi,25)]\
+                                            for lon in np.linspace(-150,150,13)],
+                            },
+                        "properties": {
+                            "times": [1435708800000+i*86400000 for i in np.linspace(0,25,13)]
+                            }
+                        },
+                    {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "MultiPolygon",
+                            "coordinates": [[[[lon-8*np.sin(theta),-47+6*np.cos(theta)]\
+                                                  for theta in np.linspace(0,2*np.pi,25)],
+                                            [[lon-4*np.sin(theta),-47+3*np.cos(theta)]\
+                                                 for theta in np.linspace(0,2*np.pi,25)]]\
+                                            for lon in np.linspace(-150,150,7)],
+                            },
+                        "properties": {
+                            "times": [1435708800000+i*86400000 for i in np.linspace(0,25,7)]
+                            }
+                        },
+                ],
+            }
+
+        mape = folium.Map([47,3], zoom_start=1)
+        mape.add_plugin(plugins.TimestampedGeoJson(data))
+        mape._build_map()
+
