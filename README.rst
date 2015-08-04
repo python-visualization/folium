@@ -358,3 +358,8 @@ https://folium.readthedocs.org/
 .. |counties_1| image:: http://farm4.staticflickr.com/3792/8755938318_bc82a81c64_c.jpg
 .. |counties_2| image:: http://farm9.staticflickr.com/8140/8754817355_2bfea43ff5_c.jpg
 .. |counties_3| image:: http://farm4.staticflickr.com/3755/8755938218_06fdc51d40_c.jpg
+
+
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :alt: Join the chat at https://gitter.im/python-visualization/folium
+   :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
