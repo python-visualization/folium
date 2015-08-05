@@ -345,3 +345,43 @@ def write_png(array):
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
  
+def mercator(geodetic):
+    """This function takes an 2D array in geodetic coordinates (ie: lat x
+    lon unprojected) and converts it to web mercator.  This is needed
+    to correctly overlay an image on a leaflet map, which uses web
+    mercator by default.
+
+    This code works with arrays that match the relative proportions of
+    latitude and longitude of the earth, meaning that they have twice
+    as many points in longitude as latitude (i.e.: (180, 360) for 1
+    degree resolution).
+
+    The code for this is from:
+    http://stackoverflow.com/questions/25058880/convert-to-web-mercator-with-numpy
+
+    Parameters
+    ----------
+    geodetic: 2D numpy array
+        Latitude x Longitude 2D array
+
+    meractor: 2d numpy array
+
+    """
+    
+    def row2lat(row):
+        return 180.0/np.pi*(2.0*np.atan(np.exp(row*np.pi/180.0))-np.pi/2.0)
+    
+    geo = np.repeat(geodetic, 2, axis=0)
+    merc = np.zeros_like(geo)
+    side = geo[0].size
+    for row in range(side):
+        lat = row2lat(180 - ((row * 1.0)/side) * 360)
+        g_row = (abs(90 - lat)/180)*side
+        fraction = g_row-np.floor(g_row)
+
+
+        high_row = geo[np.floor(g_row), :] * (fraction)
+        low_row = geo[np.ceil(g_row), :] * (1-fraction)
+        merc[row, :] = high_row + low_row
+
+    return merc
