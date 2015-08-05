@@ -40,9 +40,15 @@ def walk_subpkg(name):
 
 pkg_data = {'': ['*.js',
                  'plugins/*.js',
+                 'plugins/*.html',
+                 'plugins/*.css',
+                 'plugins/*.tpl',
                  'templates/*.html',
                  'templates/*.js',
                  'templates/*.txt'] + walk_subpkg('templates/tiles')}
+pkgs = ['folium',
+    'folium.plugins',
+    ]
 
 LICENSE = read('LICENSE.txt')
 version = find_version('folium', '__init__.py')
@@ -62,7 +68,7 @@ config = dict(name='folium',
                            'Programming Language :: Python :: 3.3',
                            'Programming Language :: Python :: 3.4',
                            'License :: OSI Approved :: MIT License'],
-              packages=['folium'],
+              packages=pkgs,
               package_data=pkg_data,
               zip_safe=False)
 
