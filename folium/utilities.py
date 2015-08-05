@@ -345,7 +345,7 @@ def write_png(array):
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
  
-def mercator(geodetic):
+def geodetic_to_mercator(geodetic):
     """This function takes an 2D array in geodetic coordinates (ie: lat x
     lon unprojected) and converts it to web mercator.  This is needed
     to correctly overlay an image on a leaflet map, which uses web
