@@ -170,6 +170,44 @@ class testFolium(object):
         nopopup = ''
         assert self.map.template_vars['custom_markers'][2][2] == nopopup
 
+    def test_div_markers(self):
+        '''Test div marker list addition'''
+
+        icon_templ = self.env.get_template('static_div_icon.js')
+        mark_templ = self.env.get_template('simple_marker.js')
+        popup_templ = self.env.get_template('simple_popup.js')
+
+        # Test with popups (expected use case)
+        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+        icon_1 = icon_templ.render({'icon_name': 'div_marker_1_0_icon', 'size': 10})
+        mark_1 = mark_templ.render({'marker': 'div_marker_1_0', 'lat': 37.421114,
+                                    'lon': -122.128314,
+                                    'icon': "{'icon':div_marker_1_0_icon}"})
+        popup_1 = popup_templ.render({'pop_name': 'div_marker_1_0',
+                                      'pop_txt': '"1437494575531"',
+                                      'width': 300})
+        nt.assert_equals(self.map.mark_cnt['div_mark'], 1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][0], icon_1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][1], mark_1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][2], popup_1)
+
+        # Second set of markers with popups to test the numbering
+        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+        icon_2 = icon_templ.render({'icon_name': 'div_marker_2_1_icon', 'size': 10})
+        mark_2 = mark_templ.render({'marker': 'div_marker_2_1', 'lat': 37.391637,
+                                    'lon': -122.085416,
+                                    'icon': "{'icon':div_marker_2_1_icon}"})
+        popup_2 = popup_templ.render({'pop_name': 'div_marker_2_1',
+                                      'pop_txt': '"1437492135937"',
+                                      'width': 300})
+        nt.assert_equals(self.map.mark_cnt['div_mark'], 2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][0], icon_2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][1], mark_2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][2], popup_2)
+
+        # Test no popup. If there are no popups, then we should get a runtimeerror.
+        nt.assert_raises(RuntimeError, self.map.div_markers, [[45.60, -122.8]])
+
     def test_circle_marker(self):
         """Test circle marker additions."""
 
