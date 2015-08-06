@@ -23,12 +23,8 @@
 
    <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css">
 
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_header(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
+    {% for key, val in figure.header.items() %}
+    {{val.render(name=key)}}
     {% endfor %}
 
    {{ dvf_js }}
@@ -53,12 +49,8 @@
         left:0;
       }
 
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_css(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
+    {% for key, val in figure.css.items() %}
+    {{val.render(name=key)}}
     {% endfor %}
 
    </style>
@@ -68,12 +60,8 @@
 
    <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
 
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_html(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
+    {% for key, val in figure.body.items() %}
+    {{val.render(name=key)}}
     {% endfor %}
 
    <script>
@@ -189,12 +177,8 @@
 
 {% if fit_bounds %}{{ fit_bounds }}{% endif %}
 
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_js(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
+    {% for key, val in figure.script.items() %}
+    {{val.render(name=key)}}
     {% endfor %}
 
    </script>

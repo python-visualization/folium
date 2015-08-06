@@ -15,6 +15,7 @@ import codecs
 import functools
 import json
 from uuid import uuid4
+from collections import OrderedDict
 
 from jinja2 import Environment, PackageLoader
 from pkg_resources import resource_string
@@ -54,6 +55,12 @@ def iter_obj(type):
         return wrapper
     return decorator
 
+class Figure(object):
+    def __init__(self):
+        self.header = OrderedDict()
+        self.css    = OrderedDict()
+        self.body   = OrderedDict()
+        self.script = OrderedDict()
 
 class Map(object):
     """Create a Map with Folium."""
@@ -127,6 +134,8 @@ class Map(object):
         self.mark_cnt = {}
         self.json_data = {}
         self.plugins = {}
+
+        self.figure = Figure()
 
         # No location means we will use automatic bounds and ignore zoom
         self.location = location
@@ -1115,7 +1124,11 @@ class Map(object):
             if templ_type == 'string':
                 html_templ = self.env.from_string(html_templ)
 
-        self.HTML = html_templ.render(self.template_vars, plugins=self.plugins)
+        for plugin_name, plugin_list in self.plugins.items():
+            for nb, plugin in enumerate(plugin_list):
+                plugin.render(nb=nb, name=plugin_name)
+
+        self.HTML = html_templ.render(self.template_vars, plugins=self.plugins, figure=self.figure)
 
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML and data output to JSON if available.
