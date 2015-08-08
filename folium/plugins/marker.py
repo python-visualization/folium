@@ -8,6 +8,7 @@ from jinja2 import Template
 import json
 
 from .plugin import Plugin
+from .links import JavascriptLink
 
 class Popup(Plugin):
     def __init__(self, html, max_width=300):
@@ -30,6 +31,31 @@ class Popup(Plugin):
                 id=self.object_name,
                 ))
         return 'Popup_'+self.object_name
+
+class VegaPopup(Plugin):
+    def __init__(self, data, max_width=300):
+        super(VegaPopup, self).__init__()
+        self.plugin_name = 'VegaPopup'
+        self.data = data
+        self.map = None
+
+    def render(self, **kwargs):
+        assert self.map is not None, "Cannot render a Popup that have no 'map' attribute."
+        #{{ pop_name }}.bindPopup({{ pop_txt }});
+        #{{ pop_name }}._popup.options.maxWidth = {{ width }};
+        self.map.figure.header['d3'    ] = JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js")
+        self.map.figure.header['vega'  ] = JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js")
+        self.map.figure.header['jquery'] = JavascriptLink("https://code.jquery.com/jquery-2.1.0.min.js")
+        self.map.figure.script['vega_parse'] = Template("""function vega_parse(spec, div) {
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}""")
+
+        self.map.figure.script['VegaPopup_'+self.object_name] = Template("""
+            var VegaPopup_{id} = $('<div id="VegaPopup_{id}" style="width: 675px; height: 350px;"></div>')[0];
+            vega_parse({json},VegaPopup_{id});
+            """.format(id=self.object_name,
+                       json=json.dumps(self.data),
+                      ))
+        return "VegaPopup_{id}".format(id=self.object_name)
 
 class Icon(Plugin):
     def __init__(self, color='blue', icon='info-sign', angle=0):

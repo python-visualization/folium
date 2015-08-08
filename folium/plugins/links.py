@@ -34,7 +34,7 @@ class Link(Plugin):
         return self.render(embedded=embedded)
 
 class JavascriptLink(Link):
-    def render(self, embedded=False):
+    def render(self, embedded=False, **kwargs):
         """Renders the object.
         
         Parameters
@@ -50,7 +50,7 @@ class JavascriptLink(Link):
             return '<script src="{}"></script>'.format(self.url)
 
 class CssLink(Link):
-    def render(self, embedded=False):
+    def render(self, embedded=False, **kwargs):
         """Renders the object.
         
         Parameters
