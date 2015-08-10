@@ -344,7 +344,10 @@ def write_png(array):
         png_pack(b'IHDR', struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
- 
+
+def _row2lat(row):
+    return 180.0/np.pi*(2.0*np.arctan(np.exp(row*np.pi/180.0))-np.pi/2.0)
+    
 def geodetic_to_mercator(geodetic):
     """This function takes an 2D array in geodetic coordinates (ie: lat x
     lon unprojected) and converts it to web mercator.  This is needed
@@ -361,26 +364,29 @@ def geodetic_to_mercator(geodetic):
 
     Parameters
     ----------
-    geodetic: 2D numpy array
-        Latitude x Longitude 2D array
+    geodetic: numpy image array
+        Latitude x Longitude array, in mono (NxM), rgb (NxMx3) or RGBA (NxMx4)
 
-    meractor: 2d numpy array
+    Returns
+    -------
+    meractor: projected numpy image array
 
     """
     
-    def row2lat(row):
-        return 180.0/np.pi*(2.0*np.arctan(np.exp(row*np.pi/180.0))-np.pi/2.0)
-    
-    geo = np.repeat(geodetic, 2, axis=0)
+    geo = np.repeat(np.atleast_3d(geodetic), 2, axis=0)
     merc = np.zeros_like(geo)
-    side = geo[0].size
+    side = geo.shape[0]
+
     for row in range(side):
-        lat = row2lat(180 - ((row * 1.0)/side) * 360)
+        lat = _row2lat(180 - ((row * 1.0)/side) * 360)
         g_row = (abs(90 - lat)/180)*side
         fraction = g_row-np.floor(g_row)
 
-        high_row = geo[np.floor(g_row), :] * (fraction)
-        low_row = geo[np.ceil(g_row), :] * (1-fraction)
-        merc[row, :] = high_row + low_row
+        # Here I optimized the code by using the numpy vector operations 
+        # instead of the for loop:
 
-    return merc
+        high_row = geo[np.floor(g_row), :, :] * (fraction)
+        low_row = geo[np.ceil(g_row), :, :] * (1-fraction)
+        merc[row, :, :] = high_row + low_row
+
+    return np.squeeze(merc)
