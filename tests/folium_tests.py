@@ -485,10 +485,11 @@ class testFolium(object):
     def test_image_overlay(self):
         """Test image overlay"""
         from numpy.random import random
-        from folium.utilities import write_png
+        from folium.utilities import write_png, geodetic_to_mercator
         import base64
         
         data = random((100,100))
+        data = geodetic_to_mercator(data)
         png_str = write_png(data)
         with open('data.png', 'wb') as f:
             f.write(png_str)
