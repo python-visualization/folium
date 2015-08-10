@@ -488,7 +488,7 @@ class testFolium(object):
         from folium.utilities import write_png, geodetic_to_mercator
         import base64
 
-        # setup
+        # Setup
         
         data = random((100,200)) 
         png_str = write_png(data)
@@ -504,7 +504,7 @@ class testFolium(object):
         min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
         image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]  
 
-        # test external png
+        # Test external png.
         
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': image_url,
@@ -515,7 +515,7 @@ class testFolium(object):
         self.map.image_overlay(data, filename=image_url)
         assert image_rendered in self.map.template_vars['image_layers']
 
-        # test inline png
+        # Test inline png.
 
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': inline_image_url,
