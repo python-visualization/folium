@@ -369,7 +369,7 @@ def geodetic_to_mercator(geodetic):
     """
     
     def row2lat(row):
-        return 180.0/np.pi*(2.0*np.atan(np.exp(row*np.pi/180.0))-np.pi/2.0)
+        return 180.0/np.pi*(2.0*np.arctan(np.exp(row*np.pi/180.0))-np.pi/2.0)
     
     geo = np.repeat(geodetic, 2, axis=0)
     merc = np.zeros_like(geo)
@@ -378,7 +378,6 @@ def geodetic_to_mercator(geodetic):
         lat = row2lat(180 - ((row * 1.0)/side) * 360)
         g_row = (abs(90 - lat)/180)*side
         fraction = g_row-np.floor(g_row)
-
 
         high_row = geo[np.floor(g_row), :] * (fraction)
         low_row = geo[np.ceil(g_row), :] * (1-fraction)
