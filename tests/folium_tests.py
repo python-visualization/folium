@@ -409,7 +409,7 @@ class testFolium(object):
                 'max_lat': 90,
                 'min_lon': -180,
                 'max_lon': 180}
-        HTML = html_templ.render(tmpl, plugins={})
+        HTML = html_templ.render(tmpl, plugins={}, figure=self.map.figure)
 
         assert self.map.HTML == HTML
 

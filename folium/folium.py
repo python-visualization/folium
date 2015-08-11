@@ -22,6 +22,7 @@ from pkg_resources import resource_string
 
 from folium import utilities
 from folium.six import text_type, binary_type, iteritems
+from .plugins.marker import Popup, VegaPopup, RegularPolygonMarker
 
 import sys
 import base64
@@ -614,36 +615,14 @@ class Map(object):
 
         count = self.mark_cnt['polygon']
 
-        poly_temp = self.env.get_template('poly_marker.js')
+        popup = self._popup_(popup=popup, width=popup_width)
 
-        polygon = poly_temp.render({'marker': 'polygon_' + str(count),
-                                    'lat': location[0],
-                                    'lon': location[1],
-                                    'line_color': line_color,
-                                    'line_opacity': line_opacity,
-                                    'line_weight': line_weight,
-                                    'fill_color': fill_color,
-                                    'fill_opacity': fill_opacity,
-                                    'num_sides': num_sides,
-                                    'rotation': rotation,
-                                    'radius': radius})
+        rpm = RegularPolygonMarker(location, popup=popup, icon=None,
+                     color=line_color, opacity=line_opacity, weight=line_weight,
+                     fill_color=fill_color, fill_opacity=fill_opacity,
+                     number_of_sides=num_sides, rotation=rotation,radius=radius)
 
-        popup_out = self._popup_render(popup=popup, mk_name='polygon_',
-                                       count=count, width=popup_width)
-
-        add_mark = 'map.addLayer(polygon_{0})'.format(count)
-
-        self.template_vars.setdefault('markers', []).append((polygon,
-                                                             popup_out,
-                                                             add_mark))
-        # Update JS/CSS and other Plugin files.
-        js_temp = self.env.get_template('dvf_js_ref.txt').render()
-        self.template_vars.update({'dvf_js': js_temp})
-
-        polygon_js = resource_string('folium',
-                                     'plugins/leaflet-dvf.markers.min.js')
-
-        self.plugins.update({'leaflet-dvf.markers.min.js': polygon_js})
+        self.add_plugin(rpm)
 
     def lat_lng_popover(self):
         """Enable popovers to display Lat and Lon on each click."""
@@ -817,6 +796,40 @@ class Map(object):
                                           'max_width': max_width,
                                           'json_out': json_out,
                                           'vega_id': vega_id})
+            else:
+                raise TypeError("Unrecognized popup type: {!r}".format(popup))
+
+    def _popup_(self, popup=None, width=300):
+        """Popup renderer: either text or Vincent/Vega.
+        Unlike _popup_render, it returns a Popup plugin object
+
+        Parameters
+        ----------
+        popup: str or Vincent tuple, default None
+            String for text popup, or tuple of (Vincent object, json_path)
+        """
+        if not popup:
+            return None
+        else:
+            if sys.version_info >= (3, 0):
+                utype, stype = str, bytes
+            else:
+                utype, stype = unicode, str
+
+            if isinstance(popup, (utype, stype)):
+                if isinstance(popup, utype):
+                    popup_txt = popup.encode('ascii', 'xmlcharrefreplace')
+                else:
+                    popup_txt = popup
+                if sys.version_info >= (3, 0):
+                    popup_txt = popup_txt.decode()
+                return Popup(popup_txt, max_width=width)
+            elif isinstance(popup, tuple):
+                # Update template with JS libs.
+                vega = popup[0]
+                vega_data = json.loads(vega.to_json())
+                return VegaPopup(vega_data, width=width)
+
             else:
                 raise TypeError("Unrecognized popup type: {!r}".format(popup))
 
