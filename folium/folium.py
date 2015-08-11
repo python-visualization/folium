@@ -1168,13 +1168,6 @@ class Map(object):
                 with open(path, 'w') as g:
                     json.dump(data, g)
 
-        if self.plugins and plugin_data_out:
-            for name, plugin in iteritems(self.plugins):
-                with open(name, 'w') as f:
-                    if isinstance(plugin, binary_type):
-                        plugin = text_type(plugin, 'utf8')
-                    f.write(plugin)
-
     def _repr_html_(self):
         """Build the HTML representation for IPython."""
         map_types = {'base': 'ipynb_repr.html',
