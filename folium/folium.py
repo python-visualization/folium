@@ -1016,16 +1016,23 @@ class Map(object):
 
     @iter_obj('image_overlay')
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None):
-        """Simple image overlay of raster data from a numpy array.  This is a lightweight
-        way to overlay geospatial data on top of a map.  If your data is high res, consider
-        implementing a WMS server and adding a WMS layer.
+                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None,
+                      data_projection='mercator'):
+        """Simple image overlay of raster data from a numpy array.  This is a
+        lightweight way to overlay geospatial data on top of a map.
+        If your data is high res, consider implementing a WMS server
+        and adding a WMS layer.
 
-        This function works by generating a PNG file from a numpy array.  If you do not
-        specifiy a filename, it will embed the image inline.  Otherwise, it saves the file in the
-        current directory, and then adds it as an image overlay layer in leaflet.js.
-        By default, the image is placed and stretched using bounds that cover the 
-        entire globe.
+        This function works by generating a PNG file from a numpy
+        array.  If you do not specifiy a filename, it will embed the
+        image inline.  Otherwise, it saves the file in the current
+        directory, and then adds it as an image overlay layer in
+        leaflet.js.  By default, the image is placed and stretched
+        using bounds that cover the entire globe.  By default, we
+        assume that your data is in geodetic projection and thus
+        project it to web mercator for display purposes.  If you are
+        overlaying a non-georeferenced image, set data_projection to
+        None.
 
         Parameters
         ----------
@@ -1040,10 +1047,12 @@ class Map(object):
         max_lon: float, default  180.0
         image_name: string, default None
             The name of the layer object in leaflet.js
-        filename: string, default None
+        filename: string or None, default None
             Optional file name of output.png for image overlay.  If None, we use a 
             inline PNG.
-
+        data_projection: string or None, default 'mercator'
+            Used to specify projection of image.  If None, do no projection
+            
         Output
         ------
         Image overlay data layer in obj.template_vars
@@ -1052,7 +1061,7 @@ class Map(object):
         -------
         # assumes a map object `m` has been created
         >>> import numpy as np
-        >>> data = np.random.random((100,100))
+        >>> data = np.random.random((180,360))
         
         # to make a rgba from a specific matplotlib colormap:
         >>> import matplotlib.cm as cm
@@ -1064,12 +1073,16 @@ class Map(object):
 
         # put it only over a single city (Paris)
         >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970, min_lon=2.25214, max_lon=2.44731)
-        
-        """
 
+        """
         if isinstance(data, str):
             filename = data
         else:
+            assert data_projection in [None, 'mercator']
+            # this assumes a lat x long array
+            # with 2x as many points in long as lat dims.
+            if data_projection is 'mercator':
+                data = utilities.geodetic_to_mercator(data)
             try:
                 png_str = utilities.write_png(data)
             except Exception as e:
