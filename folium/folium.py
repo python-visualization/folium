@@ -192,6 +192,7 @@ class Map(object):
                               'stamenterrain', 'stamentoner',
                               'stamenwatercolor',
                               'cartodbpositron', 'cartodbdark_matter']
+
         self.tile_types = {}
         for tile in self.default_tiles:
             tile_path = 'tiles/%s' % tile
@@ -356,6 +357,58 @@ class Map(object):
             name = 'custom_markers'
         append = (icon, marker, popup_out, add_mark)
         self.template_vars.setdefault(name, []).append(append)
+
+    @iter_obj('div_mark')
+    def div_markers(self, locations=None, popups=None, marker_size=10, popup_width=300):
+        """Create a simple div marker on the map, with optional
+        popup text or Vincent visualization. Useful for marking points along a
+        line.
+
+        Parameters
+        ----------
+        locations: list of locations, where each location is an array
+            Latitude and Longitude of Marker (Northing, Easting)
+        popup: list of popups, each popup should be a string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width`.  (Leaflet default is 300px.)
+        marker_size
+            default is 5
+
+        Returns
+        -------
+        Marker names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>>map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+
+        """
+        call_cnt = self.mark_cnt['div_mark']
+        if locations is None or popups is None:
+            raise RuntimeError("Both locations and popups are mandatory")
+        for (point_cnt, (location, popup)) in enumerate(zip(locations, popups)):
+            marker_num = 'div_marker_{0}_{1}'.format(call_cnt, point_cnt)
+
+            icon_temp = self.env.get_template('static_div_icon.js')
+            icon_name = marker_num+"_icon"
+            icon = icon_temp.render({'icon_name': icon_name,
+                                     'size': marker_size})
+
+            mark_temp = self.env.get_template('simple_marker.js')
+            # Get marker and popup.
+            marker = mark_temp.render({'marker': marker_num,
+                                       'lat': location[0],
+                                       'lon': location[1],
+                                       'icon': "{'icon':"+icon_name+"}"
+                                       })
+
+            popup_out = self._popup_render(popup=popup, mk_name='div_marker_{0}_'.format(call_cnt),
+                                           count=point_cnt, width=popup_width)
+            add_mark = 'map.addLayer(div_marker_{0}_{1})'.format(call_cnt, point_cnt)
+            append = (icon, marker, popup_out, add_mark)
+            self.template_vars.setdefault('div_markers', []).append(append)
 
     @iter_obj('line')
     def line(self, locations,
