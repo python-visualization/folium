@@ -800,7 +800,7 @@ class Map(object):
                 else:
                     width += 75
                     height += 50
-                max_width = self.map_size['width']
+                max_width = max([self.map_size['width'], width])
                 vega_id = '#' + div_id
                 popup_temp = self.env.get_template('vega_marker.js')
                 return popup_temp.render({'mark': mark, 'div_id': div_id,
