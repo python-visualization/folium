@@ -21,7 +21,15 @@
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
 
-   <link rel="stylesheet" href="https://birdage.github.io/Leaflet.awesome-markers/dist/leaflet.awesome.rotate.css">
+   <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css">
+
+    {% for name, plugin in plugins.items() %}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_header(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
+    {% endfor %}
 
    {{ dvf_js }}
    {{ d3 }}
@@ -45,12 +53,28 @@
         left:0;
       }
 
+    {% for name, plugin in plugins.items() %}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_css(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
+    {% endfor %}
+
    </style>
 </head>
 
 <body>
 
    <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
+
+    {% for name, plugin in plugins.items() %}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_html(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
+    {% endfor %}
 
    <script>
 
@@ -107,7 +131,7 @@
                                        layers: [base_tile]
                                      });
 
-      L.control.layers(baseLayer, layer_list).addTo(map);
+      // L.control.layers(baseLayer, layer_list).addTo(map);
 
       /*
       addition of the image layers
@@ -115,7 +139,7 @@
       {% for image in image_layers %}
       {{ image }}
       {% endfor %}
-      
+
       //cluster group
       var clusteredmarkers = L.markerClusterGroup();
       //section for adding clustered markers
@@ -129,6 +153,13 @@
       map.addLayer(clusteredmarkers);
 
       {% for icon, mark, popup, add_mark in custom_markers %}
+      {{ icon }}
+      {{ mark }}
+      {{ popup }}
+      {{ add_mark }}
+      {% endfor %}
+
+      {% for icon, mark, popup, add_mark in div_markers %}
       {{ icon }}
       {{ mark }}
       {{ popup }}
@@ -157,6 +188,14 @@
       {{ click_pop }}
 
 {% if fit_bounds %}{{ fit_bounds }}{% endif %}
+
+    {% for name, plugin in plugins.items() %}
+        {% set plugin_nb = 0 %}
+        {% for plugin_object in plugin %}
+            {{plugin_object.render_js(plugin_nb)}}
+            {% set plugin_nb = plugin_nb +1 %}
+        {% endfor %}
+    {% endfor %}
 
    </script>
 

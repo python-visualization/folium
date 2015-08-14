@@ -13,7 +13,8 @@ from jinja2 import Environment, PackageLoader
 import vincent
 import folium
 from folium.six import PY3
-
+from folium.plugins import ScrollZoomToggler, MarkerCluster
+from test_plugins import testPlugins
 
 def setup_data():
     """Import economic data for testing."""
@@ -168,6 +169,44 @@ class testFolium(object):
         self.map.simple_marker(location=[45.60, -122.8])
         nopopup = ''
         assert self.map.template_vars['custom_markers'][2][2] == nopopup
+
+    def test_div_markers(self):
+        '''Test div marker list addition'''
+
+        icon_templ = self.env.get_template('static_div_icon.js')
+        mark_templ = self.env.get_template('simple_marker.js')
+        popup_templ = self.env.get_template('simple_popup.js')
+
+        # Test with popups (expected use case)
+        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+        icon_1 = icon_templ.render({'icon_name': 'div_marker_1_0_icon', 'size': 10})
+        mark_1 = mark_templ.render({'marker': 'div_marker_1_0', 'lat': 37.421114,
+                                    'lon': -122.128314,
+                                    'icon': "{'icon':div_marker_1_0_icon}"})
+        popup_1 = popup_templ.render({'pop_name': 'div_marker_1_0',
+                                      'pop_txt': '"1437494575531"',
+                                      'width': 300})
+        nt.assert_equals(self.map.mark_cnt['div_mark'], 1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][0], icon_1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][1], mark_1)
+        nt.assert_equals(self.map.template_vars['div_markers'][0][2], popup_1)
+
+        # Second set of markers with popups to test the numbering
+        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+        icon_2 = icon_templ.render({'icon_name': 'div_marker_2_1_icon', 'size': 10})
+        mark_2 = mark_templ.render({'marker': 'div_marker_2_1', 'lat': 37.391637,
+                                    'lon': -122.085416,
+                                    'icon': "{'icon':div_marker_2_1_icon}"})
+        popup_2 = popup_templ.render({'pop_name': 'div_marker_2_1',
+                                      'pop_txt': '"1437492135937"',
+                                      'width': 300})
+        nt.assert_equals(self.map.mark_cnt['div_mark'], 2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][0], icon_2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][1], mark_2)
+        nt.assert_equals(self.map.template_vars['div_markers'][4][2], popup_2)
+
+        # Test no popup. If there are no popups, then we should get a runtimeerror.
+        nt.assert_raises(RuntimeError, self.map.div_markers, [[45.60, -122.8]])
 
     def test_circle_marker(self):
         """Test circle marker additions."""
@@ -370,7 +409,7 @@ class testFolium(object):
                 'max_lat': 90,
                 'min_lon': -180,
                 'max_lon': 180}
-        HTML = html_templ.render(tmpl)
+        HTML = html_templ.render(tmpl, plugins={})
 
         assert self.map.HTML == HTML
 
@@ -484,21 +523,26 @@ class testFolium(object):
     def test_image_overlay(self):
         """Test image overlay"""
         from numpy.random import random
-        from folium.utilities import write_png
+        from folium.utilities import write_png, geodetic_to_mercator
         import base64
+
+        # Setup
         
-        data = random((100,100))
+        data = random((100,200)) 
         png_str = write_png(data)
         with open('data.png', 'wb') as f:
             f.write(png_str)
-        inline_image_url = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
-        
+        image_url = 'data.png'    
+        inline_image_url = ("data:image/png;base64," +
+                            base64.b64encode(write_png(geodetic_to_mercator(data))).decode('utf-8'))
+
         image_tpl = self.env.get_template('image_layer.js')
         image_name = 'Image_Overlay'
         image_opacity = 0.25
-        image_url = 'data.png'
         min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
         image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]  
+
+        # Test external png.
         
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': image_url,
@@ -509,6 +553,7 @@ class testFolium(object):
         self.map.image_overlay(data, filename=image_url)
         assert image_rendered in self.map.template_vars['image_layers']
 
+        # Test inline png.
 
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': inline_image_url,
@@ -519,3 +564,19 @@ class testFolium(object):
         self.map.image_overlay(data)
         assert image_rendered in self.map.template_vars['image_layers']
 
+    def test_scroll_zoom_toggler_plugin(self):
+        "test ScrollZoomToggler plugin"""
+        a_map = folium.Map([45,3], zoom_start=4)
+        a_map.add_plugin(ScrollZoomToggler())
+        a_map._build_map()
+
+    def test_marker_cluster_plugin(self):
+        "test MarkerCluster plugin"""
+        data = [(35,-12,"lower left"),
+                (35, 30,"lower right"),
+                (60,-12,"upper left"),
+                (60, 30,"upper right"),
+                ]
+        a_map = folium.Map([0,0], zoom_start=0)
+        a_map.add_plugin(MarkerCluster(data))
+        a_map._build_map()

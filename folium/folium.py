@@ -192,6 +192,7 @@ class Map(object):
                               'stamenterrain', 'stamentoner',
                               'stamenwatercolor',
                               'cartodbpositron', 'cartodbdark_matter']
+
         self.tile_types = {}
         for tile in self.default_tiles:
             tile_path = 'tiles/%s' % tile
@@ -356,6 +357,58 @@ class Map(object):
             name = 'custom_markers'
         append = (icon, marker, popup_out, add_mark)
         self.template_vars.setdefault(name, []).append(append)
+
+    @iter_obj('div_mark')
+    def div_markers(self, locations=None, popups=None, marker_size=10, popup_width=300):
+        """Create a simple div marker on the map, with optional
+        popup text or Vincent visualization. Useful for marking points along a
+        line.
+
+        Parameters
+        ----------
+        locations: list of locations, where each location is an array
+            Latitude and Longitude of Marker (Northing, Easting)
+        popup: list of popups, each popup should be a string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width`.  (Leaflet default is 300px.)
+        marker_size
+            default is 5
+
+        Returns
+        -------
+        Marker names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>>map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+
+        """
+        call_cnt = self.mark_cnt['div_mark']
+        if locations is None or popups is None:
+            raise RuntimeError("Both locations and popups are mandatory")
+        for (point_cnt, (location, popup)) in enumerate(zip(locations, popups)):
+            marker_num = 'div_marker_{0}_{1}'.format(call_cnt, point_cnt)
+
+            icon_temp = self.env.get_template('static_div_icon.js')
+            icon_name = marker_num+"_icon"
+            icon = icon_temp.render({'icon_name': icon_name,
+                                     'size': marker_size})
+
+            mark_temp = self.env.get_template('simple_marker.js')
+            # Get marker and popup.
+            marker = mark_temp.render({'marker': marker_num,
+                                       'lat': location[0],
+                                       'lon': location[1],
+                                       'icon': "{'icon':"+icon_name+"}"
+                                       })
+
+            popup_out = self._popup_render(popup=popup, mk_name='div_marker_{0}_'.format(call_cnt),
+                                           count=point_cnt, width=popup_width)
+            add_mark = 'map.addLayer(div_marker_{0}_{1})'.format(call_cnt, point_cnt)
+            append = (icon, marker, popup_out, add_mark)
+            self.template_vars.setdefault('div_markers', []).append(append)
 
     @iter_obj('line')
     def line(self, locations,
@@ -657,6 +710,17 @@ class Map(object):
 
         self.template_vars.update({'fit_bounds': fit_bounds_str})
 
+    def add_plugin(self, plugin):
+        """Adds a plugin to the map.
+
+        Parameters
+        ----------
+            plugin: folium.plugins object
+                A plugin to be added to the map. It has to implement the methods
+                `render_html`, `render_css` and `render_js`.
+        """
+        plugin.add_to_map(self)
+
     def _auto_bounds(self):
         if 'fit_bounds' in self.template_vars:
             return
@@ -952,16 +1016,23 @@ class Map(object):
 
     @iter_obj('image_overlay')
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None):
-        """Simple image overlay of raster data from a numpy array.  This is a lightweight
-        way to overlay geospatial data on top of a map.  If your data is high res, consider
-        implementing a WMS server and adding a WMS layer.
+                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None,
+                      data_projection='mercator'):
+        """Simple image overlay of raster data from a numpy array.  This is a
+        lightweight way to overlay geospatial data on top of a map.
+        If your data is high res, consider implementing a WMS server
+        and adding a WMS layer.
 
-        This function works by generating a PNG file from a numpy array.  If you do not
-        specifiy a filename, it will embed the image inline.  Otherwise, it saves the file in the
-        current directory, and then adds it as an image overlay layer in leaflet.js.
-        By default, the image is placed and stretched using bounds that cover the 
-        entire globe.
+        This function works by generating a PNG file from a numpy
+        array.  If you do not specifiy a filename, it will embed the
+        image inline.  Otherwise, it saves the file in the current
+        directory, and then adds it as an image overlay layer in
+        leaflet.js.  By default, the image is placed and stretched
+        using bounds that cover the entire globe.  By default, we
+        assume that your data is in geodetic projection and thus
+        project it to web mercator for display purposes.  If you are
+        overlaying a non-georeferenced image, set data_projection to
+        None.
 
         Parameters
         ----------
@@ -976,10 +1047,12 @@ class Map(object):
         max_lon: float, default  180.0
         image_name: string, default None
             The name of the layer object in leaflet.js
-        filename: string, default None
+        filename: string or None, default None
             Optional file name of output.png for image overlay.  If None, we use a 
             inline PNG.
-
+        data_projection: string or None, default 'mercator'
+            Used to specify projection of image.  If None, do no projection
+            
         Output
         ------
         Image overlay data layer in obj.template_vars
@@ -988,7 +1061,7 @@ class Map(object):
         -------
         # assumes a map object `m` has been created
         >>> import numpy as np
-        >>> data = np.random.random((100,100))
+        >>> data = np.random.random((180,360))
         
         # to make a rgba from a specific matplotlib colormap:
         >>> import matplotlib.cm as cm
@@ -1000,12 +1073,16 @@ class Map(object):
 
         # put it only over a single city (Paris)
         >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970, min_lon=2.25214, max_lon=2.44731)
-        
-        """
 
+        """
         if isinstance(data, str):
             filename = data
         else:
+            assert data_projection in [None, 'mercator']
+            # this assumes a lat x long array
+            # with 2x as many points in long as lat dims.
+            if data_projection is 'mercator':
+                data = utilities.geodetic_to_mercator(data)
             try:
                 png_str = utilities.write_png(data)
             except Exception as e:
@@ -1051,7 +1128,7 @@ class Map(object):
             if templ_type == 'string':
                 html_templ = self.env.from_string(html_templ)
 
-        self.HTML = html_templ.render(self.template_vars)
+        self.HTML = html_templ.render(self.template_vars, plugins=self.plugins)
 
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML and data output to JSON if available.
