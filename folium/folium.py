@@ -359,7 +359,8 @@ class Map(object):
         self.template_vars.setdefault(name, []).append(append)
 
     @iter_obj('div_mark')
-    def div_markers(self, locations=None, popups=None, marker_size=10, popup_width=300):
+    def div_markers(self, locations=None, popups=None,
+                    marker_size=10, popup_width=300):
         """Create a simple div marker on the map, with optional
         popup text or Vincent visualization. Useful for marking points along a
         line.
@@ -368,11 +369,13 @@ class Map(object):
         ----------
         locations: list of locations, where each location is an array
             Latitude and Longitude of Marker (Northing, Easting)
-        popup: list of popups, each popup should be a string or tuple, default 'Pop Text'
+        popup: list of popups, each popup should be a string or tuple.
+            Default 'Pop Text'
             Input text or visualization for object. Can pass either text,
             or a tuple of the form (Vincent object, 'vis_path.json')
             It is possible to adjust the width of text/HTML popups
-            using the optional keywords `popup_width`.  (Leaflet default is 300px.)
+            using the optional keywords `popup_width`.
+            (Leaflet default is 300px.)
         marker_size
             default is 5
 
@@ -382,13 +385,19 @@ class Map(object):
 
         Example
         -------
-        >>>map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
+        >>> map.div_markers(locations=[[37.421114, -122.128314],
+        ...                            [37.391637, -122.085416],
+        ...                            [37.388832, -122.087709]],
+        ...                 popups=['1437494575531',
+        ...                         '1437492135937',
+        ...                         '1437493590434'])
 
         """
         call_cnt = self.mark_cnt['div_mark']
         if locations is None or popups is None:
             raise RuntimeError("Both locations and popups are mandatory")
-        for (point_cnt, (location, popup)) in enumerate(zip(locations, popups)):
+        for (point_cnt, (location, popup)) in enumerate(zip(locations,
+                                                            popups)):
             marker_num = 'div_marker_{0}_{1}'.format(call_cnt, point_cnt)
 
             icon_temp = self.env.get_template('static_div_icon.js')
@@ -404,9 +413,12 @@ class Map(object):
                                        'icon': "{'icon':"+icon_name+"}"
                                        })
 
-            popup_out = self._popup_render(popup=popup, mk_name='div_marker_{0}_'.format(call_cnt),
+            mk_name = 'div_marker_{0}_'.format(call_cnt)
+            popup_out = self._popup_render(popup=popup,
+                                           mk_name=mk_name,
                                            count=point_cnt, width=popup_width)
-            add_mark = 'map.addLayer(div_marker_{0}_{1})'.format(call_cnt, point_cnt)
+            add_mark = 'map.addLayer(div_marker_{0}_{1})'.format(call_cnt,
+                                                                 point_cnt)
             append = (icon, marker, popup_out, add_mark)
             self.template_vars.setdefault('div_markers', []).append(append)
 
@@ -716,8 +728,8 @@ class Map(object):
         Parameters
         ----------
             plugin: folium.plugins object
-                A plugin to be added to the map. It has to implement the methods
-                `render_html`, `render_css` and `render_js`.
+                A plugin to be added to the map. It has to implement the
+                methods `render_html`, `render_css` and `render_js`.
         """
         plugin.add_to_map(self)
 
@@ -1016,24 +1028,28 @@ class Map(object):
 
     @iter_obj('image_overlay')
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None):
-        """Simple image overlay of raster data from a numpy array.  This is a lightweight
-        way to overlay geospatial data on top of a map.  If your data is high res, consider
-        implementing a WMS server and adding a WMS layer.
+                      min_lon=-180.0, max_lon=180.0, image_name=None,
+                      filename=None):
+        """
+        Simple image overlay of raster data from a numpy array.  This is a
+        lightweight way to overlay geospatial data on top of a map.  If your
+        data is high res, consider implementing a WMS server and adding a WMS
+        layer.
 
-        This function works by generating a PNG file from a numpy array.  If you do not
-        specifiy a filename, it will embed the image inline.  Otherwise, it saves the file in the
-        current directory, and then adds it as an image overlay layer in leaflet.js.
-        By default, the image is placed and stretched using bounds that cover the 
-        entire globe.
+        This function works by generating a PNG file from a numpy array.  If
+        you do not specify a filename, it will embed the image inline.
+        Otherwise, it saves the file in the current directory, and then adds
+        it as an image overlay layer in leaflet.js.  By default, the image is
+        placed and stretched using bounds that cover the entire globe.
 
         Parameters
         ----------
-        data: numpy array OR url string, required.  
-            if numpy array, must be a image format, i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
+        data: numpy array OR url string, required.
+            if numpy array, must be a image format,
+            i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
             if url, must be a valid url to a image (local or external)
         opacity: float, default 0.25
-            Image layer opacity in range 0 (completely transparent) to 1 (opaque)
+            Image layer opacity in range 0 (transparent) to 1 (opaque)
         min_lat: float, default -90.0
         max_lat: float, default  90.0
         min_lon: float, default -180.0
@@ -1041,8 +1057,8 @@ class Map(object):
         image_name: string, default None
             The name of the layer object in leaflet.js
         filename: string, default None
-            Optional file name of output.png for image overlay.  If None, we use a 
-            inline PNG.
+            Optional file name of output.png for image overlay.
+            Use `None` for inline PNG.
 
         Output
         ------
@@ -1053,18 +1069,17 @@ class Map(object):
         # assumes a map object `m` has been created
         >>> import numpy as np
         >>> data = np.random.random((100,100))
-        
+
         # to make a rgba from a specific matplotlib colormap:
         >>> import matplotlib.cm as cm
         >>> cmapper = cm.cm.ColorMapper('jet')
         >>> data2 = cmapper.to_rgba(np.random.random((100,100)))
-
-        # place the data over all of the globe (will be pretty pixelated!)
+        >>> # Place the data over all of the globe (will be pretty pixelated!)
         >>> m.image_overlay(data)
+        >>> # Put it only over a single city (Paris).
+        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970,
+        ...                 min_lon=2.25214, max_lon=2.44731)
 
-        # put it only over a single city (Paris)
-        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970, min_lon=2.25214, max_lon=2.44731)
-        
         """
 
         if isinstance(data, str):
@@ -1079,7 +1094,8 @@ class Map(object):
                 with open(filename, 'wb') as fd:
                     fd.write(png_str)
             else:
-                filename = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
+                png = "data:image/png;base64,{}".format
+                filename = png(base64.b64encode(png_str).decode('utf-8'))
 
         if image_name not in self.added_layers:
             if image_name is None:
@@ -1089,7 +1105,7 @@ class Map(object):
             image_url = filename
             image_bounds = [[min_lat, min_lon], [max_lat, max_lon]]
             image_opacity = opacity
-            
+
             image_temp = self.env.get_template('image_layer.js')
 
             image = image_temp.render({'image_name': image_name,
@@ -1099,7 +1115,7 @@ class Map(object):
 
             self.template_vars['image_layers'].append(image)
             self.added_layers.append(image_name)
-        
+
     def _build_map(self, html_templ=None, templ_type='string'):
         self._auto_bounds()
         """Build HTML/JS/CSS from Templates given current map type."""
