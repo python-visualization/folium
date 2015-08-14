@@ -2,7 +2,8 @@
    :target: http://badge.fury.io/py/folium
 .. image:: https://api.travis-ci.org/python-visualization/folium.png?branch=master
    :target: https://travis-ci.org/python-visualization/folium
-
+.. image:: https://badges.gitter.im/Join%20Chat.svg
+   :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 Folium
 ======
