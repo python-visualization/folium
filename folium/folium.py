@@ -736,7 +736,7 @@ class Map(object):
                 else:
                     width += 75
                     height += 50
-                max_width = self.map_size['width']
+                max_width = max([self.map_size['width'], width])
                 vega_id = '#' + div_id
                 popup_temp = self.env.get_template('vega_marker.js')
                 return popup_temp.render({'mark': mark, 'div_id': div_id,
@@ -951,16 +951,16 @@ class Map(object):
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
     @iter_obj('image_overlay')
-    def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-                      min_lon=-180.0, max_lon=180.0, image_name=None, filename=None,
-                      data_projection='mercator'):
+    def image_overlay(self, data, opacity=0.75, min_lat=-90.0, max_lat=90.0,
+                      min_lon=-180.0, max_lon=180.0, image_name=None,
+                      filename=None, data_projection='mercator'):
         """Simple image overlay of raster data from a numpy array.  This is a
         lightweight way to overlay geospatial data on top of a map.
         If your data is high res, consider implementing a WMS server
         and adding a WMS layer.
 
         This function works by generating a PNG file from a numpy
-        array.  If you do not specifiy a filename, it will embed the
+        array.  If you do not specify a filename, it will embed the
         image inline.  Otherwise, it saves the file in the current
         directory, and then adds it as an image overlay layer in
         leaflet.js.  By default, the image is placed and stretched
@@ -972,11 +972,12 @@ class Map(object):
 
         Parameters
         ----------
-        data: numpy array OR url string, required.  
-            if numpy array, must be a image format, i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
+        data: numpy array OR url string, required.
+            if numpy array, must be a image format,
+            i.e., NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)
             if url, must be a valid url to a image (local or external)
-        opacity: float, default 0.25
-            Image layer opacity in range 0 (completely transparent) to 1 (opaque)
+        opacity: float, default 0.75
+            Image layer opacity in range 0 (transparent) to 1 (opaque)
         min_lat: float, default -90.0
         max_lat: float, default  90.0
         min_lon: float, default -180.0
@@ -984,38 +985,34 @@ class Map(object):
         image_name: string, default None
             The name of the layer object in leaflet.js
         filename: string or None, default None
-            Optional file name of output.png for image overlay.  If None, we use a 
-            inline PNG.
+            Optional file name of output.png for image overlay.
+            If None, we use a inline PNG.
         data_projection: string or None, default 'mercator'
             Used to specify projection of image.  If None, do no projection
-            
+
         Output
         ------
         Image overlay data layer in obj.template_vars
 
         Examples
         -------
-        # assumes a map object `m` has been created
+        # Assumes a map object `m` has been created.
         >>> import numpy as np
         >>> data = np.random.random((180,360))
-        
-        # to make a rgba from a specific matplotlib colormap:
-        >>> import matplotlib.cm as cm
-        >>> cmapper = cm.cm.ColorMapper('jet')
-        >>> data2 = cmapper.to_rgba(np.random.random((100,100)))
 
-        # place the data over all of the globe (will be pretty pixelated!)
+        # Place the data over all of the globe (will be pretty pixelated!)
         >>> m.image_overlay(data)
 
-        # put it only over a single city (Paris)
-        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970, min_lon=2.25214, max_lon=2.44731)
+        # Put it only over a single city (Paris)
+        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970,
+        ...                 min_lon=2.25214, max_lon=2.44731)
 
         """
         if isinstance(data, str):
             filename = data
         else:
             assert data_projection in [None, 'mercator']
-            # this assumes a lat x long array
+            # This assumes a lat x long array.
             # with 2x as many points in long as lat dims.
             if data_projection is 'mercator':
                 data = utilities.geodetic_to_mercator(data)
@@ -1028,7 +1025,8 @@ class Map(object):
                 with open(filename, 'wb') as fd:
                     fd.write(png_str)
             else:
-                filename = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
+                png = "data:image/png;base64,{}".format
+                filename = png(base64.b64encode(png_str).decode('utf-8'))
 
         if image_name not in self.added_layers:
             if image_name is None:
@@ -1038,7 +1036,7 @@ class Map(object):
             image_url = filename
             image_bounds = [[min_lat, min_lon], [max_lat, max_lon]]
             image_opacity = opacity
-            
+
             image_temp = self.env.get_template('image_layer.js')
 
             image = image_temp.render({'image_name': image_name,
@@ -1048,7 +1046,7 @@ class Map(object):
 
             self.template_vars['image_layers'].append(image)
             self.added_layers.append(image_name)
-        
+
     def _build_map(self, html_templ=None, templ_type='string'):
         self._auto_bounds()
         """Build HTML/JS/CSS from Templates given current map type."""
