@@ -364,8 +364,9 @@ def write_png(array):
             frame = array_full[:, :, component]
             array_full[:, :, component] = (frame / frame.max() * 255)
         array_full = array_full.astype('uint8')
-    width, height = array_full.shape[:2]
-
+    height, width = array_full.shape[:2]
+    array_full = np.flipud(array_full)
+    
     array_full = array_full.tobytes()
 
     # Reverse the vertical line order and add null bytes at the start.
