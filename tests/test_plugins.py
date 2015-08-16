@@ -11,6 +11,19 @@ import json
 
 class testPlugins(object):
     '''Test class for Folium plugins'''
+    def test_javascript_link(self):
+        j = plugins.JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js")
+        j.render(embedded=False)
+        j.render(embedded=True)
+        j.render_header(0)
+        j.render_html(0)
+
+    def test_css_link(self):
+        c = plugins.CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css")
+        c.render(embedded=False)
+        c.render(embedded=True)
+        c.render_header(0)
+        c.render_html(0)
 
     def test_scroll_zoom_toggler(self):
         mapa = folium.Map([45.,3.], zoom_start=4)

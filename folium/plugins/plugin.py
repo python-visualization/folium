@@ -9,7 +9,7 @@ Other plugins may inherit from this one.
 """
 from uuid import uuid4
 
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, PackageLoader, Template
 ENV = Environment(loader=PackageLoader('folium', 'plugins'))
 
 class Plugin(object):
@@ -40,3 +40,8 @@ class Plugin(object):
     def render_header(self, nb):
         """Generates the Header part of the plugin."""
         return ""
+    def render(self, nb=0, **kwargs):
+        self.map.figure.header[self.object_name] = Template(self.render_header(nb))
+        self.map.figure.css   [self.object_name] = Template(self.render_css(nb))
+        self.map.figure.body  [self.object_name] = Template(self.render_html(nb))
+        self.map.figure.script[self.object_name] = Template(self.render_js(nb))
