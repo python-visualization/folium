@@ -225,7 +225,9 @@ class Map(object):
         self.template_vars.setdefault('image_layers', [])
 
     @iter_obj('simple')
-    def add_tile_layer(self, tile_name=None, tile_url=None, active=False):
+    def add_tile_layer(self, tile_name=None, tile_url=None, active=False, minZoom=0,
+                        maxZoom=18, tms=False, continuousWorld=False, noWrap=False, zoomOffset=0,
+                        zoomReverse=False, opacity=1, attribution='Leaflet'):
         """Adds a simple tile layer.
 
         Parameters
@@ -240,9 +242,17 @@ class Map(object):
         if tile_name not in self.added_layers:
             tile_name = tile_name.replace(" ", "_")
             tile_temp = self.env.get_template('tile_layer.js')
-
             tile = tile_temp.render({'tile_name': tile_name,
-                                     'tile_url': tile_url})
+                                     'tile_url': tile_url,
+                                     'minZoom': minZoom,
+                                     'maxZoom': maxZoom,
+                                     'tms': str(tms).lower(),
+                                     'continuousWorld': str(continuousWorld).lower(),
+                                     'noWrap': str(noWrap).lower(),
+                                     'zoomOffset': zoomOffset,
+                                     'zoomReverse': str(zoomReverse).lower(),
+                                     'opacity': opacity,
+                                     })
 
             self.template_vars.setdefault('tile_layers', []).append((tile))
 
