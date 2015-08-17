@@ -3,4 +3,4 @@ from __future__ import absolute_import
 
 __version__ = '0.1.6'
 
-from folium.folium import Map, initialize_notebook
+from folium.folium import Map
