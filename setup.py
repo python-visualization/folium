@@ -1,30 +1,40 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-
 import os
-import re
 import sys
-import codecs
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        # FIXME: '--doctest-modules'
+        self.test_args = ['--verbose']
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(self.test_args)
+        sys.exit(errno)
+
+
 def read(*parts):
-    return codecs.open(os.path.join(rootpath, *parts), 'r').read()
+    return open(os.path.join(rootpath, *parts), 'r').read()
 
 
-def find_version(*file_paths):
-    version_file = read(*file_paths)
-    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]",
-                              version_file, re.M)
-    if version_match:
-        return version_match.group(1)
-    raise RuntimeError("Unable to find version string.")
+def extract_version(module='folium'):
+    version = None
+    fname = os.path.join(rootpath, module, '__init__.py')
+    with open(fname) as f:
+        for line in f:
+            if (line.startswith('__version__')):
+                _, version = line.split('=')
+                version = version.strip()[1:-1]  # Remove quotation characters.
+                break
+    return version
 
 
 def walk_subpkg(name):
@@ -47,20 +57,23 @@ pkg_data = {'': ['*.js',
                  'templates/*.js',
                  'templates/*.txt'] + walk_subpkg('templates/tiles')}
 pkgs = ['folium',
-    'folium.plugins',
-    ]
+        'folium.plugins']
 
 LICENSE = read('LICENSE.txt')
-version = find_version('folium', '__init__.py')
 long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
 
+# Dependencies.
+with open('requirements.txt') as f:
+    tests_require = f.readlines()
+install_requires = [t.strip() for t in tests_require]
+
+
 config = dict(name='folium',
-              version=version,
+              version=extract_version(),
               description='Make beautiful maps with Leaflet.js & Python',
               long_description=long_description,
               author='Rob Story',
               author_email='wrobstory@gmail.com',
-              license='MIT License',
               url='https://github.com/python-visualization/folium',
               keywords='data visualization',
               classifiers=['Development Status :: 4 - Beta',
@@ -70,16 +83,11 @@ config = dict(name='folium',
                            'License :: OSI Approved :: MIT License'],
               packages=pkgs,
               package_data=pkg_data,
+              cmdclass=dict(test=PyTest),
+              tests_require=['pytest'],
+              license=LICENSE,
+              install_requires=install_requires,
               zip_safe=False)
 
-
-if sys.argv[-1] == 'publish':
-    os.system("python setup.py sdist upload")
-    print("Remember to also tag the version.")
-    sys.exit()
-elif sys.argv[-1] == 'tag':
-    os.system("git tag -a %s -m 'version %s'" % (version, version))
-    os.system("git push --tags")
-    sys.exit()
 
 setup(**config)
