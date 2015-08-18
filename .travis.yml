@@ -11,13 +11,12 @@ before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - conda update --yes conda
-    - travis_retry conda create --yes -n test $CONDA pip jinja2 pandas mock six nose
+    - conda update --yes --all
+    - travis_retry conda create --yes -n test $CONDA --file requirements.txt
     - source activate test
+    - travis_retry conda install --yes pip mock pytest pandas
     - travis_retry pip install vincent
 
-install:
-    - python setup.py install
-
 script:
-    - cd tests && nosetests --verbose --nocapture folium_tests.py
+    - python setup.py test
+

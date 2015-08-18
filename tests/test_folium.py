@@ -1,31 +1,38 @@
 # -*- coding: utf-8 -*-
+
 """
 Folium Tests
 -------
 
 """
+import pytest
+
+import os
 import json
 import mock
 import pandas as pd
-import nose.tools as nt
 import jinja2
 from jinja2 import Environment, PackageLoader
 import vincent
 import folium
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
-from test_plugins import testPlugins
+
+
+rootpath = os.path.abspath(os.path.dirname(__file__))
+
 
 def setup_data():
     """Import economic data for testing."""
-    with open('us-counties.json', 'r') as f:
+    with open(os.path.join(rootpath, 'us-counties.json'), 'r') as f:
         get_id = json.load(f)
 
     county_codes = [x['id'] for x in get_id['features']]
     county_df = pd.DataFrame({'FIPS_Code': county_codes}, dtype=str)
 
     # Read into Dataframe, cast to string for consistency.
-    df = pd.read_csv('us_county_data.csv', na_values=[' '])
+    df = pd.read_csv(os.path.join(rootpath, 'us_county_data.csv'),
+                     na_values=[' '])
     df['FIPS_Code'] = df['FIPS_Code'].astype(str)
 
     # Perform an inner join, pad NA's with data from nearest county.
@@ -37,10 +44,10 @@ def test_get_templates():
     """Test template getting."""
 
     env = folium.utilities.get_templates()
-    nt.assert_is_instance(env, jinja2.environment.Environment)
+    assert isinstance(env, jinja2.environment.Environment) == True
 
 
-class testFolium(object):
+class TestFolium(object):
     """Test class for the Folium library."""
 
     def setup(self):
@@ -81,9 +88,8 @@ class testFolium(object):
 
     def test_cloudmade(self):
         """Test cloudmade tiles and the API key."""
-
-        nt.assert_raises(ValueError, callableObj=folium.Map,
-                         location=[45.5236, -122.6750], tiles='cloudmade')
+        with pytest.raises(ValueError):
+            folium.Map(location=[45.5236, -122.6750], tiles='cloudmade')
 
         map = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
                          API_key='###')
@@ -109,8 +115,8 @@ class testFolium(object):
         url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
         attr = 'Attribution for custom tiles'
 
-        nt.assert_raises(ValueError, callableObj=folium.Map,
-                         location=[45.5236, -122.6750], tiles=url)
+        with pytest.raises(ValueError):
+            folium.Map(location=[45.5236, -122.6750], tiles=url)
 
         map = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
         assert map.template_vars['Tiles'] == url
@@ -177,36 +183,52 @@ class testFolium(object):
         mark_templ = self.env.get_template('simple_marker.js')
         popup_templ = self.env.get_template('simple_popup.js')
 
-        # Test with popups (expected use case)
-        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
-        icon_1 = icon_templ.render({'icon_name': 'div_marker_1_0_icon', 'size': 10})
-        mark_1 = mark_templ.render({'marker': 'div_marker_1_0', 'lat': 37.421114,
+        # Test with popups (expected use case).
+        self.map.div_markers(locations=[[37.421114, -122.128314],
+                                        [37.391637, -122.085416],
+                                        [37.388832, -122.087709]],
+                             popups=['1437494575531',
+                                     '1437492135937',
+                                     '1437493590434'])
+        icon_1 = icon_templ.render({'icon_name': 'div_marker_1_0_icon',
+                                    'size': 10})
+        mark_1 = mark_templ.render({'marker': 'div_marker_1_0',
+                                    'lat': 37.421114,
                                     'lon': -122.128314,
                                     'icon': "{'icon':div_marker_1_0_icon}"})
         popup_1 = popup_templ.render({'pop_name': 'div_marker_1_0',
                                       'pop_txt': '"1437494575531"',
                                       'width': 300})
-        nt.assert_equals(self.map.mark_cnt['div_mark'], 1)
-        nt.assert_equals(self.map.template_vars['div_markers'][0][0], icon_1)
-        nt.assert_equals(self.map.template_vars['div_markers'][0][1], mark_1)
-        nt.assert_equals(self.map.template_vars['div_markers'][0][2], popup_1)
+        assert self.map.mark_cnt['div_mark'] == 1
+        assert self.map.template_vars['div_markers'][0][0] == icon_1
+        assert self.map.template_vars['div_markers'][0][1] == mark_1
+        assert self.map.template_vars['div_markers'][0][2] == popup_1
 
-        # Second set of markers with popups to test the numbering
-        self.map.div_markers(locations=[[37.421114, -122.128314], [37.391637, -122.085416], [37.388832, -122.087709]], popups=['1437494575531', '1437492135937', '1437493590434'])
-        icon_2 = icon_templ.render({'icon_name': 'div_marker_2_1_icon', 'size': 10})
-        mark_2 = mark_templ.render({'marker': 'div_marker_2_1', 'lat': 37.391637,
+        # Second set of markers with popups to test the numbering.
+        self.map.div_markers(locations=[[37.421114, -122.128314],
+                                        [37.391637, -122.085416],
+                                        [37.388832, -122.087709]],
+                             popups=['1437494575531',
+                                     '1437492135937',
+                                     '1437493590434'])
+        icon_2 = icon_templ.render({'icon_name': 'div_marker_2_1_icon',
+                                    'size': 10})
+        mark_2 = mark_templ.render({'marker': 'div_marker_2_1',
+                                    'lat': 37.391637,
                                     'lon': -122.085416,
                                     'icon': "{'icon':div_marker_2_1_icon}"})
         popup_2 = popup_templ.render({'pop_name': 'div_marker_2_1',
                                       'pop_txt': '"1437492135937"',
                                       'width': 300})
-        nt.assert_equals(self.map.mark_cnt['div_mark'], 2)
-        nt.assert_equals(self.map.template_vars['div_markers'][4][0], icon_2)
-        nt.assert_equals(self.map.template_vars['div_markers'][4][1], mark_2)
-        nt.assert_equals(self.map.template_vars['div_markers'][4][2], popup_2)
+        assert self.map.mark_cnt['div_mark'] == 2
+        assert self.map.template_vars['div_markers'][4][0] == icon_2
+        assert self.map.template_vars['div_markers'][4][1] == mark_2
+        assert self.map.template_vars['div_markers'][4][2] == popup_2
 
-        # Test no popup. If there are no popups, then we should get a runtimeerror.
-        nt.assert_raises(RuntimeError, self.map.div_markers, [[45.60, -122.8]])
+        # Test no popup. If there are no popups,
+        # then we should get a RuntimeError.
+        with pytest.raises(RuntimeError):
+            self.map.div_markers([[45.60, -122.8]])
 
     def test_circle_marker(self):
         """Test circle marker additions."""
@@ -292,7 +314,7 @@ class testFolium(object):
     def test_geo_json(self):
         """Test geojson method."""
 
-        path = 'us-counties.json'
+        path = os.path.join(rootpath, 'us-counties.json')
         geo_path = ".defer(d3.json, '{0}')".format(path)
 
         # No data binding.
@@ -320,19 +342,19 @@ class testFolium(object):
 
         # Data binding incorrect color value error.
         data = setup_data()
-        nt.assert_raises(ValueError, self.map.geo_json,
-                         path, data=data,
-                         columns=['FIPS_Code', 'Unemployed_2011'],
-                         key_on='feature.id', fill_color='blue')
+        with pytest.raises(ValueError):
+            self.map.geo_json(path, data=data,
+                              columns=['FIPS_Code', 'Unemployed_2011'],
+                              key_on='feature.id', fill_color='blue')
 
         # Data binding threshold_scale too long.
         data = setup_data()
-        nt.assert_raises(ValueError, self.map.geo_json,
-                         path, data=data,
-                         columns=['FIPS_Code', 'Unemployed_2011'],
-                         key_on='feature.id',
-                         threshold_scale=[1, 2, 3, 4, 5, 6, 7],
-                         fill_color='YlGnBu')
+        with pytest.raises(ValueError):
+            self.map.geo_json(path, data=data,
+                              columns=['FIPS_Code', 'Unemployed_2011'],
+                              key_on='feature.id',
+                              threshold_scale=[1, 2, 3, 4, 5, 6, 7],
+                              fill_color='YlGnBu')
 
         # With DataFrame data binding, default threshold scale.
         self.map.geo_json(geo_path=path, data=data,
@@ -439,7 +461,7 @@ class testFolium(object):
                          tiles='test', attr='юникод')
 
         # Add json data.
-        path = 'us-counties.json'
+        path = os.path.join(rootpath, 'us-counties.json')
         data = setup_data()
         map.geo_json(geo_path=path, data=data,
                      columns=['FIPS_Code', 'Unemployed_2011'],
@@ -513,7 +535,8 @@ class testFolium(object):
         fit_bounds_rendered = fit_bounds_tpl.render({
             'bounds': json.dumps(bounds),
             'fit_bounds_options': json.dumps({'maxZoom': 15,
-                                              'padding': (3, 3), }, sort_keys=True),
+                                              'padding': (3, 3), },
+                                             sort_keys=True),
         })
 
         self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
@@ -521,56 +544,54 @@ class testFolium(object):
         assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
 
     def test_image_overlay(self):
-        """Test image overlay"""
+        """Test image overlay."""
         from numpy.random import random
         from folium.utilities import write_png
         import base64
-        
-        data = random((100,100))
+
+        data = random((100, 100))
         png_str = write_png(data)
         with open('data.png', 'wb') as f:
             f.write(png_str)
-        inline_image_url = "data:image/png;base64,"+base64.b64encode(png_str).decode('utf-8')
-        
+        png = "data:image/png;base64,{}".format
+        inline_image_url = png(base64.b64encode(png_str).decode('utf-8'))
+
         image_tpl = self.env.get_template('image_layer.js')
         image_name = 'Image_Overlay'
         image_opacity = 0.25
         image_url = 'data.png'
         min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
-        image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]  
-        
+        image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]
+
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': image_url,
                                            'image_bounds': image_bounds,
-                                           'image_opacity': image_opacity
-        })
+                                           'image_opacity': image_opacity})
 
         self.map.image_overlay(data, filename=image_url)
         assert image_rendered in self.map.template_vars['image_layers']
 
-
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': inline_image_url,
                                            'image_bounds': image_bounds,
-                                           'image_opacity': image_opacity
-        })
+                                           'image_opacity': image_opacity})
 
         self.map.image_overlay(data)
         assert image_rendered in self.map.template_vars['image_layers']
 
     def test_scroll_zoom_toggler_plugin(self):
-        "test ScrollZoomToggler plugin"""
-        a_map = folium.Map([45,3], zoom_start=4)
+        """Test ScrollZoomToggler plugin."""
+        a_map = folium.Map([45, 3], zoom_start=4)
         a_map.add_plugin(ScrollZoomToggler())
         a_map._build_map()
 
     def test_marker_cluster_plugin(self):
-        "test MarkerCluster plugin"""
-        data = [(35,-12,"lower left"),
-                (35, 30,"lower right"),
-                (60,-12,"upper left"),
-                (60, 30,"upper right"),
+        """Test MarkerCluster plugin."""
+        data = [(35, -12, "lower left"),
+                (35, 30, "lower right"),
+                (60, -12, "upper left"),
+                (60, 30, "upper right"),
                 ]
-        a_map = folium.Map([0,0], zoom_start=0)
+        a_map = folium.Map([0, 0], zoom_start=0)
         a_map.add_plugin(MarkerCluster(data))
         a_map._build_map()
