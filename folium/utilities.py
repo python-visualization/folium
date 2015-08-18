@@ -366,7 +366,7 @@ def write_png(array):
         array_full = array_full.astype('uint8')
     height, width = array_full.shape[:2]
     array_full = np.flipud(array_full)
-    
+
     array_full = array_full.tobytes()
 
     # Reverse the vertical line order and add null bytes at the start.
@@ -408,12 +408,12 @@ def geodetic_to_mercator(geodetic):
 
     Parameters
     ----------
-    geodetic: numpy image array
+    geodetic: NumPy image array
         Latitude x Longitude array, in mono (NxM), RGB (NxMx3) or RGBA (NxMx4)
 
     Returns
     -------
-    mercator: projected numpy image array
+    mercator: projected NumPy image array
 
     """
     geo = np.repeat(np.atleast_3d(geodetic), 2, axis=0)

@@ -485,7 +485,7 @@ class testFolium(object):
     def test_image_overlay(self):
         """Test image overlay."""
         from numpy.random import random
-        from folium.utilities import write_png, geodetic_to_mercator
+        from folium.utilities import write_png
         import base64
 
         data = random((100, 100))
@@ -495,18 +495,16 @@ class testFolium(object):
 
         image_url = 'data.png'
         inline_image_url = ("data:image/png;base64," +
-                            base64.b64encode(write_png(
-                                geodetic_to_mercator(data))).decode('utf-8'))
+                            base64.b64encode(write_png(data)).decode('utf-8'))
 
         image_tpl = self.env.get_template('image_layer.js')
         image_name = 'Image_Overlay'
-        image_opacity = 0.75
+        image_opacity = 1
 
         min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
         image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]
 
-        # Test the external png.
-
+        # Test the external PNG.
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': image_url,
                                            'image_bounds': image_bounds,
@@ -515,8 +513,7 @@ class testFolium(object):
         self.map.image_overlay(data, filename=image_url)
         assert image_rendered in self.map.template_vars['image_layers']
 
-        # Test the inline png.
-
+        # Test the inline PNG.
         image_rendered = image_tpl.render({'image_name': image_name,
                                            'image_url': inline_image_url,
                                            'image_bounds': image_bounds,

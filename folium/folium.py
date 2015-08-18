@@ -951,44 +951,37 @@ class Map(object):
         self.template_vars.setdefault('gjson_layers', []).append(layer)
 
     @iter_obj('image_overlay')
-    def image_overlay(self, data, opacity=0.75, min_lat=-90.0, max_lat=90.0,
+    def image_overlay(self, data, image_opacity=1, min_lat=-90.0, max_lat=90.0,
                       min_lon=-180.0, max_lon=180.0, image_name=None,
-                      filename=None, data_projection='mercator'):
-        """Simple image overlay of raster data from a numpy array.  This is a
-        lightweight way to overlay geospatial data on top of a map.
-        If your data is high res, consider implementing a WMS server
-        and adding a WMS layer.
+                      filename=None):
+        """
+        Simple image overlay of raster `data` from an image or a NumPy array.
+        This is a lightweight way to overlay geospatial data on top of a map.
+        The default lon, lat corners are the whole globe.  Adjust it to your
+        image.
 
-        This function works by generating a PNG file from a numpy
-        array.  If you do not specify a filename, it will embed the
-        image inline.  Otherwise, it saves the file in the current
-        directory, and then adds it as an image overlay layer in
-        leaflet.js.  By default, the image is placed and stretched
-        using bounds that cover the entire globe.  By default, we
-        assume that your data is in geodetic projection and thus
-        project it to web mercator for display purposes.  If you are
-        overlaying a non-georeferenced image, set data_projection to
-        None.
+        If `data` is is a NumPy array a PNG file will be created for you.
+        If you do not specify a filename the image will be embedded inline.
+
+        NOTE: The image must be projected as Web Mercator
+        (https://en.wikipedia.org/wiki/Web_Mercator).  See the examples below
+        for re-projection.
 
         Parameters
         ----------
-        data: numpy array OR url string, required.
-            if numpy array, must be a image format,
-            i.e., NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)
-            if url, must be a valid url to a image (local or external)
-        opacity: float, default 0.75
-            Image layer opacity in range 0 (transparent) to 1 (opaque)
-        min_lat: float, default -90.0
-        max_lat: float, default  90.0
-        min_lon: float, default -180.0
-        max_lon: float, default  180.0
+        data: NumPy array OR image.
+            The NumPy array can NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)
+        image_opacity: float, default 1
+            Image layer image_opacity in range 0 (transparent) to 1 (opaque)
+        min_lat: float (default: -90)
+        max_lat: float (default:  90)
+        min_lon: float (default: -180)
+        max_lon: float (default"  180)
         image_name: string, default None
             The name of the layer object in leaflet.js
         filename: string or None, default None
             Optional file name of output.png for image overlay.
             If None, we use a inline PNG.
-        data_projection: string or None, default 'mercator'
-            Used to specify projection of image.  If None, do no projection
 
         Output
         ------
@@ -996,26 +989,44 @@ class Map(object):
 
         Examples
         -------
-        # Assumes a map object `m` has been created.
         >>> import numpy as np
-        >>> data = np.random.random((180,360))
-
-        # Place the data over all of the globe (will be pretty pixelated!)
-        >>> m.image_overlay(data)
-
-        # Put it only over a single city (Paris)
-        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970,
-        ...                 min_lon=2.25214, max_lon=2.44731)
+        >>> import matplotlib
+        >>> def sample_data(shape=(73, 145)):
+        ...    nlats, nlons = shape
+        ...    lats = np.linspace(-np.pi / 2, np.pi / 2, nlats)
+        ...    lons = np.linspace(0, 2 * np.pi, nlons)
+        ...    lons, lats = np.meshgrid(lons, lats)
+        ...    wave = 0.75 * (np.sin(2 * lats) ** 8) * np.cos(4 * lons)
+        ...    mean = 0.5 * np.cos(2 * lats) * ((np.sin(2 * lats)) ** 2 + 2)
+        ...    lats = np.rad2deg(lats)
+        ...    lons = np.rad2deg(lons)
+        ...    data = wave + mean
+        ...    return lons, lats, data
+        >>> # Lets create some data,
+        >>> lon, lat, data = sample_data(shape=(73, 145))
+        >>> lon -= 180
+        >>> # and color it.
+        >>> cm = matplotlib.cm.get_cmap('cubehelix')
+        >>> normed_data = (data - data.min()) / (data.max() - data.min())
+        >>> colored_data = cm(normed_data)
+        >>> # First no projection (wrong).
+        >>> map = folium.Map(location=[lat.mean(), lon.mean()], zoom_start=1)
+        >>> map.image_overlay(colored_data,
+        ...                   min_lat=lat.min(), max_lat=lat.max(),
+        ...                   min_lon=lon.min(), max_lon=lon.max(),
+        ...                   image_opacity=0.25)
+        >>> # Now lets project the data as to Web Mercator (correct).
+        >>> map = folium.Map(location=[lat.mean(), lon.mean()], zoom_start=1)
+        >>> project = geodetic_to_mercator(colored_data)
+        >>> map.image_overlay(projected,
+        ...                   min_lat=lat.min(), max_lat=lat.max(),
+        ...                   min_lon=lon.min(), max_lon=lon.max(),
+        ...                   image_opacity=0.25)
 
         """
         if isinstance(data, str):
             filename = data
         else:
-            assert data_projection in [None, 'mercator']
-            # This assumes a lat x long array.
-            # with 2x as many points in long as lat dims.
-            if data_projection is 'mercator':
-                data = utilities.geodetic_to_mercator(data)
             try:
                 png_str = utilities.write_png(data)
             except Exception as e:
@@ -1030,19 +1041,20 @@ class Map(object):
 
         if image_name not in self.added_layers:
             if image_name is None:
+                # FIXME: This will fails with multiple overlays!
                 image_name = "Image_Overlay"
             else:
+                # FIXME: We should write a more robust `name_normalizer()`.
                 image_name = image_name.replace(" ", "_")
             image_url = filename
             image_bounds = [[min_lat, min_lon], [max_lat, max_lon]]
-            image_opacity = opacity
 
-            image_temp = self.env.get_template('image_layer.js')
+            image_templ = self.env.get_template('image_layer.js')
 
-            image = image_temp.render({'image_name': image_name,
-                                       'image_url': image_url,
-                                       'image_bounds': image_bounds,
-                                       'image_opacity': image_opacity})
+            image = image_templ.render({'image_name': image_name,
+                                        'image_url': image_url,
+                                        'image_bounds': image_bounds,
+                                        'image_opacity': image_opacity})
 
             self.template_vars['image_layers'].append(image)
             self.added_layers.append(image_name)
