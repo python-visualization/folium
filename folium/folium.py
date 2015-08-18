@@ -28,21 +28,6 @@ import base64
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
-def initialize_notebook():
-    """Initialize the IPython notebook display elements."""
-    try:
-        from IPython.core.display import display, HTML
-    except ImportError:
-        print("IPython Notebook could not be loaded.")
-
-    lib_css = ENV.get_template('ipynb_init_css.html')
-    lib_js = ENV.get_template('ipynb_init_js.html')
-    leaflet_dvf = ENV.get_template('leaflet-dvf.markers.min.js')
-
-    display(HTML(lib_css.render()))
-    display(HTML(lib_js.render({'leaflet_dvf': leaflet_dvf.render()})))
-
-
 def iter_obj(type):
     """Decorator to keep count of different map object types in self.mk_cnt."""
     def decorator(func):
@@ -1098,29 +1083,15 @@ class Map(object):
 
     def _repr_html_(self):
         """Build the HTML representation for IPython."""
-        map_types = {'base': 'ipynb_repr.html',
-                     'geojson': 'ipynb_iframe.html'}
+        self._build_map()  # Using the default templates.
+        srcdoc = self.HTML
 
-        # Check current map type.
-        type_temp = map_types[self.map_type]
-        if self.render_iframe:
-            type_temp = 'ipynb_iframe.html'
-        templ = self.env.get_template(type_temp)
-        self._build_map(html_templ=templ, templ_type='temp')
-        if self.map_type == 'geojson' or self.render_iframe:
-            if not self.map_path:
-                raise ValueError('Use create_map to set the path!')
-            return templ.render(path=self.map_path, width=self.width,
-                                height=self.height)
-        return self.HTML
-
-    def display(self):
-        """Display the visualization inline in the IPython notebook.
-
-        This is deprecated, use the following instead::
-
-            from IPython.display import display
-            display(viz)
-        """
-        from IPython.core.display import display, HTML
-        display(HTML(self._repr_html_()))
+        if self.json_data:
+            callback = 'function(callback){{callback(null, JSON.parse({}))}}'
+            for path, data in self.json_data.items():
+                json_data = json.dumps(data).replace('"', '&quot;')
+                srcdoc = srcdoc.replace('d3.json, {}'.format(repr(path)),
+                                        callback.format((repr(json_data))))
+        srcdoc = srcdoc.replace('"', '&quot;')
+        return ('<iframe srcdoc="{srcdoc}" style="width: 100%; height: 500px; '
+                'border: none"></iframe>'.format(srcdoc=srcdoc))
