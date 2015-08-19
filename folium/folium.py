@@ -828,7 +828,7 @@ class Map(object):
                  data=None, columns=None, key_on=None, threshold_scale=None,
                  fill_color='blue', fill_opacity=0.6, line_color='black',
                  line_weight=1, line_opacity=1, legend_name=None,
-                 topojson=None, reset=False):
+                 topojson=None, reset=False, freescale=False):
         """Apply a GeoJSON overlay to the map.
 
         Plot a GeoJSON overlay on the base map. There is no requirement
@@ -895,6 +895,9 @@ class Map(object):
             keyword argument will enable conversion to GeoJSON.
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
+        freescale: if True use free format for the scale, where min and max values
+            are taken from the data. It also allow to plot values that do not have 0 
+            minimum and are, for example, float.
 
         Output
         ------
@@ -983,9 +986,10 @@ class Map(object):
 
             # D3 Color scale.
             series = data[columns[1]]
-            if threshold_scale and len(threshold_scale) > 6:
-                raise ValueError
-            domain = threshold_scale or utilities.split_six(series=series)
+            if freescale == False:
+                if threshold_scale and len(threshold_scale) > 6:
+                    raise ValueError
+            domain = threshold_scale or utilities.split_six(series=series, freescale=freescale)
             if len(domain) > 253:
                 raise ValueError('The threshold scale must be length <= 253')
             if not utilities.color_brewer(fill_color):
@@ -1004,9 +1008,20 @@ class Map(object):
             # Create legend.
             name = legend_name or columns[1]
             leg_templ = self.env.get_template('d3_map_legend.js')
-            legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
-                                       'tick_labels': tick_labels,
-                                       'caption': name})
+            if freescale==False:
+
+                legend = leg_templ.render({'lin_min': 0,
+                                           'lin_max': int(domain[-1]*1.1),
+                                           'tick_labels': tick_labels,
+                                           'caption': name})
+
+            else:
+
+                legend = leg_templ.render({'lin_min': domain[0],
+                                           'lin_max': domain[-1],
+                                           'tick_labels': tick_labels,
+                                           'caption': name})
+
             self.template_vars.setdefault('map_legends', []).append(legend)
 
             # Style with color brewer colors.

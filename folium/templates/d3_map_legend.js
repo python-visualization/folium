@@ -5,7 +5,7 @@
     legend.addTo(map);
 
     var x = d3.scale.linear()
-    .domain([0, {{ lin_max }}])
+    .domain([{{ lin_min }}, {{ lin_max }}])
     .range([0, 400]);
 
     var xAxis = d3.svg.axis()
