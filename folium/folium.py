@@ -986,8 +986,9 @@ class Map(object):
 
             # D3 Color scale.
             series = data[columns[1]]
-            if threshold_scale and len(threshold_scale) > 6:
-                raise ValueError
+            if freescale == False:
+                if threshold_scale and len(threshold_scale) > 6:
+                    raise ValueError
             domain = threshold_scale or utilities.split_six(series=series, freescale=freescale)
             if len(domain) > 253:
                 raise ValueError('The threshold scale must be length <= 253')
