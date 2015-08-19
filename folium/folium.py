@@ -986,7 +986,6 @@ class Map(object):
             if threshold_scale and len(threshold_scale) > 6:
                 raise ValueError
             domain = threshold_scale or utilities.split_six(series=series, freescale=freescale)
-            print(domain)
             if len(domain) > 253:
                 raise ValueError('The threshold scale must be length <= 253')
             if not utilities.color_brewer(fill_color):
