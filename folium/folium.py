@@ -895,6 +895,9 @@ class Map(object):
             keyword argument will enable conversion to GeoJSON.
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
+        freescale: if True use free format for the scale, where min and max values
+            are taken from the data. It also allow to plot values that do not have 0 
+            minimum and are, for example, float.
 
         Output
         ------

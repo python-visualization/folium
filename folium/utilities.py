@@ -286,6 +286,8 @@ def split_six(series=None, freescale=False):
     Parameters
     ----------
     series: Pandas series, default None
+    freescale: If True use simple method to find quantiles from the data
+        in the series.
 
     Returns
     -------
