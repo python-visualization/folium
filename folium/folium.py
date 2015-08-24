@@ -261,19 +261,17 @@ class Map(object):
     def add_layers_to_map(self):
         """
         Required function to actually add the layers to the HTML packet.
+
         """
-        layers_temp = self.env.get_template('add_layers.js')
-
-        data_string = ''
-        for i, layer in enumerate(self.added_layers):
+        data_layers = ''
+        for k, layer in enumerate(self.added_layers):
             name = list(layer.keys())[0]
-            if i < len(self.added_layers)-1:
-                term_string = ",\n"
+            data_layers += '\"{}\": {}'.format(name, name)
+            if k < len(self.added_layers)-1:
+                data_layers += ",\n"
             else:
-                term_string += "\n"
-            data_string += '\"{}\": {}'.format(name, name, term_string)
+                data_layers += "\n"
 
-        data_layers = layers_temp.render({'layers': data_string})
         self.template_vars.setdefault('data_layers', []).append((data_layers))
 
     @iter_obj('simple')
@@ -1042,7 +1040,9 @@ class Map(object):
                                         'image_opacity': image_opacity})
 
             self.template_vars['image_layers'].append(image)
-            self.added_layers.append(image_name)
+            # FIXME: I am excluding the image_overlay from the layer
+            # control for now.  There is a bug and I cannot find it.
+            # self.added_layers.append({image_name: image_url})
 
     def _build_map(self, html_templ=None, templ_type='string'):
         self._auto_bounds()
