@@ -273,7 +273,7 @@ def transform_data(data):
     return json_data
 
 
-def split_six(series=None):
+def split_six(series=None, freescale=False):
     """
     Given a Pandas Series, get a domain of values from zero to the 90%
     quantile rounded to the nearest order-of-magnitude integer.
@@ -302,10 +302,14 @@ def split_six(series=None):
         else:
             return 0
 
-    quants = [0, 50, 75, 85, 90]
     # Some weirdness in series quantiles a la 0.13.
     arr = series.values
-    return [base(np.percentile(arr, x)) for x in quants]
+    if not freescale:
+        quants = [0, 50, 75, 85, 90]
+        return [base(np.percentile(arr, x)) for x in quants]
+    else:
+        quants = [0, 25, 50, 75, 85, 90]
+        return [np.percentile(arr, x) for x in quants]
 
 
 def write_png(array):
