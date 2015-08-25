@@ -17,14 +17,16 @@ from .six import text_type, binary_type
 class Feature(object):
     """Basic feature object that does nothing.
     Other features may inherit from this one."""
-    def __init__(self):
+    def __init__(self, template=None, template_name=None):
         """Creates a feature."""
         self._name = 'Feature'
         self._id = uuid4().hex
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
-        self._template = Template("")
+        self._template = Template(template) if template is not None\
+            else ENV.get_template(template_name) if template_name is not None\
+            else Template("")
 
     def add_children(self, child, name=None, index=None):
         """Add a children."""
@@ -66,8 +68,6 @@ class Figure(Feature):
     def __init__(self):
         super(Figure, self).__init__()
         self._name = 'Figure'
-        self._children = OrderedDict()
         self.header = Feature()
         self.body   = Feature()
         self.script = Feature()
-        self.axes   = Feature()
