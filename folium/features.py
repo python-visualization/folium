@@ -60,6 +60,13 @@ class Feature(object):
     def to_json(self, depth=-1, **kwargs):
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
+    def get_root(self):
+        """Returns the root of the features tree."""
+        if self._parent is None:
+            return self
+        else:
+            return self._parent.get_root()
+
     def render(self, **kwargs):
         """TODO : docstring here."""
         return self._template.render(self=self)
