@@ -12,7 +12,7 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 from collections import OrderedDict
 import json
 
-from .six import text_type, binary_type
+from .six import text_type, binary_type, urlopen
 
 
 class Feature(object):
@@ -49,7 +49,7 @@ class Feature(object):
         """Add feature to a parent."""
         parent.add_children(self, name=name, index=index)
 
-    def to_dict(self, depth=-1, ordered=True):
+    def to_dict(self, depth=-1, ordered=True, **kwargs):
         if ordered:
             dict_fun = OrderedDict
         else:
@@ -99,4 +99,70 @@ class Figure(Feature):
         <script>
             {{this.script.render(**kwargs)}}
         </script>
+        """)
+    def to_dict(self, depth=-1, **kwargs):
+        out = super(Figure, self).to_dict(depth=-1, **kwargs)
+        out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
+        out['body'] = self.body.to_dict(depth=depth-1, **kwargs)
+        out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
+        return out
+
+class Link(Feature):
+    def get_code(self):
+        if self.code is None:
+            self.code = urlopen(self.url).read()
+        return self.code
+    def to_dict(self, depth=-1, **kwargs):
+        out = super(Link, self).to_dict(depth=-1, **kwargs)
+        out['url'] = self.url
+        return out
+
+class JavascriptLink(Link):
+    def __init__(self, url, download=False):
+        """Create a JavascriptLink object based on a url.
+        Parameters
+        ----------
+            url : str
+                The url to be linked
+            download : bool, default False
+                Whether the target document shall be loaded right now.
+        """
+        super(JavascriptLink, self).__init__()
+        self._name = 'JavascriptLink'
+        self.url = url
+        self.code = None
+        if download:
+            self.get_code()
+
+        self._template = Template("""
+        {% if kwargs.get("embedded",False) %}
+            <script>{{this.get_code()}}</script>
+        {% else %}
+            <script src="{{this.url}}"></script>
+        {% endif %}
+        """)
+
+class CssLink(Link):
+    def __init__(self, url, download=False):
+        """Create a CssLink object based on a url.
+        Parameters
+        ----------
+            url : str
+                The url to be linked
+            download : bool, default False
+                Whether the target document shall be loaded right now.
+        """
+        super(CssLink, self).__init__()
+        self._name = 'CssLink'
+        self.url = url
+        self.code = None
+        if download:
+            self.get_code()
+
+        self._template = Template("""
+        {% if kwargs.get("embedded",False) %}
+            <style>{{this.get_code()}}</style>
+        {% else %}
+            <link rel="stylesheet" href="{{this.url}}" />
+        {% endif %}
         """)
