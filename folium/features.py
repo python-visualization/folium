@@ -117,6 +117,7 @@ class Figure(Feature):
         self.header = Feature()
         self.body   = Feature()
         self.script = Feature()
+        self.axes = []
 
         self.header._parent = self
         self.body._parent = self
@@ -174,6 +175,12 @@ class Figure(Feature):
         out['body'] = self.body.to_dict(depth=depth-1, **kwargs)
         out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
         return out
+
+    def render(self, **kwargs):
+        """TODO : docstring here."""
+        for ax in self.axes:
+            ax.render()
+        return self._template.render(this=self, kwargs=kwargs)
 
 class Link(Feature):
     def get_code(self):
