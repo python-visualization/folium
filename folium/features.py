@@ -14,6 +14,7 @@ import json
 
 from .six import text_type, binary_type
 
+
 class Feature(object):
     """Basic feature object that does nothing.
     Other features may inherit from this one."""
@@ -26,7 +27,11 @@ class Feature(object):
         self._parent = None
         self._template = Template(template) if template is not None\
             else ENV.get_template(template_name) if template_name is not None\
-            else Template("")
+            else Template("""
+        {% for name, feature in this._children.items() %}
+            {{feature.render(**kwargs)}}
+        {% endfor %}
+        """)
 
     def add_children(self, child, name=None, index=None):
         """Add a children."""
@@ -39,7 +44,7 @@ class Feature(object):
             items.insert(int(index),(name,child))
             self._children = items
         child._parent = self
-        
+
     def add_to(self, parent, name=None, index=None):
         """Add feature to a parent."""
         parent.add_children(self, name=name, index=index)
@@ -69,7 +74,7 @@ class Feature(object):
 
     def render(self, **kwargs):
         """TODO : docstring here."""
-        return self._template.render(self=self)
+        return self._template.render(this=self, kwargs=kwargs)
 
 class Figure(Feature):
     def __init__(self):
@@ -78,3 +83,20 @@ class Figure(Feature):
         self.header = Feature()
         self.body   = Feature()
         self.script = Feature()
+
+        self.header._parent = self
+        self.body._parent = self
+        self.script._parent = self
+
+        self._template = Template("""
+        <!DOCTYPE html>
+        <head>
+            {{this.header.render(**kwargs)}}
+        </head>
+        <body>
+            {{this.body.render(**kwargs)}}
+        </body>
+        <script>
+            {{this.script.render(**kwargs)}}
+        </script>
+        """)
