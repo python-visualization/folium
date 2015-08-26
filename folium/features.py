@@ -182,6 +182,33 @@ class Figure(Feature):
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
 
+    def _repr_html_(self, figsize=(17,10), **kwargs):
+        """Displays the Figure in a Jupyter notebook.
+
+        Parameters
+        ----------
+            self : folium.Map object
+                The map you want to display
+
+            figsize : tuple of length 2, default (17,10)
+                The size of the output you expect in inches.
+                Output is 60dpi so that the output has same size as a
+                matplotlib figure with the same figsize.
+
+        """
+        html = self.render(**kwargs)
+
+        width, height = figsize
+
+        iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
+            .format(\
+                    html = "data:text/html;base64,"+html.encode('base64'),
+                    #html = self.HTML.replace('"','&quot;'),
+                    width = int(60.*width),
+                    height= int(60.*height),
+                   )
+        return iframe
+
 class Link(Feature):
     def get_code(self):
         if self.code is None:
@@ -347,8 +374,8 @@ class Map(Feature):
 
         {% macro script(this, kwargs) %}
 
-            var southWest = L.latLng({{ min_lat }}, {{ min_lon }});
-            var northEast = L.latLng({{ max_lat }}, {{ max_lon }});
+            var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+            var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
             var bounds = L.latLngBounds(southWest, northEast);
 
             var map_{{this._id}} = L.map('map_{{this._id}}', {
@@ -373,6 +400,28 @@ class Map(Feature):
 
         for name, feature in self._children.items():
             feature.render(**kwargs)
+
+    def _repr_html_(self, figsize=(17,10), **kwargs):
+        """Displays the Map in a Jupyter notebook.
+
+        Parameters
+        ----------
+            self : folium.Map object
+                The map you want to display
+
+            figsize : tuple of length 2, default (17,10)
+                The size of the output you expect in inches.
+                Output is 60dpi so that the output has same size as a
+                matplotlib figure with the same figsize.
+
+        """
+        if self._parent is None:
+            self.add_to(Figure())
+            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            self._parent = None
+        else:
+            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+        return out
 
 class TileLayer(Feature):
     def __init__(self, tiles='OpenStreetMap', name=None,
