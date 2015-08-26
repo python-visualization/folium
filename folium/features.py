@@ -117,7 +117,7 @@ class Figure(Feature):
         self.header = Feature()
         self.body   = Feature()
         self.script = Feature()
-        self.axes = []
+        #self.axes = []
 
         self.header._parent = self
         self.body._parent = self
@@ -170,7 +170,7 @@ class Figure(Feature):
             """), name='css_style')
 
     def to_dict(self, depth=-1, **kwargs):
-        out = super(Figure, self).to_dict(depth=-1, **kwargs)
+        out = super(Figure, self).to_dict(depth=depth, **kwargs)
         out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
         out['body'] = self.body.to_dict(depth=depth-1, **kwargs)
         out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
@@ -178,8 +178,8 @@ class Figure(Feature):
 
     def render(self, **kwargs):
         """TODO : docstring here."""
-        for ax in self.axes:
-            ax.render()
+        for name, child in self._children.items():
+            child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
 
 class Link(Feature):
@@ -241,3 +241,191 @@ class CssLink(Link):
             <link rel="stylesheet" href="{{this.url}}" />
         {% endif %}
         """)
+
+def _parse_size(value):
+    try:
+        if isinstance(value, int):
+            value_type = 'px'
+            assert value > 0
+        else:
+            value_type = '%'
+            value = int(value.strip('%'))
+            assert 0 <= value <= 100
+    except:
+        msg = "Cannot parse value {!r} as {!r}".format
+        raise ValueError(msg(value, value_type))
+    return value, value_type
+
+class Map(Feature):
+    def __init__(self, location=None, width='100%', height='100%',
+                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
+                 zoom_start=10, attr=None, min_lat=-90, max_lat=90,
+                 min_lon=-180, max_lon=180):
+        """Create a Map with Folium and Leaflet.js
+
+        Generate a base map of given width and height with either default
+        tilesets or a custom tileset URL. The following tilesets are built-in
+        to Folium. Pass any of the following to the "tiles" keyword:
+            - "OpenStreetMap"
+            - "MapQuest Open"
+            - "MapQuest Open Aerial"
+            - "Mapbox Bright" (Limited levels of zoom for free tiles)
+            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+            - "Stamen" (Terrain, Toner, and Watercolor)
+            - "Cloudmade" (Must pass API key)
+            - "Mapbox" (Must pass API key)
+            - "CartoDB" (positron and dark_matter)
+        You can pass a custom tileset to Folium by passing a Leaflet-style
+        URL to the tiles parameter:
+        http://{s}.yourtiles.com/{z}/{x}/{y}.png
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Map (Northing, Easting).
+        width: pixel int or percentage string (default: '100%')
+            Width of the map.
+        height: pixel int or percentage string (default: '100%')
+            Height of the map.
+        tiles: str, default 'OpenStreetMap'
+            Map tileset to use. Can use defaults or pass a custom URL.
+        API_key: str, default None
+            API key for Cloudmade or Mapbox tiles.
+        max_zoom: int, default 18
+            Maximum zoom depth for the map.
+        zoom_start: int, default 10
+            Initial zoom level for the map.
+        attr: string, default None
+            Map tile attribution; only required if passing custom tile URL.
+
+        Returns
+        -------
+        Folium Map Object
+
+        Examples
+        --------
+        >>>map = folium.Map(location=[45.523, -122.675], width=750, height=500)
+        >>>map = folium.Map(location=[45.523, -122.675],
+                            tiles='Mapbox Control Room')
+        >>>map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+                            tiles='Cloudmade', API_key='YourKey')
+        >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
+                            tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                    'mapbox.control-room/{z}/{x}/{y}.png'),
+                            attr='Mapbox attribution')
+
+        """
+        super(Map, self).__init__()
+        self._name = 'Map'
+
+        if not location:
+            # If location is not passed, we center the map at 0,0 and ignore zoom
+            self.location = [0, 0]
+            self.zoom_start = min_zoom
+        else:
+            self.location = location
+            self.zoom_start = zoom_start
+
+        # Map Size Parameters.
+        self.width  = _parse_size(width)
+        self.height = _parse_size(height)
+
+        self.min_lat = min_lat
+        self.max_lat = max_lat
+        self.min_lon = min_lon
+        self.max_lon = max_lon
+
+        self.add_children(TileLayer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                                    attr=attr,
+                                    API_key=API_key))
+
+        self._template = Template("""
+        {% macro body(this, kwargs) %}
+            <div class="folium-map" id="map_{{this._id}}"
+                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}}"></div>
+        {% endmacro %}
+
+        {% macro script(this, kwargs) %}
+
+            var southWest = L.latLng({{ min_lat }}, {{ min_lon }});
+            var northEast = L.latLng({{ max_lat }}, {{ max_lon }});
+            var bounds = L.latLngBounds(southWest, northEast);
+
+            var map_{{this._id}} = L.map('map_{{this._id}}', {
+                                           center:[{{this.location[0]}},{{this.location[1]}}],
+                                           zoom: {{this.zoom_start}},
+                                           maxBounds: bounds,
+                                           layers: []
+                                         });
+        {% endmacro %}
+        """)
+
+    def render(self, **kwargs):
+        figure = self.get_root()
+
+        body = self._template.module.__dict__.get('body',None)
+        assert body is not None
+        figure.body.add_children(Feature(body(self, kwargs)), name='map_'+self._id)
+
+        script = self._template.module.__dict__.get('script',None)
+        assert script is not None
+        figure.script.add_children(Feature(script(self, kwargs)), name='map_'+self._id)
+
+        for name, feature in self._children.items():
+            feature.render(**kwargs)
+
+class TileLayer(Feature):
+    def __init__(self, tiles='OpenStreetMap', name=None,
+                 min_zoom=1, max_zoom=18, attr=None, API_key=None):
+        """TODO docstring here
+        Parameters
+        ----------
+        """
+        super(TileLayer, self).__init__()
+        self._name = 'TileLayer'
+        self.tile_name = name if name is not None else tiles
+
+        self.min_zoom = min_zoom
+        self.max_zoom = max_zoom
+
+        self.tiles = ''.join(tiles.lower().strip().split())
+        if self.tiles in ('cloudmade', 'mapbox') and not API_key:
+            raise ValueError('You must pass an API key if using Cloudmade'
+                             ' or non-default Mapbox tiles.')
+        templates = list(self._env.list_templates(filter_func=lambda x: x.startswith('tiles/')))
+        tile_template = 'tiles/'+self.tiles+'/tiles.txt'
+        attr_template = 'tiles/'+self.tiles+'/attr.txt'
+
+        if tile_template in templates and attr_template in templates:
+            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)
+            self.attr  = self._env.get_template(attr_template).render()
+        else:
+            self.tiles = tiles
+            if not attr:
+                raise ValueError('Custom tiles must'
+                                 ' also be passed an attribution')
+            self.attr = attr
+
+        self._template = Template("""
+        {% macro script(this, kwargs) %}
+            var tile_layer_{{this._id}} = L.tileLayer(
+                '{{this.tiles}}',
+                {
+                    maxZoom: {{this.max_zoom}},
+                    minZoom: {{this.min_zoom}},
+                    attribution: '{{this.attr}}'
+                    }
+                ).addTo(map_{{this._parent._id}});
+
+        {% endmacro %}
+        """)
+
+    def render(self, **kwargs):
+        for name, feature in self._children.items():
+            feature.render(**kwargs)
+
+        figure = self.get_root()
+
+        script = self._template.module.__dict__.get('script',None)
+        assert script is not None
+        figure.script.add_children(Feature(script(self, kwargs)), name='tile_layer_'+self._id)
