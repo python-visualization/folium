@@ -5,6 +5,7 @@ Features
 
 A generic class for creating features.
 """
+import warnings
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader, Template
@@ -362,9 +363,8 @@ class Map(Feature):
         self.min_lon = min_lon
         self.max_lon = max_lon
 
-        self.add_children(TileLayer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                                    attr=attr,
-                                    API_key=API_key))
+        self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                            attr=attr, API_key=API_key)
 
         self._template = Template("""
         {% macro body(this, kwargs) %}
@@ -423,6 +423,22 @@ class Map(Feature):
             out = self._parent._repr_html_(figsize=figsize, **kwargs)
         return out
 
+    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
+                       API_key=None, max_zoom=18, min_zoom=1,
+                       attr=None, tile_name=None, tile_url=None,
+                       active=False, **kwargs):
+        if tile_name is not None:
+            name = tile_name
+            warnings.warn("'tile_name' is deprecated. Please use 'name' instead.")
+        if tile_url is not None:
+            tiles = tile_url
+            warnings.warn("'tile_url' is deprecated. Please use 'tiles' instead.")
+
+        tile_layer = TileLayer(tiles=tiles, name=name,
+                               min_zoom=min_zoom, max_zoom=max_zoom,
+                               attr=attr, API_key=API_key)
+        self.add_children(tile_layer, name=tile_layer.tile_name)
+
 class TileLayer(Feature):
     def __init__(self, tiles='OpenStreetMap', name=None,
                  min_zoom=1, max_zoom=18, attr=None, API_key=None):
@@ -432,7 +448,7 @@ class TileLayer(Feature):
         """
         super(TileLayer, self).__init__()
         self._name = 'TileLayer'
-        self.tile_name = name if name is not None else tiles
+        self.tile_name = name if name is not None else ''.join(tiles.lower().strip().split())
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
