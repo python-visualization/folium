@@ -15,6 +15,10 @@ import json
 
 from .six import text_type, binary_type, urlopen
 
+def _camelify(out):
+    return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
+         else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
+         else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
 
 class Feature(object):
     """Basic feature object that does nothing.
@@ -34,10 +38,13 @@ class Feature(object):
         {% endfor %}
         """)
 
+    def get_name(self):
+        return _camelify(self._name) + '_' +self._id
+
     def add_children(self, child, name=None, index=None):
         """Add a children."""
         if name is None:
-            name = text_type(child._name)+u"_"+text_type(child._id)
+            name = child.get_name()
         if index is None:
             self._children[name] = child
         else:
@@ -270,11 +277,6 @@ class CssLink(Link):
         {% endif %}
         """)
 
-def _camelify(out):
-    return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
-         else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
-         else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
-
 class MacroFeature(Feature):
     """This is a parent class for Features defined by a macro template.
     To compute your own feature, all you have to do is:
@@ -299,9 +301,6 @@ class MacroFeature(Feature):
         self._name = 'MacroFeature'
 
         self._template = Template(u"")
-
-    def get_name(self):
-        return _camelify(self._name) + '_' +self._id
 
     def render(self, **kwargs):
         figure = self.get_root()
@@ -424,7 +423,7 @@ class Map(MacroFeature):
 
         self._template = Template(u"""
         {% macro body(this, kwargs) %}
-            <div class="folium-map" id="map_{{this._id}}"
+            <div class="folium-map" id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}}"></div>
         {% endmacro %}
 
@@ -434,7 +433,7 @@ class Map(MacroFeature):
             var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
             var bounds = L.latLngBounds(southWest, northEast);
 
-            var map_{{this._id}} = L.map('map_{{this._id}}', {
+            var {{this.get_name()}} = L.map('{{this.get_name()}}', {
                                            center:[{{this.location[0]}},{{this.location[1]}}],
                                            zoom: {{this.zoom_start}},
                                            maxBounds: bounds,
@@ -515,14 +514,14 @@ class TileLayer(MacroFeature):
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
-            var tile_layer_{{this._id}} = L.tileLayer(
+            var {{this.get_name()}} = L.tileLayer(
                 '{{this.tiles}}',
                 {
                     maxZoom: {{this.max_zoom}},
                     minZoom: {{this.min_zoom}},
                     attribution: '{{this.attr}}'
                     }
-                ).addTo(map_{{this._parent._id}});
+                ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
         """)
@@ -549,7 +548,7 @@ class WmsTileLayer(TileLayer):
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
-            var wms_tile_layer_{{this._id}} = L.tileLayer.wms(
+            var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
                 {
                     format:'{{ this.format }}',
@@ -557,7 +556,7 @@ class WmsTileLayer(TileLayer):
                     layers:'{{ this.layers }}',
                     attribution:'{{this.attribution}}'
                     }
-                ).addTo(map_{{this._parent._id}});
+                ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
         """)
@@ -573,10 +572,10 @@ class Popup(MacroFeature):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
-                var popup_{{this._id}} = L.popup({
+                var {{this.get_name()}} = L.popup({
                     maxWidth: '{{this.max_width}}'
                     }).setContent({{this.html}});
-                marker_{{this._parent._id}}.bindPopup(popup_{{this._id}})
+                {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
             {% endmacro %}
             """)
 
@@ -592,13 +591,13 @@ class Icon(MacroFeature):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
-                var icon_{{this._id}} = L.AwesomeMarkers.icon({
+                var {{this.get_name()}} = L.AwesomeMarkers.icon({
                     icon: '{{this.icon}}',
                     markerColor: '{{this.color}}',
                     prefix: 'glyphicon',
                     extraClasses: 'fa-rotate-{{this.angle}}'
                     });
-                marker_{{this._parent._id}}.setIcon(icon_{{this._id}})
+                {{this._parent.get_name()}}.setIcon({{this.get_name()}})
             {% endmacro %}
             """)
 
@@ -636,12 +635,12 @@ class Marker(MacroFeature):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
-            var marker_{{this._id}} = L.marker(
+            var {{this.get_name()}} = L.marker(
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
                     icon: new L.Icon.Default()
                     }
                 )
-                .addTo(map_{{this._parent._id}});
+                .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
