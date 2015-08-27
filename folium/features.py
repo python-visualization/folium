@@ -28,7 +28,7 @@ class Feature(object):
         self._parent = None
         self._template = Template(template) if template is not None\
             else ENV.get_template(template_name) if template_name is not None\
-            else Template("""
+            else Template(u"""
         {% for name, feature in this._children.items() %}
             {{feature.render(**kwargs)}}
         {% endfor %}
@@ -124,7 +124,7 @@ class Figure(Feature):
         self.body._parent = self
         self.script._parent = self
 
-        self._template = Template("""
+        self._template = Template(u"""
         <!DOCTYPE html>
         <head>
             {{this.header.render(**kwargs)}}
@@ -203,7 +203,7 @@ class Figure(Feature):
 
         iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
             .format(\
-                    html = "data:text/html;base64,"+html.encode('base64'),
+                    html = "data:text/html;base64,"+html.encode('utf8').encode('base64'),
                     #html = self.HTML.replace('"','&quot;'),
                     width = int(60.*width),
                     height= int(60.*height),
@@ -237,7 +237,7 @@ class JavascriptLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template("""
+        self._template = Template(u"""
         {% if kwargs.get("embedded",False) %}
             <script>{{this.get_code()}}</script>
         {% else %}
@@ -262,7 +262,7 @@ class CssLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template("""
+        self._template = Template(u"""
         {% if kwargs.get("embedded",False) %}
             <style>{{this.get_code()}}</style>
         {% else %}
@@ -366,7 +366,7 @@ class Map(Feature):
         self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                             attr=attr, API_key=API_key)
 
-        self._template = Template("""
+        self._template = Template(u"""
         {% macro body(this, kwargs) %}
             <div class="folium-map" id="map_{{this._id}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}}"></div>
@@ -471,7 +471,7 @@ class TileLayer(Feature):
                                  ' also be passed an attribution')
             self.attr = attr
 
-        self._template = Template("""
+        self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var tile_layer_{{this._id}} = L.tileLayer(
                 '{{this.tiles}}',
@@ -486,6 +486,7 @@ class TileLayer(Feature):
         """)
 
     def render(self, **kwargs):
+        assert self._parent is not None, "You cannot render this Feature if it's not in a Map"
         for name, feature in self._children.items():
             feature.render(**kwargs)
 
@@ -494,3 +495,38 @@ class TileLayer(Feature):
         script = self._template.module.__dict__.get('script',None)
         assert script is not None
         figure.script.add_children(Feature(script(self, kwargs)), name='tile_layer_'+self._id)
+
+class WmsTileLayer(TileLayer):
+    def __init__(self, url, name=None,
+                 format=None, layers=None, transparent=True,
+                attribution=None):
+        """TODO docstring here
+        Parameters
+        ----------
+        """
+        super(TileLayer, self).__init__()
+        self._name = 'WmsTileLayer'
+        self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
+        self.url = url
+        self.format = format
+        self.layers = layers
+        self.transparent = transparent
+        #if attribution is None:
+        #    raise ValueError('WMS must'
+        #                     ' also be passed an attribution')
+        self.attribution = attribution
+
+        self._template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var wms_tile_layer_{{this._id}} = L.tileLayer.wms(
+                '{{ this.url }}',
+                {
+                    format:'{{ this.format }}',
+                    transparent: {{ this.transparent.__str__().lower() }},
+                    layers:'{{ this.layers }}',
+                    attribution:'{{this.attribution}}'
+                    }
+                ).addTo(map_{{this._parent._id}});
+
+        {% endmacro %}
+        """)
