@@ -694,3 +694,51 @@ class RegularPolygonMarker(MacroFeature):
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf"
                            "/0.2/leaflet-dvf.markers.min.js"),
             name='dvf_js')
+
+class VegaPopup(MacroFeature):
+    def __init__(self, data, width=300, height=300):
+        """TODO : docstring here"""
+        super(VegaPopup, self).__init__()
+        self.plugin_name = 'VegaPopup'
+        self.data = data
+        self.width = "{}px".format(width) if isinstance(width,int) or isinstance(width,float) else "{}".format(width)
+        self.height = "{}px".format(height) if isinstance(height,int) or isinstance(height,float) else "{}".format(height)
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} =
+                $('<div id="{{this.get_name()}}" style="width: {{this.width}}; height: {{this.height}};"></div>')[0];
+            vega_parse({{this.json}},{{this.get_name()}});
+
+            var VegaPopup_{{this.get_name()}} = L.popup({
+                maxWidth: '{{this.width}}'
+                }).setContent({{this.get_name()}});
+
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+            {% endmacro %}
+            """)
+    def render(self, **kwargs):
+        self.json = json.dumps(self.data)
+
+        super(VegaPopup, self).render()
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Feature "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+            name='d3')
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),
+            name='vega')
+
+        figure.header.add_children(\
+            JavascriptLink("https://code.jquery.com/jquery-2.1.0.min.js"),
+            name='jquery')
+
+        figure.script.add_children(\
+            Template("""function vega_parse(spec, div) {
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
+            name='vega_parse')
