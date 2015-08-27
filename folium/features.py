@@ -41,7 +41,7 @@ class Feature(object):
         if index is None:
             self._children[name] = child
         else:
-            items = [item for item in self._children.items() if item[0] <> name]
+            items = [item for item in self._children.items() if item[0] != name]
             items.insert(int(index),(name,child))
             self._children = items
         child._parent = self
@@ -58,7 +58,7 @@ class Feature(object):
         out = dict_fun()
         out['name'] = self._name
         out['id'] = self._id
-        if depth <> 0:
+        if depth != 0:
             out['children'] = dict_fun([(name, child.to_dict(depth=depth-1))\
                     for name,child in self._children.items()])
         return out
