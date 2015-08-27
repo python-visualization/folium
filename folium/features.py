@@ -270,6 +270,62 @@ class CssLink(Link):
         {% endif %}
         """)
 
+def _camelify(out):
+    return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
+         else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
+         else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
+
+class MacroFeature(Feature):
+    """This is a parent class for Features defined by a macro template.
+    To compute your own feature, all you have to do is:
+        * To inherit from this class
+        * Overwrite the '_name' attribute
+        * Overwrite the '_template' attribute with something of the form:
+            {% macro header(this, kwargs) %}
+                ...
+            {% endmacro %}
+
+            {% macro body(this, kwargs) %}
+                ...
+            {% endmacro %}
+
+            {% macro script(this, kwargs) %}
+                ...
+            {% endmacro %}
+    """
+    def __init__(self):
+        """TODO : docstring here"""
+        super(MacroFeature, self).__init__()
+        self._name = 'MacroFeature'
+
+        self._template = Template(u"")
+
+    def get_name(self):
+        return _camelify(self._name) + '_' +self._id
+
+    def render(self, **kwargs):
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Feature "
+            "if it's not in a Figure.")
+
+        header = self._template.module.__dict__.get('header',None)
+        if header is not None:
+            figure.header.add_children(Feature(header(self, kwargs)),
+                                       name=self.get_name())
+
+        body = self._template.module.__dict__.get('body',None)
+        if body is not None:
+            figure.body.add_children(Feature(body(self, kwargs)),
+                                       name=self.get_name())
+
+        script = self._template.module.__dict__.get('script',None)
+        if script is not None:
+            figure.script.add_children(Feature(script(self, kwargs)),
+                                       name=self.get_name())
+
+        for name, feature in self._children.items():
+            feature.render(**kwargs)
+
 def _parse_size(value):
     try:
         if isinstance(value, int):
