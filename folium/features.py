@@ -575,7 +575,7 @@ class Popup(MacroFeature):
                 var {{this.get_name()}} = L.popup({
                     maxWidth: '{{this.max_width}}'
                     }).setContent({{this.html}});
-                {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
+                {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
             {% endmacro %}
             """)
 
@@ -597,7 +597,7 @@ class Icon(MacroFeature):
                     prefix: 'glyphicon',
                     extraClasses: 'fa-rotate-{{this.angle}}'
                     });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}})
+                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
 
@@ -644,3 +644,53 @@ class Marker(MacroFeature):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+class RegularPolygonMarker(MacroFeature):
+    def __init__(self, location, popup=None, icon=None,
+                 color='black', opacity=1, weight=2,
+                 fill_color='blue', fill_opacity=1,
+                 number_of_sides=4, rotation=0, radius=15):
+        """TODO : docstring here"""
+        super(RegularPolygonMarker, self).__init__()
+        self.plugin_name = 'RegularPolygonMarker'
+        self.location = location
+        self.icon = "new L.Icon.Default()" if icon is None else icon
+        self.color   = color
+        self.opacity = opacity
+        self.weight  = weight
+        self.fill_color  = fill_color
+        self.fill_opacity= fill_opacity
+        self.number_of_sides= number_of_sides
+        self.rotation = rotation
+        self.radius = radius
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = new L.RegularPolygonMarker(
+                new L.LatLng({{this.location[0]}},{{this.location[1]}}),
+                {
+                    icon : new L.Icon.Default(),
+                    color: '{{this.color}}',
+                    opacity: {{this.opacity}},
+                    weight: {{this.weight}},
+                    fillColor: '{{this.fill_color}}',
+                    fillOpacity: {{this.fill_opacity}},
+                    numberOfSides: {{this.number_of_sides}},
+                    rotation: {{this.rotation}},
+                    radius: {{this.radius}}
+                    }
+                )
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+    def render(self, **kwargs):
+        super(RegularPolygonMarker, self).render()
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Feature "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf"
+                           "/0.2/leaflet-dvf.markers.min.js"),
+            name='dvf_js')
