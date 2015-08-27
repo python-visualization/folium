@@ -340,7 +340,7 @@ def _parse_size(value):
         raise ValueError(msg(value, value_type))
     return value, value_type
 
-class Map(Feature):
+class Map(MacroFeature):
     def __init__(self, location=None, width='100%', height='100%',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
@@ -443,20 +443,6 @@ class Map(Feature):
         {% endmacro %}
         """)
 
-    def render(self, **kwargs):
-        figure = self.get_root()
-
-        body = self._template.module.__dict__.get('body',None)
-        assert body is not None
-        figure.body.add_children(Feature(body(self, kwargs)), name='map_'+self._id)
-
-        script = self._template.module.__dict__.get('script',None)
-        assert script is not None
-        figure.script.add_children(Feature(script(self, kwargs)), name='map_'+self._id)
-
-        for name, feature in self._children.items():
-            feature.render(**kwargs)
-
     def _repr_html_(self, figsize=(17,10), **kwargs):
         """Displays the Map in a Jupyter notebook.
 
@@ -495,7 +481,7 @@ class Map(Feature):
                                attr=attr, API_key=API_key)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
-class TileLayer(Feature):
+class TileLayer(MacroFeature):
     def __init__(self, tiles='OpenStreetMap', name=None,
                  min_zoom=1, max_zoom=18, attr=None, API_key=None):
         """TODO docstring here
@@ -541,17 +527,6 @@ class TileLayer(Feature):
         {% endmacro %}
         """)
 
-    def render(self, **kwargs):
-        assert self._parent is not None, "You cannot render this Feature if it's not in a Map"
-        for name, feature in self._children.items():
-            feature.render(**kwargs)
-
-        figure = self.get_root()
-
-        script = self._template.module.__dict__.get('script',None)
-        assert script is not None
-        figure.script.add_children(Feature(script(self, kwargs)), name='tile_layer_'+self._id)
-
 class WmsTileLayer(TileLayer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
@@ -586,3 +561,87 @@ class WmsTileLayer(TileLayer):
 
         {% endmacro %}
         """)
+
+class Popup(MacroFeature):
+    def __init__(self, html, max_width=300):
+        """TODO : docstring here"""
+        super(Popup, self).__init__()
+        self._name = 'Popup'
+        self.html = json.dumps(html)
+        self.max_width = max_width
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+                var popup_{{this._id}} = L.popup({
+                    maxWidth: '{{this.max_width}}'
+                    }).setContent({{this.html}});
+                marker_{{this._parent._id}}.bindPopup(popup_{{this._id}})
+            {% endmacro %}
+            """)
+
+class Icon(MacroFeature):
+    def __init__(self, color='blue', icon='info-sign', angle=0):
+        """TODO : docstring here"""
+        super(Icon, self).__init__()
+        self._name = 'Icon'
+        self.color = color
+        self.icon = icon
+        self.angle = angle
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+                var icon_{{this._id}} = L.AwesomeMarkers.icon({
+                    icon: '{{this.icon}}',
+                    markerColor: '{{this.color}}',
+                    prefix: 'glyphicon',
+                    extraClasses: 'fa-rotate-{{this.angle}}'
+                    });
+                marker_{{this._parent._id}}.setIcon(icon_{{this._id}})
+            {% endmacro %}
+            """)
+
+class Marker(MacroFeature):
+    def __init__(self, location, popup=None, icon=None):
+        """Create a simple stock Leaflet marker on the map, with optional
+        popup text or Vincent visualization.
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+        icon: Icon plugin
+            the Icon plugin to use to render the marker.
+
+        Returns
+        -------
+        Marker names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
+
+        """
+        super(Marker, self).__init__()
+        self._name = 'Marker'
+        self.location = location
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var marker_{{this._id}} = L.marker(
+                [{{this.location[0]}},{{this.location[1]}}],
+                {
+                    icon: new L.Icon.Default()
+                    }
+                )
+                .addTo(map_{{this._parent._id}});
+            {% endmacro %}
+            """)
