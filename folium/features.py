@@ -677,60 +677,69 @@ class RegularPolygonMarker(MacroFeature):
                            "/0.2/leaflet-dvf.markers.min.js"),
             name='dvf_js')
 
-class PopupContent(Feature):
-    def __init__(self, html):
+class Html(Feature):
+    def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
-        super(PopupContent, self).__init__()
-        self._name = 'PopupContent'
-        if isinstance(html,Feature):
-            self.add_children(html)
-        elif isinstance(html,text_type) or isinstance(html,binary_type):
-            self.add_children(Feature(html))
+        super(Html, self).__init__()
+        self._name = 'Html'
+        self.data = data
+
+        self.width  = _parse_size(width)
+        self.height  = _parse_size(height)
 
         self._template = Template(u"""
-            {{this._children.items()[-1][1].render(this=this._children.items()[0][1],kwargs=kwargs)}}
-            """)
+        <div id="{{this.get_name()}}"
+                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
+                {{this.data}}</div>
+                """)
 
 class Popup(Feature):
     def __init__(self, html, max_width=300):
-        """TODO : docstring here"""
         super(Popup, self).__init__()
         self._name = 'Popup'
-        self.html = PopupContent(json.dumps(html))
-        self.html._parent=self
-        #self.add_children(PopupContent(html), name='content')
+        self.header = Feature()
+        self.html   = Feature()
+        self.script = Feature()
+
+        self.header._parent = self
+        self.html._parent = self
+        self.script._parent = self
+
+        if isinstance(html, Feature):
+            self.html.add_children(html)
+        elif isinstance(html, text_type) or isinstance(html,binary_type):
+            self.html.add_children(Html(text_type(html)))
+
         self.max_width = max_width
 
-        ## render children before
-
         self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.popup({
-                    maxWidth: '{{this.max_width}}'
-                    }).setContent('{{this.html._children.items()[-1][1].render().replace('\\n',' ')}}');
-                {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
-            {% endmacro %}
-            """)
+            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
+
+            {% for name, feature in this.html._children.items() %}
+                var {{name}} = $('{{feature.render(**kwargs).replace('\\n',' ')}}')[0];
+                {{this.get_name()}}.setContent({{name}});
+            {% endfor %}
+
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+
+            {% for name, feature in this.script._children.items() %}
+                {{feature.render()}}
+            {% endfor %}
+        """)
 
     def render(self, **kwargs):
+        """TODO : docstring here."""
+        for name, child in self._children.items():
+            child.render(**kwargs)
+
         figure = self.get_root()
         assert isinstance(figure,Figure), ("You cannot render this Feature "
             "if it's not in a Figure.")
 
-        figure.script.add_children(Feature(), name=self.get_name())
+        figure.script.add_children(Feature(\
+            self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
 
-        for name, feature in self._children.items():
-            feature.render(**kwargs)
-
-        out = self.html.render()
-
-        figure.script.add_children(Feature(Template("""
-            var {{this.get_name()}} = L.popup({ maxWidth: '{{this.max_width}}' })
-            {{this.get_name()}}.setContent({{out.replace('\\n',' ')}});
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
-            """).render(this=self, kwargs=kwargs, out=out)), name=self.get_name())
-
-class Vega(MacroFeature):
+class Vega(Feature):
     def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
         super(Vega, self).__init__()
@@ -740,27 +749,23 @@ class Vega(MacroFeature):
         self.width  = _parse_size(width)
         self.height  = _parse_size(height)
 
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                vega_parse({{this.json}},{{this.get_name()}});
-            {% endmacro %}
-            """)
+        self._template = Template(u"")
     def render(self, **kwargs):
         self.json = json.dumps(self.data)
 
-        super(Vega, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Feature "
-            "if it's not in a Figure.")
-
-        self._parent.html.add_children(Feature(self.get_name()), name=self.get_name())
-
-        figure.html.add_children(Feature(Template("""
+        self._parent.html.add_children(Feature(Template("""
             <div id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
                 </div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
+
+        self._parent.script.add_children(Feature(Template("""
+            vega_parse({{this.json}},{{this.get_name()}});
+            """).render(this=self)), name=self.get_name())
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Feature "
+            "if it's not in a Figure.")
 
         figure.header.add_children(\
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
@@ -778,5 +783,3 @@ class Vega(MacroFeature):
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
             name='vega_parse')
-
-        return self.get_name()
