@@ -123,12 +123,12 @@ class Figure(Feature):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Feature()
-        self.body   = Feature()
+        self.html   = Feature()
         self.script = Feature()
         #self.axes = []
 
         self.header._parent = self
-        self.body._parent = self
+        self.html._parent = self
         self.script._parent = self
 
         self._template = Template(u"""
@@ -137,7 +137,7 @@ class Figure(Feature):
             {{this.header.render(**kwargs)}}
         </head>
         <body>
-            {{this.body.render(**kwargs)}}
+            {{this.html.render(**kwargs)}}
         </body>
         <script>
             {{this.script.render(**kwargs)}}
@@ -180,7 +180,7 @@ class Figure(Feature):
     def to_dict(self, depth=-1, **kwargs):
         out = super(Figure, self).to_dict(depth=depth, **kwargs)
         out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
-        out['body'] = self.body.to_dict(depth=depth-1, **kwargs)
+        out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
         out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
         return out
 
@@ -287,7 +287,7 @@ class MacroFeature(Feature):
                 ...
             {% endmacro %}
 
-            {% macro body(this, kwargs) %}
+            {% macro html(this, kwargs) %}
                 ...
             {% endmacro %}
 
@@ -312,9 +312,9 @@ class MacroFeature(Feature):
             figure.header.add_children(Feature(header(self, kwargs)),
                                        name=self.get_name())
 
-        body = self._template.module.__dict__.get('body',None)
-        if body is not None:
-            figure.body.add_children(Feature(body(self, kwargs)),
+        html = self._template.module.__dict__.get('html',None)
+        if html is not None:
+            figure.html.add_children(Feature(html(self, kwargs)),
                                        name=self.get_name())
 
         script = self._template.module.__dict__.get('script',None)
@@ -422,7 +422,7 @@ class Map(MacroFeature):
                             attr=attr, API_key=API_key)
 
         self._template = Template(u"""
-        {% macro body(this, kwargs) %}
+        {% macro html(this, kwargs) %}
             <div class="folium-map" id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}}"></div>
         {% endmacro %}
@@ -561,24 +561,6 @@ class WmsTileLayer(TileLayer):
         {% endmacro %}
         """)
 
-class Popup(MacroFeature):
-    def __init__(self, html, max_width=300):
-        """TODO : docstring here"""
-        super(Popup, self).__init__()
-        self._name = 'Popup'
-        self.html = json.dumps(html)
-        self.max_width = max_width
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.popup({
-                    maxWidth: '{{this.max_width}}'
-                    }).setContent({{this.html}});
-                {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
-            {% endmacro %}
-            """)
-
 class Icon(MacroFeature):
     def __init__(self, color='blue', icon='info-sign', angle=0):
         """TODO : docstring here"""
@@ -652,7 +634,7 @@ class RegularPolygonMarker(MacroFeature):
                  number_of_sides=4, rotation=0, radius=15):
         """TODO : docstring here"""
         super(RegularPolygonMarker, self).__init__()
-        self.plugin_name = 'RegularPolygonMarker'
+        self._name = 'RegularPolygonMarker'
         self.location = location
         self.icon = "new L.Icon.Default()" if icon is None else icon
         self.color   = color
@@ -695,11 +677,64 @@ class RegularPolygonMarker(MacroFeature):
                            "/0.2/leaflet-dvf.markers.min.js"),
             name='dvf_js')
 
-class VegaPopup(MacroFeature):
+class PopupContent(Feature):
+    def __init__(self, html):
+        """TODO : docstring here"""
+        super(PopupContent, self).__init__()
+        self._name = 'PopupContent'
+        if isinstance(html,Feature):
+            self.add_children(html)
+        elif isinstance(html,text_type) or isinstance(html,binary_type):
+            self.add_children(Feature(html))
+
+        self._template = Template(u"""
+            {{this._children.items()[-1][1].render(this=this._children.items()[0][1],kwargs=kwargs)}}
+            """)
+
+class Popup(Feature):
+    def __init__(self, html, max_width=300):
+        """TODO : docstring here"""
+        super(Popup, self).__init__()
+        self._name = 'Popup'
+        self.html = PopupContent(json.dumps(html))
+        self.html._parent=self
+        #self.add_children(PopupContent(html), name='content')
+        self.max_width = max_width
+
+        ## render children before
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.popup({
+                    maxWidth: '{{this.max_width}}'
+                    }).setContent('{{this.html._children.items()[-1][1].render().replace('\\n',' ')}}');
+                {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+            {% endmacro %}
+            """)
+
+    def render(self, **kwargs):
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Feature "
+            "if it's not in a Figure.")
+
+        figure.script.add_children(Feature(), name=self.get_name())
+
+        for name, feature in self._children.items():
+            feature.render(**kwargs)
+
+        out = self.html.render()
+
+        figure.script.add_children(Feature(Template("""
+            var {{this.get_name()}} = L.popup({ maxWidth: '{{this.max_width}}' })
+            {{this.get_name()}}.setContent({{out.replace('\\n',' ')}});
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+            """).render(this=self, kwargs=kwargs, out=out)), name=self.get_name())
+
+class Vega(MacroFeature):
     def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
-        super(VegaPopup, self).__init__()
-        self.plugin_name = 'VegaPopup'
+        super(Vega, self).__init__()
+        self._name = 'Vega'
         self.data = data
 
         self.width  = _parse_size(width)
@@ -707,25 +742,25 @@ class VegaPopup(MacroFeature):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} =
-                $('<div id="{{this.get_name()}}" style="width: {{this.width}}; height: {{this.height}};"></div>')[0];
-            vega_parse({{this.json}},{{this.get_name()}});
-
-            var VegaPopup_{{this.get_name()}} = L.popup({
-                maxWidth: '{{this.width}}'
-                }).setContent({{this.get_name()}});
-
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+                vega_parse({{this.json}},{{this.get_name()}});
             {% endmacro %}
             """)
     def render(self, **kwargs):
         self.json = json.dumps(self.data)
 
-        super(VegaPopup, self).render()
+        super(Vega, self).render()
 
         figure = self.get_root()
         assert isinstance(figure,Figure), ("You cannot render this Feature "
             "if it's not in a Figure.")
+
+        self._parent.html.add_children(Feature(self.get_name()), name=self.get_name())
+
+        figure.html.add_children(Feature(Template("""
+            <div id="{{this.get_name()}}"
+                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
+                </div>
+            """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
         figure.header.add_children(\
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
@@ -743,3 +778,5 @@ class VegaPopup(MacroFeature):
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
             name='vega_parse')
+
+        return self.get_name()
