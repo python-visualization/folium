@@ -696,13 +696,14 @@ class RegularPolygonMarker(MacroFeature):
             name='dvf_js')
 
 class VegaPopup(MacroFeature):
-    def __init__(self, data, width=300, height=300):
+    def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
         super(VegaPopup, self).__init__()
         self.plugin_name = 'VegaPopup'
         self.data = data
-        self.width = "{}px".format(width) if isinstance(width,int) or isinstance(width,float) else "{}".format(width)
-        self.height = "{}px".format(height) if isinstance(height,int) or isinstance(height,float) else "{}".format(height)
+
+        self.width  = _parse_size(width)
+        self.height  = _parse_size(height)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
