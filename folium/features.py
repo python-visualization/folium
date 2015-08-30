@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Features
+Elements
 ------
 
-A generic class for creating features.
+A generic class for creating Elements.
 """
 import warnings
 from uuid import uuid4
@@ -20,12 +20,12 @@ def _camelify(out):
          else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
          else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
 
-class Feature(object):
-    """Basic feature object that does nothing.
-    Other features may inherit from this one."""
+class Element(object):
+    """Basic Element object that does nothing.
+    Other Elements may inherit from this one."""
     def __init__(self, template=None, template_name=None):
-        """Creates a feature."""
-        self._name = 'Feature'
+        """Creates a Element."""
+        self._name = 'Element'
         self._id = uuid4().hex
         self._env = ENV
         self._children = OrderedDict()
@@ -33,8 +33,8 @@ class Feature(object):
         self._template = Template(template) if template is not None\
             else ENV.get_template(template_name) if template_name is not None\
             else Template(u"""
-        {% for name, feature in this._children.items() %}
-            {{feature.render(**kwargs)}}
+        {% for name, element in this._children.items() %}
+            {{element.render(**kwargs)}}
         {% endfor %}
         """)
 
@@ -54,7 +54,7 @@ class Feature(object):
         child._parent = self
 
     def add_to(self, parent, name=None, index=None):
-        """Add feature to a parent."""
+        """Add element to a parent."""
         parent.add_children(self, name=name, index=index)
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
@@ -74,7 +74,7 @@ class Feature(object):
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
     def get_root(self):
-        """Returns the root of the features tree."""
+        """Returns the root of the elements tree."""
         if self._parent is None:
             return self
         else:
@@ -118,13 +118,13 @@ _default_css = [
      "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),
     ]
 
-class Figure(Feature):
+class Figure(Element):
     def __init__(self):
         super(Figure, self).__init__()
         self._name = 'Figure'
-        self.header = Feature()
-        self.html   = Feature()
-        self.script = Feature()
+        self.header = Element()
+        self.html   = Element()
+        self.script = Element()
         #self.axes = []
 
         self.header._parent = self
@@ -145,7 +145,7 @@ class Figure(Feature):
         """)
 
         # Create the meta tag
-        self.header.add_children(Feature(
+        self.header.add_children(Element(
             '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),
                                   name='meta_http')
 
@@ -157,7 +157,7 @@ class Figure(Feature):
         for name, url in _default_css:
             self.header.add_children(CssLink(url), name=name)
 
-        self.header.add_children(Feature("""
+        self.header.add_children(Element("""
             <style>
 
             html, body {
@@ -217,7 +217,7 @@ class Figure(Feature):
                    )
         return iframe
 
-class Link(Feature):
+class Link(Element):
     def get_code(self):
         if self.code is None:
             self.code = urlopen(self.url).read()
@@ -277,9 +277,9 @@ class CssLink(Link):
         {% endif %}
         """)
 
-class MacroFeature(Feature):
-    """This is a parent class for Features defined by a macro template.
-    To compute your own feature, all you have to do is:
+class MacroElement(Element):
+    """This is a parent class for Elements defined by a macro template.
+    To compute your own element, all you have to do is:
         * To inherit from this class
         * Overwrite the '_name' attribute
         * Overwrite the '_template' attribute with something of the form:
@@ -297,33 +297,33 @@ class MacroFeature(Feature):
     """
     def __init__(self):
         """TODO : docstring here"""
-        super(MacroFeature, self).__init__()
-        self._name = 'MacroFeature'
+        super(MacroElement, self).__init__()
+        self._name = 'MacroElement'
 
         self._template = Template(u"")
 
     def render(self, **kwargs):
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Feature "
+        assert isinstance(figure,Figure), ("You cannot render this Element "
             "if it's not in a Figure.")
 
         header = self._template.module.__dict__.get('header',None)
         if header is not None:
-            figure.header.add_children(Feature(header(self, kwargs)),
+            figure.header.add_children(Element(header(self, kwargs)),
                                        name=self.get_name())
 
         html = self._template.module.__dict__.get('html',None)
         if html is not None:
-            figure.html.add_children(Feature(html(self, kwargs)),
+            figure.html.add_children(Element(html(self, kwargs)),
                                        name=self.get_name())
 
         script = self._template.module.__dict__.get('script',None)
         if script is not None:
-            figure.script.add_children(Feature(script(self, kwargs)),
+            figure.script.add_children(Element(script(self, kwargs)),
                                        name=self.get_name())
 
-        for name, feature in self._children.items():
-            feature.render(**kwargs)
+        for name, element in self._children.items():
+            element.render(**kwargs)
 
 def _parse_size(value):
     try:
@@ -339,7 +339,7 @@ def _parse_size(value):
         raise ValueError(msg(value, value_type))
     return value, value_type
 
-class Map(MacroFeature):
+class Map(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
@@ -480,7 +480,7 @@ class Map(MacroFeature):
                                attr=attr, API_key=API_key)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
-class TileLayer(MacroFeature):
+class TileLayer(MacroElement):
     def __init__(self, tiles='OpenStreetMap', name=None,
                  min_zoom=1, max_zoom=18, attr=None, API_key=None):
         """TODO docstring here
@@ -561,7 +561,7 @@ class WmsTileLayer(TileLayer):
         {% endmacro %}
         """)
 
-class Icon(MacroFeature):
+class Icon(MacroElement):
     def __init__(self, color='blue', icon='info-sign', angle=0):
         """TODO : docstring here"""
         super(Icon, self).__init__()
@@ -583,7 +583,7 @@ class Icon(MacroFeature):
             {% endmacro %}
             """)
 
-class Marker(MacroFeature):
+class Marker(MacroElement):
     def __init__(self, location, popup=None, icon=None):
         """Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
@@ -627,7 +627,7 @@ class Marker(MacroFeature):
             {% endmacro %}
             """)
 
-class RegularPolygonMarker(MacroFeature):
+class RegularPolygonMarker(MacroElement):
     def __init__(self, location, popup=None, icon=None,
                  color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
@@ -669,7 +669,7 @@ class RegularPolygonMarker(MacroFeature):
         super(RegularPolygonMarker, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Feature "
+        assert isinstance(figure,Figure), ("You cannot render this Element "
             "if it's not in a Figure.")
 
         figure.header.add_children(\
@@ -677,7 +677,7 @@ class RegularPolygonMarker(MacroFeature):
                            "/0.2/leaflet-dvf.markers.min.js"),
             name='dvf_js')
 
-class Html(Feature):
+class Html(Element):
     def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
         super(Html, self).__init__()
@@ -693,19 +693,19 @@ class Html(Feature):
                 {{this.data}}</div>
                 """)
 
-class Popup(Feature):
+class Popup(Element):
     def __init__(self, html, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
-        self.header = Feature()
-        self.html   = Feature()
-        self.script = Feature()
+        self.header = Element()
+        self.html   = Element()
+        self.script = Element()
 
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
 
-        if isinstance(html, Feature):
+        if isinstance(html, Element):
             self.html.add_children(html)
         elif isinstance(html, text_type) or isinstance(html,binary_type):
             self.html.add_children(Html(text_type(html)))
@@ -715,15 +715,15 @@ class Popup(Feature):
         self._template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
 
-            {% for name, feature in this.html._children.items() %}
-                var {{name}} = $('{{feature.render(**kwargs).replace('\\n',' ')}}')[0];
+            {% for name, element in this.html._children.items() %}
+                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
             {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
 
-            {% for name, feature in this.script._children.items() %}
-                {{feature.render()}}
+            {% for name, element in this.script._children.items() %}
+                {{element.render()}}
             {% endfor %}
         """)
 
@@ -733,13 +733,13 @@ class Popup(Feature):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Feature "
+        assert isinstance(figure,Figure), ("You cannot render this Element "
             "if it's not in a Figure.")
 
-        figure.script.add_children(Feature(\
+        figure.script.add_children(Element(\
             self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
 
-class Vega(Feature):
+class Vega(Element):
     def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
         super(Vega, self).__init__()
@@ -753,18 +753,18 @@ class Vega(Feature):
     def render(self, **kwargs):
         self.json = json.dumps(self.data)
 
-        self._parent.html.add_children(Feature(Template("""
+        self._parent.html.add_children(Element(Template("""
             <div id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
                 </div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
-        self._parent.script.add_children(Feature(Template("""
+        self._parent.script.add_children(Element(Template("""
             vega_parse({{this.json}},{{this.get_name()}});
             """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Feature "
+        assert isinstance(figure,Figure), ("You cannot render this Element "
             "if it's not in a Figure.")
 
         figure.header.add_children(\
