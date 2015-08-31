@@ -217,6 +217,26 @@ class Figure(Element):
                    )
         return iframe
 
+    def add_subplot(self, x,y,n,margin=0.05):
+        width = 1./y
+        height = 1./x
+        left = ((n-1)%y)*width
+        top = ((n-1)//y)*height
+
+        left = left+width*margin
+        top  = top+height*margin
+        width = width*(1-2.*margin)
+        height = height*(1-2.*margin)
+
+        div = Div(position='absolute',
+                  width="{}%".format(100.*width),
+                  height="{}%".format(100.*height),
+                  left="{}%".format(100.*left),
+                  top="{}%".format(100.*top),
+                  )
+        self.add_children(div)
+        return div
+
 class Link(Element):
     def get_code(self):
         if self.code is None:
@@ -426,12 +446,13 @@ class MacroElement(Element):
 
 def _parse_size(value):
     try:
-        if isinstance(value, int):
+        if isinstance(value, int) or isinstance(value, float):
             value_type = 'px'
+            value = float(value)
             assert value > 0
         else:
             value_type = '%'
-            value = int(value.strip('%'))
+            value = float(value.strip('%'))
             assert 0 <= value <= 100
     except:
         msg = "Cannot parse value {!r} as {!r}".format
