@@ -277,6 +277,105 @@ class CssLink(Link):
         {% endif %}
         """)
 
+class Div(Figure):
+    def __init__(self, width='100%', height='100%',
+                 left="0%", top="0%", position='relative'):
+        """Create a Map with Folium and Leaflet.js
+        """
+        super(Figure, self).__init__()
+        self._name = 'Div'
+
+        # Size Parameters.
+        self.width  = _parse_size(width)
+        self.height = _parse_size(height)
+        self.left = _parse_size(left)
+        self.top  = _parse_size(top)
+        self.position = position
+
+        self.header = Element()
+        self.html   = Element("""
+        {% for name, element in this._children.items() %}
+            {{element.render(**kwargs)}}
+        {% endfor %}
+        """)
+        self.script = Element()
+
+        self.header._parent = self
+        self.html._parent = self
+        self.script._parent = self
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <div id="{{this.get_name()}}">
+                {{this.html.render(**kwargs)}}
+            </div>
+        {% endmacro %}
+        """)
+
+    def get_root(self):
+        return self
+
+    def render(self, **kwargs):
+        """TODO : docstring here."""
+        figure = self._parent
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        for name, element in self._children.items():
+            element.render(**kwargs)
+
+        for name, element in self.header._children.items():
+            figure.header.add_children(element, name=name)
+
+        for name, element in self.script._children.items():
+            figure.script.add_children(element, name=name)
+
+        header = self._template.module.__dict__.get('header',None)
+        if header is not None:
+            figure.header.add_children(Element(header(self, kwargs)),
+                                       name=self.get_name())
+
+        html = self._template.module.__dict__.get('html',None)
+        if html is not None:
+            figure.html.add_children(Element(html(self, kwargs)),
+                                       name=self.get_name())
+
+        script = self._template.module.__dict__.get('script',None)
+        if script is not None:
+            figure.script.add_children(Element(script(self, kwargs)),
+                                       name=self.get_name())
+
+def _repr_html_(self, figsize=(17,10), **kwargs):
+        """Displays the Map in a Jupyter notebook.
+
+        Parameters
+        ----------
+            self : folium.Map object
+                The map you want to display
+
+            figsize : tuple of length 2, default (17,10)
+                The size of the output you expect in inches.
+                Output is 60dpi so that the output has same size as a
+                matplotlib figure with the same figsize.
+
+        """
+        if self._parent is None:
+            self.add_to(Figure())
+            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            self._parent = None
+        else:
+            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+        return out
+
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.
     To compute your own element, all you have to do is:
