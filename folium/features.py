@@ -849,3 +849,44 @@ class GeoJson(MacroElement):
                 var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+class MarkerCluster(MacroElement):
+    """Adds a MarkerCluster layer on the map."""
+    def __init__(self):
+        """Creates a MarkerCluster element to append into a map with
+        Map.add_children.
+
+        Parameters
+        ----------
+        """
+        super(MarkerCluster, self).__init__()
+        self._name = 'MarkerCluster'
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.markerClusterGroup();
+            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+    def render(self, **kwargs):
+        super(MarkerCluster, self).render()
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster"
+                           "/0.4.0/leaflet.markercluster-src.js"),
+            name='marker_cluster_src')
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster"
+                           "/0.4.0/leaflet.markercluster.js"),
+            name='marker_cluster')
+
+        figure.header.add_children(\
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),
+            name='marker_cluster_css')
+
+        figure.header.add_children(\
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
+            name="marker_cluster_default_css")
