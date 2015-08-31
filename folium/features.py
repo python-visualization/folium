@@ -341,6 +341,7 @@ def _parse_size(value):
 
 class Map(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
+                 left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180):
@@ -412,6 +413,9 @@ class Map(MacroElement):
         # Map Size Parameters.
         self.width  = _parse_size(width)
         self.height = _parse_size(height)
+        self.left = _parse_size(left)
+        self.top  = _parse_size(top)
+        self.position = position
 
         self.min_lat = min_lat
         self.max_lat = max_lat
@@ -422,9 +426,17 @@ class Map(MacroElement):
                             attr=attr, API_key=API_key)
 
         self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+        {% endmacro %}
         {% macro html(this, kwargs) %}
-            <div class="folium-map" id="{{this.get_name()}}"
-                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}}"></div>
+            <div class="folium-map" id="{{this.get_name()}}" ></div>
         {% endmacro %}
 
         {% macro script(this, kwargs) %}
@@ -740,14 +752,20 @@ class Popup(Element):
             self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
 
 class Vega(Element):
-    def __init__(self, data, width="100%", height="100%"):
+    def __init__(self, data, width='100%', height='100%',
+                 left="0%", top="0%", position='relative'):
         """TODO : docstring here"""
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data
 
+        # Size Parameters.
         self.width  = _parse_size(width)
-        self.height  = _parse_size(height)
+        self.height = _parse_size(height)
+        self.left = _parse_size(left)
+        self.top  = _parse_size(top)
+        self.position = position
+
 
         self._template = Template(u"")
     def render(self, **kwargs):
@@ -766,6 +784,16 @@ class Vega(Element):
         figure = self.get_root()
         assert isinstance(figure,Figure), ("You cannot render this Element "
             "if it's not in a Figure.")
+
+        figure.header.add_children(Element(Template("""
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+            """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_children(\
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
