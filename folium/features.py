@@ -811,3 +811,41 @@ class Vega(Element):
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
             name='vega_parse')
+
+class GeoJson(MacroElement):
+    def __init__(self, data):
+        """Creates a GeoJson plugin to append into a map with
+        Map.add_plugin.
+
+        Parameters
+        ----------
+            data: file, dict or str.
+                The geo-json data you want to plot.
+                If file, then data will be read in the file and fully embeded in Leaflet's javascript.
+                If dict, then data will be converted to json and embeded in the javascript.
+                If str, then data will be passed to the javascript as-is.
+
+                examples :
+                    # providing file
+                    GeoJson(open('foo.json'))
+
+                    # providing dict
+                    GeoJson(json.load(open('foo.json')))
+
+                    # providing string
+                    GeoJson(open('foo.json').read())
+        """
+        super(GeoJson, self).__init__()
+        self._name = 'GeoJson'
+        if 'read' in dir(data):
+            self.data = data.read()
+        elif type(data) is dict:
+            self.data = json.dumps(data)
+        else:
+            self.data = data
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
