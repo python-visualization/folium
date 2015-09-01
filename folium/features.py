@@ -120,17 +120,18 @@ _default_css = [
     ]
 
 class Figure(Element):
-    def __init__(self):
+    def __init__(self, figsize=(17,10)):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
         self.html   = Element()
         self.script = Element()
-        #self.axes = []
 
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
+
+        self.figsize = figsize
 
         self._template = Template(u"""
         <!DOCTYPE html>
@@ -191,7 +192,7 @@ class Figure(Element):
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
 
-    def _repr_html_(self, figsize=(17,10), **kwargs):
+    def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook.
 
         Parameters
@@ -207,7 +208,7 @@ class Figure(Element):
         """
         html = self.render(**kwargs)
 
-        width, height = figsize
+        width, height = self.figsize
 
         iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
             .format(\
