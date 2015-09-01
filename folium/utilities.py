@@ -345,3 +345,22 @@ def write_png(array):
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
  
+def _camelify(out):
+    return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
+         else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
+         else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
+
+def _parse_size(value):
+    try:
+        if isinstance(value, int) or isinstance(value, float):
+            value_type = 'px'
+            value = float(value)
+            assert value > 0
+        else:
+            value_type = '%'
+            value = float(value.strip('%'))
+            assert 0 <= value <= 100
+    except:
+        msg = "Cannot parse value {!r} as {!r}".format
+        raise ValueError(msg(value, value_type))
+    return value, value_type
