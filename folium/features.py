@@ -14,6 +14,7 @@ from collections import OrderedDict
 import json
 
 from .six import text_type, binary_type, urlopen
+from .utilities import color_brewer
 
 def _camelify(out):
     return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
@@ -969,6 +970,57 @@ class GeoJson(MacroElement):
                 var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+class GeoJsonStyle(MacroElement):
+    def __init__(self, color_domain, color_code, color_data=None, key_on='feature.properties.color'):
+        """TODO : docstring here.
+        """
+        super(GeoJsonStyle, self).__init__()
+        self._name = 'GeoJsonStyle'
+
+        self.color_domain = color_domain
+        self.color_range = color_brewer(color_code, n=len(color_domain))
+        self.color_data = json.dumps(color_data)
+        self.key_on = key_on
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = {
+                    color_scale : d3.scale.threshold()
+                          .domain({{this.color_domain}})
+                          .range({{this.color_range}}),
+                    color_data : {{this.color_data}},
+                    color_function : function(feature) {
+                        {% if this.color_data=='null' %}
+                            return this.color_scale({{this.key_on}});
+                        {% else %}
+                            return this.color_scale(this.color_data[{{this.key_on}}]);
+                        {% endif %}
+                        },
+                    };
+
+                {{this._parent.get_name()}}.setStyle(function(feature) {
+                    return {
+                        fillColor: {{this.get_name()}}.color_function(feature),
+                        weight: 2,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7
+                        };
+                    });
+            {% endmacro %}
+            """)
+    def render(self,**kwargs):
+        super(GeoJsonStyle,self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+                                   name='d3')
 
 class MarkerCluster(MacroElement):
     """Adds a MarkerCluster layer on the map."""
