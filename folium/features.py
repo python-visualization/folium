@@ -40,8 +40,8 @@ class WmsTileLayer(TileLayer):
                 {
                     format:'{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
-                    layers:'{{ this.layers }}',
-                    attribution:'{{this.attribution}}'
+                    layers:'{{ this.layers }}'
+                    {% if this.attribution %}, attribution:'{{this.attribution}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
 

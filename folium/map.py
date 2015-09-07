@@ -85,6 +85,8 @@ class Map(MacroElement):
             self.location = location
             self.zoom_start = zoom_start
 
+        Figure().add_children(self)
+
         # Map Size Parameters.
         self.width  = _parse_size(width)
         self.height = _parse_size(height)

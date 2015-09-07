@@ -52,7 +52,7 @@ class TestFolium(object):
 
     def setup(self):
         """Setup Folium Map."""
-        with mock.patch('folium.folium.uuid4') as uuid4:
+        with mock.patch('folium.element.uuid4') as uuid4:
             uuid4().hex = '0' * 32
             self.map = folium.Map(location=[45.5236, -122.6750], width=900,
                                   height=400, max_zoom=20, zoom_start=4)
@@ -61,30 +61,30 @@ class TestFolium(object):
     def test_init(self):
         """Test map initialization."""
 
-        assert self.map.map_type == 'base'
-        assert self.map.mark_cnt == {}
+        assert self.map.get_name() == 'map_00000000000000000000000000000000'
+        assert self.map.get_root() == self.map._parent
         assert self.map.location == [45.5236, -122.6750]
-        assert self.map.map_size == {'width': 900, 'height': 400}
-
-        tmpl = {'Tiles': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': ('Map data (c) <a href="http://openstreetmap.org">'
-                         'OpenStreetMap</a> contributors'),
-                'map_id': 'folium_' + '0' * 32,
-                'lat': 45.5236,
-                'lon': -122.675,
-                'max_zoom': 20,
-                'size': 'style="width: 900px; height: 400px"',
-                'zoom_level': 4,
-                'tile_layers': [],
-                'wms_layers': [],
-                'image_layers': [],
-                'min_zoom': 1,
-                'min_lat': -90,
-                'max_lat': 90,
-                'min_lon': -180,
-                'max_lon': 180}
-
-        assert self.map.template_vars == tmpl
+        assert self.map.zoom_start == 4
+        assert self.map.max_lat == 90
+        assert self.map.min_lat == -90
+        assert self.map.max_lon == 180
+        assert self.map.min_lon == -180
+        assert self.map.position == 'relative'
+        assert self.map.height == (400, 'px')
+        assert self.map.width == (900, 'px')
+        assert self.map.left == (0, '%')
+        assert self.map.top == (0, '%')
+        assert self.map.to_dict() == {
+            "name": "Map",
+            "id": "00000000000000000000000000000000",
+            "children": {
+                "openstreetmap": {
+                    "name": "TileLayer",
+                    "id": "00000000000000000000000000000000",
+                    "children": {}
+                    }
+                }
+            }
 
     def test_cloudmade(self):
         """Test cloudmade tiles and the API key."""
@@ -93,7 +93,7 @@ class TestFolium(object):
 
         map = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
                          API_key='###')
-        assert map.template_vars['Tiles'] == ('http://{s}.tile.cloudmade.com'
+        assert map._children['cloudmade'].tiles == ('http://{s}.tile.cloudmade.com'
                                               '/###/997/256/{z}/{x}/{y}.png')
 
     def test_builtin_tile(self):
@@ -103,11 +103,11 @@ class TestFolium(object):
         for tiles in default_tiles:
             map = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
             tiles = ''.join(tiles.lower().strip().split())
-            url = map.tile_types[tiles]['templ'].render()
-            attr = map.tile_types[tiles]['attr'].render()
+            url = map._env.get_template('tiles/{}/tiles.txt'.format(tiles)).render()
+            attr = map._env.get_template('tiles/{}/attr.txt'.format(tiles)).render()
 
-            assert map.template_vars['Tiles'] == url
-            assert map.template_vars['attr'] == attr
+            assert map._children[tiles].tiles == url
+            assert map._children[tiles].attr == attr
 
     def test_custom_tile(self):
         """Test custom tile URLs."""
@@ -119,8 +119,8 @@ class TestFolium(object):
             folium.Map(location=[45.5236, -122.6750], tiles=url)
 
         map = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
-        assert map.template_vars['Tiles'] == url
-        assert map.template_vars['attr'] == attr
+        assert map._children[url].tiles == url
+        assert map._children[url].attr == attr
 
     def test_wms_layer(self):
         """Test WMS layer URLs."""
@@ -138,12 +138,12 @@ class TestFolium(object):
                           wms_transparent=True)
 
         wms_temp = self.env.get_template('wms_layer.js')
-        wms = wms_temp.render({'wms_name': wms_name,
+        wms = wms_temp.render({'wms_name': map._children[wms_name].get_name(),
                                'wms_url': wms_url,
                                'wms_format': wms_format,
                                'wms_layer_names': wms_layers,
                                'wms_transparent': 'true'})
-        assert map.template_vars['wms_layers'][0] == wms
+        assert ''.join(wms.split())[:-1] in ''.join(map.get_root().render().split())
 
     def test_simple_marker(self):
         """Test simple marker addition."""
