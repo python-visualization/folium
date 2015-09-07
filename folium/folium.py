@@ -26,7 +26,7 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup
+    CircleMarker, LatLngPopup, ClickForMarker
 
 #import sys
 #import base64
@@ -594,30 +594,26 @@ class Map(_Map):
                       FutureWarning, stacklevel=2)
         self.add_children(LatLngPopup())
 
-#    def click_for_marker(self, popup=None):
-#        """Enable the addition of markers via clicking on the map. The marker
-#        popup defaults to Lat/Lon, but custom text can be passed via the
-#        popup parameter. Double click markers to remove them.
-#
-#        Parameters
-#        ----------
-#        popup:
-#            Custom popup text
-#
-#        Example
-#        -------
-#        >>>map.click_for_marker(popup='Your Custom Text')
-#
-#        """
-#        latlng = '"Latitude: " + lat + "<br>Longitude: " + lng '
-#        click_temp = self.env.get_template('click_for_marker.js')
-#        if popup:
-#            popup_txt = ''.join(['"', popup, '"'])
-#        else:
-#            popup_txt = latlng
-#        click_str = click_temp.render({'popup': popup_txt})
-#        self.template_vars.update({'click_pop': click_str})
-#
+    def click_for_marker(self, popup=None):
+        """Enable the addition of markers via clicking on the map. The marker
+        popup defaults to Lat/Lon, but custom text can be passed via the
+        popup parameter. Double click markers to remove them.
+
+        Parameters
+        ----------
+        popup:
+            Custom popup text
+
+        Example
+        -------
+        >>>map.click_for_marker(popup='Your Custom Text')
+
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("click_for_marker",
+                                                            "add_children(ClickForMarker)"),
+                      FutureWarning, stacklevel=2)
+        self.add_children(ClickForMarker(popup=popup))
+
 #    def fit_bounds(self, bounds, padding_top_left=None,
 #                   padding_bottom_right=None, padding=None, max_zoom=None):
 #        """Fit the map to contain a bounding box with the maximum zoom level possible.

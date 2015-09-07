@@ -359,3 +359,29 @@ class LatLngPopup(MacroElement):
                 {{this._parent.get_name()}}.on('click', latLngPop);
             {% endmacro %}
             """)
+
+class ClickForMarker(MacroElement):
+    def __init__(self, popup=None):
+        """TODO : docstring here
+        """
+        super(ClickForMarker, self).__init__()
+        self._name = 'ClickForMarker'
+
+        if popup:
+            self.popup = ''.join(['"', popup, '"'])
+        else:
+            self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                function newMarker(e){
+                    var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
+                    new_mark.dragging.enable();
+                    new_mark.on('dblclick', function(e){ {{this._parent.get_name()}}.removeLayer(e.target)})
+                    var lat = e.latlng.lat.toFixed(4),
+                       lng = e.latlng.lng.toFixed(4);
+                    new_mark.bindPopup({{ this.popup }});
+                    };
+                {{this._parent.get_name()}}.on('click', newMarker);
+            {% endmacro %}
+            """)

@@ -300,17 +300,20 @@ class TestFolium(object):
         """Test click for marker functionality."""
 
         # Lat/lon popover.
+        self.map = folium.Map([46,3])
         self.map.click_for_marker()
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': ('"Latitude: " + lat + "<br>'
-                                              'Longitude: " + lng ')})
-        assert self.map.template_vars['click_pop'] == click
+                                              'Longitude: " + lng '),
+                                   'map' : self.map.get_name()})
+        assert (''.join(click.split()))[:-1] in ''.join(self.map.get_root().render().split())
 
         # Custom popover.
         self.map.click_for_marker(popup='Test')
         click_templ = self.env.get_template('click_for_marker.js')
-        click = click_templ.render({'popup': '"Test"'})
-        assert self.map.template_vars['click_pop'] == click
+        click = click_templ.render({'popup': '"Test"',
+                                   'map' : self.map.get_name()})
+        assert (''.join(click.split()))[:-1] in ''.join(self.map.get_root().render().split())
 
     def test_vega_popup(self):
         """Test vega popups."""
