@@ -17,7 +17,9 @@ import vincent
 import folium
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
-from folium.map import Popup
+from folium.element import Html
+from folium.map import Popup, Marker, Icon
+from folium.features import DivIcon
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -149,6 +151,7 @@ class TestFolium(object):
     def test_simple_marker(self):
         """Test simple marker addition."""
 
+        self.map = folium.Map(location=[44, -73], zoom_start=3)
         mark_templ = self.env.get_template('simple_marker.js')
         popup_templ = self.env.get_template('simple_popup.js')
 
@@ -187,56 +190,51 @@ class TestFolium(object):
 
     def test_div_markers(self):
         '''Test div marker list addition'''
+        self.map = folium.Map(location=[37.421114, -122.128314])
 
         icon_templ = self.env.get_template('static_div_icon.js')
         mark_templ = self.env.get_template('simple_marker.js')
         popup_templ = self.env.get_template('simple_popup.js')
 
         # Test with popups (expected use case).
-        self.map.div_markers(locations=[[37.421114, -122.128314],
-                                        [37.391637, -122.085416],
-                                        [37.388832, -122.087709]],
-                             popups=['1437494575531',
-                                     '1437492135937',
-                                     '1437493590434'])
-        icon_1 = icon_templ.render({'icon_name': 'div_marker_1_0_icon',
-                                    'size': 10})
-        mark_1 = mark_templ.render({'marker': 'div_marker_1_0',
-                                    'lat': 37.421114,
-                                    'lon': -122.128314,
-                                    'icon': "{'icon':div_marker_1_0_icon}"})
-        popup_1 = popup_templ.render({'pop_name': 'div_marker_1_0',
-                                      'pop_txt': '"1437494575531"',
-                                      'width': 300})
-        assert self.map.mark_cnt['div_mark'] == 1
-        assert self.map.template_vars['div_markers'][0][0] == icon_1
-        assert self.map.template_vars['div_markers'][0][1] == mark_1
-        assert self.map.template_vars['div_markers'][0][2] == popup_1
+        locations = [[37.421114, -122.128314],
+                     [37.391637, -122.085416],
+                     [37.388832, -122.087709]]
+        popups = ['1437494575531', '1437492135937', '1437493590434']
 
-        # Second set of markers with popups to test the numbering.
-        self.map.div_markers(locations=[[37.421114, -122.128314],
-                                        [37.391637, -122.085416],
-                                        [37.388832, -122.087709]],
-                             popups=['1437494575531',
-                                     '1437492135937',
-                                     '1437493590434'])
-        icon_2 = icon_templ.render({'icon_name': 'div_marker_2_1_icon',
-                                    'size': 10})
-        mark_2 = mark_templ.render({'marker': 'div_marker_2_1',
-                                    'lat': 37.391637,
-                                    'lon': -122.085416,
-                                    'icon': "{'icon':div_marker_2_1_icon}"})
-        popup_2 = popup_templ.render({'pop_name': 'div_marker_2_1',
-                                      'pop_txt': '"1437492135937"',
-                                      'width': 300})
-        assert self.map.mark_cnt['div_mark'] == 2
-        assert self.map.template_vars['div_markers'][4][0] == icon_2
-        assert self.map.template_vars['div_markers'][4][1] == mark_2
-        assert self.map.template_vars['div_markers'][4][2] == popup_2
+        self.map.div_markers(locations=locations, popups=popups)
+
+        markers = [marker for marker in self.map._children.values() if isinstance(marker,Marker)]
+        assert len(markers)==3
+
+        for marker, location, pop in zip(markers, locations, popups):
+            icon = marker._children.values()[0]
+            popup = marker._children.values()[1]
+            html = popup.html._children.values()[0]
+
+            assert isinstance(icon,DivIcon)
+            assert isinstance(popup,Popup)
+            assert isinstance(html,Html)
+
+            icon_1 = icon_templ.render({'icon_name': icon.get_name(),
+                                        'size': 10})
+            mark_1 = mark_templ.render({'marker': marker.get_name(),
+                                        'lat': location[0],
+                                        'lon': location[1],
+                                        'icon': "{icon:new L.Icon.Default()}"})
+            popup_1 = popup_templ.render({'pop_name': popup.get_name(),
+                                          'html_name' : html.get_name(),
+                                          'pop_txt': '{}'.format(pop),
+                                          'width': 300})
+
+            out = ''.join(self.map.get_root().render().split())
+            assert ''.join(icon_1.split())[:-1] in out
+            assert ''.join(mark_1.split())[:-1] in out
+            assert ''.join(popup_1.split())[:-1] in out
 
         # Test no popup. If there are no popups,
         # then we should get a RuntimeError.
-        with pytest.raises(RuntimeError):
+        with pytest.raises(TypeError):
             self.map.div_markers([[45.60, -122.8]])
 
     def test_circle_marker(self):

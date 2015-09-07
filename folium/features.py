@@ -288,3 +288,21 @@ class MarkerCluster(MacroElement):
         figure.header.add_children(\
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
             name="marker_cluster_default_css")
+
+class DivIcon(MacroElement):
+    def __init__(self, width=30, height=30):
+        """TODO : docstring here"""
+        super(DivIcon, self).__init__()
+        self._name = 'DivIcon'
+        self.width = width
+        self.height = height
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.divIcon({
+                    className: 'leaflet-div-icon',
+                    'iconSize': [{{ this.width }},{{ this.height }}]
+                    });
+                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
+            {% endmacro %}
+            """)

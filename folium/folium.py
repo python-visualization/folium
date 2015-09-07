@@ -25,7 +25,7 @@ from folium.six import text_type, binary_type#, iteritems
 from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
-from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster
+from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon
 
 #import sys
 #import base64
@@ -380,40 +380,47 @@ class Map(_Map):
 #        self.template_vars.setdefault(name, []).append(append)
 #
 #    @iter_obj('div_mark')
-#    def div_markers(self, locations=None, popups=None,
-#                    marker_size=10, popup_width=300):
-#        """Create a simple div marker on the map, with optional
-#        popup text or Vincent visualization. Useful for marking points along a
-#        line.
-#
-#        Parameters
-#        ----------
-#        locations: list of locations, where each location is an array
-#            Latitude and Longitude of Marker (Northing, Easting)
-#        popup: list of popups, each popup should be a string or tuple.
-#            Default 'Pop Text'
-#            Input text or visualization for object. Can pass either text,
-#            or a tuple of the form (Vincent object, 'vis_path.json')
-#            It is possible to adjust the width of text/HTML popups
-#            using the optional keywords `popup_width`.
-#            (Leaflet default is 300px.)
-#        marker_size
-#            default is 5
-#
-#        Returns
-#        -------
-#        Marker names and HTML in obj.template_vars
-#
-#        Example
-#        -------
-#        >>> map.div_markers(locations=[[37.421114, -122.128314],
-#        ...                            [37.391637, -122.085416],
-#        ...                            [37.388832, -122.087709]],
-#        ...                 popups=['1437494575531',
-#        ...                         '1437492135937',
-#        ...                         '1437493590434'])
-#
-#        """
+    def div_markers(self, locations=None, popups=None,
+                    marker_size=10, popup_width=300):
+        """Create a simple div marker on the map, with optional
+        popup text or Vincent visualization. Useful for marking points along a
+        line.
+
+        Parameters
+        ----------
+        locations: list of locations, where each location is an array
+            Latitude and Longitude of Marker (Northing, Easting)
+        popup: list of popups, each popup should be a string or tuple.
+            Default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width`.
+            (Leaflet default is 300px.)
+        marker_size
+            default is 5
+
+        Returns
+        -------
+        Marker names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>> map.div_markers(locations=[[37.421114, -122.128314],
+        ...                            [37.391637, -122.085416],
+        ...                            [37.388832, -122.087709]],
+        ...                 popups=['1437494575531',
+        ...                         '1437492135937',
+        ...                         '1437493590434'])
+
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("div_markers", "Marker.add_children(DivIcon)"),
+                      FutureWarning, stacklevel=2)
+        for location, popup in zip(locations,popups):
+            marker = Marker(location,
+                            popup = Popup(popup),
+                            icon = DivIcon(width=marker_size, height=marker_size))
+            self.add_children(marker)
 #        call_cnt = self.mark_cnt['div_mark']
 #        if locations is None or popups is None:
 #            raise RuntimeError("Both locations and popups are mandatory")
