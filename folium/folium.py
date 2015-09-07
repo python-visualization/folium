@@ -14,7 +14,7 @@ from __future__ import absolute_import
 import warnings
 #import codecs
 #import functools
-#import json
+import json
 #from uuid import uuid4
 
 #from jinja2 import Environment, PackageLoader

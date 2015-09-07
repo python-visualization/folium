@@ -318,17 +318,28 @@ class TestFolium(object):
     def test_vega_popup(self):
         """Test vega popups."""
 
+        self.map = folium.Map([45.60, -122.8])
+
+        vega_templ = self.env.get_template('vega_marker.js')
+        vega_parse = self.env.get_template('vega_parse.js')
+
         vis = vincent.Bar(width=675 - 75, height=350 - 50, no_data=True)
+        data = json.loads(vis.to_json())
 
         self.map.simple_marker(location=[45.60, -122.8],
                                popup=(vis, 'vis.json'))
-        popup_temp = self.env.get_template('vega_marker.js')
-        vega = popup_temp.render({'mark': 'marker_1', 'div_id': 'vis',
-                                  'width': 675, 'height': 350,
-                                  'max_width': 900,
-                                  'json_out': 'vis.json',
-                                  'vega_id': '#vis'})
-        assert self.map.template_vars['custom_markers'][0][2] == vega
+
+        marker = self.map._children.values()[-1]
+        popup = marker._children.values()[-1]
+        vega = popup._children.values()[-1]
+        vega_str = vega_templ.render({'vega': vega.get_name(),
+                                      'popup':popup.get_name(),
+                                      'marker':marker.get_name(),
+                                      'vega_json':json.dumps(data),
+                                      })
+        out = ''.join(self.map.get_root().render().split())
+        assert ''.join(vega_parse.render().split()) in out
+        assert (''.join(vega_str.split()))[:-1] in out
 
     def test_geo_json(self):
         """Test geojson method."""
