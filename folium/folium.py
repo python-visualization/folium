@@ -7,7 +7,7 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 """
 
-#from __future__ import absolute_import
+from __future__ import absolute_import
 #from __future__ import print_function
 #from __future__ import division
 
@@ -21,9 +21,11 @@ import warnings
 #from pkg_resources import resource_string
 
 #from folium import utilities
-#from folium.six import text_type, binary_type, iteritems
+from folium.six import text_type, binary_type#, iteritems
 from .map import Map as _Map
-from .features import WmsTileLayer
+from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
+from .map import Map, TileLayer, Icon, Marker, Popup
+from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster
 
 #import sys
 #import base64
@@ -296,40 +298,56 @@ class Map(_Map):
 #        self.template_vars.setdefault('data_layers', []).append((data_layers))
 #
 #    @iter_obj('simple')
-#    def simple_marker(self, location=None, popup=None,
-#                      marker_color='blue', marker_icon='info-sign',
-#                      clustered_marker=False, icon_angle=0, popup_width=300):
-#        """Create a simple stock Leaflet marker on the map, with optional
-#        popup text or Vincent visualization.
-#
-#        Parameters
-#        ----------
-#        location: tuple or list, default None
-#            Latitude and Longitude of Marker (Northing, Easting)
-#        popup: string or tuple, default 'Pop Text'
-#            Input text or visualization for object. Can pass either text,
-#            or a tuple of the form (Vincent object, 'vis_path.json')
-#            It is possible to adjust the width of text/HTML popups
-#            using the optional keywords `popup_width` (default is 300px).
-#        marker_color
-#            color of marker you want
-#        marker_icon
-#            icon from (http://getbootstrap.com/components/) you want on the
-#            marker
-#        clustered_marker
-#            boolean of whether or not you want the marker clustered with
-#            other markers
-#
-#        Returns
-#        -------
-#        Marker names and HTML in obj.template_vars
-#
-#        Example
-#        -------
-#        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-#        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
-#
-#        """
+    def simple_marker(self, location=None, popup=None,
+                      marker_color='blue', marker_icon='info-sign',
+                      clustered_marker=False, icon_angle=0, popup_width=300):
+        """Create a simple stock Leaflet marker on the map, with optional
+        popup text or Vincent visualization.
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+        marker_color
+            color of marker you want
+        marker_icon
+            icon from (http://getbootstrap.com/components/) you want on the
+            marker
+        clustered_marker
+            boolean of whether or not you want the marker clustered with
+            other markers
+
+        Returns
+        -------
+        Marker names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
+
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("simple_marker", "add_children(Marker)"),
+                      FutureWarning, stacklevel=2)
+        if clustered_marker:
+            raise ValueError("%s is deprecated. Use %s instead" % ("clustered_marker", "MarkerCluster"))
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            popup_ = Popup(popup, max_width=popup_width)
+        elif isinstance(popup, tuple):
+            popup_ = Popup(Vega(json.loads(popup[0].to_json()),
+                                     width="100%", height="100%"),
+                           max_width=popup_width)
+        else:
+            popup_ = None
+        marker = Marker(location,
+                        popup=popup_,
+                        icon=Icon(color=marker_color, icon=marker_icon, angle=icon_angle))
+        self.add_children(marker)
 #        count = self.mark_cnt['simple']
 #
 #        mark_temp = self.env.get_template('simple_marker.js')

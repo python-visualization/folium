@@ -267,6 +267,10 @@ class Marker(MacroElement):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = location
+        if icon is not None:
+            self.add_children(icon)
+        if popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -294,7 +298,7 @@ class Popup(Element):
         self.script._parent = self
 
         if isinstance(html, Element):
-            self.html.add_children(html)
+            self.add_children(html)
         elif isinstance(html, text_type) or isinstance(html,binary_type):
             self.html.add_children(Html(text_type(html)))
 

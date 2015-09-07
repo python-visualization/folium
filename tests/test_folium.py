@@ -17,6 +17,7 @@ import vincent
 import folium
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
+from folium.map import Popup
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -153,28 +154,36 @@ class TestFolium(object):
 
         # Single Simple marker.
         self.map.simple_marker(location=[45.50, -122.7])
-        mark_1 = mark_templ.render({'marker': 'marker_1', 'lat': 45.50,
+        marker_1 = self.map._children.values()[-1]
+        mark_1 = mark_templ.render({'marker': marker_1.get_name(),
+                                    'lat': 45.50,
                                     'lon': -122.7,
-                                    'icon': "{'icon':marker_1_icon}"})
-        assert self.map.template_vars['custom_markers'][0][1] == mark_1
-        assert self.map.template_vars['custom_markers'][0][2] == ""
+                                    'icon': "{icon:new L.Icon.Default()}"})
+        assert ''.join(mark_1.split())[:-1] in ''.join(self.map.get_root().render().split())
+        #assert self.map.template_vars['custom_markers'][0][2] == ""
 
         # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
-        mark_2 = mark_templ.render({'marker': 'marker_2', 'lat': 45.60,
+        marker_2 = self.map._children.values()[-1]
+        popup_2 = marker_2._children.values()[-1]
+        html_2 = popup_2.html._children.values()[0]
+        mark_2 = mark_templ.render({'marker': marker_2.get_name(),
+                                    'lat': 45.60,
                                     'lon': -122.8,
-                                    'icon': "{'icon':marker_2_icon}"})
-        popup_2 = popup_templ.render({'pop_name': 'marker_2',
-                                      'pop_txt': json.dumps('Hi'),
-                                      'width': 300})
-        assert self.map.mark_cnt['simple'] == 2
-        assert self.map.template_vars['custom_markers'][1][1] == mark_2
-        assert self.map.template_vars['custom_markers'][1][2] == popup_2
+                                    'icon': "{icon:new L.Icon.Default()}"})
+        pop_2 = popup_templ.render({'pop_name': popup_2.get_name(),
+                                    'pop_txt': 'Hi',
+                                    'html_name': html_2.get_name(),
+                                    'width': 300})
+        #assert self.map.mark_cnt['simple'] == 2
+        assert ''.join(mark_2.split())[:-1] in ''.join(self.map.get_root().render().split())
+        assert ''.join(pop_2.split())[:-1] in ''.join(self.map.get_root().render().split())
+        #assert self.map.template_vars['custom_markers'][1][2] == pop_2
 
         # Test no popup.
         self.map.simple_marker(location=[45.60, -122.8])
-        nopopup = ''
-        assert self.map.template_vars['custom_markers'][2][2] == nopopup
+        for child in self.map._children.values()[-1]._children.values():
+            assert not isinstance(child, Popup)
 
     def test_div_markers(self):
         '''Test div marker list addition'''
