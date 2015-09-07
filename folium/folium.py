@@ -531,79 +531,62 @@ class Map(_Map):
                               popup=popup_)
         self.add_children(marker)
 
-#    @iter_obj('polygon')
-#    def polygon_marker(self, location=None, line_color='black', line_opacity=1,
-#                       line_weight=2, fill_color='blue', fill_opacity=1,
-#                       num_sides=4, rotation=0, radius=15, popup=None,
-#                       popup_width=300):
-#        """Custom markers using the Leaflet Data Vis Framework.
-#
-#
-#        Parameters
-#        ----------
-#        location: tuple or list, default None
-#            Latitude and Longitude of Marker (Northing, Easting)
-#        line_color: string, default 'black'
-#            Marker line color
-#        line_opacity: float, default 1
-#            Line opacity, scale 0-1
-#        line_weight: int, default 2
-#            Stroke weight in pixels
-#        fill_color: string, default 'blue'
-#            Marker fill color
-#        fill_opacity: float, default 1
-#            Marker fill opacity
-#        num_sides: int, default 4
-#            Number of polygon sides
-#        rotation: int, default 0
-#            Rotation angle in degrees
-#        radius: int, default 15
-#            Marker radius, in pixels
-#        popup: string or tuple, default 'Pop Text'
-#            Input text or visualization for object. Can pass either text,
-#            or a tuple of the form (Vincent object, 'vis_path.json')
-#            It is possible to adjust the width of text/HTML popups
-#            using the optional keywords `popup_width` (default is 300px).
-#
-#        Returns
-#        -------
-#        Polygon marker names and HTML in obj.template_vars
-#
-#        """
-#
-#        count = self.mark_cnt['polygon']
-#
-#        poly_temp = self.env.get_template('poly_marker.js')
-#
-#        polygon = poly_temp.render({'marker': 'polygon_' + str(count),
-#                                    'lat': location[0],
-#                                    'lon': location[1],
-#                                    'line_color': line_color,
-#                                    'line_opacity': line_opacity,
-#                                    'line_weight': line_weight,
-#                                    'fill_color': fill_color,
-#                                    'fill_opacity': fill_opacity,
-#                                    'num_sides': num_sides,
-#                                    'rotation': rotation,
-#                                    'radius': radius})
-#
-#        popup_out = self._popup_render(popup=popup, mk_name='polygon_',
-#                                       count=count, width=popup_width)
-#
-#        add_mark = 'map.addLayer(polygon_{0})'.format(count)
-#
-#        self.template_vars.setdefault('markers', []).append((polygon,
-#                                                             popup_out,
-#                                                             add_mark))
-#        # Update JS/CSS and other Plugin files.
-#        js_temp = self.env.get_template('dvf_js_ref.txt').render()
-#        self.template_vars.update({'dvf_js': js_temp})
-#
-#        polygon_js = resource_string('folium',
-#                                     'plugins/leaflet-dvf.markers.min.js')
-#
-#        self.plugins.update({'leaflet-dvf.markers.min.js': polygon_js})
-#
+    def polygon_marker(self, location=None, line_color='black', line_opacity=1,
+                       line_weight=2, fill_color='blue', fill_opacity=1,
+                       num_sides=4, rotation=0, radius=15, popup=None,
+                       popup_width=300):
+        """Custom markers using the Leaflet Data Vis Framework.
+
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        line_color: string, default 'black'
+            Marker line color
+        line_opacity: float, default 1
+            Line opacity, scale 0-1
+        line_weight: int, default 2
+            Stroke weight in pixels
+        fill_color: string, default 'blue'
+            Marker fill color
+        fill_opacity: float, default 1
+            Marker fill opacity
+        num_sides: int, default 4
+            Number of polygon sides
+        rotation: int, default 0
+            Rotation angle in degrees
+        radius: int, default 15
+            Marker radius, in pixels
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+
+        Returns
+        -------
+        Polygon marker names and HTML in obj.template_vars
+
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("polygon_marker",
+                                                            "add_children(RegularPolygonMarker)"),
+                      FutureWarning, stacklevel=2)
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            popup_ = Popup(popup, max_width=popup_width)
+        elif isinstance(popup, tuple):
+            popup_ = Popup(Vega(json.loads(popup[0].to_json()),
+                                     width="100%", height="100%"),
+                           max_width=popup_width)
+        else:
+            popup_ = None
+        marker = RegularPolygonMarker(location, popup=popup_, color=line_color,
+                                      opacity=line_opacity, weight=line_weight,
+                                      fill_color=fill_color, fill_opacity=fill_opacity,
+                                      number_of_sides=num_sides, rotation=rotation,
+                                      radius=radius)
+        self.add_children(marker)
+
 #    def lat_lng_popover(self):
 #        """Enable popovers to display Lat and Lon on each click."""
 #

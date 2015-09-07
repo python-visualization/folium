@@ -49,7 +49,7 @@ class WmsTileLayer(TileLayer):
         """)
 
 class RegularPolygonMarker(MacroElement):
-    def __init__(self, location, popup=None, icon=None,
+    def __init__(self, location, popup=None,
                  color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15):
@@ -57,7 +57,6 @@ class RegularPolygonMarker(MacroElement):
         super(RegularPolygonMarker, self).__init__()
         self._name = 'RegularPolygonMarker'
         self.location = location
-        self.icon = "new L.Icon.Default()" if icon is None else icon
         self.color   = color
         self.opacity = opacity
         self.weight  = weight
@@ -66,6 +65,8 @@ class RegularPolygonMarker(MacroElement):
         self.number_of_sides= number_of_sides
         self.rotation = rotation
         self.radius = radius
+        if popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}

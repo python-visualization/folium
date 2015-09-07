@@ -268,9 +268,12 @@ class TestFolium(object):
     def test_poly_marker(self):
         """Test polygon marker."""
 
+        self.map = folium.Map(location=[45.5, -122.5])
         poly_temp = self.env.get_template('poly_marker.js')
 
-        polygon = poly_temp.render({'marker': 'polygon_1',
+        self.map.polygon_marker(location=[45.5, -122.5])
+        marker = self.map._children.values()[-1]
+        polygon = poly_temp.render({'marker': marker.get_name(),
                                     'lat': 45.5,
                                     'lon': -122.5,
                                     'line_color': 'black',
@@ -282,8 +285,7 @@ class TestFolium(object):
                                     'rotation': 0,
                                     'radius': 15})
 
-        self.map.polygon_marker(location=[45.5, -122.5])
-        assert self.map.template_vars['markers'][0][0] == polygon
+        assert (''.join(polygon.split()))[-1] in ''.join(self.map.get_root().render().split())
 
     def test_latlng_pop(self):
         """Test lat/lon popovers."""
