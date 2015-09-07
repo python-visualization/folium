@@ -26,7 +26,7 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker
+    CircleMarker, LatLngPopup
 
 #import sys
 #import base64
@@ -587,12 +587,13 @@ class Map(_Map):
                                       radius=radius)
         self.add_children(marker)
 
-#    def lat_lng_popover(self):
-#        """Enable popovers to display Lat and Lon on each click."""
-#
-#        latlng_temp = self.env.get_template('lat_lng_popover.js')
-#        self.template_vars.update({'lat_lng_pop': latlng_temp.render()})
-#
+    def lat_lng_popover(self):
+        """Enable popovers to display Lat and Lon on each click."""
+        warnings.warn("%s is deprecated. Use %s instead" % ("lat_lng_popover",
+                                                            "add_children(LatLngPopup)"),
+                      FutureWarning, stacklevel=2)
+        self.add_children(LatLngPopup())
+
 #    def click_for_marker(self, popup=None):
 #        """Enable the addition of markers via clicking on the map. The marker
 #        popup defaults to Lat/Lon, but custom text can be passed via the

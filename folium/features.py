@@ -311,30 +311,7 @@ class DivIcon(MacroElement):
 class CircleMarker(MacroElement):
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        """Create a simple stock Leaflet marker on the map, with optional
-        popup text or Vincent visualization.
-
-        Parameters
-        ----------
-        location: tuple or list, default None
-            Latitude and Longitude of Marker (Northing, Easting)
-        popup: string or tuple, default 'Pop Text'
-            Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'vis_path.json')
-            It is possible to adjust the width of text/HTML popups
-            using the optional keywords `popup_width` (default is 300px).
-        icon: Icon plugin
-            the Icon plugin to use to render the marker.
-
-        Returns
-        -------
-        Marker names and HTML in obj.template_vars
-
-        Example
-        -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
-
+        """TODO : docstring here
         """
         super(CircleMarker, self).__init__()
         self._name = 'CircleMarker'
@@ -359,5 +336,26 @@ class CircleMarker(MacroElement):
                     }
                 )
                 .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+class LatLngPopup(MacroElement):
+    def __init__(self):
+        """TODO : docstring here
+        """
+        super(LatLngPopup, self).__init__()
+        self._name = 'LatLngPopup'
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.popup();
+                function latLngPop(e) {
+                    {{this.get_name()}}
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn({{this._parent.get_name()}});
+                    }
+                {{this._parent.get_name()}}.on('click', latLngPop);
             {% endmacro %}
             """)

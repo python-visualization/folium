@@ -19,7 +19,7 @@ from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon
-from folium.features import DivIcon, CircleMarker
+from folium.features import DivIcon, CircleMarker, LatLngPopup
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -291,8 +291,10 @@ class TestFolium(object):
         """Test lat/lon popovers."""
 
         self.map.lat_lng_popover()
-        pop_templ = self.env.get_template('lat_lng_popover.js').render()
-        assert self.map.template_vars['lat_lng_pop'] == pop_templ
+        pop = self.map._children.values()[-1]
+        pop_templ = self.env.get_template('lat_lng_popover.js').render(popup=pop.get_name(),
+                                                                      map=self.map.get_name())
+        assert (''.join(pop_templ.split()))[:-1] in ''.join(self.map.get_root().render().split())
 
     def test_click_for_marker(self):
         """Test click for marker functionality."""
