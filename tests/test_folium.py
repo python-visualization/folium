@@ -157,7 +157,7 @@ class TestFolium(object):
 
         # Single Simple marker.
         self.map.simple_marker(location=[45.50, -122.7])
-        marker_1 = self.map._children.values()[-1]
+        marker_1 = list(self.map._children.values())[-1]
         mark_1 = mark_templ.render({'marker': marker_1.get_name(),
                                     'lat': 45.50,
                                     'lon': -122.7,
@@ -167,9 +167,9 @@ class TestFolium(object):
 
         # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
-        marker_2 = self.map._children.values()[-1]
-        popup_2 = marker_2._children.values()[-1]
-        html_2 = popup_2.html._children.values()[0]
+        marker_2 = list(self.map._children.values())[-1]
+        popup_2 = list(marker_2._children.values())[-1]
+        html_2 = list(popup_2.html._children.values())[0]
         mark_2 = mark_templ.render({'marker': marker_2.get_name(),
                                     'lat': 45.60,
                                     'lon': -122.8,
@@ -185,7 +185,7 @@ class TestFolium(object):
 
         # Test no popup.
         self.map.simple_marker(location=[45.60, -122.8])
-        for child in self.map._children.values()[-1]._children.values():
+        for child in list(self.map._children.values())[-1]._children.values():
             assert not isinstance(child, Popup)
 
     def test_div_markers(self):
@@ -208,9 +208,9 @@ class TestFolium(object):
         assert len(markers)==3
 
         for marker, location, pop in zip(markers, locations, popups):
-            icon = marker._children.values()[0]
-            popup = marker._children.values()[1]
-            html = popup.html._children.values()[0]
+            icon = list(marker._children.values())[0]
+            popup = list(marker._children.values())[1]
+            html = list(popup.html._children.values())[0]
 
             assert isinstance(icon,DivIcon)
             assert isinstance(popup,Popup)
@@ -245,7 +245,7 @@ class TestFolium(object):
 
         # Single Circle marker.
         self.map.circle_marker(location=[45.60, -122.8], popup='Hi')
-        marker = self.map._children.values()[-1]
+        marker = list(self.map._children.values())[-1]
         circle_1 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
@@ -256,7 +256,7 @@ class TestFolium(object):
 
         # Second circle marker.
         self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
-        marker = self.map._children.values()[-1]
+        marker = list(self.map._children.values())[-1]
         circle_2 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
@@ -272,7 +272,7 @@ class TestFolium(object):
         poly_temp = self.env.get_template('poly_marker.js')
 
         self.map.polygon_marker(location=[45.5, -122.5])
-        marker = self.map._children.values()[-1]
+        marker = list(self.map._children.values())[-1]
         polygon = poly_temp.render({'marker': marker.get_name(),
                                     'lat': 45.5,
                                     'lon': -122.5,
@@ -291,7 +291,7 @@ class TestFolium(object):
         """Test lat/lon popovers."""
 
         self.map.lat_lng_popover()
-        pop = self.map._children.values()[-1]
+        pop = list(self.map._children.values())[-1]
         pop_templ = self.env.get_template('lat_lng_popover.js').render(popup=pop.get_name(),
                                                                       map=self.map.get_name())
         assert (''.join(pop_templ.split()))[:-1] in ''.join(self.map.get_root().render().split())
@@ -329,9 +329,9 @@ class TestFolium(object):
         self.map.simple_marker(location=[45.60, -122.8],
                                popup=(vis, 'vis.json'))
 
-        marker = self.map._children.values()[-1]
-        popup = marker._children.values()[-1]
-        vega = popup._children.values()[-1]
+        marker = list(self.map._children.values())[-1]
+        popup = list(marker._children.values())[-1]
+        vega = list(popup._children.values())[-1]
         vega_str = vega_templ.render({'vega': vega.get_name(),
                                       'popup':popup.get_name(),
                                       'marker':marker.get_name(),
