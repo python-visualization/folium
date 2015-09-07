@@ -25,7 +25,8 @@ from folium.six import text_type, binary_type#, iteritems
 from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
-from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon
+from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
+    CircleMarker
 
 #import sys
 #import base64
@@ -265,19 +266,6 @@ class Map(_Map):
                            transparent=wms_transparent, attribution=None)
         self.add_children(wms, name=wms_name)
 
-#        if wms_name not in self.added_layers:
-#            wms_name = wms_name.replace(" ", "_")
-#            wms_temp = self.env.get_template('wms_layer.js')
-#
-#            wms = wms_temp.render({
-#                'wms_name': wms_name,
-#                'wms_url': wms_url,
-#                'wms_format': wms_format,
-#                'wms_layer_names': wms_layers,
-#                'wms_transparent': str(wms_transparent).lower()})
-#            self.template_vars.setdefault('wms_layers', []).append((wms))
-#            self.added_layers.append({wms_name: wms_url})
-#
 #    @iter_obj('simple')
 #    def add_layers_to_map(self):
 #        """
@@ -348,38 +336,7 @@ class Map(_Map):
                         popup=popup_,
                         icon=Icon(color=marker_color, icon=marker_icon, angle=icon_angle))
         self.add_children(marker)
-#        count = self.mark_cnt['simple']
-#
-#        mark_temp = self.env.get_template('simple_marker.js')
-#
-#        marker_num = 'marker_{0}'.format(count)
-#        add_line = "{'icon':"+marker_num+"_icon}"
-#
-#        icon_temp = self.env.get_template('simple_icon.js')
-#        icon = icon_temp.render({'icon': marker_icon,
-#                                 'icon_name': marker_num+"_icon",
-#                                 'markerColor': marker_color,
-#                                 'icon_angle': icon_angle})
-#
-#        # Get marker and popup.
-#        marker = mark_temp.render({'marker': 'marker_' + str(count),
-#                                   'lat': location[0],
-#                                   'lon': location[1],
-#                                   'icon': add_line
-#                                   })
-#
-#        popup_out = self._popup_render(popup=popup, mk_name='marker_',
-#                                       count=count, width=popup_width)
-#        if clustered_marker:
-#            add_mark = 'clusteredmarkers.addLayer(marker_{0})'.format(count)
-#            name = 'cluster_markers'
-#        else:
-#            add_mark = 'map.addLayer(marker_{0})'.format(count)
-#            name = 'custom_markers'
-#        append = (icon, marker, popup_out, add_mark)
-#        self.template_vars.setdefault(name, []).append(append)
-#
-#    @iter_obj('div_mark')
+
     def div_markers(self, locations=None, popups=None,
                     marker_size=10, popup_width=300):
         """Create a simple div marker on the map, with optional
@@ -421,34 +378,6 @@ class Map(_Map):
                             popup = Popup(popup),
                             icon = DivIcon(width=marker_size, height=marker_size))
             self.add_children(marker)
-#        call_cnt = self.mark_cnt['div_mark']
-#        if locations is None or popups is None:
-#            raise RuntimeError("Both locations and popups are mandatory")
-#        for (point_cnt, (location, popup)) in enumerate(zip(locations,
-#                                                            popups)):
-#            marker_num = 'div_marker_{0}_{1}'.format(call_cnt, point_cnt)
-#
-#            icon_temp = self.env.get_template('static_div_icon.js')
-#            icon_name = marker_num+"_icon"
-#            icon = icon_temp.render({'icon_name': icon_name,
-#                                     'size': marker_size})
-#
-#            mark_temp = self.env.get_template('simple_marker.js')
-#            # Get marker and popup.
-#            marker = mark_temp.render({'marker': marker_num,
-#                                       'lat': location[0],
-#                                       'lon': location[1],
-#                                       'icon': "{'icon':"+icon_name+"}"
-#                                       })
-#
-#            mk_name = 'div_marker_{0}_'.format(call_cnt)
-#            popup_out = self._popup_render(popup=popup,
-#                                           mk_name=mk_name,
-#                                           count=point_cnt, width=popup_width)
-#            add_mark = 'map.addLayer(div_marker_{0}_{1})'.format(call_cnt,
-#                                                                 point_cnt)
-#            append = (icon, marker, popup_out, add_mark)
-#            self.template_vars.setdefault('div_markers', []).append(append)
 #
 #    @iter_obj('line')
 #    def line(self, locations,
@@ -547,62 +476,61 @@ class Map(_Map):
 #        self.template_vars.setdefault('multilines', []).append(append)
 #
 #    @iter_obj('circle')
-#    def circle_marker(self, location=None, radius=500, popup=None,
-#                      line_color='black', fill_color='black',
-#                      fill_opacity=0.6, popup_width=300):
-#        """Create a simple circle marker on the map, with optional popup text
-#        or Vincent visualization.
-#
-#        Parameters
-#        ----------
-#        location: tuple or list, default None
-#            Latitude and Longitude of Marker (Northing, Easting)
-#        radius: int, default 500
-#            Circle radius, in pixels
-#        popup: string or tuple, default 'Pop Text'
-#            Input text or visualization for object. Can pass either text,
-#            or a tuple of the form (Vincent object, 'vis_path.json')
-#            It is possible to adjust the width of text/HTML popups
-#            using the optional keywords `popup_width` (default is 300px).
-#        line_color: string, default black
-#            Line color. Can pass hex value here as well.
-#        fill_color: string, default black
-#            Fill color. Can pass hex value here as well.
-#        fill_opacity: float, default 0.6
-#            Circle fill opacity
-#
-#        Returns
-#        -------
-#        Circle names and HTML in obj.template_vars
-#
-#        Example
-#        -------
-#        >>>map.circle_marker(location=[45.5, -122.3],
-#                             radius=1000, popup='Portland, OR')
-#        >>>map.circle_marker(location=[45.5, -122.3],
-#                             radius=1000, popup=(bar_chart, 'bar_data.json'))
-#
-#        """
-#        count = self.mark_cnt['circle']
-#
-#        circle_temp = self.env.get_template('circle_marker.js')
-#
-#        circle = circle_temp.render({'circle': 'circle_' + str(count),
-#                                     'radius': radius,
-#                                     'lat': location[0], 'lon': location[1],
-#                                     'line_color': line_color,
-#                                     'fill_color': fill_color,
-#                                     'fill_opacity': fill_opacity})
-#
-#        popup_out = self._popup_render(popup=popup, mk_name='circle_',
-#                                       count=count, width=popup_width)
-#
-#        add_mark = 'map.addLayer(circle_{0})'.format(count)
-#
-#        self.template_vars.setdefault('markers', []).append((circle,
-#                                                             popup_out,
-#                                                             add_mark))
-#
+    def circle_marker(self, location=None, radius=500, popup=None,
+                      line_color='black', fill_color='black',
+                      fill_opacity=0.6, popup_width=300):
+        """Create a simple circle marker on the map, with optional popup text
+        or Vincent visualization.
+
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        radius: int, default 500
+            Circle radius, in pixels
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+        line_color: string, default black
+            Line color. Can pass hex value here as well.
+        fill_color: string, default black
+            Fill color. Can pass hex value here as well.
+        fill_opacity: float, default 0.6
+            Circle fill opacity
+
+        Returns
+        -------
+        Circle names and HTML in obj.template_vars
+
+        Example
+        -------
+        >>>map.circle_marker(location=[45.5, -122.3],
+                             radius=1000, popup='Portland, OR')
+        >>>map.circle_marker(location=[45.5, -122.3],
+                             radius=1000, popup=(bar_chart, 'bar_data.json'))
+
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("circle_marker",
+                                                            "add_children(CircleMarker)"),
+                      FutureWarning, stacklevel=2)
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            popup_ = Popup(popup, max_width=popup_width)
+        elif isinstance(popup, tuple):
+            popup_ = Popup(Vega(json.loads(popup[0].to_json()),
+                                     width="100%", height="100%"),
+                           max_width=popup_width)
+        else:
+            popup_ = None
+        marker = CircleMarker(location,
+                              radius=radius,
+                              color=line_color,
+                              fill_color=fill_color,
+                              fill_opacity=fill_opacity,
+                              popup=popup_)
+        self.add_children(marker)
+
 #    @iter_obj('polygon')
 #    def polygon_marker(self, location=None, line_color='black', line_opacity=1,
 #                       line_weight=2, fill_color='blue', fill_opacity=1,

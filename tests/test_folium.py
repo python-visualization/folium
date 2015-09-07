@@ -19,7 +19,7 @@ from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon
-from folium.features import DivIcon
+from folium.features import DivIcon, CircleMarker
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -240,25 +240,30 @@ class TestFolium(object):
     def test_circle_marker(self):
         """Test circle marker additions."""
 
+        self.map = folium.Map(location=[45.60, -122.8])
         circ_templ = self.env.get_template('circle_marker.js')
 
         # Single Circle marker.
         self.map.circle_marker(location=[45.60, -122.8], popup='Hi')
-        circle_1 = circ_templ.render({'circle': 'circle_1', 'lat': 45.60,
+        marker = self.map._children.values()[-1]
+        circle_1 = circ_templ.render({'circle': marker.get_name(),
+                                      'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
-        assert self.map.template_vars['markers'][0][0] == circle_1
+        assert ''.join(circle_1.split())[:-1] in ''.join(self.map.get_root().render().split())
 
         # Second circle marker.
         self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
-        circle_2 = circ_templ.render({'circle': 'circle_2', 'lat': 45.70,
+        marker = self.map._children.values()[-1]
+        circle_2 = circ_templ.render({'circle': marker.get_name(),
+                                      'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
-        assert self.map.template_vars['markers'][1][0] == circle_2
+        assert ''.join(circle_2.split())[:-1] in ''.join(self.map.get_root().render().split())
 
     def test_poly_marker(self):
         """Test polygon marker."""
