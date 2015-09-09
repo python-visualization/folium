@@ -8,7 +8,7 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
-from .utilities import color_brewer, _parse_size
+from .utilities import color_brewer, _parse_size, legend_scaler
 
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
@@ -196,8 +196,46 @@ class GeoJson(MacroElement):
             {% endmacro %}
             """)
 
+class TopoJson(MacroElement):
+    def __init__(self, data, object_path):
+        """TODO docstring here.
+        """
+        super(TopoJson, self).__init__()
+        self._name = 'TopoJson'
+        if 'read' in dir(data):
+            self.data = data.read()
+        elif type(data) is dict:
+            self.data = json.dumps(data)
+        else:
+            self.data = data
+
+        self.object_path = object_path
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}}_data = {{this.data}};
+                var {{this.get_name()}} = L.geoJson(topojson.feature(
+                    {{this.get_name()}}_data,
+                    {{this.get_name()}}_data.{{this.object_path}}
+                    )).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+    def render(self,**kwargs):
+        super(TopoJson,self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),
+                                   name='topojson')
+
 class GeoJsonStyle(MacroElement):
-    def __init__(self, color_domain, color_code, color_data=None, key_on='feature.properties.color'):
+    def __init__(self, color_domain, color_code, color_data=None,
+                 key_on='feature.properties.color',
+                 weight=1, opacity=1, color='black',
+                 fill_opacity=0.6, dash_array='3'):
         """TODO : docstring here.
         """
         super(GeoJsonStyle, self).__init__()
@@ -208,36 +246,133 @@ class GeoJsonStyle(MacroElement):
         self.color_data = json.dumps(color_data)
         self.key_on = key_on
 
+        self.weight = weight
+        self.opacity = opacity
+        self.color = color
+        self.fill_color = color_code
+        self.fill_opacity = fill_opacity
+        self.dash_array = dash_array
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = {
-                    color_scale : d3.scale.threshold()
-                          .domain({{this.color_domain}})
-                          .range({{this.color_range}}),
-                    color_data : {{this.color_data}},
-                    color_function : function(feature) {
-                        {% if this.color_data=='null' %}
-                            return this.color_scale({{this.key_on}});
-                        {% else %}
-                            return this.color_scale(this.color_data[{{this.key_on}}]);
-                        {% endif %}
-                        },
-                    };
+                {% if not this.color_range %}
+                    var {{this.get_name()}} = {
+                        color_function : function(feature) {
+                            return '{{this.fill_color}}';
+                            },
+                        };
+                {%else%}
+                    var {{this.get_name()}} = {
+                        color_scale : d3.scale.threshold()
+                              .domain({{this.color_domain}})
+                              .range({{this.color_range}}),
+                        color_data : {{this.color_data}},
+                        color_function : function(feature) {
+                            {% if this.color_data=='null' %}
+                                return this.color_scale({{this.key_on}});
+                            {% else %}
+                                return this.color_scale(this.color_data[{{this.key_on}}]);
+                            {% endif %}
+                            },
+                        };
+                {%endif%}
 
                 {{this._parent.get_name()}}.setStyle(function(feature) {
                     return {
                         fillColor: {{this.get_name()}}.color_function(feature),
-                        weight: 2,
-                        opacity: 1,
-                        color: 'white',
-                        dashArray: '3',
-                        fillOpacity: 0.7
+                        weight: {{this.weight}},
+                        opacity: {{this.opacity}},
+                        color: '{{this.color}}',
+                        fillOpacity: {{this.fill_opacity}},
+                        dashArray: '{{this.dash_array}}'
                         };
                     });
             {% endmacro %}
             """)
     def render(self,**kwargs):
         super(GeoJsonStyle,self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+                                   name='d3')
+
+class ColorScale(MacroElement):
+    def __init__(self, color_domain, color_code, caption=""):
+        """TODO : docstring here.
+        """
+        super(ColorScale, self).__init__()
+        self._name = 'ColorScale'
+
+        self.color_domain = color_domain
+        self.color_range = color_brewer(color_code, n=len(color_domain))
+        self.tick_labels=legend_scaler(self.color_domain)
+
+        self.caption = caption
+        self.fill_color = color_code
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = {};
+
+                {%if this.color_range %}
+                {{this.get_name()}}.color = d3.scale.threshold()
+                          .domain({{this.color_domain}})
+                          .range({{this.color_range}});
+                {%else%}
+                {{this.get_name()}}.color = d3.scale.threshold()
+                          .domain([{{ this.color_domain[0] }}, {{ this.color_domain[-1] }}])
+                          .range(['{{ this.fill_color }}', '{{ this.fill_color }}']);
+                {%endif%}
+
+                {{this.get_name()}}.x = d3.scale.linear()
+                          .domain([{{ this.color_domain[0] }}, {{ this.color_domain[-1] }}])
+                          .range([0, 400]);
+
+                {{this.get_name()}}.legend = L.control({position: 'topright'});
+                {{this.get_name()}}.legend.onAdd = function (map) {var div = L.DomUtil.create('div', 'legend'); return div};
+                {{this.get_name()}}.legend.addTo({{this._parent.get_name()}});
+
+                {{this.get_name()}}.xAxis = d3.svg.axis()
+                    .scale({{this.get_name()}}.x)
+                    .orient("top")
+                    .tickSize(1)
+                    .tickValues({{ this.tick_labels }});
+
+                {{this.get_name()}}.svg = d3.select(".legend.leaflet-control").append("svg")
+                    .attr("id", 'legend')
+                    .attr("width", 450)
+                    .attr("height", 40);
+
+                {{this.get_name()}}.g = {{this.get_name()}}.svg.append("g")
+                    .attr("class", "key")
+                    .attr("transform", "translate(25,16)");
+
+                {{this.get_name()}}.g.selectAll("rect")
+                    .data({{this.get_name()}}.color.range().map(function(d, i) {
+                      return {
+                        x0: i ? {{this.get_name()}}.x({{this.get_name()}}.color.domain()[i - 1]) : {{this.get_name()}}.x.range()[0],
+                        x1: i < {{this.get_name()}}.color.domain().length ? {{this.get_name()}}.x({{this.get_name()}}.color.domain()[i]) : {{this.get_name()}}.x.range()[1],
+                        z: d
+                      };
+                    }))
+                  .enter().append("rect")
+                    .attr("height", 10)
+                    .attr("x", function(d) { return d.x0; })
+                    .attr("width", function(d) { return d.x1 - d.x0; })
+                    .style("fill", function(d) { return d.z; });
+
+                {{this.get_name()}}.g.call({{this.get_name()}}.xAxis).append("text")
+                    .attr("class", "caption")
+                    .attr("y", 21)
+                    .text('{{ this.caption }}');
+            {% endmacro %}
+            """)
+    def render(self,**kwargs):
+        super(ColorScale,self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure,Figure), ("You cannot render this Element "

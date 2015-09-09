@@ -26,7 +26,7 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup, ClickForMarker
+    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson
 
 #import sys
 #import base64
@@ -760,210 +760,154 @@ class Map(_Map):
 #                                          'vega_id': vega_id})
 #            else:
 #                raise TypeError("Unrecognized popup type: {!r}".format(popup))
-#
-#    @iter_obj('geojson')
-#    def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
-#                 data=None, columns=None, key_on=None, threshold_scale=None,
-#                 fill_color='blue', fill_opacity=0.6, line_color='black',
-#                 line_weight=1, line_opacity=1, legend_name=None,
-#                 topojson=None, reset=False):
-#        """Apply a GeoJSON overlay to the map.
-#
-#        Plot a GeoJSON overlay on the base map. There is no requirement
-#        to bind data (passing just a GeoJSON plots a single-color overlay),
-#        but there is a data binding option to map your columnar data to
-#        different feature objects with a color scale.
-#
-#        If data is passed as a Pandas dataframe, the "columns" and "key-on"
-#        keywords must be included, the first to indicate which DataFrame
-#        columns to use, the second to indicate the layer in the GeoJSON
-#        on which to key the data. The 'columns' keyword does not need to be
-#        passed for a Pandas series.
-#
-#        Colors are generated from color brewer (http://colorbrewer2.org/)
-#        sequential palettes on a D3 threshold scale. The scale defaults to the
-#        following quantiles: [0, 0.5, 0.75, 0.85, 0.9]. A custom scale can be
-#        passed to `threshold_scale` of length <=6, in order to match the
-#        color brewer range.
-#
-#        TopoJSONs can be passed as "geo_path", but the "topojson" keyword must
-#        also be passed with the reference to the topojson objects to convert.
-#        See the topojson.feature method in the TopoJSON API reference:
-#        https://github.com/mbostock/topojson/wiki/API-Reference
-#
-#
-#        Parameters
-#        ----------
-#        geo_path: string, default None
-#            URL or File path to your GeoJSON data
-#        geo_str: string, default None
-#            String of GeoJSON, alternative to geo_path
-#        data_out: string, default 'data.json'
-#            Path to write Pandas DataFrame/Series to JSON if binding data
-#        data: Pandas DataFrame or Series, default None
-#            Data to bind to the GeoJSON.
-#        columns: dict or tuple, default None
-#            If the data is a Pandas DataFrame, the columns of data to be bound.
-#            Must pass column 1 as the key, and column 2 the values.
-#        key_on: string, default None
-#            Variable in the GeoJSON file to bind the data to. Must always
-#            start with 'feature' and be in JavaScript objection notation.
-#            Ex: 'feature.id' or 'feature.properties.statename'.
-#        threshold_scale: list, default None
-#            Data range for D3 threshold scale. Defaults to the following range
-#            of quantiles: [0, 0.5, 0.75, 0.85, 0.9], rounded to the nearest
-#            order-of-magnitude integer. Ex: 270 rounds to 200, 5600 to 6000.
-#        fill_color: string, default 'blue'
-#            Area fill color. Can pass a hex code, color name, or if you are
-#            binding data, one of the following color brewer palettes:
-#            'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
-#            'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
-#        fill_opacity: float, default 0.6
-#            Area fill opacity, range 0-1.
-#        line_color: string, default 'black'
-#            GeoJSON geopath line color.
-#        line_weight: int, default 1
-#            GeoJSON geopath line weight.
-#        line_opacity: float, default 1
-#            GeoJSON geopath line opacity, range 0-1.
-#        legend_name: string, default None
-#            Title for data legend. If not passed, defaults to columns[1].
-#        topojson: string, default None
-#            If using a TopoJSON, passing "objects.yourfeature" to the topojson
-#            keyword argument will enable conversion to GeoJSON.
-#        reset: boolean, default False
-#            Remove all current geoJSON layers, start with new layer
-#
-#        Output
-#        ------
-#        GeoJSON data layer in obj.template_vars
-#
-#        Example
-#        -------
-#        >>> m.geo_json(geo_path='us-states.json', line_color='blue',
-#                      line_weight=3)
-#        >>> m.geo_json(geo_path='geo.json', data=df,
-#                      columns=['Data 1', 'Data 2'],
-#                      key_on='feature.properties.myvalue', fill_color='PuBu',
-#                      threshold_scale=[0, 20, 30, 40, 50, 60])
-#        >>> m.geo_json(geo_path='countries.json', topojson='objects.countries')
-#        """
-#
-#        if reset:
-#            reset_vars = ['json_paths', 'func_vars', 'color_scales',
-#                          'geo_styles', 'gjson_layers', 'map_legends',
-#                          'topo_convert']
-#            for var in reset_vars:
-#                self.template_vars.update({var: []})
-#            self.mark_cnt['geojson'] = 1
-#
-#        def json_style(style_cnt, line_color, line_weight, line_opacity,
-#                       fill_color, fill_opacity, quant_fill):
-#            """Generate JSON styling function from template"""
-#            style_temp = self.env.get_template('geojson_style.js')
-#            style = style_temp.render({'style': style_cnt,
-#                                       'line_color': line_color,
-#                                       'line_weight': line_weight,
-#                                       'line_opacity': line_opacity,
-#                                       'fill_color': fill_color,
-#                                       'fill_opacity': fill_opacity,
-#                                       'quantize_fill': quant_fill})
-#            return style
-#
-#        # Set map type to geojson.
-#        self.map_type = 'geojson'
-#
-#        # Get JSON map layer template pieces, convert TopoJSON if necessary.
-#        # geo_str is really a hack.
-#        if geo_path:
-#            geo_path = ".defer(d3.json, '{0}')".format(geo_path)
-#        elif geo_str:
-#            fmt = (".defer(function(callback)"
-#                   "{{callback(null, JSON.parse('{}'))}})").format
-#            geo_path = fmt(geo_str)
-#        if topojson is None:
-#            map_var = '_'.join(['gjson', str(self.mark_cnt['geojson'])])
-#            layer_var = map_var
-#        else:
-#            map_var = '_'.join(['tjson', str(self.mark_cnt['geojson'])])
-#            topo_obj = '.'.join([map_var, topojson])
-#            layer_var = '_'.join(['topo', str(self.mark_cnt['geojson'])])
-#            topo_templ = self.env.get_template('topo_func.js')
-#            topo_func = topo_templ.render({'map_var': layer_var,
-#                                           't_var': map_var,
-#                                           't_var_obj': topo_obj})
-#            topo_lib = self.env.get_template('topojson_ref.txt').render()
-#            self.template_vars.update({'topojson': topo_lib})
-#            self.template_vars.setdefault('topo_convert',
-#                                          []).append(topo_func)
-#
-#        style_count = '_'.join(['style', str(self.mark_cnt['geojson'])])
-#
-#        # Get Data binding pieces if available.
-#        if data is not None:
-#
-#            import pandas as pd
-#
-#            # Create DataFrame with only the relevant columns.
-#            if isinstance(data, pd.DataFrame):
-#                data = pd.concat([data[columns[0]], data[columns[1]]], axis=1)
-#
-#            # Save data to JSON.
-#            self.json_data[data_out] = utilities.transform_data(data)
-#
-#            # Add data to queue.
-#            d_path = ".defer(d3.json, '{0}')".format(data_out)
-#            self.template_vars.setdefault('json_paths', []).append(d_path)
-#
-#            # Add data variable to makeMap function.
-#            data_var = '_'.join(['data', str(self.mark_cnt['geojson'])])
-#            self.template_vars.setdefault('func_vars', []).append(data_var)
-#
-#            # D3 Color scale.
-#            series = data[columns[1]]
-#            if threshold_scale and len(threshold_scale) > 6:
-#                raise ValueError
-#            domain = threshold_scale or utilities.split_six(series=series)
-#            if len(domain) > 253:
-#                raise ValueError('The threshold scale must be length <= 253')
-#            if not utilities.color_brewer(fill_color):
-#                raise ValueError('Please pass a valid color brewer code to '
-#                                 'fill_local. See docstring for valid codes.')
-#
-#            palette = utilities.color_brewer(fill_color, len(domain))
-#            d3range = palette[0: len(domain) + 1]
-#            tick_labels = utilities.legend_scaler(domain)
-#
-#            color_temp = self.env.get_template('d3_threshold.js')
-#            d3scale = color_temp.render({'domain': domain,
-#                                         'range': d3range})
-#            self.template_vars.setdefault('color_scales', []).append(d3scale)
-#
-#            # Create legend.
-#            name = legend_name or columns[1]
-#            leg_templ = self.env.get_template('d3_map_legend.js')
-#            legend = leg_templ.render({'lin_max': int(domain[-1]*1.1),
-#                                       'tick_labels': tick_labels,
-#                                       'caption': name})
-#            self.template_vars.setdefault('map_legends', []).append(legend)
-#
-#            # Style with color brewer colors.
-#            matchColor = 'color(matchKey({0}, {1}))'.format(key_on, data_var)
-#            style = json_style(style_count, line_color, line_weight,
-#                               line_opacity, None, fill_opacity, matchColor)
-#        else:
-#            style = json_style(style_count, line_color, line_weight,
-#                               line_opacity, fill_color, fill_opacity, None)
-#
-#        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
-#                 'onEachFeature: onEachFeature}}).addTo(map)'
-#                 .format(self.mark_cnt['geojson'], layer_var, style_count))
-#
-#        self.template_vars.setdefault('json_paths', []).append(geo_path)
-#        self.template_vars.setdefault('func_vars', []).append(map_var)
-#        self.template_vars.setdefault('geo_styles', []).append(style)
-#        self.template_vars.setdefault('gjson_layers', []).append(layer)
-#
+
+    def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
+                 data=None, columns=None, key_on=None, threshold_scale=None,
+                 fill_color='blue', fill_opacity=0.6, line_color='black',
+                 line_weight=1, line_opacity=1, legend_name=None,
+                 topojson=None, reset=False):
+        """Apply a GeoJSON overlay to the map.
+
+        Plot a GeoJSON overlay on the base map. There is no requirement
+        to bind data (passing just a GeoJSON plots a single-color overlay),
+        but there is a data binding option to map your columnar data to
+        different feature objects with a color scale.
+
+        If data is passed as a Pandas dataframe, the "columns" and "key-on"
+        keywords must be included, the first to indicate which DataFrame
+        columns to use, the second to indicate the layer in the GeoJSON
+        on which to key the data. The 'columns' keyword does not need to be
+        passed for a Pandas series.
+
+        Colors are generated from color brewer (http://colorbrewer2.org/)
+        sequential palettes on a D3 threshold scale. The scale defaults to the
+        following quantiles: [0, 0.5, 0.75, 0.85, 0.9]. A custom scale can be
+        passed to `threshold_scale` of length <=6, in order to match the
+        color brewer range.
+
+        TopoJSONs can be passed as "geo_path", but the "topojson" keyword must
+        also be passed with the reference to the topojson objects to convert.
+        See the topojson.feature method in the TopoJSON API reference:
+        https://github.com/mbostock/topojson/wiki/API-Reference
+
+
+        Parameters
+        ----------
+        geo_path: string, default None
+            URL or File path to your GeoJSON data
+        geo_str: string, default None
+            String of GeoJSON, alternative to geo_path
+        data_out: string, default 'data.json'
+            Path to write Pandas DataFrame/Series to JSON if binding data
+        data: Pandas DataFrame or Series, default None
+            Data to bind to the GeoJSON.
+        columns: dict or tuple, default None
+            If the data is a Pandas DataFrame, the columns of data to be bound.
+            Must pass column 1 as the key, and column 2 the values.
+        key_on: string, default None
+            Variable in the GeoJSON file to bind the data to. Must always
+            start with 'feature' and be in JavaScript objection notation.
+            Ex: 'feature.id' or 'feature.properties.statename'.
+        threshold_scale: list, default None
+            Data range for D3 threshold scale. Defaults to the following range
+            of quantiles: [0, 0.5, 0.75, 0.85, 0.9], rounded to the nearest
+            order-of-magnitude integer. Ex: 270 rounds to 200, 5600 to 6000.
+        fill_color: string, default 'blue'
+            Area fill color. Can pass a hex code, color name, or if you are
+            binding data, one of the following color brewer palettes:
+            'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
+            'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
+        fill_opacity: float, default 0.6
+            Area fill opacity, range 0-1.
+        line_color: string, default 'black'
+            GeoJSON geopath line color.
+        line_weight: int, default 1
+            GeoJSON geopath line weight.
+        line_opacity: float, default 1
+            GeoJSON geopath line opacity, range 0-1.
+        legend_name: string, default None
+            Title for data legend. If not passed, defaults to columns[1].
+        topojson: string, default None
+            If using a TopoJSON, passing "objects.yourfeature" to the topojson
+            keyword argument will enable conversion to GeoJSON.
+        reset: boolean, default False
+            Remove all current geoJSON layers, start with new layer
+
+        Output
+        ------
+        GeoJSON data layer in obj.template_vars
+
+        Example
+        -------
+        >>> m.geo_json(geo_path='us-states.json', line_color='blue',
+                      line_weight=3)
+        >>> m.geo_json(geo_path='geo.json', data=df,
+                      columns=['Data 1', 'Data 2'],
+                      key_on='feature.properties.myvalue', fill_color='PuBu',
+                      threshold_scale=[0, 20, 30, 40, 50, 60])
+        >>> m.geo_json(geo_path='countries.json', topojson='objects.countries')
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("geo_json", "add_children(GeoJson)"),
+                      FutureWarning, stacklevel=2)
+
+        # Create GeoJson object
+        if geo_path:
+            geo_data = open(geo_path)
+        elif geo_str:
+            geo_data = geo_str
+        else:
+            geo_data = {}
+
+        if topojson:
+            geo_json = TopoJson(geo_data, topojson)
+        else:
+            geo_json = GeoJson(geo_data)
+
+        # Create color_data dict
+        if hasattr(data,'set_index'):
+            # This is a pd.DataFrame
+            color_data = data.set_index(columns[0])[columns[1]].to_dict()
+        elif hasattr(data, 'to_dict'):
+            # This is a pd.Series
+            color_data = data.to_dict()
+        elif data:
+            color_data = dict(data)
+        else:
+            color_data = None
+
+        # Compute color_domain
+        if threshold_scale:
+            color_domain = list(threshold_scale).copy()
+        else:
+            # To avoid explicit pandas dependency ; changed default behavior.
+            warnings.warn("'threshold_scale' default behavior has changed."
+                          " Now you get a linear scale between the 'min' and the 'mas'"
+                          " of your data."
+                          " To get former behavior, use folium.utilities.split_six.",
+                          FutureWarning, stacklevel=2)
+            data_min = min(color_data.values())
+            data_max = max(color_data.values())
+            if data_min==data_max:
+                data_min = data_min if data_min<0 else 0 if data_min>0 else -1
+                data_max = data_max if data_max>0 else 0 if data_max<0 else 1
+            data_min, data_max = 1.01*data_min-0.01*data_max, 1.01*data_max-0.01*data_min
+            nb_class = 6
+            color_domain = [data_min+i*(data_max-data_min)*1./nb_class for i in range(1+nb_class)]
+
+        # Create GeoJsonStyle
+        geo_json_style = GeoJsonStyle(\
+            color_domain, fill_color, color_data=color_data,
+            key_on=key_on,
+            weight=line_weight, opacity=line_opacity, color=line_color,
+            fill_opacity=fill_opacity)
+
+        # Create ColorScale
+        color_scale = ColorScale(color_domain, fill_color, caption=legend_name)
+
+        geo_json.add_children(geo_json_style)
+        self.add_children(geo_json)
+        self.add_children(color_scale)
+
 #    @iter_obj('image_overlay')
 #    def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
 #                      min_lon=-180.0, max_lon=180.0, image_name=None,
