@@ -19,7 +19,7 @@ from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon
-from folium.features import DivIcon, CircleMarker, LatLngPopup
+from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson, GeoJsonStyle, ColorScale
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -344,33 +344,37 @@ class TestFolium(object):
     def test_geo_json_simple(self):
         """Test geojson method."""
 
-        self.map = folium.Map([43, -100], zoom_start=4)
-
-        path = os.path.join(rootpath, 'us-counties.json')
-        geo_path = ".defer(d3.json, '{0}')".format(path)
-
         # No data binding.
+        self.map = folium.Map([43, -100], zoom_start=4)
+        path = os.path.join(rootpath, 'us-counties.json')
         self.map.geo_json(geo_path=path)
-        geo_path = ".defer(d3.json, '{0}')".format(path)
-        map_var = 'gjson_1'
-        layer_var = 'gjson_1'
+
+        geo_json = [x for x in self.map._children.values() if isinstance(x,GeoJson)][0]
+        color_scale = [x for x in self.map._children.values() if isinstance(x,ColorScale)][0]
+        geo_json_style = list(geo_json._children.values())[0]
+        out = ''.join(self.map._parent.render().split())
+
+        # Verify the geo_json object
+        obj_temp = self.env.get_template('geo_json.js')
+        obj = obj_temp.render(this = geo_json)
+        assert ''.join(obj.split())[:-1] in out
+
+        # Verify the style
         style_temp = self.env.get_template('geojson_style.js')
-        style = style_temp.render({'style': 'style_1',
+        style = style_temp.render({'this': geo_json_style,
                                    'line_color': 'black',
                                    'line_weight': 1,
                                    'line_opacity': 1,
                                    'fill_color': 'blue',
-                                   'fill_opacity': 0.6})
-        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
-                 'onEachFeature: onEachFeature}}).addTo(map)'
-                 .format(1, layer_var, 'style_1'))
+                                   'fill_opacity': 0.6,
+                                   'dash_array' : 0,
+                                  })
+        assert ''.join(style.split())[:-1] in out
 
-        templ = self.map.template_vars
-        assert self.map.map_type == 'geojson'
-        assert templ['func_vars'][0] == map_var
-        assert templ['geo_styles'][0] == style
-        assert templ['gjson_layers'][0] == layer
-        assert templ['json_paths'][0] == geo_path
+        # Verify the color_scale
+        colorsc_temp = self.env.get_template('color_scale.js')
+        colorsc = colorsc_temp.render(this=color_scale)
+        assert ''.join(colorsc.split())[:-1] in out
 
     def test_geo_json_bad_color(self):
         """Test geojson method."""

@@ -877,8 +877,8 @@ class Map(_Map):
 
         # Compute color_domain
         if threshold_scale:
-            color_domain = list(threshold_scale).copy()
-        else:
+            color_domain = list(threshold_scale)
+        elif color_data:
             # To avoid explicit pandas dependency ; changed default behavior.
             warnings.warn("'threshold_scale' default behavior has changed."
                           " Now you get a linear scale between the 'min' and the 'mas'"
@@ -893,6 +893,8 @@ class Map(_Map):
             data_min, data_max = 1.01*data_min-0.01*data_max, 1.01*data_max-0.01*data_min
             nb_class = 6
             color_domain = [data_min+i*(data_max-data_min)*1./nb_class for i in range(1+nb_class)]
+        else:
+            color_domain = [-1,1]
 
         # Create GeoJsonStyle
         geo_json_style = GeoJsonStyle(\
