@@ -27,7 +27,7 @@ from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
     CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson
-
+from .utilities import color_brewer
 #import sys
 #import base64
 
@@ -849,6 +849,12 @@ class Map(_Map):
         """
         warnings.warn("%s is deprecated. Use %s instead" % ("geo_json", "add_children(GeoJson)"),
                       FutureWarning, stacklevel=2)
+
+        if threshold_scale and len(threshold_scale)>6:
+            raise ValueError
+        if data is not None and not color_brewer(fill_color):
+            raise ValueError('Please pass a valid color brewer code to '
+                                 'fill_local. See docstring for valid codes.')
 
         # Create GeoJson object
         if geo_path:
