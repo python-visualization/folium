@@ -341,8 +341,10 @@ class TestFolium(object):
         assert ''.join(vega_parse.render().split()) in out
         assert (''.join(vega_str.split()))[:-1] in out
 
-    def test_geo_json(self):
+    def test_geo_json_simple(self):
         """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
 
         path = os.path.join(rootpath, 'us-counties.json')
         geo_path = ".defer(d3.json, '{0}')".format(path)
@@ -370,12 +372,26 @@ class TestFolium(object):
         assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'][0] == geo_path
 
+    def test_geo_json_bad_color(self):
+        """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        path = os.path.join(rootpath, 'us-counties.json')
+
         # Data binding incorrect color value error.
         data = setup_data()
         with pytest.raises(ValueError):
             self.map.geo_json(path, data=data,
                               columns=['FIPS_Code', 'Unemployed_2011'],
                               key_on='feature.id', fill_color='blue')
+
+    def test_geo_json_bad_threshold_scale(self):
+        """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        path = os.path.join(rootpath, 'us-counties.json')
 
         # Data binding threshold_scale too long.
         data = setup_data()
@@ -385,6 +401,13 @@ class TestFolium(object):
                               key_on='feature.id',
                               threshold_scale=[1, 2, 3, 4, 5, 6, 7],
                               fill_color='YlGnBu')
+
+    def test_geo_json_data_binding(self):
+        """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        path = os.path.join(rootpath, 'us-counties.json')
 
         # With DataFrame data binding, default threshold scale.
         self.map.geo_json(geo_path=path, data=data,
@@ -423,6 +446,13 @@ class TestFolium(object):
         assert templ['gjson_layers'][0] == layer
         assert templ['json_paths'] == [data_path, geo_path]
         assert templ['color_scales'][0] == scale
+
+    def test_topo_json(self):
+        """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        path = os.path.join(rootpath, 'us-counties.json')
 
         # Adding TopoJSON as additional layer.
         path_2 = 'or_counties_topo.json'
