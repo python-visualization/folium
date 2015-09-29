@@ -360,15 +360,13 @@ class TestFolium(object):
         assert ''.join(obj.split())[:-1] in out
 
         # Verify the style
-        style_temp = self.env.get_template('geojson_style.js')
-        style = style_temp.render({'this': geo_json_style,
-                                   'line_color': 'black',
-                                   'line_weight': 1,
-                                   'line_opacity': 1,
-                                   'fill_color': 'blue',
-                                   'fill_opacity': 0.6,
-                                   'dash_array' : 0,
-                                  })
+        assert geo_json_style.color == 'black'
+        assert geo_json_style.weight == 1
+        assert geo_json_style.opacity == 1
+        assert geo_json_style.fill_color == 'blue'
+        assert geo_json_style.fill_opacity == 0.6
+        assert geo_json_style.dash_array == 0
+        style = geo_json_style._template.module.script(geo_json_style)
         assert ''.join(style.split())[:-1] in out
 
         # Verify the color_scale
@@ -409,47 +407,51 @@ class TestFolium(object):
     def test_geo_json_data_binding(self):
         """Test geojson method."""
 
+        data = setup_data()
+
         self.map = folium.Map([43, -100], zoom_start=4)
 
         path = os.path.join(rootpath, 'us-counties.json')
 
         # With DataFrame data binding, default threshold scale.
         self.map.geo_json(geo_path=path, data=data,
+                          threshold_scale=[4.0, 1000.0, 3000.0, 5000.0, 9000.0],
                           columns=['FIPS_Code', 'Unemployed_2011'],
                           key_on='feature.id', fill_color='YlGnBu',
                           reset=True)
-        geo_path = ".defer(d3.json, '{0}')".format(path)
-        data_path = ".defer(d3.json, '{0}')".format('data.json')
-        map_var = 'gjson_1'
-        layer_var = 'gjson_1'
-        data_var = 'data_1'
 
+        out = self.map._parent.render()
+
+        geo_json = [x for x in self.map._children.values() if isinstance(x,GeoJson)][0]
+        color_scale = [x for x in self.map._children.values() if isinstance(x,ColorScale)][0]
+        geo_json_style = list(geo_json._children.values())[0]
+
+        # Verify the geo_json object
+        obj_temp = self.env.get_template('geo_json.js')
+        obj = obj_temp.render(this = geo_json)
+        assert ''.join(obj.split())[:-1] in ''.join(out.split())
+
+        # Verify the style
+        assert geo_json_style.color == 'black'
+        assert geo_json_style.weight == 1
+        assert geo_json_style.opacity == 1
+        assert geo_json_style.fill_color == 'YlGnBu'
+        assert geo_json_style.fill_opacity == 0.6
+        assert geo_json_style.dash_array == 0
+        style = geo_json_style._template.module.script(geo_json_style)
+        assert ''.join(style.split())[:-1] in ''.join(out.split())
+
+        # Verify the colorscale
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
         palette = folium.utilities.color_brewer('YlGnBu')
-        d3range = palette[0: len(domain) + 1]
-        color_temp = self.env.get_template('d3_threshold.js')
-        scale = color_temp.render({'domain': domain,
-                                   'range': d3range})
-
-        style_temp = self.env.get_template('geojson_style.js')
-        color = 'color(matchKey(feature.id, data_1))'
-        style = style_temp.render({'style': 'style_1',
-                                   'line_color': 'black',
-                                   'line_weight': 1,
-                                   'line_opacity': 1,
-                                   'quantize_fill': color,
-                                   'fill_opacity': 0.6})
-
-        layer = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
-                 'onEachFeature: onEachFeature}}).addTo(map)'
-                 .format(1, layer_var, 'style_1'))
-
-        templ = self.map.template_vars
-        assert templ['func_vars'] == [data_var, map_var]
-        assert templ['geo_styles'][0] == style
-        assert templ['gjson_layers'][0] == layer
-        assert templ['json_paths'] == [data_path, geo_path]
-        assert templ['color_scales'][0] == scale
+        d3range = palette[0: len(domain) + 2]
+        colorscale_obj = [val for key,val in self.map._children.items() if isinstance(val, ColorScale)][0]
+        colorscale_temp = self.env.get_template('d3_threshold.js')
+        colorscale = colorscale_temp.render({
+            'this' : colorscale_obj,
+            'domain': domain,
+            'range': d3range})
+        assert ''.join(colorscale.split())[:-1] in ''.join(out.split())
 
     def test_topo_json(self):
         """Test geojson method."""
