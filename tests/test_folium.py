@@ -19,7 +19,8 @@ from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon
-from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson, GeoJsonStyle, ColorScale
+from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson,\
+    GeoJsonStyle, ColorScale, TopoJson
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -463,20 +464,14 @@ class TestFolium(object):
         # Adding TopoJSON as additional layer.
         path_2 = 'or_counties_topo.json'
         self.map.geo_json(geo_path=path_2, topojson='objects.or_counties_geo')
-        geo_path_2 = ".defer(d3.json, '{0}')".format(path_2)
-        map_var_2 = 'tjson_2'
-        layer_var_2 = 'topo_2'
-        topo_func = ('topo_2 = topojson.feature(tjson_2,'
-                     ' tjson_2.objects.or_counties_geo);')
-        fmt = ('gJson_layer_{0} = L.geoJson({1}, {{style: {2},'
-               'onEachFeature: onEachFeature}}).addTo(map)')
-        layer_2 = fmt.format(2, layer_var_2, 'style_2')
 
-        templ = self.map.template_vars
-        assert templ['func_vars'] == [data_var, map_var, map_var_2]
-        assert templ['gjson_layers'][1] == layer_2
-        assert templ['json_paths'] == [data_path, geo_path, geo_path_2]
-        assert templ['topo_convert'][0] == topo_func
+        out = self.map._parent.render()
+
+        # Verify TopoJson
+        topo_json = [val for key,val in self.map._children.items()\
+                 if isinstance(val,TopoJson)][0]
+        topojson_str = topo_json._template.module.script(topo_json)
+        assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
 
     def test_map_build(self):
         """Test map build."""
