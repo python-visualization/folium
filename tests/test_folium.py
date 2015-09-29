@@ -543,7 +543,7 @@ class TestFolium(object):
         map.polygon_marker(location=[45.5, -122.5])
 
         # Test write.
-        map.create_map()
+        map._parent.render()
 
     def test_line(self):
         """Test line."""
