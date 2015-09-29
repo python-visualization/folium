@@ -110,6 +110,7 @@ class Map(MacroElement):
                 height: {{this.height[0]}}{{this.height[1]}};
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
+                }
             </style>
         {% endmacro %}
         {% macro html(this, kwargs) %}

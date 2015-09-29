@@ -477,24 +477,34 @@ class TestFolium(object):
         """Test map build."""
 
         # Standard map.
-        self.map._build_map()
+        self.setup()
+        out = self.map._parent.render()
         html_templ = self.env.get_template('fol_template.html')
 
-        tmpl = {'Tiles': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        tile_layers = [
+            {
+                'id' : 'tile_layer_'+'0'*32,
+                'address' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                          'OpenStreetMap</a> contributors'),
-                'map_id': 'folium_' + '0' * 32,
-                'lat': 45.5236, 'lon': -122.675, 'max_zoom': 20,
-                'size': 'style="width: 900px; height: 400px"',
-                'zoom_level': 4,
+                'max_zoom': 20,
                 'min_zoom': 1,
+                }
+            ]
+        tmpl = {
+                'map_id': 'map_' + '0' * 32,
+                'lat': 45.5236, 'lon': -122.675,
+                'size': 'width: 900.0px; height: 400.0px;',
+                'zoom_level': 4,
                 'min_lat': -90,
                 'max_lat': 90,
                 'min_lon': -180,
-                'max_lon': 180}
+                'max_lon': 180,
+                'tile_layers': tile_layers,
+            }
         HTML = html_templ.render(tmpl, plugins={})
 
-        assert self.map.HTML == HTML
+        assert ''.join(out.split()) == ''.join(HTML.split())
 
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode
