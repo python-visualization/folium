@@ -200,6 +200,8 @@ class TileLayer(MacroElement):
             if not attr:
                 raise ValueError('Custom tiles must'
                                  ' also be passed an attribution')
+            if isinstance(attr, binary_type):
+                attr = text_type(attr, 'utf8')
             self.attr = attr
 
         self._template = Template(u"""

@@ -516,14 +516,14 @@ class TestFolium(object):
         if not PY3:
             map = folium.Map(location=[45.5236, -122.6750],
                              tiles='test', attr=b'unicode')
-            map._build_map()
+            map._parent.render()
         else:
             map = folium.Map(location=[45.5236, -122.6750],
                              tiles='test', attr=u'юникод')
-            map._build_map()
+            map._parent.render()
         map = folium.Map(location=[45.5236, -122.6750],
                          tiles='test', attr='юникод')
-        map._build_map()
+        map._parent.render()
 
     def test_create_map(self):
         """Test create map."""
