@@ -459,11 +459,9 @@ class TestFolium(object):
 
         self.map = folium.Map([43, -100], zoom_start=4)
 
-        path = os.path.join(rootpath, 'us-counties.json')
-
         # Adding TopoJSON as additional layer.
-        path_2 = 'or_counties_topo.json'
-        self.map.geo_json(geo_path=path_2, topojson='objects.or_counties_geo')
+        path = os.path.join(rootpath, 'or_counties_topo.json')
+        self.map.geo_json(geo_path=path, topojson='objects.or_counties_geo')
 
         out = self.map._parent.render()
 
