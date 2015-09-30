@@ -18,7 +18,7 @@ import folium
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
-from folium.map import Popup, Marker, Icon
+from folium.map import Popup, Marker, Icon, FitBounds
 from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson,\
     GeoJsonStyle, ColorScale, TopoJson, PolyLine, MultiPolyLine
 
@@ -606,13 +606,24 @@ class TestFolium(object):
     def test_fit_bounds(self):
         """Test fit_bounds."""
         bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
+
+        self.setup()
+        self.map.fit_bounds(bounds)
+        fitbounds = [val for key,val in self.map._children.items() if isinstance(val,FitBounds)][0]
+        out = self.map._parent.render()
+
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
             'bounds': json.dumps(bounds),
+            'this' : fitbounds,
             'fit_bounds_options': {}, })
 
-        self.map.fit_bounds(bounds)
-        assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
+        assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
+
+        self.setup()
+        self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
+        fitbounds = [val for key,val in self.map._children.items() if isinstance(val,FitBounds)][0]
+        out = self.map._parent.render()
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
@@ -620,11 +631,10 @@ class TestFolium(object):
             'fit_bounds_options': json.dumps({'maxZoom': 15,
                                               'padding': (3, 3), },
                                              sort_keys=True),
-        })
+            'this' : fitbounds,
+            })
 
-        self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
-
-        assert self.map.template_vars['fit_bounds'] == fit_bounds_rendered
+        assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
     def test_image_overlay(self):
         """Test image overlay."""

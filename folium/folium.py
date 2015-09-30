@@ -24,7 +24,7 @@ import json
 from folium.six import text_type, binary_type#, iteritems
 from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
-from .map import Map, TileLayer, Icon, Marker, Popup
+from .map import Map, TileLayer, Icon, Marker, Popup, FitBounds
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
     CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine
 from .utilities import color_brewer
@@ -477,22 +477,6 @@ class Map(_Map):
 
         self.add_children(p)
 
-#        count = self.mark_cnt['multiline']
-#
-#        multiline_temp = self.env.get_template('multi_polyline.js')
-#
-#        multiline_opts = {'color': line_color, 'weight': line_weight,
-#                          'opacity': line_opacity}
-#
-#        varname = 'multiline_{}'.format(count)
-#        multiline_rendered = multiline_temp.render({'multiline': varname,
-#                                                    'locations': locations,
-#                                                    'options': multiline_opts})
-#
-#        add_multiline = 'map.addLayer({});'.format(varname)
-#        append = (multiline_rendered, add_multiline)
-#        self.template_vars.setdefault('multilines', []).append(append)
-#
 #    @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup=None,
                       line_color='black', fill_color='black',
@@ -632,50 +616,39 @@ class Map(_Map):
                       FutureWarning, stacklevel=2)
         self.add_children(ClickForMarker(popup=popup))
 
-#    def fit_bounds(self, bounds, padding_top_left=None,
-#                   padding_bottom_right=None, padding=None, max_zoom=None):
-#        """Fit the map to contain a bounding box with the maximum zoom level possible.
-#
-#        Parameters
-#        ----------
-#        bounds: list of (latitude, longitude) points
-#            Bounding box specified as two points [southwest, northeast]
-#        padding_top_left: (x, y) point, default None
-#            Padding in the top left corner. Useful if some elements in
-#            the corner, such as controls, might obscure objects you're zooming
-#            to.
-#        padding_bottom_right: (x, y) point, default None
-#            Padding in the bottom right corner.
-#        padding: (x, y) point, default None
-#            Equivalent to setting both top left and bottom right padding to
-#            the same value.
-#        max_zoom: int, default None
-#            Maximum zoom to be used.
-#
-#        Example
-#        -------
-#        >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
-#
-#        """
-#        options = {
-#            'paddingTopLeft': padding_top_left,
-#            'paddingBottomRight': padding_bottom_right,
-#            'padding': padding,
-#            'maxZoom': max_zoom,
-#        }
-#        fit_bounds_options = {}
-#        for key, opt in options.items():
-#            if opt:
-#                fit_bounds_options[key] = opt
-#        fit_bounds = self.env.get_template('fit_bounds.js')
-#        fit_bounds_str = fit_bounds.render({
-#            'bounds': json.dumps(bounds),
-#            'fit_bounds_options': json.dumps(fit_bounds_options,
-#                                             sort_keys=True),
-#        })
-#
-#        self.template_vars.update({'fit_bounds': fit_bounds_str})
-#
+    def fit_bounds(self, bounds, padding_top_left=None,
+                   padding_bottom_right=None, padding=None, max_zoom=None):
+        """Fit the map to contain a bounding box with the maximum zoom level possible.
+
+        Parameters
+        ----------
+        bounds: list of (latitude, longitude) points
+            Bounding box specified as two points [southwest, northeast]
+        padding_top_left: (x, y) point, default None
+            Padding in the top left corner. Useful if some elements in
+            the corner, such as controls, might obscure objects you're zooming
+            to.
+        padding_bottom_right: (x, y) point, default None
+            Padding in the bottom right corner.
+        padding: (x, y) point, default None
+            Equivalent to setting both top left and bottom right padding to
+            the same value.
+        max_zoom: int, default None
+            Maximum zoom to be used.
+
+        Example
+        -------
+        >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
+
+        """
+        self.add_children(FitBounds(bounds,
+                                    padding_top_left=padding_top_left,
+                                    padding_bottom_right=padding_bottom_right,
+                                    padding=padding,
+                                    max_zoom=max_zoom,
+                                    )
+                          )
+
     def add_plugin(self, plugin):
         """Adds a plugin to the map.
 

@@ -5,7 +5,7 @@ var autobounds = L.featureGroup({{ features }}).getBounds()
 {% endif %}
 {% endif %}
 {% if bounds %}
-map.fitBounds({{ bounds }},
+{{this._parent.get_name()}}.fitBounds({{ bounds }},
     {{ fit_bounds_options }}
 );
 {% endif %}

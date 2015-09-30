@@ -6,6 +6,7 @@ Map
 Classes for drawing maps.
 """
 import warnings
+import json
 
 from jinja2 import Template
 
@@ -333,3 +334,50 @@ class Popup(Element):
 
         figure.script.add_children(Element(\
             self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
+
+class FitBounds(MacroElement):
+    def __init__(self, bounds, padding_top_left=None,
+                   padding_bottom_right=None, padding=None, max_zoom=None):
+        """Fit the map to contain a bounding box with the maximum zoom level possible.
+
+        Parameters
+        ----------
+        bounds: list of (latitude, longitude) points
+            Bounding box specified as two points [southwest, northeast]
+        padding_top_left: (x, y) point, default None
+            Padding in the top left corner. Useful if some elements in
+            the corner, such as controls, might obscure objects you're zooming
+            to.
+        padding_bottom_right: (x, y) point, default None
+            Padding in the bottom right corner.
+        padding: (x, y) point, default None
+            Equivalent to setting both top left and bottom right padding to
+            the same value.
+        max_zoom: int, default None
+            Maximum zoom to be used.
+
+        """
+        super(FitBounds, self).__init__()
+        self._name = 'FitBounds'
+        self.bounds = json.loads(json.dumps(bounds))
+        options = {
+            'maxZoom': max_zoom,
+            'paddingTopLeft': padding_top_left,
+            'paddingBottomRight': padding_bottom_right,
+            'padding': padding,
+        }
+        self.fit_bounds_options = json.dumps({key:val for key,val in options.items() if val},
+                                             sort_keys=True)
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                {% if this.autobounds %}
+                    var autobounds = L.featureGroup({{ this.features }}).getBounds()
+                {% endif %}
+
+                {{this._parent.get_name()}}.fitBounds(
+                    {% if this.bounds %}{{ this.bounds }}{% else %}"autobounds"{% endif %},
+                    {{ this.fit_bounds_options }}
+                    );
+            {% endmacro %}
+            """)
