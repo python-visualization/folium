@@ -463,3 +463,49 @@ class ClickForMarker(MacroElement):
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
             """)
+
+class PolyLine(MacroElement):
+    def __init__(self, locations, color=None, weight=None, opacity=None, latlon=True):
+        """Creates a PolyLine object to append into a map with Map.add_children.
+
+        Parameters
+        ----------
+            locations: list of points (latitude, longitude)
+                Latitude and Longitude of line (Northing, Easting)
+            color: string, default Leaflet's default ('#03f')
+            weight: float, default Leaflet's default (5)
+            opacity: float, default Leaflet's default (0.5)
+            latlon: bool, default True
+                Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+                Note that the default GeoJson format is latlon=False,
+                while Leaflet polyline's default is latlon=True.
+
+                examples :
+                    # providing file
+                    GeoJson(open('foo.json'))
+
+                    # providing dict
+                    GeoJson(json.load(open('foo.json')))
+
+                    # providing string
+                    GeoJson(open('foo.json').read())
+        """
+        super(PolyLine, self).__init__()
+        self._name = 'PolyLine'
+        self.data = [[x[1],x[0]] for x in locations] if not latlon else locations
+        self.color = color
+        self.weight = weight
+        self.opacity = opacity
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.polyline(
+                    {{this.data}},
+                    {
+                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
+                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
+                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
+                        });
+                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)

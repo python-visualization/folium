@@ -20,7 +20,7 @@ from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon
 from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson,\
-    GeoJsonStyle, ColorScale, TopoJson
+    GeoJsonStyle, ColorScale, TopoJson, PolyLine
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -560,15 +560,22 @@ class TestFolium(object):
             [[45.5237, -122.6750], [45.5237, -122.6751]],
             [[45.5238, -122.6750], [45.5238, -122.6751]]
         ]
-        line_rendered = line_temp.render({'line': 'line_1',
-                                          'locations': locations,
-                                          'options': line_opts})
 
+        self.setup()
         self.map.line(locations=locations,
                       line_color=line_opts['color'],
                       line_weight=line_opts['weight'],
                       line_opacity=line_opts['opacity'])
-        assert self.map.template_vars['lines'][0][0] == line_rendered
+        polyline = [val for key,val in self.map._children.items()\
+                    if isinstance(val,PolyLine)][0]
+        out = self.map._parent.render()
+
+        line_rendered = line_temp.render({'line': 'line_1',
+                                          'this':polyline,
+                                          'locations': locations,
+                                          'options': line_opts})
+
+        assert ''.join(line_rendered.split()) in ''.join(out.split())
 
     def test_multi_polyline(self):
         """Test multi_polyline."""

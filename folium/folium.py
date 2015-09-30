@@ -26,7 +26,7 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson
+    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine
 from .utilities import color_brewer
 #import sys
 #import base64
@@ -378,55 +378,51 @@ class Map(_Map):
                             popup = Popup(popup),
                             icon = DivIcon(width=marker_size, height=marker_size))
             self.add_children(marker)
-#
-#    @iter_obj('line')
-#    def line(self, locations,
-#             line_color=None, line_opacity=None, line_weight=None,
-#             popup=None, popup_width=300):
-#        """Add a line to the map with optional styles.
-#
-#        Parameters
-#        ----------
-#        locations: list of points (latitude, longitude)
-#            Latitude and Longitude of line (Northing, Easting)
-#        line_color: string, default Leaflet's default ('#03f')
-#        line_opacity: float, default Leaflet's default (0.5)
-#        line_weight: float, default Leaflet's default (5)
-#        popup: string or tuple, default 'Pop Text'
-#            Input text or visualization for object. Can pass either text,
-#            or a tuple of the form (Vincent object, 'vis_path.json')
-#            It is possible to adjust the width of text/HTML popups
-#            using the optional keywords `popup_width` (default is 300px).
-#
-#        Note: If the optional styles are omitted, they will not be included
-#        in the HTML output and will obtain the Leaflet defaults listed above.
-#
-#        Example
-#        -------
-#        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
-#        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
-#                    line_color='red', line_opacity=1.0)
-#
-#        """
-#        count = self.mark_cnt['line']
-#
-#        line_temp = self.env.get_template('polyline.js')
-#
-#        polyline_opts = {'color': line_color, 'weight': line_weight,
-#                         'opacity': line_opacity}
-#
-#        varname = 'line_{}'.format(count)
-#        line_rendered = line_temp.render({'line': varname,
-#                                          'locations': locations,
-#                                          'options': polyline_opts})
-#
-#        popup_out = self._popup_render(popup=popup, mk_name='line_',
-#                                       count=count, width=popup_width)
-#
-#        add_line = 'map.addLayer({});'.format(varname)
-#        append = (line_rendered, popup_out, add_line)
-#        self.template_vars.setdefault('lines', []).append((append))
-#
+
+    def line(self, locations,
+             line_color=None, line_opacity=None, line_weight=None,
+             popup=None, popup_width=300, latlon=True):
+        """Add a line to the map with optional styles.
+
+        Parameters
+        ----------
+        locations: list of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        line_color: string, default Leaflet's default ('#03f')
+        line_opacity: float, default Leaflet's default (0.5)
+        line_weight: float, default Leaflet's default (5)
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+        latlon: bool, default True
+            Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+            Note that the default GeoJson format is latlon=False,
+            while Leaflet polyline's default is latlon=True.
+
+        Note: If the optional styles are omitted, they will not be included
+        in the HTML output and will obtain the Leaflet defaults listed above.
+
+        Example
+        -------
+        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
+        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
+                    line_color='red', line_opacity=1.0)
+
+        """
+
+        p = PolyLine(locations,
+                     color=line_color,
+                     weight=line_weight,
+                     opacity=line_opacity,
+                     latlon=latlon,
+                     )
+
+        if popup is not None:
+            p.add_children(Popup(popup, max_width=popup_width))
+
+        self.add_children(p)
 #    @iter_obj('multiline')
 #    def multiline(self, locations, line_color=None, line_opacity=None,
 #                  line_weight=None):
