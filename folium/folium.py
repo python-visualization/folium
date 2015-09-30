@@ -26,7 +26,7 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine
+    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine
 from .utilities import color_brewer
 #import sys
 #import base64
@@ -423,38 +423,60 @@ class Map(_Map):
             p.add_children(Popup(popup, max_width=popup_width))
 
         self.add_children(p)
-#    @iter_obj('multiline')
-#    def multiline(self, locations, line_color=None, line_opacity=None,
-#                  line_weight=None):
-#        """Add a multiPolyline to the map with optional styles.
-#
-#        A multiPolyline is single layer that consists of several polylines that
-#        share styling/popup.
-#
-#        Parameters
-#        ----------
-#        locations: list of lists of points (latitude, longitude)
-#            Latitude and Longitude of line (Northing, Easting)
-#        line_color: string, default Leaflet's default ('#03f')
-#        line_opacity: float, default Leaflet's default (0.5)
-#        line_weight: float, default Leaflet's default (5)
-#
-#        Note: If the optional styles are omitted, they will not be included
-#        in the HTML output and will obtain the Leaflet defaults listed above.
-#
-#        Example
-#        -------
-#        # FIXME: Add another example.
-#        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
-#                                   [(45.5237, -122.675), (45.5237, -122.675)],
-#                                   [(45.5238, -122.675), (45.5238, -122.675)]])
-#        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
-#                                   [(45.5237, -122.675), (45.5237, -122.675)],
-#                                   [(45.5238, -122.675), (45.5238, -122.675)]],
-#                                   line_color='red', line_weight=2,
-#                                   line_opacity=1.0)
-#        """
-#
+
+    def multiline(self, locations, line_color=None, line_opacity=None,
+                  line_weight=None,
+             popup=None, popup_width=300, latlon=True):
+        """Add a multiPolyline to the map with optional styles.
+
+        A multiPolyline is single layer that consists of several polylines that
+        share styling/popup.
+
+        Parameters
+        ----------
+        locations: list of lists of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        line_color: string, default Leaflet's default ('#03f')
+        line_opacity: float, default Leaflet's default (0.5)
+        line_weight: float, default Leaflet's default (5)
+        popup: string or tuple, default 'Pop Text'
+            Input text or visualization for object. Can pass either text,
+            or a tuple of the form (Vincent object, 'vis_path.json')
+            It is possible to adjust the width of text/HTML popups
+            using the optional keywords `popup_width` (default is 300px).
+        latlon: bool, default True
+            Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+            Note that the default GeoJson format is latlon=False,
+            while Leaflet polyline's default is latlon=True.
+
+        Note: If the optional styles are omitted, they will not be included
+        in the HTML output and will obtain the Leaflet defaults listed above.
+
+        Example
+        -------
+        # FIXME: Add another example.
+        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
+                                   [(45.5237, -122.675), (45.5237, -122.675)],
+                                   [(45.5238, -122.675), (45.5238, -122.675)]])
+        >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
+                                   [(45.5237, -122.675), (45.5237, -122.675)],
+                                   [(45.5238, -122.675), (45.5238, -122.675)]],
+                                   line_color='red', line_weight=2,
+                                   line_opacity=1.0)
+        """
+
+        p = MultiPolyLine(locations,
+                     color=line_color,
+                     weight=line_weight,
+                     opacity=line_opacity,
+                     latlon=latlon,
+                     )
+
+        if popup is not None:
+            p.add_children(Popup(popup, max_width=popup_width))
+
+        self.add_children(p)
+
 #        count = self.mark_cnt['multiline']
 #
 #        multiline_temp = self.env.get_template('multi_polyline.js')

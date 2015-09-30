@@ -408,3 +408,23 @@ def _parse_size(value):
         msg = "Cannot parse value {!r} as {!r}".format
         raise ValueError(msg(value, value_type))
     return value, value_type
+
+def _locations_mirror(x):
+    """Mirrors the points in a list-of-list-of-...-of-list-of-points.
+    For example _locations_mirror([[[1,2],[3,4]],[5,6],[7,8]]) = [[[2, 1], [4, 3]], [6, 5], [8, 7]]
+    """
+    if hasattr(x, '__iter__'):
+        if hasattr(x[0], '__iter__'):
+            return list(map(_locations_mirror,x))
+        else:
+            return list(x[::-1])
+    else:
+        return x
+
+def _locations_tolist(x):
+    """Transforms recusively a list of iterables into a list of list.
+    """
+    if hasattr(x, '__iter__'):
+        return list(map(_locations_tolist,x))
+    else:
+        return x
