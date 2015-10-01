@@ -26,8 +26,8 @@ from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup, FitBounds
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine
-from .utilities import color_brewer
+    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine, ImageOverlay
+from .utilities import color_brewer, write_png
 #import sys
 #import base64
 
@@ -907,96 +907,80 @@ class Map(_Map):
         self.add_children(geo_json)
         self.add_children(color_scale)
 
-#    @iter_obj('image_overlay')
-#    def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-#                      min_lon=-180.0, max_lon=180.0, image_name=None,
-#                      filename=None):
-#        """
-#        Simple image overlay of raster data from a numpy array.  This is a
-#        lightweight way to overlay geospatial data on top of a map.  If your
-#        data is high res, consider implementing a WMS server and adding a WMS
-#        layer.
-#
-#        This function works by generating a PNG file from a numpy array.  If
-#        you do not specify a filename, it will embed the image inline.
-#        Otherwise, it saves the file in the current directory, and then adds
-#        it as an image overlay layer in leaflet.js.  By default, the image is
-#        placed and stretched using bounds that cover the entire globe.
-#
-#        Parameters
-#        ----------
-#        data: numpy array OR url string, required.
-#            if numpy array, must be a image format,
-#            i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
-#            if url, must be a valid url to a image (local or external)
-#        opacity: float, default 0.25
-#            Image layer opacity in range 0 (transparent) to 1 (opaque)
-#        min_lat: float, default -90.0
-#        max_lat: float, default  90.0
-#        min_lon: float, default -180.0
-#        max_lon: float, default  180.0
-#        image_name: string, default None
-#            The name of the layer object in leaflet.js
-#        filename: string, default None
-#            Optional file name of output.png for image overlay.
-#            Use `None` for inline PNG.
-#
-#        Output
-#        ------
-#        Image overlay data layer in obj.template_vars
-#
-#        Examples
-#        -------
-#        # assumes a map object `m` has been created
-#        >>> import numpy as np
-#        >>> data = np.random.random((100,100))
-#
-#        # to make a rgba from a specific matplotlib colormap:
-#        >>> import matplotlib.cm as cm
-#        >>> cmapper = cm.cm.ColorMapper('jet')
-#        >>> data2 = cmapper.to_rgba(np.random.random((100,100)))
-#        >>> # Place the data over all of the globe (will be pretty pixelated!)
-#        >>> m.image_overlay(data)
-#        >>> # Put it only over a single city (Paris).
-#        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970,
-#        ...                 min_lon=2.25214, max_lon=2.44731)
-#
-#        """
-#
-#        if isinstance(data, str):
-#            filename = data
-#        else:
-#            try:
-#                png_str = utilities.write_png(data)
-#            except Exception as e:
-#                raise e
-#
-#            if filename is not None:
-#                with open(filename, 'wb') as fd:
-#                    fd.write(png_str)
-#            else:
-#                png = "data:image/png;base64,{}".format
-#                filename = png(base64.b64encode(png_str).decode('utf-8'))
-#
-#        if image_name not in self.added_layers:
-#            if image_name is None:
-#                image_name = "Image_Overlay"
-#            else:
-#                image_name = image_name.replace(" ", "_")
-#            image_url = filename
-#            image_bounds = [[min_lat, min_lon], [max_lat, max_lon]]
-#            image_opacity = opacity
-#
-#            image_temp = self.env.get_template('image_layer.js')
-#
-#            image = image_temp.render({'image_name': image_name,
-#                                       'image_url': image_url,
-#                                       'image_bounds': image_bounds,
-#                                       'image_opacity': image_opacity})
-#
-#            self.template_vars['image_layers'].append(image)
-#            self.added_layers.append(image_name)
-#
+    def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
+                      min_lon=-180.0, max_lon=180.0, origin='upper', colormap=None,
+                      image_name=None, filename=None, mercator_project=False):
+        """
+        Simple image overlay of raster data from a numpy array.  This is a
+        lightweight way to overlay geospatial data on top of a map.  If your
+        data is high res, consider implementing a WMS server and adding a WMS
+        layer.
+
+        This function works by generating a PNG file from a numpy array.  If
+        you do not specify a filename, it will embed the image inline.
+        Otherwise, it saves the file in the current directory, and then adds
+        it as an image overlay layer in leaflet.js.  By default, the image is
+        placed and stretched using bounds that cover the entire globe.
+
+        Parameters
+        ----------
+        data: numpy array OR url string, required.
+            if numpy array, must be a image format,
+            i.e., NxM (mono), NxMx3 (rgb), or NxMx4 (rgba)
+            if url, must be a valid url to a image (local or external)
+        opacity: float, default 0.25
+            Image layer opacity in range 0 (transparent) to 1 (opaque)
+        min_lat: float, default -90.0
+        max_lat: float, default  90.0
+        min_lon: float, default -180.0
+        max_lon: float, default  180.0
+        image_name: string, default None
+            The name of the layer object in leaflet.js
+        filename: string, default None
+            Optional file name of output.png for image overlay.
+            Use `None` for inline PNG.
+        origin : ['upper' | 'lower'], optional, default 'upper'
+            Place the [0,0] index of the array in the upper left or lower left
+            corner of the axes.
+
+        colormap : callable, used only for `mono` image.
+            Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+            for transforming a mono image into RGB.
+            It must output iterables of length 3 or 4, with values between 0. and 1.
+            Hint : you can use colormaps from `matplotlib.cm`.
+
+        mercator_project : bool, default False, used only for array-like image.
+            Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+        Output
+        ------
+        Image overlay data layer in obj.template_vars
+
+        Examples
+        -------
+        # assumes a map object `m` has been created
+        >>> import numpy as np
+        >>> data = np.random.random((100,100))
+
+        # to make a rgba from a specific matplotlib colormap:
+        >>> import matplotlib.cm as cm
+        >>> cmapper = cm.cm.ColorMapper('jet')
+        >>> data2 = cmapper.to_rgba(np.random.random((100,100)))
+        >>> # Place the data over all of the globe (will be pretty pixelated!)
+        >>> m.image_overlay(data)
+        >>> # Put it only over a single city (Paris).
+        >>> m.image_overlay(data, min_lat=48.80418, max_lat=48.90970,
+        ...                 min_lon=2.25214, max_lon=2.44731)
+
+        """
+        if filename:
+            image = write_png(data, origin=origin, colormap=colormap)
+            open(filename,'wb').write(image)
+            data = filename
+
+        self.add_children(ImageOverlay(data, [[min_lat, min_lon],[max_lat,max_lon]],
+                                       opacity=opacity, origin=origin, colormap=colormap,
+                                      mercator_project=mercator_project))
+
 #    def _build_map(self, html_templ=None, templ_type='string'):
 #        self._auto_bounds()
 #        """Build HTML/JS/CSS from Templates given current map type."""

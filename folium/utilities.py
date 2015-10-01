@@ -311,77 +311,137 @@ def split_six(series=None):
     arr = series.values
     return [base(np.percentile(arr, x)) for x in quants]
 
-
-def write_png(array):
-    """
-    Format a numpy array as a PNG byte string.
-    This can be writen to disk using binary I/O, or encoded using base64
-    for an inline png like this:
-
-    >>> png_str = write_png(array)
-    >>> "data:image/png;base64,"+base64.b64encode(png_str)
-
-    Taken from
-    http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
+def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
+    """Transforms an image computed in (longitude,latitude) coordinates into
+    the a Mercator projection image.
 
     Parameters
     ----------
 
-    array: numpy array
-         Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
+    data: numpy array or equivalent list-like object.
+        Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
 
-    Returns
-    -------
-    PNG formatted byte string
+    lat_bounds : length 2 tuple
+        Minimal and maximal value of the latitude of the image.
 
+    origin : ['upper' | 'lower'], optional, default 'upper'
+        Place the [0,0] index of the array in the upper left or lower left
+        corner of the axes.
+
+    height_out : int, default None
+        The expected height of the output.
+        If None, the height of the input is used.
     """
     if np is None:
         raise ImportError("The NumPy package is required"
                           " for this functionality")
 
-    array = np.atleast_3d(array)
-    if array.shape[2] not in [1, 3, 4]:
-        raise ValueError("Data must be NxM (mono), "
-                         "NxMx3 (RGB), or NxMx4 (RGBA)")
+    mercator = lambda x: np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
 
-    # Have to broadcast up into a full RGBA array.
-    array_full = np.empty((array.shape[0], array.shape[1], 4))
-    # NxM -> NxMx4.
-    if array.shape[2] == 1:
-        array_full[:, :, 0] = array[:, :, 0]
-        array_full[:, :, 1] = array[:, :, 0]
-        array_full[:, :, 2] = array[:, :, 0]
-        array_full[:, :, 3] = 1
-    # NxMx3 -> NxMx4.
-    elif array.shape[2] == 3:
-        array_full[:, :, 0] = array[:, :, 0]
-        array_full[:, :, 1] = array[:, :, 1]
-        array_full[:, :, 2] = array[:, :, 2]
-        array_full[:, :, 3] = 1
-    # NxMx4 -> keep.
-    else:
-        array_full = array
+    array = np.atleast_3d(data).copy()
+    height, width, nblayers = array.shape
+
+    lat_min,lat_max = lat_bounds
+    if height_out is None:
+        height_out = height
+
+    # Eventually flip the image
+    if origin=='upper':
+        array = array[::-1,:,:]
+
+    lats = lat_min + np.linspace(0.5/height,1.-0.5/height, height)*(lat_max-lat_min)
+    latslats = mercator(lat_min) + np.linspace(0.5/height_out,1.-0.5/height_out, height_out)*(mercator(lat_max)-mercator(lat_min))
+
+    out = np.zeros((height_out,width,nblayers))
+    for i in range(width):
+        for j in range(4):
+            out[:,i,j] = np.interp(latslats,mercator(lats),  array[:,i,j])
+
+    # Eventually flip the image
+    if origin=='upper':
+        out = out[::-1,:,:]
+
+    return out
+
+def write_png(data, origin='upper', colormap=None):
+    """
+    Tranform an array of data into a PNG string.
+    This can be writen to disk using binary I/O, or encoded using base64
+    for an inline png like this:
+
+    >>> png_str = write_png(array)
+    >>> "data:image/png;base64,"+png_str.encode('base64')
+
+    Inspired from
+    http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
+
+    Parameters
+    ----------
+
+    data: numpy array or equivalent list-like object.
+         Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
+
+    origin : ['upper' | 'lower'], optional, default 'upper'
+        Place the [0,0] index of the array in the upper left or lower left
+        corner of the axes.
+
+    colormap : callable, used only for `mono` image.
+        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+        for transforming a mono image into RGB.
+        It must output iterables of length 3 or 4, with values between 0. and 1.
+        Hint : you can use colormaps from `matplotlib.cm`.
+
+    Returns
+    -------
+    PNG formatted byte string
+    """
+    if np is None:
+        raise ImportError("The NumPy package is required"
+                          " for this functionality")
+
+    if colormap is None:
+        colormap = lambda x: (x,x,x,1)
+
+    array = np.atleast_3d(data)
+    height, width, nblayers = array.shape
+
+    if nblayers not in [1, 3, 4]:
+            raise ValueError("Data must be NxM (mono), "
+                             "NxMx3 (RGB), or NxMx4 (RGBA)")
+    assert array.shape == (height,width,nblayers)
+
+    if nblayers==1:
+        array = np.array(map(colormap,array.ravel()))
+        nblayers = array.shape[1]
+        if nblayers not in [3,4]:
+            raise ValueError("colormap must provide colors of"
+                             "length 3 (RGB) or 4 (RGBA)")
+        array = array.reshape((height,width,nblayers))
+    assert array.shape == (height,width,nblayers)
+
+    if nblayers==3:
+        array = np.concatenate((array, np.ones((height,width,1))), axis=2)
+        nblayers = 4
+    assert array.shape == (height,width,nblayers)
+    assert nblayers == 4
 
     # Normalize to uint8 if it isn't already.
-    if array_full.dtype != 'uint8':
-        for component in range(4):
-            frame = array_full[:, :, component]
-            array_full[:, :, component] = (frame / frame.max() * 255)
-        array_full = array_full.astype('uint8')
-    width, height = array_full.shape[:2]
+    if array.dtype != 'uint8':
+        array = (array *255./array.max(axis=(0,1)).reshape((1,1,4)))\
+            .astype('uint8')
 
-    array_full = array_full.tobytes()
+    # Eventually flip the image
+    if origin=='lower':
+        array = array[::-1,:,:]
 
-    # Reverse the vertical line order and add null bytes at the start.
-    width_byte_4 = width * 4
-    raw_data = b''.join(b'\x00' + array_full[span:span + width_byte_4] for
-                        span in range((height-1) * width*4, -1, -width_byte_4))
+    # Transform the array to bytes
+    raw_data = b''.join([b'\x00' + array[i,:,:].tobytes() for i in range(height)])
 
     def png_pack(png_tag, data):
-        chunk_head = png_tag + data
-        return (struct.pack("!I", len(data)) +
-                chunk_head +
-                struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head)))
+            chunk_head = png_tag + data
+            return (struct.pack("!I", len(data)) +
+                    chunk_head +
+                    struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head)))
 
     return b''.join([
         b'\x89PNG\r\n\x1a\n',

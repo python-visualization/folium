@@ -8,7 +8,8 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
-from .utilities import color_brewer, _parse_size, legend_scaler, _locations_mirror, _locations_tolist
+from .utilities import color_brewer, _parse_size, legend_scaler, _locations_mirror, _locations_tolist, write_png,\
+    mercator_transform
 
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
@@ -533,5 +534,76 @@ class MultiPolyLine(MacroElement):
                         {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
                         });
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+
+class ImageOverlay(MacroElement):
+    def __init__(self, image, bounds, opacity=1., attribution=None, origin='upper', colormap=None, mercator_project=False):
+        """Used to load and display a single image over specific bounds of the map, implements ILayer interface
+
+        Parameters
+        ----------
+            image: string, file or array-like object
+                The data you want to draw on the map.
+                * If string, it will be written directly in the output file.
+                * If file, it's content will be converted as embeded in the output file.
+                * If array-like, it will be converted to PNG base64 string and embeded in the output.
+            bounds: list
+                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]]
+            opacity: float, default Leaflet's default (1.0)
+            attr: string, default Leaflet's default ("")
+            origin : ['upper' | 'lower'], optional, default 'upper'
+                Place the [0,0] index of the array in the upper left or lower left
+                corner of the axes.
+
+            colormap : callable, used only for `mono` image.
+                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+                for transforming a mono image into RGB.
+                It must output iterables of length 3 or 4, with values between 0. and 1.
+                Hint : you can use colormaps from `matplotlib.cm`.
+
+            mercator_project : bool, default False, used only for array-like image.
+                Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+        """
+        super(ImageOverlay, self).__init__()
+        self._name = 'ImageOverlay'
+
+        if hasattr(image,'read'):
+            # We got an image file.
+            if hasattr(image,'name'):
+                # we try to get the image format from the file name.
+                fileformat = image.name.lower().split('.')[-1]
+            else:
+                fileformat = 'png'
+            self.url = "data:image/{};base64,{}".format(fileformat,
+                                                   image.read().encode('base64'))
+        elif hasattr(image,'__iter__'):
+            # We got an array-like object
+            if mercator_project:
+                data = mercator_transform(image,
+                                          [bounds[0][0], bounds[1][0]],
+                                          origin=origin)
+            else:
+                data = image
+            self.url = "data:image/png;base64," +write_png(data, origin=origin, colormap=colormap).encode('base64')
+        else:
+            # We got an url
+            self.url = json.loads(json.dumps(image))
+
+        self.url = self.url.replace('\n',' ')
+        self.bounds = json.loads(json.dumps(bounds))
+        options = {
+            'opacity': opacity,
+            'attribution': attribution,
+        }
+        self.options = json.dumps({key:val for key,val in options.items() if val},
+                                             sort_keys=True)
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.imageOverlay(
+                    '{{ this.url }}',
+                    {{ this.bounds }},
+                    {{ this.options }}
+                    ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)

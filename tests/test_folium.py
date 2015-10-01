@@ -20,7 +20,7 @@ from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon, FitBounds
 from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson,\
-    GeoJsonStyle, ColorScale, TopoJson, PolyLine, MultiPolyLine
+    GeoJsonStyle, ColorScale, TopoJson, PolyLine, MultiPolyLine, ImageOverlay
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -638,39 +638,52 @@ class TestFolium(object):
 
     def test_image_overlay(self):
         """Test image overlay."""
-        from numpy.random import random
+        #from numpy.random import random
         from folium.utilities import write_png
-        import base64
+        #import base64
 
-        data = random((100, 100))
+        data = [[[1,0,0,1],[0,0,0,0],[0,0,0,0]],[[1,1,0,0.5],[0,0,1,1],[0,0,1,1]]]
+        min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
+
+        self.setup()
+        image_url = 'data.png'
+        self.map.image_overlay(data, filename=image_url)
+        out = self.map._parent.render()
+
+        imageoverlay = [val for key,val in self.map._children.items() if isinstance(val,ImageOverlay)][0]
+
         png_str = write_png(data)
-        with open('data.png', 'wb') as f:
-            f.write(png_str)
+        #with open('data.png', 'wb') as f:
+        #    f.write(png_str)
         png = "data:image/png;base64,{}".format
-        inline_image_url = png(base64.b64encode(png_str).decode('utf-8'))
+        inline_image_url = png(png_str.encode('base64').decode('utf-8'))
 
         image_tpl = self.env.get_template('image_layer.js')
         image_name = 'Image_Overlay'
         image_opacity = 0.25
-        image_url = 'data.png'
-        min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
         image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]
 
         image_rendered = image_tpl.render({'image_name': image_name,
+                                           'this':imageoverlay,
                                            'image_url': image_url,
                                            'image_bounds': image_bounds,
                                            'image_opacity': image_opacity})
 
-        self.map.image_overlay(data, filename=image_url)
-        assert image_rendered in self.map.template_vars['image_layers']
+        assert ''.join(image_rendered.split()) in ''.join(out.split())
+
+        self.setup()
+        self.map.image_overlay(data)
+        out = self.map._parent.render()
+
+        imageoverlay = [val for key,val in self.map._children.items() if isinstance(val,ImageOverlay)][0]
 
         image_rendered = image_tpl.render({'image_name': image_name,
+                                           'this':imageoverlay,
                                            'image_url': inline_image_url,
                                            'image_bounds': image_bounds,
                                            'image_opacity': image_opacity})
 
-        self.map.image_overlay(data)
-        assert image_rendered in self.map.template_vars['image_layers']
+        assert ''.join(image_rendered.split()) in ''.join(out.split())
 
     def test_scroll_zoom_toggler_plugin(self):
         """Test ScrollZoomToggler plugin."""
