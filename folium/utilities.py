@@ -411,7 +411,7 @@ def write_png(data, origin='upper', colormap=None):
     assert array.shape == (height,width,nblayers)
 
     if nblayers==1:
-        array = np.array(map(colormap,array.ravel()))
+        array = np.array(list(map(colormap,array.ravel())))
         nblayers = array.shape[1]
         if nblayers not in [3,4]:
             raise ValueError("colormap must provide colors of"

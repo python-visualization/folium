@@ -15,6 +15,7 @@ import jinja2
 from jinja2 import Environment, PackageLoader
 import vincent
 import folium
+import base64
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
@@ -656,7 +657,7 @@ class TestFolium(object):
         #with open('data.png', 'wb') as f:
         #    f.write(png_str)
         png = "data:image/png;base64,{}".format
-        inline_image_url = png(png_str.encode('base64').decode('utf-8'))
+        inline_image_url = png(base64.b64encode(png_str).decode('utf-8'))
 
         image_tpl = self.env.get_template('image_layer.js')
         image_name = 'Image_Overlay'

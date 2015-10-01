@@ -7,9 +7,11 @@ Extra features Elements.
 """
 from jinja2 import Template
 import json
+import base64
 
 from .utilities import color_brewer, _parse_size, legend_scaler, _locations_mirror, _locations_tolist, write_png,\
     mercator_transform
+from .six import text_type, binary_type
 
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
@@ -576,8 +578,8 @@ class ImageOverlay(MacroElement):
             else:
                 fileformat = 'png'
             self.url = "data:image/{};base64,{}".format(fileformat,
-                                                   image.read().encode('base64'))
-        elif hasattr(image,'__iter__'):
+                                                   base64.b64encode(image.read()).decode('utf-8'))
+        elif (not (isinstance(image,text_type) or isinstance(image,binary_type))) and hasattr(image,'__iter__'):
             # We got an array-like object
             if mercator_project:
                 data = mercator_transform(image,
@@ -585,7 +587,8 @@ class ImageOverlay(MacroElement):
                                           origin=origin)
             else:
                 data = image
-            self.url = "data:image/png;base64," +write_png(data, origin=origin, colormap=colormap).encode('base64')
+            self.url = "data:image/png;base64," +\
+                base64.b64encode(write_png(data, origin=origin, colormap=colormap)).decode('utf-8')
         else:
             # We got an url
             self.url = json.loads(json.dumps(image))
