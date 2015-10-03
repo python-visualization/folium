@@ -28,8 +28,8 @@ class TestPlugins(object):
             range(N),                                    # Popups.
             ]).T
         mapa = folium.Map([45., 3.], zoom_start=4)
-        mapa.add_plugin(plugins.MarkerCluster(data))
-        mapa._build_map()
+        mapa.add_children(plugins.MarkerCluster(data))
+        mapa._repr_html_()
 
     def test_terminator(self):
         mapa = folium.Map([45., 3.], zoom_start=1)
