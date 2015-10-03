@@ -685,20 +685,3 @@ class TestFolium(object):
                                            'image_opacity': image_opacity})
 
         assert ''.join(image_rendered.split()) in ''.join(out.split())
-
-    def test_scroll_zoom_toggler_plugin(self):
-        """Test ScrollZoomToggler plugin."""
-        a_map = folium.Map([45, 3], zoom_start=4)
-        a_map.add_plugin(ScrollZoomToggler())
-        a_map._build_map()
-
-    def test_marker_cluster_plugin(self):
-        """Test MarkerCluster plugin."""
-        data = [(35, -12, "lower left"),
-                (35, 30, "lower right"),
-                (60, -12, "upper left"),
-                (60, 30, "upper right"),
-                ]
-        a_map = folium.Map([0, 0], zoom_start=0)
-        a_map.add_plugin(MarkerCluster(data))
-        a_map._build_map()
