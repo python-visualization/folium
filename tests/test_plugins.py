@@ -17,8 +17,8 @@ class TestPlugins(object):
 
     def test_scroll_zoom_toggler(self):
         mapa = folium.Map([45., 3.], zoom_start=4)
-        mapa.add_plugin(plugins.ScrollZoomToggler())
-        mapa._build_map()
+        mapa.add_children(plugins.ScrollZoomToggler())
+        mapa._repr_html_()
 
     def test_marker_cluster(self):
         N = 100
