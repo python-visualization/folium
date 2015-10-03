@@ -11,6 +11,7 @@ from jinja2 import Environment, PackageLoader, Template
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 from collections import OrderedDict
 import json
+import base64
 
 from .six import urlopen
 from .utilities import _camelify, _parse_size
@@ -266,7 +267,7 @@ class Figure(Element):
 
         iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
             .format(\
-                    html = "data:text/html;base64,"+html.encode('utf8').encode('base64'),
+                    html = b"data:text/html;base64,"+base64.b64encode(html.encode('utf8')),
                     #html = self.HTML.replace('"','&quot;'),
                     width = int(60.*width),
                     height= int(60.*height),
