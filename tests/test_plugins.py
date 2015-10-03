@@ -33,9 +33,9 @@ class TestPlugins(object):
 
     def test_terminator(self):
         mapa = folium.Map([45., 3.], zoom_start=1)
-        mapa.add_plugin(plugins.Terminator())
-        mapa.add_plugin(plugins.ScrollZoomToggler())
-        mapa._build_map()
+        mapa.add_children(plugins.Terminator())
+        mapa.add_children(plugins.ScrollZoomToggler())
+        mapa._repr_html_()
 
     def test_boat_marker(self):
         mapa = folium.Map([30., 0.], zoom_start=3)
