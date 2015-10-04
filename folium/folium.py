@@ -8,19 +8,10 @@ Make beautiful, interactive maps with Python and Leaflet.js
 """
 
 from __future__ import absolute_import
-#from __future__ import print_function
-#from __future__ import division
 
 import warnings
-#import codecs
-#import functools
 import json
-#from uuid import uuid4
 
-#from jinja2 import Environment, PackageLoader
-#from pkg_resources import resource_string
-
-#from folium import utilities
 from folium.six import text_type, binary_type#, iteritems
 from .map import Map as _Map
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
@@ -28,11 +19,6 @@ from .map import Map, TileLayer, Icon, Marker, Popup, FitBounds
 from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
     CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine, ImageOverlay
 from .utilities import color_brewer, write_png
-#import sys
-#import base64
-
-#ENV = Environment(loader=PackageLoader('folium', 'templates'))
-
 
 def initialize_notebook():
     """Initialize the IPython notebook display elements."""
@@ -40,214 +26,10 @@ def initialize_notebook():
                       FutureWarning, stacklevel=2)
     pass
 
-
-#def iter_obj(type):
-#    """Decorator to keep count of different map object types in self.mk_cnt."""
-#    def decorator(func):
-#        @functools.wraps(func)
-#        def wrapper(self, *args, **kwargs):
-#            self.mark_cnt[type] = self.mark_cnt.get(type, 0) + 1
-#            func_result = func(self, *args, **kwargs)
-#            return func_result
-#        return wrapper
-#    return decorator
-
-
 class Map(_Map):
     """This class inherits from the map.Map object in order to provide bindings to
     former folium API.
     """
-#    def __init__(self, location=None, width='100%', height='100%',
-#                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-#                 zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-#                 min_lon=-180, max_lon=180):
-#        """Create a Map with Folium and Leaflet.js
-#
-#        Generate a base map of given width and height with either default
-#        tilesets or a custom tileset URL. The following tilesets are built-in
-#        to Folium. Pass any of the following to the "tiles" keyword:
-#            - "OpenStreetMap"
-#            - "MapQuest Open"
-#            - "MapQuest Open Aerial"
-#            - "Mapbox Bright" (Limited levels of zoom for free tiles)
-#            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-#            - "Stamen" (Terrain, Toner, and Watercolor)
-#            - "Cloudmade" (Must pass API key)
-#            - "Mapbox" (Must pass API key)
-#            - "CartoDB" (positron and dark_matter)
-#        You can pass a custom tileset to Folium by passing a Leaflet-style
-#        URL to the tiles parameter:
-#        http://{s}.yourtiles.com/{z}/{x}/{y}.png
-#
-#        Parameters
-#        ----------
-#        location: tuple or list, default None
-#            Latitude and Longitude of Map (Northing, Easting).
-#        width: pixel int or percentage string (default: '100%')
-#            Width of the map.
-#        height: pixel int or percentage string (default: '100%')
-#            Height of the map.
-#        tiles: str, default 'OpenStreetMap'
-#            Map tileset to use. Can use defaults or pass a custom URL.
-#        API_key: str, default None
-#            API key for Cloudmade or Mapbox tiles.
-#        max_zoom: int, default 18
-#            Maximum zoom depth for the map.
-#        zoom_start: int, default 10
-#            Initial zoom level for the map.
-#        attr: string, default None
-#            Map tile attribution; only required if passing custom tile URL.
-#
-#        Returns
-#        -------
-#        Folium Map Object
-#
-#        Examples
-#        --------
-#        >>>map = folium.Map(location=[45.523, -122.675], width=750, height=500)
-#        >>>map = folium.Map(location=[45.523, -122.675],
-#                            tiles='Mapbox Control Room')
-#        >>>map = folium.Map(location=(45.523, -122.675), max_zoom=20,
-#                            tiles='Cloudmade', API_key='YourKey')
-#        >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
-#                            tiles=('http://{s}.tiles.mapbox.com/v3/'
-#                                    'mapbox.control-room/{z}/{x}/{y}.png'),
-#                            attr='Mapbox attribution')
-#
-#        """
-#
-#        # Inits.
-#        self.map_path = None
-#        self.render_iframe = False
-#        self.map_type = 'base'
-#        self.map_id = '_'.join(['folium', uuid4().hex])
-#
-#        # Mark counter, JSON, Plugins.
-#        self.mark_cnt = {}
-#        self.json_data = {}
-#        self.plugins = {}
-#
-#        # No location means we will use automatic bounds and ignore zoom
-#        self.location = location
-#
-#        # If location is not passed, we center the map at 0,0
-#        if not location:
-#            location = [0, 0]
-#            zoom_start = min_zoom
-#
-#        # Map Size Parameters.
-#        try:
-#            if isinstance(width, int):
-#                width_type = 'px'
-#                assert width > 0
-#            else:
-#                width_type = '%'
-#                width = int(width.strip('%'))
-#                assert 0 <= width <= 100
-#        except:
-#            msg = "Cannot parse width {!r} as {!r}".format
-#            raise ValueError(msg(width, width_type))
-#        self.width = width
-#
-#        try:
-#            if isinstance(height, int):
-#                height_type = 'px'
-#                assert height > 0
-#            else:
-#                height_type = '%'
-#                height = int(height.strip('%'))
-#                assert 0 <= height <= 100
-#        except:
-#            msg = "Cannot parse height {!r} as {!r}".format
-#            raise ValueError(msg(height, height_type))
-#        self.height = height
-#
-#        self.map_size = {'width': width, 'height': height}
-#        self._size = ('style="width: {0}{1}; height: {2}{3}"'
-#                      .format(width, width_type, height, height_type))
-#        # Templates.
-#        self.env = ENV
-#        self.template_vars = dict(lat=location[0],
-#                                  lon=location[1],
-#                                  size=self._size,
-#                                  max_zoom=max_zoom,
-#                                  zoom_level=zoom_start,
-#                                  map_id=self.map_id,
-#                                  min_zoom=min_zoom,
-#                                  min_lat=min_lat,
-#                                  max_lat=max_lat,
-#                                  min_lon=min_lon,
-#                                  max_lon=max_lon)
-#
-#        # Tiles.
-#        self.tiles = ''.join(tiles.lower().strip().split())
-#        if self.tiles in ('cloudmade', 'mapbox') and not API_key:
-#            raise ValueError('You must pass an API key if using Cloudmade'
-#                             ' or non-default Mapbox tiles.')
-#
-#        self.default_tiles = ['openstreetmap', 'mapboxcontrolroom',
-#                              'mapquestopen', 'mapquestopenaerial',
-#                              'mapboxbright', 'mapbox', 'cloudmade',
-#                              'stamenterrain', 'stamentoner',
-#                              'stamenwatercolor',
-#                              'cartodbpositron', 'cartodbdark_matter']
-#
-#        self.tile_types = {}
-#        for tile in self.default_tiles:
-#            tile_path = 'tiles/%s' % tile
-#            self.tile_types[tile] = {
-#                'templ': self.env.get_template('%s/%s' % (tile_path,
-#                                                          'tiles.txt')),
-#                'attr': self.env.get_template('%s/%s' % (tile_path,
-#                                                         'attr.txt')),
-#            }
-#
-#        if self.tiles in self.tile_types:
-#            self.template_vars['Tiles'] = (self.tile_types[self.tiles]['templ']
-#                                           .render(API_key=API_key))
-#            self.template_vars['attr'] = (self.tile_types[self.tiles]['attr']
-#                                          .render())
-#        else:
-#            self.template_vars['Tiles'] = tiles
-#            if not attr:
-#                raise ValueError('Custom tiles must'
-#                                 ' also be passed an attribution')
-#            if isinstance(attr, binary_type):
-#                attr = text_type(attr, 'utf8')
-#            self.template_vars['attr'] = attr
-#            self.tile_types.update({'Custom': {'template': tiles,
-#                                               'attr': attr}})
-#
-#        self.added_layers = []
-#        self.template_vars.setdefault('wms_layers', [])
-#        self.template_vars.setdefault('tile_layers', [])
-#        self.template_vars.setdefault('image_layers', [])
-#
-#    @iter_obj('simple')
-#    def add_tile_layer(self, tile_name=None, tile_url=None, active=False):
-#        """Adds a simple tile layer.
-#
-#        Parameters
-#        ----------
-#        tile_name: string
-#            name of the tile layer
-#        tile_url: string
-#            url location of the tile layer
-#        active: boolean
-#            should the layer be active when added
-#        """
-#        if tile_name not in self.added_layers:
-#            tile_name = tile_name.replace(" ", "_")
-#            tile_temp = self.env.get_template('tile_layer.js')
-#
-#            tile = tile_temp.render({'tile_name': tile_name,
-#                                     'tile_url': tile_url})
-#
-#            self.template_vars.setdefault('tile_layers', []).append((tile))
-#
-#            self.added_layers.append({tile_name: tile_url})
-#
-#    @iter_obj('simple')
     def add_wms_layer(self, wms_name=None, wms_url=None, wms_format=None,
                       wms_layers=None, wms_transparent=True):
         """Adds a simple tile layer.
@@ -266,26 +48,6 @@ class Map(_Map):
                            transparent=wms_transparent, attribution=None)
         self.add_children(wms, name=wms_name)
 
-#    @iter_obj('simple')
-#    def add_layers_to_map(self):
-#        """
-#        Required function to actually add the layers to the HTML packet.
-#        """
-#        layers_temp = self.env.get_template('add_layers.js')
-#
-#        data_string = ''
-#        for i, layer in enumerate(self.added_layers):
-#            name = list(layer.keys())[0]
-#            if i < len(self.added_layers)-1:
-#                term_string = ",\n"
-#            else:
-#                term_string += "\n"
-#            data_string += '\"{}\": {}'.format(name, name, term_string)
-#
-#        data_layers = layers_temp.render({'layers': data_string})
-#        self.template_vars.setdefault('data_layers', []).append((data_layers))
-#
-#    @iter_obj('simple')
     def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
                       clustered_marker=False, icon_angle=0, popup_width=300):
@@ -477,7 +239,6 @@ class Map(_Map):
 
         self.add_children(p)
 
-#    @iter_obj('circle')
     def circle_marker(self, location=None, radius=500, popup=None,
                       line_color='black', fill_color='black',
                       fill_opacity=0.6, popup_width=300):
@@ -684,73 +445,6 @@ class Map(_Map):
 #        })
 #
 #        self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
-#
-#    def _popup_render(self, popup=None, mk_name=None, count=None,
-#                      width=300):
-#        """Popup renderer: either text or Vincent/Vega.
-#
-#        Parameters
-#        ----------
-#        popup: str or Vincent tuple, default None
-#            String for text popup, or tuple of (Vincent object, json_path)
-#        mk_name: str, default None
-#            Type of marker. Simple, Circle, etc.
-#        count: int, default None
-#            Count of marker
-#        """
-#        if not popup:
-#            return ''
-#        else:
-#            if sys.version_info >= (3, 0):
-#                utype, stype = str, bytes
-#            else:
-#                utype, stype = unicode, str
-#
-#            if isinstance(popup, (utype, stype)):
-#                popup_temp = self.env.get_template('simple_popup.js')
-#                if isinstance(popup, utype):
-#                    popup_txt = popup.encode('ascii', 'xmlcharrefreplace')
-#                else:
-#                    popup_txt = popup
-#                if sys.version_info >= (3, 0):
-#                    popup_txt = popup_txt.decode()
-#                pop_txt = json.dumps(str(popup_txt))
-#                return popup_temp.render({'pop_name': mk_name + str(count),
-#                                          'pop_txt': pop_txt, 'width': width})
-#            elif isinstance(popup, tuple):
-#                # Update template with JS libs.
-#                vega_temp = self.env.get_template('vega_ref.txt').render()
-#                jquery_temp = self.env.get_template('jquery_ref.txt').render()
-#                d3_temp = self.env.get_template('d3_ref.txt').render()
-#                vega_parse = self.env.get_template('vega_parse.js').render()
-#                self.template_vars.update({'vega': vega_temp,
-#                                           'd3': d3_temp,
-#                                           'jquery': jquery_temp,
-#                                           'vega_parse': vega_parse})
-#
-#                # Parameters for Vega template.
-#                vega = popup[0]
-#                mark = ''.join([mk_name, str(count)])
-#                json_out = popup[1]
-#                div_id = popup[1].split('.')[0]
-#                width = vega.width
-#                height = vega.height
-#                if isinstance(vega.padding, dict):
-#                    width += vega.padding['left']+vega.padding['right']
-#                    height += vega.padding['top']+vega.padding['bottom']
-#                else:
-#                    width += 75
-#                    height += 50
-#                max_width = max([self.map_size['width'], width])
-#                vega_id = '#' + div_id
-#                popup_temp = self.env.get_template('vega_marker.js')
-#                return popup_temp.render({'mark': mark, 'div_id': div_id,
-#                                          'width': width, 'height': height,
-#                                          'max_width': max_width,
-#                                          'json_out': json_out,
-#                                          'vega_id': vega_id})
-#            else:
-#                raise TypeError("Unrecognized popup type: {!r}".format(popup))
 
     def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
                  data=None, columns=None, key_on=None, threshold_scale=None,
@@ -980,82 +674,3 @@ class Map(_Map):
         self.add_children(ImageOverlay(data, [[min_lat, min_lon],[max_lat,max_lon]],
                                        opacity=opacity, origin=origin, colormap=colormap,
                                       mercator_project=mercator_project))
-
-#    def _build_map(self, html_templ=None, templ_type='string'):
-#        self._auto_bounds()
-#        """Build HTML/JS/CSS from Templates given current map type."""
-#        if html_templ is None:
-#            map_types = {'base': 'fol_template.html',
-#                         'geojson': 'geojson_template.html'}
-#
-#            # Check current map type.
-#            type_temp = map_types[self.map_type]
-#
-#            html_templ = self.env.get_template(type_temp)
-#        else:
-#            if templ_type == 'string':
-#                html_templ = self.env.from_string(html_templ)
-#
-#        self.HTML = html_templ.render(self.template_vars, plugins=self.plugins)
-#
-#    def create_map(self, path='map.html', plugin_data_out=True, template=None):
-#        """Write Map output to HTML and data output to JSON if available.
-#
-#        Parameters:
-#        -----------
-#        path: string, default 'map.html'
-#            Path for HTML output for map
-#        plugin_data_out: boolean, default True
-#            If using plugins such as awesome markers, write all plugin
-#            data such as JS/CSS/images to path
-#        template: string, default None
-#            Custom template to render
-#
-#        """
-#        self.map_path = path
-#        self._build_map(template)
-#
-#        with codecs.open(path, 'w', 'utf8') as f:
-#            f.write(self.HTML)
-#
-#        if self.json_data:
-#            for path, data in iteritems(self.json_data):
-#                with open(path, 'w') as g:
-#                    json.dump(data, g)
-#
-#        if self.plugins and plugin_data_out:
-#            for name, plugin in iteritems(self.plugins):
-#                with open(name, 'w') as f:
-#                    if isinstance(plugin, binary_type):
-#                        plugin = text_type(plugin, 'utf8')
-#                    f.write(plugin)
-#
-#    def _repr_html_(self):
-#        """Build the HTML representation for IPython."""
-#        map_types = {'base': 'ipynb_repr.html',
-#                     'geojson': 'ipynb_iframe.html'}
-#
-#        # Check current map type.
-#        type_temp = map_types[self.map_type]
-#        if self.render_iframe:
-#            type_temp = 'ipynb_iframe.html'
-#        templ = self.env.get_template(type_temp)
-#        self._build_map(html_templ=templ, templ_type='temp')
-#        if self.map_type == 'geojson' or self.render_iframe:
-#            if not self.map_path:
-#                raise ValueError('Use create_map to set the path!')
-#            return templ.render(path=self.map_path, width=self.width,
-#                                height=self.height)
-#        return self.HTML
-#
-#    def display(self):
-#        """Display the visualization inline in the IPython notebook.
-#
-#        This is deprecated, use the following instead::
-#
-#            from IPython.display import display
-#            display(viz)
-#        """
-#        from IPython.core.display import display, HTML
-#        display(HTML(self._repr_html_()))
-#
