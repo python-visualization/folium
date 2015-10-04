@@ -59,60 +59,6 @@ class TestPlugins(object):
         mapa.add_children(folium.map.LayerControl())
         mapa._repr_html_()
 
-    def test_geo_json(self):
-        N = 100
-        lons = 5 - np.random.normal(size=N)
-        lats = 48 - np.random.normal(size=N)
-        coordinates = [[lon, lat] for (lat, lon) in zip(lats, lons)]
-        data = {
-            "type": "FeatureCollection",
-            "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "MultiPoint",
-                            "coordinates": coordinates,
-                            },
-                        "properties": {"prop0": "value0"}
-                        },
-                ],
-            }
-
-        mapa = folium.Map([48., 5.], zoom_start=6)
-        mapa.add_plugin(plugins.GeoJson(data))
-        mapa._build_map()
-
-        open('geojson_plugin_test1.json', 'w').write(json.dumps(data))
-        mapb = folium.Map([48., 5.], zoom_start=6)
-        mapb.add_plugin(plugins.GeoJson(open('geojson_plugin_test1.json')))
-        mapb._build_map()
-
-        coordinates = [[[[lon+1e-4, lat+1e-4], [lon+1e-4, lat-1e-4],
-                         [lon-1e-4, lat-1e-4], [lon-1e-4, lat+1e-4]]] for
-                       (lat, lon) in zip(lats, lons)]
-        data = {
-            "type": "FeatureCollection",
-            "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "MultiPolygon",
-                            "coordinates": coordinates,
-                            },
-                        "properties": {"prop0": "value0"}
-                        },
-                ],
-            }
-
-        mapc = folium.Map([48., 5.], zoom_start=6)
-        mapc.add_plugin(plugins.GeoJson(data))
-        mapc._build_map()
-
-        open('geojson_plugin_test2.json', 'w').write(json.dumps(data))
-        mapd = folium.Map([48., 5.], zoom_start=6)
-        mapd.add_plugin(plugins.GeoJson(open('geojson_plugin_test2.json')))
-        mapd._build_map()
-
     def test_timestamped_geo_json(self):
         coordinates = [[[[lon-8*np.sin(theta), -47+6*np.cos(theta)] for
                          theta in np.linspace(0, 2*np.pi, 25)],
