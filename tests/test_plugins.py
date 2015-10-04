@@ -52,11 +52,12 @@ class TestPlugins(object):
         mapa._repr_html_()
 
     def test_layer(self):
-        mapa = folium.Map([48., 5.], zoom_start=6)
-        layer = '//otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png'
-        mapa.add_plugin(plugins.Layer(layer, layer_name='MapQuest'))
-        mapa.add_plugin(plugins.LayerControl())
-        mapa._build_map()
+        mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+        layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',  attr='attribution'))
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest2', attr='attribution2', overlay=True))
+        mapa.add_children(folium.map.LayerControl())
+        mapa._repr_html_()
 
     def test_geo_json(self):
         N = 100

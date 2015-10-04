@@ -7,6 +7,7 @@ Classes for drawing maps.
 """
 import warnings
 import json
+from collections import OrderedDict
 
 from jinja2 import Template
 
@@ -173,7 +174,7 @@ class Map(MacroElement):
 
 class TileLayer(MacroElement):
     def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None):
+                 min_zoom=1, max_zoom=18, attr=None, API_key=None, overlay = False):
         """TODO docstring here
         Parameters
         ----------
@@ -184,6 +185,8 @@ class TileLayer(MacroElement):
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
+
+        self.overlay = overlay
 
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
@@ -218,6 +221,42 @@ class TileLayer(MacroElement):
 
         {% endmacro %}
         """)
+
+class LayerControl(MacroElement):
+    """Adds a layer control to the map."""
+    def __init__(self):
+        """Creates a LayerControl object to be added on a folium map.
+
+        Parameters
+        ----------
+        """
+        super(LayerControl, self).__init__()
+        self._name = 'LayerControl'
+
+        self.base_layers = OrderedDict()
+        self.overlays = OrderedDict()
+
+        self._template = Template("""
+        {% macro script(this,kwargs) %}
+            var {{this.get_name()}} = {
+                base_layers : { {% for key,val in this.base_layers.items() %}"{{key}}" : {{val}},{% endfor %} },
+                overlays : { {% for key,val in this.overlays.items() %}"{{key}}" : {{val}},{% endfor %} }
+                };
+            L.control.layers(
+                {{this.get_name()}}.base_layers,
+                {{this.get_name()}}.overlays
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
+    def render(self, **kwargs):
+        """TODO : docstring here."""
+        self.base_layers = OrderedDict([(val.tile_name,val.get_name()) \
+                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and not val.overlay])
+        self.overlays = OrderedDict([(val.tile_name,val.get_name()) \
+                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and val.overlay])
+
+        super(LayerControl, self).render()
 
 class Icon(MacroElement):
     def __init__(self, color='blue', icon='info-sign', angle=0):
