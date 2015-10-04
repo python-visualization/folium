@@ -39,17 +39,17 @@ class TestPlugins(object):
 
     def test_boat_marker(self):
         mapa = folium.Map([30., 0.], zoom_start=3)
-        mapa.add_plugin(plugins.BoatMarker((34, -43),
+        mapa.add_children(plugins.BoatMarker((34, -43),
                                            heading=45,
                                            wind_heading=150,
                                            wind_speed=45,
                                            color="#8f8"))
-        mapa.add_plugin(plugins.BoatMarker((46, -30),
+        mapa.add_children(plugins.BoatMarker((46, -30),
                                            heading=-20,
                                            wind_heading=46,
                                            wind_speed=25,
                                            color="#88f"))
-        mapa._build_map()
+        mapa._repr_html_()
 
     def test_layer(self):
         mapa = folium.Map([48., 5.], zoom_start=6)
