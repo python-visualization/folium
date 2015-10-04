@@ -13,14 +13,14 @@ A geo-json is timestamped if :
     Eventually, you may have Point features with a "times" property being an array of length 1.
 """
 import json
+from jinja2 import Template
 
-from .plugin import Plugin
+from folium.element import MacroElement, Figure, JavascriptLink, CssLink
 
-class TimestampedGeoJson(Plugin):
-    """Adds a TimestampedGeoJson layer on the map."""
+class TimestampedGeoJson(MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True):
         """Creates a TimestampedGeoJson plugin to append into a map with
-        Map.add_plugin.
+        Map.add_children.
 
         Parameters
         ----------
@@ -69,8 +69,9 @@ class TimestampedGeoJson(Plugin):
             
         """
         super(TimestampedGeoJson, self).__init__()
-        self.plugin_name = 'TimestampedGeoJson'
-        self.template = self.env.get_template('timestamped_geo_json.tpl')
+        self._name = 'TimestampedGeoJson'
+
+        #self.template = self.env.get_template('timestamped_geo_json.tpl')
         if 'read' in dir(data):
             self.data = data.read()
         elif type(data) is dict:
@@ -81,13 +82,53 @@ class TimestampedGeoJson(Plugin):
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
 
-    def render_header(self, nb):
-        """Generates the header part of the plugin."""
-        header = self.template.module.__dict__.get('header',None)
-        assert header is not None, "This template must have a 'header' macro."
-        return header(nb)
-    def render_js(self, nb):
-        """Generates the Javascript part of the plugin."""
-        js = self.template.module.__dict__.get('js',None)
-        assert js is not None, "This template must have a 'js' macro."
-        return js(nb,self)
+        self._template = Template("""
+        {% macro script(this, kwargs) %}
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension();
+            {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
+                position: 'bottomleft',
+                autoPlay: {{'true' if this.auto_play else 'false'}},
+                playerOptions: {
+                    transitionTime: {{this.transition_time}},
+                    loop: {{'true' if this.loop else 'false'}}}
+                    });
+            {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+
+            var {{this.get_name()}} = L.timeDimension.layer.geoJson(
+                L.geoJson({{this.data}}),
+                {updateTimeDimension: true,addlastPoint: true}
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
+    def render(self, **kwargs):
+        super(TimestampedGeoJson, self).render()
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),
+            name='jquery2.0.0')
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),
+            name='jqueryui1.10.2')
+
+        figure.header.add_children(\
+            JavascriptLink("https://raw.githubusercontent.com/nezasa/iso8601-js-period/master/iso8601.min.js"),
+            name='iso8601')
+
+        figure.header.add_children(\
+            JavascriptLink("https://raw.githubusercontent.com/socib/Leaflet.TimeDimension/master/"
+                           "dist/leaflet.timedimension.min.js"),
+            name='leaflet.timedimension')
+
+        figure.header.add_children(\
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),
+            name='highlight.js_css')
+
+        figure.header.add_children(\
+            CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),
+            name='leaflet.timedimension_css')

@@ -186,5 +186,5 @@ class TestPlugins(object):
             }
 
         mape = folium.Map([47, 3], zoom_start=1)
-        mape.add_plugin(plugins.TimestampedGeoJson(data))
-        mape._build_map()
+        mape.add_children(plugins.TimestampedGeoJson(data))
+        mape._repr_html_()
