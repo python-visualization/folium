@@ -7,8 +7,11 @@ Extra features Elements.
 """
 from jinja2 import Template
 import json
+import base64
 
-from .utilities import color_brewer, _parse_size
+from .utilities import color_brewer, _parse_size, legend_scaler, _locations_mirror, _locations_tolist, write_png,\
+    mercator_transform
+from .six import text_type, binary_type
 
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
 from .map import Map, TileLayer, Icon, Marker, Popup
@@ -40,8 +43,8 @@ class WmsTileLayer(TileLayer):
                 {
                     format:'{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
-                    layers:'{{ this.layers }}',
-                    attribution:'{{this.attribution}}'
+                    layers:'{{ this.layers }}'
+                    {% if this.attribution %}, attribution:'{{this.attribution}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
 
@@ -49,7 +52,7 @@ class WmsTileLayer(TileLayer):
         """)
 
 class RegularPolygonMarker(MacroElement):
-    def __init__(self, location, popup=None, icon=None,
+    def __init__(self, location, popup=None,
                  color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15):
@@ -57,7 +60,6 @@ class RegularPolygonMarker(MacroElement):
         super(RegularPolygonMarker, self).__init__()
         self._name = 'RegularPolygonMarker'
         self.location = location
-        self.icon = "new L.Icon.Default()" if icon is None else icon
         self.color   = color
         self.opacity = opacity
         self.weight  = weight
@@ -66,6 +68,8 @@ class RegularPolygonMarker(MacroElement):
         self.number_of_sides= number_of_sides
         self.rotation = rotation
         self.radius = radius
+        if popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -119,9 +123,7 @@ class Vega(Element):
         self.json = json.dumps(self.data)
 
         self._parent.html.add_children(Element(Template("""
-            <div id="{{this.get_name()}}"
-                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
-                </div>
+            <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
         self._parent.script.add_children(Element(Template("""
@@ -197,8 +199,46 @@ class GeoJson(MacroElement):
             {% endmacro %}
             """)
 
+class TopoJson(MacroElement):
+    def __init__(self, data, object_path):
+        """TODO docstring here.
+        """
+        super(TopoJson, self).__init__()
+        self._name = 'TopoJson'
+        if 'read' in dir(data):
+            self.data = data.read()
+        elif type(data) is dict:
+            self.data = json.dumps(data)
+        else:
+            self.data = data
+
+        self.object_path = object_path
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}}_data = {{this.data}};
+                var {{this.get_name()}} = L.geoJson(topojson.feature(
+                    {{this.get_name()}}_data,
+                    {{this.get_name()}}_data.{{this.object_path}}
+                    )).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+    def render(self,**kwargs):
+        super(TopoJson,self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),
+                                   name='topojson')
+
 class GeoJsonStyle(MacroElement):
-    def __init__(self, color_domain, color_code, color_data=None, key_on='feature.properties.color'):
+    def __init__(self, color_domain, color_code, color_data=None,
+                 key_on='feature.properties.color',
+                 weight=1, opacity=1, color='black',
+                 fill_opacity=0.6, dash_array=0):
         """TODO : docstring here.
         """
         super(GeoJsonStyle, self).__init__()
@@ -209,36 +249,78 @@ class GeoJsonStyle(MacroElement):
         self.color_data = json.dumps(color_data)
         self.key_on = key_on
 
+        self.weight = weight
+        self.opacity = opacity
+        self.color = color
+        self.fill_color = color_code
+        self.fill_opacity = fill_opacity
+        self.dash_array = dash_array
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = {
-                    color_scale : d3.scale.threshold()
-                          .domain({{this.color_domain}})
-                          .range({{this.color_range}}),
-                    color_data : {{this.color_data}},
-                    color_function : function(feature) {
-                        {% if this.color_data=='null' %}
-                            return this.color_scale({{this.key_on}});
-                        {% else %}
-                            return this.color_scale(this.color_data[{{this.key_on}}]);
-                        {% endif %}
-                        },
-                    };
+                {% if not this.color_range %}
+                    var {{this.get_name()}} = {
+                        color_function : function(feature) {
+                            return '{{this.fill_color}}';
+                            },
+                        };
+                {%else%}
+                    var {{this.get_name()}} = {
+                        color_scale : d3.scale.threshold()
+                              .domain({{this.color_domain}})
+                              .range({{this.color_range}}),
+                        color_data : {{this.color_data}},
+                        color_function : function(feature) {
+                            {% if this.color_data=='null' %}
+                                return this.color_scale({{this.key_on}});
+                            {% else %}
+                                return this.color_scale(this.color_data[{{this.key_on}}]);
+                            {% endif %}
+                            },
+                        };
+                {%endif%}
 
                 {{this._parent.get_name()}}.setStyle(function(feature) {
                     return {
                         fillColor: {{this.get_name()}}.color_function(feature),
-                        weight: 2,
-                        opacity: 1,
-                        color: 'white',
-                        dashArray: '3',
-                        fillOpacity: 0.7
+                        weight: {{this.weight}},
+                        opacity: {{this.opacity}},
+                        color: '{{this.color}}',
+                        fillOpacity: {{this.fill_opacity}},
+                        dashArray: '{{this.dash_array}}'
                         };
                     });
             {% endmacro %}
             """)
     def render(self,**kwargs):
         super(GeoJsonStyle,self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure,Figure), ("You cannot render this Element "
+            "if it's not in a Figure.")
+
+        figure.header.add_children(\
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+                                   name='d3')
+
+class ColorScale(MacroElement):
+    def __init__(self, color_domain, color_code, caption=""):
+        """TODO : docstring here.
+        """
+        super(ColorScale, self).__init__()
+        self._name = 'ColorScale'
+
+        self.color_domain = color_domain
+        self.color_range = color_brewer(color_code, n=len(color_domain))
+        self.tick_labels=legend_scaler(self.color_domain)
+
+        self.caption = caption
+        self.fill_color = color_code
+
+        self._template = self._env.get_template('color_scale.js')
+
+    def render(self,**kwargs):
+        super(ColorScale,self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure,Figure), ("You cannot render this Element "
@@ -288,3 +370,243 @@ class MarkerCluster(MacroElement):
         figure.header.add_children(\
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
             name="marker_cluster_default_css")
+
+class DivIcon(MacroElement):
+    def __init__(self, width=30, height=30):
+        """TODO : docstring here"""
+        super(DivIcon, self).__init__()
+        self._name = 'DivIcon'
+        self.width = width
+        self.height = height
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.divIcon({
+                    className: 'leaflet-div-icon',
+                    'iconSize': [{{ this.width }},{{ this.height }}]
+                    });
+                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
+            {% endmacro %}
+            """)
+
+class CircleMarker(MacroElement):
+    def __init__(self, location, radius=500, color='black',
+                 fill_color='black', fill_opacity=0.6, popup=None):
+        """TODO : docstring here
+        """
+        super(CircleMarker, self).__init__()
+        self._name = 'CircleMarker'
+        self.location = location
+        self.radius = radius
+        self.color = color
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        if popup is not None:
+            self.add_children(popup)
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var {{this.get_name()}} = L.circle(
+                [{{this.location[0]}},{{this.location[1]}}],
+                {{ this.radius }},
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }}
+                    }
+                )
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+class LatLngPopup(MacroElement):
+    def __init__(self):
+        """TODO : docstring here
+        """
+        super(LatLngPopup, self).__init__()
+        self._name = 'LatLngPopup'
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.popup();
+                function latLngPop(e) {
+                    {{this.get_name()}}
+                        .setLatLng(e.latlng)
+                        .setContent("Latitude: " + e.latlng.lat.toFixed(4) +
+                                    "<br>Longitude: " + e.latlng.lng.toFixed(4))
+                        .openOn({{this._parent.get_name()}});
+                    }
+                {{this._parent.get_name()}}.on('click', latLngPop);
+            {% endmacro %}
+            """)
+
+class ClickForMarker(MacroElement):
+    def __init__(self, popup=None):
+        """TODO : docstring here
+        """
+        super(ClickForMarker, self).__init__()
+        self._name = 'ClickForMarker'
+
+        if popup:
+            self.popup = ''.join(['"', popup, '"'])
+        else:
+            self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                function newMarker(e){
+                    var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
+                    new_mark.dragging.enable();
+                    new_mark.on('dblclick', function(e){ {{this._parent.get_name()}}.removeLayer(e.target)})
+                    var lat = e.latlng.lat.toFixed(4),
+                       lng = e.latlng.lng.toFixed(4);
+                    new_mark.bindPopup({{ this.popup }});
+                    };
+                {{this._parent.get_name()}}.on('click', newMarker);
+            {% endmacro %}
+            """)
+
+class PolyLine(MacroElement):
+    def __init__(self, locations, color=None, weight=None, opacity=None, latlon=True):
+        """Creates a PolyLine object to append into a map with Map.add_children.
+
+        Parameters
+        ----------
+            locations: list of points (latitude, longitude)
+                Latitude and Longitude of line (Northing, Easting)
+            color: string, default Leaflet's default ('#03f')
+            weight: float, default Leaflet's default (5)
+            opacity: float, default Leaflet's default (0.5)
+            latlon: bool, default True
+                Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+                Note that the default GeoJson format is latlon=False,
+                while Leaflet polyline's default is latlon=True.
+        """
+        super(PolyLine, self).__init__()
+        self._name = 'PolyLine'
+        self.data = _locations_mirror(locations) if not latlon else _locations_tolist(locations)
+        self.color = color
+        self.weight = weight
+        self.opacity = opacity
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.polyline(
+                    {{this.data}},
+                    {
+                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
+                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
+                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
+                        });
+                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+
+class MultiPolyLine(MacroElement):
+    def __init__(self, locations, color=None, weight=None, opacity=None, latlon=True):
+        """Creates a MultiPolyLine object to append into a map with Map.add_children.
+
+        Parameters
+        ----------
+            locations: list of points (latitude, longitude)
+                Latitude and Longitude of line (Northing, Easting)
+            color: string, default Leaflet's default ('#03f')
+            weight: float, default Leaflet's default (5)
+            opacity: float, default Leaflet's default (0.5)
+            latlon: bool, default True
+                Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+                Note that the default GeoJson format is latlon=False,
+                while Leaflet polyline's default is latlon=True.
+        """
+        super(MultiPolyLine, self).__init__()
+        self._name = 'MultiPolyLine'
+        self.data = _locations_mirror(locations) if not latlon else _locations_tolist(locations)
+        self.color = color
+        self.weight = weight
+        self.opacity = opacity
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.multiPolyline(
+                    {{this.data}},
+                    {
+                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
+                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
+                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
+                        });
+                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+
+class ImageOverlay(MacroElement):
+    def __init__(self, image, bounds, opacity=1., attribution=None, origin='upper', colormap=None, mercator_project=False):
+        """Used to load and display a single image over specific bounds of the map, implements ILayer interface
+
+        Parameters
+        ----------
+            image: string, file or array-like object
+                The data you want to draw on the map.
+                * If string, it will be written directly in the output file.
+                * If file, it's content will be converted as embeded in the output file.
+                * If array-like, it will be converted to PNG base64 string and embeded in the output.
+            bounds: list
+                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]]
+            opacity: float, default Leaflet's default (1.0)
+            attr: string, default Leaflet's default ("")
+            origin : ['upper' | 'lower'], optional, default 'upper'
+                Place the [0,0] index of the array in the upper left or lower left
+                corner of the axes.
+
+            colormap : callable, used only for `mono` image.
+                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+                for transforming a mono image into RGB.
+                It must output iterables of length 3 or 4, with values between 0. and 1.
+                Hint : you can use colormaps from `matplotlib.cm`.
+
+            mercator_project : bool, default False, used only for array-like image.
+                Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+        """
+        super(ImageOverlay, self).__init__()
+        self._name = 'ImageOverlay'
+
+        if hasattr(image,'read'):
+            # We got an image file.
+            if hasattr(image,'name'):
+                # we try to get the image format from the file name.
+                fileformat = image.name.lower().split('.')[-1]
+            else:
+                fileformat = 'png'
+            self.url = "data:image/{};base64,{}".format(fileformat,
+                                                   base64.b64encode(image.read()).decode('utf-8'))
+        elif (not (isinstance(image,text_type) or isinstance(image,binary_type))) and hasattr(image,'__iter__'):
+            # We got an array-like object
+            if mercator_project:
+                data = mercator_transform(image,
+                                          [bounds[0][0], bounds[1][0]],
+                                          origin=origin)
+            else:
+                data = image
+            self.url = "data:image/png;base64," +\
+                base64.b64encode(write_png(data, origin=origin, colormap=colormap)).decode('utf-8')
+        else:
+            # We got an url
+            self.url = json.loads(json.dumps(image))
+
+        self.url = self.url.replace('\n',' ')
+        self.bounds = json.loads(json.dumps(bounds))
+        options = {
+            'opacity': opacity,
+            'attribution': attribution,
+        }
+        self.options = json.dumps({key:val for key,val in options.items() if val},
+                                             sort_keys=True)
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.imageOverlay(
+                    '{{ this.url }}',
+                    {{ this.bounds }},
+                    {{ this.options }}
+                    ).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)

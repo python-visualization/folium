@@ -1,40 +1,22 @@
 <!DOCTYPE html>
 <head>
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
-   <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css">
    <script src="https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
-
-
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css">
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css">
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
 
-   <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css">
-
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_header(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
-    {% endfor %}
-
-   {{ dvf_js }}
-   {{ d3 }}
-   {{ vega }}
-   {{ jquery }}
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"/>
+   <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css"/>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"/>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"/>
+   <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
 
    <style>
 
@@ -53,150 +35,48 @@
         left:0;
       }
 
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_css(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
-    {% endfor %}
-
    </style>
+
+   <style>
+       #{{ map_id }} {
+           position:relative;
+           {{ size }}
+           left:0.0%;
+           top:0.0%;
+       }
+    </style>
+
 </head>
 
 <body>
 
-   <div class="folium-map" id="{{ map_id }}" {{ size }}></div>
-
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_html(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
-    {% endfor %}
-
-   <script>
-
-      {{ vega_parse }}
-
-      var base_tile = L.tileLayer('{{ Tiles }}', {
-          maxZoom: {{ max_zoom }},
-          minZoom: {{ min_zoom }},
-          attribution: '{{ attr }}'
-      });
-
-      var baseLayer = {
-        "Base Layer": base_tile
-      };
-
-      /*
-      addition of the wms layers
-      */
-
-      {% for wms in wms_layers %}
-      {{ wms }}
-      {% endfor %}
-
-      /*
-      addition of the tile layers
-      */
-      {% for tile in tile_layers %}
-      {{ tile }}
-      {% endfor %}
-
-      /*
-      list of layers to be added
-      */
-      var layer_list = {
-      {% for data_string in data_layers %}
-      {{ data_string }}
-      {% endfor %}
-      };
-
-      /*
-      Bounding box.
-      */
-      var southWest = L.latLng({{ min_lat }}, {{ min_lon }}),
-          northEast = L.latLng({{ max_lat }}, {{ max_lon }}),
-          bounds = L.latLngBounds(southWest, northEast);
-
-      /*
-      Creates the map and adds the selected layers
-      */
-      var map = L.map('{{ map_id }}', {
-                                       center:[{{ lat }}, {{ lon }}],
-                                       zoom: {{ zoom_level }},
-                                       maxBounds: bounds,
-                                       layers: [base_tile]
-                                     });
-
-      // L.control.layers(baseLayer, layer_list).addTo(map);
-
-      /*
-      addition of the image layers
-      */
-      {% for image in image_layers %}
-      {{ image }}
-      {% endfor %}
-
-      //cluster group
-      var clusteredmarkers = L.markerClusterGroup();
-      //section for adding clustered markers
-      {% for icon, mark, popup, add_mark in cluster_markers %}
-      {{ icon }}
-      {{ mark }}
-      {{ popup }}
-      {{ add_mark }}
-      {% endfor %}
-      //add the clustered markers to the group anyway
-      map.addLayer(clusteredmarkers);
-
-      {% for icon, mark, popup, add_mark in custom_markers %}
-      {{ icon }}
-      {{ mark }}
-      {{ popup }}
-      {{ add_mark }}
-      {% endfor %}
-
-      {% for icon, mark, popup, add_mark in div_markers %}
-      {{ icon }}
-      {{ mark }}
-      {{ popup }}
-      {{ add_mark }}
-      {% endfor %}
-
-      {% for mark, popup, add_mark in markers %}
-      {{ mark }}
-      {{ popup }}
-      {{ add_mark }}
-      {% endfor %}
-
-      {% for line, popup, add_line in lines %}
-      {{ line }}
-      {{ popup }}
-      {{ add_line }}
-      {% endfor %}
-
-      {% for multiline, add_multiline in multilines %}
-      {{ multiline }}
-      {{ add_multiline }}
-      {% endfor %}
-
-      {{ lat_lng_pop }}
-
-      {{ click_pop }}
-
-{% if fit_bounds %}{{ fit_bounds }}{% endif %}
-
-    {% for name, plugin in plugins.items() %}
-        {% set plugin_nb = 0 %}
-        {% for plugin_object in plugin %}
-            {{plugin_object.render_js(plugin_nb)}}
-            {% set plugin_nb = plugin_nb +1 %}
-        {% endfor %}
-    {% endfor %}
-
-   </script>
+    <div class="folium-map" id="{{ map_id }}" ></div>
 
 </body>
+
+<script>
+
+    var southWest = L.latLng({{ min_lat }}, {{ min_lon }});
+    var northEast = L.latLng({{ max_lat }}, {{ max_lon }});
+    var bounds = L.latLngBounds(southWest, northEast);
+
+    var {{ map_id }} = L.map('{{ map_id }}', {
+        center:[{{ lat }}, {{ lon }}],
+        zoom: {{ zoom_level }},
+        maxBounds: bounds,
+        layers: []
+        });
+
+    {% for tile in tile_layers %}
+        var {{tile['id']}} = L.tileLayer(
+            '{{tile['address']}}',
+            {
+                maxZoom: {{tile['max_zoom']}},
+                minZoom: {{tile['min_zoom']}},
+                attribution: '{{tile['attr']}}'
+                }
+            ).addTo({{ map_id }});
+    {% endfor %}
+
+</script>
+

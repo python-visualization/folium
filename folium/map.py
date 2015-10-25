@@ -6,6 +6,8 @@ Map
 Classes for drawing maps.
 """
 import warnings
+import json
+from collections import OrderedDict
 
 from jinja2 import Template
 
@@ -85,6 +87,8 @@ class Map(MacroElement):
             self.location = location
             self.zoom_start = zoom_start
 
+        Figure().add_children(self)
+
         # Map Size Parameters.
         self.width  = _parse_size(width)
         self.height = _parse_size(height)
@@ -108,6 +112,7 @@ class Map(MacroElement):
                 height: {{this.height[0]}}{{this.height[1]}};
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
+                }
             </style>
         {% endmacro %}
         {% macro html(this, kwargs) %}
@@ -169,7 +174,7 @@ class Map(MacroElement):
 
 class TileLayer(MacroElement):
     def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None):
+                 min_zoom=1, max_zoom=18, attr=None, API_key=None, overlay = False):
         """TODO docstring here
         Parameters
         ----------
@@ -180,6 +185,8 @@ class TileLayer(MacroElement):
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
+
+        self.overlay = overlay
 
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
@@ -197,6 +204,8 @@ class TileLayer(MacroElement):
             if not attr:
                 raise ValueError('Custom tiles must'
                                  ' also be passed an attribution')
+            if isinstance(attr, binary_type):
+                attr = text_type(attr, 'utf8')
             self.attr = attr
 
         self._template = Template(u"""
@@ -212,6 +221,42 @@ class TileLayer(MacroElement):
 
         {% endmacro %}
         """)
+
+class LayerControl(MacroElement):
+    """Adds a layer control to the map."""
+    def __init__(self):
+        """Creates a LayerControl object to be added on a folium map.
+
+        Parameters
+        ----------
+        """
+        super(LayerControl, self).__init__()
+        self._name = 'LayerControl'
+
+        self.base_layers = OrderedDict()
+        self.overlays = OrderedDict()
+
+        self._template = Template("""
+        {% macro script(this,kwargs) %}
+            var {{this.get_name()}} = {
+                base_layers : { {% for key,val in this.base_layers.items() %}"{{key}}" : {{val}},{% endfor %} },
+                overlays : { {% for key,val in this.overlays.items() %}"{{key}}" : {{val}},{% endfor %} }
+                };
+            L.control.layers(
+                {{this.get_name()}}.base_layers,
+                {{this.get_name()}}.overlays
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
+    def render(self, **kwargs):
+        """TODO : docstring here."""
+        self.base_layers = OrderedDict([(val.tile_name,val.get_name()) \
+                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and not val.overlay])
+        self.overlays = OrderedDict([(val.tile_name,val.get_name()) \
+                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and val.overlay])
+
+        super(LayerControl, self).render()
 
 class Icon(MacroElement):
     def __init__(self, color='blue', icon='info-sign', angle=0):
@@ -265,6 +310,10 @@ class Marker(MacroElement):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = location
+        if icon is not None:
+            self.add_children(icon)
+        if popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -292,7 +341,7 @@ class Popup(Element):
         self.script._parent = self
 
         if isinstance(html, Element):
-            self.html.add_children(html)
+            self.add_children(html)
         elif isinstance(html, text_type) or isinstance(html,binary_type):
             self.html.add_children(Html(text_type(html)))
 
@@ -324,3 +373,50 @@ class Popup(Element):
 
         figure.script.add_children(Element(\
             self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
+
+class FitBounds(MacroElement):
+    def __init__(self, bounds, padding_top_left=None,
+                   padding_bottom_right=None, padding=None, max_zoom=None):
+        """Fit the map to contain a bounding box with the maximum zoom level possible.
+
+        Parameters
+        ----------
+        bounds: list of (latitude, longitude) points
+            Bounding box specified as two points [southwest, northeast]
+        padding_top_left: (x, y) point, default None
+            Padding in the top left corner. Useful if some elements in
+            the corner, such as controls, might obscure objects you're zooming
+            to.
+        padding_bottom_right: (x, y) point, default None
+            Padding in the bottom right corner.
+        padding: (x, y) point, default None
+            Equivalent to setting both top left and bottom right padding to
+            the same value.
+        max_zoom: int, default None
+            Maximum zoom to be used.
+
+        """
+        super(FitBounds, self).__init__()
+        self._name = 'FitBounds'
+        self.bounds = json.loads(json.dumps(bounds))
+        options = {
+            'maxZoom': max_zoom,
+            'paddingTopLeft': padding_top_left,
+            'paddingBottomRight': padding_bottom_right,
+            'padding': padding,
+        }
+        self.fit_bounds_options = json.dumps({key:val for key,val in options.items() if val},
+                                             sort_keys=True)
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                {% if this.autobounds %}
+                    var autobounds = L.featureGroup({{ this.features }}).getBounds()
+                {% endif %}
+
+                {{this._parent.get_name()}}.fitBounds(
+                    {% if this.bounds %}{{ this.bounds }}{% else %}"autobounds"{% endif %},
+                    {{ this.fit_bounds_options }}
+                    );
+            {% endmacro %}
+            """)

@@ -17,8 +17,8 @@ class TestPlugins(object):
 
     def test_scroll_zoom_toggler(self):
         mapa = folium.Map([45., 3.], zoom_start=4)
-        mapa.add_plugin(plugins.ScrollZoomToggler())
-        mapa._build_map()
+        mapa.add_children(plugins.ScrollZoomToggler())
+        mapa._repr_html_()
 
     def test_marker_cluster(self):
         N = 100
@@ -28,89 +28,36 @@ class TestPlugins(object):
             range(N),                                    # Popups.
             ]).T
         mapa = folium.Map([45., 3.], zoom_start=4)
-        mapa.add_plugin(plugins.MarkerCluster(data))
-        mapa._build_map()
+        mapa.add_children(plugins.MarkerCluster(data))
+        mapa._repr_html_()
 
     def test_terminator(self):
         mapa = folium.Map([45., 3.], zoom_start=1)
-        mapa.add_plugin(plugins.Terminator())
-        mapa.add_plugin(plugins.ScrollZoomToggler())
-        mapa._build_map()
+        mapa.add_children(plugins.Terminator())
+        mapa.add_children(plugins.ScrollZoomToggler())
+        mapa._repr_html_()
 
     def test_boat_marker(self):
         mapa = folium.Map([30., 0.], zoom_start=3)
-        mapa.add_plugin(plugins.BoatMarker((34, -43),
+        mapa.add_children(plugins.BoatMarker((34, -43),
                                            heading=45,
                                            wind_heading=150,
                                            wind_speed=45,
                                            color="#8f8"))
-        mapa.add_plugin(plugins.BoatMarker((46, -30),
+        mapa.add_children(plugins.BoatMarker((46, -30),
                                            heading=-20,
                                            wind_heading=46,
                                            wind_speed=25,
                                            color="#88f"))
-        mapa._build_map()
+        mapa._repr_html_()
 
     def test_layer(self):
-        mapa = folium.Map([48., 5.], zoom_start=6)
-        layer = '//otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png'
-        mapa.add_plugin(plugins.Layer(layer, layer_name='MapQuest'))
-        mapa.add_plugin(plugins.LayerControl())
-        mapa._build_map()
-
-    def test_geo_json(self):
-        N = 100
-        lons = 5 - np.random.normal(size=N)
-        lats = 48 - np.random.normal(size=N)
-        coordinates = [[lon, lat] for (lat, lon) in zip(lats, lons)]
-        data = {
-            "type": "FeatureCollection",
-            "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "MultiPoint",
-                            "coordinates": coordinates,
-                            },
-                        "properties": {"prop0": "value0"}
-                        },
-                ],
-            }
-
-        mapa = folium.Map([48., 5.], zoom_start=6)
-        mapa.add_plugin(plugins.GeoJson(data))
-        mapa._build_map()
-
-        open('geojson_plugin_test1.json', 'w').write(json.dumps(data))
-        mapb = folium.Map([48., 5.], zoom_start=6)
-        mapb.add_plugin(plugins.GeoJson(open('geojson_plugin_test1.json')))
-        mapb._build_map()
-
-        coordinates = [[[[lon+1e-4, lat+1e-4], [lon+1e-4, lat-1e-4],
-                         [lon-1e-4, lat-1e-4], [lon-1e-4, lat+1e-4]]] for
-                       (lat, lon) in zip(lats, lons)]
-        data = {
-            "type": "FeatureCollection",
-            "features": [
-                    {
-                        "type": "Feature",
-                        "geometry": {
-                            "type": "MultiPolygon",
-                            "coordinates": coordinates,
-                            },
-                        "properties": {"prop0": "value0"}
-                        },
-                ],
-            }
-
-        mapc = folium.Map([48., 5.], zoom_start=6)
-        mapc.add_plugin(plugins.GeoJson(data))
-        mapc._build_map()
-
-        open('geojson_plugin_test2.json', 'w').write(json.dumps(data))
-        mapd = folium.Map([48., 5.], zoom_start=6)
-        mapd.add_plugin(plugins.GeoJson(open('geojson_plugin_test2.json')))
-        mapd._build_map()
+        mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+        layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',  attr='attribution'))
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest2', attr='attribution2', overlay=True))
+        mapa.add_children(folium.map.LayerControl())
+        mapa._repr_html_()
 
     def test_timestamped_geo_json(self):
         coordinates = [[[[lon-8*np.sin(theta), -47+6*np.cos(theta)] for
@@ -185,5 +132,5 @@ class TestPlugins(object):
             }
 
         mape = folium.Map([47, 3], zoom_start=1)
-        mape.add_plugin(plugins.TimestampedGeoJson(data))
-        mape._build_map()
+        mape.add_children(plugins.TimestampedGeoJson(data))
+        mape._repr_html_()

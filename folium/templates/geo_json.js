@@ -1,0 +1,1 @@
+var {{ this.get_name() }} = L.geoJson({{ this.data }}).addTo({{ this._parent.get_name() }});
