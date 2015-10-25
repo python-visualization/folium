@@ -3,20 +3,24 @@ language: python
 sudo: false
 
 env:
-    - CONDA="python=2.7"
-    - CONDA="python=3.3"
-    - CONDA="python=3.4"
+    - PYTHON="2.7"
+    - PYTHON="3.3"
+    - PYTHON="3.4"
+    - PYTHON="3.5"
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
+    - conda config --add channels ioos -f
     - conda update --yes --all
-    - travis_retry conda create --yes -n test $CONDA --file requirements.txt
+    - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
     - source activate test
-    - travis_retry conda install --yes pip mock pytest pandas
-    - travis_retry pip install vincent
+    - travis_retry conda install --yes pytest pandas vincent
+    - if [[ "$PYTHON" != "3.5" ]]; then
+        travis_retry conda install --yes mock ;
+      fi
+    - travis_retry pip install
 
 script:
     - python setup.py test
-

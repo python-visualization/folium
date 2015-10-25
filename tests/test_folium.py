@@ -9,7 +9,10 @@ import pytest
 
 import os
 import json
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
 import pandas as pd
 import jinja2
 from jinja2 import Environment, PackageLoader
@@ -20,8 +23,9 @@ from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
 from folium.map import Popup, Marker, Icon, FitBounds
-from folium.features import DivIcon, CircleMarker, LatLngPopup, GeoJson,\
-    GeoJsonStyle, ColorScale, TopoJson, PolyLine, MultiPolyLine, ImageOverlay
+from folium.features import (DivIcon, CircleMarker, LatLngPopup, GeoJson,
+                             GeoJsonStyle, ColorScale, TopoJson, PolyLine,
+                             MultiPolyLine, ImageOverlay)
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -49,7 +53,7 @@ def test_get_templates():
     """Test template getting."""
 
     env = folium.utilities.get_templates()
-    assert isinstance(env, jinja2.environment.Environment) == True
+    assert isinstance(env, jinja2.environment.Environment)
 
 
 class TestFolium(object):
@@ -98,8 +102,8 @@ class TestFolium(object):
 
         map = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
                          API_key='###')
-        assert map._children['cloudmade'].tiles == ('http://{s}.tile.cloudmade.com'
-                                              '/###/997/256/{z}/{x}/{y}.png')
+        cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
+        assert map._children['cloudmade'].tiles == cloudmade
 
     def test_builtin_tile(self):
         """Test custom maptiles."""
@@ -108,8 +112,10 @@ class TestFolium(object):
         for tiles in default_tiles:
             map = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
             tiles = ''.join(tiles.lower().strip().split())
-            url = map._env.get_template('tiles/{}/tiles.txt'.format(tiles)).render()
-            attr = map._env.get_template('tiles/{}/attr.txt'.format(tiles)).render()
+            url = 'tiles/{}/tiles.txt'.format
+            attr = 'tiles/{}/attr.txt'.format
+            url = map._env.get_template(url(tiles)).render()
+            attr = map._env.get_template(attr(tiles)).render()
 
             assert map._children[tiles].tiles == url
             assert map._children[tiles].attr == attr
@@ -148,7 +154,8 @@ class TestFolium(object):
                                'wms_format': wms_format,
                                'wms_layer_names': wms_layers,
                                'wms_transparent': 'true'})
-        assert ''.join(wms.split())[:-1] in ''.join(map.get_root().render().split())
+        assert (''.join(wms.split())[:-1] in
+                ''.join(map.get_root().render().split()))
 
     def test_simple_marker(self):
         """Test simple marker addition."""
@@ -164,8 +171,9 @@ class TestFolium(object):
                                     'lat': 45.50,
                                     'lon': -122.7,
                                     'icon': "{icon:new L.Icon.Default()}"})
-        assert ''.join(mark_1.split())[:-1] in ''.join(self.map.get_root().render().split())
-        #assert self.map.template_vars['custom_markers'][0][2] == ""
+        assert (''.join(mark_1.split())[:-1] in
+                ''.join(self.map.get_root().render().split()))
+        # assert self.map.template_vars['custom_markers'][0][2] == ""
 
         # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
@@ -180,10 +188,12 @@ class TestFolium(object):
                                     'pop_txt': 'Hi',
                                     'html_name': html_2.get_name(),
                                     'width': 300})
-        #assert self.map.mark_cnt['simple'] == 2
-        assert ''.join(mark_2.split())[:-1] in ''.join(self.map.get_root().render().split())
-        assert ''.join(pop_2.split())[:-1] in ''.join(self.map.get_root().render().split())
-        #assert self.map.template_vars['custom_markers'][1][2] == pop_2
+        # assert self.map.mark_cnt['simple'] == 2
+        assert (''.join(mark_2.split())[:-1] in
+                ''.join(self.map.get_root().render().split()))
+        assert (''.join(pop_2.split())[:-1] in
+                ''.join(self.map.get_root().render().split()))
+        # assert self.map.template_vars['custom_markers'][1][2] == pop_2
 
         # Test no popup.
         self.map.simple_marker(location=[45.60, -122.8])
@@ -206,17 +216,18 @@ class TestFolium(object):
 
         self.map.div_markers(locations=locations, popups=popups)
 
-        markers = [marker for marker in self.map._children.values() if isinstance(marker,Marker)]
-        assert len(markers)==3
+        markers = [marker for marker in self.map._children.values() if
+                   isinstance(marker, Marker)]
+        assert len(markers) == 3
 
         for marker, location, pop in zip(markers, locations, popups):
             icon = list(marker._children.values())[0]
             popup = list(marker._children.values())[1]
             html = list(popup.html._children.values())[0]
 
-            assert isinstance(icon,DivIcon)
-            assert isinstance(popup,Popup)
-            assert isinstance(html,Html)
+            assert isinstance(icon, DivIcon)
+            assert isinstance(popup, Popup)
+            assert isinstance(html, Html)
 
             icon_1 = icon_templ.render({'icon_name': icon.get_name(),
                                         'size': 10})
@@ -225,7 +236,7 @@ class TestFolium(object):
                                         'lon': location[1],
                                         'icon': "{icon:new L.Icon.Default()}"})
             popup_1 = popup_templ.render({'pop_name': popup.get_name(),
-                                          'html_name' : html.get_name(),
+                                          'html_name': html.get_name(),
                                           'pop_txt': '{}'.format(pop),
                                           'width': 300})
 
@@ -254,7 +265,8 @@ class TestFolium(object):
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
-        assert ''.join(circle_1.split())[:-1] in ''.join(self.map.get_root().render().split())
+        assert (''.join(circle_1.split())[:-1] in
+                ''.join(self.map.get_root().render().split()))
 
         # Second circle marker.
         self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
@@ -265,7 +277,8 @@ class TestFolium(object):
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
-        assert ''.join(circle_2.split())[:-1] in ''.join(self.map.get_root().render().split())
+        assert (''.join(circle_2.split())[:-1] in
+                ''.join(self.map.get_root().render().split()))
 
     def test_poly_marker(self):
         """Test polygon marker."""
@@ -287,35 +300,40 @@ class TestFolium(object):
                                     'rotation': 0,
                                     'radius': 15})
 
-        assert (''.join(polygon.split()))[-1] in ''.join(self.map.get_root().render().split())
+        assert ((''.join(polygon.split()))[-1] in
+                ''.join(self.map.get_root().render().split()))
 
     def test_latlng_pop(self):
         """Test lat/lon popovers."""
 
         self.map.lat_lng_popover()
         pop = list(self.map._children.values())[-1]
-        pop_templ = self.env.get_template('lat_lng_popover.js').render(popup=pop.get_name(),
-                                                                      map=self.map.get_name())
-        assert (''.join(pop_templ.split()))[:-1] in ''.join(self.map.get_root().render().split())
+        tmpl = 'lat_lng_popover.js'
+        pop_templ = self.env.get_template(tmpl).render(popup=pop.get_name(),
+                                                       map=self.map.get_name())
+        assert ((''.join(pop_templ.split()))[:-1] in
+                ''.join(self.map.get_root().render().split()))
 
     def test_click_for_marker(self):
         """Test click for marker functionality."""
 
         # Lat/lon popover.
-        self.map = folium.Map([46,3])
+        self.map = folium.Map([46, 3])
         self.map.click_for_marker()
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': ('"Latitude: " + lat + "<br>'
                                               'Longitude: " + lng '),
-                                   'map' : self.map.get_name()})
-        assert (''.join(click.split()))[:-1] in ''.join(self.map.get_root().render().split())
+                                    'map': self.map.get_name()})
+        assert ((''.join(click.split()))[:-1] in
+                ''.join(self.map.get_root().render().split()))
 
         # Custom popover.
         self.map.click_for_marker(popup='Test')
         click_templ = self.env.get_template('click_for_marker.js')
         click = click_templ.render({'popup': '"Test"',
-                                   'map' : self.map.get_name()})
-        assert (''.join(click.split()))[:-1] in ''.join(self.map.get_root().render().split())
+                                    'map': self.map.get_name()})
+        assert ((''.join(click.split()))[:-1] in
+                ''.join(self.map.get_root().render().split()))
 
     def test_vega_popup(self):
         """Test vega popups."""
@@ -335,9 +353,9 @@ class TestFolium(object):
         popup = list(marker._children.values())[-1]
         vega = list(popup._children.values())[-1]
         vega_str = vega_templ.render({'vega': vega.get_name(),
-                                      'popup':popup.get_name(),
-                                      'marker':marker.get_name(),
-                                      'vega_json':json.dumps(data),
+                                      'popup': popup.get_name(),
+                                      'marker': marker.get_name(),
+                                      'vega_json': json.dumps(data),
                                       })
         out = ''.join(self.map.get_root().render().split())
         assert ''.join(vega_parse.render().split()) in out
@@ -351,14 +369,16 @@ class TestFolium(object):
         path = os.path.join(rootpath, 'us-counties.json')
         self.map.geo_json(geo_path=path)
 
-        geo_json = [x for x in self.map._children.values() if isinstance(x,GeoJson)][0]
-        color_scale = [x for x in self.map._children.values() if isinstance(x,ColorScale)][0]
+        geo_json = [x for x in self.map._children.values() if
+                    isinstance(x, GeoJson)][0]
+        color_scale = [x for x in self.map._children.values() if
+                       isinstance(x, ColorScale)][0]
         geo_json_style = list(geo_json._children.values())[0]
         out = ''.join(self.map._parent.render().split())
 
         # Verify the geo_json object
         obj_temp = self.env.get_template('geo_json.js')
-        obj = obj_temp.render(this = geo_json)
+        obj = obj_temp.render(this=geo_json)
         assert ''.join(obj.split())[:-1] in out
 
         # Verify the style
@@ -417,20 +437,23 @@ class TestFolium(object):
 
         # With DataFrame data binding, default threshold scale.
         self.map.geo_json(geo_path=path, data=data,
-                          threshold_scale=[4.0, 1000.0, 3000.0, 5000.0, 9000.0],
+                          threshold_scale=[4.0, 1000.0, 3000.0,
+                                           5000.0, 9000.0],
                           columns=['FIPS_Code', 'Unemployed_2011'],
                           key_on='feature.id', fill_color='YlGnBu',
                           reset=True)
 
         out = self.map._parent.render()
 
-        geo_json = [x for x in self.map._children.values() if isinstance(x,GeoJson)][0]
-        color_scale = [x for x in self.map._children.values() if isinstance(x,ColorScale)][0]
+        geo_json = [x for x in self.map._children.values() if
+                    isinstance(x, GeoJson)][0]
+        color_scale = [x for x in self.map._children.values() if
+                       isinstance(x, ColorScale)][0]
         geo_json_style = list(geo_json._children.values())[0]
 
         # Verify the geo_json object
         obj_temp = self.env.get_template('geo_json.js')
-        obj = obj_temp.render(this = geo_json)
+        obj = obj_temp.render(this=geo_json)
         assert ''.join(obj.split())[:-1] in ''.join(out.split())
 
         # Verify the style
@@ -447,10 +470,11 @@ class TestFolium(object):
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
         palette = folium.utilities.color_brewer('YlGnBu')
         d3range = palette[0: len(domain) + 2]
-        colorscale_obj = [val for key,val in self.map._children.items() if isinstance(val, ColorScale)][0]
+        colorscale_obj = [val for key, val in self.map._children.items() if
+                          isinstance(val, ColorScale)][0]
         colorscale_temp = self.env.get_template('d3_threshold.js')
         colorscale = colorscale_temp.render({
-            'this' : colorscale_obj,
+            'this': colorscale_obj,
             'domain': domain,
             'range': d3range})
         assert ''.join(colorscale.split())[:-1] in ''.join(out.split())
@@ -467,8 +491,8 @@ class TestFolium(object):
         out = self.map._parent.render()
 
         # Verify TopoJson
-        topo_json = [val for key,val in self.map._children.items()\
-                 if isinstance(val,TopoJson)][0]
+        topo_json = [val for key, val in self.map._children.items()
+                     if isinstance(val, TopoJson)][0]
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
 
@@ -481,17 +505,14 @@ class TestFolium(object):
         html_templ = self.env.get_template('fol_template.html')
 
         tile_layers = [
-            {
-                'id' : 'tile_layer_'+'0'*32,
-                'address' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'attr': ('Map data (c) <a href="http://openstreetmap.org">'
-                         'OpenStreetMap</a> contributors'),
-                'max_zoom': 20,
-                'min_zoom': 1,
-                }
+            {'id': 'tile_layer_'+'0'*32,
+             'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+             'attr': ('Map data (c) <a href="http://openstreetmap.org">'
+                      'OpenStreetMap</a> contributors'),
+             'max_zoom': 20,
+             'min_zoom': 1}
             ]
-        tmpl = {
-                'map_id': 'map_' + '0' * 32,
+        tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
                 'size': 'width: 900.0px; height: 400.0px;',
                 'zoom_level': 4,
@@ -499,8 +520,7 @@ class TestFolium(object):
                 'max_lat': 90,
                 'min_lon': -180,
                 'max_lon': 180,
-                'tile_layers': tile_layers,
-            }
+                'tile_layers': tile_layers}
         HTML = html_templ.render(tmpl, plugins={})
 
         assert ''.join(out.split()) == ''.join(HTML.split())
@@ -565,12 +585,12 @@ class TestFolium(object):
                       line_color=line_opts['color'],
                       line_weight=line_opts['weight'],
                       line_opacity=line_opts['opacity'])
-        polyline = [val for key,val in self.map._children.items()\
-                    if isinstance(val,PolyLine)][0]
+        polyline = [val for key, val in self.map._children.items()
+                    if isinstance(val, PolyLine)][0]
         out = self.map._parent.render()
 
         line_rendered = line_temp.render({'line': 'line_1',
-                                          'this':polyline,
+                                          'this': polyline,
                                           'locations': locations,
                                           'options': line_opts})
 
@@ -593,12 +613,12 @@ class TestFolium(object):
                            line_color=multiline_opts['color'],
                            line_weight=multiline_opts['weight'],
                            line_opacity=multiline_opts['opacity'])
-        multipolyline = [val for key,val in self.map._children.items()\
-                    if isinstance(val,MultiPolyLine)][0]
+        multipolyline = [val for key, val in self.map._children.items()
+                         if isinstance(val, MultiPolyLine)][0]
         out = self.map._parent.render()
 
         multiline_rendered = multiline_temp.render({'multiline': 'multiline_1',
-                                                    'this' : multipolyline,
+                                                    'this': multipolyline,
                                                     'locations': locations,
                                                     'options': multiline_opts})
 
@@ -610,20 +630,22 @@ class TestFolium(object):
 
         self.setup()
         self.map.fit_bounds(bounds)
-        fitbounds = [val for key,val in self.map._children.items() if isinstance(val,FitBounds)][0]
+        fitbounds = [val for key, val in self.map._children.items() if
+                     isinstance(val, FitBounds)][0]
         out = self.map._parent.render()
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
             'bounds': json.dumps(bounds),
-            'this' : fitbounds,
+            'this': fitbounds,
             'fit_bounds_options': {}, })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
         self.setup()
         self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
-        fitbounds = [val for key,val in self.map._children.items() if isinstance(val,FitBounds)][0]
+        fitbounds = [val for key, val in self.map._children.items() if
+                     isinstance(val, FitBounds)][0]
         out = self.map._parent.render()
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
@@ -632,18 +654,19 @@ class TestFolium(object):
             'fit_bounds_options': json.dumps({'maxZoom': 15,
                                               'padding': (3, 3), },
                                              sort_keys=True),
-            'this' : fitbounds,
+            'this': fitbounds,
             })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
     def test_image_overlay(self):
         """Test image overlay."""
-        #from numpy.random import random
+        # from numpy.random import random
         from folium.utilities import write_png
-        #import base64
+        # import base64
 
-        data = [[[1,0,0,1],[0,0,0,0],[0,0,0,0]],[[1,1,0,0.5],[0,0,1,1],[0,0,1,1]]]
+        data = [[[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0]],
+                [[1, 1, 0, 0.5], [0, 0, 1, 1], [0, 0, 1, 1]]]
         min_lon, max_lon, min_lat, max_lat = -90.0, 90.0, -180.0, 180.0
 
         self.setup()
@@ -651,10 +674,11 @@ class TestFolium(object):
         self.map.image_overlay(data, filename=image_url)
         out = self.map._parent.render()
 
-        imageoverlay = [val for key,val in self.map._children.items() if isinstance(val,ImageOverlay)][0]
+        imageoverlay = [val for key, val in self.map._children.items() if
+                        isinstance(val, ImageOverlay)][0]
 
         png_str = write_png(data)
-        #with open('data.png', 'wb') as f:
+        # with open('data.png', 'wb') as f:
         #    f.write(png_str)
         png = "data:image/png;base64,{}".format
         inline_image_url = png(base64.b64encode(png_str).decode('utf-8'))
@@ -665,7 +689,7 @@ class TestFolium(object):
         image_bounds = [[min_lon, min_lat], [max_lon, max_lat]]
 
         image_rendered = image_tpl.render({'image_name': image_name,
-                                           'this':imageoverlay,
+                                           'this': imageoverlay,
                                            'image_url': image_url,
                                            'image_bounds': image_bounds,
                                            'image_opacity': image_opacity})
@@ -676,10 +700,11 @@ class TestFolium(object):
         self.map.image_overlay(data)
         out = self.map._parent.render()
 
-        imageoverlay = [val for key,val in self.map._children.items() if isinstance(val,ImageOverlay)][0]
+        imageoverlay = [val for key, val in self.map._children.items() if
+                        isinstance(val, ImageOverlay)][0]
 
         image_rendered = image_tpl.render({'image_name': image_name,
-                                           'this':imageoverlay,
+                                           'this': imageoverlay,
                                            'image_url': inline_image_url,
                                            'image_bounds': image_bounds,
                                            'image_opacity': image_opacity})
