@@ -11,9 +11,7 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 class PyTest(TestCommand):
     def finalize_options(self):
         TestCommand.finalize_options(self)
-        # FIXME: '--doctest-modules'
-        self.test_args = ['--verbose']
-        self.test_suite = True
+        self.verbose = True
 
     def run_tests(self):
         import pytest
@@ -76,11 +74,12 @@ config = dict(name='folium',
               author_email='wrobstory@gmail.com',
               url='https://github.com/python-visualization/folium',
               keywords='data visualization',
-              classifiers=['Development Status :: 4 - Beta',
-                           'Programming Language :: Python :: 2.7',
+              classifiers=['Programming Language :: Python :: 2.7',
                            'Programming Language :: Python :: 3.3',
                            'Programming Language :: Python :: 3.4',
-                           'License :: OSI Approved :: MIT License'],
+                           'Programming Language :: Python :: 3.5',
+                           'License :: OSI Approved :: MIT License',
+                           'Development Status :: 5 - Production/Stable'],
               packages=pkgs,
               package_data=pkg_data,
               cmdclass=dict(test=PyTest),
