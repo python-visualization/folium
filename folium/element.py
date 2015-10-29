@@ -267,7 +267,7 @@ class Figure(Element):
 
         iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
             .format(\
-                    html = b"data:text/html;base64,"+base64.b64encode(html.encode('utf8')),
+                    html = "data:text/html;base64,"+base64.b64encode(html.encode('utf8')).decode('utf8'),
                     #html = self.HTML.replace('"','&quot;'),
                     width = int(60.*width),
                     height= int(60.*height),
