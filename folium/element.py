@@ -175,7 +175,23 @@ _default_css = [
     ]
 
 class Figure(Element):
-    def __init__(self, figsize=(17,10)):
+    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
+        """Create a Figure object, to plot things into it.
+
+        Parameters
+        ----------
+            width : str, default "100%"
+                The width of the Figure. It may be a percentage or a distance (like "300px").
+            height : str, default None
+                The height of the Figure. It may be a percentage or a distance (like "300px").
+            ratio : str, default "60%"
+                A percentage defining the aspect ratio of the Figure.
+                It will be ignored if height is not None.
+            figsize : tuple of two int, default None
+                If you're a matplotlib addict, you can overwrite width and height.
+                Values will be converted into pixels in using 60 dpi.
+                For example figsize=(10,5) wil result in width="600px", height="300px".
+        """
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -186,7 +202,12 @@ class Figure(Element):
         self.html._parent = self
         self.script._parent = self
 
-        self.figsize = figsize
+        self.width = width
+        self.height = height
+        self.ratio = ratio
+        if figsize is not None:
+            self.width = str(60*figsize[0])+'px'
+            self.height = str(60*figsize[1])+'px'
 
         self._template = Template(u"""
         <!DOCTYPE html>
@@ -252,25 +273,27 @@ class Figure(Element):
 
         Parameters
         ----------
-            self : folium.Map object
-                The map you want to display
-
-            figsize : tuple of length 2, default (17,10)
-                The size of the output you expect in inches.
-                Output is 60dpi so that the output has same size as a
-                matplotlib figure with the same figsize.
-
         """
         html = self.render(**kwargs)
+        html = "data:text/html;base64,"+base64.b64encode(html.encode('utf8')).decode('utf8')
 
-        width, height = self.figsize
-
-        iframe = '<iframe src="{html}" width="{width}px" height="{height}px"></iframe>'\
+        if self.height is None:
+            iframe = """
+            <div style="width:{width};">
+            <div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">
+            <iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">
+            </iframe>
+            </div></div>""".format(
+                html=html,
+                width=self.width,
+                ratio=self.ratio,
+                )
+        else:
+            iframe = '<iframe src="{html}" width="{width}" height="{height}"></iframe>'\
             .format(\
-                    html = "data:text/html;base64,"+base64.b64encode(html.encode('utf8')).decode('utf8'),
-                    #html = self.HTML.replace('"','&quot;'),
-                    width = int(60.*width),
-                    height= int(60.*height),
+                    html = html,
+                    width = self.width,
+                    height= self.height,
                    )
         return iframe
 
@@ -387,26 +410,15 @@ class Div(Figure):
             figure.script.add_children(Element(script(self, kwargs)),
                                        name=self.get_name())
 
-    def _repr_html_(self, figsize=(17,10), **kwargs):
-        """Displays the Map in a Jupyter notebook.
-
-        Parameters
-        ----------
-            self : folium.Map object
-                The map you want to display
-
-            figsize : tuple of length 2, default (17,10)
-                The size of the output you expect in inches.
-                Output is 60dpi so that the output has same size as a
-                matplotlib figure with the same figsize.
-
+    def _repr_html_(self, **kwargs):
+        """Displays the Div in a Jupyter notebook.
         """
         if self._parent is None:
             self.add_to(Figure())
-            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            out = self._parent._repr_html_(**kwargs)
             self._parent = None
         else:
-            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            out = self._parent._repr_html_(**kwargs)
         return out
 
 class MacroElement(Element):

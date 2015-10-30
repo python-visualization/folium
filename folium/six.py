@@ -1,5 +1,4 @@
 import sys
-import urllib
 
 PY3 = sys.version_info[0] == 3
 
@@ -17,4 +16,9 @@ else:
     def iteritems(d, **kw):
         return iter(d.iteritems(**kw))
 
-urlopen = urllib.request.urlopen if PY3 else urllib.urlopen
+if PY3:
+    import urllib.request
+    urlopen = urllib.request.urlopen
+else:
+    import urllib
+    urlopen = urllib.urlopen
