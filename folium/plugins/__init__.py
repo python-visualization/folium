@@ -10,3 +10,4 @@ from .scroll_zoom_toggler import ScrollZoomToggler
 from .terminator import Terminator
 from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
+from .heat_map import HeatMap
