@@ -510,7 +510,9 @@ class TestFolium(object):
              'attr': ('Map data (c) <a href="http://openstreetmap.org">'
                       'OpenStreetMap</a> contributors'),
              'max_zoom': 20,
-             'min_zoom': 1}
+             'min_zoom': 1,
+             'detect_retina': False,
+            }
             ]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
