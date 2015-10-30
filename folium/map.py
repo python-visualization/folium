@@ -134,26 +134,15 @@ class Map(MacroElement):
         {% endmacro %}
         """)
 
-    def _repr_html_(self, figsize=(17,10), **kwargs):
+    def _repr_html_(self, **kwargs):
         """Displays the Map in a Jupyter notebook.
-
-        Parameters
-        ----------
-            self : folium.Map object
-                The map you want to display
-
-            figsize : tuple of length 2, default (17,10)
-                The size of the output you expect in inches.
-                Output is 60dpi so that the output has same size as a
-                matplotlib figure with the same figsize.
-
         """
         if self._parent is None:
             self.add_to(Figure())
-            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            out = self._parent._repr_html_(**kwargs)
             self._parent = None
         else:
-            out = self._parent._repr_html_(figsize=figsize, **kwargs)
+            out = self._parent._repr_html_(**kwargs)
         return out
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
