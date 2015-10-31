@@ -134,3 +134,9 @@ class TestPlugins(object):
         mape = folium.Map([47, 3], zoom_start=1)
         mape.add_children(plugins.TimestampedGeoJson(data))
         mape._repr_html_()
+
+    def test_heat_map(self):
+        data = (np.random.normal(size=(100,2))*np.array([[1,1]])+np.array([[48,5]])).tolist()
+        mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+        mapa.add_children(plugins.HeatMap(data))
+        mapa._repr_html_()
