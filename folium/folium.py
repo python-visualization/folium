@@ -30,6 +30,23 @@ class Map(_Map):
     """This class inherits from the map.Map object in order to provide bindings to
     former folium API.
     """
+    def create_map(self, path='map.html', plugin_data_out=True, template=None):
+        """Write Map output to HTML.
+
+        Parameters:
+        -----------
+        path: string, default 'map.html'
+            Path for HTML output for map
+        plugin_data_out: boolean, default True
+            Deprecated, not used anymore
+        template: string, default None
+            Deprecated, not used anymore
+        """
+        warnings.warn("%s is deprecated. Use %s instead" % ("Map.create_map",
+                                                            "Map.save"),
+                      FutureWarning, stacklevel=2)
+        self.save(path)
+
     def add_wms_layer(self, wms_name=None, wms_url=None, wms_format=None,
                       wms_layers=None, wms_transparent=True):
         """Adds a simple tile layer.
