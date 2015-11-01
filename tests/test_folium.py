@@ -563,6 +563,7 @@ class TestFolium(object):
 
         # Test write.
         map._parent.render()
+        map.save('map.html')
 
     def test_line(self):
         """Test line."""
