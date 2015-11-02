@@ -7,10 +7,9 @@ Extra features Elements.
 """
 from jinja2 import Template
 import json
-import base64
 
 from .utilities import color_brewer, _parse_size, legend_scaler, _locations_mirror, _locations_tolist, write_png,\
-    mercator_transform
+    image_to_url
 from .six import text_type, binary_type
 
 from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
@@ -557,43 +556,19 @@ class ImageOverlay(MacroElement):
             origin : ['upper' | 'lower'], optional, default 'upper'
                 Place the [0,0] index of the array in the upper left or lower left
                 corner of the axes.
-
             colormap : callable, used only for `mono` image.
                 Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
                 for transforming a mono image into RGB.
                 It must output iterables of length 3 or 4, with values between 0. and 1.
                 Hint : you can use colormaps from `matplotlib.cm`.
-
             mercator_project : bool, default False, used only for array-like image.
                 Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
         """
         super(ImageOverlay, self).__init__()
         self._name = 'ImageOverlay'
 
-        if hasattr(image,'read'):
-            # We got an image file.
-            if hasattr(image,'name'):
-                # we try to get the image format from the file name.
-                fileformat = image.name.lower().split('.')[-1]
-            else:
-                fileformat = 'png'
-            self.url = "data:image/{};base64,{}".format(fileformat,
-                                                   base64.b64encode(image.read()).decode('utf-8'))
-        elif (not (isinstance(image,text_type) or isinstance(image,binary_type))) and hasattr(image,'__iter__'):
-            # We got an array-like object
-            if mercator_project:
-                data = mercator_transform(image,
-                                          [bounds[0][0], bounds[1][0]],
-                                          origin=origin)
-            else:
-                data = image
-            self.url = "data:image/png;base64," +\
-                base64.b64encode(write_png(data, origin=origin, colormap=colormap)).decode('utf-8')
-        else:
-            # We got an url
-            self.url = json.loads(json.dumps(image))
+        self.url = image_to_url(image, origin=origin, mercator_project=mercator_project)
 
-        self.url = self.url.replace('\n',' ')
         self.bounds = json.loads(json.dumps(bounds))
         options = {
             'opacity': opacity,
@@ -608,5 +583,62 @@ class ImageOverlay(MacroElement):
                     {{ this.bounds }},
                     {{ this.options }}
                     ).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+class CustomIcon(Icon):
+    def __init__(self, icon_image, icon_size=None, icon_anchor=None,
+                 shadow_image=None, shadow_size=None, shadow_anchor=None,
+                 popup_anchor=None):
+        """Create a custom icon, based on an image.
+
+        Parameters
+        ----------
+            icon_image :  string, file or array-like object
+                The data you want to use as an icon.
+                * If string, it will be written directly in the output file.
+                * If file, it's content will be converted as embeded in the output file.
+                * If array-like, it will be converted to PNG base64 string and embeded in the output.
+            icon_size : tuple of 2 int
+                Size of the icon image in pixels.
+            icon_anchor : tuple of 2 int
+                The coordinates of the "tip" of the icon (relative to its top left corner).
+                The icon will be aligned so that this point is at the marker's geographical location.
+            shadow_image :  string, file or array-like object
+                The data for the shadow image. If not specified, no shadow image will be created.
+            shadow_size : tuple of 2 int
+                Size of the shadow image in pixels.
+            shadow_anchor : tuple of 2 int
+                The coordinates of the "tip" of the shadow (relative to its top left corner)
+                (the same as icon_anchor if not specified).
+            popup_anchor : tuple of 2 int
+                The coordinates of the point from which popups will "open", relative to the icon anchor.
+        """
+        super(Icon, self).__init__()
+        self._name = 'CustomIcon'
+        self.icon_url = image_to_url(icon_image)
+        self.icon_size = icon_size
+        self.icon_anchor = icon_anchor
+
+        self.shadow_url = image_to_url(shadow_image) if shadow_image is not None else None
+        self.shadow_size = shadow_size
+        self.shadow_anchor = shadow_anchor
+        self.popup_anchor = popup_anchor
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+                var {{this.get_name()}} = L.icon({
+                    iconUrl: '{{this.icon_url}}',
+                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
+                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
+
+                    {% if this.shadow_url %}shadowUrl: '{{this.shadow_url}}',{% endif %}
+                    {% if this.shadow_size %}shadowSize: [{{this.shadow_size[0]}},{{this.shadow_size[1]}}],{% endif %}
+                    {% if this.shadow_anchor %}shadowAnchor: [{{this.shadow_anchor[0]}},{{this.shadow_anchor[1]}}],{% endif %}
+
+                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
+                    });
+                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
