@@ -365,7 +365,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
 
     return out
 
-def image_to_url(image, mercator_project=False, colormap=None, origin='upper'):
+def image_to_url(image, mercator_project=False, colormap=None, origin='upper', bounds=((-90,-180),(90,180))):
     """Infers the type of an image argument and transforms it into a url.
 
         Parameters
@@ -384,6 +384,9 @@ def image_to_url(image, mercator_project=False, colormap=None, origin='upper'):
                 Hint : you can use colormaps from `matplotlib.cm`.
             mercator_project : bool, default False, used only for array-like image.
                 Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+            bounds: list-like, default ((-90,-180),(90,180))
+                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]].
+                Only used if mercator_project is True.
     """
     if hasattr(image,'read'):
         # We got an image file.

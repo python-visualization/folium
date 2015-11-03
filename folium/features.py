@@ -567,7 +567,7 @@ class ImageOverlay(MacroElement):
         super(ImageOverlay, self).__init__()
         self._name = 'ImageOverlay'
 
-        self.url = image_to_url(image, origin=origin, mercator_project=mercator_project)
+        self.url = image_to_url(image, origin=origin, mercator_project=mercator_project, bounds=bounds)
 
         self.bounds = json.loads(json.dumps(bounds))
         options = {
