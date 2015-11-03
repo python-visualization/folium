@@ -802,9 +802,9 @@ class Map(object):
             keyword argument will enable conversion to GeoJSON.
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
-        freescale: if True use free format for the scale, where min and max values
-            are taken from the data. It also allow to plot allow to plot values < 0 
-            and float legend labels.
+        freescale: if True use free format for the scale, where min and max
+            values are taken from the data. It also allow to plot
+            values < 0 and float legend labels.
 
         Output
         ------
@@ -893,7 +893,7 @@ class Map(object):
 
             # D3 Color scale.
             series = data[columns[1]]
-            if freescale == False:
+            if not freescale:
                 if threshold_scale and len(threshold_scale) > 6:
                     raise ValueError
             domain = threshold_scale or utilities.split_six(series=series)
@@ -918,18 +918,15 @@ class Map(object):
 
             if not freescale:
                 legend = leg_templ.render({'lin_min': 0,
-                           'lin_max': int(domain[-1]*1.1),
-                           'tick_labels': tick_labels,
-                           'caption': name})
-
-
+                                           'lin_max': int(domain[-1]*1.1),
+                                           'tick_labels': tick_labels,
+                                           'caption': name})
             else:
                 legend = leg_templ.render({'lin_min':  domain[0],
                                            'lin_max':  domain[-1],
                                            'tick_labels': tick_labels,
                                            'caption': name})
 
-            
             self.template_vars.setdefault('map_legends', []).append(legend)
 
             # Style with color brewer colors.
@@ -1112,14 +1109,20 @@ class Map(object):
     def _repr_html_(self):
         """Build the HTML representation for IPython."""
         self._build_map()  # Using the default templates.
-        srcdoc = self.HTML
+        html = self.HTML.encode('utf8')
 
         if self.json_data:
             callback = 'function(callback){{callback(null, JSON.parse({}))}}'
             for path, data in self.json_data.items():
-                json_data = json.dumps(data).replace('"', '&quot;')
-                srcdoc = srcdoc.replace('d3.json, {}'.format(repr(path)),
-                                        callback.format((repr(json_data))))
-        srcdoc = srcdoc.replace('"', '&quot;')
-        return ('<iframe srcdoc="{srcdoc}" style="width: 100%; height: 500px; '
-                'border: none"></iframe>'.format(srcdoc=srcdoc))
+                json_data = json.dumps(data)
+                html = html.replace('d3.json, {}'.format(repr(path)),
+                                    callback.format((repr(json_data))))
+            html = html.replace('"', '&quot;')
+            iframe = ('<iframe srcdoc="{}" width=100%; height=500px; '
+                      'border: none"></iframe>').format
+        else:
+            encoded = base64.b64encode(html)
+            html = "data:text/html;base64," + encoded.decode('utf8')
+            iframe = ('<iframe src="{}" width=100%; height=500px; '
+                      'border: none"></iframe>').format
+        return iframe(html)
