@@ -698,7 +698,7 @@ class TestFolium(object):
         assert ''.join(image_rendered.split()) in ''.join(out.split())
 
         self.setup()
-        self.map.image_overlay(data)
+        self.map.image_overlay(data, mercator_project=True)
         out = self.map._parent.render()
 
         imageoverlay = [val for key, val in self.map._children.items() if
