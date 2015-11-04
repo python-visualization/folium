@@ -21,7 +21,7 @@ class Map(MacroElement):
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180):
+                 min_lon=-180, max_lon=180, detect_retina=False):
         """Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -58,6 +58,9 @@ class Map(MacroElement):
             Initial zoom level for the map.
         attr: string, default None
             Map tile attribution; only required if passing custom tile URL.
+        detect_retina: bool, default False
+            If true and user is on a retina display, it will request four tiles of half the specified
+            size and a bigger zoom level in place of one to utilize the high resolution.
 
         Returns
         -------
@@ -102,7 +105,7 @@ class Map(MacroElement):
         self.max_lon = max_lon
 
         self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                            attr=attr, API_key=API_key)
+                            attr=attr, API_key=API_key, detect_retina=detect_retina)
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -148,7 +151,7 @@ class Map(MacroElement):
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
                        attr=None, tile_name=None, tile_url=None,
-                       active=False, **kwargs):
+                       active=False, detect_retina=False, **kwargs):
         if tile_name is not None:
             name = tile_name
             warnings.warn("'tile_name' is deprecated. Please use 'name' instead.")
@@ -158,12 +161,13 @@ class Map(MacroElement):
 
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
-                               attr=attr, API_key=API_key)
+                               attr=attr, API_key=API_key, detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
 class TileLayer(MacroElement):
     def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None, overlay = False):
+                 min_zoom=1, max_zoom=18, attr=None, API_key=None, overlay = False,
+                detect_retina=False):
         """TODO docstring here
         Parameters
         ----------
@@ -176,6 +180,7 @@ class TileLayer(MacroElement):
         self.max_zoom = max_zoom
 
         self.overlay = overlay
+        self.detect_retina = detect_retina
 
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
@@ -204,7 +209,8 @@ class TileLayer(MacroElement):
                 {
                     maxZoom: {{this.max_zoom}},
                     minZoom: {{this.min_zoom}},
-                    attribution: '{{this.attr}}'
+                    attribution: '{{this.attr}}',
+                    detectRetina: {{this.detect_retina.__str__().lower()}}
                     }
                 ).addTo({{this._parent.get_name()}});
 
