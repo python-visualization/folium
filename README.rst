@@ -4,6 +4,8 @@
    :target: https://travis-ci.org/python-visualization/folium
 .. image:: https://badges.gitter.im/Join%20Chat.svg
    :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
+   :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
 
 Folium
 ======
