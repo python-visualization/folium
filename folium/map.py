@@ -217,6 +217,34 @@ class TileLayer(MacroElement):
         {% endmacro %}
         """)
 
+class FeatureGroup(TileLayer):
+    def __init__(self, name=None, overlay=True):
+        """Create a FeatureGroup layer ; you can put things in it and handle them as a
+        single layer. For example, you can add a LayerControl to tick/untick the whole group.
+
+        Parameters
+        ----------
+        name : str, default None
+            The name of the featureGroup layer. It will be displayed in the LayerControl.
+            If None, get_name() will be called to get the object's technical (ugly) name.
+        overlay : bool, default True
+            Whether your layer will be an overlay (ticked with a checkbox in LayerControls)
+            or a base layer (ticked with a radio button).
+        """
+        super(TileLayer, self).__init__()
+        self._name = 'FeatureGroup'
+
+        self.tile_name = name if name is not None else self.get_name()
+
+        self.overlay = overlay
+
+        self._template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.featureGroup(
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
 class LayerControl(MacroElement):
     """Adds a layer control to the map."""
     def __init__(self):
