@@ -22,7 +22,7 @@ import base64
 from folium.six import PY3
 from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
-from folium.map import Popup, Marker, Icon, FitBounds
+from folium.map import Popup, Marker, Icon, FitBounds, FeatureGroup
 from folium.features import (DivIcon, CircleMarker, LatLngPopup, GeoJson,
                              GeoJsonStyle, ColorScale, TopoJson, PolyLine,
                              MultiPolyLine, ImageOverlay)
@@ -156,6 +156,18 @@ class TestFolium(object):
                                'wms_transparent': 'true'})
         assert (''.join(wms.split())[:-1] in
                 ''.join(map.get_root().render().split()))
+
+    def test_feature_group(self):
+        """Test FeatureGroup."""
+
+        map = folium.Map()
+        feature_group = FeatureGroup()
+        feature_group.add_children(Marker([45,-30],popup=Popup('-30')))
+        feature_group.add_children(Marker([45, 30],popup=Popup('30')))
+        map.add_children(feature_group)
+        map.add_children(folium.map.LayerControl())
+
+        map._repr_html_()
 
     def test_simple_marker(self):
         """Test simple marker addition."""
