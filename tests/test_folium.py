@@ -700,7 +700,7 @@ class TestFolium(object):
         assert ''.join(image_rendered.split()) in ''.join(out.split())
 
         self.setup()
-        self.map.image_overlay(data)
+        self.map.image_overlay(data, mercator_project=True)
         out = self.map._parent.render()
 
         imageoverlay = [val for key, val in self.map._children.items() if
@@ -713,3 +713,23 @@ class TestFolium(object):
                                            'image_opacity': image_opacity})
 
         assert ''.join(image_rendered.split()) in ''.join(out.split())
+
+    def test_custom_icon(self):
+        """Test CustomIcon."""
+        self.setup()
+
+        icon_image = "http://leafletjs.com/docs/images/leaf-green.png"
+        shadow_image = "http://leafletjs.com/docs/images/leaf-shadow.png"
+
+        self.map = folium.Map([45,-100], zoom_start=4)
+        i = folium.features.CustomIcon(icon_image,
+               icon_size=(38,95),
+               icon_anchor=(22,94),
+               shadow_image=shadow_image,
+               shadow_size=(50,64),
+               shadow_anchor=(4,62),
+               popup_anchor=(-3,-76),
+              )
+        mk = folium.map.Marker([45,-100], icon=i, popup=folium.map.Popup('Hello'))
+        self.map.add_children(mk)
+        out = self.map._parent.render()

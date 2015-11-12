@@ -15,6 +15,8 @@ import time
 import math
 import zlib
 import struct
+import json
+import base64
 from jinja2 import Environment, PackageLoader
 
 try:
@@ -27,7 +29,7 @@ try:
 except ImportError:
     np = None
 
-from folium.six import iteritems
+from folium.six import iteritems, text_type, binary_type
 
 
 def get_templates():
@@ -362,6 +364,54 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
         out = out[::-1,:,:]
 
     return out
+
+def image_to_url(image, mercator_project=False, colormap=None, origin='upper', bounds=((-90,-180),(90,180))):
+    """Infers the type of an image argument and transforms it into a url.
+
+        Parameters
+        ----------
+            image: string, file or array-like object
+                * If string, it will be written directly in the output file.
+                * If file, it's content will be converted as embeded in the output file.
+                * If array-like, it will be converted to PNG base64 string and embeded in the output.
+            origin : ['upper' | 'lower'], optional, default 'upper'
+                Place the [0,0] index of the array in the upper left or lower left
+                corner of the axes.
+            colormap : callable, used only for `mono` image.
+                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+                for transforming a mono image into RGB.
+                It must output iterables of length 3 or 4, with values between 0. and 1.
+                Hint : you can use colormaps from `matplotlib.cm`.
+            mercator_project : bool, default False, used only for array-like image.
+                Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+            bounds: list-like, default ((-90,-180),(90,180))
+                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]].
+                Only used if mercator_project is True.
+    """
+    if hasattr(image,'read'):
+        # We got an image file.
+        if hasattr(image,'name'):
+            # we try to get the image format from the file name.
+            fileformat = image.name.lower().split('.')[-1]
+        else:
+            fileformat = 'png'
+        url = "data:image/{};base64,{}".format(fileformat,
+                                               base64.b64encode(image.read()).decode('utf-8'))
+    elif (not (isinstance(image,text_type) or isinstance(image,binary_type))) and hasattr(image,'__iter__'):
+        # We got an array-like object
+        if mercator_project:
+            data = mercator_transform(image,
+                                      [bounds[0][0], bounds[1][0]],
+                                      origin=origin)
+        else:
+            data = image
+        url = "data:image/png;base64," +\
+            base64.b64encode(write_png(data, origin=origin, colormap=colormap)).decode('utf-8')
+    else:
+        # We got an url
+        url = json.loads(json.dumps(image))
+
+    return url.replace('\n',' ')
 
 def write_png(data, origin='upper', colormap=None):
     """
