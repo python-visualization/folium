@@ -4,6 +4,7 @@ Heat map
 --------
 
 Create a HeatMap layer
+
 """
 import json
 from jinja2 import Template
@@ -11,11 +12,10 @@ from jinja2 import Template
 from folium.element import JavascriptLink, Figure
 from folium.map import TileLayer
 
+
 class HeatMap(TileLayer):
-    def __init__(self, data, name=None,
-                 min_opacity = .5, max_zoom=18, max_val=1.,
-                 radius=25, blur=15, gradient=None,
-                 overlay = True):
+    def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
+                 max_val=1.0, radius=25, blur=15, gradient=None, overlay=True):
         """Create a Heatmap layer
 
         Parameters
@@ -28,8 +28,8 @@ class HeatMap(TileLayer):
         min_opacity  : default 1.
             The minimum opacity the heat will start at.
         max_zoom : default 18
-            Zoom level where the points reach maximum intensity (as intensity scales with zoom),
-            equals maxZoom of the map by default
+            Zoom level where the points reach maximum intensity (as intensity
+            scales with zoom), equals maxZoom of the map by default
         max_val : float, default 1.
             Maximum point intensity
         radius : int, default 25
@@ -49,7 +49,8 @@ class HeatMap(TileLayer):
         self.max_val = max_val
         self.radius = radius
         self.blur = blur
-        self.gradient = json.dumps(gradient, sort_keys=True) if gradient is not None else "null"
+        self.gradient = (json.dumps(gradient, sort_keys=True) if
+                         gradient is not None else "null")
         self.overlay = overlay
 
         self._template = Template(u"""
@@ -72,9 +73,9 @@ class HeatMap(TileLayer):
         super(TileLayer, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),
             name='leaflet-heat.js')

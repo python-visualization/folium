@@ -9,7 +9,6 @@ Folium Plugins Tests
 import folium
 from folium import plugins
 import numpy as np
-import json
 
 
 class TestPlugins(object):
@@ -40,22 +39,26 @@ class TestPlugins(object):
     def test_boat_marker(self):
         mapa = folium.Map([30., 0.], zoom_start=3)
         mapa.add_children(plugins.BoatMarker((34, -43),
-                                           heading=45,
-                                           wind_heading=150,
-                                           wind_speed=45,
-                                           color="#8f8"))
+                                             heading=45,
+                                             wind_heading=150,
+                                             wind_speed=45,
+                                             color="#8f8"))
         mapa.add_children(plugins.BoatMarker((46, -30),
-                                           heading=-20,
-                                           wind_heading=46,
-                                           wind_speed=25,
-                                           color="#88f"))
+                                             heading=-20,
+                                             wind_heading=46,
+                                             wind_speed=25,
+                                             color="#88f"))
         mapa._repr_html_()
 
     def test_layer(self):
         mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
         layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
-        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',  attr='attribution'))
-        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest2', attr='attribution2', overlay=True))
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',
+                                               attr='attribution'))
+        mapa.add_children(folium.map.TileLayer(layer,
+                                               name='MapQuest2',
+                                               attr='attribution2',
+                                               overlay=True))
         mapa.add_children(folium.map.LayerControl())
         mapa._repr_html_()
 
@@ -136,7 +139,8 @@ class TestPlugins(object):
         mape._repr_html_()
 
     def test_heat_map(self):
-        data = (np.random.normal(size=(100,2))*np.array([[1,1]])+np.array([[48,5]])).tolist()
+        data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
+                np.array([[48, 5]])).tolist()
         mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
         mapa.add_children(plugins.HeatMap(data))
         mapa._repr_html_()

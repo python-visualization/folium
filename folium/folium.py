@@ -12,23 +12,27 @@ from __future__ import absolute_import
 import warnings
 import json
 
-from folium.six import text_type, binary_type#, iteritems
+from folium.six import text_type, binary_type
 from .map import Map as _Map
-from .element import Element, Figure, JavascriptLink, CssLink, Div, MacroElement
-from .map import Map, TileLayer, Icon, Marker, Popup, FitBounds
-from .features import WmsTileLayer, RegularPolygonMarker, Vega, GeoJson, GeoJsonStyle, MarkerCluster, DivIcon,\
-    CircleMarker, LatLngPopup, ClickForMarker, ColorScale, TopoJson, PolyLine, MultiPolyLine, ImageOverlay
+from .map import Icon, Marker, Popup, FitBounds
+from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
+                       GeoJsonStyle, DivIcon, CircleMarker, LatLngPopup,
+                       ClickForMarker, ColorScale, TopoJson, PolyLine,
+                       MultiPolyLine, ImageOverlay)
 from .utilities import color_brewer, write_png
+
 
 def initialize_notebook():
     """Initialize the IPython notebook display elements."""
-    warnings.warn("%s is deprecated and no longer required." % ("initialize_notebook",),
-                      FutureWarning, stacklevel=2)
+    warnings.warn("%s is deprecated and no longer required." %
+                  ("initialize_notebook",),
+                  FutureWarning, stacklevel=2)
     pass
 
+
 class Map(_Map):
-    """This class inherits from the map.Map object in order to provide bindings to
-    former folium API.
+    """This class inherits from the map.Map object in order to provide
+    bindings to former folium API.
     """
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML.
@@ -58,11 +62,13 @@ class Map(_Map):
         wms_url : string
             url of wms layer
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("Map.add_wms_layer",
-                                                            "Map.add_children(WmsTileLayer(...))"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("Map.add_wms_layer",
+                       "Map.add_children(WmsTileLayer(...))"),
                       FutureWarning, stacklevel=2)
-        wms = WmsTileLayer(wms_url, name=wms_name, format=wms_format, layers=wms_layers,
-                           transparent=wms_transparent, attribution=None)
+        wms = WmsTileLayer(wms_url, name=wms_name, format=wms_format,
+                           layers=wms_layers, transparent=wms_transparent,
+                           attribution=None)
         self.add_children(wms, name=wms_name)
 
     def simple_marker(self, location=None, popup=None,
@@ -99,21 +105,25 @@ class Map(_Map):
         >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("simple_marker", "add_children(Marker)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("simple_marker", "add_children(Marker)"),
                       FutureWarning, stacklevel=2)
         if clustered_marker:
-            raise ValueError("%s is deprecated. Use %s instead" % ("clustered_marker", "MarkerCluster"))
+            raise ValueError("%s is deprecated. Use %s instead" %
+                             ("clustered_marker", "MarkerCluster"))
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             popup_ = Popup(popup, max_width=popup_width)
         elif isinstance(popup, tuple):
             popup_ = Popup(Vega(json.loads(popup[0].to_json()),
-                                     width="100%", height="100%"),
+                                width="100%", height="100%"),
                            max_width=popup_width)
         else:
             popup_ = None
         marker = Marker(location,
                         popup=popup_,
-                        icon=Icon(color=marker_color, icon=marker_icon, angle=icon_angle))
+                        icon=Icon(color=marker_color,
+                                  icon=marker_icon,
+                                  angle=icon_angle))
         self.add_children(marker)
 
     def div_markers(self, locations=None, popups=None,
@@ -150,12 +160,14 @@ class Map(_Map):
         ...                         '1437493590434'])
 
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("div_markers", "Marker.add_children(DivIcon)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("div_markers", "Marker.add_children(DivIcon)"),
                       FutureWarning, stacklevel=2)
-        for location, popup in zip(locations,popups):
+        for location, popup in zip(locations, popups):
             marker = Marker(location,
-                            popup = Popup(popup),
-                            icon = DivIcon(width=marker_size, height=marker_size))
+                            popup=Popup(popup),
+                            icon=DivIcon(width=marker_size,
+                                         height=marker_size))
             self.add_children(marker)
 
     def line(self, locations,
@@ -176,7 +188,8 @@ class Map(_Map):
             It is possible to adjust the width of text/HTML popups
             using the optional keywords `popup_width` (default is 300px).
         latlon: bool, default True
-            Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+            Whether locations are given in the form [[lat, lon]]
+            or not ([[lon, lat]] if False).
             Note that the default GeoJson format is latlon=False,
             while Leaflet polyline's default is latlon=True.
 
@@ -204,8 +217,7 @@ class Map(_Map):
         self.add_children(p)
 
     def multiline(self, locations, line_color=None, line_opacity=None,
-                  line_weight=None,
-             popup=None, popup_width=300, latlon=True):
+                  line_weight=None, popup=None, popup_width=300, latlon=True):
         """Add a multiPolyline to the map with optional styles.
 
         A multiPolyline is single layer that consists of several polylines that
@@ -224,7 +236,8 @@ class Map(_Map):
             It is possible to adjust the width of text/HTML popups
             using the optional keywords `popup_width` (default is 300px).
         latlon: bool, default True
-            Whether locations are given in the form [[lat,lon]] or not ([[lon,lat]] if False).
+            Whether locations are given in the form [[lat, lon]]
+            or not ([[lon, lat]] if False).
             Note that the default GeoJson format is latlon=False,
             while Leaflet polyline's default is latlon=True.
 
@@ -245,11 +258,10 @@ class Map(_Map):
         """
 
         p = MultiPolyLine(locations,
-                     color=line_color,
-                     weight=line_weight,
-                     opacity=line_opacity,
-                     latlon=latlon,
-                     )
+                          color=line_color,
+                          weight=line_weight,
+                          opacity=line_opacity,
+                          latlon=latlon)
 
         if popup is not None:
             p.add_children(Popup(popup, max_width=popup_width))
@@ -292,14 +304,14 @@ class Map(_Map):
                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("circle_marker",
-                                                            "add_children(CircleMarker)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("circle_marker", "add_children(CircleMarker)"),
                       FutureWarning, stacklevel=2)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             popup_ = Popup(popup, max_width=popup_width)
         elif isinstance(popup, tuple):
             popup_ = Popup(Vega(json.loads(popup[0].to_json()),
-                                     width="100%", height="100%"),
+                                width="100%", height="100%"),
                            max_width=popup_width)
         else:
             popup_ = None
@@ -349,28 +361,33 @@ class Map(_Map):
         Polygon marker names and HTML in obj.template_vars
 
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("polygon_marker",
-                                                            "add_children(RegularPolygonMarker)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("polygon_marker", "add_children(RegularPolygonMarker)"),
                       FutureWarning, stacklevel=2)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             popup_ = Popup(popup, max_width=popup_width)
         elif isinstance(popup, tuple):
             popup_ = Popup(Vega(json.loads(popup[0].to_json()),
-                                     width="100%", height="100%"),
+                                width="100%", height="100%"),
                            max_width=popup_width)
         else:
             popup_ = None
-        marker = RegularPolygonMarker(location, popup=popup_, color=line_color,
-                                      opacity=line_opacity, weight=line_weight,
-                                      fill_color=fill_color, fill_opacity=fill_opacity,
-                                      number_of_sides=num_sides, rotation=rotation,
+        marker = RegularPolygonMarker(location,
+                                      popup=popup_,
+                                      color=line_color,
+                                      opacity=line_opacity,
+                                      weight=line_weight,
+                                      fill_color=fill_color,
+                                      fill_opacity=fill_opacity,
+                                      number_of_sides=num_sides,
+                                      rotation=rotation,
                                       radius=radius)
         self.add_children(marker)
 
     def lat_lng_popover(self):
         """Enable popovers to display Lat and Lon on each click."""
-        warnings.warn("%s is deprecated. Use %s instead" % ("lat_lng_popover",
-                                                            "add_children(LatLngPopup)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("lat_lng_popover", "add_children(LatLngPopup)"),
                       FutureWarning, stacklevel=2)
         self.add_children(LatLngPopup())
 
@@ -389,14 +406,15 @@ class Map(_Map):
         >>>map.click_for_marker(popup='Your Custom Text')
 
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("click_for_marker",
-                                                            "add_children(ClickForMarker)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("click_for_marker", "add_children(ClickForMarker)"),
                       FutureWarning, stacklevel=2)
         self.add_children(ClickForMarker(popup=popup))
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):
-        """Fit the map to contain a bounding box with the maximum zoom level possible.
+        """Fit the map to contain a bounding box with the
+        maximum zoom level possible.
 
         Parameters
         ----------
@@ -436,7 +454,8 @@ class Map(_Map):
                 A plugin to be added to the map. It has to implement the
                 methods `render_html`, `render_css` and `render_js`.
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("add_plugin", "add_children"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("add_plugin", "add_children"),
                       FutureWarning, stacklevel=2)
         self.add_children(plugin)
 
@@ -549,14 +568,15 @@ class Map(_Map):
                       threshold_scale=[0, 20, 30, 40, 50, 60])
         >>> m.geo_json(geo_path='countries.json', topojson='objects.countries')
         """
-        warnings.warn("%s is deprecated. Use %s instead" % ("geo_json", "add_children(GeoJson)"),
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("geo_json", "add_children(GeoJson)"),
                       FutureWarning, stacklevel=2)
 
-        if threshold_scale and len(threshold_scale)>6:
+        if threshold_scale and len(threshold_scale) > 6:
             raise ValueError
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
-                                 'fill_local. See docstring for valid codes.')
+                             'fill_local. See docstring for valid codes.')
 
         # Create GeoJson object
         if geo_path:
@@ -572,7 +592,7 @@ class Map(_Map):
             geo_json = GeoJson(geo_data)
 
         # Create color_data dict
-        if hasattr(data,'set_index'):
+        if hasattr(data, 'set_index'):
             # This is a pd.DataFrame
             color_data = data.set_index(columns[0])[columns[1]].to_dict()
         elif hasattr(data, 'to_dict'):
@@ -589,25 +609,29 @@ class Map(_Map):
         elif color_data:
             # To avoid explicit pandas dependency ; changed default behavior.
             warnings.warn("'threshold_scale' default behavior has changed."
-                          " Now you get a linear scale between the 'min' and the 'mas'"
-                          " of your data."
-                          " To get former behavior, use folium.utilities.split_six.",
+                          " Now you get a linear scale between the 'min' and"
+                          " the 'mas' of your data."
+                          " To get former behavior, use"
+                          " folium.utilities.split_six.",
                           FutureWarning, stacklevel=2)
             data_min = min(color_data.values())
             data_max = max(color_data.values())
-            if data_min==data_max:
-                data_min = data_min if data_min<0 else 0 if data_min>0 else -1
-                data_max = data_max if data_max>0 else 0 if data_max<0 else 1
-            data_min, data_max = 1.01*data_min-0.01*data_max, 1.01*data_max-0.01*data_min
+            if data_min == data_max:
+                data_min = (data_min if data_min < 0 else 0
+                            if data_min > 0 else -1)
+                data_max = (data_max if data_max > 0 else 0
+                            if data_max < 0 else 1)
+            data_min, data_max = (1.01*data_min-0.01*data_max,
+                                  1.01*data_max-0.01*data_min)
             nb_class = 6
-            color_domain = [data_min+i*(data_max-data_min)*1./nb_class for i in range(1+nb_class)]
+            color_domain = [data_min+i*(data_max-data_min)*1./nb_class
+                            for i in range(1+nb_class)]
         else:
-            color_domain = [-1,1]
+            color_domain = [-1, 1]
 
-        # Create GeoJsonStyle
-        geo_json_style = GeoJsonStyle(\
-            color_domain, fill_color, color_data=color_data,
-            key_on=key_on,
+        # Create GeoJsonStyle.
+        geo_json_style = GeoJsonStyle(
+            color_domain, fill_color, color_data=color_data, key_on=key_on,
             weight=line_weight, opacity=line_opacity, color=line_color,
             fill_opacity=fill_opacity)
 
@@ -619,8 +643,9 @@ class Map(_Map):
         self.add_children(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
-                      min_lon=-180.0, max_lon=180.0, origin='upper', colormap=None,
-                      image_name=None, filename=None, mercator_project=False):
+                      min_lon=-180.0, max_lon=180.0, origin='upper',
+                      colormap=None, image_name=None, filename=None,
+                      mercator_project=False):
         """
         Simple image overlay of raster data from a numpy array.  This is a
         lightweight way to overlay geospatial data on top of a map.  If your
@@ -661,7 +686,8 @@ class Map(_Map):
             Hint : you can use colormaps from `matplotlib.cm`.
 
         mercator_project : bool, default False, used only for array-like image.
-            Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
+            Transforms the data to project (longitude,latitude) coordinates
+            to the Mercator projection.
         Output
         ------
         Image overlay data layer in obj.template_vars
@@ -685,9 +711,12 @@ class Map(_Map):
         """
         if filename:
             image = write_png(data, origin=origin, colormap=colormap)
-            open(filename,'wb').write(image)
+            open(filename, 'wb').write(image)
             data = filename
 
-        self.add_children(ImageOverlay(data, [[min_lat, min_lon],[max_lat,max_lon]],
-                                       opacity=opacity, origin=origin, colormap=colormap,
-                                      mercator_project=mercator_project))
+        self.add_children(ImageOverlay(data, [[min_lat, min_lon],
+                                              [max_lat, max_lon]],
+                                       opacity=opacity,
+                                       origin=origin,
+                                       colormap=colormap,
+                                       mercator_project=mercator_project))

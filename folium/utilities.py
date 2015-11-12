@@ -313,6 +313,7 @@ def split_six(series=None):
     arr = series.values
     return [base(np.percentile(arr, x)) for x in quants]
 
+
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     """Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
@@ -343,81 +344,88 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     array = np.atleast_3d(data).copy()
     height, width, nblayers = array.shape
 
-    lat_min,lat_max = lat_bounds
+    lat_min, lat_max = lat_bounds
     if height_out is None:
         height_out = height
 
     # Eventually flip the image
-    if origin=='upper':
-        array = array[::-1,:,:]
+    if origin == 'upper':
+        array = array[::-1, :, :]
 
-    lats = lat_min + np.linspace(0.5/height,1.-0.5/height, height)*(lat_max-lat_min)
-    latslats = mercator(lat_min) + np.linspace(0.5/height_out,1.-0.5/height_out, height_out)*(mercator(lat_max)-mercator(lat_min))
+    lats = (lat_min + np.linspace(0.5/height, 1.-0.5/height, height) *
+            (lat_max-lat_min))
+    latslats = (mercator(lat_min) +
+                np.linspace(0.5/height_out, 1.-0.5/height_out, height_out) *
+                (mercator(lat_max)-mercator(lat_min)))
 
-    out = np.zeros((height_out,width,nblayers))
+    out = np.zeros((height_out, width, nblayers))
     for i in range(width):
         for j in range(4):
-            out[:,i,j] = np.interp(latslats,mercator(lats),  array[:,i,j])
+            out[:, i, j] = np.interp(latslats, mercator(lats),  array[:, i, j])
 
-    # Eventually flip the image
-    if origin=='upper':
-        out = out[::-1,:,:]
-
+    # Eventually flip the image.
+    if origin == 'upper':
+        out = out[::-1, :, :]
     return out
 
-def image_to_url(image, mercator_project=False, colormap=None, origin='upper', bounds=((-90,-180),(90,180))):
-    """Infers the type of an image argument and transforms it into a url.
+
+def image_to_url(image, mercator_project=False, colormap=None,
+                 origin='upper', bounds=((-90, -180), (90, 180))):
+    """Infers the type of an image argument and transforms it into a URL.
 
         Parameters
         ----------
             image: string, file or array-like object
                 * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embeded in the output file.
-                * If array-like, it will be converted to PNG base64 string and embeded in the output.
+                * If file, it's content will be converted as embedded in the output file.
+                * If array-like, it will be converted to PNG base64 string and embedded in the output.
             origin : ['upper' | 'lower'], optional, default 'upper'
-                Place the [0,0] index of the array in the upper left or lower left
-                corner of the axes.
+                Place the [0, 0] index of the array in the upper left or
+                lower left corner of the axes.
             colormap : callable, used only for `mono` image.
                 Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
                 for transforming a mono image into RGB.
                 It must output iterables of length 3 or 4, with values between 0. and 1.
                 Hint : you can use colormaps from `matplotlib.cm`.
             mercator_project : bool, default False, used only for array-like image.
-                Transforms the data to project (longitude,latitude) coordinates to the Mercator projection.
-            bounds: list-like, default ((-90,-180),(90,180))
+                Transforms the data to project (longitude,latitude)
+                coordinates to the Mercator projection.
+            bounds: list-like, default ((-90, -180), (90, 180))
                 Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]].
                 Only used if mercator_project is True.
     """
-    if hasattr(image,'read'):
+    if hasattr(image, 'read'):
         # We got an image file.
-        if hasattr(image,'name'):
-            # we try to get the image format from the file name.
+        if hasattr(image, 'name'):
+            # We try to get the image format from the file name.
             fileformat = image.name.lower().split('.')[-1]
         else:
             fileformat = 'png'
-        url = "data:image/{};base64,{}".format(fileformat,
-                                               base64.b64encode(image.read()).decode('utf-8'))
-    elif (not (isinstance(image,text_type) or isinstance(image,binary_type))) and hasattr(image,'__iter__'):
-        # We got an array-like object
+        url = "data:image/{};base64,{}".format(
+            fileformat, base64.b64encode(image.read()).decode('utf-8'))
+    elif (not (isinstance(image, text_type) or
+               isinstance(image, binary_type))) and hasattr(image, '__iter__'):
+        # We got an array-like object.
         if mercator_project:
             data = mercator_transform(image,
                                       [bounds[0][0], bounds[1][0]],
                                       origin=origin)
         else:
             data = image
-        url = "data:image/png;base64," +\
-            base64.b64encode(write_png(data, origin=origin, colormap=colormap)).decode('utf-8')
+        png = write_png(data, origin=origin, colormap=colormap)
+        url = "data:image/png;base64," + base64.b64encode(png).decode('utf-8')
     else:
-        # We got an url
+        # We got an URL.
         url = json.loads(json.dumps(image))
 
-    return url.replace('\n',' ')
+    return url.replace('\n', ' ')
+
 
 def write_png(data, origin='upper', colormap=None):
     """
-    Tranform an array of data into a PNG string.
-    This can be writen to disk using binary I/O, or encoded using base64
-    for an inline png like this:
+    Transform an array of data into a PNG string.
+    This can be written to disk using binary I/O, or encoded using base64
+    for an inline PNG like this:
 
     >>> png_str = write_png(array)
     >>> "data:image/png;base64,"+png_str.encode('base64')
@@ -439,7 +447,7 @@ def write_png(data, origin='upper', colormap=None):
         Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
         for transforming a mono image into RGB.
         It must output iterables of length 3 or 4, with values between 0. and 1.
-        Hint : you can use colormaps from `matplotlib.cm`.
+        Hint: you can use colormaps from `matplotlib.cm`.
 
     Returns
     -------
@@ -450,7 +458,7 @@ def write_png(data, origin='upper', colormap=None):
                           " for this functionality")
 
     if colormap is None:
-        colormap = lambda x: (x,x,x,1)
+        colormap = lambda x: (x, x, x, 1)
 
     array = np.atleast_3d(data)
     height, width, nblayers = array.shape
@@ -458,34 +466,34 @@ def write_png(data, origin='upper', colormap=None):
     if nblayers not in [1, 3, 4]:
             raise ValueError("Data must be NxM (mono), "
                              "NxMx3 (RGB), or NxMx4 (RGBA)")
-    assert array.shape == (height,width,nblayers)
+    assert array.shape == (height, width, nblayers)
 
-    if nblayers==1:
-        array = np.array(list(map(colormap,array.ravel())))
+    if nblayers == 1:
+        array = np.array(list(map(colormap, array.ravel())))
         nblayers = array.shape[1]
-        if nblayers not in [3,4]:
+        if nblayers not in [3, 4]:
             raise ValueError("colormap must provide colors of"
                              "length 3 (RGB) or 4 (RGBA)")
-        array = array.reshape((height,width,nblayers))
-    assert array.shape == (height,width,nblayers)
+        array = array.reshape((height, width, nblayers))
+    assert array.shape == (height, width, nblayers)
 
-    if nblayers==3:
-        array = np.concatenate((array, np.ones((height,width,1))), axis=2)
+    if nblayers == 3:
+        array = np.concatenate((array, np.ones((height, width, 1))), axis=2)
         nblayers = 4
-    assert array.shape == (height,width,nblayers)
+    assert array.shape == (height, width, nblayers)
     assert nblayers == 4
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != 'uint8':
-        array = (array *255./array.max(axis=(0,1)).reshape((1,1,4)))\
-            .astype('uint8')
+        array = (array * 255./array.max(axis=(0, 1)).reshape((1, 1, 4))).astype('uint8')
 
-    # Eventually flip the image
-    if origin=='lower':
-        array = array[::-1,:,:]
+    # Eventually flip the image.
+    if origin == 'lower':
+        array = array[::-1, :, :]
 
-    # Transform the array to bytes
-    raw_data = b''.join([b'\x00' + array[i,:,:].tobytes() for i in range(height)])
+    # Transform the array to bytes.
+    raw_data = b''.join([b'\x00' + array[i, :, :].tobytes()
+                         for i in range(height)])
 
     def png_pack(png_tag, data):
             chunk_head = png_tag + data
@@ -499,10 +507,12 @@ def write_png(data, origin='upper', colormap=None):
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
 
+
 def _camelify(out):
-    return (''.join(["_"+x.lower() if i<len(out)-1 and x.isupper() and out[i+1].islower()
-         else x.lower()+"_" if i<len(out)-1 and x.islower() and out[i+1].isupper()
-         else x.lower() for i,x in enumerate(list(out))])).lstrip('_').replace('__','_')
+    return (''.join(["_" + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()
+         else x.lower() + "_" if i < len(out)-1 and x.islower() and out[i+1].isupper()
+         else x.lower() for i, x in enumerate(list(out))])).lstrip('_').replace('__', '_')
+
 
 def _parse_size(value):
     try:
@@ -519,22 +529,27 @@ def _parse_size(value):
         raise ValueError(msg(value, value_type))
     return value, value_type
 
+
 def _locations_mirror(x):
     """Mirrors the points in a list-of-list-of-...-of-list-of-points.
-    For example _locations_mirror([[[1,2],[3,4]],[5,6],[7,8]]) = [[[2, 1], [4, 3]], [6, 5], [8, 7]]
+    For example:
+    >>> _locations_mirror([[[1, 2], [3, 4]], [5, 6], [7, 8]])
+    [[[2, 1], [4, 3]], [6, 5], [8, 7]]
+
     """
     if hasattr(x, '__iter__'):
         if hasattr(x[0], '__iter__'):
-            return list(map(_locations_mirror,x))
+            return list(map(_locations_mirror, x))
         else:
             return list(x[::-1])
     else:
         return x
 
+
 def _locations_tolist(x):
-    """Transforms recusively a list of iterables into a list of list.
+    """Transforms recursively a list of iterables into a list of list.
     """
     if hasattr(x, '__iter__'):
-        return list(map(_locations_tolist,x))
+        return list(map(_locations_tolist, x))
     else:
         return x

@@ -4,18 +4,26 @@ TimestampedGeoJson plugin
 --------------
 
 Add a timestamped geojson feature collection on a folium map.
-This is based on Leaflet.TimeDimension (see https://github.com/socib/Leaflet.TimeDimension).
+This is based on Leaflet.TimeDimension.
 
-A geo-json is timestamped if :
-    * it contains only features of types LineString, MultiPoint, MultiLineString and MultiPolygon.
-    * each feature has a "times" property with the same length as the coordinates array.
-    * each element of each "times" property is a timestamp in ms since epoch, or in ISO string.
-    Eventually, you may have Point features with a "times" property being an array of length 1.
+https://github.com/socib/Leaflet.TimeDimension
+
+A geo-json is timestamped if:
+    * it contains only features of types LineString, MultiPoint,
+      MultiLineString and MultiPolygon.
+    * each feature has a "times" property with the same length as the
+      coordinates array.
+    * each element of each "times" property is a timestamp in ms since epoch,
+     or in ISO string.  Eventually, you may have Point features with a
+     "times" property being an array of length 1.
+
 """
+
 import json
 from jinja2 import Template
 
 from folium.element import MacroElement, Figure, JavascriptLink, CssLink
+
 
 class TimestampedGeoJson(MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True):
@@ -27,15 +35,19 @@ class TimestampedGeoJson(MacroElement):
             data: file, dict or str.
                 The timestamped geo-json data you want to plot.
 
-                If file, then data will be read in the file and fully embeded in Leaflet's javascript.
+                If file, then data will be read in the file and fully embedded in Leaflet's javascript.
                 If dict, then data will be converted to json and embeded in the javascript.
                 If str, then data will be passed to the javascript as-is.
 
-                A geo-json is timestamped if :
-                    * it contains only features of types LineString, MultiPoint, MultiLineString and MultiPolygon.
-                    * each feature has a "times" property with the same length as the coordinates array.
-                    * each element of each "times" property is a timestamp in ms since epoch, or in ISO string.
-                    Eventually, you may have Point features with a "times" property being an array of length 1.
+                A geo-json is timestamped if:
+                    * it contains only features of types LineString,
+                      MultiPoint, MultiLineString and MultiPolygon.
+                    * each feature has a "times" property with the same length
+                      as the coordinates array.
+                    * each element of each "times" property is a timestamp in
+                      ms since epoch, or in ISO string.
+                    Eventually, you may have Point features with a "times"
+                    property being an array of length 1.
 
                 examples :
                     # providing file
@@ -66,12 +78,12 @@ class TimestampedGeoJson(MacroElement):
                 Whether the animation shall loop.
             auto_play : bool, default True
                 Whether the animation shall start automatically at startup.
-            
+
         """
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
-        #self.template = self.env.get_template('timestamped_geo_json.tpl')
+        # self.template = self.env.get_template('timestamped_geo_json.tpl')
         if 'read' in dir(data):
             self.data = data.read()
         elif type(data) is dict:
@@ -105,30 +117,29 @@ class TimestampedGeoJson(MacroElement):
         super(TimestampedGeoJson, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),
             name='jquery2.0.0')
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),
             name='jqueryui1.10.2')
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://raw.githubusercontent.com/nezasa/iso8601-js-period/master/iso8601.min.js"),
             name='iso8601')
 
-        figure.header.add_children(\
-            JavascriptLink("https://raw.githubusercontent.com/socib/Leaflet.TimeDimension/master/"
-                           "dist/leaflet.timedimension.min.js"),
+        figure.header.add_children(
+            JavascriptLink("https://raw.githubusercontent.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"),
             name='leaflet.timedimension')
 
-        figure.header.add_children(\
+        figure.header.add_children(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),
             name='highlight.js_css')
 
-        figure.header.add_children(\
+        figure.header.add_children(
             CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),
             name='leaflet.timedimension_css')

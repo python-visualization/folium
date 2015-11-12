@@ -8,13 +8,16 @@ A generic class for creating Elements.
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader, Template
-ENV = Environment(loader=PackageLoader('folium', 'templates'))
 from collections import OrderedDict
 import json
 import base64
 
 from .six import urlopen, text_type, binary_type
 from .utilities import _camelify, _parse_size
+
+
+ENV = Environment(loader=PackageLoader('folium', 'templates'))
+
 
 class Element(object):
     """Basic Element object that does nothing.
@@ -35,7 +38,7 @@ class Element(object):
         """)
 
     def get_name(self):
-        return _camelify(self._name) + '_' +self._id
+        return _camelify(self._name) + '_' + self._id
 
     def add_children(self, child, name=None, index=None):
         """Add a children."""
@@ -44,8 +47,9 @@ class Element(object):
         if index is None:
             self._children[name] = child
         else:
-            items = [item for item in self._children.items() if item[0] != name]
-            items.insert(int(index),(name,child))
+            items = [item for item in self._children.items()
+                     if item[0] != name]
+            items.insert(int(index), (name, child))
             self._children = items
         child._parent = self
 
@@ -62,8 +66,8 @@ class Element(object):
         out['name'] = self._name
         out['id'] = self._id
         if depth != 0:
-            out['children'] = dict_fun([(name, child.to_dict(depth=depth-1))\
-                    for name,child in self._children.items()])
+            out['children'] = dict_fun([(name, child.to_dict(depth=depth-1))
+                                        for name, child in self._children.items()])
         return out
 
     def to_json(self, depth=-1, **kwargs):
@@ -86,11 +90,11 @@ class Element(object):
         Parameters
         ----------
         outfile : str or file object
-            The file (or filename) where you want to ouput the html.
+            The file (or filename) where you want to output the html.
         close_file : bool, default True
             Whether the file has to be closed after write.
         """
-        if isinstance(outfile,text_type) or isinstance(outfile,binary_type):
+        if isinstance(outfile, text_type) or isinstance(outfile, binary_type):
             fid = open(outfile, 'wb')
         else:
             fid = outfile
@@ -101,15 +105,18 @@ class Element(object):
         if close_file:
             fid.close()
 
+
 class Link(Element):
     def get_code(self):
         if self.code is None:
             self.code = urlopen(self.url).read()
         return self.code
+
     def to_dict(self, depth=-1, **kwargs):
         out = super(Link, self).to_dict(depth=-1, **kwargs)
         out['url'] = self.url
         return out
+
 
 class JavascriptLink(Link):
     def __init__(self, url, download=False):
@@ -135,6 +142,7 @@ class JavascriptLink(Link):
             <script src="{{this.url}}"></script>
         {% endif %}
         """)
+
 
 class CssLink(Link):
     def __init__(self, url, download=False):
@@ -195,6 +203,7 @@ _default_css = [
      "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),
     ]
 
+
 class Figure(Element):
     def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
         """Create a Figure object, to plot things into it.
@@ -216,7 +225,7 @@ class Figure(Element):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
-        self.html   = Element()
+        self.html = Element()
         self.script = Element()
 
         self.header._parent = self
@@ -246,7 +255,7 @@ class Figure(Element):
         # Create the meta tag
         self.header.add_children(Element(
             '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),
-                                  name='meta_http')
+            name='meta_http')
 
         # Import Javascripts
         for name, url in _default_js:
@@ -296,7 +305,7 @@ class Figure(Element):
         ----------
         """
         html = self.render(**kwargs)
-        html = "data:text/html;base64,"+base64.b64encode(html.encode('utf8')).decode('utf8')
+        html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')
 
         if self.height is None:
             iframe = """
@@ -310,22 +319,19 @@ class Figure(Element):
                 ratio=self.ratio,
                 )
         else:
-            iframe = '<iframe src="{html}" width="{width}" height="{height}"></iframe>'\
-            .format(\
-                    html = html,
-                    width = self.width,
-                    height= self.height,
-                   )
+            iframe = ('<iframe src="{html}" width="{width}" '
+                      'height="{height}"></iframe>').format
+            iframe = iframe(html=html, width=self.width, height=self.height)
         return iframe
 
-    def add_subplot(self, x,y,n,margin=0.05):
+    def add_subplot(self, x, y, n, margin=0.05):
         width = 1./y
         height = 1./x
-        left = ((n-1)%y)*width
+        left = ((n-1) % y)*width
         top = ((n-1)//y)*height
 
         left = left+width*margin
-        top  = top+height*margin
+        top = top+height*margin
         width = width*(1-2.*margin)
         height = height*(1-2.*margin)
 
@@ -338,6 +344,7 @@ class Figure(Element):
         self.add_children(div)
         return div
 
+
 class Html(Element):
     def __init__(self, data, width="100%", height="100%"):
         """TODO : docstring here"""
@@ -345,8 +352,8 @@ class Html(Element):
         self._name = 'Html'
         self.data = data
 
-        self.width  = _parse_size(width)
-        self.height  = _parse_size(height)
+        self.width = _parse_size(width)
+        self.height = _parse_size(height)
 
         self._template = Template(u"""
         <div id="{{this.get_name()}}"
@@ -354,23 +361,23 @@ class Html(Element):
                 {{this.data}}</div>
                 """)
 
+
 class Div(Figure):
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
-        """Create a Map with Folium and Leaflet.js
-        """
+        """Create a Map with Folium and Leaflet.js."""
         super(Figure, self).__init__()
         self._name = 'Div'
 
         # Size Parameters.
-        self.width  = _parse_size(width)
+        self.width = _parse_size(width)
         self.height = _parse_size(height)
         self.left = _parse_size(left)
-        self.top  = _parse_size(top)
+        self.top = _parse_size(top)
         self.position = position
 
         self.header = Element()
-        self.html   = Element("""
+        self.html = Element("""
         {% for name, element in this._children.items() %}
             {{element.render(**kwargs)}}
         {% endfor %}
@@ -404,8 +411,8 @@ class Div(Figure):
     def render(self, **kwargs):
         """TODO : docstring here."""
         figure = self._parent
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
         for name, element in self._children.items():
             element.render(**kwargs)
@@ -416,24 +423,23 @@ class Div(Figure):
         for name, element in self.script._children.items():
             figure.script.add_children(element, name=name)
 
-        header = self._template.module.__dict__.get('header',None)
+        header = self._template.module.__dict__.get('header', None)
         if header is not None:
             figure.header.add_children(Element(header(self, kwargs)),
                                        name=self.get_name())
 
-        html = self._template.module.__dict__.get('html',None)
+        html = self._template.module.__dict__.get('html', None)
         if html is not None:
             figure.html.add_children(Element(html(self, kwargs)),
-                                       name=self.get_name())
+                                     name=self.get_name())
 
-        script = self._template.module.__dict__.get('script',None)
+        script = self._template.module.__dict__.get('script', None)
         if script is not None:
             figure.script.add_children(Element(script(self, kwargs)),
                                        name=self.get_name())
 
     def _repr_html_(self, **kwargs):
-        """Displays the Div in a Jupyter notebook.
-        """
+        """Displays the Div in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
             out = self._parent._repr_html_(**kwargs)
@@ -441,6 +447,7 @@ class Div(Figure):
         else:
             out = self._parent._repr_html_(**kwargs)
         return out
+
 
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.
@@ -469,20 +476,20 @@ class MacroElement(Element):
 
     def render(self, **kwargs):
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        header = self._template.module.__dict__.get('header',None)
+        header = self._template.module.__dict__.get('header', None)
         if header is not None:
             figure.header.add_children(Element(header(self, kwargs)),
                                        name=self.get_name())
 
-        html = self._template.module.__dict__.get('html',None)
+        html = self._template.module.__dict__.get('html', None)
         if html is not None:
             figure.html.add_children(Element(html(self, kwargs)),
-                                       name=self.get_name())
+                                     name=self.get_name())
 
-        script = self._template.module.__dict__.get('script',None)
+        script = self._template.module.__dict__.get('script', None)
         if script is not None:
             figure.script.add_children(Element(script(self, kwargs)),
                                        name=self.get_name())
