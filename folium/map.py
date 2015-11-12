@@ -254,21 +254,44 @@ class LayerControl(MacroElement):
         super(LayerControl, self).render()
 
 class Icon(MacroElement):
-    def __init__(self, color='blue', icon='info-sign', angle=0):
-        """TODO : docstring here"""
+    def __init__(self, color='blue', icon_color='white', icon='info-sign', angle=0, prefix='glyphicon'):
+        """Creates an Icon object, that will be rendered using Leaflet.awesome-markers.
+
+        Parameters
+        ----------
+        color : str, default 'blue'
+            The color of the marker. You can use:
+                ['red', 'blue', 'green', 'purple', 'orange', 'darkred', 'lightred', 'beige',
+                 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple', 'white', 'pink', 'lightblue',
+                 'lightgreen', 'gray', 'black', 'lightgray']
+        icon_color : str, default 'white'
+            The color of the drawing on the marker. You can use colors above, or an html color code.
+        icon : str, default 'info-sign'
+            The name of the marker sign. See Font-Awesome website to choose yours.
+            Warning : depending on the icon you choose, you may need to adapt the `prefix` as well.
+        angle : int, default 0
+            The icon will be rotated by this amount of degrees.
+        prefix : str, default 'glyphicon'
+            The prefix states the source of the icon. 'fa' for font-awesome or 'glyphicon' for bootstrap 3.
+
+        For more details, see https://github.com/lvoogdt/Leaflet.awesome-markers
+        """
         super(Icon, self).__init__()
         self._name = 'Icon'
         self.color = color
         self.icon = icon
+        self.icon_color = icon_color
         self.angle = angle
+        self.prefix = prefix
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
                 var {{this.get_name()}} = L.AwesomeMarkers.icon({
                     icon: '{{this.icon}}',
+                    iconColor: '{{this.icon_color}}',
                     markerColor: '{{this.color}}',
-                    prefix: 'glyphicon',
+                    prefix: '{{this.prefix}}',
                     extraClasses: 'fa-rotate-{{this.angle}}'
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
