@@ -14,7 +14,6 @@ from .utilities import (color_brewer, _parse_size, legend_scaler,
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import TileLayer, Icon
 
-
 class WmsTileLayer(TileLayer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
