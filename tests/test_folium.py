@@ -20,11 +20,10 @@ import vincent
 import folium
 import base64
 from folium.six import PY3
-from folium.plugins import ScrollZoomToggler, MarkerCluster
 from folium.element import Html
-from folium.map import Popup, Marker, Icon, FitBounds, FeatureGroup
-from folium.features import (DivIcon, CircleMarker, LatLngPopup, GeoJson,
-                             GeoJsonStyle, ColorScale, TopoJson, PolyLine,
+from folium.map import Popup, Marker, FitBounds, FeatureGroup
+from folium.features import (DivIcon, GeoJson,
+                             ColorScale, TopoJson, PolyLine,
                              MultiPolyLine, ImageOverlay)
 
 
@@ -162,8 +161,8 @@ class TestFolium(object):
 
         map = folium.Map()
         feature_group = FeatureGroup()
-        feature_group.add_children(Marker([45,-30],popup=Popup('-30')))
-        feature_group.add_children(Marker([45, 30],popup=Popup('30')))
+        feature_group.add_children(Marker([45, -30], popup=Popup('-30')))
+        feature_group.add_children(Marker([45, 30], popup=Popup('30')))
         map.add_children(feature_group)
         map.add_children(folium.map.LayerControl())
 
@@ -463,12 +462,12 @@ class TestFolium(object):
                        isinstance(x, ColorScale)][0]
         geo_json_style = list(geo_json._children.values())[0]
 
-        # Verify the geo_json object
+        # Verify the geo_json object.
         obj_temp = self.env.get_template('geo_json.js')
         obj = obj_temp.render(this=geo_json)
         assert ''.join(obj.split())[:-1] in ''.join(out.split())
 
-        # Verify the style
+        # Verify the style.
         assert geo_json_style.color == 'black'
         assert geo_json_style.weight == 1
         assert geo_json_style.opacity == 1
@@ -524,8 +523,7 @@ class TestFolium(object):
              'max_zoom': 20,
              'min_zoom': 1,
              'detect_retina': False,
-            }
-            ]
+             }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
                 'size': 'width: 900.0px; height: 400.0px;',
@@ -733,15 +731,15 @@ class TestFolium(object):
         icon_image = "http://leafletjs.com/docs/images/leaf-green.png"
         shadow_image = "http://leafletjs.com/docs/images/leaf-shadow.png"
 
-        self.map = folium.Map([45,-100], zoom_start=4)
+        self.map = folium.Map([45, -100], zoom_start=4)
         i = folium.features.CustomIcon(icon_image,
-               icon_size=(38,95),
-               icon_anchor=(22,94),
-               shadow_image=shadow_image,
-               shadow_size=(50,64),
-               shadow_anchor=(4,62),
-               popup_anchor=(-3,-76),
-              )
-        mk = folium.map.Marker([45,-100], icon=i, popup=folium.map.Popup('Hello'))
+                                       icon_size=(38, 95),
+                                       icon_anchor=(22, 94),
+                                       shadow_image=shadow_image,
+                                       shadow_size=(50, 64),
+                                       shadow_anchor=(4, 62),
+                                       popup_anchor=(-3, -76),)
+        mk = folium.map.Marker([45, -100], icon=i,
+                               popup=folium.map.Popup('Hello'))
         self.map.add_children(mk)
-        out = self.map._parent.render()
+        self.map._parent.render()

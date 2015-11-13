@@ -3,20 +3,28 @@
 Terminator plugin
 -----------------
 
-Leaflet.Terminator is a simple plug-in to the Leaflet library to overlay day and night regions on maps.
+Leaflet.Terminator is a simple plug-in to the Leaflet library to overlay day
+and night regions on maps.
+
 """
 from jinja2 import Template
 
 from folium.element import JavascriptLink, MacroElement, Figure
 
+
 class Terminator(MacroElement):
-    """Leaflet.Terminator is a simple plug-in to the Leaflet library to overlay day and night regions on maps."""
+    """Leaflet.Terminator is a simple plug-in to the Leaflet library to
+    overlay day and night regions on maps.
+
+    """
     def __init__(self):
-        """Creates a Terminator plugin to append into a map with
+        """
+        Creates a Terminator plugin to append into a map with
         Map.add_plugin.
 
         Parameters
         ----------
+
         """
         super(Terminator, self).__init__()
         self._name = 'Terminator'
@@ -26,13 +34,14 @@ class Terminator(MacroElement):
                 L.terminator().addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
-    def render(self,**kwargs):
-        super(Terminator,self).render(**kwargs)
+
+    def render(self, **kwargs):
+        super(Terminator, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://rawgithub.com/joergdietrich/Leaflet.Terminator/master/L.Terminator.js"),
-                                   name='markerclusterjs')
+            name='markerclusterjs')

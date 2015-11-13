@@ -7,7 +7,8 @@ Adds a button to enable/disable zoom scrolling.
 """
 from jinja2 import Template
 
-from folium.element import MacroElement, Figure, Element
+from folium.element import MacroElement
+
 
 class ScrollZoomToggler(MacroElement):
     def __init__(self):

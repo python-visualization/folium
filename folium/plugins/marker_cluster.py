@@ -5,11 +5,12 @@ Marker Cluster plugin
 
 Creates a MarkerCluster plugin to add on a folium map.
 """
-#import json
+
 from jinja2 import Template
 
 from folium.element import JavascriptLink, CssLink, MacroElement, Figure
 from folium.map import Popup, Icon, Marker
+
 
 class MarkerCluster(MacroElement):
     def __init__(self, locations, popups=None, icons=None):
@@ -35,7 +36,7 @@ class MarkerCluster(MacroElement):
         if icons is None:
             icons = [None]*len(locations)
 
-        for location, popup, icon in zip(locations,popups,icons):
+        for location, popup, icon in zip(locations, popups, icons):
             if popup is None or isinstance(popup, Popup):
                 p = popup
             else:
@@ -52,19 +53,22 @@ class MarkerCluster(MacroElement):
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)
-    def render(self,**kwargs):
-        super(MarkerCluster,self).render(**kwargs)
+
+    def render(self, **kwargs):
+        super(MarkerCluster, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),
-                                   name='markerclusterjs')
-        figure.header.add_children(\
+            name='markerclusterjs')
+
+        figure.header.add_children(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),
-                                   name='markerclustercss')
-        figure.header.add_children(\
+            name='markerclustercss')
+
+        figure.header.add_children(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
-                                   name='markerclusterdefaultcss')
+            name='markerclusterdefaultcss')

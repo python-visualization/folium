@@ -3,16 +3,20 @@
 Boat marker
 -----------
 
-Creates a marker shaped like a boat. Optionally you can append a wind direction. 
+Creates a marker shaped like a boat.
+Optionally you can append a wind direction.
+
 """
 import json
 from jinja2 import Template
 
 from folium.element import JavascriptLink, MacroElement, Figure
 
+
 class BoatMarker(MacroElement):
     """Adds a BoatMarker layer on the map."""
-    def __init__(self, position=None, heading=0, wind_heading=None, wind_speed=0, **kwargs):
+    def __init__(self, position=None, heading=0,
+                 wind_heading=None, wind_speed=0, **kwargs):
         """Creates a BoatMarker plugin to append into a map with
         Map.add_plugin.
 
@@ -48,13 +52,15 @@ class BoatMarker(MacroElement):
                 {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
             {% endmacro %}
             """)
-    def render(self,**kwargs):
-        super(BoatMarker,self).render(**kwargs)
+
+
+def render(self, **kwargs):
+        super(BoatMarker, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.header.add_children(\
+        figure.header.add_children(
             JavascriptLink("https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"),
-                                   name='markerclusterjs')
+            name='markerclusterjs')

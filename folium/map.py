@@ -16,6 +16,7 @@ from .utilities import _parse_size
 
 from .element import Element, Figure, MacroElement, Html
 
+
 class Map(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
@@ -59,8 +60,9 @@ class Map(MacroElement):
         attr: string, default None
             Map tile attribution; only required if passing custom tile URL.
         detect_retina: bool, default False
-            If true and user is on a retina display, it will request four tiles of half the specified
-            size and a bigger zoom level in place of one to utilize the high resolution.
+            If true and user is on a retina display, it will request four
+            tiles of half the specified size and a bigger zoom level in place
+            of one to utilize the high resolution.
 
         Returns
         -------
@@ -83,7 +85,7 @@ class Map(MacroElement):
         self._name = 'Map'
 
         if not location:
-            # If location is not passed, we center the map at 0,0 and ignore zoom
+            # If location is not passed we center and ignore zoom.
             self.location = [0, 0]
             self.zoom_start = min_zoom
         else:
@@ -93,10 +95,10 @@ class Map(MacroElement):
         Figure().add_children(self)
 
         # Map Size Parameters.
-        self.width  = _parse_size(width)
+        self.width = _parse_size(width)
         self.height = _parse_size(height)
         self.left = _parse_size(left)
-        self.top  = _parse_size(top)
+        self.top = _parse_size(top)
         self.position = position
 
         self.min_lat = min_lat
@@ -105,7 +107,8 @@ class Map(MacroElement):
         self.max_lon = max_lon
 
         self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                            attr=attr, API_key=API_key, detect_retina=detect_retina)
+                            attr=attr, API_key=API_key,
+                            detect_retina=detect_retina)
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -154,27 +157,30 @@ class Map(MacroElement):
                        active=False, detect_retina=False, **kwargs):
         if tile_name is not None:
             name = tile_name
-            warnings.warn("'tile_name' is deprecated. Please use 'name' instead.")
+            warnings.warn("'tile_name' is deprecated. Use 'name' instead.")
         if tile_url is not None:
             tiles = tile_url
-            warnings.warn("'tile_url' is deprecated. Please use 'tiles' instead.")
+            warnings.warn("'tile_url' is deprecated. Use 'tiles' instead.")
 
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
-                               attr=attr, API_key=API_key, detect_retina=detect_retina)
+                               attr=attr, API_key=API_key,
+                               detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
+
 
 class TileLayer(MacroElement):
     def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None, overlay = False,
-                detect_retina=False):
+                 min_zoom=1, max_zoom=18, attr=None, API_key=None,
+                 overlay=False, detect_retina=False):
         """TODO docstring here
         Parameters
         ----------
         """
         super(TileLayer, self).__init__()
         self._name = 'TileLayer'
-        self.tile_name = name if name is not None else ''.join(tiles.lower().strip().split())
+        self.tile_name = (name if name is not None else
+                          ''.join(tiles.lower().strip().split()))
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
@@ -186,18 +192,19 @@ class TileLayer(MacroElement):
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
                              ' or non-default Mapbox tiles.')
-        templates = list(self._env.list_templates(filter_func=lambda x: x.startswith('tiles/')))
+        templates = list(self._env.list_templates(
+            filter_func=lambda x: x.startswith('tiles/')))
         tile_template = 'tiles/'+self.tiles+'/tiles.txt'
         attr_template = 'tiles/'+self.tiles+'/attr.txt'
 
         if tile_template in templates and attr_template in templates:
-            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)
-            self.attr  = self._env.get_template(attr_template).render()
+            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
+            self.attr = self._env.get_template(attr_template).render()
         else:
             self.tiles = tiles
             if not attr:
                 raise ValueError('Custom tiles must'
-                                 ' also be passed an attribution')
+                                 ' also be passed an attribution.')
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
@@ -217,10 +224,13 @@ class TileLayer(MacroElement):
         {% endmacro %}
         """)
 
+
 class FeatureGroup(TileLayer):
     def __init__(self, name=None, overlay=True):
-        """Create a FeatureGroup layer ; you can put things in it and handle them as a
-        single layer. For example, you can add a LayerControl to tick/untick the whole group.
+        """
+        Create a FeatureGroup layer ; you can put things in it and handle them
+        as a single layer.  For example, you can add a LayerControl to
+        tick/untick the whole group.
 
         Parameters
         ----------
@@ -228,8 +238,8 @@ class FeatureGroup(TileLayer):
             The name of the featureGroup layer. It will be displayed in the LayerControl.
             If None, get_name() will be called to get the object's technical (ugly) name.
         overlay : bool, default True
-            Whether your layer will be an overlay (ticked with a checkbox in LayerControls)
-            or a base layer (ticked with a radio button).
+            Whether your layer will be an overlay (ticked with a check box in
+            LayerControls) or a base layer (ticked with a radio button).
         """
         super(TileLayer, self).__init__()
         self._name = 'FeatureGroup'
@@ -244,6 +254,7 @@ class FeatureGroup(TileLayer):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
+
 
 class LayerControl(MacroElement):
     """Adds a layer control to the map."""
@@ -270,39 +281,54 @@ class LayerControl(MacroElement):
                 {{this.get_name()}}.overlays
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)
+        """)  # noqa
 
     def render(self, **kwargs):
         """TODO : docstring here."""
-        self.base_layers = OrderedDict([(val.tile_name,val.get_name()) \
-                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and not val.overlay])
-        self.overlays = OrderedDict([(val.tile_name,val.get_name()) \
-                       for key,val in self._parent._children.items() if isinstance(val,TileLayer) and val.overlay])
+        self.base_layers = OrderedDict(
+            [(val.tile_name, val.get_name()) for key, val in
+             self._parent._children.items() if
+             isinstance(val, TileLayer) and not val.overlay])
+        self.overlays = OrderedDict(
+            [(val.tile_name, val.get_name()) for key, val in
+             self._parent._children.items() if
+             isinstance(val, TileLayer) and val.overlay])
 
         super(LayerControl, self).render()
 
+
 class Icon(MacroElement):
-    def __init__(self, color='blue', icon_color='white', icon='info-sign', angle=0, prefix='glyphicon'):
-        """Creates an Icon object, that will be rendered using Leaflet.awesome-markers.
+    def __init__(self, color='blue', icon_color='white', icon='info-sign',
+                 angle=0, prefix='glyphicon'):
+        """
+        Creates an Icon object that will be rendered
+        using Leaflet.awesome-markers.
 
         Parameters
         ----------
         color : str, default 'blue'
             The color of the marker. You can use:
-                ['red', 'blue', 'green', 'purple', 'orange', 'darkred', 'lightred', 'beige',
-                 'darkblue', 'darkgreen', 'cadetblue', 'darkpurple', 'white', 'pink', 'lightblue',
-                 'lightgreen', 'gray', 'black', 'lightgray']
+                ['red', 'blue', 'green', 'purple', 'orange', 'darkred',
+                 'lightred', 'beige', 'darkblue', 'darkgreen', 'cadetblue',
+                 'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen',
+                 'gray', 'black', 'lightgray']
         icon_color : str, default 'white'
-            The color of the drawing on the marker. You can use colors above, or an html color code.
+            The color of the drawing on the marker. You can use colors above,
+            or an html color code.
         icon : str, default 'info-sign'
-            The name of the marker sign. See Font-Awesome website to choose yours.
-            Warning : depending on the icon you choose, you may need to adapt the `prefix` as well.
+            The name of the marker sign.
+            See Font-Awesome website to choose yours.
+            Warning : depending on the icon you choose you may need to adapt
+                      the `prefix` as well.
         angle : int, default 0
             The icon will be rotated by this amount of degrees.
         prefix : str, default 'glyphicon'
-            The prefix states the source of the icon. 'fa' for font-awesome or 'glyphicon' for bootstrap 3.
+            The prefix states the source of the icon. 'fa' for font-awesome or
+            'glyphicon' for bootstrap 3.
 
-        For more details, see https://github.com/lvoogdt/Leaflet.awesome-markers
+        For more details see:
+        https://github.com/lvoogdt/Leaflet.awesome-markers
+
         """
         super(Icon, self).__init__()
         self._name = 'Icon'
@@ -325,6 +351,7 @@ class Icon(MacroElement):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
+
 
 class Marker(MacroElement):
     def __init__(self, location, popup=None, icon=None):
@@ -374,12 +401,13 @@ class Marker(MacroElement):
             {% endmacro %}
             """)
 
+
 class Popup(Element):
     def __init__(self, html, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
-        self.html   = Element()
+        self.html = Element()
         self.script = Element()
 
         self.header._parent = self
@@ -388,7 +416,7 @@ class Popup(Element):
 
         if isinstance(html, Element):
             self.add_children(html)
-        elif isinstance(html, text_type) or isinstance(html,binary_type):
+        elif isinstance(html, text_type) or isinstance(html, binary_type):
             self.html.add_children(Html(text_type(html)))
 
         self.max_width = max_width
@@ -406,7 +434,7 @@ class Popup(Element):
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
             {% endfor %}
-        """)
+        """)  # noqa
 
     def render(self, **kwargs):
         """TODO : docstring here."""
@@ -414,16 +442,19 @@ class Popup(Element):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure,Figure), ("You cannot render this Element "
-            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
 
-        figure.script.add_children(Element(\
-            self._template.render(this=self, kwargs=kwargs)), name=self.get_name())
+        figure.script.add_children(Element(
+            self._template.render(this=self, kwargs=kwargs)),
+            name=self.get_name())
+
 
 class FitBounds(MacroElement):
     def __init__(self, bounds, padding_top_left=None,
-                   padding_bottom_right=None, padding=None, max_zoom=None):
-        """Fit the map to contain a bounding box with the maximum zoom level possible.
+                 padding_bottom_right=None, padding=None, max_zoom=None):
+        """Fit the map to contain a bounding box with the
+        maximum zoom level possible.
 
         Parameters
         ----------
@@ -451,7 +482,8 @@ class FitBounds(MacroElement):
             'paddingBottomRight': padding_bottom_right,
             'padding': padding,
         }
-        self.fit_bounds_options = json.dumps({key:val for key,val in options.items() if val},
+        self.fit_bounds_options = json.dumps({key: val for key, val in
+                                              options.items() if val},
                                              sort_keys=True)
 
         self._template = Template(u"""
@@ -465,4 +497,4 @@ class FitBounds(MacroElement):
                     {{ this.fit_bounds_options }}
                     );
             {% endmacro %}
-            """)
+            """)  # noqa
