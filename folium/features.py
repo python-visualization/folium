@@ -170,20 +170,21 @@ class GeoJson(MacroElement):
         Parameters
         ----------
             data: file, dict or str.
-                The geo-json data you want to plot.
-                If file, then data will be read in the file and fully embedded in Leaflet's javascript.  # noqa
-                If dict, then data will be converted to JSON and embedded in the javascript.
-                If str, then data will be passed to the javascript as-is.
+                The GeoJSON data you want to plot.
+                * If file, then data will be read in the file and fully
+                  embedded in Leaflet's JavaScript.
+                * If dict, then data will be converted to JSON and embedded
+                  in the JavaScript.
+                * If str, then data will be passed to the JavaScript as-is.
 
-                examples :
-                    # providing file
-                    GeoJson(open('foo.json'))
+                Examples:
+                >>> # Providing file.
+                >>> GeoJson(open('foo.json'))
+                >>> # Providing dict.
+                >>> GeoJson(json.load(open('foo.json')))
+                >>> # Providing string.
+                >>> GeoJson(open('foo.json').read())
 
-                    # providing dict
-                    GeoJson(json.load(open('foo.json')))
-
-                    # providing string
-                    GeoJson(open('foo.json').read())
         """
         super(GeoJson, self).__init__()
         self._name = 'GeoJson'
@@ -196,9 +197,9 @@ class GeoJson(MacroElement):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});  # noqa
+                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class TopoJson(MacroElement):
@@ -574,11 +575,11 @@ class ImageOverlay(MacroElement):
                 * If string, it will be written directly in the output file.
                 * If file, it's content will be converted as embedded in the
                   output file.
-                * If array-like, it will be converted to PNG base64 string and
-                  embedded in the output.
+                * If array-like, it will be converted to PNG base64 string
+                  and embedded in the output.
             bounds: list
-                Image bounds on the map in the form
-                [[lat_min, lon_min], [lat_max, lon_max]]
+                Image bounds on the map in the form [[lat_min, lon_min],
+                [lat_max, lon_max]]
             opacity: float, default Leaflet's default (1.0)
             attr: string, default Leaflet's default ("")
             origin : ['upper' | 'lower'], optional, default 'upper'
@@ -587,11 +588,14 @@ class ImageOverlay(MacroElement):
             colormap : callable, used only for `mono` image.
                 Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
                 for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4, with values between
-                0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False, used for array-like image.
-                Transforms the data to project (longitude, latitude)
-                coordinates to the Mercator projection.
+                It must output iterables of length 3 or 4,
+                with values between 0 and 1.
+                Hint : you can use colormaps from `matplotlib.cm`.
+            mercator_project : bool, default False.
+                Used only for array-like image.  Transforms the data to
+                project (longitude, latitude) coordinates to the
+                Mercator projection.
+
         """
         super(ImageOverlay, self).__init__()
         self._name = 'ImageOverlay'
@@ -632,8 +636,8 @@ class CustomIcon(Icon):
                 * If string, it will be written directly in the output file.
                 * If file, it's content will be converted as embedded in the
                   output file.
-                * If array-like, it will be converted to PNG base64 string and
-                  embedded in the output.
+                * If array-like, it will be converted to PNG base64 string
+                  and embedded in the output.
             icon_size : tuple of 2 int
                 Size of the icon image in pixels.
             icon_anchor : tuple of 2 int
@@ -652,6 +656,7 @@ class CustomIcon(Icon):
             popup_anchor : tuple of 2 int
                 The coordinates of the point from which popups will "open",
                 relative to the icon anchor.
+
         """
         super(Icon, self).__init__()
         self._name = 'CustomIcon'
