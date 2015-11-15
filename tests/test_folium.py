@@ -20,10 +20,8 @@ import vincent
 import folium
 import base64
 from folium.six import PY3
-from folium.element import Html
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import (DivIcon, GeoJson,
-                             ColorScale, TopoJson, PolyLine,
+from folium.features import (GeoJson, ColorScale, TopoJson, PolyLine,
                              MultiPolyLine, ImageOverlay)
 
 
@@ -210,56 +208,6 @@ class TestFolium(object):
         self.map.simple_marker(location=[45.60, -122.8])
         for child in list(self.map._children.values())[-1]._children.values():
             assert not isinstance(child, Popup)
-
-    def test_div_markers(self):
-        '''Test div marker list addition'''
-        self.map = folium.Map(location=[37.421114, -122.128314])
-
-        icon_templ = self.env.get_template('static_div_icon.js')
-        mark_templ = self.env.get_template('simple_marker.js')
-        popup_templ = self.env.get_template('simple_popup.js')
-
-        # Test with popups (expected use case).
-        locations = [[37.421114, -122.128314],
-                     [37.391637, -122.085416],
-                     [37.388832, -122.087709]]
-        popups = ['1437494575531', '1437492135937', '1437493590434']
-
-        self.map.div_markers(locations=locations, popups=popups)
-
-        markers = [marker for marker in self.map._children.values() if
-                   isinstance(marker, Marker)]
-        assert len(markers) == 3
-
-        for marker, location, pop in zip(markers, locations, popups):
-            icon = list(marker._children.values())[0]
-            popup = list(marker._children.values())[1]
-            html = list(popup.html._children.values())[0]
-
-            assert isinstance(icon, DivIcon)
-            assert isinstance(popup, Popup)
-            assert isinstance(html, Html)
-
-            icon_1 = icon_templ.render({'icon_name': icon.get_name(),
-                                        'size': 10})
-            mark_1 = mark_templ.render({'marker': marker.get_name(),
-                                        'lat': location[0],
-                                        'lon': location[1],
-                                        'icon': "{icon:new L.Icon.Default()}"})
-            popup_1 = popup_templ.render({'pop_name': popup.get_name(),
-                                          'html_name': html.get_name(),
-                                          'pop_txt': '{}'.format(pop),
-                                          'width': 300})
-
-            out = ''.join(self.map.get_root().render().split())
-            assert ''.join(icon_1.split())[:-1] in out
-            assert ''.join(mark_1.split())[:-1] in out
-            assert ''.join(popup_1.split())[:-1] in out
-
-        # Test no popup. If there are no popups,
-        # then we should get a RuntimeError.
-        with pytest.raises(TypeError):
-            self.map.div_markers([[45.60, -122.8]])
 
     def test_circle_marker(self):
         """Test circle marker additions."""

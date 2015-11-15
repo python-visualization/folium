@@ -16,7 +16,7 @@ from folium.six import text_type, binary_type
 from .map import Map as _Map
 from .map import Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
-                       GeoJsonStyle, DivIcon, CircleMarker, LatLngPopup,
+                       GeoJsonStyle, CircleMarker, LatLngPopup,
                        ClickForMarker, ColorScale, TopoJson, PolyLine,
                        MultiPolyLine, ImageOverlay)
 from .utilities import color_brewer, write_png
@@ -125,50 +125,6 @@ class Map(_Map):
                                   icon=marker_icon,
                                   angle=icon_angle))
         self.add_children(marker)
-
-    def div_markers(self, locations=None, popups=None,
-                    marker_size=10, popup_width=300):
-        """Create a simple div marker on the map, with optional
-        popup text or Vincent visualization. Useful for marking points along a
-        line.
-
-        Parameters
-        ----------
-        locations: list of locations, where each location is an array
-            Latitude and Longitude of Marker (Northing, Easting)
-        popup: list of popups, each popup should be a string or tuple.
-            Default 'Pop Text'
-            Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'vis_path.json')
-            It is possible to adjust the width of text/HTML popups
-            using the optional keywords `popup_width`.
-            (Leaflet default is 300px.)
-        marker_size
-            default is 5
-
-        Returns
-        -------
-        Marker names and HTML in obj.template_vars
-
-        Example
-        -------
-        >>> map.div_markers(locations=[[37.421114, -122.128314],
-        ...                            [37.391637, -122.085416],
-        ...                            [37.388832, -122.087709]],
-        ...                 popups=['1437494575531',
-        ...                         '1437492135937',
-        ...                         '1437493590434'])
-
-        """
-        warnings.warn("%s is deprecated. Use %s instead" %
-                      ("div_markers", "Marker.add_children(DivIcon)"),
-                      FutureWarning, stacklevel=2)
-        for location, popup in zip(locations, popups):
-            marker = Marker(location,
-                            popup=Popup(popup),
-                            icon=DivIcon(width=marker_size,
-                                         height=marker_size))
-            self.add_children(marker)
 
     def line(self, locations,
              line_color=None, line_opacity=None, line_weight=None,
@@ -682,8 +638,8 @@ class Map(_Map):
         colormap : callable, used only for `mono` image.
             Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
             for transforming a mono image into RGB.
-            It must output iterables of length 3 or 4, with values between
-            0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
+            It must output iterables of length 3 or 4, with values
+            between 0 and 1. Hint: you can use colormaps from `matplotlib.cm`.
 
         mercator_project : bool, default False, used only for array-like image.
             Transforms the data to project (longitude,latitude) coordinates

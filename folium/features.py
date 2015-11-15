@@ -381,22 +381,56 @@ class MarkerCluster(MacroElement):
 
 
 class DivIcon(MacroElement):
-    def __init__(self, width=30, height=30):
-        """TODO : docstring here"""
+    def __init__(self, html=None, icon_size=None, icon_anchor=None,
+                 popup_anchor=None, class_name='empty'):
+        """
+        Represents a lightweight icon for markers that uses a simple `div`
+        element instead of an image.
+
+        Parameters
+        ----------
+        icon_size : tuple of 2 int
+            Size of the icon image in pixels.
+        icon_anchor : tuple of 2 int
+            The coordinates of the "tip" of the icon
+            (relative to its top left corner).
+            The icon will be aligned so that this point is at the
+            marker's geographical location.
+        popup_anchor : tuple of 2 int
+            The coordinates of the point from which popups will "open",
+            relative to the icon anchor.
+        class_name : string
+            A custom class name to assign to the icon.
+            Leaflet defaults is 'leaflet-div-icon' which draws a little white
+            square with a shadow.  We set it 'empty' in folium.
+        html : string
+            A custom HTML code to put inside the div element.
+
+        For more information see:
+        http://leafletjs.com/reference.html#divicon
+
+        """
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
-        self.width = width
-        self.height = height
+        self.icon_size = icon_size
+        self.icon_anchor = icon_anchor
+        self.popup_anchor = popup_anchor
+        self.html = html
+        self.className = class_name
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
+
                 var {{this.get_name()}} = L.divIcon({
-                    className: 'leaflet-div-icon',
-                    'iconSize': [{{ this.width }},{{ this.height }}]
+                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
+                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
+                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
+                    {% if this.className %}className: '{{this.className}}',{% endif %}
+                    {% if this.html %}html: '{{this.html}}',{% endif %}
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class CircleMarker(MacroElement):
