@@ -13,7 +13,7 @@ from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
 from .heat_map import HeatMap
 from .crossfilter import (Crossfilter, PieFilter, BarFilter, FeatureGroupFilter,
-                          TableFilter, CountFilter, ResetFilter)
+                          TableFilter, CountFilter, ResetFilter, HeatmapFilter)
 from .image_overlay import ImageOverlay
 
 __all__ = ['MarkerCluster',
@@ -29,4 +29,5 @@ __all__ = ['MarkerCluster',
            'TableFilter',
            'CountFilter',
            'ResetFilter',
+           'HeatmapFilter',
            'ImageOverlay']
