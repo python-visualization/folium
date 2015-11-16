@@ -358,7 +358,7 @@ class Html(Element):
         self._template = Template(u"""
         <div id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
-                {{this.data}}</div>
+                {{this.data|e}}</div>
                 """)
 
 
