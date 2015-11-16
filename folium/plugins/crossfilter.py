@@ -327,3 +327,75 @@ class TableFilter(Div):
                     });
         {% endmacro %}
         """)
+
+class CountFilter(Div):
+    def __init__(self, crossfilter, html_template="{filter}/{total}", **kwargs):
+        """TODO docstring here
+        Parameters
+        ----------
+        """
+        super(CountFilter, self).__init__(**kwargs)
+        self._name = 'CountFilter'
+
+        self.crossfilter = crossfilter
+        self.html_template = html_template
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <div id="{{this.get_name()}}" class="{{this.class_}}">
+                {{this.html_template.format(
+                    filter='<span class="filter-count"></span>',
+                    total='<span class="total-count"></span>'
+                    )}}
+            </div>
+        {% endmacro %}
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = {};
+            {{this.get_name()}}.dataCount = dc.dataCount("#{{this.get_name()}}")
+                .dimension({{this.crossfilter.get_name()}}.crossfilter)
+                .group({{this.crossfilter.get_name()}}.crossfilter.groupAll());
+        {% endmacro %}
+        """)
+
+class ResetFilter(Div):
+    def __init__(self, html="Reset all", **kwargs):
+        """TODO docstring here
+        Parameters
+        ----------
+        """
+        super(ResetFilter, self).__init__(**kwargs)
+        self._name = 'ResetFilter'
+
+        self.html = html
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <a id="{{this.get_name()}}" class="{{this.class_}} reset-filters">{{this.html}}</a>
+        {% endmacro %}
+        {% macro script(this, kwargs) %}
+            d3.selectAll('.reset-filters').on('click', function () {
+                dc.filterAll();
+                dc.renderAll();
+                });
+        {% endmacro %}
+        """)
