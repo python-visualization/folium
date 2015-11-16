@@ -272,3 +272,58 @@ class FeatureGroupFilter(FeatureGroup):
             {{this.get_name()}}.updateFun();
         {% endmacro %}
         """)
+
+class TableFilter(Div):
+    def __init__(self, crossfilter, columns, sort_by=None, ascending=True, **kwargs):
+        """TODO docstring here
+        Parameters
+        ----------
+        """
+        super(TableFilter, self).__init__(**kwargs)
+        self._name = 'TableFilter'
+
+        self.crossfilter = crossfilter
+        self.columns = columns
+        self.sort_by = sort_by
+        self.ascending = ascending
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+        <table id="{{this.get_name()}}" class="{{this.class_}}">
+            <thead>
+                <tr class="header">
+                {%for col in this.columns%}<th>{{col}}</th>{% endfor %}
+                </tr>
+            </thead>
+        </table>
+        {% endmacro %}
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = {};
+            {{this.get_name()}}.dataTable = dc.dataTable('#{{this.get_name()}}');
+            {{this.get_name()}}.dataTable
+                .dimension({{this.crossfilter.get_name()}}.allDim)
+                .group(function (d) { return 'dc.js extra line'; })
+                .size(10)
+                .columns([
+                  {% for col in this.columns %}
+                  function (d) { return d["{{col}}"]; },
+                  {% endfor %}
+                  ])
+                {%if this.sort_by %}.sortBy(dc.pluck('{this.sort_by}'))
+                {%if this.ascending %}.order(d3.ascending){% else %}.order(d3.descending){% endif %}
+                {% endif %}
+                .on('renderlet', function (table) {
+                    table.select('tr.dc-table-group').remove();
+                    });
+        {% endmacro %}
+        """)

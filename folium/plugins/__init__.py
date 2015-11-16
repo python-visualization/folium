@@ -12,7 +12,7 @@ from .terminator import Terminator
 from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
 from .heat_map import HeatMap
-from .crossfilter import Crossfilter, PieFilter, BarFilter, FeatureGroupFilter
+from .crossfilter import Crossfilter, PieFilter, BarFilter, FeatureGroupFilter, TableFilter
 from .image_overlay import ImageOverlay
 
 __all__ = ['MarkerCluster',
@@ -25,4 +25,5 @@ __all__ = ['MarkerCluster',
            'PieFilter',
            'BarFilter',
            'FeatureGroupFilter',
+           'TableFilter',
            'ImageOverlay']
