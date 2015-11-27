@@ -239,51 +239,27 @@ class TopoJson(MacroElement):
 
 
 class GeoJsonStyle(MacroElement):
-    def __init__(self, color_domain, color_code, color_data=None,
-                 key_on='feature.properties.color',
-                 weight=1, opacity=1, color='black',
-                 fill_opacity=0.6, dash_array=0):
+    def __init__(self, fill_color='#555555', weight=1, opacity=1, color='black',
+                 fill_opacity=0.5, dash_array=0):
         """TODO : docstring here.
         """
         super(GeoJsonStyle, self).__init__()
         self._name = 'GeoJsonStyle'
 
-        self.color_domain = color_domain
-        self.color_range = color_brewer(color_code, n=len(color_domain))
-        self.color_data = json.dumps(color_data)
-        self.key_on = key_on
-
+        self.fill_color = fill_color
         self.weight = weight
         self.opacity = opacity
         self.color = color
-        self.fill_color = color_code
         self.fill_opacity = fill_opacity
         self.dash_array = dash_array
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                {% if not this.color_range %}
-                    var {{this.get_name()}} = {
-                        color_function : function(feature) {
-                            return '{{this.fill_color}}';
-                            },
-                        };
-                {%else%}
-                    var {{this.get_name()}} = {
-                        color_scale : d3.scale.threshold()
-                              .domain({{this.color_domain}})
-                              .range({{this.color_range}}),
-                        color_data : {{this.color_data}},
-                        color_function : function(feature) {
-                            {% if this.color_data=='null' %}
-                                return this.color_scale({{this.key_on}});
-                            {% else %}
-                                return
-                                  this.color_scale(this.color_data[{{this.key_on}}]);
-                            {% endif %}
-                            },
-                        };
-                {%endif%}
+                var {{this.get_name()}} = {
+                    color_function : function(feature) {
+                        return '{{this.fill_color}}';
+                        },
+                    };
 
                 {{this._parent.get_name()}}.setStyle(function(feature) {
                     return {
