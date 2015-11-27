@@ -229,7 +229,7 @@ One of the key features of Folium is the ability to bind data from a Pandas Data
 ::
 
     map.geo_json(geo_path='geo.json', data_out='data.json', data=df,
-                 columns=['Keys', 'Values'], key_on='features.properties.key')
+                 columns=['Keys', 'Values'], key_on='feature.properties.key')
 
 As a more realistic example, here is what it would look like to map data from State Names to Unemployment levels::
 
