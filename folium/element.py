@@ -220,7 +220,7 @@ class Figure(Element):
             figsize : tuple of two int, default None
                 If you're a matplotlib addict, you can overwrite width and height.
                 Values will be converted into pixels in using 60 dpi.
-                For example figsize=(10,5) wil result in width="600px", height="300px".
+                For example figsize=(10,5) will result in width="600px", height="300px".
         """
         super(Figure, self).__init__()
         self._name = 'Figure'

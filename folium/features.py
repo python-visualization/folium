@@ -572,7 +572,7 @@ class ImageOverlay(MacroElement):
             image: string, file or array-like object
                 The data you want to draw on the map.
                 * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embeded in the output file.
+                * If file, it's content will be converted as embedded in the output file.
                 * If array-like, it will be converted to PNG base64 string and embedded in the output.
             bounds: list
                 Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]]

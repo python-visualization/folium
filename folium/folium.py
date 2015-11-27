@@ -610,7 +610,7 @@ class Map(_Map):
             # To avoid explicit pandas dependency ; changed default behavior.
             warnings.warn("'threshold_scale' default behavior has changed."
                           " Now you get a linear scale between the 'min' and"
-                          " the 'mas' of your data."
+                          " the 'max' of your data."
                           " To get former behavior, use"
                           " folium.utilities.split_six.",
                           FutureWarning, stacklevel=2)
