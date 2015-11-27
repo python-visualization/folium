@@ -36,7 +36,7 @@ class TimestampedGeoJson(MacroElement):
                 The timestamped geo-json data you want to plot.
 
                 If file, then data will be read in the file and fully embedded in Leaflet's javascript.
-                If dict, then data will be converted to json and embeded in the javascript.
+                If dict, then data will be converted to json and embedded in the javascript.
                 If str, then data will be passed to the javascript as-is.
 
                 A geo-json is timestamped if:
