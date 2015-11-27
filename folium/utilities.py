@@ -377,21 +377,24 @@ def image_to_url(image, mercator_project=False, colormap=None,
         ----------
             image: string, file or array-like object
                 * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the output file.
-                * If array-like, it will be converted to PNG base64 string and embedded in the output.
+                * If file, it's content will be converted as embedded in the
+                  output file.
+                * If array-like, it will be converted to PNG base64 string and
+                  embedded in the output.
             origin : ['upper' | 'lower'], optional, default 'upper'
                 Place the [0, 0] index of the array in the upper left or
                 lower left corner of the axes.
             colormap : callable, used only for `mono` image.
                 Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
                 for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4, with values between 0. and 1.
-                Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False, used only for array-like image.
+                It must output iterables of length 3 or 4, with values between
+                0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
+            mercator_project : bool, default False, used for array-like image.
                 Transforms the data to project (longitude,latitude)
                 coordinates to the Mercator projection.
             bounds: list-like, default ((-90, -180), (90, 180))
-                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]].
+                Image bounds on the map in the form
+                [[lat_min, lon_min], [lat_max, lon_max]].
                 Only used if mercator_project is True.
     """
     if hasattr(image, 'read'):
@@ -446,8 +449,8 @@ def write_png(data, origin='upper', colormap=None):
     colormap : callable, used only for `mono` image.
         Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
         for transforming a mono image into RGB.
-        It must output iterables of length 3 or 4, with values between 0. and 1.
-        Hint: you can use colormaps from `matplotlib.cm`.
+        It must output iterables of length 3 or 4, with values between
+        0. and 1.  Hint: you can use colormaps from `matplotlib.cm`.
 
     Returns
     -------
@@ -485,7 +488,7 @@ def write_png(data, origin='upper', colormap=None):
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != 'uint8':
-        array = (array * 255./array.max(axis=(0, 1)).reshape((1, 1, 4))).astype('uint8')
+        array *= 255/array.max(axis=(0, 1)).reshape((1, 1, 4)).astype('uint8')
 
     # Eventually flip the image.
     if origin == 'lower':
@@ -509,9 +512,9 @@ def write_png(data, origin='upper', colormap=None):
 
 
 def _camelify(out):
-    return (''.join(["_" + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()
-         else x.lower() + "_" if i < len(out)-1 and x.islower() and out[i+1].isupper()
-         else x.lower() for i, x in enumerate(list(out))])).lstrip('_').replace('__', '_')
+    return (''.join(["_" + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()  # noqa
+         else x.lower() + "_" if i < len(out)-1 and x.islower() and out[i+1].isupper()  # noqa
+         else x.lower() for i, x in enumerate(list(out))])).lstrip('_').replace('__', '_')  # noqa
 
 
 def _parse_size(value):

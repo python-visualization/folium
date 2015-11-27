@@ -235,8 +235,9 @@ class FeatureGroup(TileLayer):
         Parameters
         ----------
         name : str, default None
-            The name of the featureGroup layer. It will be displayed in the LayerControl.
-            If None, get_name() will be called to get the object's technical (ugly) name.
+            The name of the featureGroup layer.
+            It will be displayed in the LayerControl.
+            If None get_name() will be called to get the technical (ugly) name.
         overlay : bool, default True
             Whether your layer will be an overlay (ticked with a check box in
             LayerControls) or a base layer (ticked with a radio button).

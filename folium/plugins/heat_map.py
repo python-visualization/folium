@@ -77,5 +77,5 @@ class HeatMap(TileLayer):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),
+            JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),  # noqa
             name='leaflet-heat.js')

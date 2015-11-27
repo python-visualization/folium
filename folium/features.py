@@ -48,7 +48,7 @@ class WmsTileLayer(TileLayer):
                 ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
-        """)
+        """)  # noqa
 
 
 class RegularPolygonMarker(MacroElement):
@@ -99,7 +99,7 @@ class RegularPolygonMarker(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
 
@@ -145,11 +145,11 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),  # noqa
             name='vega')
 
         figure.header.add_children(
@@ -158,7 +158,7 @@ class Vega(Element):
 
         figure.script.add_children(
             Template("""function vega_parse(spec, div) {
-            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
 
 
@@ -171,7 +171,7 @@ class GeoJson(MacroElement):
         ----------
             data: file, dict or str.
                 The geo-json data you want to plot.
-                If file, then data will be read in the file and fully embedded in Leaflet's javascript.
+                If file, then data will be read in the file and fully embedded in Leaflet's javascript.  # noqa
                 If dict, then data will be converted to JSON and embedded in the javascript.
                 If str, then data will be passed to the javascript as-is.
 
@@ -196,7 +196,7 @@ class GeoJson(MacroElement):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
+                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});  # noqa
             {% endmacro %}
             """)
 
@@ -234,7 +234,7 @@ class TopoJson(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
             name='topojson')
 
 
@@ -306,7 +306,7 @@ class GeoJsonStyle(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
 
 
@@ -334,7 +334,7 @@ class ColorScale(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
 
 
@@ -363,19 +363,19 @@ class MarkerCluster(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
             name='marker_cluster_src')
 
         figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
             name='marker_cluster')
 
         figure.header.add_children(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
             name='marker_cluster_css')
 
         figure.header.add_children(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
             name="marker_cluster_default_css")
 
 
@@ -449,7 +449,7 @@ class LatLngPopup(MacroElement):
                     }
                 {{this._parent.get_name()}}.on('click', latLngPop);
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class ClickForMarker(MacroElement):
@@ -476,7 +476,7 @@ class ClickForMarker(MacroElement):
                     };
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class PolyLine(MacroElement):
@@ -517,7 +517,7 @@ class PolyLine(MacroElement):
                         });
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class MultiPolyLine(MacroElement):
@@ -558,7 +558,7 @@ class MultiPolyLine(MacroElement):
                         });
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 class ImageOverlay(MacroElement):
@@ -572,10 +572,13 @@ class ImageOverlay(MacroElement):
             image: string, file or array-like object
                 The data you want to draw on the map.
                 * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the output file.
-                * If array-like, it will be converted to PNG base64 string and embedded in the output.
+                * If file, it's content will be converted as embedded in the
+                  output file.
+                * If array-like, it will be converted to PNG base64 string and
+                  embedded in the output.
             bounds: list
-                Image bounds on the map in the form [[lat_min, lon_min], [lat_max, lon_max]]
+                Image bounds on the map in the form
+                [[lat_min, lon_min], [lat_max, lon_max]]
             opacity: float, default Leaflet's default (1.0)
             attr: string, default Leaflet's default ("")
             origin : ['upper' | 'lower'], optional, default 'upper'
@@ -584,9 +587,9 @@ class ImageOverlay(MacroElement):
             colormap : callable, used only for `mono` image.
                 Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
                 for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4, with values between 0. and 1.
-                Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False, used only for array-like image.
+                It must output iterables of length 3 or 4, with values between
+                0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
+            mercator_project : bool, default False, used for array-like image.
                 Transforms the data to project (longitude, latitude)
                 coordinates to the Mercator projection.
         """
@@ -627,8 +630,10 @@ class CustomIcon(Icon):
             icon_image :  string, file or array-like object
                 The data you want to use as an icon.
                 * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the output file.
-                * If array-like, it will be converted to PNG base64 string and embedded in the output.
+                * If file, it's content will be converted as embedded in the
+                  output file.
+                * If array-like, it will be converted to PNG base64 string and
+                  embedded in the output.
             icon_size : tuple of 2 int
                 Size of the icon image in pixels.
             icon_anchor : tuple of 2 int
@@ -676,4 +681,4 @@ class CustomIcon(Icon):
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
-            """)
+            """)  # noqa

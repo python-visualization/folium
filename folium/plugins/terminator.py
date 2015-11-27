@@ -43,5 +43,5 @@ class Terminator(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://rawgithub.com/joergdietrich/Leaflet.Terminator/master/L.Terminator.js"),
+            JavascriptLink("https://rawgithub.com/joergdietrich/Leaflet.Terminator/master/L.Terminator.js"),  # noqa
             name='markerclusterjs')

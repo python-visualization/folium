@@ -682,8 +682,8 @@ class Map(_Map):
         colormap : callable, used only for `mono` image.
             Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
             for transforming a mono image into RGB.
-            It must output iterables of length 3 or 4, with values between 0. and 1.
-            Hint : you can use colormaps from `matplotlib.cm`.
+            It must output iterables of length 3 or 4, with values between
+            0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
 
         mercator_project : bool, default False, used only for array-like image.
             Transforms the data to project (longitude,latitude) coordinates
