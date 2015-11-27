@@ -385,7 +385,9 @@ class Marker(MacroElement):
         self.location = location
         if icon is not None:
             self.add_children(icon)
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""

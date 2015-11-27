@@ -68,7 +68,9 @@ class RegularPolygonMarker(MacroElement):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""
@@ -410,7 +412,9 @@ class CircleMarker(MacroElement):
         self.color = color
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""
