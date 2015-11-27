@@ -8,6 +8,7 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
+from .six import text_type, binary_type
 from .utilities import (color_brewer, _parse_size, legend_scaler,
                         _locations_mirror, _locations_tolist, image_to_url)
 
