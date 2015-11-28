@@ -330,30 +330,39 @@ class TestFolium(object):
 
         geo_json = [x for x in self.map._children.values() if
                     isinstance(x, GeoJson)][0]
-        color_scale = [x for x in self.map._children.values() if
-                       isinstance(x, ColorScale)][0]
-        geo_json_style = list(geo_json._children.values())[0]
+        self.map._repr_html_()
+
+    def test_geo_json_str(self):
+        # No data binding.
+        self.map = folium.Map([43, -100], zoom_start=4)
+        path = os.path.join(rootpath, 'us-counties.json')
+
+        data = json.load(open(path))
+
+        for feature in data['features']:
+            feature.setdefault('properties',{}).setdefault('style',{}).update({
+                    'color':'black',
+                    'opactiy':1,
+                    'fillOpacity':0.6,
+                    'weight':1,
+                    'fillColor':'blue',
+                    })
+
+        self.map.geo_json(geo_str=json.dumps(data))
+
+        geo_json = [x for x in self.map._children.values() if
+                    isinstance(x, GeoJson)][0]
+
         out = ''.join(self.map._parent.render().split())
 
         # Verify the geo_json object
-        obj_temp = self.env.get_template('geo_json.js')
-        obj = obj_temp.render(this=geo_json)
+        obj_temp = jinja2.Template("""
+            var {{ this.get_name() }} = L.geoJson({{ json.dumps(this.data) }})
+                .addTo({{ this._parent.get_name() }})
+                .setStyle(function(feature) {return feature.properties.style;});
+                """)
+        obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out
-
-        # Verify the style
-        assert geo_json_style.color == 'black'
-        assert geo_json_style.weight == 1
-        assert geo_json_style.opacity == 1
-        assert geo_json_style.fill_color == 'blue'
-        assert geo_json_style.fill_opacity == 0.6
-        assert geo_json_style.dash_array == 0
-        style = geo_json_style._template.module.script(geo_json_style)
-        assert ''.join(style.split())[:-1] in out
-
-        # Verify the color_scale
-        colorsc_temp = self.env.get_template('color_scale.js')
-        colorsc = colorsc_temp.render(this=color_scale)
-        assert ''.join(colorsc.split())[:-1] in out
 
     def test_geo_json_bad_color(self):
         """Test geojson method."""
@@ -387,7 +396,6 @@ class TestFolium(object):
 
     def test_geo_json_data_binding(self):
         """Test geojson method."""
-
         data = setup_data()
 
         self.map = folium.Map([43, -100], zoom_start=4)
@@ -408,22 +416,6 @@ class TestFolium(object):
                     isinstance(x, GeoJson)][0]
         color_scale = [x for x in self.map._children.values() if
                        isinstance(x, ColorScale)][0]
-        geo_json_style = list(geo_json._children.values())[0]
-
-        # Verify the geo_json object.
-        obj_temp = self.env.get_template('geo_json.js')
-        obj = obj_temp.render(this=geo_json)
-        assert ''.join(obj.split())[:-1] in ''.join(out.split())
-
-        # Verify the style.
-        assert geo_json_style.color == 'black'
-        assert geo_json_style.weight == 1
-        assert geo_json_style.opacity == 1
-        assert geo_json_style.fill_color == 'YlGnBu'
-        assert geo_json_style.fill_opacity == 0.6
-        assert geo_json_style.dash_array == 0
-        style = geo_json_style._template.module.script(geo_json_style)
-        assert ''.join(style.split())[:-1] in ''.join(out.split())
 
         # Verify the colorscale
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]

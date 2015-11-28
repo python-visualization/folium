@@ -10,7 +10,7 @@ from folium.map import (FeatureGroup, FitBounds, Icon, LayerControl, Marker,
                         Popup, TileLayer)
 
 from folium.features import (ClickForMarker, ColorScale, CustomIcon, DivIcon,
-                             GeoJson, GeoJsonStyle, ImageOverlay, LatLngPopup,
+                             GeoJson, ImageOverlay, LatLngPopup,
                              MarkerCluster, MultiPolyLine, PolyLine, Vega,
                              RegularPolygonMarker, TopoJson, WmsTileLayer)
 

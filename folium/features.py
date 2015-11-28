@@ -166,7 +166,7 @@ class Vega(Element):
 
 
 class GeoJson(MacroElement):
-    def __init__(self, data):
+    def __init__(self, data, style_function=None):
         """
         Creates a GeoJson plugin to append into a map with
         Map.add_plugin.
@@ -174,12 +174,14 @@ class GeoJson(MacroElement):
         Parameters
         ----------
         data: file, dict or str.
-        The GeoJSON data you want to plot.
-        * If file, then data will be read in the file and fully
-          embedded in Leaflet's JavaScript.
-        * If dict, then data will be converted to JSON and embedded
-          in the JavaScript.
-        * If str, then data will be passed to the JavaScript as-is.
+            The GeoJSON data you want to plot.
+            * If file, then data will be read in the file and fully
+              embedded in Leaflet's JavaScript.
+            * If dict, then data will be converted to JSON and embedded
+              in the JavaScript.
+            * If str, then data will be passed to the JavaScript as-is.
+        style_function: function, default None
+            A function mapping a GeoJson Feature to a style dict.
 
         Examples
         --------
@@ -190,22 +192,43 @@ class GeoJson(MacroElement):
         >>> # Providing string.
         >>> GeoJson(open('foo.json').read())
 
+        >>> # Providing a style_function that put all states in green, but Alabama in blue.
+        >>> style_function=lambda x: {'fillColor': '#0000ff' if x['properties']['name']=='Alabama' else '#00ff00'}
+        >>> GeoJson(geojson, style_function=style_function)
         """
         super(GeoJson, self).__init__()
         self._name = 'GeoJson'
         if 'read' in dir(data):
-            self.data = data.read()
+            self.data = json.load(data)
         elif type(data) is dict:
-            self.data = json.dumps(data)
-        else:
             self.data = data
+        else:
+            self.data = json.loads(data)
+
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type' : 'Feature', 'geometry' : self.data}
+            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+
+        if style_function is None:
+            style_function = lambda x: {}
+        self.style_function = style_function
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.geoJson({{this.data}}).addTo({{this._parent.get_name()}});
+                var {{this.get_name()}} = L.geoJson({{this.style_data()}})
+                    .addTo({{this._parent.get_name()}})
+                    .setStyle(function(feature) {return feature.properties.style;});
             {% endmacro %}
             """)  # noqa
 
+    def style_data(self):
+        for feature in self.data['features']:
+            feature.setdefault('properties',{}).setdefault('style',{}).update(
+                self.style_function(feature))
+        return json.dumps(self.data)
 
 class TopoJson(MacroElement):
     def __init__(self, data, object_path):
@@ -244,81 +267,6 @@ class TopoJson(MacroElement):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
             name='topojson')
-
-
-class GeoJsonStyle(MacroElement):
-    def __init__(self, color_domain, color_code, color_data=None,
-                 key_on='feature.properties.color',
-                 weight=1, opacity=1, color='black',
-                 fill_opacity=0.6, dash_array=0):
-        """
-        TODO docstring here
-
-        """
-        super(GeoJsonStyle, self).__init__()
-        self._name = 'GeoJsonStyle'
-
-        self.color_domain = color_domain
-        self.color_range = color_brewer(color_code, n=len(color_domain))
-        self.color_data = json.dumps(color_data)
-        self.key_on = key_on
-
-        self.weight = weight
-        self.opacity = opacity
-        self.color = color
-        self.fill_color = color_code
-        self.fill_opacity = fill_opacity
-        self.dash_array = dash_array
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {% if not this.color_range %}
-                    var {{this.get_name()}} = {
-                        color_function : function(feature) {
-                            return '{{this.fill_color}}';
-                            },
-                        };
-                {%else%}
-                    var {{this.get_name()}} = {
-                        color_scale : d3.scale.threshold()
-                              .domain({{this.color_domain}})
-                              .range({{this.color_range}}),
-                        color_data : {{this.color_data}},
-                        color_function : function(feature) {
-                            {% if this.color_data=='null' %}
-                                return this.color_scale({{this.key_on}});
-                            {% else %}
-                                return
-                                  this.color_scale(this.color_data[{{this.key_on}}]);
-                            {% endif %}
-                            },
-                        };
-                {%endif%}
-
-                {{this._parent.get_name()}}.setStyle(function(feature) {
-                    return {
-                        fillColor: {{this.get_name()}}.color_function(feature),
-                        weight: {{this.weight}},
-                        opacity: {{this.opacity}},
-                        color: '{{this.color}}',
-                        fillOpacity: {{this.fill_opacity}},
-                        dashArray: '{{this.dash_array}}'
-                        };
-                    });
-            {% endmacro %}
-            """)
-
-    def render(self, **kwargs):
-        super(GeoJsonStyle, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
-
-        figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
-            name='d3')
-
 
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
@@ -476,7 +424,6 @@ class CircleMarker(MacroElement):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
-
 
 class LatLngPopup(MacroElement):
     def __init__(self):
