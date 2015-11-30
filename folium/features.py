@@ -19,9 +19,9 @@ class WmsTileLayer(TileLayer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
                  attribution=None):
-        """TODO docstring here
-        Parameters
-        ----------
+        """
+        TODO docstring here
+
         """
         super(TileLayer, self).__init__()
         self._name = 'WmsTileLayer'
@@ -56,7 +56,10 @@ class RegularPolygonMarker(MacroElement):
                  color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15):
-        """TODO : docstring here"""
+        """
+        TODO docstring here
+
+        """
         super(RegularPolygonMarker, self).__init__()
         self._name = 'RegularPolygonMarker'
         self.location = location
@@ -106,7 +109,10 @@ class RegularPolygonMarker(MacroElement):
 class Vega(Element):
     def __init__(self, data, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
-        """TODO : docstring here"""
+        """
+        TODO docstring here
+
+        """
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data
@@ -164,26 +170,28 @@ class Vega(Element):
 
 class GeoJson(MacroElement):
     def __init__(self, data):
-        """Creates a GeoJson plugin to append into a map with
+        """
+        Creates a GeoJson plugin to append into a map with
         Map.add_plugin.
 
         Parameters
         ----------
-            data: file, dict or str.
-                The GeoJSON data you want to plot.
-                * If file, then data will be read in the file and fully
-                  embedded in Leaflet's JavaScript.
-                * If dict, then data will be converted to JSON and embedded
-                  in the JavaScript.
-                * If str, then data will be passed to the JavaScript as-is.
+        data: file, dict or str.
+        The GeoJSON data you want to plot.
+        * If file, then data will be read in the file and fully
+          embedded in Leaflet's JavaScript.
+        * If dict, then data will be converted to JSON and embedded
+          in the JavaScript.
+        * If str, then data will be passed to the JavaScript as-is.
 
-                Examples:
-                >>> # Providing file.
-                >>> GeoJson(open('foo.json'))
-                >>> # Providing dict.
-                >>> GeoJson(json.load(open('foo.json')))
-                >>> # Providing string.
-                >>> GeoJson(open('foo.json').read())
+        Examples
+        --------
+        >>> # Providing file.
+        >>> GeoJson(open('foo.json'))
+        >>> # Providing dict.
+        >>> GeoJson(json.load(open('foo.json')))
+        >>> # Providing string.
+        >>> GeoJson(open('foo.json').read())
 
         """
         super(GeoJson, self).__init__()
@@ -204,7 +212,9 @@ class GeoJson(MacroElement):
 
 class TopoJson(MacroElement):
     def __init__(self, data, object_path):
-        """TODO docstring here.
+        """
+        TODO docstring here
+
         """
         super(TopoJson, self).__init__()
         self._name = 'TopoJson'
@@ -244,7 +254,9 @@ class GeoJsonStyle(MacroElement):
                  key_on='feature.properties.color',
                  weight=1, opacity=1, color='black',
                  fill_opacity=0.6, dash_array=0):
-        """TODO : docstring here.
+        """
+        TODO docstring here
+
         """
         super(GeoJsonStyle, self).__init__()
         self._name = 'GeoJsonStyle'
@@ -313,7 +325,9 @@ class GeoJsonStyle(MacroElement):
 
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
-        """TODO : docstring here.
+        """
+        TODO docstring here
+
         """
         super(ColorScale, self).__init__()
         self._name = 'ColorScale'
@@ -436,7 +450,9 @@ class DivIcon(MacroElement):
 class CircleMarker(MacroElement):
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        """TODO : docstring here
+        """
+        TODO docstring here
+
         """
         super(CircleMarker, self).__init__()
         self._name = 'CircleMarker'
@@ -467,7 +483,9 @@ class CircleMarker(MacroElement):
 
 class LatLngPopup(MacroElement):
     def __init__(self):
-        """TODO : docstring here
+        """
+        TODO docstring here
+
         """
         super(LatLngPopup, self).__init__()
         self._name = 'LatLngPopup'
@@ -489,7 +507,9 @@ class LatLngPopup(MacroElement):
 
 class ClickForMarker(MacroElement):
     def __init__(self, popup=None):
-        """TODO : docstring here
+        """
+        TODO docstring here
+
         """
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
@@ -517,21 +537,22 @@ class ClickForMarker(MacroElement):
 class PolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True):
-        """Creates a PolyLine object to append into a map with
+        """
+        Creates a PolyLine object to append into a map with
         Map.add_children.
 
         Parameters
         ----------
-            locations: list of points (latitude, longitude)
-                Latitude and Longitude of line (Northing, Easting)
-            color: string, default Leaflet's default ('#03f')
-            weight: float, default Leaflet's default (5)
-            opacity: float, default Leaflet's default (0.5)
-            latlon: bool, default True
-                Whether locations are given in the form [[lat, lon]]
-                or not ([[lon, lat]] if False).
-                Note that the default GeoJson format is latlon=False,
-                while Leaflet polyline's default is latlon=True.
+        locations: list of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        color: string, default Leaflet's default ('#03f')
+        weight: float, default Leaflet's default (5)
+        opacity: float, default Leaflet's default (0.5)
+        latlon: bool, default True
+            Whether locations are given in the form [[lat, lon]]
+            or not ([[lon, lat]] if False).
+            Note that the default GeoJson format is latlon=False,
+            while Leaflet polyline's default is latlon=True.
         """
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
@@ -558,21 +579,22 @@ class PolyLine(MacroElement):
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True):
-        """Creates a MultiPolyLine object to append into a map with
+        """
+        Creates a MultiPolyLine object to append into a map with
         Map.add_children.
 
         Parameters
         ----------
-            locations: list of points (latitude, longitude)
-                Latitude and Longitude of line (Northing, Easting)
-            color: string, default Leaflet's default ('#03f')
-            weight: float, default Leaflet's default (5)
-            opacity: float, default Leaflet's default (0.5)
-            latlon: bool, default True
-                Whether locations are given in the form [[lat, lon]]
-                or not ([[lon, lat]] if False).
-                Note that the default GeoJson format is latlon=False,
-                while Leaflet polyline's default is latlon=True.
+        locations: list of points (latitude, longitude)
+            Latitude and Longitude of line (Northing, Easting)
+        color: string, default Leaflet's default ('#03f')
+        weight: float, default Leaflet's default (5)
+        opacity: float, default Leaflet's default (0.5)
+        latlon: bool, default True
+            Whether locations are given in the form [[lat, lon]]
+            or not ([[lon, lat]] if False).
+            Note that the default GeoJson format is latlon=False,
+            while Leaflet polyline's default is latlon=True.
         """
         super(MultiPolyLine, self).__init__()
         self._name = 'MultiPolyLine'
@@ -599,36 +621,37 @@ class MultiPolyLine(MacroElement):
 class ImageOverlay(MacroElement):
     def __init__(self, image, bounds, opacity=1., attribution=None,
                  origin='upper', colormap=None, mercator_project=False):
-        """Used to load and display a single image over specific bounds of
+        """
+        Used to load and display a single image over specific bounds of
         the map, implements ILayer interface.
 
         Parameters
         ----------
-            image: string, file or array-like object
-                The data you want to draw on the map.
-                * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the
-                  output file.
-                * If array-like, it will be converted to PNG base64 string
-                  and embedded in the output.
-            bounds: list
-                Image bounds on the map in the form [[lat_min, lon_min],
-                [lat_max, lon_max]]
-            opacity: float, default Leaflet's default (1.0)
-            attr: string, default Leaflet's default ("")
-            origin : ['upper' | 'lower'], optional, default 'upper'
-                Place the [0,0] index of the array in the upper left or
-                lower left corner of the axes.
-            colormap : callable, used only for `mono` image.
-                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-                for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4,
-                with values between 0 and 1.
-                Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False.
-                Used only for array-like image.  Transforms the data to
-                project (longitude, latitude) coordinates to the
-                Mercator projection.
+        image: string, file or array-like object
+            The data you want to draw on the map.
+            * If string, it will be written directly in the output file.
+            * If file, it's content will be converted as embedded in the
+              output file.
+            * If array-like, it will be converted to PNG base64 string
+              and embedded in the output.
+        bounds: list
+            Image bounds on the map in the form [[lat_min, lon_min],
+            [lat_max, lon_max]]
+        opacity: float, default Leaflet's default (1.0)
+        attr: string, default Leaflet's default ("")
+        origin : ['upper' | 'lower'], optional, default 'upper'
+            Place the [0,0] index of the array in the upper left or
+            lower left corner of the axes.
+        colormap : callable, used only for `mono` image.
+            Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+            for transforming a mono image into RGB.
+            It must output iterables of length 3 or 4,
+            with values between 0 and 1.
+            Hint : you can use colormaps from `matplotlib.cm`.
+        mercator_project : bool, default False.
+            Used only for array-like image.  Transforms the data to
+            project (longitude, latitude) coordinates to the
+            Mercator projection.
 
         """
         super(ImageOverlay, self).__init__()
@@ -665,31 +688,31 @@ class CustomIcon(Icon):
 
         Parameters
         ----------
-            icon_image :  string, file or array-like object
-                The data you want to use as an icon.
-                * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the
-                  output file.
-                * If array-like, it will be converted to PNG base64 string
-                  and embedded in the output.
-            icon_size : tuple of 2 int
-                Size of the icon image in pixels.
-            icon_anchor : tuple of 2 int
-                The coordinates of the "tip" of the icon
-                (relative to its top left corner).
-                The icon will be aligned so that this point is at the
-                marker's geographical location.
-            shadow_image :  string, file or array-like object
-                The data for the shadow image. If not specified,
-                no shadow image will be created.
-            shadow_size : tuple of 2 int
-                Size of the shadow image in pixels.
-            shadow_anchor : tuple of 2 int
-                The coordinates of the "tip" of the shadow relative to its
-                top left corner (the same as icon_anchor if not specified).
-            popup_anchor : tuple of 2 int
-                The coordinates of the point from which popups will "open",
-                relative to the icon anchor.
+        icon_image :  string, file or array-like object
+            The data you want to use as an icon.
+            * If string, it will be written directly in the output file.
+            * If file, it's content will be converted as embedded in the
+              output file.
+            * If array-like, it will be converted to PNG base64 string
+              and embedded in the output.
+        icon_size : tuple of 2 int
+            Size of the icon image in pixels.
+        icon_anchor : tuple of 2 int
+            The coordinates of the "tip" of the icon
+            (relative to its top left corner).
+            The icon will be aligned so that this point is at the
+            marker's geographical location.
+        shadow_image :  string, file or array-like object
+            The data for the shadow image. If not specified,
+            no shadow image will be created.
+        shadow_size : tuple of 2 int
+            Size of the shadow image in pixels.
+        shadow_anchor : tuple of 2 int
+            The coordinates of the "tip" of the shadow relative to its
+            top left corner (the same as icon_anchor if not specified).
+        popup_anchor : tuple of 2 int
+            The coordinates of the point from which popups will "open",
+            relative to the icon anchor.
 
         """
         super(Icon, self).__init__()
