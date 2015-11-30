@@ -51,7 +51,7 @@ class BoatMarker(MacroElement):
                     {{this.kwargs}}).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
             {% endmacro %}
-            """)
+            """)  # noqa
 
 
 def render(self, **kwargs):
@@ -62,5 +62,5 @@ def render(self, **kwargs):
                                             "if it's not in a Figure.")
 
         figure.header.add_children(
-            JavascriptLink("https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"),
+            JavascriptLink("https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"),  # noqa
             name='markerclusterjs')

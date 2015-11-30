@@ -67,7 +67,7 @@ class Element(object):
         out['id'] = self._id
         if depth != 0:
             out['children'] = dict_fun([(name, child.to_dict(depth=depth-1))
-                                        for name, child in self._children.items()])
+                                        for name, child in self._children.items()])  # noqa
         return out
 
     def to_json(self, depth=-1, **kwargs):
@@ -177,11 +177,11 @@ _default_js = [
     ('bootstrap',
      "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"),
     ('awesome_markers',
-     "https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"),
+     "https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"),  # noqa
     ('marker_cluster_src',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
     ('marker_cluster',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
     ]
 
 _default_css = [
@@ -190,17 +190,17 @@ _default_css = [
     ("bootstrap_css",
      "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"),
     ("bootstrap_theme_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"),
+     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"),  # noqa
     ("awesome_markers_font_css",
-     "https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),
+     "https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),  # noqa
     ("awesome_markers_css",
-     "https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css"),
+     "https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css"),  # noqa
     ("marker_cluster_default_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
     ("marker_cluster_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
     ("awesome_rotate_css",
-     "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),
+     "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
     ]
 
 
@@ -211,16 +211,19 @@ class Figure(Element):
         Parameters
         ----------
             width : str, default "100%"
-                The width of the Figure. It may be a percentage or a distance (like "300px").
+                The width of the Figure.
+                It may be a percentage or pixel value (like "300px").
             height : str, default None
-                The height of the Figure. It may be a percentage or a distance (like "300px").
+                The height of the Figure.
+                It may be a percentage or a pixel value (like "300px").
             ratio : str, default "60%"
                 A percentage defining the aspect ratio of the Figure.
                 It will be ignored if height is not None.
             figsize : tuple of two int, default None
-                If you're a matplotlib addict, you can overwrite width and height.
-                Values will be converted into pixels in using 60 dpi.
-                For example figsize=(10,5) will result in width="600px", height="300px".
+                If you're a matplotlib addict, you can overwrite width and
+                height. Values will be converted into pixels in using 60 dpi.
+                For example figsize=(10, 5) will result in
+                width="600px", height="300px".
         """
         super(Figure, self).__init__()
         self._name = 'Figure'
@@ -252,9 +255,9 @@ class Figure(Element):
         </script>
         """)
 
-        # Create the meta tag
+        # Create the meta tag.
         self.header.add_children(Element(
-            '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),
+            '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),  # noqa
             name='meta_http')
 
         # Import Javascripts
@@ -305,19 +308,18 @@ class Figure(Element):
         ----------
         """
         html = self.render(**kwargs)
-        html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')
+        html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
         if self.height is None:
-            iframe = """
+            iframe = ("""
             <div style="width:{width};">
             <div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">
             <iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">
             </iframe>
-            </div></div>""".format(
-                html=html,
-                width=self.width,
-                ratio=self.ratio,
-                )
+            </div></div>""")  # noqa
+            iframe.format(html=html,
+                          width=self.width,
+                          ratio=self.ratio)
         else:
             iframe = ('<iframe src="{html}" width="{width}" '
                       'height="{height}"></iframe>').format
@@ -359,7 +361,7 @@ class Html(Element):
         <div id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
                 {{this.data|e}}</div>
-                """)
+                """)  # noqa
 
 
 class Div(Figure):
