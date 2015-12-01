@@ -1,41 +1,105 @@
 # -*- coding: utf-8 -*-
-'''
+""""
 Folium Features Tests
 ---------------------
 
-'''
+"""
+
+import os
+from folium import Map
 from folium import features
 from folium.six import text_type
+from folium.element import Element
 
 
-class testFeatures(object):
-    '''Test class for Folium features'''
+tmpl = """
+        <!DOCTYPE html>
+        <head>
+            <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+            <script src="https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
+            <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+            <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css" />
+            <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                }
+            #map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+        </head>
+        <body>
+        </body>
+        <script>
+        </script>
+"""  # noqa
 
-    def test_map_creation(self):
-        features.Map([40, -100], zoom_start=4)
 
-    def test_figure_creation(self):
-        features.Figure()
+# Figure
+def test_figure_creation():
+    f = features.Figure()
+    assert isinstance(f, Element)
 
-    def test_figure_rendering(self):
-        f = features.Figure()
-        out = f.render()
-        assert type(out) is text_type
 
-    def test_figure_double_rendering(self):
-        f = features.Figure()
-        out = f.render()
-        out2 = f.render()
-        assert out == out2
+def test_figure_rendering():
+    f = features.Figure()
+    out = f.render()
+    assert type(out) is text_type
 
-    def test_wms_service(self):
-        m = features.Map([40, -100], zoom_start=4)
-        url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
-        w = features.WmsTileLayer(url,
-                                  name='test',
-                                  format='image/png',
-                                  layers='nexrad-n0r-900913',
-                                  attribution=u"Weather data © 2012 IEM Nexrad",
-                                  transparent=True)
-        w.add_to(m)
-        m._repr_html_()
+
+def test_figure_html():
+    f = features.Figure()
+    out = f.render()
+    out = os.linesep.join([s for s in out.splitlines() if s.strip()])
+    print(out)
+    assert out.strip() == tmpl.strip()
+
+
+def test_figure_double_rendering():
+    f = features.Figure()
+    out = f.render()
+    out2 = f.render()
+    assert out == out2
+
+
+# DivIcon.
+def test_divicon():
+    html = """<svg height="100" width="100">
+              <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+              </svg>"""  # noqa
+    div = features.DivIcon(html=html)
+    assert isinstance(div, Element)
+    assert div.className == 'empty'
+    assert div.html == html
+
+
+# WmsTileLayer
+def test_wms_service():
+    m = Map([40, -100], zoom_start=4)
+    url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
+    w = features.WmsTileLayer(url,
+                              name='test',
+                              format='image/png',
+                              layers='nexrad-n0r-900913',
+                              attribution=u"Weather data © 2012 IEM Nexrad",
+                              transparent=True)
+    w.add_to(m)
+    m._repr_html_()
