@@ -17,100 +17,157 @@ Installation
 
 $pip install folium
 
+Folium is compatible with Python 2 as well as Python 3.
+
 Base Maps
 ---------
 
-To create a base map, simply pass starting coordinates to Folium, then create the map::
+To create a base map, call on the `Map` class::
+
+    Map(location=None, width='100%', height='100%', tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1, zoom_start=10, attr=None, min_lat=-90, max_lat=90, min_lon=-180, max_lon=180, detect_retina=False)
+
+Parameters:
+
+	location: tuple or list, default None
+	    Latitude and Longitude of Map (Northing, Easting).
+	width: pixel int or percentage string (default: '100%')
+	    Width of the map.
+	height: pixel int or percentage string (default: '100%')
+	    Height of the map.
+	tiles: str, default 'OpenStreetMap'
+	    Map tileset to use. Can use defaults or pass a custom URL.
+	API_key: str, default None
+	    API key for Cloudmade or Mapbox tiles.
+	max_zoom: int, default 18
+	    Maximum zoom depth for the map.
+	zoom_start: int, default 10
+	    Initial zoom level for the map.
+	attr: string, default None
+	    Map tile attribution; only required if passing custom tile URL.
+	detect_retina: bool, default False
+	    If true and user is on a retina display, it will request four
+	    tiles of half the specified size and a bigger zoom level in place
+	    of one to utilize the high resolution.
+
+Returns:
+
+	folium.Map object
+
+
+Example::
 
     import folium
-    map_osm = folium.Map(location=[45.5236, -122.6750])
-    map_osm.create_map(path='osm.html')
+    fo_map = folium.Map(location=[45.5236, -122.6750])
 
-`Live example <http://bl.ocks.org/wrobstory/5545719>`_
+You can modify the width and height easily of the map using pixels or percentage::
 
-Folium defaults to 960 x 500 pixels (to make it easy to generate maps for `bl.ocks <http://bl.ocks.org>`_ ). You can modify the width and height easily::
+    fo_map = folium.Map(location=[45.5236, -122.6750], width=500, height = 300)
 
-    map = folium.Map(location=[45.5236, -122.6750],  width=500, height = 300)
+Folium also supports three zoom parameters:
 
-Folium also supports two zoom parameters:
-
-- zoom_start:  The starting zoom level.
-- max_zoom:  The maximum possible zoom.
 
 ::
 
-    map = folium.Map(location=[45.5236, -122.6750], zoom_start=10, max_zoom=15)
+    fo_map = folium.Map(location=[45.5236, -122.6750], zoom_start=10, max_zoom=15)
+
+To save the map to file, simply call the `.save()` function which can take a string or a file object::
+
+    fo_map.save('fo_map.html')
+
+`Base Maps - Live example <http://bl.ocks.org/wrobstory/5545719>`_
 
 Tilesets
 ~~~~~~~~
 
 Folium natively supports five tilesets with no API key or custom URL required. You can pass any of the following strings to the `tiles` keyword:
 
-- `'OpenStreetMap'`
+- `'OpenStreetMap'` (Default)
+- `'MapQuest Open'`
+- `'MapQuest Open Aerial'`
 - `'Mapbox Bright'`  (Limited levels of zoom)
 - `'Mapbox Control Room'` (Limited levels of zoom)
-- `'Stamen Terrain'`
-- `'Stamen Toner'`
+- `'Stamen'` (Terrain, Toner, and Watercolor)
+- `'Cloudmade'` (Must pass API key)
+- `'Mapbox'` (Must pass API key)
+- `'CartoDB'` (positron and dark_matter)
 
 Example::
 
-    map = folium.Map(location=[45.523, -122.675], tiles='Mapbox Control Room')
+    fo_map = folium.Map(location=[45.523, -122.675], tiles='Mapbox Control Room')
 
 Folium also supports both Mapbox and Cloudmade tiles with an API key passed::
 
-    map = folium.Map(location=[45.5236, -122.6750], tiles='Mapbox',
-                     API_key='wrobstory.map-12345678')
+    fo_map = folium.Map(location=[45.5236, -122.6750], tiles='Mapbox', API_key='wrobstory.map-12345678')
 
 Finally, Folium supports passing your own tile URL and attribution::
 
     tileset = r'http://{s}.tiles.yourtiles.com/{z}/{x}/{y}.png'
-    map = folium.Map(location=[45.372, -121.6972], zoom_start=12,
-                     tiles=tileset, attr='My Data Attribution')
+    fo_map = folium.Map(location=[45.372, -121.6972], zoom_start=12, tiles=tileset)
 
-Markers
+Adding Elements
 -------
 
-Folium supports of a number of different marker types, including simple markers, circle markers, and polygon markers. All markers support both text and `Vincent <https://github.com/wrobstory/vincent>`_ visualizations as popups.
+Folium supports a number of different Leaflet elements that can be added to the map. Some of these are markers support `Vincent <https://github.com/wrobstory/vincent>`_ visualizations, text, and HTML formatting as popups. In order to add the marker to the map, `add_children` can be called on the variable assigned to the map::
 
-Simple Markers
+	fo_map.add_children(child, name=None, index=None)
+
+Parameters:
+
+	child: element name, required
+		Created element, e.g. Markers
+	name: string, default None
+		Custom name to be given to child
+	index: integer, default None
+		Custom number to assign to child
+
+::
+
+Standard Markers
 ~~~~~~~~~~~~~~
 
-`Live example <http://bl.ocks.org/wrobstory/5609718>`_
+The simplest type is the standard marker, which is referred to as `Marker` in Folium::
 
-The simplest type is the standard Leaflet marker, which is referred to as the `simple_marker` in Folium::
+    Marker(location, popup=None, icon=None)
 
-    map.simple_marker([45.3288, -121.6625])
 
-The marker can be passed a text string (which can be HTML formatted) for the popup message::
+Example::
 
-    map_1.simple_marker([45.3288, -121.6625], popup='My Popup Message')
+    standard_marker = folium.Marker(location=[45.3288, -121.6625])
+    fo_map.addchildren(standard_marker)
 
-To turn the popup off, pass `False` to the `popup_on` keyword::
+The marker can accept the previously assigned `simple_popup` variable, which can be HTML formatted, as the message::
 
-    map_1.simple_marker([45.3288, -121.6625], popup_on=False)
+    standard_marker = folium.Marker(location=[45.3288, -121.6625], popup='My Popup')
+
+`Standard Markers - Live example <http://bl.ocks.org/wrobstory/5609718>`_
 
 Circle Markers
 ~~~~~~~~~~~~~~
 
-`Live example <http://bl.ocks.org/wrobstory/5609747>`_
+Circle markers are exactly what they sound like- simple circles on the map. The user can define the following parameters::
 
-Circle markers are exactly what they sound like- simple circles on the map. The user can define the following parameters:
+	CircleMarker(location, radius=500, color='black', fill_color='black', fill_opacity=0.6, popup=None)
 
-- `radius`: Circle radius in pixels
-- `line_color`: Outer line color, either a simple color (blue, black, etc), or a hex string
-- `fill_color`: Inner fill color, again simple or hex
-- `fill_opacity`: Inner fill opacity
+Example::
 
-The popup rules covered in simple markers apply for all other markers types::
+    circle_marker = folium.CircleMarker(location=[45.5215, -122.6261], color='#3186cc', fill_color='#3186cc', fill_opacity=0.2)
+    fo_map.addchildren(circle_marker)
 
-    map.circle_marker(location=[45.5215, -122.6261], radius=500,
-                      popup='My Popup Info', line_color='#3186cc',
-                      fill_color='#3186cc', fill_opacity=0.2)
+`Circle Markers - Live example <http://bl.ocks.org/wrobstory/5609747>`_
 
 Polygon Markers
 ~~~~~~~~~~~~~~
 
-`Live example <http://bl.ocks.org/wrobstory/5609786>`_
+To create custom shape polygons, the `RegularPolygonMarker` can be used by varying its parameters as needed::
+
+	RegularPolygonMarker(location, popup=None, color='black', opacity=1, weight=2, fill_color='blue', fill_opacity=1, number_of_sides=4, rotation=0, radius=15)
+
+
+Example::
+
+	poly_maker = folium.RegularPolygonMarker(location=[45.5012, -122.6655], popup='Ross Island Bridge', color='#132b5e', number_of_sides=3, radius=10, rotation=60)
+	fo_map.add_children(poly_maker)
+
 
 Polygon markers are based on the `Leaflet DVF Framework <https://github.com/humangeo/leaflet-dvf>`_.They take a number of parameters that define their color and shape:
 
@@ -123,28 +180,18 @@ Polygon markers are based on the `Leaflet DVF Framework <https://github.com/huma
 - `rotation`: Rotation of the marker in degrees
 - `radius`: Circle radius in pixels
 
-::
 
-    map_5.polygon_marker(location=[45.5012, -122.6655], popup='Ross Island Bridge',
-                         fill_color='#132b5e', num_sides=3, radius=10, rotation=60)
+`Polygon Markers - Live example <http://bl.ocks.org/wrobstory/5609786>`_
 
-Lat/Lng Popups
-~~~~~~~~~~~~~~
-
-`Live example <http://bl.ocks.org/wrobstory/5609756>`_
-
-Folium supports a convenience function that will enable Lat/Lng popups anywhere you click on the map, using the following method::
-
-    map.lat_lng_popover()
-
-Click-for-Marker
+Live Markers
 ~~~~~~~~~~~~~~~~
 
-`Live example <http://bl.ocks.org/wrobstory/5609762>`_
+Use the `ClickForMarker` method to enable a marker on each map click, with custom text if desired. Double-click to remove the marker::
 
-Use the `click_for_marker` method to enable a marker on each map click, with custom text if desired. Double-click to remove the marker::
+    folium.ClickForMarker(popup='Waypoint')
 
-    map.click_for_marker(popup='Waypoint')
+
+`Click For Marker - Live example <http://bl.ocks.org/wrobstory/5609762>`_
 
 Vincent Popups
 ~~~~~~~~~~~~~~
@@ -158,25 +205,85 @@ The popup parameter in any marker can be passed a `Vincent <https://github.com/w
     vis.to_json('vis.json')
     map.polygon_marker(location=[45.5, -122.5], popup=(vis, 'vis.json'))
 
-Other features
+Poly Lines
 --------------
 
 Polyline
 ~~~~~~~~
 
-You can plot a line by simply passing an iterable of coordinates to the method `line`::
+You can plot a line by passing an iterable of coordinates to the method `PolyLine`::
 
-    map.line(locations=[[45.3288, -121.6625],
-        [45.324224, -121.657763]
-        [45.318702, -121.652871]])
+	folium.Polyline(locations, color=None, weight=None, opacity=None, latlon=True)
 
-You can specify the following parameters:
 
-- `line_color`: line color, either a simple color (blue, black, etc), or a hex string
-- `line_weight`: line weight, in pixels
-- `line_opacity`: fill opacity
+Example::
 
-Polylines also support popups, through the `popup` and `popup_on` parameters, similarly to markers.
+    p_line = folium.PolyLine(locations=[[45.3288, -121.6625], [45.324224, -121.657763], [45.318702, -121.652871]])
+    fo_map.add_children(p_line)
+
+
+Multiple Polylines
+~~~~~~~~~~~~~~
+
+To add multiple Polylines into a single layer, the `MultiPolyLine` class can be instantiated with an array of arrays::
+
+	folium.Polyline(locations, color=None, weight=None, opacity=None, latlon=True)
+
+
+Other Features
+--------------
+
+Assigning Popups
+~~~~~~~~~~~~~~
+
+In order to provide additional customization to the popup, the `Popup` class can be called using the following::
+
+	folium.Popup(html, max_width=300)
+
+Example::
+
+	simple_popup = folium.Popup('My Popup', max_width=500)
+	standard_marker = folium.Marker(location=[45.3288, -121.6625], popup=simple_popup)
+
+
+Lat/Lng Popups
+~~~~~~~~~~~~~~
+
+Folium supports a convenient method that will enable Lat/Lng popups anywhere you click on the map, using the following method::
+
+    folium.LatLngPopup()
+
+`Lat/Long Popup - Live example <http://bl.ocks.org/wrobstory/5609756>`_
+
+Layer Control
+~~~~~~~~~~~~~~
+
+If multiple layers are present, `LayerControl()` allows them to be listed and provide `FeatureGroup` (see next item) then ability to turn them on or off::
+
+	folium.LayerControl()
+
+Feature Group
+~~~~~~~~~~~~~~
+
+To control multiple objects simultaneously, the `FeatureGroup` instance can be called and individual elements can be added as needed::
+
+	folium.FeatureGroup(name=None, overlay=True)
+
+Example::
+
+	fo_map = folium.Map(location=[45.5012, -122.6655])
+
+	circle_marker = folium.CircleMarker(location=[45.5215, -122.6261], color='black', fill_color='black', fill_opacity=1)
+
+	feature_group = folium.FeatureGroup()
+	feature_group.add_children(circle_marker)
+
+	
+	fo_map.add_children(feature_group)
+	fo_map.add_children(folium.LayerControl())
+
+	fo_map.save('map.html')
+
 
 
 Data Mapping: GeoJSON and TopoJSON
