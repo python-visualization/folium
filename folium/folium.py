@@ -68,7 +68,7 @@ class Map(_Map):
                       FutureWarning, stacklevel=2)
         wms = WmsTileLayer(wms_url, name=wms_name, format=wms_format,
                            layers=wms_layers, transparent=wms_transparent,
-                           attribution=None)
+                           attr=None)
         self.add_children(wms, name=wms_name)
 
     def simple_marker(self, location=None, popup=None,

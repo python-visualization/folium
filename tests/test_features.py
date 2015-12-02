@@ -99,7 +99,7 @@ def test_wms_service():
                               name='test',
                               format='image/png',
                               layers='nexrad-n0r-900913',
-                              attribution=u"Weather data © 2012 IEM Nexrad",
+                              attr=u"Weather data © 2012 IEM Nexrad",
                               transparent=True)
     w.add_to(m)
     m._repr_html_()
