@@ -19,30 +19,68 @@ from .map import Layer, Icon, Marker, Popup
 
 
 class WmsTileLayer(Layer):
-    def __init__(self, url, name=None,
-                 format=None, layers=None, transparent=True,
-                 attr=None, overlay=True, control=True):
+    def __init__(self, url, name=None, attr=None,
+                 layers=None, styles=None, format=None, transparent=True,
+                 version='1.1.1', crs=None, overlay=True, control=True):
         """
-        TODO docstring here
+        Used to display WMS services as tile layers on the map.
+        Extends TileLayer.
+
+        Parameters
+        ----------
+        url : str
+            Web Mapping Service URL
+        name : str, default None
+            The name of the WmsTileLayer layer.
+            If None get_name() will be called to get the technical (ugly) name.
+        attr : str
+            e.g. u"© Mapbox" — the string used by the attribution control,
+            describes the layer data.
+        layers : str
+            # TODO: Check if it can take a Comma-separated list!
+            Comma-separated list of WMS layers to show.
+        styles : str, default None
+            # TODO: Check the Comma-separated list! And add style test.
+            Comma-separated list of WMS styles.
+        format : str, default 'image/jpeg'
+            WMS image format (use 'image/png' for layers with transparency).
+        transparent : bool, default False
+            If true, the WMS service will return images with transparency.
+        version : str, default '1.1.1'
+             Version of the WMS service to use.
+        crs : CRS, default None
+            # TODO: Add a test.
+            Coordinate Reference System to use for the WMS requests,
+            defaults to map CRS.
+
+        For more information see:
+        http://leafletjs.com/reference.html#tilelayer-wms
 
         """
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control)
-        self._name = 'WmsTileLayer'
-        self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
         self.url = url
-        self.format = format
-        self.layers = layers
+        self._name = 'WmsTileLayer'
+        self.attribution = attr if attr is not None else ''
+        self.tile_name = name if name is not None else 'WmsTileLayer_{}'.format(self._id)  # noqa
+        # Options.
+        self.layers = layers if layers else ''
+        self.styles = styles if styles else ''
+        self.format = format if not format else 'image/jpeg'
         self.transparent = transparent
-        self.attr = attr
+        self.version = version
+        self.crs = crs if crs else 'null'
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
                 {
+                    layers:'{{ this.layers }}',
+                    styles:'{{ this.styles }}',
                     format:'{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
-                    layers:'{{ this.layers }}'
+                    version:'{{ this.version }}',
+                    crs:{{ this.crs }},
                     {% if this.attr %}, attribution:'{{this.attr}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
