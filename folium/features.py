@@ -18,7 +18,7 @@ from .map import TileLayer, Icon
 class WmsTileLayer(TileLayer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
-                 attr=None):
+                 attr=None, overlay=True):
         """
         TODO docstring here
 
@@ -29,6 +29,7 @@ class WmsTileLayer(TileLayer):
         self.url = url
         self.format = format
         self.layers = layers
+        self.overlay = overlay
         self.transparent = transparent
         self.attr = attr
 

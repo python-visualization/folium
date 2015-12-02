@@ -289,11 +289,11 @@ class LayerControl(MacroElement):
         self.base_layers = OrderedDict(
             [(val.tile_name, val.get_name()) for key, val in
              self._parent._children.items() if
-             isinstance(val, TileLayer) and not val.overlay])
+             isinstance(val, TileLayer) and not hasattr(val, 'overlay')])
         self.overlays = OrderedDict(
             [(val.tile_name, val.get_name()) for key, val in
              self._parent._children.items() if
-             isinstance(val, TileLayer) and val.overlay])
+             isinstance(val, TileLayer) and hasattr(val, 'overlay')])
 
         super(LayerControl, self).render()
 
