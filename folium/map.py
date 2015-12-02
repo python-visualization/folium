@@ -137,6 +137,8 @@ class Map(MacroElement):
                                            maxBounds: bounds,
                                            layers: []
                                          });
+
+            var scale = L.control.scale().addTo({{this.get_name()}});
         {% endmacro %}
         """)
 
