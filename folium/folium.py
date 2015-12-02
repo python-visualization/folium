@@ -159,7 +159,9 @@ class Map(_Map):
                     line_color='red', line_opacity=1.0)
 
         """
-
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("line", "add_children(PolyLine)"),
+                      FutureWarning, stacklevel=2)
         p = PolyLine(locations,
                      color=line_color,
                      weight=line_weight,
@@ -212,7 +214,9 @@ class Map(_Map):
                                    line_color='red', line_weight=2,
                                    line_opacity=1.0)
         """
-
+        warnings.warn("%s is deprecated. Use %s instead" %
+                      ("multiline", "add_children(MultiPolyLine)"),
+                      FutureWarning, stacklevel=2)
         p = MultiPolyLine(locations,
                           color=line_color,
                           weight=line_weight,
