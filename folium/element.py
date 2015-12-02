@@ -306,20 +306,21 @@ class Figure(Element):
 
         Parameters
         ----------
+
         """
         html = self.render(**kwargs)
         html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
         if self.height is None:
-            iframe = ("""
+            iframe = """
             <div style="width:{width};">
             <div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">
             <iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">
             </iframe>
-            </div></div>""")  # noqa
-            iframe.format(html=html,
-                          width=self.width,
-                          ratio=self.ratio)
+            </div></div>""".format  # noqa
+            iframe = iframe(html=html,
+                            width=self.width,
+                            ratio=self.ratio)
         else:
             iframe = ('<iframe src="{html}" width="{width}" '
                       'height="{height}"></iframe>').format
