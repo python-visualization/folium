@@ -18,7 +18,7 @@ from .map import TileLayer, Icon
 class WmsTileLayer(TileLayer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
-                 attribution=None):
+                 attr=None):
         """
         TODO docstring here
 
@@ -30,10 +30,7 @@ class WmsTileLayer(TileLayer):
         self.format = format
         self.layers = layers
         self.transparent = transparent
-        # if attribution is None:
-        #     raise ValueError('WMS must'
-        #                      ' also be passed an attribution')
-        self.attribution = attribution
+        self.attr = attr
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -43,7 +40,7 @@ class WmsTileLayer(TileLayer):
                     format:'{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
                     layers:'{{ this.layers }}'
-                    {% if this.attribution %}, attribution:'{{this.attribution}}'{% endif %}
+                    {% if this.attr %}, attribution:'{{this.attr}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
 
@@ -619,7 +616,7 @@ class MultiPolyLine(MacroElement):
 
 
 class ImageOverlay(MacroElement):
-    def __init__(self, image, bounds, opacity=1., attribution=None,
+    def __init__(self, image, bounds, opacity=1., attr=None,
                  origin='upper', colormap=None, mercator_project=False):
         """
         Used to load and display a single image over specific bounds of
@@ -664,7 +661,7 @@ class ImageOverlay(MacroElement):
         self.bounds = json.loads(json.dumps(bounds))
         options = {
             'opacity': opacity,
-            'attribution': attribution,
+            'attribution': attr,
         }
         self.options = json.dumps({key: val for key, val
                                    in options.items() if val},
