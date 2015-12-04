@@ -488,7 +488,8 @@ def write_png(data, origin='upper', colormap=None):
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != 'uint8':
-        array *= 255/array.max(axis=(0, 1)).reshape((1, 1, 4)).astype('uint8')
+        array = array * 255./array.max(axis=(0, 1)).reshape((1, 1, 4))
+        array = array.astype('uint8')
 
     # Eventually flip the image.
     if origin == 'lower':
