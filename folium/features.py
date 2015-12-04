@@ -8,6 +8,7 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
+from .six import text_type, binary_type
 from .utilities import (color_brewer, _parse_size, legend_scaler,
                         _locations_mirror, _locations_tolist, image_to_url)
 
@@ -96,7 +97,9 @@ class RegularPolygonMarker(MacroElement):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""
@@ -434,7 +437,9 @@ class CircleMarker(MacroElement):
         self.color = color
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""
