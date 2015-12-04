@@ -49,13 +49,41 @@ class WmsTileLayer(TileLayer):
 
 
 class RegularPolygonMarker(MacroElement):
-    def __init__(self, location, popup=None,
-                 color='black', opacity=1, weight=2,
+    def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15):
-        """
-        TODO docstring here
+                 number_of_sides=4, rotation=0, radius=15, popup=None):
+        """Custom markers using the Leaflet Data Vis Framework.
 
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        color: string, default 'black'
+            Marker line color
+        opacity: float, default 1
+            Line opacity, scale 0-1
+        weight: int, default 2
+            Stroke weight in pixels
+        fill_color: string, default 'blue'
+            Marker fill color
+        fill_opacity: float, default 1
+            Marker fill opacity
+        number_of_sides: int, default 4
+            Number of polygon sides
+        rotation: int, default 0
+            Rotation angle in degrees
+        radius: int, default 15
+            Marker radius, in pixels
+        popup: string or folium.Popup, default None
+            Input text or visualization for object. Can pass either text,
+            or a folium.Popup object.
+            If None, no popup will be displayed.
+
+        Returns
+        -------
+        Polygon marker names and HTML in obj.template_vars
+
+        For more information, see https://humangeo.github.io/leaflet-dvf/
         """
         super(RegularPolygonMarker, self).__init__()
         self._name = 'RegularPolygonMarker'
