@@ -16,7 +16,7 @@ from folium.six import text_type, binary_type
 from .map import Map as _Map
 from .map import Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
-                       GeoJsonStyle, CircleMarker, LatLngPopup,
+                       CircleMarker, LatLngPopup,
                        ClickForMarker, ColorScale, TopoJson, PolyLine,
                        MultiPolyLine, ImageOverlay)
 from .utilities import color_brewer, write_png
@@ -442,10 +442,17 @@ class Map(_Map):
 #
 #        self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
 
-    def geo_json(self, geo_path=None, geo_str=None, data_out='data.json',
+    def geo_json(self, *args, **kwargs):
+        """This method is deprecated and will be removed in v0.2.1. See
+        `Map.choropleth` instead.
+        """
+        warnings.warn('This method is deprecated. Please use Map.choropleth instead.')
+        return self.choropleth(*args, **kwargs)
+
+    def choropleth(self, geo_path=None, geo_str=None, data_out='data.json',
                  data=None, columns=None, key_on=None, threshold_scale=None,
                  fill_color='blue', fill_opacity=0.6, line_color='black',
-                 line_weight=1, line_opacity=1, legend_name=None,
+                 line_weight=1, line_opacity=1, legend_name="",
                  topojson=None, reset=False):
         """Apply a GeoJSON overlay to the map.
 
@@ -506,8 +513,8 @@ class Map(_Map):
             GeoJSON geopath line weight.
         line_opacity: float, default 1
             GeoJSON geopath line opacity, range 0-1.
-        legend_name: string, default None
-            Title for data legend. If not passed, defaults to columns[1].
+        legend_name: string, default empty string
+            Title for data legend.
         topojson: string, default None
             If using a TopoJSON, passing "objects.yourfeature" to the topojson
             keyword argument will enable conversion to GeoJSON.
@@ -520,17 +527,14 @@ class Map(_Map):
 
         Example
         -------
-        >>> m.geo_json(geo_path='us-states.json', line_color='blue',
+        >>> m.choropleth(geo_path='us-states.json', line_color='blue',
                       line_weight=3)
-        >>> m.geo_json(geo_path='geo.json', data=df,
+        >>> m.choropleth(geo_path='geo.json', data=df,
                       columns=['Data 1', 'Data 2'],
                       key_on='feature.properties.myvalue', fill_color='PuBu',
                       threshold_scale=[0, 20, 30, 40, 50, 60])
-        >>> m.geo_json(geo_path='countries.json', topojson='objects.countries')
+        >>> m.choropleth(geo_path='countries.json', topojson='objects.countries')
         """
-        warnings.warn("%s is deprecated. Use %s instead" %
-                      ("geo_json", "add_children(GeoJson)"),
-                      FutureWarning, stacklevel=2)
 
         if threshold_scale and len(threshold_scale) > 6:
             raise ValueError
@@ -545,11 +549,6 @@ class Map(_Map):
             geo_data = geo_str
         else:
             geo_data = {}
-
-        if topojson:
-            geo_json = TopoJson(geo_data, topojson)
-        else:
-            geo_json = GeoJson(geo_data)
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
@@ -587,20 +586,38 @@ class Map(_Map):
             color_domain = [data_min+i*(data_max-data_min)*1./nb_class
                             for i in range(1+nb_class)]
         else:
-            color_domain = [-1, 1]
+            color_domain = None
 
-        # Create GeoJsonStyle.
-        geo_json_style = GeoJsonStyle(
-            color_domain, fill_color, color_data=color_data, key_on=key_on,
-            weight=line_weight, opacity=line_opacity, color=line_color,
-            fill_opacity=fill_opacity)
+        if color_domain and key_on:
+            key_on = key_on[8:] if key_on.startswith('feature.') else key_on
+            color_range = color_brewer(fill_color, n=len(color_domain))
+            get_by_key = lambda obj,key : (obj.get(key,None) if len(key.split('.'))<=1
+                                           else get_by_key(obj.get(key.split('.')[0],None),
+                                                           '.'.join(key.split('.')[1:])))
+            color_scale_fun = lambda x: color_range[len([u for u in color_domain
+                                                         if u<=color_data[get_by_key(x,key_on)]])]
+        else:
+            color_scale_fun = lambda x: fill_color
 
-        # Create ColorScale
-        color_scale = ColorScale(color_domain, fill_color, caption=legend_name)
+        style_function = lambda x: {
+            "weight" : line_weight,
+            "opactiy": line_opacity,
+            "color" : line_color,
+            "fillOpacity" : fill_opacity,
+            "fillColor" : color_scale_fun(x)
+            }
 
-        geo_json.add_children(geo_json_style)
+        if topojson:
+            geo_json = TopoJson(geo_data, topojson)
+        else:
+            geo_json = GeoJson(geo_data, style_function=style_function)
+
         self.add_children(geo_json)
-        self.add_children(color_scale)
+
+        # Create ColorScale.
+        if color_domain:
+            color_scale = ColorScale(color_domain, fill_color, caption=legend_name)
+            self.add_children(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
                       min_lon=-180.0, max_lon=180.0, origin='upper',
