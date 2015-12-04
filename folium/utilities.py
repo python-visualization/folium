@@ -19,16 +19,6 @@ import json
 import base64
 from jinja2 import Environment, PackageLoader
 
-try:
-    import pandas as pd
-except ImportError:
-    pd = None
-
-try:
-    import numpy as np
-except ImportError:
-    np = None
-
 from folium.six import iteritems, text_type, binary_type
 
 
@@ -240,13 +230,8 @@ def transform_data(data):
     >>> transform_data(df)
 
     """
-    if pd is None:
-        raise ImportError("The Pandas package is required"
-                          " for this functionality")
-
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+    import numpy as np
+    import pandas as pd
 
     def type_check(value):
         """
@@ -294,12 +279,7 @@ def split_six(series=None):
     list
 
     """
-    if pd is None:
-        raise ImportError("The Pandas package is required"
-                          " for this functionality")
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+    import numpy as np
 
     def base(x):
         if x > 0:
@@ -315,7 +295,8 @@ def split_six(series=None):
 
 
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
-    """Transforms an image computed in (longitude,latitude) coordinates into
+    """
+    Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
 
     Parameters
@@ -334,10 +315,9 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     height_out : int, default None
         The expected height of the output.
         If None, the height of the input is used.
+
     """
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+    import numpy as np
 
     mercator = lambda x: np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
 
@@ -348,7 +328,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     if height_out is None:
         height_out = height
 
-    # Eventually flip the image
+    # Eventually flip the image.
     if origin == 'upper':
         array = array[::-1, :, :]
 
@@ -371,31 +351,33 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
 
 def image_to_url(image, mercator_project=False, colormap=None,
                  origin='upper', bounds=((-90, -180), (90, 180))):
-    """Infers the type of an image argument and transforms it into a URL.
+    """
+    Infers the type of an image argument and transforms it into a URL.
 
-        Parameters
-        ----------
-            image: string, file or array-like object
-                * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the
-                  output file.
-                * If array-like, it will be converted to PNG base64 string and
-                  embedded in the output.
-            origin : ['upper' | 'lower'], optional, default 'upper'
-                Place the [0, 0] index of the array in the upper left or
-                lower left corner of the axes.
-            colormap : callable, used only for `mono` image.
-                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-                for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4, with values between
-                0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False, used for array-like image.
-                Transforms the data to project (longitude,latitude)
-                coordinates to the Mercator projection.
-            bounds: list-like, default ((-90, -180), (90, 180))
-                Image bounds on the map in the form
-                [[lat_min, lon_min], [lat_max, lon_max]].
-                Only used if mercator_project is True.
+    Parameters
+    ----------
+    image: string, file or array-like object
+        * If string, it will be written directly in the output file.
+        * If file, it's content will be converted as embedded in the
+            output file.
+        * If array-like, it will be converted to PNG base64 string and
+            embedded in the output.
+    origin : ['upper' | 'lower'], optional, default 'upper'
+        Place the [0, 0] index of the array in the upper left or
+        lower left corner of the axes.
+    colormap : callable, used only for `mono` image.
+        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+        for transforming a mono image into RGB.
+        It must output iterables of length 3 or 4, with values between
+        0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
+    mercator_project : bool, default False, used for array-like image.
+        Transforms the data to project (longitude,latitude)
+        coordinates to the Mercator projection.
+    bounds: list-like, default ((-90, -180), (90, 180))
+        Image bounds on the map in the form
+        [[lat_min, lon_min], [lat_max, lon_max]].
+        Only used if mercator_project is True.
+
     """
     if hasattr(image, 'read'):
         # We got an image file.
@@ -455,10 +437,9 @@ def write_png(data, origin='upper', colormap=None):
     Returns
     -------
     PNG formatted byte string
+
     """
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+    import numpy as np
 
     if colormap is None:
         colormap = lambda x: (x, x, x, 1)
@@ -550,8 +531,7 @@ def _locations_mirror(x):
 
 
 def _locations_tolist(x):
-    """Transforms recursively a list of iterables into a list of list.
-    """
+    """Transforms recursively a list of iterables into a list of list."""
     if hasattr(x, '__iter__'):
         return list(map(_locations_tolist, x))
     else:
