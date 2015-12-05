@@ -9,10 +9,11 @@ from jinja2 import Template
 import json
 
 from .utilities import (color_brewer, _parse_size, legend_scaler,
-                        _locations_mirror, _locations_tolist, image_to_url)
+                        _locations_mirror, _locations_tolist, image_to_url,
+                        text_type, binary_type)
 
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
-from .map import TileLayer, Icon
+from .map import TileLayer, Icon, Marker, Popup
 
 
 class WmsTileLayer(TileLayer):
@@ -48,7 +49,7 @@ class WmsTileLayer(TileLayer):
         """)  # noqa
 
 
-class RegularPolygonMarker(MacroElement):
+class RegularPolygonMarker(Marker):
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15, popup=None):
@@ -85,9 +86,8 @@ class RegularPolygonMarker(MacroElement):
 
         For more information, see https://humangeo.github.io/leaflet-dvf/
         """
-        super(RegularPolygonMarker, self).__init__()
+        super(RegularPolygonMarker, self).__init__(location, popup=popup)
         self._name = 'RegularPolygonMarker'
-        self.location = location
         self.color = color
         self.opacity = opacity
         self.weight = weight
@@ -96,8 +96,6 @@ class RegularPolygonMarker(MacroElement):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        if popup is not None:
-            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -420,22 +418,19 @@ class DivIcon(MacroElement):
             """)  # noqa
 
 
-class CircleMarker(MacroElement):
+class CircleMarker(Marker):
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
         """
         TODO docstring here
 
         """
-        super(CircleMarker, self).__init__()
+        super(CircleMarker, self).__init__(location, popup=popup)
         self._name = 'CircleMarker'
-        self.location = location
         self.radius = radius
         self.color = color
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
-        if popup is not None:
-            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -508,7 +503,7 @@ class ClickForMarker(MacroElement):
 
 class PolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True):
+                 opacity=None, latlon=True, popup=None):
         """
         Creates a PolyLine object to append into a map with
         Map.add_children.
@@ -525,6 +520,8 @@ class PolyLine(MacroElement):
             or not ([[lon, lat]] if False).
             Note that the default GeoJson format is latlon=False,
             while Leaflet polyline's default is latlon=True.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
         """
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
@@ -533,6 +530,10 @@ class PolyLine(MacroElement):
         self.color = color
         self.weight = weight
         self.opacity = opacity
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -550,7 +551,7 @@ class PolyLine(MacroElement):
 
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True):
+                 opacity=None, latlon=True, popup=None):
         """
         Creates a MultiPolyLine object to append into a map with
         Map.add_children.
@@ -567,6 +568,8 @@ class MultiPolyLine(MacroElement):
             or not ([[lon, lat]] if False).
             Note that the default GeoJson format is latlon=False,
             while Leaflet polyline's default is latlon=True.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
         """
         super(MultiPolyLine, self).__init__()
         self._name = 'MultiPolyLine'
@@ -575,6 +578,10 @@ class MultiPolyLine(MacroElement):
         self.color = color
         self.weight = weight
         self.opacity = opacity
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
+            self.add_children(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}

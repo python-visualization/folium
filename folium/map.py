@@ -363,11 +363,8 @@ class Marker(MacroElement):
         ----------
         location: tuple or list, default None
             Latitude and Longitude of Marker (Northing, Easting)
-        popup: string or tuple, default 'Pop Text'
-            Input text or visualization for object. Can pass either text,
-            or a tuple of the form (Vincent object, 'vis_path.json')
-            It is possible to adjust the width of text/HTML popups
-            using the optional keywords `popup_width` (default is 300px).
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
         icon: Icon plugin
             the Icon plugin to use to render the marker.
 
@@ -377,16 +374,17 @@ class Marker(MacroElement):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
-
+        >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
         """
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = location
         if icon is not None:
             self.add_children(icon)
-        if popup is not None:
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_children(Popup(popup))
+        elif popup is not None:
             self.add_children(popup)
 
         self._template = Template(u"""

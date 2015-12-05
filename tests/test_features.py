@@ -6,7 +6,7 @@ Folium Features Tests
 """
 
 import os
-from folium import Map
+from folium import Map, Popup
 from folium import features
 from folium.six import text_type
 from folium.element import Element
@@ -79,6 +79,23 @@ def test_figure_double_rendering():
     out2 = f.render()
     assert out == out2
 
+def test_marker_popups():
+    m = Map()
+    features.Marker([45,-180],popup='-180').add_to(m)
+    features.Marker([45,-120],popup=Popup('-120')).add_to(m)
+    features.RegularPolygonMarker([45,-60],popup='-60').add_to(m)
+    features.RegularPolygonMarker([45,0],popup=Popup('0')).add_to(m)
+    features.CircleMarker([45,60],popup='60').add_to(m)
+    features.CircleMarker([45,120],popup=Popup('120')).add_to(m)
+    m._repr_html_()
+
+def test_polyline_popups():
+    m = Map([43,-100], zoom_start=4)
+    features.PolyLine([[40,-80],[45,-80]], popup="PolyLine").add_to(m)
+    features.PolyLine([[40,-90],[45,-90]], popup=Popup("PolyLine")).add_to(m)
+    features.MultiPolyLine([[[40,-110],[45,-110]]], popup="MultiPolyLine").add_to(m)
+    features.MultiPolyLine([[[40,-120],[45,-120]]], popup=Popup("MultiPolyLine")).add_to(m)
+    m._repr_html_()
 
 # DivIcon.
 def test_divicon():
