@@ -374,8 +374,8 @@ class Marker(MacroElement):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
+        >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
         """
         super(Marker, self).__init__()
         self._name = 'Marker'
