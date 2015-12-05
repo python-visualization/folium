@@ -90,7 +90,7 @@ def test_marker_popups():
     m._repr_html_()
 
 def test_polyline_popups():
-    m = folium.Map([43,-100], zoom_start=4)
+    m = Map([43,-100], zoom_start=4)
     features.PolyLine([[40,-80],[45,-80]], popup="PolyLine").add_to(m)
     features.PolyLine([[40,-90],[45,-90]], popup=Popup("PolyLine")).add_to(m)
     features.MultiPolyLine([[[40,-110],[45,-110]]], popup="MultiPolyLine").add_to(m)
