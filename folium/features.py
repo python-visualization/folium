@@ -9,7 +9,8 @@ from jinja2 import Template
 import json
 
 from .utilities import (color_brewer, _parse_size, legend_scaler,
-                        _locations_mirror, _locations_tolist, image_to_url)
+                        _locations_mirror, _locations_tolist, image_to_url,
+                        text_type, binary_type)
 
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import TileLayer, Icon
@@ -192,7 +193,6 @@ class Vega(Element):
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
 
-
 class GeoJson(MacroElement):
     def __init__(self, data, style_function=None):
         """
@@ -213,8 +213,10 @@ class GeoJson(MacroElement):
 
         Examples
         --------
-        >>> # Providing file.
+        >>> # Providing file that shall be embeded.
         >>> GeoJson(open('foo.json'))
+        >>> # Providing filename that shall not be embeded.
+        >>> GeoJson('foo.json')
         >>> # Providing dict.
         >>> GeoJson(json.load(open('foo.json')))
         >>> # Providing string.
@@ -227,18 +229,20 @@ class GeoJson(MacroElement):
         super(GeoJson, self).__init__()
         self._name = 'GeoJson'
         if 'read' in dir(data):
+            self.embed = True
             self.data = json.load(data)
         elif type(data) is dict:
+            self.embed = True
             self.data = data
+        elif isinstance(data, text_type) or isinstance(data, binary_type):
+            if data.lstrip()[0] in '[{': # This is a GeoJSON inline string
+                self.embed = True
+                self.data = json.loads(data)
+            else:  # This is a filename
+                self.embed = False
+                self.data = data
         else:
-            self.data = json.loads(data)
-
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type' : 'Feature', 'geometry' : self.data}
-            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+            raise ValueError('Unhandled data type.')
 
         if style_function is None:
             style_function = lambda x: {}
@@ -246,13 +250,21 @@ class GeoJson(MacroElement):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.geoJson({{this.style_data()}})
+                var {{this.get_name()}} = L.geoJson(
+                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %})
                     .addTo({{this._parent.get_name()}})
                     .setStyle(function(feature) {return feature.properties.style;});
             {% endmacro %}
             """)  # noqa
 
     def style_data(self):
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type' : 'Feature', 'geometry' : self.data}
+            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+
         for feature in self.data['features']:
             feature.setdefault('properties',{}).setdefault('style',{}).update(
                 self.style_function(feature))
