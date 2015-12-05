@@ -228,10 +228,10 @@ class GeoJson(MacroElement):
         """
         super(GeoJson, self).__init__()
         self._name = 'GeoJson'
-        if 'read' in dir(data):
+        if hasattr(data,'read'):
             self.embed = True
             self.data = json.load(data)
-        elif type(data) is dict:
+        elif isinstance(data,dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
