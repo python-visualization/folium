@@ -221,64 +221,6 @@ def color_brewer(color_code, n=6):
         color_scheme = schemes.get(color_code, None)
     return color_scheme
 
-
-def transform_data(data):
-    """
-    Transform Pandas DataFrame into JSON format.
-
-    Parameters
-    ----------
-    data: DataFrame or Series
-        Pandas DataFrame or Series
-
-    Returns
-    -------
-    JSON compatible dict
-
-    Example
-    -------
-    >>> transform_data(df)
-
-    """
-    if pd is None:
-        raise ImportError("The Pandas package is required"
-                          " for this functionality")
-
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
-
-    def type_check(value):
-        """
-        Type check values for JSON serialization. Native Python JSON
-        serialization will not recognize some Numpy data types properly,
-        so they must be explicitly converted.
-
-        """
-        if pd.isnull(value):
-            return None
-        elif (isinstance(value, pd.tslib.Timestamp) or
-              isinstance(value, pd.Period)):
-            return time.mktime(value.timetuple())
-        elif isinstance(value, (int, np.integer)):
-            return int(value)
-        elif isinstance(value, (float, np.float_)):
-            return float(value)
-        elif isinstance(value, str):
-            return str(value)
-        else:
-            return value
-
-    if isinstance(data, pd.Series):
-        json_data = [{type_check(x): type_check(y) for
-                      x, y in iteritems(data)}]
-    elif isinstance(data, pd.DataFrame):
-        json_data = [{type_check(y): type_check(z) for
-                      x, y, z in data.itertuples()}]
-
-    return json_data
-
-
 def split_six(series=None):
     """
     Given a Pandas Series, get a domain of values from zero to the 90% quantile
@@ -313,64 +255,7 @@ def split_six(series=None):
     arr = series.values
     return [base(np.percentile(arr, x)) for x in quants]
 
-
-def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
-    """Transforms an image computed in (longitude,latitude) coordinates into
-    the a Mercator projection image.
-
-    Parameters
-    ----------
-
-    data: numpy array or equivalent list-like object.
-        Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
-
-    lat_bounds : length 2 tuple
-        Minimal and maximal value of the latitude of the image.
-
-    origin : ['upper' | 'lower'], optional, default 'upper'
-        Place the [0,0] index of the array in the upper left or lower left
-        corner of the axes.
-
-    height_out : int, default None
-        The expected height of the output.
-        If None, the height of the input is used.
-    """
-    if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
-
-    mercator = lambda x: np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
-
-    array = np.atleast_3d(data).copy()
-    height, width, nblayers = array.shape
-
-    lat_min, lat_max = lat_bounds
-    if height_out is None:
-        height_out = height
-
-    # Eventually flip the image
-    if origin == 'upper':
-        array = array[::-1, :, :]
-
-    lats = (lat_min + np.linspace(0.5/height, 1.-0.5/height, height) *
-            (lat_max-lat_min))
-    latslats = (mercator(lat_min) +
-                np.linspace(0.5/height_out, 1.-0.5/height_out, height_out) *
-                (mercator(lat_max)-mercator(lat_min)))
-
-    out = np.zeros((height_out, width, nblayers))
-    for i in range(width):
-        for j in range(4):
-            out[:, i, j] = np.interp(latslats, mercator(lats),  array[:, i, j])
-
-    # Eventually flip the image.
-    if origin == 'upper':
-        out = out[::-1, :, :]
-    return out
-
-
-def image_to_url(image, mercator_project=False, colormap=None,
-                 origin='upper', bounds=((-90, -180), (90, 180))):
+def image_to_url(image, colormap=None, origin='upper'):
     """Infers the type of an image argument and transforms it into a URL.
 
         Parameters
@@ -389,13 +274,6 @@ def image_to_url(image, mercator_project=False, colormap=None,
                 for transforming a mono image into RGB.
                 It must output iterables of length 3 or 4, with values between
                 0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
-            mercator_project : bool, default False, used for array-like image.
-                Transforms the data to project (longitude,latitude)
-                coordinates to the Mercator projection.
-            bounds: list-like, default ((-90, -180), (90, 180))
-                Image bounds on the map in the form
-                [[lat_min, lon_min], [lat_max, lon_max]].
-                Only used if mercator_project is True.
     """
     if hasattr(image, 'read'):
         # We got an image file.
@@ -409,20 +287,13 @@ def image_to_url(image, mercator_project=False, colormap=None,
     elif (not (isinstance(image, text_type) or
                isinstance(image, binary_type))) and hasattr(image, '__iter__'):
         # We got an array-like object.
-        if mercator_project:
-            data = mercator_transform(image,
-                                      [bounds[0][0], bounds[1][0]],
-                                      origin=origin)
-        else:
-            data = image
-        png = write_png(data, origin=origin, colormap=colormap)
+        png = write_png(image, origin=origin, colormap=colormap)
         url = "data:image/png;base64," + base64.b64encode(png).decode('utf-8')
     else:
         # We got an URL.
         url = json.loads(json.dumps(image))
 
     return url.replace('\n', ' ')
-
 
 def write_png(data, origin='upper', colormap=None):
     """

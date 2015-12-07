@@ -168,24 +168,43 @@ class Map(MacroElement):
                                detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
+class Layer(MacroElement):
+    """An abstract class for everything that is a Layer on the map.
+    It will be used to define whether an object will be included in LayerControls.
+    """
+    def __init__(self, name=None, overlay=False, control=True):
+        """Creates a Layer instance.
 
-class TileLayer(MacroElement):
+        Parameters
+        ----------
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Whether the layer is optional (overlay) or compulsory.
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
+        """
+        super(Layer, self).__init__()
+        self.layer_name = name if name is not None else self.get_name()
+        self.overlay = overlay
+        self.control = control
+
+class TileLayer(Layer):
     def __init__(self, tiles='OpenStreetMap', name=None,
                  min_zoom=1, max_zoom=18, attr=None, API_key=None,
-                 overlay=False, detect_retina=False):
+                 overlay=False, control=True, detect_retina=False):
         """TODO docstring here
         Parameters
         ----------
         """
-        super(TileLayer, self).__init__()
-        self._name = 'TileLayer'
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
+        super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay, control=control)
+        self._name = 'TileLayer'
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
 
-        self.overlay = overlay
         self.detect_retina = detect_retina
 
         self.tiles = ''.join(tiles.lower().strip().split())
@@ -225,8 +244,8 @@ class TileLayer(MacroElement):
         """)
 
 
-class FeatureGroup(TileLayer):
-    def __init__(self, name=None, overlay=True):
+class FeatureGroup(Layer):
+    def __init__(self, name=None, overlay=True, control=True):
         """
         Create a FeatureGroup layer ; you can put things in it and handle them
         as a single layer.  For example, you can add a LayerControl to
@@ -242,12 +261,10 @@ class FeatureGroup(TileLayer):
             Whether your layer will be an overlay (ticked with a check box in
             LayerControls) or a base layer (ticked with a radio button).
         """
-        super(TileLayer, self).__init__()
+        super(FeatureGroup, self).__init__(overlay=overlay, control=control)
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
-
-        self.overlay = overlay
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -286,17 +303,21 @@ class LayerControl(MacroElement):
 
     def render(self, **kwargs):
         """TODO : docstring here."""
+        # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
-            [(val.tile_name, val.get_name()) for key, val in
-             self._parent._children.items() if
-             isinstance(val, TileLayer) and not hasattr(val, 'overlay')])
+            [(val.layer_name, val.get_name()) for key, val in
+             self._parent._children.items() if isinstance(val, Layer)
+             and (not hasattr(val, 'overlay') or not val.overlay)
+             and (not hasattr(val, 'control') or val.control)
+            ])
+        # We select all Layers for which (control and overlay).
         self.overlays = OrderedDict(
-            [(val.tile_name, val.get_name()) for key, val in
-             self._parent._children.items() if
-             isinstance(val, TileLayer) and hasattr(val, 'overlay')])
-
+            [(val.layer_name, val.get_name()) for key, val in
+             self._parent._children.items() if isinstance(val, Layer)
+             and (hasattr(val, 'overlay') and val.overlay)
+             and (not hasattr(val, 'control') or val.control)
+            ])
         super(LayerControl, self).render()
-
 
 class Icon(MacroElement):
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
