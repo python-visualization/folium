@@ -114,9 +114,12 @@ class Map(_Map):
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             popup_ = Popup(popup, max_width=popup_width)
         elif isinstance(popup, tuple):
-            popup_ = Popup(Vega(json.loads(popup[0].to_json()),
-                                width="100%", height="100%"),
-                           max_width=popup_width)
+            popup_ = Popup(max_width=popup_width)
+            Vega(
+                json.loads(popup[0].to_json()),
+                width="100%",
+                height="100%",
+                ).add_to(popup_)
         else:
             popup_ = None
         marker = Marker(location,

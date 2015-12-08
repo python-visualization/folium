@@ -131,7 +131,7 @@ class RegularPolygonMarker(Marker):
 
 
 class Vega(Element):
-    def __init__(self, data, width='100%', height='100%',
+    def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
         """
         TODO docstring here
@@ -139,11 +139,13 @@ class Vega(Element):
         """
         super(Vega, self).__init__()
         self._name = 'Vega'
-        self.data = data
+        self.data = data.to_json() if hasattr(data,'to_json') else data
+        if isinstance(self.data,text_type) or isinstance(data,binary_type):
+            self.data = json.loads(self.data)
 
         # Size Parameters.
-        self.width = _parse_size(width)
-        self.height = _parse_size(height)
+        self.width = _parse_size(self.data.get('width','100%') if width is None else width)
+        self.height = _parse_size(self.data.get('height','100%') if height is None else height)
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -250,8 +252,8 @@ class GeoJson(MacroElement):
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %})
-                    .addTo({{this._parent.get_name()}})
-                    .setStyle(function(feature) {return feature.properties.style;});
+                    .addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
             {% endmacro %}
             """)  # noqa
 
