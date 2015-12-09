@@ -358,8 +358,8 @@ class TestFolium(object):
         # Verify the geo_json object
         obj_temp = jinja2.Template("""
             var {{ this.get_name() }} = L.geoJson({{ json.dumps(this.data) }})
-                .addTo({{ this._parent.get_name() }})
-                .setStyle(function(feature) {return feature.properties.style;});
+                .addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
                 """)
         obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out

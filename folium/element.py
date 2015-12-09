@@ -210,20 +210,20 @@ class Figure(Element):
 
         Parameters
         ----------
-            width : str, default "100%"
-                The width of the Figure.
-                It may be a percentage or pixel value (like "300px").
-            height : str, default None
-                The height of the Figure.
-                It may be a percentage or a pixel value (like "300px").
-            ratio : str, default "60%"
-                A percentage defining the aspect ratio of the Figure.
-                It will be ignored if height is not None.
-            figsize : tuple of two int, default None
-                If you're a matplotlib addict, you can overwrite width and
-                height. Values will be converted into pixels in using 60 dpi.
-                For example figsize=(10, 5) will result in
-                width="600px", height="300px".
+        width : str, default "100%"
+            The width of the Figure.
+            It may be a percentage or pixel value (like "300px").
+        height : str, default None
+            The height of the Figure.
+            It may be a percentage or a pixel value (like "300px").
+        ratio : str, default "60%"
+            A percentage defining the aspect ratio of the Figure.
+            It will be ignored if height is not None.
+        figsize : tuple of two int, default None
+            If you're a matplotlib addict, you can overwrite width and
+            height. Values will be converted into pixels in using 60 dpi.
+            For example figsize=(10, 5) will result in
+            width="600px", height="300px".
         """
         super(Figure, self).__init__()
         self._name = 'Figure'
@@ -294,6 +294,9 @@ class Figure(Element):
         out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
         out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
         return out
+
+    def get_root(self):
+        return self
 
     def render(self, **kwargs):
         """TODO : docstring here."""
@@ -451,6 +454,69 @@ class Div(Figure):
             out = self._parent._repr_html_(**kwargs)
         return out
 
+class IFrame(Element):
+    def __init__(self, html=None, width="100%", height=None, ratio="60%", figsize=None):
+        """Create a Figure object, to plot things into it.
+
+        Parameters
+        ----------
+        html : str, default None
+            Eventual HTML code that you want to put in the frame.
+        width : str, default "100%"
+            The width of the Figure.
+            It may be a percentage or pixel value (like "300px").
+        height : str, default None
+            The height of the Figure.
+            It may be a percentage or a pixel value (like "300px").
+        ratio : str, default "60%"
+            A percentage defining the aspect ratio of the Figure.
+            It will be ignored if height is not None.
+        figsize : tuple of two int, default None
+            If you're a matplotlib addict, you can overwrite width and
+            height. Values will be converted into pixels in using 60 dpi.
+            For example figsize=(10, 5) will result in
+            width="600px", height="300px".
+        """
+        super(IFrame, self).__init__()
+        self._name = 'IFrame'
+
+        self.width = width
+        self.height = height
+        self.ratio = ratio
+        if figsize is not None:
+            self.width = str(60*figsize[0])+'px'
+            self.height = str(60*figsize[1])+'px'
+
+        if isinstance(html, text_type) or isinstance(html, binary_type):
+            self.add_children(Element(html))
+        elif html is not None:
+            self.add_children(html)
+
+    def render(self, **kwargs):
+        """Displays the Figure in a Jupyter notebook.
+
+        Parameters
+        ----------
+
+        """
+        html = super(IFrame,self).render(**kwargs)
+        html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
+
+        if self.height is None:
+            iframe = (
+            '<div style="width:{width};">'
+            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'
+            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">'
+            '</iframe>'
+            '</div></div>').format  # noqa
+            iframe = iframe(html=html,
+                            width=self.width,
+                            ratio=self.ratio)
+        else:
+            iframe = ('<iframe src="{html}" width="{width}" '
+                      'height="{height}"></iframe>').format
+            iframe = iframe(html=html, width=self.width, height=self.height)
+        return iframe
 
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.

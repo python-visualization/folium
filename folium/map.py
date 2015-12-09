@@ -402,7 +402,7 @@ class Marker(MacroElement):
 
 
 class Popup(Element):
-    def __init__(self, html, max_width=300):
+    def __init__(self, html=None, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -414,7 +414,7 @@ class Popup(Element):
         self.script._parent = self
 
         if isinstance(html, Element):
-            self.add_children(html)
+            self.html.add_children(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
             self.html.add_children(Html(text_type(html)))
 
