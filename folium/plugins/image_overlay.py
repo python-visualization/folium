@@ -41,7 +41,8 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     array = np.atleast_3d(data).copy()
     height, width, nblayers = array.shape
 
-    lat_min, lat_max = lat_bounds
+    lat_min = max(lat_bounds[0], -85.051128779806589)
+    lat_max = min(lat_bounds[1], 85.051128779806589)
     if height_out is None:
         height_out = height
 
