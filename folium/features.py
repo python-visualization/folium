@@ -241,8 +241,18 @@ class GeoJson(MacroElement):
             else:  # This is a filename
                 self.embed = False
                 self.data = data
+        elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
+            self.embed = True
+            if hasattr(data, '__geo_interface__'):
+                # We have a GeoPandas 0.2 object
+                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))
+            elif hasattr(data, 'columns'):
+                # We have a GeoDataFrame 0.1
+                self.data = json.loads(data.to_crs(epsg='4326').to_json())
+            else:
+                raise ValueError('Unable to transform this object to a GeoJSON.')
         else:
-            raise ValueError('Unhandled data type.')
+            raise ValueError('Unhandled object {!r}.'.format(data))
 
         if style_function is None:
             style_function = lambda x: {}
