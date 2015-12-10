@@ -25,6 +25,8 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
 
     lat_bounds : length 2 tuple
         Minimal and maximal value of the latitude of the image.
+        Bounds must be between -85.051128779806589 and 85.051128779806589
+        otherwise they will be clipped to that values.
 
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0,0] index of the array in the upper left or lower left
@@ -33,6 +35,8 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     height_out : int, default None
         The expected height of the output.
         If None, the height of the input is used.
+
+    See https://en.wikipedia.org/wiki/Web_Mercator for more details.
     """
     import numpy as np
 
