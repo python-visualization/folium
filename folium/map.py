@@ -22,7 +22,8 @@ class Map(MacroElement):
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, detect_retina=False):
+                 min_lon=-180, max_lon=180, detect_retina=False,
+                 crs='EPSG3857'):
         """Create a Map with Folium and Leaflet.js
 
         Generate a base map of given width and height with either default
@@ -63,6 +64,20 @@ class Map(MacroElement):
             If true and user is on a retina display, it will request four
             tiles of half the specified size and a bigger zoom level in place
             of one to utilize the high resolution.
+        crs : str, default 'EPSG3857'
+            Defines coordinate reference systems for projecting geographical points
+            into pixel (screen) coordinates and back.
+            You can use Leaflet's values :
+            * EPSG3857 : The most common CRS for online maps, used by almost all
+              free and commercial tile providers. Uses Spherical Mercator projection.
+              Set in by default in Map's crs option.
+            * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
+              projection.
+            * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
+              Mercator projection.
+            * Simple : A simple CRS that maps longitude and latitude into x and y directly.
+              May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+              should still be inverted (going from bottom to top).
 
         Returns
         -------
@@ -106,6 +121,8 @@ class Map(MacroElement):
         self.min_lon = min_lon
         self.max_lon = max_lon
 
+        self.crs = crs
+
         self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                             attr=attr, API_key=API_key,
                             detect_retina=detect_retina)
@@ -135,7 +152,8 @@ class Map(MacroElement):
                                            center:[{{this.location[0]}},{{this.location[1]}}],
                                            zoom: {{this.zoom_start}},
                                            maxBounds: bounds,
-                                           layers: []
+                                           layers: [],
+                                           crs: L.CRS.{{this.crs}}
                                          });
         {% endmacro %}
         """)

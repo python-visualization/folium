@@ -472,7 +472,9 @@ class TestFolium(object):
                 'max_lat': 90,
                 'min_lon': -180,
                 'max_lon': 180,
-                'tile_layers': tile_layers}
+                'tile_layers': tile_layers,
+                'crs' : 'EPSG3857',
+               }
         HTML = html_templ.render(tmpl, plugins={})
 
         assert ''.join(out.split()) == ''.join(HTML.split())
