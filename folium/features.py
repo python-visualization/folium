@@ -13,24 +13,22 @@ from .utilities import (color_brewer, _parse_size, legend_scaler,
                         text_type, binary_type)
 
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
-from .map import TileLayer, Icon, Marker, Popup
+from .map import Layer, Icon, Marker, Popup
 
-
-class WmsTileLayer(TileLayer):
+class WmsTileLayer(Layer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
-                 attr=None, overlay=True):
+                 attr=None, overlay=True, control=True):
         """
         TODO docstring here
 
         """
-        super(TileLayer, self).__init__()
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control)
         self._name = 'WmsTileLayer'
         self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
         self.url = url
         self.format = format
         self.layers = layers
-        self.overlay = overlay
         self.transparent = transparent
         self.attr = attr
 
@@ -48,7 +46,6 @@ class WmsTileLayer(TileLayer):
 
         {% endmacro %}
         """)  # noqa
-
 
 class RegularPolygonMarker(Marker):
     def __init__(self, location, color='black', opacity=1, weight=2,
@@ -338,16 +335,16 @@ class ColorScale(MacroElement):
             name='d3')
 
 
-class MarkerCluster(MacroElement):
+class MarkerCluster(Layer):
     """Adds a MarkerCluster layer on the map."""
-    def __init__(self):
+    def __init__(self, overlay=True, control=True):
         """Creates a MarkerCluster element to append into a map with
         Map.add_children.
 
         Parameters
         ----------
         """
-        super(MarkerCluster, self).__init__()
+        super(MarkerCluster, self).__init__(overlay=overlay, control=control)
         self._name = 'MarkerCluster'
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -609,69 +606,6 @@ class MultiPolyLine(MacroElement):
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
-
-
-class ImageOverlay(MacroElement):
-    def __init__(self, image, bounds, opacity=1., attr=None,
-                 origin='upper', colormap=None, mercator_project=False):
-        """
-        Used to load and display a single image over specific bounds of
-        the map, implements ILayer interface.
-
-        Parameters
-        ----------
-        image: string, file or array-like object
-            The data you want to draw on the map.
-            * If string, it will be written directly in the output file.
-            * If file, it's content will be converted as embedded in the
-              output file.
-            * If array-like, it will be converted to PNG base64 string
-              and embedded in the output.
-        bounds: list
-            Image bounds on the map in the form [[lat_min, lon_min],
-            [lat_max, lon_max]]
-        opacity: float, default Leaflet's default (1.0)
-        attr: string, default Leaflet's default ("")
-        origin : ['upper' | 'lower'], optional, default 'upper'
-            Place the [0,0] index of the array in the upper left or
-            lower left corner of the axes.
-        colormap : callable, used only for `mono` image.
-            Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-            for transforming a mono image into RGB.
-            It must output iterables of length 3 or 4,
-            with values between 0 and 1.
-            Hint : you can use colormaps from `matplotlib.cm`.
-        mercator_project : bool, default False.
-            Used only for array-like image.  Transforms the data to
-            project (longitude, latitude) coordinates to the
-            Mercator projection.
-
-        """
-        super(ImageOverlay, self).__init__()
-        self._name = 'ImageOverlay'
-
-        self.url = image_to_url(image, origin=origin,
-                                mercator_project=mercator_project,
-                                bounds=bounds)
-
-        self.bounds = json.loads(json.dumps(bounds))
-        options = {
-            'opacity': opacity,
-            'attribution': attr,
-        }
-        self.options = json.dumps({key: val for key, val
-                                   in options.items() if val},
-                                  sort_keys=True)
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
-
 
 class CustomIcon(Icon):
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,

@@ -18,9 +18,8 @@ from .map import Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        CircleMarker, LatLngPopup,
                        ClickForMarker, ColorScale, TopoJson, PolyLine,
-                       MultiPolyLine, ImageOverlay)
-from .utilities import color_brewer, write_png
-
+                       MultiPolyLine)
+from .utilities import color_brewer
 
 def initialize_notebook():
     """Initialize the IPython notebook display elements."""
@@ -689,6 +688,11 @@ class Map(_Map):
         ...                 min_lon=2.25214, max_lon=2.44731)
 
         """
+        warnings.warn('This method is deprecated. Please use `Map.add_children('
+                      'folium.plugins.ImageOverlay(...))` instead.')
+        from .plugins import ImageOverlay
+        from .utilities import write_png
+
         if filename:
             image = write_png(data, origin=origin, colormap=colormap)
             open(filename, 'wb').write(image)

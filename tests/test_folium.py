@@ -22,8 +22,8 @@ import base64
 from folium.six import PY3
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
 from folium.features import (GeoJson, ColorScale, TopoJson, PolyLine,
-                             MultiPolyLine, ImageOverlay)
-
+                             MultiPolyLine)
+from folium.plugins import ImageOverlay
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
