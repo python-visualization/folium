@@ -428,3 +428,19 @@ def _locations_tolist(x):
         return list(map(_locations_tolist, x))
     else:
         return x
+
+def none_min(x,y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return min(x,y)
+
+def none_max(x,y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return max(x,y)

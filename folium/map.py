@@ -16,7 +16,6 @@ from .utilities import _parse_size
 
 from .element import Element, Figure, MacroElement, Html
 
-
 class Map(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
@@ -168,6 +167,12 @@ class Map(MacroElement):
                                detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
+
 class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
     It will be used to define whether an object will be included in LayerControls.
@@ -243,7 +248,6 @@ class TileLayer(Layer):
         {% endmacro %}
         """)
 
-
 class FeatureGroup(Layer):
     def __init__(self, name=None, overlay=True, control=True):
         """
@@ -272,7 +276,6 @@ class FeatureGroup(Layer):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
-
 
 class LayerControl(MacroElement):
     """Adds a layer control to the map."""
@@ -374,7 +377,6 @@ class Icon(MacroElement):
             {% endmacro %}
             """)
 
-
 class Marker(MacroElement):
     def __init__(self, location, popup=None, icon=None):
         """Create a simple stock Leaflet marker on the map, with optional
@@ -421,6 +423,11 @@ class Marker(MacroElement):
             {% endmacro %}
             """)
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
 
 class Popup(Element):
     def __init__(self, html=None, max_width=300):
@@ -469,7 +476,6 @@ class Popup(Element):
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
 
-
 class FitBounds(MacroElement):
     def __init__(self, bounds, padding_top_left=None,
                  padding_bottom_right=None, padding=None, max_zoom=None):
@@ -491,7 +497,6 @@ class FitBounds(MacroElement):
             the same value.
         max_zoom: int, default None
             Maximum zoom to be used.
-
         """
         super(FitBounds, self).__init__()
         self._name = 'FitBounds'

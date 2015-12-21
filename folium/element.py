@@ -13,7 +13,7 @@ import json
 import base64
 
 from .six import urlopen, text_type, binary_type
-from .utilities import _camelify, _parse_size
+from .utilities import _camelify, _parse_size, none_min, none_max
 
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
@@ -39,6 +39,32 @@ class Element(object):
 
     def get_name(self):
         return _camelify(self._name) + '_' + self._id
+
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        return [[None,None],[None,None]]
+
+    def get_bounds(self):
+        """Computes the bounds of the object and all it's children
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+        """
+        bounds = self._get_self_bounds()
+
+        for child in self._children.values():
+            child_bounds = child.get_bounds()
+            bounds = [
+                [
+                    none_min(bounds[0][0], child_bounds[0][0]),
+                    none_min(bounds[0][1], child_bounds[0][1]),
+                    ],
+                [
+                    none_max(bounds[1][0], child_bounds[1][0]),
+                    none_max(bounds[1][1], child_bounds[1][1]),
+                    ],
+                ]
+        return bounds
 
     def add_children(self, child, name=None, index=None):
         """Add a children."""

@@ -126,7 +126,6 @@ class RegularPolygonMarker(Marker):
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
-
 class Vega(Element):
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
@@ -277,6 +276,12 @@ class GeoJson(MacroElement):
                 self.style_function(feature))
         return json.dumps(self.data)
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        raise NotImplementedError
+
 class TopoJson(MacroElement):
     def __init__(self, data, object_path):
         """
@@ -315,6 +320,13 @@ class TopoJson(MacroElement):
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
             name='topojson')
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        raise NotImplementedError
+        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
+
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
         """
@@ -343,7 +355,6 @@ class ColorScale(MacroElement):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
-
 
 class MarkerCluster(Layer):
     """Adds a MarkerCluster layer on the map."""
@@ -569,6 +580,11 @@ class PolyLine(MacroElement):
             {% endmacro %}
             """)  # noqa
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        raise NotImplementedError
 
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
@@ -616,6 +632,11 @@ class MultiPolyLine(MacroElement):
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        raise NotImplementedError
 
 class CustomIcon(Icon):
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
