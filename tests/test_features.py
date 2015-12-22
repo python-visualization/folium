@@ -58,12 +58,16 @@ def test_figure_creation():
     f = features.Figure()
     assert isinstance(f, Element)
 
+    bounds = f.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds
 
 def test_figure_rendering():
     f = features.Figure()
     out = f.render()
     assert type(out) is text_type
 
+    bounds = f.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds
 
 def test_figure_html():
     f = features.Figure()
@@ -72,12 +76,17 @@ def test_figure_html():
     print(out)
     assert out.strip() == tmpl.strip()
 
+    bounds = f.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds
 
 def test_figure_double_rendering():
     f = features.Figure()
     out = f.render()
     out2 = f.render()
     assert out == out2
+
+    bounds = f.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds
 
 def test_marker_popups():
     m = Map()
@@ -89,6 +98,9 @@ def test_marker_popups():
     features.CircleMarker([45,120],popup=Popup('120')).add_to(m)
     m._repr_html_()
 
+    bounds = m.get_bounds()
+    assert bounds == [[45, -180], [45, 120]], bounds
+
 def test_polyline_popups():
     m = Map([43,-100], zoom_start=4)
     features.PolyLine([[40,-80],[45,-80]], popup="PolyLine").add_to(m)
@@ -96,6 +108,9 @@ def test_polyline_popups():
     features.MultiPolyLine([[[40,-110],[45,-110]]], popup="MultiPolyLine").add_to(m)
     features.MultiPolyLine([[[40,-120],[45,-120]]], popup=Popup("MultiPolyLine")).add_to(m)
     m._repr_html_()
+
+    bounds = m.get_bounds()
+    assert bounds == [[40, -120], [45, -80]], bounds
 
 # DivIcon.
 def test_divicon():
@@ -106,7 +121,6 @@ def test_divicon():
     assert isinstance(div, Element)
     assert div.className == 'empty'
     assert div.html == html
-
 
 # WmsTileLayer
 def test_wms_service():
@@ -120,3 +134,6 @@ def test_wms_service():
                               transparent=True)
     w.add_to(m)
     m._repr_html_()
+
+    bounds = m.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds
