@@ -53,8 +53,7 @@ class BoatMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-
-def render(self, **kwargs):
+    def render(self, **kwargs):
         super(BoatMarker, self).render(**kwargs)
 
         figure = self.get_root()

@@ -683,3 +683,15 @@ class TestFolium(object):
                                popup=folium.map.Popup('Hello'))
         self.map.add_children(mk)
         self.map._parent.render()
+
+def test_tile_layer():
+    mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+    layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
+    mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',
+                                           attr='attribution'))
+    mapa.add_children(folium.map.TileLayer(layer,
+                                           name='MapQuest2',
+                                           attr='attribution2',
+                                           overlay=True))
+    mapa.add_children(folium.map.LayerControl())
+    mapa._repr_html_()
