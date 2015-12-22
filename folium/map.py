@@ -167,12 +167,6 @@ class Map(MacroElement):
                                detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
-    def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-        """
-        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
-
 class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
     It will be used to define whether an object will be included in LayerControls.

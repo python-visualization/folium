@@ -10,7 +10,9 @@ import json
 
 from .utilities import (color_brewer, _parse_size, legend_scaler,
                         _locations_mirror, _locations_tolist, image_to_url,
-                        text_type, binary_type)
+                        text_type, binary_type,
+                        none_min, none_max, iter_points,
+                        )
 
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import Layer, Icon, Marker, Popup
@@ -280,7 +282,30 @@ class GeoJson(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        raise NotImplementedError
+        if not self.embed:
+            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
+
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type' : 'Feature', 'geometry' : self.data}
+            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+
+        bounds = [[None,None],[None,None]]
+        for feature in self.data['features']:
+            for point in iter_points(feature.get('geometry',{}).get('coordinates',{})):
+                bounds = [
+                    [
+                        none_min(bounds[0][0], point[1]),
+                        none_min(bounds[0][1], point[0]),
+                        ],
+                    [
+                        none_max(bounds[1][0], point[1]),
+                        none_max(bounds[1][1], point[0]),
+                        ],
+                    ]
+        return bounds
 
 class TopoJson(MacroElement):
     def __init__(self, data, object_path):
@@ -584,7 +609,19 @@ class PolyLine(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        raise NotImplementedError
+        bounds = [[None,None],[None,None]]
+        for point in iter_points(self.data):
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
+                ],
+                [
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
+                ],
+            ]
+        return bounds
 
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
@@ -636,7 +673,19 @@ class MultiPolyLine(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        raise NotImplementedError
+        bounds = [[None,None],[None,None]]
+        for point in iter_points(self.data):
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
+                ],
+                [
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
+                ],
+            ]
+        return bounds
 
 class CustomIcon(Icon):
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
