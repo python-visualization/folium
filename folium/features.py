@@ -637,7 +637,7 @@ class PolyLine(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        bounds = [[None,None],[None,None]]
+        bounds = [[None, None], [None, None]]
         for point in iter_points(self.data):
             bounds = [
                 [
@@ -701,7 +701,7 @@ class MultiPolyLine(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        bounds = [[None,None],[None,None]]
+        bounds = [[None, None], [None, None]]
         for point in iter_points(self.data):
             bounds = [
                 [

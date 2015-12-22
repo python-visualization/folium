@@ -421,7 +421,7 @@ class Marker(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
+        return [[self.location[0], self.location[1]], [self.location[0], self.location[1]]]
 
 class Popup(Element):
     def __init__(self, html=None, max_width=300):
