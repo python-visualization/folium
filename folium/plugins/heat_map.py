@@ -11,7 +11,7 @@ from jinja2 import Template
 
 from folium.element import JavascriptLink, Figure
 from folium.map import TileLayer
-
+from folium.utilities import none_min, none_max
 
 class HeatMap(TileLayer):
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
@@ -79,3 +79,21 @@ class HeatMap(TileLayer):
         figure.header.add_children(
             JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),  # noqa
             name='leaflet-heat.js')
+
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        bounds = [[None,None],[None,None]]
+        for point in self.data:
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[1]),
+                    none_min(bounds[0][1], point[0]),
+                ],
+                [
+                    none_max(bounds[1][0], point[1]),
+                    none_max(bounds[1][1], point[0]),
+                ],
+            ]
+        return bounds

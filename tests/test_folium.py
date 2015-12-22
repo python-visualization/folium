@@ -729,7 +729,7 @@ class TestFolium(object):
         assert ''.join(image_rendered.split()) in ''.join(out.split())
 
         bounds = self.map.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
+        assert bounds == [[-90.0, -180.0], [90.0, 180.0]], bounds
 
     def test_custom_icon(self):
         """Test CustomIcon."""

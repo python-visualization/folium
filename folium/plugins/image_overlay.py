@@ -136,3 +136,9 @@ class ImageOverlay(Layer):
                     ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        return self.bounds

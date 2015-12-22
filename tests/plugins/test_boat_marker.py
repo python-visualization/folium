@@ -38,10 +38,13 @@ def test_boat_marker():
     # We verify that the script part is correct
     tmpl = Template("""
                 var {{this.get_name()}} = L.boatMarker(
-                    [{{this.position[0]}},{{this.position[1]}}],
+                    [{{this.location[0]}},{{this.location[1]}}],
                     {{this.kwargs}}).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
     """)
 
     assert tmpl.render(this=bm1) in out
     assert tmpl.render(this=bm2) in out
+
+    bounds = m.get_bounds()
+    assert bounds == [[34, -43], [46, -30]], bounds

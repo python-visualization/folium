@@ -11,6 +11,7 @@ import folium
 from folium import plugins
 
 def test_heat_map():
+    np.random.seed(3141592)
     data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
             np.array([[48, 5]])).tolist()
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
@@ -39,3 +40,7 @@ def test_heat_map():
     """)
 
     assert tmpl.render(this=hm)
+
+    bounds = m.get_bounds()
+    assert bounds == [[3.0302801394447734, 46.218566840847025],
+                      [7.132453997672826, 50.75345011431167]], bounds

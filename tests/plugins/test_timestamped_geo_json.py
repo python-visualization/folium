@@ -128,3 +128,6 @@ def test_timestamped_geo_json():
     """)
 
     assert ''.join(tmpl.render(this=tgj).split()) in ''.join(out.split())
+
+    bounds = m.get_bounds()
+    assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds

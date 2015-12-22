@@ -12,6 +12,7 @@ from folium import plugins
 
 def test_marker_cluster():
     N = 100
+    np.random.seed(seed=26082009)
     data = np.array([
         np.random.uniform(low=35, high=60, size=N),   # Random latitudes.
         np.random.uniform(low=-12, high=30, size=N),  # Random longitudes.
@@ -49,3 +50,7 @@ def test_marker_cluster():
         {% endfor %}
     """)
     assert ''.join(tmpl.render(this=mc).split()) in ''.join(out.split())
+
+    bounds = m.get_bounds()
+    assert bounds == [[35.147332572663785, -11.520684337300109],
+                      [59.839718052359274, 29.94931046497927]], bounds
