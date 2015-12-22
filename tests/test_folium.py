@@ -447,6 +447,10 @@ class TestFolium(object):
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[-124.56617536999985, 41.99187135900012],
+                          [-116.46422312599977, 46.28768217800006]], bounds
+
     def test_map_build(self):
         """Test map build."""
 

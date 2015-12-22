@@ -316,10 +316,13 @@ class TopoJson(MacroElement):
         super(TopoJson, self).__init__()
         self._name = 'TopoJson'
         if 'read' in dir(data):
+            self.embed = True
             self.data = data.read()
         elif type(data) is dict:
+            self.embed = True
             self.data = json.dumps(data)
         else:
+            self.embed = False
             self.data = data
 
         self.object_path = object_path
@@ -349,8 +352,33 @@ class TopoJson(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        raise NotImplementedError
-        return [[self.location[0],self.location[1]],[self.location[0],self.location[1]]]
+        if not self.embed:
+            raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
+
+        data = json.loads(self.data)
+
+        xmin,xmax,ymin,ymax = None, None, None, None
+
+        for arc in data['arcs']:
+            x,y = 0,0
+            for dx, dy in arc:
+                x += dx
+                y += dy
+                xmin = none_min(x, xmin)
+                xmax = none_max(x, xmax)
+                ymin = none_min(y, ymin)
+                ymax = none_max(y, ymax)
+        return [
+            [
+                data['transform']['translate'][0] + data['transform']['scale'][0] * xmin,
+                data['transform']['translate'][1] + data['transform']['scale'][1] * ymin,
+            ],
+            [
+                data['transform']['translate'][0] + data['transform']['scale'][0] * xmax,
+                data['transform']['translate'][1] + data['transform']['scale'][1] * ymax,
+            ]
+
+        ]
 
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
