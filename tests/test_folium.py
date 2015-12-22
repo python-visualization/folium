@@ -102,6 +102,9 @@ class TestFolium(object):
         cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
         assert map._children['cloudmade'].tiles == cloudmade
 
+        bounds = map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
+
     def test_builtin_tile(self):
         """Test custom maptiles."""
 
@@ -117,6 +120,9 @@ class TestFolium(object):
             assert map._children[tiles].tiles == url
             assert map._children[tiles].attr == attr
 
+        bounds = map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
+
     def test_custom_tile(self):
         """Test custom tile URLs."""
 
@@ -129,6 +135,9 @@ class TestFolium(object):
         map = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
         assert map._children[url].tiles == url
         assert map._children[url].attr == attr
+
+        bounds = map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_wms_layer(self):
         """Test WMS layer URLs."""
@@ -154,6 +163,9 @@ class TestFolium(object):
         assert (''.join(wms.split())[:-1] in
                 ''.join(map.get_root().render().split()))
 
+        bounds = map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
+
     def test_feature_group(self):
         """Test FeatureGroup."""
 
@@ -165,6 +177,9 @@ class TestFolium(object):
         map.add_children(folium.map.LayerControl())
 
         map._repr_html_()
+
+        bounds = map.get_bounds()
+        assert bounds == [[45, -30], [45, 30]], bounds
 
     def test_simple_marker(self):
         """Test simple marker addition."""
@@ -182,7 +197,9 @@ class TestFolium(object):
                                     'icon': "{icon:new L.Icon.Default()}"})
         assert (''.join(mark_1.split())[:-1] in
                 ''.join(self.map.get_root().render().split()))
-        # assert self.map.template_vars['custom_markers'][0][2] == ""
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.5, -122.7], [45.5, -122.7]], bounds
 
         # Test Simple marker addition.
         self.map.simple_marker(location=[45.60, -122.8], popup='Hi')
@@ -208,6 +225,10 @@ class TestFolium(object):
         self.map.simple_marker(location=[45.60, -122.8])
         for child in list(self.map._children.values())[-1]._children.values():
             assert not isinstance(child, Popup)
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.5, -122.8], [45.6, -122.7]], bounds
+
 
     def test_circle_marker(self):
         """Test circle marker additions."""
@@ -239,6 +260,9 @@ class TestFolium(object):
         assert (''.join(circle_2.split())[:-1] in
                 ''.join(self.map.get_root().render().split()))
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.6, -122.9], [45.7, -122.8]], bounds
+
     def test_poly_marker(self):
         """Test polygon marker."""
 
@@ -262,6 +286,9 @@ class TestFolium(object):
         assert ((''.join(polygon.split()))[-1] in
                 ''.join(self.map.get_root().render().split()))
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.5, -122.5], [45.5, -122.5]], bounds
+
     def test_latlng_pop(self):
         """Test lat/lon popovers."""
 
@@ -272,6 +299,9 @@ class TestFolium(object):
                                                        map=self.map.get_name())
         assert ((''.join(pop_templ.split()))[:-1] in
                 ''.join(self.map.get_root().render().split()))
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_click_for_marker(self):
         """Test click for marker functionality."""
@@ -293,6 +323,9 @@ class TestFolium(object):
                                     'map': self.map.get_name()})
         assert ((''.join(click.split()))[:-1] in
                 ''.join(self.map.get_root().render().split()))
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_vega_popup(self):
         """Test vega popups."""
@@ -320,6 +353,9 @@ class TestFolium(object):
         assert ''.join(vega_parse.render().split()) in out
         assert (''.join(vega_str.split()))[:-1] in out
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.6, -122.8], [45.6, -122.8]], bounds
+
     def test_geo_json_simple(self):
         """Test geojson method."""
 
@@ -331,6 +367,9 @@ class TestFolium(object):
         geo_json = [x for x in self.map._children.values() if
                     isinstance(x, GeoJson)][0]
         self.map._repr_html_()
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
 
     def test_geo_json_str(self):
         # No data binding.
@@ -364,6 +403,9 @@ class TestFolium(object):
         obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
+
     def test_geo_json_bad_color(self):
         """Test geojson method."""
 
@@ -377,6 +419,9 @@ class TestFolium(object):
             self.map.geo_json(path, data=data,
                               columns=['FIPS_Code', 'Unemployed_2011'],
                               key_on='feature.id', fill_color='blue')
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_geo_json_bad_threshold_scale(self):
         """Test geojson method."""
@@ -393,6 +438,9 @@ class TestFolium(object):
                               key_on='feature.id',
                               threshold_scale=[1, 2, 3, 4, 5, 6, 7],
                               fill_color='YlGnBu')
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_geo_json_data_binding(self):
         """Test geojson method."""
@@ -429,6 +477,9 @@ class TestFolium(object):
             'domain': domain,
             'range': d3range})
         assert ''.join(colorscale.split())[:-1] in ''.join(out.split())
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
 
     def test_topo_json(self):
         """Test geojson method."""
@@ -553,6 +604,9 @@ class TestFolium(object):
 
         assert ''.join(line_rendered.split()) in ''.join(out.split())
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.5236, -122.6751], [45.5238, -122.675]], bounds
+
     def test_multi_polyline(self):
         """Test multi_polyline."""
 
@@ -580,6 +634,9 @@ class TestFolium(object):
                                                     'options': multiline_opts})
 
         assert ''.join(multiline_rendered.split()) in ''.join(out.split())
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[45.5236, -122.6751], [45.5238, -122.675]], bounds
 
     def test_fit_bounds(self):
         """Test fit_bounds."""
@@ -615,6 +672,9 @@ class TestFolium(object):
             })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
 
     def test_image_overlay(self):
         """Test image overlay."""
@@ -668,6 +728,9 @@ class TestFolium(object):
 
         assert ''.join(image_rendered.split()) in ''.join(out.split())
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
+
     def test_custom_icon(self):
         """Test CustomIcon."""
         self.setup()
@@ -688,14 +751,20 @@ class TestFolium(object):
         self.map.add_children(mk)
         self.map._parent.render()
 
-def test_tile_layer():
-    mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
-    layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
-    mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',
-                                           attr='attribution'))
-    mapa.add_children(folium.map.TileLayer(layer,
-                                           name='MapQuest2',
-                                           attr='attribution2',
-                                           overlay=True))
-    mapa.add_children(folium.map.LayerControl())
-    mapa._repr_html_()
+        bounds = self.map.get_bounds()
+        assert bounds == [[45, -100], [45, -100]], bounds
+
+    def test_tile_layer(self):
+        mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+        layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
+        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',
+                                               attr='attribution'))
+        mapa.add_children(folium.map.TileLayer(layer,
+                                               name='MapQuest2',
+                                               attr='attribution2',
+                                               overlay=True))
+        mapa.add_children(folium.map.LayerControl())
+        mapa._repr_html_()
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
