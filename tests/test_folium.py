@@ -458,8 +458,10 @@ class TestFolium(object):
         tile_layers = [
             {'id': 'tile_layer_'+'0'*32,
              'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-             'attr': ('Map data (c) <a href="http://openstreetmap.org">'
-                      'OpenStreetMap</a> contributors'),
+             'attr': ('Data by <a href="http://openstreetmap.org">OpenStreetMap'
+                      '</a>,\nunder '
+                      '<a href="http://www.openstreetmap.org/copyright">ODbL'
+                      '</a>.'),
              'max_zoom': 20,
              'min_zoom': 1,
              'detect_retina': False,
