@@ -35,3 +35,6 @@ def test_image_overlay():
                     ).addTo({{this._parent.get_name()}});
     """)
     assert tmpl.render(this=io) in out
+
+    bounds = m.get_bounds()
+    assert bounds == [[0, -180], [90, 180]], bounds

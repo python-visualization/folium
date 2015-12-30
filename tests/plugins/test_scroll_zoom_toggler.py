@@ -61,3 +61,6 @@ def test_scroll_zoom_toggler():
         {{this._parent.get_name()}}.toggleScroll();
     """)
     assert ''.join(tmpl.render(this=szt).split()) in ''.join(out.split())
+
+    bounds = m.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds

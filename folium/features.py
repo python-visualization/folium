@@ -10,7 +10,9 @@ import json
 
 from .utilities import (color_brewer, _parse_size, legend_scaler,
                         _locations_mirror, _locations_tolist, image_to_url,
-                        text_type, binary_type)
+                        text_type, binary_type,
+                        none_min, none_max, iter_points,
+                        )
 
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import Layer, Icon, Marker, Popup
@@ -125,7 +127,6 @@ class RegularPolygonMarker(Marker):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
-
 
 class Vega(Element):
     def __init__(self, data, width=None, height=None,
@@ -277,6 +278,35 @@ class GeoJson(MacroElement):
                 self.style_function(feature))
         return json.dumps(self.data)
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        if not self.embed:
+            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
+
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type' : 'Feature', 'geometry' : self.data}
+            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+
+        bounds = [[None,None],[None,None]]
+        for feature in self.data['features']:
+            for point in iter_points(feature.get('geometry',{}).get('coordinates',{})):
+                bounds = [
+                    [
+                        none_min(bounds[0][0], point[1]),
+                        none_min(bounds[0][1], point[0]),
+                        ],
+                    [
+                        none_max(bounds[1][0], point[1]),
+                        none_max(bounds[1][1], point[0]),
+                        ],
+                    ]
+        return bounds
+
 class TopoJson(MacroElement):
     def __init__(self, data, object_path):
         """
@@ -286,10 +316,13 @@ class TopoJson(MacroElement):
         super(TopoJson, self).__init__()
         self._name = 'TopoJson'
         if 'read' in dir(data):
+            self.embed = True
             self.data = data.read()
         elif type(data) is dict:
+            self.embed = True
             self.data = json.dumps(data)
         else:
+            self.embed = False
             self.data = data
 
         self.object_path = object_path
@@ -314,6 +347,38 @@ class TopoJson(MacroElement):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
             name='topojson')
+
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        if not self.embed:
+            raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
+
+        data = json.loads(self.data)
+
+        xmin,xmax,ymin,ymax = None, None, None, None
+
+        for arc in data['arcs']:
+            x,y = 0,0
+            for dx, dy in arc:
+                x += dx
+                y += dy
+                xmin = none_min(x, xmin)
+                xmax = none_max(x, xmax)
+                ymin = none_min(y, ymin)
+                ymax = none_max(y, ymax)
+        return [
+            [
+                data['transform']['translate'][0] + data['transform']['scale'][0] * xmin,
+                data['transform']['translate'][1] + data['transform']['scale'][1] * ymin,
+            ],
+            [
+                data['transform']['translate'][0] + data['transform']['scale'][0] * xmax,
+                data['transform']['translate'][1] + data['transform']['scale'][1] * ymax,
+            ]
+
+        ]
 
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
@@ -343,7 +408,6 @@ class ColorScale(MacroElement):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
-
 
 class MarkerCluster(Layer):
     """Adds a MarkerCluster layer on the map."""
@@ -569,6 +633,23 @@ class PolyLine(MacroElement):
             {% endmacro %}
             """)  # noqa
 
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        bounds = [[None, None], [None, None]]
+        for point in iter_points(self.data):
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
+                ],
+                [
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
+                ],
+            ]
+        return bounds
 
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
@@ -616,6 +697,23 @@ class MultiPolyLine(MacroElement):
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        bounds = [[None, None], [None, None]]
+        for point in iter_points(self.data):
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
+                ],
+                [
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
+                ],
+            ]
+        return bounds
 
 class CustomIcon(Icon):
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,

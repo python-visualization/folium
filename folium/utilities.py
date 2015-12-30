@@ -428,3 +428,37 @@ def _locations_tolist(x):
         return list(map(_locations_tolist, x))
     else:
         return x
+
+def none_min(x,y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return min(x,y)
+
+def none_max(x,y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return max(x,y)
+
+def iter_points(x):
+    """Iterates over a list representing a feature, and returns a list of points,
+    whatever the shape of the array (Point, MultiPolyline, etc).
+    """
+    if isinstance(x, list):
+        if len(x):
+            if isinstance(x[0], list):
+                out = []
+                for y in x:
+                    out += iter_points(y)
+                return out
+            else:
+                return [x]
+        else:
+            return []
+    else:
+        raise ValueError('List type expected. Got {!r}.'.format(x))

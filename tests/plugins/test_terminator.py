@@ -20,3 +20,6 @@ def test_terminator():
     # Verify that the script is okay.
     tmpl = Template('L.terminator().addTo({{this._parent.get_name()}});')
     assert ''.join(tmpl.render(this=t).split()) in ''.join(out.split())
+
+    bounds = m.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds

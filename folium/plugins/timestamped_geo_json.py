@@ -23,7 +23,7 @@ import json
 from jinja2 import Template
 
 from folium.element import MacroElement, Figure, JavascriptLink, CssLink
-
+from folium.utilities import none_min, none_max, iter_points
 
 class TimestampedGeoJson(MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True):
@@ -87,10 +87,13 @@ class TimestampedGeoJson(MacroElement):
 
         # self.template = self.env.get_template('timestamped_geo_json.tpl')
         if 'read' in dir(data):
+            self.embed = True
             self.data = data.read()
         elif type(data) is dict:
+            self.embed = True
             self.data = json.dumps(data)
         else:
+            self.embed = False
             self.data = data
         self.transition_time = int(transition_time)
         self.loop = bool(loop)
@@ -145,3 +148,33 @@ class TimestampedGeoJson(MacroElement):
         figure.header.add_children(
             CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
+
+    def _get_self_bounds(self):
+        """Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        if not self.embed:
+            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
+
+        data = json.loads(self.data)
+        if 'features' not in data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(data, dict) and 'geometry' in data.keys()):
+                # Catch case when GeoJSON is just a geometry.
+                data = {'type' : 'Feature', 'geometry' : data}
+            data = {'type' : 'FeatureCollection', 'features' : [data]}
+
+        bounds = [[None,None],[None,None]]
+        for feature in data['features']:
+            for point in iter_points(feature.get('geometry',{}).get('coordinates',{})):
+                bounds = [
+                    [
+                        none_min(bounds[0][0], point[1]),
+                        none_min(bounds[0][1], point[0]),
+                        ],
+                    [
+                        none_max(bounds[1][0], point[1]),
+                        none_max(bounds[1][1], point[0]),
+                        ],
+                    ]
+        return bounds
