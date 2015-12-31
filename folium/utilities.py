@@ -449,9 +449,9 @@ def iter_points(x):
     """Iterates over a list representing a feature, and returns a list of points,
     whatever the shape of the array (Point, MultiPolyline, etc).
     """
-    if isinstance(x, list):
+    if isinstance(x, (list, tuple)):
         if len(x):
-            if isinstance(x[0], list):
+            if isinstance(x[0], (list, tuple)):
                 out = []
                 for y in x:
                     out += iter_points(y)
@@ -461,4 +461,4 @@ def iter_points(x):
         else:
             return []
     else:
-        raise ValueError('List type expected. Got {!r}.'.format(x))
+        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
