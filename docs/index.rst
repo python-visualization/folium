@@ -167,7 +167,7 @@ Polyline
 You can plot a line by simply passing an iterable of coordinates to the method `line`::
 
     map.line(locations=[[45.3288, -121.6625],
-        [45.324224, -121.657763]
+        [45.324224, -121.657763],
         [45.318702, -121.652871]])
 
 You can specify the following parameters:
