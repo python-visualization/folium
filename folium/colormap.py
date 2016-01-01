@@ -6,6 +6,7 @@ Colormap
 Utility module for dealing with colormaps.
 
 """
+import math
 from jinja2 import Template
 from folium.six import text_type, binary_type
 from folium.element import MacroElement, Figure, JavascriptLink
@@ -243,6 +244,15 @@ def _parse_color(x):
         color_tuple = tuple(u/255. for u in color_tuple)
     return tuple(map(float,(color_tuple+(1.,))[:4]))
 
+_round = round
+
+def _base(x):
+    if x > 0:
+        base = pow(10, math.floor(math.log10(x)))
+        return round(x/base)*base
+    else:
+        return 0
+
 class ColorMap(MacroElement):
     """A generic class for creating colormaps."""
 
@@ -384,7 +394,8 @@ class LinearColormap(ColorMap):
         
         return tuple((1.-p) * self.colors[i-1][j] + p*self.colors[i][j] for j in range(4))
 
-    def to_step(self, n=None, index=None):
+    def to_step(self, n=None, index=None, data=None, method=None, quantiles=None,
+                round=False, base_round=False):
         """Splits the LinearColormap into a StepColormap.
 
         Parameters
@@ -396,21 +407,87 @@ class LinearColormap(ColorMap):
             The values corresponding to each color bounds.
             It has to be sorted.
             If None, a regular grid between `min` and `max` is created.
+        data : list of floats, default None
+            A sample of data to adapt the color map to.
+        method : str, default 'linear'
+            The method used to create data-based colormap.
+            It can be 'linear' for linear scale, 'log' for logarithmic,
+            or 'quant' for data's quantile-based scale.
+        quantiles : list of floats, default None
+            Alternatively, you can provide explicitely the quantiles you
+            want to use in the scale.
+        round : bool, default False
+            If True, all values will be rounded.
+        base_round : bool, default False
+            If True, all values will be rounded to the nearest order-of-magnitude
+            integer. For example, 2100 is rounded to 2000, 2790 to 3000.
 
         Return
         ------
         A StepColormap with `n=len(index)-1` colors.
+
+        Examples:
+        >> lc.to_step(n=12)
+        >> lc.to_step(index=[0,2,4,6,8,10])
+        >> lc.to_step(data=some_list, n=12)
+        >> lc.to_step(data=some_list, n=12, method='linear')
+        >> lc.to_step(data=some_list, n=12, method='log')
+        >> lc.to_step(data=some_list, n=12, method='quantiles')
+        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1])
+        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1], base_round=True)
         """
         if index is None:
-            if n is None:
-                raise ValueError('You must specify either `index` or `n`')
-            index = [self.min + (self.max-self.min)*i*1./n for i in range(1+n)]
+            if data is None:
+                if n is None:
+                    raise ValueError('You must specify either `index`,`data` or `n`')
+                else:
+                    index = [self.min + (self.max-self.min)*i*1./n for i in range(1+n)]
+                    scaled_cm = self
+            else:
+                max_ = max(data)
+                min_ = min(data)
+                scaled_cm = self.scale(min=min_, max=max_)
+                method = ('quantiles' if quantiles is not None
+                          else method if method is not None
+                          else 'linear'
+                          )
+                if method.lower().startswith('lin'):
+                    if n is None:
+                        raise ValueError('You must specify either `index` or `n`')
+                    index = [min_ + i*(max_-min_)*1./n for i in range(1+n)]
+                elif method.lower().startswith('log'):
+                    if n is None:
+                        raise ValueError('You must specify either `index` or `n`')
+                    if min_<=0:
+                        raise ValueError('Log-scale works only with strictly positive values.')
+                    index = [math.exp(
+                                math.log(min_) + i*(math.log(max_)-math.log(min_))*1./n
+                                ) for i in range(1+n)]
+                elif method.lower().startswith('quant'):
+                    if quantiles is None:
+                        if n is None:
+                            raise ValueError('You must specify either `index`, `n` or `quantiles`.')
+                        else:
+                            quantiles = [i*1./n for i in range(1+n)]
+                    p = len(data)-1
+                    s = sorted(data)
+                    index = [s[int(q*p)]*(1.-(q*p)%1)+s[min(int(q*p)+1, p)]*((q*p)%1) for q in quantiles]
+                else:
+                    raise ValueError('Unknown method {}'.format(method))
+        else:
+            scaled_cm = self.scale(min=min(index), max=max(index))
 
         n = len(index)-1
 
-        colors = [self._rgba_floats_tuple(index[i]*(1.-i/(n-1.))+index[i+1]*i/(n-1.)) for i in range(n)]
+        if round:
+            index = [_round(x) for x in index]
 
-        return StepColormap(colors, index=index, min=self.min, max=self.max)
+        if base_round:
+            index = [_base(x) for x in index]
+
+        colors = [scaled_cm._rgba_floats_tuple(index[i]*(1.-i/(n-1.))+index[i+1]*i/(n-1.)) for i in range(n)]
+
+        return StepColormap(colors, index=index, min=index[0], max=index[-1])
 
     def scale(self, min=0., max=1.):
         """Transforms the colorscale so that the minimal and maximal values
