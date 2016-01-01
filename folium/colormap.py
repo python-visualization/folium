@@ -8,6 +8,8 @@ Utility module for dealing with colormaps.
 """
 from jinja2 import Template
 from folium.six import text_type, binary_type
+from folium.element import MacroElement, Figure, JavascriptLink
+from folium.utilities import legend_scaler
 
 _cnames = {
     'aliceblue':            '#F0F8FF',
@@ -241,12 +243,37 @@ def _parse_color(x):
         color_tuple = tuple(u/255. for u in color_tuple)
     return tuple(map(float,(color_tuple+(1.,))[:4]))
 
-class ColorMap(object):
+class ColorMap(MacroElement):
     """A generic class for creating colormaps."""
 
-    def __init__(self, min=0., max=1.):
+    def __init__(self, min=0., max=1., caption=""):
+        """
+        """
+        super(ColorMap, self).__init__()
+        self._name = 'ColorMap'
+
         self.min = min
         self.max = max
+        self.caption = caption
+        self.index = [min, max]
+
+        self._template = self._env.get_template('color_scale.js')
+
+    def render(self, **kwargs):
+        self.color_domain = [self.min + (self.max-self.min)*i/499. for i in range(500)]
+        self.color_range = [self.__call__(x) for x in self.color_domain]
+        self.tick_labels = legend_scaler(self.index)
+        self.caption = ""
+
+        super(ColorMap, self).render(**kwargs)
+
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ("You cannot render this Element "
+                                            "if it's not in a Figure.")
+
+        figure.header.add_children(
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
+            name='d3')
 
     def _rgba_floats_tuple(self, x):
         """This class has to be implemented for each class inheriting from Colormap.
@@ -303,7 +330,7 @@ class ColorMap(object):
             + '</svg>')
 
 class LinearColormap(ColorMap):
-    def __init__(self, colors, index=None, min=0., max=1.):
+    def __init__(self, colors, index=None, min=0., max=1., caption=""):
         """Creates a ColorMap based on linear interpolation of a set of colors
         over a given index.
         
@@ -327,6 +354,8 @@ class LinearColormap(ColorMap):
             The maximal value for the colormap.
             Values higher than `max` will be bound directly to `colors[-1]`.
         """
+        super(LinearColormap, self).__init__(min=min, max=max, caption=caption)
+
         n = len(colors)
         if n<2:
             raise ValueError('You must provide at least 2 colors.')
@@ -335,8 +364,6 @@ class LinearColormap(ColorMap):
         else:
             self.index = list(index).copy()
         self.colors = [_parse_color(x) for x in colors]
-        self.min = min
-        self.max = max
 
     def _rgba_floats_tuple(self, x):
         """Provides the color corresponding to value `x` in the
@@ -397,7 +424,7 @@ class LinearColormap(ColorMap):
             )
 
 class StepColormap(ColorMap):
-    def __init__(self, colors, index=None, min=0., max=1.):
+    def __init__(self, colors, index=None, min=0., max=1., caption=""):
         """Creates a ColorMap based on stepwise constant colorfunction.
 
         Parameters
@@ -420,6 +447,8 @@ class StepColormap(ColorMap):
             The maximal value for the colormap.
             Values higher than `max` will be bound directly to `colors[-1]`.
         """
+        super(StepColormap, self).__init__(min=min, max=max, caption=caption)
+
         n = len(colors)
         if n<1:
             raise ValueError('You must provide at least 1 colors.')
@@ -428,8 +457,6 @@ class StepColormap(ColorMap):
         else:
             self.index = list(index).copy()
         self.colors = [_parse_color(x) for x in colors]
-        self.min = min
-        self.max = max
 
     def _rgba_floats_tuple(self, x):
         """Provides the color corresponding to value `x` in the
