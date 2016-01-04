@@ -610,7 +610,7 @@ class Map(_Map):
             }
 
         if topojson:
-            geo_json = TopoJson(geo_data, topojson)
+            geo_json = TopoJson(geo_data, topojson, style_function=style_function)
         else:
             geo_json = GeoJson(geo_data, style_function=style_function)
 
