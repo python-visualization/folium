@@ -396,7 +396,7 @@ class TestFolium(object):
 
         # Verify the geo_json object
         obj_temp = jinja2.Template("""
-            var {{ this.get_name() }} = L.geoJson({{ json.dumps(this.data) }})
+            var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
                 """)
