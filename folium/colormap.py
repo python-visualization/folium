@@ -229,22 +229,24 @@ _schemes = {'BuGn': ['#EDF8FB', '#CCECE6', '#CCECE6',
 def _parse_color(x):
     """
     """
-    if isinstance(x, tuple) or isinstance(x, list):
+    if isinstance(x, (tuple,list)):
         color_tuple = tuple(x)[:4]
-    elif isinstance(x, text_type) or isinstance(x, binary_type):
-        if x[0]=="#" and len(x)==7:
-            # Color of the for #RRGGBB
-            color_tuple = (int(x[1:3],16), int(x[3:5],16), int(x[5:7],16))
+    elif isinstance(x, (text_type, binary_type)):
+        if x.startswith('#') and len(x)==7:
+            # Color of the form #RRGGBB
+            color_tuple = (int(x[1:3], 16),
+                           int(x[3:5], 16),
+                           int(x[5:7],16))
         else:
             color_code = _cnames.get(x.lower(),None)
             if color_code is None:
-                raise ValueError('Unknown color.')
-            color_tuple = (int(color_code[1:3],16), int(color_code[3:5],16), int(color_code[5:7],16))
+                raise ValueError('Unknown color {!r}.'.format(x))
+            color_tuple = (int(color_code[1:3], 16),
+                           int(color_code[3:5], 16),
+                           int(color_code[5:7],16))
     if max(color_tuple)>1.:
         color_tuple = tuple(u/255. for u in color_tuple)
     return tuple(map(float,(color_tuple+(1.,))[:4]))
-
-_round = round
 
 def _base(x):
     if x > 0:
@@ -256,24 +258,23 @@ def _base(x):
 class ColorMap(MacroElement):
     """A generic class for creating colormaps."""
 
-    def __init__(self, min=0., max=1., caption=""):
+    def __init__(self, vmin=0., vmax=1., caption=""):
         """
         """
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
 
-        self.min = min
-        self.max = max
+        self.vmin = vmin
+        self.vmax = vmax
         self.caption = caption
-        self.index = [min, max]
+        self.index = [vmin, vmax]
 
         self._template = self._env.get_template('color_scale.js')
 
     def render(self, **kwargs):
-        self.color_domain = [self.min + (self.max-self.min)*i/499. for i in range(500)]
+        self.color_domain = [self.vmin + (self.vmax-self.vmin)*i/499. for i in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]
         self.tick_labels = legend_scaler(self.index)
-        self.caption = ""
 
         super(ColorMap, self).render(**kwargs)
 
@@ -281,23 +282,15 @@ class ColorMap(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
-            name='d3')
+        figure.header.add_children(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3') # noqa
 
-    def _rgba_floats_tuple(self, x):
+    def rgba_floats_tuple(self, x):
         """This class has to be implemented for each class inheriting from Colormap.
         This has to be a function of the form float -> (float,float,float,float)
         Describing for each input float x, the output color in RGBA format ;
         each output value being between 0 and 1.
         """
         raise NotImplementedError
-
-    def rgba_floats_tuple(self, x):
-        """Provides the color corresponding to value `x` in the
-        form of a tuple (R,G,B,A) with float values between 0. and 1.
-        """
-        return self._rgba_floats_tuple(x)
 
     def rgba_bytes_tuple(self, x):
         """Provides the color corresponding to value `x` in the
@@ -332,15 +325,15 @@ class ColorMap(MacroElement):
                     'y2="20" style="stroke:{color};stroke-width:3;" />'
                     ).format(
                         i=i*1,
-                        color = self.rgb_hex_str(self.min + (self.max-self.min)*i/499.))
+                        color = self.rgb_hex_str(self.vmin + (self.vmax-self.vmin)*i/499.))
                     for i in range(500)
                     ])
-            + '<text x="0" y="35">{}</text>'.format(self.min)
-            + '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(self.max)
+            + '<text x="0" y="35">{}</text>'.format(self.vmin)
+            + '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(self.vmax)
             + '</svg>')
 
 class LinearColormap(ColorMap):
-    def __init__(self, colors, index=None, min=0., max=1., caption=""):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
         """Creates a ColorMap based on linear interpolation of a set of colors
         over a given index.
         
@@ -356,32 +349,32 @@ class LinearColormap(ColorMap):
         index : list of floats, default None
             The values corresponding to each color.
             It has to be sorted, and have the same length as `colors`.
-            If None, a regular grid between `min` and `max` is created.
-        min : float, default 0.
+            If None, a regular grid between `vmin` and `vmax` is created.
+        vmin : float, default 0.
             The minimal value for the colormap.
-            Values lower than `min` will be bound directly to `colors[0]`.
-        max : float, default 1.
+            Values lower than `vmin` will be bound directly to `colors[0]`.
+        vmax : float, default 1.
             The maximal value for the colormap.
-            Values higher than `max` will be bound directly to `colors[-1]`.
+            Values higher than `vmax` will be bound directly to `colors[-1]`.
         """
-        super(LinearColormap, self).__init__(min=min, max=max, caption=caption)
+        super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
 
         n = len(colors)
-        if n<2:
+        if n < 2:
             raise ValueError('You must provide at least 2 colors.')
         if index is None:
-            self.index = [min + (max-min)*i*1./(n-1) for i in range(n)]
+            self.index = [vmin + (vmax-vmin)*i*1./(n-1) for i in range(n)]
         else:
             self.index = list(index).copy()
         self.colors = [_parse_color(x) for x in colors]
 
-    def _rgba_floats_tuple(self, x):
+    def rgba_floats_tuple(self, x):
         """Provides the color corresponding to value `x` in the
         form of a tuple (R,G,B,A) with float values between 0. and 1.
         """
-        if x<= self.index[0]:
+        if x <= self.index[0]:
             return self.colors[0]
-        if x>= self.index[-1]:
+        if x >= self.index[-1]:
             return self.colors[-1]
 
         i = len([u for u in self.index if u<x]) # 0 < i < n
@@ -395,7 +388,7 @@ class LinearColormap(ColorMap):
         return tuple((1.-p) * self.colors[i-1][j] + p*self.colors[i][j] for j in range(4))
 
     def to_step(self, n=None, index=None, data=None, method=None, quantiles=None,
-                round=False, base_round=False):
+                round_method=None):
         """Splits the LinearColormap into a StepColormap.
 
         Parameters
@@ -406,7 +399,7 @@ class LinearColormap(ColorMap):
         index : list of floats, default None
             The values corresponding to each color bounds.
             It has to be sorted.
-            If None, a regular grid between `min` and `max` is created.
+            If None, a regular grid between `vmin` and `vmax` is created.
         data : list of floats, default None
             A sample of data to adapt the color map to.
         method : str, default 'linear'
@@ -416,11 +409,11 @@ class LinearColormap(ColorMap):
         quantiles : list of floats, default None
             Alternatively, you can provide explicitely the quantiles you
             want to use in the scale.
-        round : bool, default False
-            If True, all values will be rounded.
-        base_round : bool, default False
-            If True, all values will be rounded to the nearest order-of-magnitude
-            integer. For example, 2100 is rounded to 2000, 2790 to 3000.
+        round_method : str, default None
+            The method used to round thresholds.
+            * If 'int', all values will be rounded to the nearest integer.
+            * If 'log10', all values will be rounded to the nearest order-of-magnitude
+              integer. For example, 2100 is rounded to 2000, 2790 to 3000.
 
         Return
         ------
@@ -434,19 +427,19 @@ class LinearColormap(ColorMap):
         >> lc.to_step(data=some_list, n=12, method='log')
         >> lc.to_step(data=some_list, n=12, method='quantiles')
         >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1])
-        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1], base_round=True)
+        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1], round_method='log10')
         """
         if index is None:
             if data is None:
                 if n is None:
                     raise ValueError('You must specify either `index`,`data` or `n`')
                 else:
-                    index = [self.min + (self.max-self.min)*i*1./n for i in range(1+n)]
+                    index = [self.vmin + (self.vmax-self.vmin)*i*1./n for i in range(1+n)]
                     scaled_cm = self
             else:
                 max_ = max(data)
                 min_ = min(data)
-                scaled_cm = self.scale(min=min_, max=max_)
+                scaled_cm = self.scale(vmin=min_, vmax=max_)
                 method = ('quantiles' if quantiles is not None
                           else method if method is not None
                           else 'linear'
@@ -475,33 +468,33 @@ class LinearColormap(ColorMap):
                 else:
                     raise ValueError('Unknown method {}'.format(method))
         else:
-            scaled_cm = self.scale(min=min(index), max=max(index))
+            scaled_cm = self.scale(vmin=min(index), vmax=max(index))
 
         n = len(index)-1
 
-        if round:
-            index = [_round(x) for x in index]
+        if round_method=='int':
+            index = [round(x) for x in index]
 
-        if base_round:
+        if round_method=='log10':
             index = [_base(x) for x in index]
 
-        colors = [scaled_cm._rgba_floats_tuple(index[i]*(1.-i/(n-1.))+index[i+1]*i/(n-1.)) for i in range(n)]
+        colors = [scaled_cm.rgba_floats_tuple(index[i]*(1.-i/(n-1.))+index[i+1]*i/(n-1.)) for i in range(n)]
 
-        return StepColormap(colors, index=index, min=index[0], max=index[-1])
+        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1])
 
-    def scale(self, min=0., max=1.):
+    def scale(self, vmin=0., vmax=1.):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
         return LinearColormap(
             self.colors,
-            index = [min + (max-min)*(x-self.min)*1./(self.max-self.min) for x in self.index],
-            min = min,
-            max = max,
+            index = [vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],
+            vmin = vmin,
+            vmax = vmax,
             )
 
 class StepColormap(ColorMap):
-    def __init__(self, colors, index=None, min=0., max=1., caption=""):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
         """Creates a ColorMap based on stepwise constant colorfunction.
 
         Parameters
@@ -516,26 +509,26 @@ class StepColormap(ColorMap):
         index : list of floats, default None
             The values corresponding to each color.
             It has to be sorted, and its length must be equal to `len(colors)+1`.
-            If None, a regular grid between `min` and `max` is created.
-        min : float, default 0.
+            If None, a regular grid between `vmin` and `vmax` is created.
+        vmin : float, default 0.
             The minimal value for the colormap.
-            Values lower than `min` will be bound directly to `colors[0]`.
-        max : float, default 1.
+            Values lower than `vmin` will be bound directly to `colors[0]`.
+        vmax : float, default 1.
             The maximal value for the colormap.
-            Values higher than `max` will be bound directly to `colors[-1]`.
+            Values higher than `vmax` will be bound directly to `colors[-1]`.
         """
-        super(StepColormap, self).__init__(min=min, max=max, caption=caption)
+        super(StepColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
 
         n = len(colors)
         if n<1:
             raise ValueError('You must provide at least 1 colors.')
         if index is None:
-            self.index = [min + (max-min)*i*1./n for i in range(n+1)]
+            self.index = [vmin + (vmax-vmin)*i*1./n for i in range(n+1)]
         else:
             self.index = list(index).copy()
         self.colors = [_parse_color(x) for x in colors]
 
-    def _rgba_floats_tuple(self, x):
+    def rgba_floats_tuple(self, x):
         """Provides the color corresponding to value `x` in the
         form of a tuple (R,G,B,A) with float values between 0. and 1.
         """
@@ -555,24 +548,24 @@ class StepColormap(ColorMap):
         index : list of floats, default None
                 The values corresponding to each color in the output colormap.
                 It has to be sorted.
-                If None, a regular grid between `min` and `max` is created.
+                If None, a regular grid between `vmin` and `vmax` is created.
         """
         if index is None:
             n = len(self.index)-1
             index = [self.index[i]*(1.-i/(n-1.))+self.index[i+1]*i/(n-1.) for i in range(n)]
 
-        colors = [self._rgba_floats_tuple(x) for x in index]
-        return LinearColormap(colors, index=index, min=self.min, max=self.max)
+        colors = [self.rgba_floats_tuple(x) for x in index]
+        return LinearColormap(colors, index=index, vmin=self.vmin, vmax=self.vmax)
 
-    def scale(self, min=0., max=1.):
+    def scale(self, vmin=0., vmax=1.):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
         return StepColormap(
             self.colors,
-            index = [min + (max-min)*(x-self.min)*1./(self.max-self.min) for x in self.index],
-            min = min,
-            max = max,
+            index = [vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],
+            vmin = vmin,
+            vmax = vmax,
             )
 
 class _LinearColormaps(object):
@@ -583,6 +576,7 @@ class _LinearColormaps(object):
         self._colormaps = {key : LinearColormap(val) for key,val in _schemes.items()}
         for key,val in _schemes.items():
             setattr(self,key, LinearColormap(val))
+
     def _repr_html_(self):
         return Template("""
         <table>
