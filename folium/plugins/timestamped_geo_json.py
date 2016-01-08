@@ -26,7 +26,8 @@ from folium.element import MacroElement, Figure, JavascriptLink, CssLink
 from folium.utilities import none_min, none_max, iter_points
 
 class TimestampedGeoJson(MacroElement):
-    def __init__(self, data, transition_time=200, loop=True, auto_play=True):
+    def __init__(self, data, transition_time=200, loop=True, auto_play=True,
+                 period="P1D"):
         """Creates a TimestampedGeoJson plugin to append into a map with
         Map.add_children.
 
@@ -80,7 +81,13 @@ class TimestampedGeoJson(MacroElement):
             Whether the animation shall loop.
         auto_play : bool, default True
             Whether the animation shall start automatically at startup.
-
+        period : str, default "P1D"
+            Used to construct the array of available times starting
+            from the first available time. Format: ISO8601 Duration
+            ex: "P1M" -> 1/month
+                "P1D"  -> 1/day
+                "PT1H"  -> 1/hour
+                "PT1M"  -> 1/minute
         """
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
@@ -98,10 +105,11 @@ class TimestampedGeoJson(MacroElement):
         self.transition_time = int(transition_time)
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
+        self.period = period
 
         self._template = Template("""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension();
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
             {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
                 position: 'bottomleft',
                 autoPlay: {{'true' if this.auto_play else 'false'}},

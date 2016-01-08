@@ -111,7 +111,7 @@ def test_timestamped_geo_json():
 
     # Verify that the script is okay.
     tmpl = Template("""
-        {{this._parent.get_name()}}.timeDimension = L.timeDimension();
+        {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
         {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
             position: 'bottomleft',
             autoPlay: {{'true' if this.auto_play else 'false'}},
