@@ -6,6 +6,8 @@ Colormap
 Utility module for dealing with colormaps.
 
 """
+from __future__ import absolute_import
+
 import math
 from jinja2 import Template
 from folium.six import text_type, binary_type
@@ -365,7 +367,7 @@ class LinearColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax-vmin)*i*1./(n-1) for i in range(n)]
         else:
-            self.index = list(index).copy()
+            self.index = [x for x in index]
         self.colors = [_parse_color(x) for x in colors]
 
     def rgba_floats_tuple(self, x):
@@ -525,7 +527,7 @@ class StepColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax-vmin)*i*1./n for i in range(n+1)]
         else:
-            self.index = list(index).copy()
+            self.index = [x for x in index]
         self.colors = [_parse_color(x) for x in colors]
 
     def rgba_floats_tuple(self, x):
