@@ -9,6 +9,7 @@ import numpy as np
 import folium
 from folium import plugins
 
+
 def test_timestamped_geo_json():
     coordinates = [[[[lon-8*np.sin(theta), -47+6*np.cos(theta)] for
                      theta in np.linspace(0, 2*np.pi, 25)],
@@ -125,7 +126,7 @@ def test_timestamped_geo_json():
             L.geoJson({{this.data}}),
             {updateTimeDimension: true,addlastPoint: true}
             ).addTo({{this._parent.get_name()}});
-    """)
+    """)  # noqa
 
     assert ''.join(tmpl.render(this=tgj).split()) in ''.join(out.split())
 

@@ -229,7 +229,6 @@ class TestFolium(object):
         bounds = self.map.get_bounds()
         assert bounds == [[45.5, -122.8], [45.6, -122.7]], bounds
 
-
     def test_circle_marker(self):
         """Test circle marker additions."""
 
@@ -364,12 +363,11 @@ class TestFolium(object):
         path = os.path.join(rootpath, 'us-counties.json')
         self.map.geo_json(geo_path=path)
 
-        geo_json = [x for x in self.map._children.values() if
-                    isinstance(x, GeoJson)][0]
         self.map._repr_html_()
 
         bounds = self.map.get_bounds()
-        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
 
     def test_geo_json_str(self):
         # No data binding.
@@ -379,13 +377,13 @@ class TestFolium(object):
         data = json.load(open(path))
 
         for feature in data['features']:
-            feature.setdefault('properties',{}).setdefault('style',{}).update({
-                    'color':'black',
-                    'opactiy':1,
-                    'fillOpacity':0.6,
-                    'weight':1,
-                    'fillColor':'blue',
-                    })
+            feature.setdefault('properties', {}).setdefault('style', {}).update({  # noqa
+                'color': 'black',
+                'opactiy': 1,
+                'fillOpacity': 0.6,
+                'weight': 1,
+                'fillColor': 'blue',
+            })
 
         self.map.geo_json(geo_str=json.dumps(data))
 
@@ -399,12 +397,13 @@ class TestFolium(object):
             var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
-                """)
+                """)  # noqa
         obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out
 
         bounds = self.map.get_bounds()
-        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
 
     def test_geo_json_bad_color(self):
         """Test geojson method."""
@@ -460,11 +459,6 @@ class TestFolium(object):
 
         out = self.map._parent.render()
 
-        geo_json = [x for x in self.map._children.values() if
-                    isinstance(x, GeoJson)][0]
-        color_scale = [x for x in self.map._children.values() if
-                       isinstance(x, ColorScale)][0]
-
         # Verify the colorscale
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
         palette = folium.utilities.color_brewer('YlGnBu')
@@ -479,7 +473,8 @@ class TestFolium(object):
         assert ''.join(colorscale.split())[:-1] in ''.join(out.split())
 
         bounds = self.map.get_bounds()
-        assert bounds == [[18.948267, -171.742517], [71.285909, -66.979601]], bounds
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
 
     def test_topo_json(self):
         """Test geojson method."""
@@ -509,14 +504,13 @@ class TestFolium(object):
         self.setup()
         out = self.map._parent.render()
         html_templ = self.env.get_template('fol_template.html')
-
+        attr = ('Data by <a href="http://openstreetmap.org">OpenStreetMap'
+                '</a>,under '
+                '<a href="http://www.openstreetmap.org/copyright">ODbL</a>.')
         tile_layers = [
             {'id': 'tile_layer_'+'0'*32,
              'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-             'attr': ('Data by <a href="http://openstreetmap.org">OpenStreetMap'
-                      '</a>,under '
-                      '<a href="http://www.openstreetmap.org/copyright">ODbL'
-                      '</a>.'),
+             'attr': attr,
              'max_zoom': 20,
              'min_zoom': 1,
              'detect_retina': False,
@@ -530,8 +524,8 @@ class TestFolium(object):
                 'min_lon': -180,
                 'max_lon': 180,
                 'tile_layers': tile_layers,
-                'crs' : 'EPSG3857',
-               }
+                'crs': 'EPSG3857',
+                }
         HTML = html_templ.render(tmpl, plugins={})
 
         assert ''.join(out.split()) == ''.join(HTML.split())

@@ -16,7 +16,8 @@ before_install:
     - conda update --yes --all
     - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
     - source activate test
-    - travis_retry conda install --yes pytest pandas vincent
+    - conda install --yes --file requirements-dev.txt
+    - travis_retry conda install --yes pytest pandas vincent flake8
     - if [[ "$PYTHON" != "3.5" ]]; then
         travis_retry conda install --yes mock ;
       fi
@@ -24,3 +25,5 @@ before_install:
 
 script:
     - python setup.py test
+    - find ./folium -type f -name "*.py" | xargs flake8 --max-line-length=100
+    - find ./tests -type f -name "*.py" | xargs flake8 --max-line-length=100

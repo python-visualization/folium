@@ -17,6 +17,7 @@ from .utilities import (color_brewer, _parse_size, legend_scaler,
 from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import Layer, Icon, Marker, Popup
 
+
 class WmsTileLayer(Layer):
     def __init__(self, url, name=None,
                  format=None, layers=None, transparent=True,
@@ -48,6 +49,7 @@ class WmsTileLayer(Layer):
 
         {% endmacro %}
         """)  # noqa
+
 
 class RegularPolygonMarker(Marker):
     def __init__(self, location, color='black', opacity=1, weight=2,
@@ -128,6 +130,7 @@ class RegularPolygonMarker(Marker):
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
+
 class Vega(Element):
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
@@ -137,13 +140,16 @@ class Vega(Element):
         """
         super(Vega, self).__init__()
         self._name = 'Vega'
-        self.data = data.to_json() if hasattr(data,'to_json') else data
-        if isinstance(self.data,text_type) or isinstance(data,binary_type):
+        self.data = data.to_json() if hasattr(data, 'to_json') else data
+        # FIXME:
+        if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
         # Size Parameters.
-        self.width = _parse_size(self.data.get('width','100%') if width is None else width)
-        self.height = _parse_size(self.data.get('height','100%') if height is None else height)
+        self.width = _parse_size(self.data.get('width', '100%') if
+                                 width is None else width)
+        self.height = _parse_size(self.data.get('height', '100%') if
+                                  height is None else height)
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -191,6 +197,7 @@ class Vega(Element):
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
 
+
 class GeoJson(MacroElement):
     def __init__(self, data, style_function=None):
         """
@@ -220,20 +227,22 @@ class GeoJson(MacroElement):
         >>> # Providing string.
         >>> GeoJson(open('foo.json').read())
 
-        >>> # Providing a style_function that put all states in green, but Alabama in blue.
-        >>> style_function=lambda x: {'fillColor': '#0000ff' if x['properties']['name']=='Alabama' else '#00ff00'}
+        >>> # Provide a style_function that color all states green but Alabama.
+        >>> style_function = lambda x: {'fillColor': '#0000ff' if
+        ...                             x['properties']['name']=='Alabama' else
+        ...                             '#00ff00'}
         >>> GeoJson(geojson, style_function=style_function)
         """
         super(GeoJson, self).__init__()
         self._name = 'GeoJson'
-        if hasattr(data,'read'):
+        if hasattr(data, 'read'):
             self.embed = True
             self.data = json.load(data)
-        elif isinstance(data,dict):
+        elif isinstance(data, dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
-            if data.lstrip()[0] in '[{': # This is a GeoJSON inline string
+            if data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.embed = True
                 self.data = json.loads(data)
             else:  # This is a filename
@@ -242,18 +251,19 @@ class GeoJson(MacroElement):
         elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
             self.embed = True
             if hasattr(data, '__geo_interface__'):
-                # We have a GeoPandas 0.2 object
-                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))
+                # We have a GeoPandas 0.2 object.
+                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))  # noqa
             elif hasattr(data, 'columns'):
                 # We have a GeoDataFrame 0.1
                 self.data = json.loads(data.to_crs(epsg='4326').to_json())
             else:
-                raise ValueError('Unable to transform this object to a GeoJSON.')
+                msg = 'Unable to transform this object to a GeoJSON.'
+                raise ValueError(msg)
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
         if style_function is None:
-            style_function = lambda x: {}
+            def style_function(x): return {}
         self.style_function = style_function
 
         self._template = Template(u"""
@@ -268,14 +278,13 @@ class GeoJson(MacroElement):
     def style_data(self):
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
                 # Catch case when GeoJSON is just a geometry.
-                self.data = {'type' : 'Feature', 'geometry' : self.data}
-            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+                self.data = {'type': 'Feature', 'geometry': self.data}
+            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-            feature.setdefault('properties',{}).setdefault('style',{}).update(
-                self.style_function(feature))
+            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
@@ -287,14 +296,14 @@ class GeoJson(MacroElement):
 
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
                 # Catch case when GeoJSON is just a geometry.
-                self.data = {'type' : 'Feature', 'geometry' : self.data}
-            self.data = {'type' : 'FeatureCollection', 'features' : [self.data]}
+                self.data = {'type': 'Feature', 'geometry': self.data}
+            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-        bounds = [[None,None],[None,None]]
+        bounds = [[None, None], [None, None]]
         for feature in self.data['features']:
-            for point in iter_points(feature.get('geometry',{}).get('coordinates',{})):
+            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
                 bounds = [
                     [
                         none_min(bounds[0][0], point[1]),
@@ -306,6 +315,7 @@ class GeoJson(MacroElement):
                         ],
                     ]
         return bounds
+
 
 class TopoJson(MacroElement):
     def __init__(self, data, object_path, style_function=None):
@@ -328,7 +338,7 @@ class TopoJson(MacroElement):
         self.object_path = object_path
 
         if style_function is None:
-            style_function = lambda x: {}
+            def style_function(x): return {}
         self.style_function = style_function
 
         self._template = Template(u"""
@@ -341,7 +351,7 @@ class TopoJson(MacroElement):
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
-            """)
+            """)  # noqa
 
     def style_data(self):
         def recursive_get(data, keys):
@@ -349,10 +359,9 @@ class TopoJson(MacroElement):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
-        geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']
+        geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
-            feature.setdefault('properties',{}).setdefault('style',{}).update(
-                self.style_function(feature))
+            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
@@ -373,10 +382,10 @@ class TopoJson(MacroElement):
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
 
-        xmin,xmax,ymin,ymax = None, None, None, None
+        xmin, xmax, ymin, ymax = None, None, None, None
 
         for arc in self.data['arcs']:
-            x,y = 0,0
+            x, y = 0, 0
             for dx, dy in arc:
                 x += dx
                 y += dy
@@ -386,15 +395,16 @@ class TopoJson(MacroElement):
                 ymax = none_max(y, ymax)
         return [
             [
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin,
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin,  # noqa
+                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,  # noqa
             ],
             [
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax,
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax,  # noqa
+                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
             ]
 
         ]
+
 
 class ColorScale(MacroElement):
     def __init__(self, color_domain, color_code, caption=""):
@@ -424,6 +434,7 @@ class ColorScale(MacroElement):
         figure.header.add_children(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
+
 
 class MarkerCluster(Layer):
     """Adds a MarkerCluster layer on the map."""
@@ -549,6 +560,7 @@ class CircleMarker(Marker):
             {% endmacro %}
             """)
 
+
 class LatLngPopup(MacroElement):
     def __init__(self):
         """
@@ -667,6 +679,7 @@ class PolyLine(MacroElement):
             ]
         return bounds
 
+
 class MultiPolyLine(MacroElement):
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
@@ -713,6 +726,7 @@ class MultiPolyLine(MacroElement):
                 {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
+
     def _get_self_bounds(self):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -730,6 +744,7 @@ class MultiPolyLine(MacroElement):
                 ],
             ]
         return bounds
+
 
 class CustomIcon(Icon):
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,

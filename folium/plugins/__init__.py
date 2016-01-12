@@ -20,5 +20,4 @@ __all__ = ['MarkerCluster',
            'BoatMarker',
            'TimestampedGeoJson',
            'HeatMap',
-           'ImageOverlay',
-          ]
+           'ImageOverlay']

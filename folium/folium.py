@@ -21,6 +21,7 @@ from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        MultiPolyLine)
 from .utilities import color_brewer
 
+
 def initialize_notebook():
     """Initialize the IPython notebook display elements."""
     warnings.warn("%s is deprecated and no longer required." %
@@ -448,15 +449,17 @@ class Map(_Map):
         """This method is deprecated and will be removed in v0.2.1. See
         `Map.choropleth` instead.
         """
-        warnings.warn('This method is deprecated. Please use Map.choropleth instead.')
+        warnings.warn('This method is deprecated. '
+                      'Please use Map.choropleth instead.')
         return self.choropleth(*args, **kwargs)
 
     def choropleth(self, geo_path=None, geo_str=None, data_out='data.json',
-                 data=None, columns=None, key_on=None, threshold_scale=None,
-                 fill_color='blue', fill_opacity=0.6, line_color='black',
-                 line_weight=1, line_opacity=1, legend_name="",
-                 topojson=None, reset=False):
-        """Apply a GeoJSON overlay to the map.
+                   data=None, columns=None, key_on=None, threshold_scale=None,
+                   fill_color='blue', fill_opacity=0.6, line_color='black',
+                   line_weight=1, line_opacity=1, legend_name="",
+                   topojson=None, reset=False):
+        """
+        Apply a GeoJSON overlay to the map.
 
         Plot a GeoJSON overlay on the base map. There is no requirement
         to bind data (passing just a GeoJSON plots a single-color overlay),
@@ -535,9 +538,10 @@ class Map(_Map):
                       columns=['Data 1', 'Data 2'],
                       key_on='feature.properties.myvalue', fill_color='PuBu',
                       threshold_scale=[0, 20, 30, 40, 50, 60])
-        >>> m.choropleth(geo_path='countries.json', topojson='objects.countries')
-        """
+        >>> m.choropleth(geo_path='countries.json',
+        ...              topojson='objects.countries')
 
+        """
         if threshold_scale and len(threshold_scale) > 6:
             raise ValueError
         if data is not None and not color_brewer(fill_color):
@@ -593,20 +597,26 @@ class Map(_Map):
         if color_domain and key_on:
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
             color_range = color_brewer(fill_color, n=len(color_domain))
-            get_by_key = lambda obj,key : (obj.get(key,None) if len(key.split('.'))<=1
-                                           else get_by_key(obj.get(key.split('.')[0],None),
-                                                           '.'.join(key.split('.')[1:])))
-            color_scale_fun = lambda x: color_range[len([u for u in color_domain
-                                                         if u<=color_data[get_by_key(x,key_on)]])]
-        else:
-            color_scale_fun = lambda x: fill_color
 
-        style_function = lambda x: {
-            "weight" : line_weight,
-            "opactiy": line_opacity,
-            "color" : line_color,
-            "fillOpacity" : fill_opacity,
-            "fillColor" : color_scale_fun(x)
+            def get_by_key(obj, key):
+                return (obj.get(key, None) if len(key.split('.')) <= 1 else
+                        get_by_key(obj.get(key.split('.')[0], None),
+                                   '.'.join(key.split('.')[1:])))
+
+            def color_scale_fun(x):
+                return color_range[len(
+                    [u for u in color_domain if
+                     u <= color_data[get_by_key(x, key_on)]])]
+        else:
+            def color_scale_fun(x): return fill_color
+
+        def style_function(x):
+            return {
+                "weight": line_weight,
+                "opactiy": line_opacity,
+                "color": line_color,
+                "fillOpacity": fill_opacity,
+                "fillColor": color_scale_fun(x)
             }
 
         if topojson:
@@ -618,7 +628,8 @@ class Map(_Map):
 
         # Create ColorScale.
         if color_domain:
-            color_scale = ColorScale(color_domain, fill_color, caption=legend_name)
+            color_scale = ColorScale(color_domain, fill_color,
+                                     caption=legend_name)
             self.add_children(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
@@ -688,8 +699,9 @@ class Map(_Map):
         ...                 min_lon=2.25214, max_lon=2.44731)
 
         """
-        warnings.warn('This method is deprecated. Please use `Map.add_children('
-                      'folium.plugins.ImageOverlay(...))` instead.')
+        msg = ('This method is deprecated. Please use '
+               '`Map.add_children(folium.plugins.ImageOverlay(...))` instead.')
+        warnings.warn(msg)
         from .plugins import ImageOverlay
         from .utilities import write_png
 

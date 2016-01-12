@@ -10,6 +10,7 @@ import numpy as np
 import folium
 from folium import plugins
 
+
 def test_marker_cluster():
     N = 100
     np.random.seed(seed=26082009)

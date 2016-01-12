@@ -11,7 +11,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
 
-import time
 import math
 import zlib
 import struct
@@ -29,7 +28,7 @@ try:
 except ImportError:
     np = None
 
-from folium.six import iteritems, text_type, binary_type
+from folium.six import text_type, binary_type
 
 
 def get_templates():
@@ -221,6 +220,7 @@ def color_brewer(color_code, n=6):
         color_scheme = schemes.get(color_code, None)
     return color_scheme
 
+
 def split_six(series=None):
     """
     Given a Pandas Series, get a domain of values from zero to the 90% quantile
@@ -254,6 +254,7 @@ def split_six(series=None):
     # Some weirdness in series quantiles a la 0.13.
     arr = series.values
     return [base(np.percentile(arr, x)) for x in quants]
+
 
 def image_to_url(image, colormap=None, origin='upper'):
     """Infers the type of an image argument and transforms it into a URL.
@@ -295,6 +296,7 @@ def image_to_url(image, colormap=None, origin='upper'):
 
     return url.replace('\n', ' ')
 
+
 def write_png(data, origin='upper', colormap=None):
     """
     Transform an array of data into a PNG string.
@@ -332,7 +334,7 @@ def write_png(data, origin='upper', colormap=None):
                           " for this functionality")
 
     if colormap is None:
-        colormap = lambda x: (x, x, x, 1)
+        def colormap(x): return (x, x, x, 1)
 
     array = np.atleast_3d(data)
     height, width, nblayers = array.shape
@@ -429,21 +431,24 @@ def _locations_tolist(x):
     else:
         return x
 
-def none_min(x,y):
-    if x is None:
-        return y
-    elif y is None:
-        return x
-    else:
-        return min(x,y)
 
-def none_max(x,y):
+def none_min(x, y):
     if x is None:
         return y
     elif y is None:
         return x
     else:
-        return max(x,y)
+        return min(x, y)
+
+
+def none_max(x, y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return max(x, y)
+
 
 def iter_points(x):
     """Iterates over a list representing a feature, and returns a list of points,
