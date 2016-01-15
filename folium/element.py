@@ -68,6 +68,10 @@ class Element(object):
 
     def add_children(self, child, name=None, index=None):
         """Add a child."""
+        return self.add_child(child, name=name, index=index)
+
+    def add_child(self, child, name=None, index=None):
+        """Add a child."""
         if name is None:
             name = child.get_name()
         if index is None:
@@ -78,10 +82,12 @@ class Element(object):
             items.insert(int(index), (name, child))
             self._children = items
         child._parent = self
+        return self
 
     def add_to(self, parent, name=None, index=None):
         """Add element to a parent."""
         parent.add_children(self, name=name, index=index)
+        return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
         if ordered:
