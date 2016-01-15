@@ -169,86 +169,87 @@ _cnames = {
     }
 
 _schemes = {'BuGn': ['#EDF8FB', '#CCECE6', '#CCECE6',
-                    '#66C2A4', '#41AE76', '#238B45', '#005824'],
-           'BuPu': ['#EDF8FB', '#BFD3E6', '#9EBCDA',
-                    '#8C96C6', '#8C6BB1', '#88419D', '#6E016B'],
-           'GnBu': ['#F0F9E8', '#CCEBC5', '#A8DDB5',
-                    '#7BCCC4', '#4EB3D3', '#2B8CBE', '#08589E'],
-           'OrRd': ['#FEF0D9', '#FDD49E', '#FDBB84',
-                    '#FC8D59', '#EF6548', '#D7301F', '#990000'],
-           'PuBu': ['#F1EEF6', '#D0D1E6', '#A6BDDB',
-                    '#74A9CF', '#3690C0', '#0570B0', '#034E7B'],
-           'PuBuGn': ['#F6EFF7', '#D0D1E6', '#A6BDDB',
-                      '#67A9CF', '#3690C0', '#02818A', '#016450'],
-           'PuRd': ['#F1EEF6', '#D4B9DA', '#C994C7',
-                    '#DF65B0', '#E7298A', '#CE1256', '#91003F'],
-           'RdPu': ['#FEEBE2', '#FCC5C0', '#FA9FB5',
-                    '#F768A1', '#DD3497', '#AE017E', '#7A0177'],
-           'YlGn': ['#FFFFCC', '#D9F0A3', '#ADDD8E',
-                    '#78C679', '#41AB5D', '#238443', '#005A32'],
-           'YlGnBu': ['#FFFFCC', '#C7E9B4', '#7FCDBB',
-                      '#41B6C4', '#1D91C0', '#225EA8', '#0C2C84'],
-           'YlOrBr': ['#FFFFD4', '#FEE391', '#FEC44F',
-                      '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
-           'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C',
-                      '#FD8D3C', '#FC4E2A', '#E31A1C', '#B10026'],
-           'BrBg': ['#8c510a', '#d8b365', '#f6e8c3',
-                    '#c7eae5', '#5ab4ac', '#01665e'],
-           'PiYG': ['#c51b7d', '#e9a3c9', '#fde0ef',
-                    '#e6f5d0', '#a1d76a', '#4d9221'],
-           'PRGn': ['#762a83', '#af8dc3', '#e7d4e8',
-                    '#d9f0d3', '#7fbf7b', '#1b7837'],
-           'PuOr': ['#b35806', '#f1a340', '#fee0b6',
-                    '#d8daeb', '#998ec3', '#542788'],
-           'RdBu': ['#b2182b', '#ef8a62', '#fddbc7',
-                    '#d1e5f0', '#67a9cf', '#2166ac'],
-           'RdGy': ['#b2182b', '#ef8a62', '#fddbc7',
-                    '#e0e0e0', '#999999', '#4d4d4d'],
-           'RdYlBu': ['#d73027', '#fc8d59', '#fee090',
-                      '#e0f3f8', '#91bfdb', '#4575b4'],
-           'RdYlGn': ['#d73027', '#fc8d59', '#fee08b',
-                      '#d9ef8b', '#91cf60', '#1a9850'],
-           'Spectral': ['#d53e4f', '#fc8d59', '#fee08b',
-                        '#e6f598', '#99d594', '#3288bd'],
-           'Accent': ['#7fc97f', '#beaed4', '#fdc086',
-                      '#ffff99', '#386cb0', '#f0027f'],
-           'Dark2': ['#1b9e77', '#d95f02', '#7570b3',
-                     '#e7298a', '#66a61e', '#e6ab02'],
-           'Paired': ['#a6cee3', '#1f78b4', '#b2df8a',
-                      '#33a02c', '#fb9a99', '#e31a1c'],
-           'Pastel1': ['#fbb4ae', '#b3cde3', '#ccebc5',
-                       '#decbe4', '#fed9a6', '#ffffcc'],
-           'Pastel2': ['#b3e2cd', '#fdcdac', '#cbd5e8',
-                       '#f4cae4', '#e6f5c9', '#fff2ae'],
-           'Set1': ['#e41a1c', '#377eb8', '#4daf4a',
-                    '#984ea3', '#ff7f00', '#ffff33'],
-           'Set2': ['#66c2a5', '#fc8d62', '#8da0cb',
-                    '#e78ac3', '#a6d854', '#ffd92f'],
-           'Set3': ['#8dd3c7', '#ffffb3', '#bebada',
-                    '#fb8072', '#80b1d3', '#fdb462'],
-          }
+                     '#66C2A4', '#41AE76', '#238B45', '#005824'],
+            'BuPu': ['#EDF8FB', '#BFD3E6', '#9EBCDA',
+                     '#8C96C6', '#8C6BB1', '#88419D', '#6E016B'],
+            'GnBu': ['#F0F9E8', '#CCEBC5', '#A8DDB5',
+                     '#7BCCC4', '#4EB3D3', '#2B8CBE', '#08589E'],
+            'OrRd': ['#FEF0D9', '#FDD49E', '#FDBB84',
+                     '#FC8D59', '#EF6548', '#D7301F', '#990000'],
+            'PuBu': ['#F1EEF6', '#D0D1E6', '#A6BDDB',
+                     '#74A9CF', '#3690C0', '#0570B0', '#034E7B'],
+            'PuBuGn': ['#F6EFF7', '#D0D1E6', '#A6BDDB',
+                       '#67A9CF', '#3690C0', '#02818A', '#016450'],
+            'PuRd': ['#F1EEF6', '#D4B9DA', '#C994C7',
+                     '#DF65B0', '#E7298A', '#CE1256', '#91003F'],
+            'RdPu': ['#FEEBE2', '#FCC5C0', '#FA9FB5',
+                     '#F768A1', '#DD3497', '#AE017E', '#7A0177'],
+            'YlGn': ['#FFFFCC', '#D9F0A3', '#ADDD8E',
+                     '#78C679', '#41AB5D', '#238443', '#005A32'],
+            'YlGnBu': ['#FFFFCC', '#C7E9B4', '#7FCDBB',
+                       '#41B6C4', '#1D91C0', '#225EA8', '#0C2C84'],
+            'YlOrBr': ['#FFFFD4', '#FEE391', '#FEC44F',
+                       '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
+            'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C',
+                       '#FD8D3C', '#FC4E2A', '#E31A1C', '#B10026'],
+            'BrBg': ['#8c510a', '#d8b365', '#f6e8c3',
+                     '#c7eae5', '#5ab4ac', '#01665e'],
+            'PiYG': ['#c51b7d', '#e9a3c9', '#fde0ef',
+                     '#e6f5d0', '#a1d76a', '#4d9221'],
+            'PRGn': ['#762a83', '#af8dc3', '#e7d4e8',
+                     '#d9f0d3', '#7fbf7b', '#1b7837'],
+            'PuOr': ['#b35806', '#f1a340', '#fee0b6',
+                     '#d8daeb', '#998ec3', '#542788'],
+            'RdBu': ['#b2182b', '#ef8a62', '#fddbc7',
+                     '#d1e5f0', '#67a9cf', '#2166ac'],
+            'RdGy': ['#b2182b', '#ef8a62', '#fddbc7',
+                     '#e0e0e0', '#999999', '#4d4d4d'],
+            'RdYlBu': ['#d73027', '#fc8d59', '#fee090',
+                       '#e0f3f8', '#91bfdb', '#4575b4'],
+            'RdYlGn': ['#d73027', '#fc8d59', '#fee08b',
+                       '#d9ef8b', '#91cf60', '#1a9850'],
+            'Spectral': ['#d53e4f', '#fc8d59', '#fee08b',
+                         '#e6f598', '#99d594', '#3288bd'],
+            'Accent': ['#7fc97f', '#beaed4', '#fdc086',
+                       '#ffff99', '#386cb0', '#f0027f'],
+            'Dark2': ['#1b9e77', '#d95f02', '#7570b3',
+                      '#e7298a', '#66a61e', '#e6ab02'],
+            'Paired': ['#a6cee3', '#1f78b4', '#b2df8a',
+                       '#33a02c', '#fb9a99', '#e31a1c'],
+            'Pastel1': ['#fbb4ae', '#b3cde3', '#ccebc5',
+                        '#decbe4', '#fed9a6', '#ffffcc'],
+            'Pastel2': ['#b3e2cd', '#fdcdac', '#cbd5e8',
+                        '#f4cae4', '#e6f5c9', '#fff2ae'],
+            'Set1': ['#e41a1c', '#377eb8', '#4daf4a',
+                     '#984ea3', '#ff7f00', '#ffff33'],
+            'Set2': ['#66c2a5', '#fc8d62', '#8da0cb',
+                     '#e78ac3', '#a6d854', '#ffd92f'],
+            'Set3': ['#8dd3c7', '#ffffb3', '#bebada',
+                     '#fb8072', '#80b1d3', '#fdb462']}
+
 
 def _parse_color(x):
     """
     """
-    if isinstance(x, (tuple,list)):
+    if isinstance(x, (tuple, list)):
         color_tuple = tuple(x)[:4]
     elif isinstance(x, (text_type, binary_type)):
-        if x.startswith('#') and len(x)==7:
+        if x.startswith('#') and len(x) == 7:
             # Color of the form #RRGGBB
             color_tuple = (int(x[1:3], 16),
                            int(x[3:5], 16),
-                           int(x[5:7],16))
+                           int(x[5:7], 16))
         else:
-            color_code = _cnames.get(x.lower(),None)
+            color_code = _cnames.get(x.lower(), None)
             if color_code is None:
                 raise ValueError('Unknown color {!r}.'.format(x))
             color_tuple = (int(color_code[1:3], 16),
                            int(color_code[3:5], 16),
-                           int(color_code[5:7],16))
-    if max(color_tuple)>1.:
+                           int(color_code[5:7], 16))
+    if max(color_tuple) > 1.:
         color_tuple = tuple(u/255. for u in color_tuple)
-    return tuple(map(float,(color_tuple+(1.,))[:4]))
+    return tuple(map(float, (color_tuple+(1.,))[:4]))
+
 
 def _base(x):
     if x > 0:
@@ -256,6 +257,7 @@ def _base(x):
         return round(x/base)*base
     else:
         return 0
+
 
 class ColorMap(MacroElement):
     """A generic class for creating colormaps."""
@@ -274,7 +276,8 @@ class ColorMap(MacroElement):
         self._template = self._env.get_template('color_scale.js')
 
     def render(self, **kwargs):
-        self.color_domain = [self.vmin + (self.vmax-self.vmin)*i/499. for i in range(500)]
+        self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
+                             k in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]
         self.tick_labels = legend_scaler(self.index)
 
@@ -284,13 +287,15 @@ class ColorMap(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3') # noqa
+        figure.header.add_children(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3')  # noqa
 
     def rgba_floats_tuple(self, x):
-        """This class has to be implemented for each class inheriting from Colormap.
-        This has to be a function of the form float -> (float,float,float,float)
-        Describing for each input float x, the output color in RGBA format ;
-        each output value being between 0 and 1.
+        """
+        This class has to be implemented for each class inheriting from
+        Colormap. This has to be a function of the form float ->
+        (float, float, float, float) describing for each input float x,
+        the output color in RGBA format;
+        Each output value being between 0 and 1.
         """
         raise NotImplementedError
 
@@ -320,32 +325,34 @@ class ColorMap(MacroElement):
 
     def _repr_html_(self):
         return (
-            '<svg height="50" width="500">'
-            + ''.join(
-                [(
-                    '<line x1="{i}" y1="0" x2="{i}" '
-                    'y2="20" style="stroke:{color};stroke-width:3;" />'
-                    ).format(
-                        i=i*1,
-                        color = self.rgb_hex_str(self.vmin + (self.vmax-self.vmin)*i/499.))
-                    for i in range(500)
-                    ])
-            + '<text x="0" y="35">{}</text>'.format(self.vmin)
-            + '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(self.vmax)
-            + '</svg>')
+            '<svg height="50" width="500">' +
+            ''.join(
+                [('<line x1="{i}" y1="0" x2="{i}" '
+                  'y2="20" style="stroke:{color};stroke-width:3;" />').format(
+                      i=i*1,
+                      color=self.rgb_hex_str(self.vmin +
+                                             (self.vmax-self.vmin)*i/499.))
+                 for i in range(500)]) +
+            '<text x="0" y="35">{}</text>'.format(self.vmin) +
+            '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(
+                self.vmax) +
+            '</svg>')
+
 
 class LinearColormap(ColorMap):
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
         """Creates a ColorMap based on linear interpolation of a set of colors
         over a given index.
-        
+
         Parameters
         ----------
         colors : list-like object
             The set of colors to be used for interpolation.
             Colors can be provided in the form:
-            * tuples of int between 0 and 255 (e.g: `(255,255,0)` or `(255,255,0,255)`)
-            * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or `(1.,1.,0.,1.)`)
+            * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
+              `(255, 255, 0, 255)`)
+            * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
+              `(1., 1., 0., 1.)`)
             * HTML-like string (e.g: `"#ffff00`)
             * a color name or shortcut (e.g: `"y"` or `"yellow"`)
         index : list of floats, default None
@@ -358,8 +365,10 @@ class LinearColormap(ColorMap):
         vmax : float, default 1.
             The maximal value for the colormap.
             Values higher than `vmax` will be bound directly to `colors[-1]`.
+
         """
-        super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
+        super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
+                                             caption=caption)
 
         n = len(colors)
         if n < 2:
@@ -379,19 +388,21 @@ class LinearColormap(ColorMap):
         if x >= self.index[-1]:
             return self.colors[-1]
 
-        i = len([u for u in self.index if u<x]) # 0 < i < n
+        i = len([u for u in self.index if u < x])  # 0 < i < n.
         if self.index[i-1] < self.index[i]:
             p = (x - self.index[i-1])*1./(self.index[i]-self.index[i-1])
         elif self.index[i-1] == self.index[i]:
             p = 1.
         else:
             raise ValueError('Thresholds are not sorted.')
-        
-        return tuple((1.-p) * self.colors[i-1][j] + p*self.colors[i][j] for j in range(4))
 
-    def to_step(self, n=None, index=None, data=None, method=None, quantiles=None,
-                round_method=None):
-        """Splits the LinearColormap into a StepColormap.
+        return tuple((1.-p) * self.colors[i-1][j] + p*self.colors[i][j] for j
+                     in range(4))
+
+    def to_step(self, n=None, index=None, data=None, method=None,
+                quantiles=None, round_method=None):
+        """
+        Splits the LinearColormap into a StepColormap.
 
         Parameters
         ----------
@@ -414,8 +425,9 @@ class LinearColormap(ColorMap):
         round_method : str, default None
             The method used to round thresholds.
             * If 'int', all values will be rounded to the nearest integer.
-            * If 'log10', all values will be rounded to the nearest order-of-magnitude
-              integer. For example, 2100 is rounded to 2000, 2790 to 3000.
+            * If 'log10', all values will be rounded to the nearest
+              order-of-magnitude integer. For example, 2100 is rounded to
+              2000, 2790 to 3000.
 
         Return
         ------
@@ -423,20 +435,24 @@ class LinearColormap(ColorMap):
 
         Examples:
         >> lc.to_step(n=12)
-        >> lc.to_step(index=[0,2,4,6,8,10])
+        >> lc.to_step(index=[0, 2, 4, 6, 8, 10])
         >> lc.to_step(data=some_list, n=12)
         >> lc.to_step(data=some_list, n=12, method='linear')
         >> lc.to_step(data=some_list, n=12, method='log')
         >> lc.to_step(data=some_list, n=12, method='quantiles')
-        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1])
-        >> lc.to_step(data=some_list, quantiles=[0,0.3,0.7,1], round_method='log10')
+        >> lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1])
+        >> lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1],
+        ...           round_method='log10')
+
         """
+        msg = 'You must specify either `index` or `n`'
         if index is None:
             if data is None:
                 if n is None:
-                    raise ValueError('You must specify either `index`,`data` or `n`')
+                    raise ValueError(msg)
                 else:
-                    index = [self.vmin + (self.vmax-self.vmin)*i*1./n for i in range(1+n)]
+                    index = [self.vmin + (self.vmax-self.vmin)*i*1./n for
+                             i in range(1+n)]
                     scaled_cm = self
             else:
                 max_ = max(data)
@@ -448,25 +464,32 @@ class LinearColormap(ColorMap):
                           )
                 if method.lower().startswith('lin'):
                     if n is None:
-                        raise ValueError('You must specify either `index` or `n`')
+                        raise ValueError(msg)
                     index = [min_ + i*(max_-min_)*1./n for i in range(1+n)]
                 elif method.lower().startswith('log'):
                     if n is None:
-                        raise ValueError('You must specify either `index` or `n`')
-                    if min_<=0:
-                        raise ValueError('Log-scale works only with strictly positive values.')
+                        raise ValueError(msg)
+                    if min_ <= 0:
+                        msg = ('Log-scale works only with strictly '
+                               'positive values.')
+                        raise ValueError(msg)
                     index = [math.exp(
-                                math.log(min_) + i*(math.log(max_)-math.log(min_))*1./n
-                                ) for i in range(1+n)]
+                        math.log(min_) + i * (math.log(max_) -
+                                              math.log(min_)) * 1./n
+                    ) for i in range(1+n)]
                 elif method.lower().startswith('quant'):
                     if quantiles is None:
                         if n is None:
-                            raise ValueError('You must specify either `index`, `n` or `quantiles`.')
+                            msg = ('You must specify either `index`, `n` or'
+                                   '`quantiles`.')
+                            raise ValueError(msg)
                         else:
                             quantiles = [i*1./n for i in range(1+n)]
                     p = len(data)-1
                     s = sorted(data)
-                    index = [s[int(q*p)]*(1.-(q*p)%1)+s[min(int(q*p)+1, p)]*((q*p)%1) for q in quantiles]
+                    index = [s[int(q*p)] * (1.-(q*p) % 1) +
+                             s[min(int(q*p) + 1, p)] * ((q*p) % 1) for
+                             q in quantiles]
                 else:
                     raise ValueError('Unknown method {}'.format(method))
         else:
@@ -474,13 +497,15 @@ class LinearColormap(ColorMap):
 
         n = len(index)-1
 
-        if round_method=='int':
+        if round_method == 'int':
             index = [round(x) for x in index]
 
-        if round_method=='log10':
+        if round_method == 'log10':
             index = [_base(x) for x in index]
 
-        colors = [scaled_cm.rgba_floats_tuple(index[i]*(1.-i/(n-1.))+index[i+1]*i/(n-1.)) for i in range(n)]
+        colors = [scaled_cm.rgba_floats_tuple(index[i] * (1.-i/(n-1.)) +
+                                              index[i+1] * i/(n-1.)) for
+                  i in range(n)]
 
         return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1])
 
@@ -490,10 +515,11 @@ class LinearColormap(ColorMap):
         """
         return LinearColormap(
             self.colors,
-            index = [vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],
-            vmin = vmin,
-            vmax = vmax,
+            index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
+            vmin=vmin,
+            vmax=vmax,
             )
+
 
 class StepColormap(ColorMap):
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
@@ -504,13 +530,15 @@ class StepColormap(ColorMap):
         colors : list-like object
             The set of colors to be used.
             Colors can be provided in the form:
-            * tuples of int between 0 and 255 (e.g: `(255,255,0)` or `(255,255,0,255)`)
-            * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or `(1.,1.,0.,1.)`)
+            * tuples of int between 0 and 255 (e.g: `(255, 255, 0)` or
+              `(255, 255, 0, 255)`)
+            * tuples of floats between 0. and 1. (e.g: `(1., 1., 0.)` or
+              `(1., 1., 0., 1.)`)
             * HTML-like string (e.g: `"#ffff00`)
             * a color name or shortcut (e.g: `"y"` or `"yellow"`)
         index : list of floats, default None
             The values corresponding to each color.
-            It has to be sorted, and its length must be equal to `len(colors)+1`.
+            Must be be sorted and its length must be equal to `len(colors)+1`.
             If None, a regular grid between `vmin` and `vmax` is created.
         vmin : float, default 0.
             The minimal value for the colormap.
@@ -518,11 +546,13 @@ class StepColormap(ColorMap):
         vmax : float, default 1.
             The maximal value for the colormap.
             Values higher than `vmax` will be bound directly to `colors[-1]`.
+
         """
-        super(StepColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
+        super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
+                                           caption=caption)
 
         n = len(colors)
-        if n<1:
+        if n < 1:
             raise ValueError('You must provide at least 1 colors.')
         if index is None:
             self.index = [vmin + (vmax-vmin)*i*1./n for i in range(n+1)]
@@ -531,19 +561,22 @@ class StepColormap(ColorMap):
         self.colors = [_parse_color(x) for x in colors]
 
     def rgba_floats_tuple(self, x):
-        """Provides the color corresponding to value `x` in the
-        form of a tuple (R,G,B,A) with float values between 0. and 1.
         """
-        if x<= self.index[0]:
+        Provides the color corresponding to value `x` in the
+        form of a tuple (R,G,B,A) with float values between 0. and 1.
+
+        """
+        if x <= self.index[0]:
             return self.colors[0]
-        if x>= self.index[-1]:
+        if x >= self.index[-1]:
             return self.colors[-1]
 
-        i = len([u for u in self.index if u<x]) # 0 < i < n
+        i = len([u for u in self.index if u < x])  # 0 < i < n.
         return tuple(self.colors[i-1])
 
     def to_linear(self, index=None):
-        """Transforms the StepColormap into a LinearColormap.
+        """
+        Transforms the StepColormap into a LinearColormap.
 
         Parameters
         ----------
@@ -551,13 +584,16 @@ class StepColormap(ColorMap):
                 The values corresponding to each color in the output colormap.
                 It has to be sorted.
                 If None, a regular grid between `vmin` and `vmax` is created.
+
         """
         if index is None:
             n = len(self.index)-1
-            index = [self.index[i]*(1.-i/(n-1.))+self.index[i+1]*i/(n-1.) for i in range(n)]
+            index = [self.index[i]*(1.-i/(n-1.))+self.index[i+1]*i/(n-1.) for
+                     i in range(n)]
 
         colors = [self.rgba_floats_tuple(x) for x in index]
-        return LinearColormap(colors, index=index, vmin=self.vmin, vmax=self.vmax)
+        return LinearColormap(colors, index=index,
+                              vmin=self.vmin, vmax=self.vmax)
 
     def scale(self, vmin=0., vmax=1.):
         """Transforms the colorscale so that the minimal and maximal values
@@ -565,19 +601,21 @@ class StepColormap(ColorMap):
         """
         return StepColormap(
             self.colors,
-            index = [vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],
-            vmin = vmin,
-            vmax = vmax,
+            index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
+            vmin=vmin,
+            vmax=vmax,
             )
 
+
 class _LinearColormaps(object):
-    """A class for hosting the list of built-in linear colormaps.
-    """
+    """A class for hosting the list of built-in linear colormaps."""
+
     def __init__(self):
         self._schemes = _schemes.copy()
-        self._colormaps = {key : LinearColormap(val) for key,val in _schemes.items()}
-        for key,val in _schemes.items():
-            setattr(self,key, LinearColormap(val))
+        self._colormaps = {key: LinearColormap(val) for
+                           key, val in _schemes.items()}
+        for key, val in _schemes.items():
+            setattr(self, key, LinearColormap(val))
 
     def _repr_html_(self):
         return Template("""

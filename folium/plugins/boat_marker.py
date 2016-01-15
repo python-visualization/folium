@@ -13,6 +13,7 @@ from jinja2 import Template
 from folium.element import JavascriptLink, Figure
 from folium.map import Marker
 
+
 class BoatMarker(Marker):
     """Adds a BoatMarker layer on the map."""
     def __init__(self, location, popup=None, icon=None,

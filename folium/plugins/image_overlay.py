@@ -13,6 +13,7 @@ from jinja2 import Template
 from folium.utilities import image_to_url
 from folium.map import Layer
 
+
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     """Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
@@ -40,7 +41,8 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     """
     import numpy as np
 
-    mercator = lambda x: np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
+    def mercator(x):
+        return np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
 
     array = np.atleast_3d(data).copy()
     height, width, nblayers = array.shape
@@ -70,10 +72,11 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
         out = out[::-1, :, :]
     return out
 
+
 class ImageOverlay(Layer):
     def __init__(self, image, bounds, opacity=1., attr=None,
                  origin='upper', colormap=None, mercator_project=False,
-                overlay=True, control=True):
+                 overlay=True, control=True):
         """
         Used to load and display a single image over specific bounds of
         the map, implements ILayer interface.
@@ -107,6 +110,7 @@ class ImageOverlay(Layer):
             Mercator projection.
             Beware that this will only work if `image` is an array-like
             object.
+
         """
         super(ImageOverlay, self).__init__(overlay=overlay, control=control)
         self._name = 'ImageOverlay'

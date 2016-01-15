@@ -25,6 +25,7 @@ from jinja2 import Template
 from folium.element import MacroElement, Figure, JavascriptLink, CssLink
 from folium.utilities import none_min, none_max, iter_points
 
+
 class TimestampedGeoJson(MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  period="P1D"):
@@ -158,8 +159,10 @@ class TimestampedGeoJson(MacroElement):
             name='leaflet.timedimension_css')
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+
         """
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
@@ -169,12 +172,12 @@ class TimestampedGeoJson(MacroElement):
             # Catch case when GeoJSON is just a single Feature or a geometry.
             if not (isinstance(data, dict) and 'geometry' in data.keys()):
                 # Catch case when GeoJSON is just a geometry.
-                data = {'type' : 'Feature', 'geometry' : data}
-            data = {'type' : 'FeatureCollection', 'features' : [data]}
+                data = {'type': 'Feature', 'geometry': data}
+            data = {'type': 'FeatureCollection', 'features': [data]}
 
-        bounds = [[None,None],[None,None]]
+        bounds = [[None, None], [None, None]]
         for feature in data['features']:
-            for point in iter_points(feature.get('geometry',{}).get('coordinates',{})):
+            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
                 bounds = [
                     [
                         none_min(bounds[0][0], point[1]),

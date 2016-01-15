@@ -44,7 +44,7 @@ class Element(object):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        return [[None,None],[None,None]]
+        return [[None, None], [None, None]]
 
     def get_bounds(self):
         """Computes the bounds of the object and all it's children
@@ -480,8 +480,10 @@ class Div(Figure):
             out = self._parent._repr_html_(**kwargs)
         return out
 
+
 class IFrame(Element):
-    def __init__(self, html=None, width="100%", height=None, ratio="60%", figsize=None):
+    def __init__(self, html=None, width="100%", height=None, ratio="60%",
+                 figsize=None):
         """Create a Figure object, to plot things into it.
 
         Parameters
@@ -525,16 +527,16 @@ class IFrame(Element):
         ----------
 
         """
-        html = super(IFrame,self).render(**kwargs)
+        html = super(IFrame, self).render(**kwargs)
         html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
         if self.height is None:
             iframe = (
             '<div style="width:{width};">'
-            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'
-            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">'
+            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
+            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">'  # noqa
             '</iframe>'
-            '</div></div>').format  # noqa
+            '</div></div>').format
             iframe = iframe(html=html,
                             width=self.width,
                             ratio=self.ratio)
@@ -543,6 +545,7 @@ class IFrame(Element):
                       'height="{height}"></iframe>').format
             iframe = iframe(html=html, width=self.width, height=self.height)
         return iframe
+
 
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.

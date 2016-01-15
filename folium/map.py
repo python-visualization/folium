@@ -19,6 +19,7 @@ from .utilities import _parse_size
 
 from .element import Element, Figure, MacroElement, Html
 
+
 class Map(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
@@ -190,9 +191,12 @@ class Map(MacroElement):
                                detect_retina=detect_retina)
         self.add_children(tile_layer, name=tile_layer.tile_name)
 
+
 class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
-    It will be used to define whether an object will be included in LayerControls.
+    It will be used to define whether an object will be included in
+    LayerControls.
+
     """
     def __init__(self, name=None, overlay=False, control=True):
         """Creates a Layer instance.
@@ -211,6 +215,7 @@ class Layer(MacroElement):
         self.overlay = overlay
         self.control = control
 
+
 class TileLayer(Layer):
     def __init__(self, tiles='OpenStreetMap', name=None,
                  min_zoom=1, max_zoom=18, attr=None, API_key=None,
@@ -221,7 +226,8 @@ class TileLayer(Layer):
         """
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
-        super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay, control=control)
+        super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
+                                        control=control)
         self._name = 'TileLayer'
 
         self.min_zoom = min_zoom
@@ -265,6 +271,7 @@ class TileLayer(Layer):
         {% endmacro %}
         """)
 
+
 class FeatureGroup(Layer):
     def __init__(self, name=None, overlay=True, control=True):
         """
@@ -293,6 +300,7 @@ class FeatureGroup(Layer):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
+
 
 class LayerControl(MacroElement):
     """Adds a layer control to the map."""
@@ -326,18 +334,17 @@ class LayerControl(MacroElement):
         # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer)
-             and (not hasattr(val, 'overlay') or not val.overlay)
-             and (not hasattr(val, 'control') or val.control)
-            ])
+             self._parent._children.items() if isinstance(val, Layer) and
+             (not hasattr(val, 'overlay') or not val.overlay) and
+             (not hasattr(val, 'control') or val.control)])
         # We select all Layers for which (control and overlay).
         self.overlays = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer)
-             and (hasattr(val, 'overlay') and val.overlay)
-             and (not hasattr(val, 'control') or val.control)
-            ])
+             self._parent._children.items() if isinstance(val, Layer) and
+             (hasattr(val, 'overlay') and val.overlay) and
+             (not hasattr(val, 'control') or val.control)])
         super(LayerControl, self).render()
+
 
 class Icon(MacroElement):
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
@@ -394,6 +401,7 @@ class Icon(MacroElement):
             {% endmacro %}
             """)
 
+
 class Marker(MacroElement):
     def __init__(self, location, popup=None, icon=None):
         """Create a simple stock Leaflet marker on the map, with optional
@@ -444,7 +452,9 @@ class Marker(MacroElement):
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        return [[self.location[0], self.location[1]], [self.location[0], self.location[1]]]
+        return [[self.location[0], self.location[1]],
+                [self.location[0], self.location[1]]]
+
 
 class Popup(Element):
     def __init__(self, html=None, max_width=300):
@@ -492,6 +502,7 @@ class Popup(Element):
         figure.script.add_children(Element(
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
+
 
 class FitBounds(MacroElement):
     def __init__(self, bounds, padding_top_left=None,

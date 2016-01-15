@@ -6,7 +6,7 @@ if PY3:
     text_type = str
     binary_type = bytes
 else:
-    text_type = unicode
+    text_type = unicode  # noqa
     binary_type = str
 
 if PY3:

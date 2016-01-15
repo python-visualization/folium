@@ -10,6 +10,7 @@ import numpy as np
 import folium
 from folium import plugins
 
+
 def test_heat_map():
     np.random.seed(3141592)
     data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
@@ -21,10 +22,11 @@ def test_heat_map():
 
     out = m._parent.render()
 
-    # We verify that the script import is present
-    assert ('<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>'
-            ) in out
-    # We verify that the script part is correct
+    # We verify that the script import is present.
+    script = '<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>'  # noqa
+    assert script in out
+
+    # We verify that the script part is correct.
     tmpl = Template("""
             var {{this.get_name()}} = L.heatLayer(
                 {{this.data}},

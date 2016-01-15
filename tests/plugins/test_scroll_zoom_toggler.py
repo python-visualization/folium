@@ -9,6 +9,7 @@ from jinja2 import Template
 import folium
 from folium import plugins
 
+
 def test_scroll_zoom_toggler():
     m = folium.Map([45., 3.], zoom_start=4)
     szt = plugins.ScrollZoomToggler()
