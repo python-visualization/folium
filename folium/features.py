@@ -276,7 +276,7 @@ class GeoJson(MacroElement):
         for feature in self.data['features']:
             feature.setdefault('properties',{}).setdefault('style',{}).update(
                 self.style_function(feature))
-        return json.dumps(self.data)
+        return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
         """Computes the bounds of the object itself (not including it's children)
@@ -308,7 +308,7 @@ class GeoJson(MacroElement):
         return bounds
 
 class TopoJson(MacroElement):
-    def __init__(self, data, object_path):
+    def __init__(self, data, object_path, style_function=None):
         """
         TODO docstring here
 
@@ -317,25 +317,43 @@ class TopoJson(MacroElement):
         self._name = 'TopoJson'
         if 'read' in dir(data):
             self.embed = True
-            self.data = data.read()
+            self.data = json.load(data)
         elif type(data) is dict:
             self.embed = True
-            self.data = json.dumps(data)
+            self.data = data
         else:
             self.embed = False
             self.data = data
 
         self.object_path = object_path
 
+        if style_function is None:
+            style_function = lambda x: {}
+        self.style_function = style_function
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}}_data = {{this.data}};
+                var {{this.get_name()}}_data = {{this.style_data()}};
                 var {{this.get_name()}} = L.geoJson(topojson.feature(
                     {{this.get_name()}}_data,
                     {{this.get_name()}}_data.{{this.object_path}}
                     )).addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+
             {% endmacro %}
             """)
+
+    def style_data(self):
+        def recursive_get(data, keys):
+            if len(keys):
+                return recursive_get(data.get(keys[0]), keys[1:])
+            else:
+                return data
+        geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']
+        for feature in geometries:
+            feature.setdefault('properties',{}).setdefault('style',{}).update(
+                self.style_function(feature))
+        return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
         super(TopoJson, self).render(**kwargs)
@@ -355,11 +373,9 @@ class TopoJson(MacroElement):
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
 
-        data = json.loads(self.data)
-
         xmin,xmax,ymin,ymax = None, None, None, None
 
-        for arc in data['arcs']:
+        for arc in self.data['arcs']:
             x,y = 0,0
             for dx, dy in arc:
                 x += dx
@@ -370,12 +386,12 @@ class TopoJson(MacroElement):
                 ymax = none_max(y, ymax)
         return [
             [
-                data['transform']['translate'][0] + data['transform']['scale'][0] * xmin,
-                data['transform']['translate'][1] + data['transform']['scale'][1] * ymin,
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin,
+                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,
             ],
             [
-                data['transform']['translate'][0] + data['transform']['scale'][0] * xmax,
-                data['transform']['translate'][1] + data['transform']['scale'][1] * ymax,
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax,
+                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,
             ]
 
         ]
