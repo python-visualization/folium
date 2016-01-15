@@ -67,7 +67,7 @@ class Element(object):
         return bounds
 
     def add_children(self, child, name=None, index=None):
-        """Add a children."""
+        """Add a child."""
         if name is None:
             name = child.get_name()
         if index is None:
@@ -107,9 +107,7 @@ class Element(object):
             return self._parent.get_root()
 
     def render(self, **kwargs):
-        """Renders the Element into an HTML representation, using the `_template`
-        attribute.
-        """
+        """Renders the HTML representation of the element."""
         return self._template.render(this=self, kwargs=kwargs)
 
     def save(self, outfile, close_file=True, **kwargs):
@@ -327,7 +325,7 @@ class Figure(Element):
         return self
 
     def render(self, **kwargs):
-        """Renders the Element into an HTML representation."""
+        """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
@@ -380,8 +378,7 @@ class Figure(Element):
 
 
 class Html(Element):
-    """A basic Element for embedding HTML.
-    """
+    """A basic Element for embedding HTML."""
     def __init__(self, data, width="100%", height="100%"):
         """Create an HTML div object for embedding data.
 
@@ -390,11 +387,11 @@ class Html(Element):
         data : str
             The HTML data to be embedded.
         width : int or str, default '100%'
-            The width of the output div.
-            Ex : 120 , '120px', '80%'
+            The width of the output div element.
+            Ex: 120 , '120px', '80%'
         height : int or str, default '100%'
-            The height of the output div.
-            Ex : 120 , '120px', '80%'
+            The height of the output div element.
+            Ex: 120 , '120px', '80%'
         """
         super(Html, self).__init__()
         self._name = 'Html'
@@ -457,7 +454,7 @@ class Div(Figure):
         return self
 
     def render(self, **kwargs):
-        """Renders the Element into an HTML representation."""
+        """Renders the HTML representation of the element."""
         figure = self._parent
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
@@ -537,12 +534,7 @@ class IFrame(Element):
             self.add_children(html)
 
     def render(self, **kwargs):
-        """Displays the Figure in a Jupyter notebook.
-
-        Parameters
-        ----------
-
-        """
+        """Renders the HTML representation of the element."""
         html = super(IFrame, self).render(**kwargs)
         html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
@@ -589,7 +581,7 @@ class MacroElement(Element):
         self._template = Template(u"")
 
     def render(self, **kwargs):
-        """Renders the Element into an HTML representation."""
+        """Renders the HTML representation of the element."""
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
