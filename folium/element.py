@@ -107,7 +107,9 @@ class Element(object):
             return self._parent.get_root()
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the Element into an HTML representation, using the `_template`
+        attribute.
+        """
         return self._template.render(this=self, kwargs=kwargs)
 
     def save(self, outfile, close_file=True, **kwargs):
@@ -325,7 +327,7 @@ class Figure(Element):
         return self
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the Element into an HTML representation."""
         for name, child in self._children.items():
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
@@ -378,8 +380,22 @@ class Figure(Element):
 
 
 class Html(Element):
+    """A basic Element for embedding HTML.
+    """
     def __init__(self, data, width="100%", height="100%"):
-        """TODO : docstring here"""
+        """Create an HTML div object for embedding data.
+
+        Parameters
+        ----------
+        data : str
+            The HTML data to be embedded.
+        width : int or str, default '100%'
+            The width of the output div.
+            Ex : 120 , '120px', '80%'
+        height : int or str, default '100%'
+            The height of the output div.
+            Ex : 120 , '120px', '80%'
+        """
         super(Html, self).__init__()
         self._name = 'Html'
         self.data = data
@@ -441,7 +457,7 @@ class Div(Figure):
         return self
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the Element into an HTML representation."""
         figure = self._parent
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
@@ -566,13 +582,14 @@ class MacroElement(Element):
             {% endmacro %}
     """
     def __init__(self):
-        """TODO : docstring here"""
+        """Creates a MacroElement object."""
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
 
         self._template = Template(u"")
 
     def render(self, **kwargs):
+        """Renders the Element into an HTML representation."""
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
