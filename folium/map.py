@@ -50,7 +50,8 @@ class Map(MacroElement):
         height: pixel int or percentage string (default: '100%')
             Height of the map.
         tiles: str, default 'OpenStreetMap'
-            Map tileset to use. Can use defaults or pass a custom URL.
+            Map tileset to use. Can choose from a list of built-in tiles,
+            pass a custom URL or pass `None` to create a map without tiles.
         API_key: str, default None
             API key for Cloudmade or Mapbox tiles.
         max_zoom: int, default 18
@@ -122,9 +123,10 @@ class Map(MacroElement):
 
         self.crs = crs
 
-        self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                            attr=attr, API_key=API_key,
-                            detect_retina=detect_retina)
+        if tiles:
+            self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                                attr=attr, API_key=API_key,
+                                detect_retina=detect_retina)
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
