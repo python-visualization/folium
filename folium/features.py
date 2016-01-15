@@ -197,9 +197,8 @@ class Vega(Element):
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
 
-
-class GeoJson(MacroElement):
-    def __init__(self, data, style_function=None):
+class GeoJson(Layer):
+    def __init__(self, data, style_function=None, name=None, overlay=True, control=True):
         """
         Creates a GeoJson plugin to append into a map with
         Map.add_plugin.
@@ -215,6 +214,12 @@ class GeoJson(MacroElement):
             * If str, then data will be passed to the JavaScript as-is.
         style_function: function, default None
             A function mapping a GeoJson Feature to a style dict.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Whether the layer is optional (overlay) or compulsory.
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
 
         Examples
         --------
@@ -233,7 +238,7 @@ class GeoJson(MacroElement):
         ...                             '#00ff00'}
         >>> GeoJson(geojson, style_function=style_function)
         """
-        super(GeoJson, self).__init__()
+        super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
             self.embed = True
@@ -316,14 +321,20 @@ class GeoJson(MacroElement):
                     ]
         return bounds
 
-
-class TopoJson(MacroElement):
-    def __init__(self, data, object_path, style_function=None):
+class TopoJson(Layer):
+    def __init__(self, data, object_path, name=None, overlay=True, control=True):
         """
         TODO docstring here
 
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Whether the layer is optional (overlay) or compulsory.
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
+
         """
-        super(TopoJson, self).__init__()
+        super(TopoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'TopoJson'
         if 'read' in dir(data):
             self.embed = True
