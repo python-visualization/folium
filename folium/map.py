@@ -5,6 +5,9 @@ Map
 
 Classes for drawing maps.
 """
+
+from __future__ import unicode_literals
+
 import warnings
 import json
 from collections import OrderedDict
