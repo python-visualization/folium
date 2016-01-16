@@ -13,8 +13,7 @@ import warnings
 import json
 
 from folium.six import text_type, binary_type
-from .map import Map as _Map
-from .map import Icon, Marker, Popup, FitBounds
+from .map import LegacyMap, Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        CircleMarker, LatLngPopup,
                        ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
@@ -31,7 +30,7 @@ def initialize_notebook():
     pass
 
 
-class Map(_Map):
+class Map(LegacyMap):
     """This class inherits from the map.Map object in order to provide
     bindings to former folium API.
     """

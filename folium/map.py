@@ -20,7 +20,7 @@ from .utilities import _parse_size
 from .element import Element, Figure, MacroElement, Html
 
 
-class Map(MacroElement):
+class LegacyMap(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
@@ -85,22 +85,22 @@ class Map(MacroElement):
 
         Returns
         -------
-        Folium Map Object
+        Folium LegacyMap Object
 
         Examples
         --------
-        >>>map = folium.Map(location=[45.523, -122.675], width=750, height=500)
-        >>>map = folium.Map(location=[45.523, -122.675],
+        >>>map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+        >>>map = folium.LegacyMap(location=[45.523, -122.675],
                             tiles='Mapbox Control Room')
-        >>>map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+        >>>map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
                             tiles='Cloudmade', API_key='YourKey')
-        >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
+        >>>map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
                             tiles=('http://{s}.tiles.mapbox.com/v3/'
                                     'mapbox.control-room/{z}/{x}/{y}.png'),
                             attr='Mapbox attribution')
 
         """
-        super(Map, self).__init__()
+        super(LegacyMap, self).__init__()
         self._name = 'Map'
 
         if not location:
