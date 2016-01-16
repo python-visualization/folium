@@ -208,7 +208,7 @@ class Layer(MacroElement):
         overlay : bool, default False
             Whether the layer is optional (overlay) or compulsory.
         control : bool, default True
-            Whether the Layer will be included in LayerControls
+            Whether the Layer will be included in LayerControls.
         """
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -217,12 +217,45 @@ class Layer(MacroElement):
 
 
 class TileLayer(Layer):
-    def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None,
-                 overlay=False, control=True, detect_retina=False):
-        """TODO docstring here
+    def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
+                 attr=None, API_key=None, detect_retina=False,
+                 name=None, overlay=False, control=True):
+        """Create a tile layer to append on a Map.
+
         Parameters
         ----------
+        tiles: str, default 'OpenStreetMap'
+            Map tileset to use. Can choose from this list of built-in tiles:
+                - "OpenStreetMap"
+                - "MapQuest Open"
+                - "MapQuest Open Aerial"
+                - "Mapbox Bright" (Limited levels of zoom for free tiles)
+                - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+                - "Stamen" (Terrain, Toner, and Watercolor)
+                - "Cloudmade" (Must pass API key)
+                - "Mapbox" (Must pass API key)
+                - "CartoDB" (positron and dark_matter)
+            You can pass a custom tileset to Folium by passing a Leaflet-style
+            URL to the tiles parameter:
+            http://{s}.yourtiles.com/{z}/{x}/{y}.png
+        min_zoom: int, default 1
+            Minimal zoom for which the layer will be displayed.
+        max_zoom: int, default 18
+            Maximal zoom for which the layer will be displayed.
+        attr: string, default None
+            Map tile attribution; only required if passing custom tile URL.
+        API_key: str, default None
+            API key for Cloudmade or Mapbox tiles.
+        detect_retina: bool, default False
+            If true and user is on a retina display, it will request four
+            tiles of half the specified size and a bigger zoom level in place
+            of one to utilize the high resolution.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Whether the layer is optional (overlay) or compulsory.
+        control : bool, default True
+            Whether the Layer will be included in LayerControls.
         """
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -330,7 +363,7 @@ class LayerControl(MacroElement):
         """)  # noqa
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
@@ -491,7 +524,7 @@ class Popup(Element):
         """)  # noqa
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
 
