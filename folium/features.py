@@ -8,7 +8,7 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
-from .utilities import (color_brewer, _parse_size, legend_scaler,
+from .utilities import (_parse_size,
                         _locations_mirror, _locations_tolist, image_to_url,
                         text_type, binary_type,
                         none_min, none_max, iter_points,
@@ -485,36 +485,6 @@ class TopoJson(Layer):
             ]
 
         ]
-
-
-class ColorScale(MacroElement):
-    def __init__(self, color_domain, color_code, caption=""):
-        """
-        TODO docstring here
-
-        """
-        super(ColorScale, self).__init__()
-        self._name = 'ColorScale'
-
-        self.color_domain = color_domain
-        self.color_range = color_brewer(color_code, n=len(color_domain))
-        self.tick_labels = legend_scaler(self.color_domain)
-
-        self.caption = caption
-        self.fill_color = color_code
-
-        self._template = self._env.get_template('color_scale.js')
-
-    def render(self, **kwargs):
-        super(ColorScale, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
-
-        figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
-            name='d3')
 
 
 class MarkerCluster(Layer):

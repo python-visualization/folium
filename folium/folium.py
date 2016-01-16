@@ -17,8 +17,9 @@ from .map import Map as _Map
 from .map import Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        CircleMarker, LatLngPopup,
-                       ClickForMarker, ColorScale, TopoJson, PolyLine,
-                       MultiPolyLine)
+                       ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
+                       )
+from .colormap import StepColormap
 from .utilities import color_brewer
 
 
@@ -422,29 +423,6 @@ class Map(_Map):
                       FutureWarning, stacklevel=2)
         self.add_children(plugin)
 
-#    def _auto_bounds(self):
-#        if 'fit_bounds' in self.template_vars:
-#            return
-#        # Get count for each feature type
-#        ft_names = ["marker", "line", "circle", "polygon", "multiline"]
-#        ft_names = [i for i in ft_names if i in self.mark_cnt]
-#
-#        # Make a comprehensive list of all the features we want to fit
-#        feat_str = ["{name}_{count}".format(name=ft_name,
-#                                            count=self.mark_cnt[ft_name])
-#                    for ft_name in ft_names for
-#                    count in range(1, self.mark_cnt[ft_name]+1)]
-#        feat_str = "[" + ', '.join(feat_str) + "]"
-#
-#        fit_bounds = self.env.get_template('fit_bounds.js')
-#        fit_bounds_str = fit_bounds.render({
-#            'autobounds': not self.location,
-#            'features': feat_str,
-#            'fit_bounds_options': json.dumps({'padding': [30, 30]}),
-#        })
-#
-#        self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
-
     def geo_json(self, *args, **kwargs):
         """This method is deprecated and will be removed in v0.2.1. See
         `Map.choropleth` instead.
@@ -626,10 +604,15 @@ class Map(_Map):
 
         self.add_children(geo_json)
 
-        # Create ColorScale.
+        # Create ColorMap.
         if color_domain:
-            color_scale = ColorScale(color_domain, fill_color,
-                                     caption=legend_name)
+            brewed = color_brewer(fill_color, n=len(color_domain))
+            color_scale = StepColormap(
+                brewed[1:len(color_domain)],
+                index=color_domain,
+                vmin=color_domain[0],
+                vmax=color_domain[-1],
+                )
             self.add_children(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
