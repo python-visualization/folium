@@ -197,6 +197,7 @@ class Vega(Element):
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
 
+
 class GeoJson(Layer):
     def __init__(self, data, style_function=None, name=None, overlay=True, control=True):
         """
@@ -321,8 +322,10 @@ class GeoJson(Layer):
                     ]
         return bounds
 
+
 class TopoJson(Layer):
-    def __init__(self, data, object_path, name=None, overlay=True, control=True):
+    def __init__(self, data, object_path, style_function=None,
+                 name=None, overlay=True, control=True):
         """
         TODO docstring here
 
