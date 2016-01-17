@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Elements
-------
+Element
+-------
 
 A generic class for creating Elements.
 """
@@ -38,6 +38,7 @@ class Element(object):
         """)
 
     def get_name(self):
+        """TODO: docstring."""
         return _camelify(self._name) + '_' + self._id
 
     def _get_self_bounds(self):
@@ -90,6 +91,7 @@ class Element(object):
         return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
+        """TODO: docstring."""
         if ordered:
             dict_fun = OrderedDict
         else:
@@ -103,6 +105,7 @@ class Element(object):
         return out
 
     def to_json(self, depth=-1, **kwargs):
+        """TODO: docstring."""
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
     def get_root(self):
@@ -139,18 +142,24 @@ class Element(object):
 
 
 class Link(Element):
+    """Link
+    ----
+    """
     def get_code(self):
+        """TODO : docstring."""
         if self.code is None:
             self.code = urlopen(self.url).read()
         return self.code
 
     def to_dict(self, depth=-1, **kwargs):
+        """TODO : docstring."""
         out = super(Link, self).to_dict(depth=-1, **kwargs)
         out['url'] = self.url
         return out
 
 
 class JavascriptLink(Link):
+    """TODO: docstring."""
     def __init__(self, url, download=False):
         """Create a JavascriptLink object based on a url.
         Parameters
@@ -177,6 +186,7 @@ class JavascriptLink(Link):
 
 
 class CssLink(Link):
+    """TODO: docstring."""
     def __init__(self, url, download=False):
         """Create a CssLink object based on a url.
         Parameters
@@ -237,6 +247,7 @@ _default_css = [
 
 
 class Figure(Element):
+    """TODO: docstring."""
     def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
         """Create a Figure object, to plot things into it.
 
@@ -321,6 +332,7 @@ class Figure(Element):
             """), name='css_style')
 
     def to_dict(self, depth=-1, **kwargs):
+        """TODO: docstring."""
         out = super(Figure, self).to_dict(depth=depth, **kwargs)
         out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
         out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
@@ -328,6 +340,7 @@ class Figure(Element):
         return out
 
     def get_root(self):
+        """TODO: docstring."""
         return self
 
     def render(self, **kwargs):
@@ -363,6 +376,7 @@ class Figure(Element):
         return iframe
 
     def add_subplot(self, x, y, n, margin=0.05):
+        """TODO: docstring."""
         width = 1./y
         height = 1./x
         left = ((n-1) % y)*width
@@ -414,6 +428,7 @@ class Html(Element):
 
 
 class Div(Figure):
+    """TODO: docstring."""
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
         """Create a Map with Folium and Leaflet.js."""
@@ -457,6 +472,7 @@ class Div(Figure):
         """)
 
     def get_root(self):
+        """TODO: docstring."""
         return self
 
     def render(self, **kwargs):
@@ -501,6 +517,7 @@ class Div(Figure):
 
 
 class IFrame(Element):
+    """TODO: docstring."""
     def __init__(self, html=None, width="100%", height=None, ratio="60%",
                  figsize=None):
         """Create a Figure object, to plot things into it.
