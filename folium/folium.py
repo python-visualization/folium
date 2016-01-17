@@ -101,8 +101,8 @@ class Map(LegacyMap):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
+        >>> map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>> map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -157,9 +157,9 @@ class Map(LegacyMap):
 
         Example
         -------
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
-                    line_color='red', line_opacity=1.0)
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
+                     line_color='red', line_opacity=1.0)
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -261,10 +261,10 @@ class Map(LegacyMap):
 
         Example
         -------
-        >>>map.circle_marker(location=[45.5, -122.3],
-                             radius=1000, popup='Portland, OR')
-        >>>map.circle_marker(location=[45.5, -122.3],
-                             radius=1000, popup=(bar_chart, 'bar_data.json'))
+        >>> map.circle_marker(location=[45.5, -122.3],
+                              radius=1000, popup='Portland, OR')
+        >>> map.circle_marker(location=[45.5, -122.3],
+                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -366,7 +366,7 @@ class Map(LegacyMap):
 
         Example
         -------
-        >>>map.click_for_marker(popup='Your Custom Text')
+        >>> map.click_for_marker(popup='Your Custom Text')
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -510,11 +510,11 @@ class Map(LegacyMap):
         Example
         -------
         >>> m.choropleth(geo_path='us-states.json', line_color='blue',
-                      line_weight=3)
+                         line_weight=3)
         >>> m.choropleth(geo_path='geo.json', data=df,
-                      columns=['Data 1', 'Data 2'],
-                      key_on='feature.properties.myvalue', fill_color='PuBu',
-                      threshold_scale=[0, 20, 30, 40, 50, 60])
+                         columns=['Data 1', 'Data 2'],
+                         key_on='feature.properties.myvalue', fill_color='PuBu',
+                         threshold_scale=[0, 20, 30, 40, 50, 60])
         >>> m.choropleth(geo_path='countries.json',
         ...              topojson='objects.countries')
 

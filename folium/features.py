@@ -22,7 +22,7 @@ class WmsTileLayer(Layer):
     def __init__(self, url, format=None, layers=None,
                  transparent=True, attr=None,
                  name=None, overlay=True, control=True):
-        """Creates a Layer based on a WMS (Web map service).
+        """Creates a Web Map Service (WMS) layer.
 
         Parameters
         ----------
@@ -40,11 +40,11 @@ class WmsTileLayer(Layer):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls
         """
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control)
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)
         self._name = 'WmsTileLayer'
         self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
         self.url = url
@@ -163,17 +163,17 @@ class Vega(Element):
         width: int or str, default None
             The width of the output element.
             If None, either data['width'] (if available) or '100%' will be used.
-            Ex: 120 , '120px', '80%'
+            Ex: 120, '120px', '80%'
         height: int or str, default None
             The height of the output element.
             If None, either data['width'] (if available) or '100%' will be used.
-            Ex: 120 , '120px', '80%'
+            Ex: 120, '120px', '80%'
         left: int or str, default '0%'
             The horizontal distance of the output with respect to the parent HTML object.
-            Ex: 120 , '120px', '80%'
+            Ex: 120, '120px', '80%'
         top: int or str, default '0%'
             The vertical distance of the output with respect to the parent HTML object.
-            Ex: 120 , '120px', '80%'
+            Ex: 120, '120px', '80%'
         position: str, default 'relative'
             The `position` argument that the CSS shall contain.
             Ex: 'relative', 'absolute'
@@ -256,7 +256,7 @@ class GeoJson(Layer):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls
 
@@ -383,7 +383,7 @@ class TopoJson(Layer):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls
 
@@ -498,7 +498,7 @@ class MarkerCluster(Layer):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls
         """

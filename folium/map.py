@@ -89,16 +89,15 @@ class LegacyMap(MacroElement):
 
         Examples
         --------
-        >>>map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
-        >>>map = folium.LegacyMap(location=[45.523, -122.675],
-                            tiles='Mapbox Control Room')
-        >>>map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
-                            tiles='Cloudmade', API_key='YourKey')
-        >>>map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-                            tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                    'mapbox.control-room/{z}/{x}/{y}.png'),
-                            attr='Mapbox attribution')
-
+        >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+        >>> map = folium.LegacyMap(location=[45.523, -122.675],
+                                   tiles='Mapbox Control Room')
+        >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+                                   tiles='Cloudmade', API_key='YourKey')
+        >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
+                                   tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                          'mapbox.control-room/{z}/{x}/{y}.png'),
+                                    attr='Mapbox attribution')
         """
         super(LegacyMap, self).__init__()
         self._name = 'Map'
@@ -206,7 +205,7 @@ class Layer(MacroElement):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls.
         """
@@ -253,7 +252,7 @@ class TileLayer(Layer):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
             Whether the Layer will be included in LayerControls.
         """
