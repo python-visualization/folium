@@ -21,8 +21,8 @@ import folium
 import base64
 from folium.six import PY3
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import (GeoJson, ColorScale, TopoJson, PolyLine,
-                             MultiPolyLine)
+from folium.features import GeoJson, TopoJson, PolyLine, MultiPolyLine
+from folium.colormap import ColorMap
 from folium.plugins import ImageOverlay
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -450,12 +450,12 @@ class TestFolium(object):
         path = os.path.join(rootpath, 'us-counties.json')
 
         # With DataFrame data binding, default threshold scale.
-        self.map.geo_json(geo_path=path, data=data,
-                          threshold_scale=[4.0, 1000.0, 3000.0,
-                                           5000.0, 9000.0],
-                          columns=['FIPS_Code', 'Unemployed_2011'],
-                          key_on='feature.id', fill_color='YlGnBu',
-                          reset=True)
+        self.map.choropleth(geo_path=path, data=data,
+                            threshold_scale=[4.0, 1000.0, 3000.0,
+                                             5000.0, 9000.0],
+                            columns=['FIPS_Code', 'Unemployed_2011'],
+                            key_on='feature.id', fill_color='YlGnBu',
+                            reset=True)
 
         out = self.map._parent.render()
 
@@ -464,8 +464,8 @@ class TestFolium(object):
         palette = folium.utilities.color_brewer('YlGnBu')
         d3range = palette[0: len(domain) + 2]
         colorscale_obj = [val for key, val in self.map._children.items() if
-                          isinstance(val, ColorScale)][0]
-        colorscale_temp = self.env.get_template('d3_threshold.js')
+                          isinstance(val, ColorMap)][0]
+        colorscale_temp = self.env.get_template('color_scale.js')
         colorscale = colorscale_temp.render({
             'this': colorscale_obj,
             'domain': domain,

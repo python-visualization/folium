@@ -12,7 +12,7 @@ from folium.element import MacroElement
 
 class ScrollZoomToggler(MacroElement):
     def __init__(self):
-        """TODO docstring here.
+        """Creates a button for enabling/disabling scroll on the Map.
         """
         super(ScrollZoomToggler, self).__init__()
         self._name = 'ScrollZoomToggler'

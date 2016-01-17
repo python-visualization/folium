@@ -67,7 +67,11 @@ class Element(object):
         return bounds
 
     def add_children(self, child, name=None, index=None):
-        """Add a children."""
+        """Add a child."""
+        return self.add_child(child, name=name, index=index)
+
+    def add_child(self, child, name=None, index=None):
+        """Add a child."""
         if name is None:
             name = child.get_name()
         if index is None:
@@ -78,10 +82,12 @@ class Element(object):
             items.insert(int(index), (name, child))
             self._children = items
         child._parent = self
+        return self
 
     def add_to(self, parent, name=None, index=None):
         """Add element to a parent."""
         parent.add_children(self, name=name, index=index)
+        return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
         if ordered:
@@ -107,7 +113,7 @@ class Element(object):
             return self._parent.get_root()
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         return self._template.render(this=self, kwargs=kwargs)
 
     def save(self, outfile, close_file=True, **kwargs):
@@ -325,7 +331,7 @@ class Figure(Element):
         return self
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
@@ -378,8 +384,21 @@ class Figure(Element):
 
 
 class Html(Element):
+    """A basic Element for embedding HTML."""
     def __init__(self, data, width="100%", height="100%"):
-        """TODO : docstring here"""
+        """Create an HTML div object for embedding data.
+
+        Parameters
+        ----------
+        data : str
+            The HTML data to be embedded.
+        width : int or str, default '100%'
+            The width of the output div element.
+            Ex: 120 , '120px', '80%'
+        height : int or str, default '100%'
+            The height of the output div element.
+            Ex: 120 , '120px', '80%'
+        """
         super(Html, self).__init__()
         self._name = 'Html'
         self.data = data
@@ -441,7 +460,7 @@ class Div(Figure):
         return self
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         figure = self._parent
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
@@ -521,12 +540,7 @@ class IFrame(Element):
             self.add_children(html)
 
     def render(self, **kwargs):
-        """Displays the Figure in a Jupyter notebook.
-
-        Parameters
-        ----------
-
-        """
+        """Renders the HTML representation of the element."""
         html = super(IFrame, self).render(**kwargs)
         html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
@@ -566,13 +580,14 @@ class MacroElement(Element):
             {% endmacro %}
     """
     def __init__(self):
-        """TODO : docstring here"""
+        """Creates a MacroElement object."""
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
 
         self._template = Template(u"")
 
     def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")

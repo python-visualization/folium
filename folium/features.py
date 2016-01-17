@@ -8,7 +8,7 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
-from .utilities import (color_brewer, _parse_size, legend_scaler,
+from .utilities import (_parse_size,
                         _locations_mirror, _locations_tolist, image_to_url,
                         text_type, binary_type,
                         none_min, none_max, iter_points,
@@ -19,14 +19,32 @@ from .map import Layer, Icon, Marker, Popup
 
 
 class WmsTileLayer(Layer):
-    def __init__(self, url, name=None,
-                 format=None, layers=None, transparent=True,
-                 attr=None, overlay=True, control=True):
-        """
-        TODO docstring here
+    def __init__(self, url, format=None, layers=None,
+                 transparent=True, attr=None,
+                 name=None, overlay=True, control=True):
+        """Creates a Web Map Service (WMS) layer.
 
+        Parameters
+        ----------
+        url: str
+            The url of the WMS server.
+        format: str, default None
+            The format of the service output.
+            Ex: 'iamge/png'
+        layers: str, default None
+            The names of the layers to be displayed.
+        transparent: bool, default True
+            Whether the layer shall allow transparency.
+        attr: str, default None
+            The attribution of the service. Will be displayed in the bottom right corner.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Adds the layer as an optional overlay (True) or the base layer (False).
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
         """
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control)
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)
         self._name = 'WmsTileLayer'
         self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
         self.url = url
@@ -134,9 +152,31 @@ class RegularPolygonMarker(Marker):
 class Vega(Element):
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
-        """
-        TODO docstring here
+        """Cretes a Vega chart element.
 
+        Parameters
+        ----------
+        data: JSON-like str or object
+            The Vega description of the chart.
+            It can also ba any object that has a method `to_json`, so that you can (for instance)
+            provide a `vincent` chart.
+        width: int or str, default None
+            The width of the output element.
+            If None, either data['width'] (if available) or '100%' will be used.
+            Ex: 120, '120px', '80%'
+        height: int or str, default None
+            The height of the output element.
+            If None, either data['width'] (if available) or '100%' will be used.
+            Ex: 120, '120px', '80%'
+        left: int or str, default '0%'
+            The horizontal distance of the output with respect to the parent HTML object.
+            Ex: 120, '120px', '80%'
+        top: int or str, default '0%'
+            The vertical distance of the output with respect to the parent HTML object.
+            Ex: 120, '120px', '80%'
+        position: str, default 'relative'
+            The `position` argument that the CSS shall contain.
+            Ex: 'relative', 'absolute'
         """
         super(Vega, self).__init__()
         self._name = 'Vega'
@@ -198,11 +238,9 @@ class Vega(Element):
             name='vega_parse')
 
 
-class GeoJson(MacroElement):
-    def __init__(self, data, style_function=None):
-        """
-        Creates a GeoJson plugin to append into a map with
-        Map.add_plugin.
+class GeoJson(Layer):
+    def __init__(self, data, style_function=None, name=None, overlay=True, control=True):
+        """Creates a GeoJson object for plotting into a Map.
 
         Parameters
         ----------
@@ -215,6 +253,12 @@ class GeoJson(MacroElement):
             * If str, then data will be passed to the JavaScript as-is.
         style_function: function, default None
             A function mapping a GeoJson Feature to a style dict.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Adds the layer as an optional overlay (True) or the base layer (False).
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
 
         Examples
         --------
@@ -233,7 +277,7 @@ class GeoJson(MacroElement):
         ...                             '#00ff00'}
         >>> GeoJson(geojson, style_function=style_function)
         """
-        super(GeoJson, self).__init__()
+        super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
             self.embed = True
@@ -317,13 +361,50 @@ class GeoJson(MacroElement):
         return bounds
 
 
-class TopoJson(MacroElement):
-    def __init__(self, data, object_path, style_function=None):
-        """
-        TODO docstring here
+class TopoJson(Layer):
+    def __init__(self, data, object_path, style_function=None,
+                 name=None, overlay=True, control=True):
+        """Creates a TopoJson object for plotting into a Map.
 
+        Parameters
+        ----------
+        data: file, dict or str.
+            The TopoJSON data you want to plot.
+            * If file, then data will be read in the file and fully
+              embedded in Leaflet's JavaScript.
+            * If dict, then data will be converted to JSON and embedded
+              in the JavaScript.
+            * If str, then data will be passed to the JavaScript as-is.
+        object_path: str
+            The path of the desired object into the TopoJson structure.
+            Ex: 'objects.myobject'.
+        style_function: function, default None
+            A function mapping a TopoJson geometry to a style dict.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Adds the layer as an optional overlay (True) or the base layer (False).
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
+
+        Examples
+        --------
+        >>> # Providing file that shall be embeded.
+        >>> TopoJson(open('foo.json'), 'object.myobject')
+        >>> # Providing filename that shall not be embeded.
+        >>> TopoJson('foo.json', 'object.myobject')
+        >>> # Providing dict.
+        >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
+        >>> # Providing string.
+        >>> TopoJson(open('foo.json').read(), 'object.myobject')
+
+        >>> # Provide a style_function that color all states green but Alabama.
+        >>> style_function = lambda x: {'fillColor': '#0000ff' if
+        ...                             x['properties']['name']=='Alabama' else
+        ...                             '#00ff00'}
+        >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
         """
-        super(TopoJson, self).__init__()
+        super(TopoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'TopoJson'
         if 'read' in dir(data):
             self.embed = True
@@ -406,46 +487,22 @@ class TopoJson(MacroElement):
         ]
 
 
-class ColorScale(MacroElement):
-    def __init__(self, color_domain, color_code, caption=""):
-        """
-        TODO docstring here
-
-        """
-        super(ColorScale, self).__init__()
-        self._name = 'ColorScale'
-
-        self.color_domain = color_domain
-        self.color_range = color_brewer(color_code, n=len(color_domain))
-        self.tick_labels = legend_scaler(self.color_domain)
-
-        self.caption = caption
-        self.fill_color = color_code
-
-        self._template = self._env.get_template('color_scale.js')
-
-    def render(self, **kwargs):
-        super(ColorScale, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
-
-        figure.header.add_children(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
-            name='d3')
-
-
 class MarkerCluster(Layer):
     """Adds a MarkerCluster layer on the map."""
-    def __init__(self, overlay=True, control=True):
+    def __init__(self, name=None, overlay=True, control=True):
         """Creates a MarkerCluster element to append into a map with
         Map.add_children.
 
         Parameters
         ----------
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Adds the layer as an optional overlay (True) or the base layer (False).
+        control : bool, default True
+            Whether the Layer will be included in LayerControls
         """
-        super(MarkerCluster, self).__init__(overlay=overlay, control=control)
+        super(MarkerCluster, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'MarkerCluster'
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -505,7 +562,6 @@ class DivIcon(MacroElement):
 
         For more information see:
         http://leafletjs.com/reference.html#divicon
-
         """
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
@@ -533,9 +589,22 @@ class DivIcon(MacroElement):
 class CircleMarker(Marker):
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        """
-        TODO docstring here
+        """Creates a CircleMarker object for plotting on a Map.
 
+        Parameters
+        ----------
+        location: tuple or list, default None
+            Latitude and Longitude of Marker (Northing, Easting)
+        radius: int
+            The radius of the circle in pixels.
+        color: str, default 'black'
+            The color of the marker's edge in a HTML-compatible format.
+        fill_color: str, default 'black'
+            The fill color of the marker in a HTML-compatible format.
+        fill_opacity: float, default à.6
+            The fill opacity of the marker, between 0. and 1.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
         """
         super(CircleMarker, self).__init__(location, popup=popup)
         self._name = 'CircleMarker'
@@ -563,9 +632,11 @@ class CircleMarker(Marker):
 
 class LatLngPopup(MacroElement):
     def __init__(self):
-        """
-        TODO docstring here
+        """When one clicks on a Map that contains a LatLngPopup, a popup is shown that displays
+        the latitude and longitude of the pointer.
 
+        Parameters
+        ----------
         """
         super(LatLngPopup, self).__init__()
         self._name = 'LatLngPopup'
@@ -587,9 +658,14 @@ class LatLngPopup(MacroElement):
 
 class ClickForMarker(MacroElement):
     def __init__(self, popup=None):
-        """
-        TODO docstring here
+        """When one clicks on a Map that contains a ClickForMarker, a Marker is created
+        at the pointer's position.
 
+        Parameters
+        ----------
+        popup: str, default None
+            Text to display in the markers' popups.
+            If None, the popups will display the marker's latitude and longitude.
         """
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'

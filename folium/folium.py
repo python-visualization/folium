@@ -13,12 +13,12 @@ import warnings
 import json
 
 from folium.six import text_type, binary_type
-from .map import Map as _Map
-from .map import Icon, Marker, Popup, FitBounds
+from .map import LegacyMap, Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        CircleMarker, LatLngPopup,
-                       ClickForMarker, ColorScale, TopoJson, PolyLine,
-                       MultiPolyLine)
+                       ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
+                       )
+from .colormap import StepColormap
 from .utilities import color_brewer
 
 
@@ -30,7 +30,7 @@ def initialize_notebook():
     pass
 
 
-class Map(_Map):
+class Map(LegacyMap):
     """This class inherits from the map.Map object in order to provide
     bindings to former folium API.
     """
@@ -101,8 +101,8 @@ class Map(_Map):
 
         Example
         -------
-        >>>map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>>map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
+        >>> map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
+        >>> map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -157,9 +157,9 @@ class Map(_Map):
 
         Example
         -------
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
-        >>>map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
-                    line_color='red', line_opacity=1.0)
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
+        >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
+                     line_color='red', line_opacity=1.0)
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -261,10 +261,10 @@ class Map(_Map):
 
         Example
         -------
-        >>>map.circle_marker(location=[45.5, -122.3],
-                             radius=1000, popup='Portland, OR')
-        >>>map.circle_marker(location=[45.5, -122.3],
-                             radius=1000, popup=(bar_chart, 'bar_data.json'))
+        >>> map.circle_marker(location=[45.5, -122.3],
+                              radius=1000, popup='Portland, OR')
+        >>> map.circle_marker(location=[45.5, -122.3],
+                              radius=1000, popup=(bar_chart, 'bar_data.json'))
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -366,7 +366,7 @@ class Map(_Map):
 
         Example
         -------
-        >>>map.click_for_marker(popup='Your Custom Text')
+        >>> map.click_for_marker(popup='Your Custom Text')
 
         """
         warnings.warn("%s is deprecated. Use %s instead" %
@@ -421,29 +421,6 @@ class Map(_Map):
                       ("add_plugin", "add_children"),
                       FutureWarning, stacklevel=2)
         self.add_children(plugin)
-
-#    def _auto_bounds(self):
-#        if 'fit_bounds' in self.template_vars:
-#            return
-#        # Get count for each feature type
-#        ft_names = ["marker", "line", "circle", "polygon", "multiline"]
-#        ft_names = [i for i in ft_names if i in self.mark_cnt]
-#
-#        # Make a comprehensive list of all the features we want to fit
-#        feat_str = ["{name}_{count}".format(name=ft_name,
-#                                            count=self.mark_cnt[ft_name])
-#                    for ft_name in ft_names for
-#                    count in range(1, self.mark_cnt[ft_name]+1)]
-#        feat_str = "[" + ', '.join(feat_str) + "]"
-#
-#        fit_bounds = self.env.get_template('fit_bounds.js')
-#        fit_bounds_str = fit_bounds.render({
-#            'autobounds': not self.location,
-#            'features': feat_str,
-#            'fit_bounds_options': json.dumps({'padding': [30, 30]}),
-#        })
-#
-#        self.template_vars.update({'fit_bounds': fit_bounds_str.strip()})
 
     def geo_json(self, *args, **kwargs):
         """This method is deprecated and will be removed in v0.2.1. See
@@ -533,11 +510,11 @@ class Map(_Map):
         Example
         -------
         >>> m.choropleth(geo_path='us-states.json', line_color='blue',
-                      line_weight=3)
+                         line_weight=3)
         >>> m.choropleth(geo_path='geo.json', data=df,
-                      columns=['Data 1', 'Data 2'],
-                      key_on='feature.properties.myvalue', fill_color='PuBu',
-                      threshold_scale=[0, 20, 30, 40, 50, 60])
+                         columns=['Data 1', 'Data 2'],
+                         key_on='feature.properties.myvalue', fill_color='PuBu',
+                         threshold_scale=[0, 20, 30, 40, 50, 60])
         >>> m.choropleth(geo_path='countries.json',
         ...              topojson='objects.countries')
 
@@ -626,10 +603,15 @@ class Map(_Map):
 
         self.add_children(geo_json)
 
-        # Create ColorScale.
+        # Create ColorMap.
         if color_domain:
-            color_scale = ColorScale(color_domain, fill_color,
-                                     caption=legend_name)
+            brewed = color_brewer(fill_color, n=len(color_domain))
+            color_scale = StepColormap(
+                brewed[1:len(color_domain)],
+                index=color_domain,
+                vmin=color_domain[0],
+                vmax=color_domain[-1],
+                )
             self.add_children(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,

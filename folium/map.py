@@ -20,7 +20,7 @@ from .utilities import _parse_size
 from .element import Element, Figure, MacroElement, Html
 
 
-class Map(MacroElement):
+class LegacyMap(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
@@ -85,22 +85,21 @@ class Map(MacroElement):
 
         Returns
         -------
-        Folium Map Object
+        Folium LegacyMap Object
 
         Examples
         --------
-        >>>map = folium.Map(location=[45.523, -122.675], width=750, height=500)
-        >>>map = folium.Map(location=[45.523, -122.675],
-                            tiles='Mapbox Control Room')
-        >>>map = folium.Map(location=(45.523, -122.675), max_zoom=20,
-                            tiles='Cloudmade', API_key='YourKey')
-        >>>map = folium.Map(location=[45.523, -122.675], zoom_start=2,
-                            tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                    'mapbox.control-room/{z}/{x}/{y}.png'),
-                            attr='Mapbox attribution')
-
+        >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+        >>> map = folium.LegacyMap(location=[45.523, -122.675],
+                                   tiles='Mapbox Control Room')
+        >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+                                   tiles='Cloudmade', API_key='YourKey')
+        >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
+                                   tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                          'mapbox.control-room/{z}/{x}/{y}.png'),
+                                    attr='Mapbox attribution')
         """
-        super(Map, self).__init__()
+        super(LegacyMap, self).__init__()
         self._name = 'Map'
 
         if not location:
@@ -206,9 +205,9 @@ class Layer(MacroElement):
         name : string, default None
             The name of the Layer, as it will appear in LayerControls
         overlay : bool, default False
-            Whether the layer is optional (overlay) or compulsory.
+            Adds the layer as an optional overlay (True) or the base layer (False).
         control : bool, default True
-            Whether the Layer will be included in LayerControls
+            Whether the Layer will be included in LayerControls.
         """
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -217,12 +216,45 @@ class Layer(MacroElement):
 
 
 class TileLayer(Layer):
-    def __init__(self, tiles='OpenStreetMap', name=None,
-                 min_zoom=1, max_zoom=18, attr=None, API_key=None,
-                 overlay=False, control=True, detect_retina=False):
-        """TODO docstring here
+    def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
+                 attr=None, API_key=None, detect_retina=False,
+                 name=None, overlay=False, control=True):
+        """Create a tile layer to append on a Map.
+
         Parameters
         ----------
+        tiles: str, default 'OpenStreetMap'
+            Map tileset to use. Can choose from this list of built-in tiles:
+                - "OpenStreetMap"
+                - "MapQuest Open"
+                - "MapQuest Open Aerial"
+                - "Mapbox Bright" (Limited levels of zoom for free tiles)
+                - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+                - "Stamen" (Terrain, Toner, and Watercolor)
+                - "Cloudmade" (Must pass API key)
+                - "Mapbox" (Must pass API key)
+                - "CartoDB" (positron and dark_matter)
+            You can pass a custom tileset to Folium by passing a Leaflet-style
+            URL to the tiles parameter:
+            http://{s}.yourtiles.com/{z}/{x}/{y}.png
+        min_zoom: int, default 1
+            Minimal zoom for which the layer will be displayed.
+        max_zoom: int, default 18
+            Maximal zoom for which the layer will be displayed.
+        attr: string, default None
+            Map tile attribution; only required if passing custom tile URL.
+        API_key: str, default None
+            API key for Cloudmade or Mapbox tiles.
+        detect_retina: bool, default False
+            If true and user is on a retina display, it will request four
+            tiles of half the specified size and a bigger zoom level in place
+            of one to utilize the high resolution.
+        name : string, default None
+            The name of the Layer, as it will appear in LayerControls
+        overlay : bool, default False
+            Adds the layer as an optional overlay (True) or the base layer (False).
+        control : bool, default True
+            Whether the Layer will be included in LayerControls.
         """
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -330,7 +362,7 @@ class LayerControl(MacroElement):
         """)  # noqa
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
@@ -491,7 +523,7 @@ class Popup(Element):
         """)  # noqa
 
     def render(self, **kwargs):
-        """TODO : docstring here."""
+        """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
 

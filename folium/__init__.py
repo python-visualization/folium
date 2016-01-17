@@ -7,10 +7,12 @@ from folium.folium import Map, initialize_notebook, CircleMarker
 from folium.map import (FeatureGroup, FitBounds, Icon, LayerControl, Marker,
                         Popup, TileLayer)
 
-from folium.features import (ClickForMarker, ColorScale, CustomIcon, DivIcon,
+from folium.features import (ClickForMarker, CustomIcon, DivIcon,
                              GeoJson, LatLngPopup,
                              MarkerCluster, MultiPolyLine, PolyLine, Vega,
                              RegularPolygonMarker, TopoJson, WmsTileLayer)
+
+import folium.colormap as colormap
 
 __version__ = '0.2.0.dev'
 
@@ -25,7 +27,7 @@ __all__ = ['Map',
            'Popup',
            'TileLayer',
            'ClickForMarker',
-           'ColorScale',
+           'colormap',
            'CustomIcon',
            'DivIcon',
            'GeoJson',
