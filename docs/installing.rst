@@ -70,7 +70,6 @@ To build the docs, you'll also need to install:
 ::
 
  sphinx
- sphinxcontrib-napoleon
 
 Then go in folium base folder (`~/sandbox/folium` for example)
 ::
