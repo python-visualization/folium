@@ -146,11 +146,7 @@ class Element(object):
 
 
 class Link(Element):
-    """Link
-    ----
-
-    TODO: docstring.
-    """
+    """TODO: docstring."""
     def get_code(self):
         """TODO : docstring."""
         if self.code is None:

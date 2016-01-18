@@ -432,8 +432,8 @@ class LinearColormap(ColorMap):
               order-of-magnitude integer. For example, 2100 is rounded to
               2000, 2790 to 3000.
 
-        Return
-        ------
+        Returns
+        -------
         A StepColormap with `n=len(index)-1` colors.
 
         Examples:

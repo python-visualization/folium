@@ -168,8 +168,8 @@ class Map(LegacyMap):
         -------
         Marker names and HTML in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
         >>> map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
@@ -224,8 +224,8 @@ class Map(LegacyMap):
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
         >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
                      line_color='red', line_opacity=1.0)
@@ -274,8 +274,8 @@ class Map(LegacyMap):
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
 
-        Example
-        -------
+        Examples
+        --------
         # FIXME: Add another example.
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
@@ -328,8 +328,8 @@ class Map(LegacyMap):
         -------
         Circle names and HTML in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.circle_marker(location=[45.5, -122.3],
                               radius=1000, popup='Portland, OR')
         >>> map.circle_marker(location=[45.5, -122.3],
@@ -433,8 +433,8 @@ class Map(LegacyMap):
         popup:
             Custom popup text
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.click_for_marker(popup='Your Custom Text')
 
         """
@@ -464,8 +464,8 @@ class Map(LegacyMap):
         max_zoom: int, default None
             Maximum zoom to be used.
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
@@ -572,12 +572,12 @@ class Map(LegacyMap):
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
 
-        Output
-        ------
+        Returns
+        -------
         GeoJSON data layer in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> m.choropleth(geo_path='us-states.json', line_color='blue',
                          line_weight=3)
         >>> m.choropleth(geo_path='geo.json', data=df,
@@ -729,12 +729,13 @@ class Map(LegacyMap):
         mercator_project : bool, default False, used only for array-like image.
             Transforms the data to project (longitude,latitude) coordinates
             to the Mercator projection.
-        Output
-        ------
+
+        Returns
+        -------
         Image overlay data layer in obj.template_vars
 
         Examples
-        -------
+        --------
         # assumes a map object `m` has been created
         >>> import numpy as np
         >>> data = np.random.random((100,100))

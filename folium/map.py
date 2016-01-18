@@ -444,8 +444,8 @@ class Marker(MacroElement):
     -------
     Marker names and HTML in obj.template_vars
 
-    Example
-    -------
+    Examples
+    --------
     >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
     """

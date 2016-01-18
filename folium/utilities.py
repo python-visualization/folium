@@ -60,8 +60,9 @@ def linear_gradient(hexList, nColors):
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
 
-    Example:
-    linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
+    Examples
+    --------
+    >>> linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
 
     """
     def _scale(start, finish, length, i):
