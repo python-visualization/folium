@@ -260,11 +260,14 @@ def _base(x):
 
 
 class ColorMap(MacroElement):
-    """A generic class for creating colormaps."""
+    """A generic class for creating colormaps.
+
+    Parameters
+    ----------
+    TODO: docstring
+    """
 
     def __init__(self, vmin=0., vmax=1., caption=""):
-        """
-        """
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
 
@@ -276,6 +279,7 @@ class ColorMap(MacroElement):
         self._template = self._env.get_template('color_scale.js')
 
     def render(self, **kwargs):
+        """TODO: docstring"""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
                              k in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]
@@ -340,33 +344,32 @@ class ColorMap(MacroElement):
 
 
 class LinearColormap(ColorMap):
+    """Creates a ColorMap based on linear interpolation of a set of colors
+    over a given index.
+
+    Parameters
+    ----------
+    colors : list-like object
+        The set of colors to be used for interpolation.
+        Colors can be provided in the form:
+        * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
+          `(255, 255, 0, 255)`)
+        * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
+          `(1., 1., 0., 1.)`)
+        * HTML-like string (e.g: `"#ffff00`)
+        * a color name or shortcut (e.g: `"y"` or `"yellow"`)
+    index : list of floats, default None
+        The values corresponding to each color.
+        It has to be sorted, and have the same length as `colors`.
+        If None, a regular grid between `vmin` and `vmax` is created.
+    vmin : float, default 0.
+        The minimal value for the colormap.
+        Values lower than `vmin` will be bound directly to `colors[0]`.
+    vmax : float, default 1.
+        The maximal value for the colormap.
+        Values higher than `vmax` will be bound directly to `colors[-1]`.
+    """
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
-        """Creates a ColorMap based on linear interpolation of a set of colors
-        over a given index.
-
-        Parameters
-        ----------
-        colors : list-like object
-            The set of colors to be used for interpolation.
-            Colors can be provided in the form:
-            * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
-              `(255, 255, 0, 255)`)
-            * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
-              `(1., 1., 0., 1.)`)
-            * HTML-like string (e.g: `"#ffff00`)
-            * a color name or shortcut (e.g: `"y"` or `"yellow"`)
-        index : list of floats, default None
-            The values corresponding to each color.
-            It has to be sorted, and have the same length as `colors`.
-            If None, a regular grid between `vmin` and `vmax` is created.
-        vmin : float, default 0.
-            The minimal value for the colormap.
-            Values lower than `vmin` will be bound directly to `colors[0]`.
-        vmax : float, default 1.
-            The maximal value for the colormap.
-            Values higher than `vmax` will be bound directly to `colors[-1]`.
-
-        """
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
                                              caption=caption)
 
@@ -522,32 +525,33 @@ class LinearColormap(ColorMap):
 
 
 class StepColormap(ColorMap):
+    """Creates a ColorMap based on linear interpolation of a set of colors
+    over a given index.
+
+    Parameters
+    ----------
+    colors : list-like object
+        The set of colors to be used for interpolation.
+        Colors can be provided in the form:
+        * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
+          `(255, 255, 0, 255)`)
+        * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
+          `(1., 1., 0., 1.)`)
+        * HTML-like string (e.g: `"#ffff00`)
+        * a color name or shortcut (e.g: `"y"` or `"yellow"`)
+    index : list of floats, default None
+        The values corresponding to each color.
+        It has to be sorted, and have the same length as `colors`.
+        If None, a regular grid between `vmin` and `vmax` is created.
+    vmin : float, default 0.
+        The minimal value for the colormap.
+        Values lower than `vmin` will be bound directly to `colors[0]`.
+    vmax : float, default 1.
+        The maximal value for the colormap.
+        Values higher than `vmax` will be bound directly to `colors[-1]`.
+
+    """
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
-        """Creates a ColorMap based on stepwise constant colorfunction.
-
-        Parameters
-        ----------
-        colors : list-like object
-            The set of colors to be used.
-            Colors can be provided in the form:
-            * tuples of int between 0 and 255 (e.g: `(255, 255, 0)` or
-              `(255, 255, 0, 255)`)
-            * tuples of floats between 0. and 1. (e.g: `(1., 1., 0.)` or
-              `(1., 1., 0., 1.)`)
-            * HTML-like string (e.g: `"#ffff00`)
-            * a color name or shortcut (e.g: `"y"` or `"yellow"`)
-        index : list of floats, default None
-            The values corresponding to each color.
-            Must be be sorted and its length must be equal to `len(colors)+1`.
-            If None, a regular grid between `vmin` and `vmax` is created.
-        vmin : float, default 0.
-            The minimal value for the colormap.
-            Values lower than `vmin` will be bound directly to `colors[0]`.
-        vmax : float, default 1.
-            The maximal value for the colormap.
-            Values higher than `vmax` will be bound directly to `colors[-1]`.
-
-        """
         super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
                                            caption=caption)
 
@@ -609,7 +613,6 @@ class StepColormap(ColorMap):
 
 class _LinearColormaps(object):
     """A class for hosting the list of built-in linear colormaps."""
-
     def __init__(self):
         self._schemes = _schemes.copy()
         self._colormaps = {key: LinearColormap(val) for

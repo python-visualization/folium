@@ -31,8 +31,77 @@ def initialize_notebook():
 
 
 class Map(LegacyMap):
-    """This class inherits from the map.Map object in order to provide
-    bindings to former folium API.
+    """Create a Map with Folium and Leaflet.js
+
+    Generate a base map of given width and height with either default
+    tilesets or a custom tileset URL. The following tilesets are built-in
+    to Folium. Pass any of the following to the "tiles" keyword:
+        - "OpenStreetMap"
+        - "MapQuest Open"
+        - "MapQuest Open Aerial"
+        - "Mapbox Bright" (Limited levels of zoom for free tiles)
+        - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+        - "Stamen" (Terrain, Toner, and Watercolor)
+        - "Cloudmade" (Must pass API key)
+        - "Mapbox" (Must pass API key)
+        - "CartoDB" (positron and dark_matter)
+    You can pass a custom tileset to Folium by passing a Leaflet-style
+    URL to the tiles parameter:
+    http://{s}.yourtiles.com/{z}/{x}/{y}.png
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Map (Northing, Easting).
+    width: pixel int or percentage string (default: '100%')
+        Width of the map.
+    height: pixel int or percentage string (default: '100%')
+        Height of the map.
+    tiles: str, default 'OpenStreetMap'
+        Map tileset to use. Can choose from a list of built-in tiles,
+        pass a custom URL or pass `None` to create a map without tiles.
+    API_key: str, default None
+        API key for Cloudmade or Mapbox tiles.
+    max_zoom: int, default 18
+        Maximum zoom depth for the map.
+    zoom_start: int, default 10
+        Initial zoom level for the map.
+    attr: string, default None
+        Map tile attribution; only required if passing custom tile URL.
+    detect_retina: bool, default False
+        If true and user is on a retina display, it will request four
+        tiles of half the specified size and a bigger zoom level in place
+        of one to utilize the high resolution.
+    crs : str, default 'EPSG3857'
+        Defines coordinate reference systems for projecting geographical points
+        into pixel (screen) coordinates and back.
+        You can use Leaflet's values :
+        * EPSG3857 : The most common CRS for online maps, used by almost all
+          free and commercial tile providers. Uses Spherical Mercator projection.
+          Set in by default in Map's crs option.
+        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
+          projection.
+        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
+          Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
+          May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+          should still be inverted (going from bottom to top).
+
+    Returns
+    -------
+    Folium LegacyMap Object
+
+    Examples
+    --------
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+                               tiles='Mapbox Control Room')
+    >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+                               tiles='Cloudmade', API_key='YourKey')
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
+                               tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                      'mapbox.control-room/{z}/{x}/{y}.png'),
+                                attr='Mapbox attribution')
     """
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML.

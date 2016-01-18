@@ -19,31 +19,31 @@ from .map import Layer, Icon, Marker, Popup
 
 
 class WmsTileLayer(Layer):
+    """Creates a Web Map Service (WMS) layer.
+
+    Parameters
+    ----------
+    url: str
+        The url of the WMS server.
+    format: str, default None
+        The format of the service output.
+        Ex: 'iamge/png'
+    layers: str, default None
+        The names of the layers to be displayed.
+    transparent: bool, default True
+        Whether the layer shall allow transparency.
+    attr: str, default None
+        The attribution of the service. Will be displayed in the bottom right corner.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls
+    """
     def __init__(self, url, format=None, layers=None,
                  transparent=True, attr=None,
                  name=None, overlay=True, control=True):
-        """Creates a Web Map Service (WMS) layer.
-
-        Parameters
-        ----------
-        url: str
-            The url of the WMS server.
-        format: str, default None
-            The format of the service output.
-            Ex: 'iamge/png'
-        layers: str, default None
-            The names of the layers to be displayed.
-        transparent: bool, default True
-            Whether the layer shall allow transparency.
-        attr: str, default None
-            The attribution of the service. Will be displayed in the bottom right corner.
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls
-        """
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)
         self._name = 'WmsTileLayer'
         self.tile_name = name if name is not None else 'WmsTileLayer_'+self._id
@@ -70,42 +70,42 @@ class WmsTileLayer(Layer):
 
 
 class RegularPolygonMarker(Marker):
+    """Custom markers using the Leaflet Data Vis Framework.
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Marker (Northing, Easting)
+    color: string, default 'black'
+        Marker line color
+    opacity: float, default 1
+        Line opacity, scale 0-1
+    weight: int, default 2
+        Stroke weight in pixels
+    fill_color: string, default 'blue'
+        Marker fill color
+    fill_opacity: float, default 1
+        Marker fill opacity
+    number_of_sides: int, default 4
+        Number of polygon sides
+    rotation: int, default 0
+        Rotation angle in degrees
+    radius: int, default 15
+        Marker radius, in pixels
+    popup: string or folium.Popup, default None
+        Input text or visualization for object. Can pass either text,
+        or a folium.Popup object.
+        If None, no popup will be displayed.
+
+    Returns
+    -------
+    Polygon marker names and HTML in obj.template_vars
+
+    For more information, see https://humangeo.github.io/leaflet-dvf/
+    """
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15, popup=None):
-        """Custom markers using the Leaflet Data Vis Framework.
-
-        Parameters
-        ----------
-        location: tuple or list, default None
-            Latitude and Longitude of Marker (Northing, Easting)
-        color: string, default 'black'
-            Marker line color
-        opacity: float, default 1
-            Line opacity, scale 0-1
-        weight: int, default 2
-            Stroke weight in pixels
-        fill_color: string, default 'blue'
-            Marker fill color
-        fill_opacity: float, default 1
-            Marker fill opacity
-        number_of_sides: int, default 4
-            Number of polygon sides
-        rotation: int, default 0
-            Rotation angle in degrees
-        radius: int, default 15
-            Marker radius, in pixels
-        popup: string or folium.Popup, default None
-            Input text or visualization for object. Can pass either text,
-            or a folium.Popup object.
-            If None, no popup will be displayed.
-
-        Returns
-        -------
-        Polygon marker names and HTML in obj.template_vars
-
-        For more information, see https://humangeo.github.io/leaflet-dvf/
-        """
         super(RegularPolygonMarker, self).__init__(location, popup=popup)
         self._name = 'RegularPolygonMarker'
         self.color = color
@@ -138,6 +138,7 @@ class RegularPolygonMarker(Marker):
             """)
 
     def render(self, **kwargs):
+        """TODO: docstring."""
         super(RegularPolygonMarker, self).render()
 
         figure = self.get_root()
@@ -150,34 +151,34 @@ class RegularPolygonMarker(Marker):
 
 
 class Vega(Element):
+    """Cretes a Vega chart element.
+
+    Parameters
+    ----------
+    data: JSON-like str or object
+        The Vega description of the chart.
+        It can also ba any object that has a method `to_json`, so that you can (for instance)
+        provide a `vincent` chart.
+    width: int or str, default None
+        The width of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    height: int or str, default None
+        The height of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    left: int or str, default '0%'
+        The horizontal distance of the output with respect to the parent HTML object.
+        Ex: 120, '120px', '80%'
+    top: int or str, default '0%'
+        The vertical distance of the output with respect to the parent HTML object.
+        Ex: 120, '120px', '80%'
+    position: str, default 'relative'
+        The `position` argument that the CSS shall contain.
+        Ex: 'relative', 'absolute'
+    """
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
-        """Cretes a Vega chart element.
-
-        Parameters
-        ----------
-        data: JSON-like str or object
-            The Vega description of the chart.
-            It can also ba any object that has a method `to_json`, so that you can (for instance)
-            provide a `vincent` chart.
-        width: int or str, default None
-            The width of the output element.
-            If None, either data['width'] (if available) or '100%' will be used.
-            Ex: 120, '120px', '80%'
-        height: int or str, default None
-            The height of the output element.
-            If None, either data['width'] (if available) or '100%' will be used.
-            Ex: 120, '120px', '80%'
-        left: int or str, default '0%'
-            The horizontal distance of the output with respect to the parent HTML object.
-            Ex: 120, '120px', '80%'
-        top: int or str, default '0%'
-            The vertical distance of the output with respect to the parent HTML object.
-            Ex: 120, '120px', '80%'
-        position: str, default 'relative'
-            The `position` argument that the CSS shall contain.
-            Ex: 'relative', 'absolute'
-        """
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
@@ -196,6 +197,7 @@ class Vega(Element):
         self._template = Template(u"")
 
     def render(self, **kwargs):
+        """TODO: docstring"""
         self.json = json.dumps(self.data)
 
         self._parent.html.add_children(Element(Template("""
@@ -239,44 +241,44 @@ class Vega(Element):
 
 
 class GeoJson(Layer):
+    """Creates a GeoJson object for plotting into a Map.
+
+    Parameters
+    ----------
+    data: file, dict or str.
+        The GeoJSON data you want to plot.
+        * If file, then data will be read in the file and fully
+          embedded in Leaflet's JavaScript.
+        * If dict, then data will be converted to JSON and embedded
+          in the JavaScript.
+        * If str, then data will be passed to the JavaScript as-is.
+    style_function: function, default None
+        A function mapping a GeoJson Feature to a style dict.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls
+
+    Examples
+    --------
+    >>> # Providing file that shall be embeded.
+    >>> GeoJson(open('foo.json'))
+    >>> # Providing filename that shall not be embeded.
+    >>> GeoJson('foo.json')
+    >>> # Providing dict.
+    >>> GeoJson(json.load(open('foo.json')))
+    >>> # Providing string.
+    >>> GeoJson(open('foo.json').read())
+
+    >>> # Provide a style_function that color all states green but Alabama.
+    >>> style_function = lambda x: {'fillColor': '#0000ff' if
+    ...                             x['properties']['name']=='Alabama' else
+    ...                             '#00ff00'}
+    >>> GeoJson(geojson, style_function=style_function)
+    """
     def __init__(self, data, style_function=None, name=None, overlay=True, control=True):
-        """Creates a GeoJson object for plotting into a Map.
-
-        Parameters
-        ----------
-        data: file, dict or str.
-            The GeoJSON data you want to plot.
-            * If file, then data will be read in the file and fully
-              embedded in Leaflet's JavaScript.
-            * If dict, then data will be converted to JSON and embedded
-              in the JavaScript.
-            * If str, then data will be passed to the JavaScript as-is.
-        style_function: function, default None
-            A function mapping a GeoJson Feature to a style dict.
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls
-
-        Examples
-        --------
-        >>> # Providing file that shall be embeded.
-        >>> GeoJson(open('foo.json'))
-        >>> # Providing filename that shall not be embeded.
-        >>> GeoJson('foo.json')
-        >>> # Providing dict.
-        >>> GeoJson(json.load(open('foo.json')))
-        >>> # Providing string.
-        >>> GeoJson(open('foo.json').read())
-
-        >>> # Provide a style_function that color all states green but Alabama.
-        >>> style_function = lambda x: {'fillColor': '#0000ff' if
-        ...                             x['properties']['name']=='Alabama' else
-        ...                             '#00ff00'}
-        >>> GeoJson(geojson, style_function=style_function)
-        """
         super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
@@ -320,6 +322,7 @@ class GeoJson(Layer):
             """)  # noqa
 
     def style_data(self):
+        """TODO: docstring."""
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
             if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
@@ -362,48 +365,48 @@ class GeoJson(Layer):
 
 
 class TopoJson(Layer):
+    """Creates a TopoJson object for plotting into a Map.
+
+    Parameters
+    ----------
+    data: file, dict or str.
+        The TopoJSON data you want to plot.
+        * If file, then data will be read in the file and fully
+          embedded in Leaflet's JavaScript.
+        * If dict, then data will be converted to JSON and embedded
+          in the JavaScript.
+        * If str, then data will be passed to the JavaScript as-is.
+    object_path: str
+        The path of the desired object into the TopoJson structure.
+        Ex: 'objects.myobject'.
+    style_function: function, default None
+        A function mapping a TopoJson geometry to a style dict.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls
+
+    Examples
+    --------
+    >>> # Providing file that shall be embeded.
+    >>> TopoJson(open('foo.json'), 'object.myobject')
+    >>> # Providing filename that shall not be embeded.
+    >>> TopoJson('foo.json', 'object.myobject')
+    >>> # Providing dict.
+    >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
+    >>> # Providing string.
+    >>> TopoJson(open('foo.json').read(), 'object.myobject')
+
+    >>> # Provide a style_function that color all states green but Alabama.
+    >>> style_function = lambda x: {'fillColor': '#0000ff' if
+    ...                             x['properties']['name']=='Alabama' else
+    ...                             '#00ff00'}
+    >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
+    """
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True):
-        """Creates a TopoJson object for plotting into a Map.
-
-        Parameters
-        ----------
-        data: file, dict or str.
-            The TopoJSON data you want to plot.
-            * If file, then data will be read in the file and fully
-              embedded in Leaflet's JavaScript.
-            * If dict, then data will be converted to JSON and embedded
-              in the JavaScript.
-            * If str, then data will be passed to the JavaScript as-is.
-        object_path: str
-            The path of the desired object into the TopoJson structure.
-            Ex: 'objects.myobject'.
-        style_function: function, default None
-            A function mapping a TopoJson geometry to a style dict.
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls
-
-        Examples
-        --------
-        >>> # Providing file that shall be embeded.
-        >>> TopoJson(open('foo.json'), 'object.myobject')
-        >>> # Providing filename that shall not be embeded.
-        >>> TopoJson('foo.json', 'object.myobject')
-        >>> # Providing dict.
-        >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
-        >>> # Providing string.
-        >>> TopoJson(open('foo.json').read(), 'object.myobject')
-
-        >>> # Provide a style_function that color all states green but Alabama.
-        >>> style_function = lambda x: {'fillColor': '#0000ff' if
-        ...                             x['properties']['name']=='Alabama' else
-        ...                             '#00ff00'}
-        >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
-        """
         super(TopoJson, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'TopoJson'
         if 'read' in dir(data):
@@ -435,6 +438,7 @@ class TopoJson(Layer):
             """)  # noqa
 
     def style_data(self):
+        """TODO: docstring."""
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
@@ -446,6 +450,7 @@ class TopoJson(Layer):
         return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
+        """TODO: docstring."""
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
@@ -488,20 +493,19 @@ class TopoJson(Layer):
 
 
 class MarkerCluster(Layer):
-    """Adds a MarkerCluster layer on the map."""
-    def __init__(self, name=None, overlay=True, control=True):
-        """Creates a MarkerCluster element to append into a map with
-        Map.add_children.
+    """Creates a MarkerCluster element to append into a map with
+    Map.add_children.
 
-        Parameters
-        ----------
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls
-        """
+    Parameters
+    ----------
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls
+    """
+    def __init__(self, name=None, overlay=True, control=True):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay, control=control)
         self._name = 'MarkerCluster'
         self._template = Template(u"""
@@ -512,6 +516,7 @@ class MarkerCluster(Layer):
             """)
 
     def render(self, **kwargs):
+        """TODO: docstring"""
         super(MarkerCluster, self).render()
 
         figure = self.get_root()
@@ -535,34 +540,34 @@ class MarkerCluster(Layer):
 
 
 class DivIcon(MacroElement):
+    """
+    Represents a lightweight icon for markers that uses a simple `div`
+    element instead of an image.
+
+    Parameters
+    ----------
+    icon_size : tuple of 2 int
+        Size of the icon image in pixels.
+    icon_anchor : tuple of 2 int
+        The coordinates of the "tip" of the icon
+        (relative to its top left corner).
+        The icon will be aligned so that this point is at the
+        marker's geographical location.
+    popup_anchor : tuple of 2 int
+        The coordinates of the point from which popups will "open",
+        relative to the icon anchor.
+    class_name : string
+        A custom class name to assign to the icon.
+        Leaflet defaults is 'leaflet-div-icon' which draws a little white
+        square with a shadow.  We set it 'empty' in folium.
+    html : string
+        A custom HTML code to put inside the div element.
+
+    For more information see:
+    http://leafletjs.com/reference.html#divicon
+    """
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
-        """
-        Represents a lightweight icon for markers that uses a simple `div`
-        element instead of an image.
-
-        Parameters
-        ----------
-        icon_size : tuple of 2 int
-            Size of the icon image in pixels.
-        icon_anchor : tuple of 2 int
-            The coordinates of the "tip" of the icon
-            (relative to its top left corner).
-            The icon will be aligned so that this point is at the
-            marker's geographical location.
-        popup_anchor : tuple of 2 int
-            The coordinates of the point from which popups will "open",
-            relative to the icon anchor.
-        class_name : string
-            A custom class name to assign to the icon.
-            Leaflet defaults is 'leaflet-div-icon' which draws a little white
-            square with a shadow.  We set it 'empty' in folium.
-        html : string
-            A custom HTML code to put inside the div element.
-
-        For more information see:
-        http://leafletjs.com/reference.html#divicon
-        """
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
         self.icon_size = icon_size
@@ -587,25 +592,25 @@ class DivIcon(MacroElement):
 
 
 class CircleMarker(Marker):
+    """Creates a CircleMarker object for plotting on a Map.
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Marker (Northing, Easting)
+    radius: int
+        The radius of the circle in pixels.
+    color: str, default 'black'
+        The color of the marker's edge in a HTML-compatible format.
+    fill_color: str, default 'black'
+        The fill color of the marker in a HTML-compatible format.
+    fill_opacity: float, default à.6
+        The fill opacity of the marker, between 0. and 1.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        """Creates a CircleMarker object for plotting on a Map.
-
-        Parameters
-        ----------
-        location: tuple or list, default None
-            Latitude and Longitude of Marker (Northing, Easting)
-        radius: int
-            The radius of the circle in pixels.
-        color: str, default 'black'
-            The color of the marker's edge in a HTML-compatible format.
-        fill_color: str, default 'black'
-            The fill color of the marker in a HTML-compatible format.
-        fill_opacity: float, default à.6
-            The fill opacity of the marker, between 0. and 1.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-        """
         super(CircleMarker, self).__init__(location, popup=popup)
         self._name = 'CircleMarker'
         self.radius = radius
@@ -631,13 +636,9 @@ class CircleMarker(Marker):
 
 
 class LatLngPopup(MacroElement):
+    """When one clicks on a Map that contains a LatLngPopup, a popup is shown that displays
+    the latitude and longitude of the pointer."""
     def __init__(self):
-        """When one clicks on a Map that contains a LatLngPopup, a popup is shown that displays
-        the latitude and longitude of the pointer.
-
-        Parameters
-        ----------
-        """
         super(LatLngPopup, self).__init__()
         self._name = 'LatLngPopup'
 
@@ -657,16 +658,16 @@ class LatLngPopup(MacroElement):
 
 
 class ClickForMarker(MacroElement):
-    def __init__(self, popup=None):
-        """When one clicks on a Map that contains a ClickForMarker, a Marker is created
-        at the pointer's position.
+    """When one clicks on a Map that contains a ClickForMarker, a Marker is created
+    at the pointer's position.
 
-        Parameters
-        ----------
-        popup: str, default None
-            Text to display in the markers' popups.
-            If None, the popups will display the marker's latitude and longitude.
-        """
+    Parameters
+    ----------
+    popup: str, default None
+        Text to display in the markers' popups.
+        If None, the popups will display the marker's latitude and longitude.
+    """
+    def __init__(self, popup=None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -691,27 +692,27 @@ class ClickForMarker(MacroElement):
 
 
 class PolyLine(MacroElement):
+    """
+    Creates a PolyLine object to append into a map with
+    Map.add_children.
+
+    Parameters
+    ----------
+    locations: list of points (latitude, longitude)
+        Latitude and Longitude of line (Northing, Easting)
+    color: string, default Leaflet's default ('#03f')
+    weight: float, default Leaflet's default (5)
+    opacity: float, default Leaflet's default (0.5)
+    latlon: bool, default True
+        Whether locations are given in the form [[lat, lon]]
+        or not ([[lon, lat]] if False).
+        Note that the default GeoJson format is latlon=False,
+        while Leaflet polyline's default is latlon=True.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    """
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
-        """
-        Creates a PolyLine object to append into a map with
-        Map.add_children.
-
-        Parameters
-        ----------
-        locations: list of points (latitude, longitude)
-            Latitude and Longitude of line (Northing, Easting)
-        color: string, default Leaflet's default ('#03f')
-        weight: float, default Leaflet's default (5)
-        opacity: float, default Leaflet's default (0.5)
-        latlon: bool, default True
-            Whether locations are given in the form [[lat, lon]]
-            or not ([[lon, lat]] if False).
-            Note that the default GeoJson format is latlon=False,
-            while Leaflet polyline's default is latlon=True.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-        """
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
         self.data = (_locations_mirror(locations) if not latlon else
@@ -757,27 +758,27 @@ class PolyLine(MacroElement):
 
 
 class MultiPolyLine(MacroElement):
+    """
+    Creates a MultiPolyLine object to append into a map with
+    Map.add_children.
+
+    Parameters
+    ----------
+    locations: list of points (latitude, longitude)
+        Latitude and Longitude of line (Northing, Easting)
+    color: string, default Leaflet's default ('#03f')
+    weight: float, default Leaflet's default (5)
+    opacity: float, default Leaflet's default (0.5)
+    latlon: bool, default True
+        Whether locations are given in the form [[lat, lon]]
+        or not ([[lon, lat]] if False).
+        Note that the default GeoJson format is latlon=False,
+        while Leaflet polyline's default is latlon=True.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    """
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
-        """
-        Creates a MultiPolyLine object to append into a map with
-        Map.add_children.
-
-        Parameters
-        ----------
-        locations: list of points (latitude, longitude)
-            Latitude and Longitude of line (Northing, Easting)
-        color: string, default Leaflet's default ('#03f')
-        weight: float, default Leaflet's default (5)
-        opacity: float, default Leaflet's default (0.5)
-        latlon: bool, default True
-            Whether locations are given in the form [[lat, lon]]
-            or not ([[lon, lat]] if False).
-            Note that the default GeoJson format is latlon=False,
-            while Leaflet polyline's default is latlon=True.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-        """
         super(MultiPolyLine, self).__init__()
         self._name = 'MultiPolyLine'
         self.data = (_locations_mirror(locations) if not latlon else
@@ -823,40 +824,39 @@ class MultiPolyLine(MacroElement):
 
 
 class CustomIcon(Icon):
+    """Create a custom icon, based on an image.
+
+    Parameters
+    ----------
+    icon_image :  string, file or array-like object
+        The data you want to use as an icon.
+        * If string, it will be written directly in the output file.
+        * If file, it's content will be converted as embedded in the
+          output file.
+        * If array-like, it will be converted to PNG base64 string
+          and embedded in the output.
+    icon_size : tuple of 2 int
+        Size of the icon image in pixels.
+    icon_anchor : tuple of 2 int
+        The coordinates of the "tip" of the icon
+        (relative to its top left corner).
+        The icon will be aligned so that this point is at the
+        marker's geographical location.
+    shadow_image :  string, file or array-like object
+        The data for the shadow image. If not specified,
+        no shadow image will be created.
+    shadow_size : tuple of 2 int
+        Size of the shadow image in pixels.
+    shadow_anchor : tuple of 2 int
+        The coordinates of the "tip" of the shadow relative to its
+        top left corner (the same as icon_anchor if not specified).
+    popup_anchor : tuple of 2 int
+        The coordinates of the point from which popups will "open",
+        relative to the icon anchor.
+    """
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
                  shadow_image=None, shadow_size=None, shadow_anchor=None,
                  popup_anchor=None):
-        """Create a custom icon, based on an image.
-
-        Parameters
-        ----------
-        icon_image :  string, file or array-like object
-            The data you want to use as an icon.
-            * If string, it will be written directly in the output file.
-            * If file, it's content will be converted as embedded in the
-              output file.
-            * If array-like, it will be converted to PNG base64 string
-              and embedded in the output.
-        icon_size : tuple of 2 int
-            Size of the icon image in pixels.
-        icon_anchor : tuple of 2 int
-            The coordinates of the "tip" of the icon
-            (relative to its top left corner).
-            The icon will be aligned so that this point is at the
-            marker's geographical location.
-        shadow_image :  string, file or array-like object
-            The data for the shadow image. If not specified,
-            no shadow image will be created.
-        shadow_size : tuple of 2 int
-            Size of the shadow image in pixels.
-        shadow_anchor : tuple of 2 int
-            The coordinates of the "tip" of the shadow relative to its
-            top left corner (the same as icon_anchor if not specified).
-        popup_anchor : tuple of 2 int
-            The coordinates of the point from which popups will "open",
-            relative to the icon anchor.
-
-        """
         super(Icon, self).__init__()
         self._name = 'CustomIcon'
         self.icon_url = image_to_url(icon_image)

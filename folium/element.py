@@ -21,9 +21,13 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 class Element(object):
     """Basic Element object that does nothing.
-    Other Elements may inherit from this one."""
+    Other Elements may inherit from this one.
+
+    Parameters
+    ----------
+    TODO: docstring.
+    """
     def __init__(self, template=None, template_name=None):
-        """Creates a Element."""
         self._name = 'Element'
         self._id = uuid4().hex
         self._env = ENV
@@ -144,6 +148,8 @@ class Element(object):
 class Link(Element):
     """Link
     ----
+
+    TODO: docstring.
     """
     def get_code(self):
         """TODO : docstring."""
@@ -159,16 +165,15 @@ class Link(Element):
 
 
 class JavascriptLink(Link):
-    """TODO: docstring."""
+    """Create a JavascriptLink object based on a url.
+    Parameters
+    ----------
+        url : str
+            The url to be linked
+        download : bool, default False
+            Whether the target document shall be loaded right now.
+    """
     def __init__(self, url, download=False):
-        """Create a JavascriptLink object based on a url.
-        Parameters
-        ----------
-            url : str
-                The url to be linked
-            download : bool, default False
-                Whether the target document shall be loaded right now.
-        """
         super(JavascriptLink, self).__init__()
         self._name = 'JavascriptLink'
         self.url = url
@@ -186,16 +191,15 @@ class JavascriptLink(Link):
 
 
 class CssLink(Link):
-    """TODO: docstring."""
+    """Create a CssLink object based on a url.
+    Parameters
+    ----------
+        url : str
+            The url to be linked
+        download : bool, default False
+            Whether the target document shall be loaded right now.
+    """
     def __init__(self, url, download=False):
-        """Create a CssLink object based on a url.
-        Parameters
-        ----------
-            url : str
-                The url to be linked
-            download : bool, default False
-                Whether the target document shall be loaded right now.
-        """
         super(CssLink, self).__init__()
         self._name = 'CssLink'
         self.url = url
@@ -247,27 +251,26 @@ _default_css = [
 
 
 class Figure(Element):
-    """TODO: docstring."""
-    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
-        """Create a Figure object, to plot things into it.
+    """Create a Figure object, to plot things into it.
 
-        Parameters
-        ----------
-        width : str, default "100%"
-            The width of the Figure.
-            It may be a percentage or pixel value (like "300px").
-        height : str, default None
-            The height of the Figure.
-            It may be a percentage or a pixel value (like "300px").
-        ratio : str, default "60%"
-            A percentage defining the aspect ratio of the Figure.
-            It will be ignored if height is not None.
-        figsize : tuple of two int, default None
-            If you're a matplotlib addict, you can overwrite width and
-            height. Values will be converted into pixels in using 60 dpi.
-            For example figsize=(10, 5) will result in
-            width="600px", height="300px".
-        """
+    Parameters
+    ----------
+    width : str, default "100%"
+        The width of the Figure.
+        It may be a percentage or pixel value (like "300px").
+    height : str, default None
+        The height of the Figure.
+        It may be a percentage or a pixel value (like "300px").
+    ratio : str, default "60%"
+        A percentage defining the aspect ratio of the Figure.
+        It will be ignored if height is not None.
+    figsize : tuple of two int, default None
+        If you're a matplotlib addict, you can overwrite width and
+        height. Values will be converted into pixels in using 60 dpi.
+        For example figsize=(10, 5) will result in
+        width="600px", height="300px".
+    """
+    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -398,21 +401,21 @@ class Figure(Element):
 
 
 class Html(Element):
-    """A basic Element for embedding HTML."""
-    def __init__(self, data, width="100%", height="100%"):
-        """Create an HTML div object for embedding data.
+    """Create an HTML div object for embedding data.
 
-        Parameters
-        ----------
-        data : str
-            The HTML data to be embedded.
-        width : int or str, default '100%'
-            The width of the output div element.
-            Ex: 120 , '120px', '80%'
-        height : int or str, default '100%'
-            The height of the output div element.
-            Ex: 120 , '120px', '80%'
-        """
+    Parameters
+    ----------
+    data : str
+        The HTML data to be embedded.
+    width : int or str, default '100%'
+        The width of the output div element.
+        Ex: 120 , '120px', '80%'
+    height : int or str, default '100%'
+        The height of the output div element.
+        Ex: 120 , '120px', '80%'
+    """
+
+    def __init__(self, data, width="100%", height="100%"):
         super(Html, self).__init__()
         self._name = 'Html'
         self.data = data
@@ -428,10 +431,14 @@ class Html(Element):
 
 
 class Div(Figure):
-    """TODO: docstring."""
+    """Create a Map with Folium and Leaflet.js.
+
+    Parameters
+    ----------
+    TODO: docstring.
+    """
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
-        """Create a Map with Folium and Leaflet.js."""
         super(Figure, self).__init__()
         self._name = 'Div'
 
@@ -517,30 +524,29 @@ class Div(Figure):
 
 
 class IFrame(Element):
-    """TODO: docstring."""
+    """Create a Figure object, to plot things into it.
+
+    Parameters
+    ----------
+    html : str, default None
+        Eventual HTML code that you want to put in the frame.
+    width : str, default "100%"
+        The width of the Figure.
+        It may be a percentage or pixel value (like "300px").
+    height : str, default None
+        The height of the Figure.
+        It may be a percentage or a pixel value (like "300px").
+    ratio : str, default "60%"
+        A percentage defining the aspect ratio of the Figure.
+        It will be ignored if height is not None.
+    figsize : tuple of two int, default None
+        If you're a matplotlib addict, you can overwrite width and
+        height. Values will be converted into pixels in using 60 dpi.
+        For example figsize=(10, 5) will result in
+        width="600px", height="300px".
+    """
     def __init__(self, html=None, width="100%", height=None, ratio="60%",
                  figsize=None):
-        """Create a Figure object, to plot things into it.
-
-        Parameters
-        ----------
-        html : str, default None
-            Eventual HTML code that you want to put in the frame.
-        width : str, default "100%"
-            The width of the Figure.
-            It may be a percentage or pixel value (like "300px").
-        height : str, default None
-            The height of the Figure.
-            It may be a percentage or a pixel value (like "300px").
-        ratio : str, default "60%"
-            A percentage defining the aspect ratio of the Figure.
-            It will be ignored if height is not None.
-        figsize : tuple of two int, default None
-            If you're a matplotlib addict, you can overwrite width and
-            height. Values will be converted into pixels in using 60 dpi.
-            For example figsize=(10, 5) will result in
-            width="600px", height="300px".
-        """
         super(IFrame, self).__init__()
         self._name = 'IFrame'
 
@@ -597,7 +603,6 @@ class MacroElement(Element):
             {% endmacro %}
     """
     def __init__(self):
-        """Creates a MacroElement object."""
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
 
