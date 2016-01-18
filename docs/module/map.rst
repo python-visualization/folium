@@ -1,53 +1,54 @@
-`Element`
----------
+`LegacyMap`
+-----------
 
-.. autoclass:: folium.element.Element
+.. autoclass:: folium.map.LegacyMap
    :members:
 
-`MacroElement`
+`Layer`
+-------
+
+.. autoclass:: folium.map.Layer
+   :members:
+
+`TileLayer`
+-----------
+
+.. autoclass:: folium.map.TileLayer
+   :members:
+
+`FeatureGroup`
 --------------
 
-.. autoclass:: folium.element.MacroElement
+.. autoclass:: folium.map.FeatureGroup
    :members:
 
-`Figure`
---------
+`LayerControl`
+--------------
 
-.. autoclass:: folium.element.Figure
+.. autoclass:: folium.map.LayerControl
    :members:
 
-`Html`
+`Icon`
 ------
 
-.. autoclass:: folium.element.Html
+.. autoclass:: folium.map.Icon
    :members:
 
-`Div`
------
-
-.. autoclass:: folium.element.Div
-   :members:
-
-`IFrame`
+`Marker`
 --------
 
-.. autoclass:: folium.element.IFrame
+.. autoclass:: folium.map.Marker
    :members:
 
-`Link`
-------
+`Popup`
+-------
 
-.. autoclass:: folium.element.Link
+.. autoclass:: folium.map.Popup
    :members:
 
-`JavascriptLink`
-----------------
+`FitBounds`
+-----------
 
-.. autoclass:: folium.element.JavascriptLink
+.. autoclass:: folium.map.FitBounds
    :members:
 
-`CssLink`
----------
-
-.. autoclass:: folium.element.CssLink
-   :members:

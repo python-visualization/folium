@@ -1,3 +1,5 @@
+Installing
+==========
 
 Requirements
 ------------

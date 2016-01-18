@@ -1,3 +1,6 @@
+Contributing
+============
+
 Choose the sandbox folder of your choice (`~/sandbox` for example)
 ::
 
