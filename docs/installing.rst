@@ -19,6 +19,7 @@ Easiest
 ::
 
 $pip install folium
+
 Or from the source
 
 $python setup.py install
@@ -69,14 +70,16 @@ To build the docs, you'll also need to install:
 ::
 
  sphinx
+ sphinxcontrib-napoleon
 
 Then go in folium base folder (`~/sandbox/folium` for example)
 ::
 
 $ cd ~/sandbox/folium
 
-Run the test
+Build the docs
 ::
 
-$ sphinx-build -b html docs/ docs/_build/html
+$ rm -rf docs/_build; sphinx-build -b html docs/ docs/_build/html
 
+Then the documentation is in `docs/_build/html/index.html`.

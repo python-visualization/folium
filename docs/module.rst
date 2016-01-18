@@ -1,4 +1,3 @@
-.. _module::
 ModuleDescription
 *****************
 
@@ -7,7 +6,7 @@ ModuleDescription
 
 .. toctree::
    :maxdepth: 3
-   
+
    module/element
 
 :doc:`Map </module/map>`
