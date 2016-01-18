@@ -583,20 +583,23 @@ class IFrame(Element):
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.
     To compute your own element, all you have to do is:
-        * To inherit from this class
-        * Overwrite the '_name' attribute
-        * Overwrite the '_template' attribute with something of the form:
-            {% macro header(this, kwargs) %}
-                ...
-            {% endmacro %}
 
-            {% macro html(this, kwargs) %}
-                ...
-            {% endmacro %}
+    * To inherit from this class
+    * Overwrite the '_name' attribute
+    * Overwrite the '_template' attribute with something of the form::
 
-            {% macro script(this, kwargs) %}
-                ...
-            {% endmacro %}
+        {% macro header(this, kwargs) %}
+            ...
+        {% endmacro %}
+
+        {% macro html(this, kwargs) %}
+            ...
+        {% endmacro %}
+
+        {% macro script(this, kwargs) %}
+            ...
+        {% endmacro %}
+
     """
     def __init__(self):
         super(MacroElement, self).__init__()

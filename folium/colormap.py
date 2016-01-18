@@ -4,8 +4,8 @@ Colormap
 -------
 
 Utility module for dealing with colormaps.
-
 """
+
 from __future__ import absolute_import
 
 import math
@@ -264,8 +264,7 @@ class ColorMap(MacroElement):
 
     Parameters
     ----------
-    TODO: docstring
-    """
+    TODO: docstring"""
 
     def __init__(self, vmin=0., vmax=1., caption=""):
         super(ColorMap, self).__init__()
@@ -349,13 +348,14 @@ class LinearColormap(ColorMap):
 
     Parameters
     ----------
+
     colors : list-like object
         The set of colors to be used for interpolation.
         Colors can be provided in the form:
         * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
-          `(255, 255, 0, 255)`)
+        `(255, 255, 0, 255)`)
         * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
-          `(1., 1., 0., 1.)`)
+        `(1., 1., 0., 1.)`)
         * HTML-like string (e.g: `"#ffff00`)
         * a color name or shortcut (e.g: `"y"` or `"yellow"`)
     index : list of floats, default None
@@ -367,8 +367,8 @@ class LinearColormap(ColorMap):
         Values lower than `vmin` will be bound directly to `colors[0]`.
     vmax : float, default 1.
         The maximal value for the colormap.
-        Values higher than `vmax` will be bound directly to `colors[-1]`.
-    """
+        Values higher than `vmax` will be bound directly to `colors[-1]`."""
+
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
                                              caption=caption)
@@ -404,8 +404,7 @@ class LinearColormap(ColorMap):
 
     def to_step(self, n=None, index=None, data=None, method=None,
                 quantiles=None, round_method=None):
-        """
-        Splits the LinearColormap into a StepColormap.
+        """Splits the LinearColormap into a StepColormap.
 
         Parameters
         ----------
@@ -429,8 +428,8 @@ class LinearColormap(ColorMap):
             The method used to round thresholds.
             * If 'int', all values will be rounded to the nearest integer.
             * If 'log10', all values will be rounded to the nearest
-              order-of-magnitude integer. For example, 2100 is rounded to
-              2000, 2790 to 3000.
+            order-of-magnitude integer. For example, 2100 is rounded to
+            2000, 2790 to 3000.
 
         Returns
         -------
@@ -534,9 +533,9 @@ class StepColormap(ColorMap):
         The set of colors to be used for interpolation.
         Colors can be provided in the form:
         * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
-          `(255, 255, 0, 255)`)
+        `(255, 255, 0, 255)`)
         * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
-          `(1., 1., 0., 1.)`)
+        `(1., 1., 0., 1.)`)
         * HTML-like string (e.g: `"#ffff00`)
         * a color name or shortcut (e.g: `"y"` or `"yellow"`)
     index : list of floats, default None

@@ -36,6 +36,7 @@ class Map(LegacyMap):
     Generate a base map of given width and height with either default
     tilesets or a custom tileset URL. The following tilesets are built-in
     to Folium. Pass any of the following to the "tiles" keyword:
+
         - "OpenStreetMap"
         - "MapQuest Open"
         - "MapQuest Open Aerial"
@@ -45,6 +46,7 @@ class Map(LegacyMap):
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
+
     You can pass a custom tileset to Folium by passing a Leaflet-style
     URL to the tiles parameter:
     http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -77,15 +79,15 @@ class Map(LegacyMap):
         into pixel (screen) coordinates and back.
         You can use Leaflet's values :
         * EPSG3857 : The most common CRS for online maps, used by almost all
-          free and commercial tile providers. Uses Spherical Mercator projection.
-          Set in by default in Map's crs option.
+        free and commercial tile providers. Uses Spherical Mercator projection.
+        Set in by default in Map's crs option.
         * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-          projection.
+        projection.
         * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-          Mercator projection.
+        Mercator projection.
         * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-          May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-          should still be inverted (going from bottom to top).
+        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+        should still be inverted (going from bottom to top).
 
     Returns
     -------
@@ -106,8 +108,8 @@ class Map(LegacyMap):
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         path: string, default 'map.html'
             Path for HTML output for map
         plugin_data_out: boolean, default True
@@ -276,15 +278,15 @@ class Map(LegacyMap):
 
         Examples
         --------
-        # FIXME: Add another example.
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
                                    [(45.5238, -122.675), (45.5238, -122.675)]])
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
                                    [(45.5238, -122.675), (45.5238, -122.675)]],
-                                   line_color='red', line_weight=2,
-                                   line_opacity=1.0)
+                        line_color='red', line_weight=2,
+                        line_opacity=1.0)
+        FIXME: Add another example.
         """
         warnings.warn("%s is deprecated. Use %s instead" %
                       ("multiline", "add_children(MultiPolyLine)"),

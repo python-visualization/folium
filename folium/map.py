@@ -26,6 +26,7 @@ class LegacyMap(MacroElement):
     Generate a base map of given width and height with either default
     tilesets or a custom tileset URL. The following tilesets are built-in
     to Folium. Pass any of the following to the "tiles" keyword:
+
         - "OpenStreetMap"
         - "MapQuest Open"
         - "MapQuest Open Aerial"
@@ -35,6 +36,7 @@ class LegacyMap(MacroElement):
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
+
     You can pass a custom tileset to Folium by passing a Leaflet-style
     URL to the tiles parameter:
     http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -67,15 +69,15 @@ class LegacyMap(MacroElement):
         into pixel (screen) coordinates and back.
         You can use Leaflet's values :
         * EPSG3857 : The most common CRS for online maps, used by almost all
-          free and commercial tile providers. Uses Spherical Mercator projection.
-          Set in by default in Map's crs option.
+        free and commercial tile providers. Uses Spherical Mercator projection.
+        Set in by default in Map's crs option.
         * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-          projection.
+        projection.
         * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-          Mercator projection.
+        Mercator projection.
         * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-          May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-          should still be inverted (going from bottom to top).
+        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+        should still be inverted (going from bottom to top).
 
     Returns
     -------
@@ -229,6 +231,7 @@ class TileLayer(Layer):
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
             - "CartoDB" (positron and dark_matter)
+
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter:
         http://{s}.yourtiles.com/{z}/{x}/{y}.png
@@ -381,10 +384,12 @@ class Icon(MacroElement):
     ----------
     color : str, default 'blue'
         The color of the marker. You can use:
+
             ['red', 'blue', 'green', 'purple', 'orange', 'darkred',
              'lightred', 'beige', 'darkblue', 'darkgreen', 'cadetblue',
              'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen',
              'gray', 'black', 'lightgray']
+
     icon_color : str, default 'white'
         The color of the drawing on the marker. You can use colors above,
         or an html color code.
@@ -392,7 +397,7 @@ class Icon(MacroElement):
         The name of the marker sign.
         See Font-Awesome website to choose yours.
         Warning : depending on the icon you choose you may need to adapt
-                  the `prefix` as well.
+        the `prefix` as well.
     angle : int, default 0
         The icon will be rotated by this amount of degrees.
     prefix : str, default 'glyphicon'

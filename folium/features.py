@@ -248,9 +248,9 @@ class GeoJson(Layer):
     data: file, dict or str.
         The GeoJSON data you want to plot.
         * If file, then data will be read in the file and fully
-          embedded in Leaflet's JavaScript.
+        embedded in Leaflet's JavaScript.
         * If dict, then data will be converted to JSON and embedded
-          in the JavaScript.
+        in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         A function mapping a GeoJson Feature to a style dict.
@@ -372,9 +372,9 @@ class TopoJson(Layer):
     data: file, dict or str.
         The TopoJSON data you want to plot.
         * If file, then data will be read in the file and fully
-          embedded in Leaflet's JavaScript.
+        embedded in Leaflet's JavaScript.
         * If dict, then data will be converted to JSON and embedded
-          in the JavaScript.
+        in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
     object_path: str
         The path of the desired object into the TopoJson structure.
@@ -832,9 +832,9 @@ class CustomIcon(Icon):
         The data you want to use as an icon.
         * If string, it will be written directly in the output file.
         * If file, it's content will be converted as embedded in the
-          output file.
+        output file.
         * If array-like, it will be converted to PNG base64 string
-          and embedded in the output.
+        and embedded in the output.
     icon_size : tuple of 2 int
         Size of the icon image in pixels.
     icon_anchor : tuple of 2 int
