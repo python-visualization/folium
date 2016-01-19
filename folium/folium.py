@@ -31,14 +31,85 @@ def initialize_notebook():
 
 
 class Map(LegacyMap):
-    """This class inherits from the map.Map object in order to provide
-    bindings to former folium API.
+    """Create a Map with Folium and Leaflet.js
+
+    Generate a base map of given width and height with either default
+    tilesets or a custom tileset URL. The following tilesets are built-in
+    to Folium. Pass any of the following to the "tiles" keyword:
+
+        - "OpenStreetMap"
+        - "MapQuest Open"
+        - "MapQuest Open Aerial"
+        - "Mapbox Bright" (Limited levels of zoom for free tiles)
+        - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+        - "Stamen" (Terrain, Toner, and Watercolor)
+        - "Cloudmade" (Must pass API key)
+        - "Mapbox" (Must pass API key)
+        - "CartoDB" (positron and dark_matter)
+
+    You can pass a custom tileset to Folium by passing a Leaflet-style
+    URL to the tiles parameter:
+    http://{s}.yourtiles.com/{z}/{x}/{y}.png
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Map (Northing, Easting).
+    width: pixel int or percentage string (default: '100%')
+        Width of the map.
+    height: pixel int or percentage string (default: '100%')
+        Height of the map.
+    tiles: str, default 'OpenStreetMap'
+        Map tileset to use. Can choose from a list of built-in tiles,
+        pass a custom URL or pass `None` to create a map without tiles.
+    API_key: str, default None
+        API key for Cloudmade or Mapbox tiles.
+    max_zoom: int, default 18
+        Maximum zoom depth for the map.
+    zoom_start: int, default 10
+        Initial zoom level for the map.
+    attr: string, default None
+        Map tile attribution; only required if passing custom tile URL.
+    detect_retina: bool, default False
+        If true and user is on a retina display, it will request four
+        tiles of half the specified size and a bigger zoom level in place
+        of one to utilize the high resolution.
+    crs : str, default 'EPSG3857'
+        Defines coordinate reference systems for projecting geographical points
+        into pixel (screen) coordinates and back.
+        You can use Leaflet's values :
+        * EPSG3857 : The most common CRS for online maps, used by almost all
+        free and commercial tile providers. Uses Spherical Mercator projection.
+        Set in by default in Map's crs option.
+        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
+        projection.
+        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
+        Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
+        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+        should still be inverted (going from bottom to top).
+
+    Returns
+    -------
+    Folium LegacyMap Object
+
+    Examples
+    --------
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+                               tiles='Mapbox Control Room')
+    >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+                               tiles='Cloudmade', API_key='YourKey')
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
+                               tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                      'mapbox.control-room/{z}/{x}/{y}.png'),
+                                attr='Mapbox attribution')
     """
     def create_map(self, path='map.html', plugin_data_out=True, template=None):
         """Write Map output to HTML.
 
-        Parameters:
-        -----------
+        Parameters
+        ----------
         path: string, default 'map.html'
             Path for HTML output for map
         plugin_data_out: boolean, default True
@@ -99,8 +170,8 @@ class Map(LegacyMap):
         -------
         Marker names and HTML in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.simple_marker(location=[45.5, -122.3], popup='Portland, OR')
         >>> map.simple_marker(location=[45.5, -122.3], popup=(vis, 'vis.json'))
 
@@ -155,8 +226,8 @@ class Map(LegacyMap):
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)])
         >>> map.line(locations=[(45.5, -122.3), (42.3, -71.0)],
                      line_color='red', line_opacity=1.0)
@@ -205,17 +276,17 @@ class Map(LegacyMap):
         Note: If the optional styles are omitted, they will not be included
         in the HTML output and will obtain the Leaflet defaults listed above.
 
-        Example
-        -------
-        # FIXME: Add another example.
+        Examples
+        --------
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
                                    [(45.5238, -122.675), (45.5238, -122.675)]])
         >>> m.multiline(locations=[[(45.5236, -122.675), (45.5236, -122.675)],
                                    [(45.5237, -122.675), (45.5237, -122.675)],
                                    [(45.5238, -122.675), (45.5238, -122.675)]],
-                                   line_color='red', line_weight=2,
-                                   line_opacity=1.0)
+                        line_color='red', line_weight=2,
+                        line_opacity=1.0)
+        FIXME: Add another example.
         """
         warnings.warn("%s is deprecated. Use %s instead" %
                       ("multiline", "add_children(MultiPolyLine)"),
@@ -259,8 +330,8 @@ class Map(LegacyMap):
         -------
         Circle names and HTML in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.circle_marker(location=[45.5, -122.3],
                               radius=1000, popup='Portland, OR')
         >>> map.circle_marker(location=[45.5, -122.3],
@@ -364,8 +435,8 @@ class Map(LegacyMap):
         popup:
             Custom popup text
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.click_for_marker(popup='Your Custom Text')
 
         """
@@ -395,8 +466,8 @@ class Map(LegacyMap):
         max_zoom: int, default None
             Maximum zoom to be used.
 
-        Example
-        -------
+        Examples
+        --------
         >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
@@ -503,12 +574,12 @@ class Map(LegacyMap):
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
 
-        Output
-        ------
+        Returns
+        -------
         GeoJSON data layer in obj.template_vars
 
-        Example
-        -------
+        Examples
+        --------
         >>> m.choropleth(geo_path='us-states.json', line_color='blue',
                          line_weight=3)
         >>> m.choropleth(geo_path='geo.json', data=df,
@@ -660,12 +731,13 @@ class Map(LegacyMap):
         mercator_project : bool, default False, used only for array-like image.
             Transforms the data to project (longitude,latitude) coordinates
             to the Mercator projection.
-        Output
-        ------
+
+        Returns
+        -------
         Image overlay data layer in obj.template_vars
 
         Examples
-        -------
+        --------
         # assumes a map object `m` has been created
         >>> import numpy as np
         >>> data = np.random.random((100,100))

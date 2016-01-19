@@ -60,8 +60,9 @@ def linear_gradient(hexList, nColors):
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
 
-    Example:
-    linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
+    Examples
+    --------
+    >>> linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
 
     """
     def _scale(start, finish, length, i):
@@ -259,22 +260,22 @@ def split_six(series=None):
 def image_to_url(image, colormap=None, origin='upper'):
     """Infers the type of an image argument and transforms it into a URL.
 
-        Parameters
-        ----------
-            image: string, file or array-like object
-                * If string, it will be written directly in the output file.
-                * If file, it's content will be converted as embedded in the
-                  output file.
-                * If array-like, it will be converted to PNG base64 string and
-                  embedded in the output.
-            origin : ['upper' | 'lower'], optional, default 'upper'
-                Place the [0, 0] index of the array in the upper left or
-                lower left corner of the axes.
-            colormap : callable, used only for `mono` image.
-                Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-                for transforming a mono image into RGB.
-                It must output iterables of length 3 or 4, with values between
-                0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
+    Parameters
+    ----------
+    image: string, file or array-like object
+        * If string, it will be written directly in the output file.
+        * If file, it's content will be converted as embedded in the
+          output file.
+        * If array-like, it will be converted to PNG base64 string and
+          embedded in the output.
+    origin : ['upper' | 'lower'], optional, default 'upper'
+        Place the [0, 0] index of the array in the upper left or
+        lower left corner of the axes.
+    colormap : callable, used only for `mono` image.
+        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+        for transforming a mono image into RGB.
+        It must output iterables of length 3 or 4, with values between
+        0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
     """
     if hasattr(image, 'read'):
         # We got an image file.
@@ -311,7 +312,6 @@ def write_png(data, origin='upper', colormap=None):
 
     Parameters
     ----------
-
     data: numpy array or equivalent list-like object.
          Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
 

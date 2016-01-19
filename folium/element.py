@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Elements
-------
+Element
+-------
 
 A generic class for creating Elements.
 """
@@ -21,9 +21,13 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 class Element(object):
     """Basic Element object that does nothing.
-    Other Elements may inherit from this one."""
+    Other Elements may inherit from this one.
+
+    Parameters
+    ----------
+    TODO: docstring.
+    """
     def __init__(self, template=None, template_name=None):
-        """Creates a Element."""
         self._name = 'Element'
         self._id = uuid4().hex
         self._env = ENV
@@ -38,6 +42,7 @@ class Element(object):
         """)
 
     def get_name(self):
+        """TODO: docstring."""
         return _camelify(self._name) + '_' + self._id
 
     def _get_self_bounds(self):
@@ -90,6 +95,7 @@ class Element(object):
         return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
+        """TODO: docstring."""
         if ordered:
             dict_fun = OrderedDict
         else:
@@ -103,6 +109,7 @@ class Element(object):
         return out
 
     def to_json(self, depth=-1, **kwargs):
+        """TODO: docstring."""
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
     def get_root(self):
@@ -139,27 +146,30 @@ class Element(object):
 
 
 class Link(Element):
+    """TODO: docstring."""
     def get_code(self):
+        """TODO : docstring."""
         if self.code is None:
             self.code = urlopen(self.url).read()
         return self.code
 
     def to_dict(self, depth=-1, **kwargs):
+        """TODO : docstring."""
         out = super(Link, self).to_dict(depth=-1, **kwargs)
         out['url'] = self.url
         return out
 
 
 class JavascriptLink(Link):
+    """Create a JavascriptLink object based on a url.
+    Parameters
+    ----------
+        url : str
+            The url to be linked
+        download : bool, default False
+            Whether the target document shall be loaded right now.
+    """
     def __init__(self, url, download=False):
-        """Create a JavascriptLink object based on a url.
-        Parameters
-        ----------
-            url : str
-                The url to be linked
-            download : bool, default False
-                Whether the target document shall be loaded right now.
-        """
         super(JavascriptLink, self).__init__()
         self._name = 'JavascriptLink'
         self.url = url
@@ -177,15 +187,15 @@ class JavascriptLink(Link):
 
 
 class CssLink(Link):
+    """Create a CssLink object based on a url.
+    Parameters
+    ----------
+        url : str
+            The url to be linked
+        download : bool, default False
+            Whether the target document shall be loaded right now.
+    """
     def __init__(self, url, download=False):
-        """Create a CssLink object based on a url.
-        Parameters
-        ----------
-            url : str
-                The url to be linked
-            download : bool, default False
-                Whether the target document shall be loaded right now.
-        """
         super(CssLink, self).__init__()
         self._name = 'CssLink'
         self.url = url
@@ -237,26 +247,26 @@ _default_css = [
 
 
 class Figure(Element):
-    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
-        """Create a Figure object, to plot things into it.
+    """Create a Figure object, to plot things into it.
 
-        Parameters
-        ----------
-        width : str, default "100%"
-            The width of the Figure.
-            It may be a percentage or pixel value (like "300px").
-        height : str, default None
-            The height of the Figure.
-            It may be a percentage or a pixel value (like "300px").
-        ratio : str, default "60%"
-            A percentage defining the aspect ratio of the Figure.
-            It will be ignored if height is not None.
-        figsize : tuple of two int, default None
-            If you're a matplotlib addict, you can overwrite width and
-            height. Values will be converted into pixels in using 60 dpi.
-            For example figsize=(10, 5) will result in
-            width="600px", height="300px".
-        """
+    Parameters
+    ----------
+    width : str, default "100%"
+        The width of the Figure.
+        It may be a percentage or pixel value (like "300px").
+    height : str, default None
+        The height of the Figure.
+        It may be a percentage or a pixel value (like "300px").
+    ratio : str, default "60%"
+        A percentage defining the aspect ratio of the Figure.
+        It will be ignored if height is not None.
+    figsize : tuple of two int, default None
+        If you're a matplotlib addict, you can overwrite width and
+        height. Values will be converted into pixels in using 60 dpi.
+        For example figsize=(10, 5) will result in
+        width="600px", height="300px".
+    """
+    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -321,6 +331,7 @@ class Figure(Element):
             """), name='css_style')
 
     def to_dict(self, depth=-1, **kwargs):
+        """TODO: docstring."""
         out = super(Figure, self).to_dict(depth=depth, **kwargs)
         out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
         out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
@@ -328,6 +339,7 @@ class Figure(Element):
         return out
 
     def get_root(self):
+        """TODO: docstring."""
         return self
 
     def render(self, **kwargs):
@@ -363,6 +375,7 @@ class Figure(Element):
         return iframe
 
     def add_subplot(self, x, y, n, margin=0.05):
+        """TODO: docstring."""
         width = 1./y
         height = 1./x
         left = ((n-1) % y)*width
@@ -384,21 +397,21 @@ class Figure(Element):
 
 
 class Html(Element):
-    """A basic Element for embedding HTML."""
-    def __init__(self, data, width="100%", height="100%"):
-        """Create an HTML div object for embedding data.
+    """Create an HTML div object for embedding data.
 
-        Parameters
-        ----------
-        data : str
-            The HTML data to be embedded.
-        width : int or str, default '100%'
-            The width of the output div element.
-            Ex: 120 , '120px', '80%'
-        height : int or str, default '100%'
-            The height of the output div element.
-            Ex: 120 , '120px', '80%'
-        """
+    Parameters
+    ----------
+    data : str
+        The HTML data to be embedded.
+    width : int or str, default '100%'
+        The width of the output div element.
+        Ex: 120 , '120px', '80%'
+    height : int or str, default '100%'
+        The height of the output div element.
+        Ex: 120 , '120px', '80%'
+    """
+
+    def __init__(self, data, width="100%", height="100%"):
         super(Html, self).__init__()
         self._name = 'Html'
         self.data = data
@@ -414,9 +427,14 @@ class Html(Element):
 
 
 class Div(Figure):
+    """Create a Map with Folium and Leaflet.js.
+
+    Parameters
+    ----------
+    TODO: docstring.
+    """
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
-        """Create a Map with Folium and Leaflet.js."""
         super(Figure, self).__init__()
         self._name = 'Div'
 
@@ -457,6 +475,7 @@ class Div(Figure):
         """)
 
     def get_root(self):
+        """TODO: docstring."""
         return self
 
     def render(self, **kwargs):
@@ -501,29 +520,29 @@ class Div(Figure):
 
 
 class IFrame(Element):
+    """Create a Figure object, to plot things into it.
+
+    Parameters
+    ----------
+    html : str, default None
+        Eventual HTML code that you want to put in the frame.
+    width : str, default "100%"
+        The width of the Figure.
+        It may be a percentage or pixel value (like "300px").
+    height : str, default None
+        The height of the Figure.
+        It may be a percentage or a pixel value (like "300px").
+    ratio : str, default "60%"
+        A percentage defining the aspect ratio of the Figure.
+        It will be ignored if height is not None.
+    figsize : tuple of two int, default None
+        If you're a matplotlib addict, you can overwrite width and
+        height. Values will be converted into pixels in using 60 dpi.
+        For example figsize=(10, 5) will result in
+        width="600px", height="300px".
+    """
     def __init__(self, html=None, width="100%", height=None, ratio="60%",
                  figsize=None):
-        """Create a Figure object, to plot things into it.
-
-        Parameters
-        ----------
-        html : str, default None
-            Eventual HTML code that you want to put in the frame.
-        width : str, default "100%"
-            The width of the Figure.
-            It may be a percentage or pixel value (like "300px").
-        height : str, default None
-            The height of the Figure.
-            It may be a percentage or a pixel value (like "300px").
-        ratio : str, default "60%"
-            A percentage defining the aspect ratio of the Figure.
-            It will be ignored if height is not None.
-        figsize : tuple of two int, default None
-            If you're a matplotlib addict, you can overwrite width and
-            height. Values will be converted into pixels in using 60 dpi.
-            For example figsize=(10, 5) will result in
-            width="600px", height="300px".
-        """
         super(IFrame, self).__init__()
         self._name = 'IFrame'
 
@@ -564,23 +583,25 @@ class IFrame(Element):
 class MacroElement(Element):
     """This is a parent class for Elements defined by a macro template.
     To compute your own element, all you have to do is:
-        * To inherit from this class
-        * Overwrite the '_name' attribute
-        * Overwrite the '_template' attribute with something of the form:
-            {% macro header(this, kwargs) %}
-                ...
-            {% endmacro %}
 
-            {% macro html(this, kwargs) %}
-                ...
-            {% endmacro %}
+    * To inherit from this class
+    * Overwrite the '_name' attribute
+    * Overwrite the '_template' attribute with something of the form::
 
-            {% macro script(this, kwargs) %}
-                ...
-            {% endmacro %}
+        {% macro header(this, kwargs) %}
+            ...
+        {% endmacro %}
+
+        {% macro html(this, kwargs) %}
+            ...
+        {% endmacro %}
+
+        {% macro script(this, kwargs) %}
+            ...
+        {% endmacro %}
+
     """
     def __init__(self):
-        """Creates a MacroElement object."""
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
 

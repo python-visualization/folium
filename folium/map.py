@@ -21,84 +21,86 @@ from .element import Element, Figure, MacroElement, Html
 
 
 class LegacyMap(MacroElement):
+    """Create a Map with Folium and Leaflet.js
+
+    Generate a base map of given width and height with either default
+    tilesets or a custom tileset URL. The following tilesets are built-in
+    to Folium. Pass any of the following to the "tiles" keyword:
+
+        - "OpenStreetMap"
+        - "MapQuest Open"
+        - "MapQuest Open Aerial"
+        - "Mapbox Bright" (Limited levels of zoom for free tiles)
+        - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+        - "Stamen" (Terrain, Toner, and Watercolor)
+        - "Cloudmade" (Must pass API key)
+        - "Mapbox" (Must pass API key)
+        - "CartoDB" (positron and dark_matter)
+
+    You can pass a custom tileset to Folium by passing a Leaflet-style
+    URL to the tiles parameter:
+    http://{s}.yourtiles.com/{z}/{x}/{y}.png
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Map (Northing, Easting).
+    width: pixel int or percentage string (default: '100%')
+        Width of the map.
+    height: pixel int or percentage string (default: '100%')
+        Height of the map.
+    tiles: str, default 'OpenStreetMap'
+        Map tileset to use. Can choose from a list of built-in tiles,
+        pass a custom URL or pass `None` to create a map without tiles.
+    API_key: str, default None
+        API key for Cloudmade or Mapbox tiles.
+    max_zoom: int, default 18
+        Maximum zoom depth for the map.
+    zoom_start: int, default 10
+        Initial zoom level for the map.
+    attr: string, default None
+        Map tile attribution; only required if passing custom tile URL.
+    detect_retina: bool, default False
+        If true and user is on a retina display, it will request four
+        tiles of half the specified size and a bigger zoom level in place
+        of one to utilize the high resolution.
+    crs : str, default 'EPSG3857'
+        Defines coordinate reference systems for projecting geographical points
+        into pixel (screen) coordinates and back.
+        You can use Leaflet's values :
+        * EPSG3857 : The most common CRS for online maps, used by almost all
+        free and commercial tile providers. Uses Spherical Mercator projection.
+        Set in by default in Map's crs option.
+        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
+        projection.
+        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
+        Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
+        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
+        should still be inverted (going from bottom to top).
+
+    Returns
+    -------
+    Folium LegacyMap Object
+
+    Examples
+    --------
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+                               tiles='Mapbox Control Room')
+    >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+                               tiles='Cloudmade', API_key='YourKey')
+    >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
+                               tiles=('http://{s}.tiles.mapbox.com/v3/'
+                                      'mapbox.control-room/{z}/{x}/{y}.png'),
+                                attr='Mapbox attribution')
+    """
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, detect_retina=False,
                  crs='EPSG3857'):
-        """Create a Map with Folium and Leaflet.js
-
-        Generate a base map of given width and height with either default
-        tilesets or a custom tileset URL. The following tilesets are built-in
-        to Folium. Pass any of the following to the "tiles" keyword:
-            - "OpenStreetMap"
-            - "MapQuest Open"
-            - "MapQuest Open Aerial"
-            - "Mapbox Bright" (Limited levels of zoom for free tiles)
-            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-            - "Stamen" (Terrain, Toner, and Watercolor)
-            - "Cloudmade" (Must pass API key)
-            - "Mapbox" (Must pass API key)
-            - "CartoDB" (positron and dark_matter)
-        You can pass a custom tileset to Folium by passing a Leaflet-style
-        URL to the tiles parameter:
-        http://{s}.yourtiles.com/{z}/{x}/{y}.png
-
-        Parameters
-        ----------
-        location: tuple or list, default None
-            Latitude and Longitude of Map (Northing, Easting).
-        width: pixel int or percentage string (default: '100%')
-            Width of the map.
-        height: pixel int or percentage string (default: '100%')
-            Height of the map.
-        tiles: str, default 'OpenStreetMap'
-            Map tileset to use. Can choose from a list of built-in tiles,
-            pass a custom URL or pass `None` to create a map without tiles.
-        API_key: str, default None
-            API key for Cloudmade or Mapbox tiles.
-        max_zoom: int, default 18
-            Maximum zoom depth for the map.
-        zoom_start: int, default 10
-            Initial zoom level for the map.
-        attr: string, default None
-            Map tile attribution; only required if passing custom tile URL.
-        detect_retina: bool, default False
-            If true and user is on a retina display, it will request four
-            tiles of half the specified size and a bigger zoom level in place
-            of one to utilize the high resolution.
-        crs : str, default 'EPSG3857'
-            Defines coordinate reference systems for projecting geographical points
-            into pixel (screen) coordinates and back.
-            You can use Leaflet's values :
-            * EPSG3857 : The most common CRS for online maps, used by almost all
-              free and commercial tile providers. Uses Spherical Mercator projection.
-              Set in by default in Map's crs option.
-            * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-              projection.
-            * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-              Mercator projection.
-            * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-              May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-              should still be inverted (going from bottom to top).
-
-        Returns
-        -------
-        Folium LegacyMap Object
-
-        Examples
-        --------
-        >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
-        >>> map = folium.LegacyMap(location=[45.523, -122.675],
-                                   tiles='Mapbox Control Room')
-        >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
-                                   tiles='Cloudmade', API_key='YourKey')
-        >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-                                   tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                          'mapbox.control-room/{z}/{x}/{y}.png'),
-                                    attr='Mapbox attribution')
-        """
         super(LegacyMap, self).__init__()
         self._name = 'Map'
 
@@ -177,6 +179,7 @@ class LegacyMap(MacroElement):
                        API_key=None, max_zoom=18, min_zoom=1,
                        attr=None, tile_name=None, tile_url=None,
                        active=False, detect_retina=False, **kwargs):
+        """TODO: docstring."""
         if tile_name is not None:
             name = tile_name
             warnings.warn("'tile_name' is deprecated. Use 'name' instead.")
@@ -196,19 +199,16 @@ class Layer(MacroElement):
     It will be used to define whether an object will be included in
     LayerControls.
 
+    Parameters
+    ----------
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
     """
     def __init__(self, name=None, overlay=False, control=True):
-        """Creates a Layer instance.
-
-        Parameters
-        ----------
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls.
-        """
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
@@ -216,46 +216,47 @@ class Layer(MacroElement):
 
 
 class TileLayer(Layer):
+    """Create a tile layer to append on a Map.
+
+    Parameters
+    ----------
+    tiles: str, default 'OpenStreetMap'
+        Map tileset to use. Can choose from this list of built-in tiles:
+            - "OpenStreetMap"
+            - "MapQuest Open"
+            - "MapQuest Open Aerial"
+            - "Mapbox Bright" (Limited levels of zoom for free tiles)
+            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
+            - "Stamen" (Terrain, Toner, and Watercolor)
+            - "Cloudmade" (Must pass API key)
+            - "Mapbox" (Must pass API key)
+            - "CartoDB" (positron and dark_matter)
+
+        You can pass a custom tileset to Folium by passing a Leaflet-style
+        URL to the tiles parameter:
+        http://{s}.yourtiles.com/{z}/{x}/{y}.png
+    min_zoom: int, default 1
+        Minimal zoom for which the layer will be displayed.
+    max_zoom: int, default 18
+        Maximal zoom for which the layer will be displayed.
+    attr: string, default None
+        Map tile attribution; only required if passing custom tile URL.
+    API_key: str, default None
+        API key for Cloudmade or Mapbox tiles.
+    detect_retina: bool, default False
+        If true and user is on a retina display, it will request four
+        tiles of half the specified size and a bigger zoom level in place
+        of one to utilize the high resolution.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
                  name=None, overlay=False, control=True):
-        """Create a tile layer to append on a Map.
-
-        Parameters
-        ----------
-        tiles: str, default 'OpenStreetMap'
-            Map tileset to use. Can choose from this list of built-in tiles:
-                - "OpenStreetMap"
-                - "MapQuest Open"
-                - "MapQuest Open Aerial"
-                - "Mapbox Bright" (Limited levels of zoom for free tiles)
-                - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-                - "Stamen" (Terrain, Toner, and Watercolor)
-                - "Cloudmade" (Must pass API key)
-                - "Mapbox" (Must pass API key)
-                - "CartoDB" (positron and dark_matter)
-            You can pass a custom tileset to Folium by passing a Leaflet-style
-            URL to the tiles parameter:
-            http://{s}.yourtiles.com/{z}/{x}/{y}.png
-        min_zoom: int, default 1
-            Minimal zoom for which the layer will be displayed.
-        max_zoom: int, default 18
-            Maximal zoom for which the layer will be displayed.
-        attr: string, default None
-            Map tile attribution; only required if passing custom tile URL.
-        API_key: str, default None
-            API key for Cloudmade or Mapbox tiles.
-        detect_retina: bool, default False
-            If true and user is on a retina display, it will request four
-            tiles of half the specified size and a bigger zoom level in place
-            of one to utilize the high resolution.
-        name : string, default None
-            The name of the Layer, as it will appear in LayerControls
-        overlay : bool, default False
-            Adds the layer as an optional overlay (True) or the base layer (False).
-        control : bool, default True
-            Whether the Layer will be included in LayerControls.
-        """
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -305,22 +306,22 @@ class TileLayer(Layer):
 
 
 class FeatureGroup(Layer):
-    def __init__(self, name=None, overlay=True, control=True):
-        """
-        Create a FeatureGroup layer ; you can put things in it and handle them
-        as a single layer.  For example, you can add a LayerControl to
-        tick/untick the whole group.
+    """
+    Create a FeatureGroup layer ; you can put things in it and handle them
+    as a single layer.  For example, you can add a LayerControl to
+    tick/untick the whole group.
 
-        Parameters
-        ----------
-        name : str, default None
-            The name of the featureGroup layer.
-            It will be displayed in the LayerControl.
-            If None get_name() will be called to get the technical (ugly) name.
-        overlay : bool, default True
-            Whether your layer will be an overlay (ticked with a check box in
-            LayerControls) or a base layer (ticked with a radio button).
-        """
+    Parameters
+    ----------
+    name : str, default None
+        The name of the featureGroup layer.
+        It will be displayed in the LayerControl.
+        If None get_name() will be called to get the technical (ugly) name.
+    overlay : bool, default True
+        Whether your layer will be an overlay (ticked with a check box in
+        LayerControls) or a base layer (ticked with a radio button).
+    """
+    def __init__(self, name=None, overlay=True, control=True):
         super(FeatureGroup, self).__init__(overlay=overlay, control=control)
         self._name = 'FeatureGroup'
 
@@ -335,13 +336,9 @@ class FeatureGroup(Layer):
 
 
 class LayerControl(MacroElement):
-    """Adds a layer control to the map."""
+    """Creates a LayerControl object to be added on a folium map.
+    """
     def __init__(self):
-        """Creates a LayerControl object to be added on a folium map.
-
-        Parameters
-        ----------
-        """
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
 
@@ -379,38 +376,39 @@ class LayerControl(MacroElement):
 
 
 class Icon(MacroElement):
+    """
+    Creates an Icon object that will be rendered
+    using Leaflet.awesome-markers.
+
+    Parameters
+    ----------
+    color : str, default 'blue'
+        The color of the marker. You can use:
+
+            ['red', 'blue', 'green', 'purple', 'orange', 'darkred',
+             'lightred', 'beige', 'darkblue', 'darkgreen', 'cadetblue',
+             'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen',
+             'gray', 'black', 'lightgray']
+
+    icon_color : str, default 'white'
+        The color of the drawing on the marker. You can use colors above,
+        or an html color code.
+    icon : str, default 'info-sign'
+        The name of the marker sign.
+        See Font-Awesome website to choose yours.
+        Warning : depending on the icon you choose you may need to adapt
+        the `prefix` as well.
+    angle : int, default 0
+        The icon will be rotated by this amount of degrees.
+    prefix : str, default 'glyphicon'
+        The prefix states the source of the icon. 'fa' for font-awesome or
+        'glyphicon' for bootstrap 3.
+
+    For more details see:
+    https://github.com/lvoogdt/Leaflet.awesome-markers
+    """
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
                  angle=0, prefix='glyphicon'):
-        """
-        Creates an Icon object that will be rendered
-        using Leaflet.awesome-markers.
-
-        Parameters
-        ----------
-        color : str, default 'blue'
-            The color of the marker. You can use:
-                ['red', 'blue', 'green', 'purple', 'orange', 'darkred',
-                 'lightred', 'beige', 'darkblue', 'darkgreen', 'cadetblue',
-                 'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen',
-                 'gray', 'black', 'lightgray']
-        icon_color : str, default 'white'
-            The color of the drawing on the marker. You can use colors above,
-            or an html color code.
-        icon : str, default 'info-sign'
-            The name of the marker sign.
-            See Font-Awesome website to choose yours.
-            Warning : depending on the icon you choose you may need to adapt
-                      the `prefix` as well.
-        angle : int, default 0
-            The icon will be rotated by this amount of degrees.
-        prefix : str, default 'glyphicon'
-            The prefix states the source of the icon. 'fa' for font-awesome or
-            'glyphicon' for bootstrap 3.
-
-        For more details see:
-        https://github.com/lvoogdt/Leaflet.awesome-markers
-
-        """
         super(Icon, self).__init__()
         self._name = 'Icon'
         self.color = color
@@ -435,28 +433,28 @@ class Icon(MacroElement):
 
 
 class Marker(MacroElement):
+    """Create a simple stock Leaflet marker on the map, with optional
+    popup text or Vincent visualization.
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Marker (Northing, Easting)
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    icon: Icon plugin
+        the Icon plugin to use to render the marker.
+
+    Returns
+    -------
+    Marker names and HTML in obj.template_vars
+
+    Examples
+    --------
+    >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
+    >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
+    """
     def __init__(self, location, popup=None, icon=None):
-        """Create a simple stock Leaflet marker on the map, with optional
-        popup text or Vincent visualization.
-
-        Parameters
-        ----------
-        location: tuple or list, default None
-            Latitude and Longitude of Marker (Northing, Easting)
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-        icon: Icon plugin
-            the Icon plugin to use to render the marker.
-
-        Returns
-        -------
-        Marker names and HTML in obj.template_vars
-
-        Example
-        -------
-        >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
-        >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
-        """
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = location
@@ -489,6 +487,7 @@ class Marker(MacroElement):
 
 
 class Popup(Element):
+    """TODO: docstring."""
     def __init__(self, html=None, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
@@ -537,27 +536,27 @@ class Popup(Element):
 
 
 class FitBounds(MacroElement):
+    """Fit the map to contain a bounding box with the
+    maximum zoom level possible.
+
+    Parameters
+    ----------
+    bounds: list of (latitude, longitude) points
+        Bounding box specified as two points [southwest, northeast]
+    padding_top_left: (x, y) point, default None
+        Padding in the top left corner. Useful if some elements in
+        the corner, such as controls, might obscure objects you're zooming
+        to.
+    padding_bottom_right: (x, y) point, default None
+        Padding in the bottom right corner.
+    padding: (x, y) point, default None
+        Equivalent to setting both top left and bottom right padding to
+        the same value.
+    max_zoom: int, default None
+        Maximum zoom to be used.
+    """
     def __init__(self, bounds, padding_top_left=None,
                  padding_bottom_right=None, padding=None, max_zoom=None):
-        """Fit the map to contain a bounding box with the
-        maximum zoom level possible.
-
-        Parameters
-        ----------
-        bounds: list of (latitude, longitude) points
-            Bounding box specified as two points [southwest, northeast]
-        padding_top_left: (x, y) point, default None
-            Padding in the top left corner. Useful if some elements in
-            the corner, such as controls, might obscure objects you're zooming
-            to.
-        padding_bottom_right: (x, y) point, default None
-            Padding in the bottom right corner.
-        padding: (x, y) point, default None
-            Equivalent to setting both top left and bottom right padding to
-            the same value.
-        max_zoom: int, default None
-            Maximum zoom to be used.
-        """
         super(FitBounds, self).__init__()
         self._name = 'FitBounds'
         self.bounds = json.loads(json.dumps(bounds))
