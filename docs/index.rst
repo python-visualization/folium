@@ -1,8 +1,12 @@
 .. Folium documentation master file, created by
 
-#####################################
-Folium: Python Data. Leaflet.js Maps.
-#####################################
+Folium
+######
+
+.. image:: _static/folium_logo.jpg
+
+Python Data. Leaflet.js Maps.
+*****************************
 
 Folium builds on the data wrangling strengths of the Python ecosystem and the mapping strengths of the Leaflet.js library. Manipulate your data in Python, then visualize it in on a Leaflet map via Folium.
 
