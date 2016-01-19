@@ -359,12 +359,12 @@ class Figure(Element):
         html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
         if self.height is None:
-            iframe = """
-            <div style="width:{width};">
-            <div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">
-            <iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">
-            </iframe>
-            </div></div>""".format  # noqa
+            iframe = (
+            '<div style="width:{width};">'
+            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
+            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;">'  # noqa
+            '</iframe>'
+            '</div></div>').format
             iframe = iframe(html=html,
                             width=self.width,
                             ratio=self.ratio)
