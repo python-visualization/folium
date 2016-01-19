@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Boat marker
 -----------
@@ -7,6 +8,9 @@ Creates a marker shaped like a boat.
 Optionally you can append a wind direction.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 import json
 from jinja2 import Template
 

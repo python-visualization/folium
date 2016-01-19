@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Utilities
 -------
@@ -7,9 +8,7 @@ Utility module for Folium helper functions.
 
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+from __future__ import (absolute_import, division, print_function)
 
 import math
 import zlib

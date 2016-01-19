@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Terminator plugin
 -----------------
@@ -7,6 +8,9 @@ Leaflet.Terminator is a simple plug-in to the Leaflet library to overlay day
 and night regions on maps.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 from jinja2 import Template
 
 from folium.element import JavascriptLink, MacroElement, Figure

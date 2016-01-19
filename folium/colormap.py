@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Colormap
 -------
@@ -6,7 +7,8 @@ Colormap
 Utility module for dealing with colormaps.
 
 """
-from __future__ import absolute_import
+
+from __future__ import (absolute_import, division, print_function)
 
 import math
 from jinja2 import Template

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Heat map
 --------
@@ -6,6 +7,9 @@ Heat map
 Create a HeatMap layer
 
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 import json
 from jinja2 import Template
 

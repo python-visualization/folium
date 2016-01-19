@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
+
 """
 Test ScrollZoomToggler
 ----------------------
+
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from jinja2 import Template
 

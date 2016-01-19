@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+
 """
 Features
 ------
 
 Extra features Elements.
+
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 from jinja2 import Template
 import json
 
@@ -80,7 +85,6 @@ class WmsTileLayer(Layer):
                     {% if this.attribution %}, attribution:'{{this.attribution}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
-
         {% endmacro %}
         """)  # noqa
 

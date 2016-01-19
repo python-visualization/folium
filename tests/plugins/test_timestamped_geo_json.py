@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
+
 """
 Test TimestampedGeoJson
 -----------------------
+
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 from jinja2 import Template
 import numpy as np
 

@@ -5,9 +5,12 @@ Folium map Tests
 ----------------
 
 """
-from __future__ import unicode_literals
 
-from folium.map import Popup  # TODO: Map, Marker, ...
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
+# TODO: Map, Marker, ...
+from folium.map import Popup
 
 
 tmpl = """

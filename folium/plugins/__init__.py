@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
+
 """
 Folium plugins
 --------------
 
 Add different objects/effects on a folium map.
+
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from .marker_cluster import MarkerCluster
 from .scroll_zoom_toggler import ScrollZoomToggler

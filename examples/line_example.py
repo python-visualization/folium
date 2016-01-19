@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-'''Test of Folium polylines'''
+
+"""
+Test of Folium polylines
+
+"""
+
+from __future__ import (absolute_import, division, print_function)
 
 import folium
 
-# Coordinates are 15 points on the great circle from Boston to 
+# Coordinates are 15 points on the great circle from Boston to
 # San Francisco.
 # Reference: http://williams.best.vwh.net/avform.htm#Intermediate
 coordinates = [
