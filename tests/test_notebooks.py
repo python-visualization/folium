@@ -16,9 +16,10 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 class NotebookTester(object):
     def __init__(self, filename):
         self.filename = filename
+
     def __call__(self, exporter=None, filename=None):
         raw_nb = nbconvert.exporters.Exporter().from_filename(self.filename)
-        raw_nb[0].metadata.setdefault('kernelspec',{})['name'] = 'python'
+        raw_nb[0].metadata.setdefault('kernelspec', {})['name'] = 'python'
         exec_nb = nbconvert.preprocessors.ExecutePreprocessor().preprocess(*raw_nb)
 
         if exporter is not None:
@@ -26,7 +27,8 @@ class NotebookTester(object):
             if filename is None:
                 assert self.filename.endswith('.ipynb')
                 filename = self.filename[:-6] + exporter.file_extension
-            open(filename,'w').write(out_nb[0].encode('utf-8'))
+            open(filename, 'w').write(out_nb[0].encode('utf-8'))
+
 
 class TestNotebooks(object):
     _filepath = rootpath.rstrip('/')+'/../examples/'
