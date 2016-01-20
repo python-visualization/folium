@@ -17,7 +17,7 @@ before_install:
     - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
     - source activate test
     - conda install --yes --file requirements-dev.txt
-    - travis_retry conda install --yes pytest pandas vincent flake8 nbconvert jupyter_client
+    - travis_retry conda install --yes pytest pandas vincent flake8 nbconvert jupyter_client ipykernel
     - if [[ "$PYTHON" != "3.5" ]]; then
         travis_retry conda install --yes mock ;
       fi
