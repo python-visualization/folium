@@ -20,6 +20,7 @@ before_install:
         conda install --yes --file requirements-dev.txt;
         conda install --yes -c ioos geopandas;
       fi
+    - conda install --yes pandas numpy
     - if [[ "$PYTHON" != "3.5" ]]; then
         travis_retry conda install --yes mock ;
       fi
