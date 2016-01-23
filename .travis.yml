@@ -16,10 +16,10 @@ before_install:
     - conda update --yes --all
     - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
     - source activate test
-    - conda install --yes --file requirements-dev.txt
-    - travis_retry conda install --yes pytest pandas vincent flake8 nbconvert jupyter_client ipykernel shapely fiona
-    - pip install geopandas
-    - conda update --yes --all
+    - if [[ "$PYTHON" != "3.3" ]]; then
+        conda install --yes --file requirements-dev.txt
+        conda install -c ioos geopandas
+      fi
     - if [[ "$PYTHON" != "3.5" ]]; then
         travis_retry conda install --yes mock ;
       fi
