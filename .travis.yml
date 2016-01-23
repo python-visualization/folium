@@ -18,7 +18,7 @@ before_install:
     - source activate test
     - if [[ "$PYTHON" != "3.3" ]]; then
         conda install --yes --file requirements-dev.txt;
-        conda install -c ioos geopandas;
+        conda install --yes -c ioos geopandas;
       fi
     - if [[ "$PYTHON" != "3.5" ]]; then
         travis_retry conda install --yes mock ;
