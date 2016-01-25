@@ -10,11 +10,10 @@ import os
 import sys
 import folium
 
-if sys.version_info[:2]==(3,4):
+if sys.version_info[:2] == (3, 4):
     import nbconvert
 
     rootpath = os.path.abspath(os.path.dirname(__file__))
-
 
     class NotebookTester(object):
         def __init__(self, filename):
@@ -31,7 +30,6 @@ if sys.version_info[:2]==(3,4):
                     assert self.filename.endswith('.ipynb')
                     filename = self.filename[:-6] + exporter.file_extension
                 open(filename, 'w').write(out_nb[0].encode('utf-8'))
-
 
     class TestNotebooks(object):
         _filepath = rootpath.rstrip('/')+'/../examples/'
