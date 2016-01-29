@@ -95,7 +95,7 @@ class Crossfilter(Div):
 
 class PieFilter(Div):
     def __init__(self, crossfilter, column, name="", width=150, height=150, inner_radius=20,
-                 weight=None, order=None, **kwargs):
+                 weight=None, order=None, colors=None, **kwargs):
         """TODO docstring here
         Parameters
         ----------
@@ -111,6 +111,7 @@ class PieFilter(Div):
         self.inner_radius = inner_radius
         self.order = order
         self.weight = weight
+        self.colors = [x for x in colors] if colors else None
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -143,6 +144,74 @@ class PieFilter(Div):
                     {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
                     )
                 .innerRadius({{this.inner_radius}})
+                {% if this.colors %}.ordinalColors({{this.colors}}){% endif %}
+                {% if this.order %}.ordering(function (d) {
+                    var out = null;
+                    var order={{this.order}};
+                    for (var j=0;j<order.length;j++) {
+                        if (order[j]==d.key) {out = 1+j;}
+                        }
+                    return out;}){% endif %};
+            d3.selectAll('#{{this.get_name()}}-reset').on('click',function () {
+                {{this.get_name()}}.chart.filterAll();
+                dc.redrawAll();
+                });
+        {% endmacro %}
+        """)
+
+class RowBarFilter(Div):
+    """TODO docstring here
+    Parameters
+    ----------
+    """
+    def __init__(self, crossfilter, column, name="", width=150, height=150, inner_radius=20,
+                 weight=None, order=None, elastic_x=True, colors=None, **kwargs):
+        super(RowBarFilter, self).__init__(width=width, height=height, **kwargs)
+        self._name = 'RowBarFilter'
+
+        self.crossfilter = crossfilter
+        self.column = column
+        self.name = name
+        self.width = width
+        self.height = height
+        self.inner_radius = inner_radius
+        self.order = order
+        self.weight = weight
+        self.elastic_x = elastic_x
+        self.colors = [x for x in colors] if colors else None
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <div id="{{this.get_name()}}" class="{{this.class_}}">{{this.html.render(**kwargs)}}</div>
+        {% endmacro %}
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = {};
+
+            {{this.get_name()}}.dimension = {{this.crossfilter.get_name()}}.crossfilter.dimension(
+                function(d) {return d["{{this.column}}"];});
+            document.getElementById("{{this.get_name()}}").innerHTML =
+                '<h4>{{this.name}} <small><a id="{{this.get_name()}}-reset">reset</a></small></h4>'
+                + '<div id="{{this.get_name()}}-chart" class="dc-chart"></div>';
+
+            {{this.get_name()}}.chart = dc.rowChart('#{{this.get_name()}}-chart')
+                .width({{this.width}})
+                .height({{this.height}})
+                .dimension({{this.get_name()}}.dimension)
+                .group({{this.get_name()}}.dimension.group()
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    )
+                .elasticX({{this.elastic_x.__str__().lower()}})
+                {% if this.colors %}.ordinalColors({{this.colors}}){% endif %}
                 {% if this.order %}.ordering(function (d) {
                     var out = null;
                     var order={{this.order}};
