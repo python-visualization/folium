@@ -95,7 +95,7 @@ class Crossfilter(Div):
 
 class PieFilter(Div):
     def __init__(self, crossfilter, column, name="", width=150, height=150, inner_radius=20,
-                 order=None, **kwargs):
+                 weight=None, order=None, **kwargs):
         """TODO docstring here
         Parameters
         ----------
@@ -110,6 +110,7 @@ class PieFilter(Div):
         self.height = height
         self.inner_radius = inner_radius
         self.order = order
+        self.weight = weight
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -138,7 +139,9 @@ class PieFilter(Div):
                 .width({{this.width}})
                 .height({{this.height}})
                 .dimension({{this.get_name()}}.dimension)
-                .group({{this.get_name()}}.dimension.group().reduceCount())
+                .group({{this.get_name()}}.dimension.group()
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    )
                 .innerRadius({{this.inner_radius}})
                 {% if this.order %}.ordering(function (d) {
                     var out = null;
@@ -157,7 +160,7 @@ class PieFilter(Div):
 class BarFilter(Div):
     def __init__(self, crossfilter, column, width=150, height=150, bar_padding=0.1,
                  domain=None, groupby=None, xlabel="", ylabel="", margins=None,
-                 xticks=None, time_format=None, **kwargs):
+                 weight=None, elastic_y=True, xticks=None, time_format=None, **kwargs):
         """TODO docstring here
         Parameters
         ----------
@@ -177,6 +180,8 @@ class BarFilter(Div):
         self.margins=json.dumps(margins)
         self.xticks=json.dumps(xticks)
         self.time_format=time_format
+        self.weight = weight
+        self.elastic_y = elastic_y
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -213,12 +218,14 @@ class BarFilter(Div):
                 .width({{this.width}})
                 .height({{this.height}})
                 .dimension({{this.get_name()}}.dimension)
-                .group({{this.get_name()}}.dimension.group().reduceCount())
+                .group({{this.get_name()}}.dimension.group()
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    )
                 .x(d3.scale.linear().domain([
                     {{this.get_name()}}.domain[0]/{{this.get_name()}}.groupby,
                     {{this.get_name()}}.domain[1]/{{this.get_name()}}.groupby,
                     ]))
-                .elasticY(false)
+                .elasticY({{this.elastic_y.__str__().lower()}})
                 .centerBar(false)
                 .barPadding({{this.bar_padding}})
                 .xAxisLabel("{{this.xlabel}}")
