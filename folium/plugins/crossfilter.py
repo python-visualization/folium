@@ -141,7 +141,8 @@ class PieFilter(Div):
                 .height({{this.height}})
                 .dimension({{this.get_name()}}.dimension)
                 .group({{this.get_name()}}.dimension.group()
-                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];})
+                    {% else %}.reduceCount(){% endif %}
                     )
                 .innerRadius({{this.inner_radius}})
                 {% if this.colors %}.ordinalColors({{this.colors}}){% endif %}
@@ -208,7 +209,8 @@ class RowBarFilter(Div):
                 .height({{this.height}})
                 .dimension({{this.get_name()}}.dimension)
                 .group({{this.get_name()}}.dimension.group()
-                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];})
+                    {% else %}.reduceCount(){% endif %}
                     )
                 .elasticX({{this.elastic_x.__str__().lower()}})
                 {% if this.colors %}.ordinalColors({{this.colors}}){% endif %}
@@ -288,7 +290,8 @@ class BarFilter(Div):
                 .height({{this.height}})
                 .dimension({{this.get_name()}}.dimension)
                 .group({{this.get_name()}}.dimension.group()
-                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];}){% else %}.reduceCount(){% endif %}
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];})
+                    {% else %}.reduceCount(){% endif %}
                     )
                 .x(d3.scale.linear().domain([
                     {{this.get_name()}}.domain[0]/{{this.get_name()}}.groupby,
@@ -351,7 +354,7 @@ class FeatureGroupFilter(FeatureGroup):
         """)
 
 class TableFilter(Div):
-    def __init__(self, crossfilter, columns, sort_by=None, ascending=True, **kwargs):
+    def __init__(self, crossfilter, columns, size=10, sort_by=None, ascending=True, **kwargs):
         """TODO docstring here
         Parameters
         ----------
@@ -363,6 +366,7 @@ class TableFilter(Div):
         self.columns = columns
         self.sort_by = sort_by
         self.ascending = ascending
+        self.size = size
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -390,7 +394,7 @@ class TableFilter(Div):
             {{this.get_name()}}.dataTable
                 .dimension({{this.crossfilter.get_name()}}.allDim)
                 .group(function (d) { return 'dc.js extra line'; })
-                .size(10)
+                .size({{this.size}})
                 .columns([
                   {% for col in this.columns %}
                   function (d) { return d["{{col}}"]; },
