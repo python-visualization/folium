@@ -95,7 +95,7 @@ class Crossfilter(Div):
 
 class PieFilter(Div):
     def __init__(self, crossfilter, column, name="", width=150, height=150, inner_radius=20,
-                 weight=None, order=None, colors=None, **kwargs):
+                 weight=None, order=None, colors=None, label=None, **kwargs):
         """TODO docstring here
         Parameters
         ----------
@@ -112,6 +112,7 @@ class PieFilter(Div):
         self.order = order
         self.weight = weight
         self.colors = [x for x in colors] if colors else None
+        self.label = label
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -145,6 +146,7 @@ class PieFilter(Div):
                     {% else %}.reduceCount(){% endif %}
                     )
                 .innerRadius({{this.inner_radius}})
+                {% if this.label %}.label({{this.label}}){% endif %}
                 {% if this.colors %}.ordinalColors({{this.colors}}){% endif %}
                 {% if this.order %}.ordering(function (d) {
                     var out = null;
@@ -317,7 +319,8 @@ class BarFilter(Div):
         """)
 
 class FeatureGroupFilter(FeatureGroup):
-    def __init__(self, crossfilter, name=None, fit_bounds=False, **kwargs):
+    def __init__(self, crossfilter, name=None, fit_bounds=False,
+                 circle_radius=None, color="#0000ff", opacity=1., **kwargs):
         """
         """
         super(FeatureGroupFilter, self).__init__(**kwargs)
@@ -327,6 +330,9 @@ class FeatureGroupFilter(FeatureGroup):
 
         self.crossfilter = crossfilter
         self.fit_bounds = fit_bounds
+        self.circle_radius = circle_radius
+        self.color = color
+        self.opacity = opacity
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -337,7 +343,13 @@ class FeatureGroupFilter(FeatureGroup):
                 var dimVals = {{this.crossfilter.get_name()}}.allDim.top(Infinity)
                 for (var i in dimVals) {
                 var d = dimVals[i];
-                    var marker = L.marker([d.lat, d.lng]);
+                    var marker =
+                    {% if this.circle_radius %}L.circleMarker([d.lat, d.lng],
+                        {
+                        fillColor: '{{ this.color }}',
+                        fillOpacity: {{ this.opacity }}
+                        }).setRadius({{this.circle_radius}})
+                    {% else %}L.marker([d.lat, d.lng],{opacity:{{this.opacity}} }){% endif %};
                     marker.bindPopup(d.popup);
                     this.feature_group.addLayer(marker);
                     }
@@ -444,7 +456,8 @@ class CountFilter(Div):
             var {{this.get_name()}} = {};
             {{this.get_name()}}.dataCount = dc.dataCount("#{{this.get_name()}}")
                 .dimension({{this.crossfilter.get_name()}}.crossfilter)
-                .group({{this.crossfilter.get_name()}}.crossfilter.groupAll());
+                .group({{this.crossfilter.get_name()}}.crossfilter.groupAll()
+                );
         {% endmacro %}
         """)
 
@@ -522,5 +535,83 @@ class HeatmapFilter(HeatMap):
                .group(function (d) { return 'dc.js';})
                .on('renderlet', function (table) { {{this.get_name()}}.updateFun();});
             {{this.get_name()}}.updateFun();
+        {% endmacro %}
+        """)
+
+class GeoChoroplethFilter(Div):
+    """TODO docstring here
+    Parameters
+    ----------
+    """
+    def __init__(self, crossfilter, column, geojson, key_on='feature.properties.name',
+                 name="", width=150, height=150, inner_radius=20,
+                 weight=None, order=None, elastic_x=True, projection=None,
+                 colors=None, **kwargs):
+        super(GeoChoroplethFilter, self).__init__(width=width, height=height, **kwargs)
+        self._name = 'GeoChoroplethFilter'
+
+        self.crossfilter = crossfilter
+        self.column = column
+        self.geojson = geojson
+        self.key_on = key_on
+        self.name = name
+        self.width = width
+        self.height = height
+        self.projection = projection
+        self.inner_radius = inner_radius
+        self.order = order
+        self.weight = weight
+        self.elastic_x = elastic_x
+        self.colors = colors if colors else None
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <div id="{{this.get_name()}}" class="{{this.class_}}">{{this.html.render(**kwargs)}}</div>
+        {% endmacro %}
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = {};
+
+            {{this.get_name()}}.geojson = {{this.geojson}};
+
+            {{this.get_name()}}.dimension = {{this.crossfilter.get_name()}}.crossfilter.dimension(
+                function(d) {return d["{{this.column}}"];});
+            document.getElementById("{{this.get_name()}}").innerHTML =
+                '<h4>{{this.name}} <small><a id="{{this.get_name()}}-reset">reset</a></small></h4>'
+                + '<div id="{{this.get_name()}}-chart" class="dc-chart"></div>';
+
+            {{this.get_name()}}.chart = dc.geoChoroplethChart('#{{this.get_name()}}-chart')
+                .width({{this.width}})
+                .height({{this.height}})
+                .dimension({{this.get_name()}}.dimension)
+                .group({{this.get_name()}}.dimension.group()
+                    {% if this.weight %}.reduceSum(function(d) {return d["{{this.weight}}"];})
+                    {% else %}.reduceCount(){% endif %}
+                    )
+                .overlayGeoJson({{this.get_name()}}.geojson.features, "state",
+                    function (feature) {return {{this.key_on}};}
+                    )
+                {% if this.projection %}.projection({{this.projection}}){% endif %}
+                {% if this.colors %}.colors({{this.colors}}){% endif %}
+                {% if this.order %}.ordering(function (d) {
+                    var out = null;
+                    var order={{this.order}};
+                    for (var j=0;j<order.length;j++) {
+                        if (order[j]==d.key) {out = 1+j;}
+                        }
+                    return out;}){% endif %};
+            d3.selectAll('#{{this.get_name()}}-reset').on('click',function () {
+                {{this.get_name()}}.chart.filterAll();
+                dc.redrawAll();
+                });
         {% endmacro %}
         """)
