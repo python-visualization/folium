@@ -374,7 +374,7 @@ class Figure(Element):
             iframe = iframe(html=html, width=self.width, height=self.height)
         return iframe
 
-    def add_subplot(self, x, y, n, margin=0.05):
+    def add_subplot(self, x,y,n, div=None, margin=0.05):
         """TODO: docstring."""
         width = 1./y
         height = 1./x
@@ -386,12 +386,13 @@ class Figure(Element):
         width = width*(1-2.*margin)
         height = height*(1-2.*margin)
 
-        div = Div(position='absolute',
-                  width="{}%".format(100.*width),
-                  height="{}%".format(100.*height),
-                  left="{}%".format(100.*left),
-                  top="{}%".format(100.*top),
-                  )
+        div = div if div is not None else Div()
+        div.position='absolute'
+        div.width  = _parse_size("{}%".format(100.*width))
+        div.height = _parse_size("{}%".format(100.*height))
+        div.left = _parse_size("{}%".format(100.*left))
+        div.top  = _parse_size("{}%".format(100.*top))
+
         self.add_children(div)
         return div
 
@@ -433,17 +434,18 @@ class Div(Figure):
     ----------
     TODO: docstring.
     """
-    def __init__(self, width='100%', height='100%',
-                 left="0%", top="0%", position='relative'):
+    def __init__(self, width=None, height=None,
+                 left=None, top=None, position=None, class_=''):
         super(Figure, self).__init__()
         self._name = 'Div'
 
         # Size Parameters.
-        self.width = _parse_size(width)
-        self.height = _parse_size(height)
-        self.left = _parse_size(left)
-        self.top = _parse_size(top)
+        self.width  = _parse_size(width) if width is not None else None
+        self.height = _parse_size(height) if height is not None else None
+        self.left = _parse_size(left) if left is not None else None
+        self.top  = _parse_size(top) if top is not None else None
         self.position = position
+        self.class_ = class_
 
         self.header = Element()
         self.html = Element("""
@@ -460,17 +462,15 @@ class Div(Figure):
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
             <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
+                {% if this.position %}position : {{this.position}};{% endif %}
+                {% if this.width %}width : {{this.width[0]}}{{this.width[1]}};{% endif %}
+                {% if this.height %}height: {{this.height[0]}}{{this.height[1]}};{% endif %}
+                {% if this.left %}left: {{this.left[0]}}{{this.left[1]}};{% endif %}
+                {% if this.top %}top: {{this.top[0]}}{{this.top[1]}};{% endif %}
             </style>
         {% endmacro %}
         {% macro html(this, kwargs) %}
-            <div id="{{this.get_name()}}">
-                {{this.html.render(**kwargs)}}
-            </div>
+            <div id="{{this.get_name()}}" class="{{this.class_}}">{{this.html.render(**kwargs)}}</div>
         {% endmacro %}
         """)
 
@@ -601,11 +601,11 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
-    def __init__(self):
+    def __init__(self, template=u""):
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
 
-        self._template = Template(u"")
+        self._template = Template(template)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
