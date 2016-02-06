@@ -387,7 +387,7 @@ class Figure(Element):
 
     def add_subplot(self, x, y, n, margin=0.05):
         """Creates a div child subplot in a matplotlib.figure.add_subplot style.
-        
+
         Parameters
         ----------
         x : int

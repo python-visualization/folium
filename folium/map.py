@@ -180,7 +180,7 @@ class LegacyMap(MacroElement):
                        attr=None, tile_name=None, tile_url=None,
                        active=False, detect_retina=False, **kwargs):
         """Add a tile layer to the map.
-        
+
         See TileLayer for options."""
         if tile_name is not None:
             name = tile_name
@@ -490,7 +490,7 @@ class Marker(MacroElement):
 
 class Popup(Element):
     """Create a Popup instance that can be linked to a Layer.
-    
+
     Parameters
     ----------
     html: string or Element
