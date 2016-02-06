@@ -138,7 +138,7 @@ class RegularPolygonMarker(Marker):
             """)
 
     def render(self, **kwargs):
-        """TODO: docstring."""
+        """Renders the HTML representation of the element."""
         super(RegularPolygonMarker, self).render()
 
         figure = self.get_root()
@@ -197,7 +197,7 @@ class Vega(Element):
         self._template = Template(u"")
 
     def render(self, **kwargs):
-        """TODO: docstring"""
+        """Renders the HTML representation of the element."""
         self.json = json.dumps(self.data)
 
         self._parent.html.add_children(Element(Template("""
@@ -322,7 +322,9 @@ class GeoJson(Layer):
             """)  # noqa
 
     def style_data(self):
-        """TODO: docstring."""
+        """Applies self.style_function to each feature of self.data and returns a corresponding
+        JSON output.
+        """
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
             if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
@@ -438,7 +440,9 @@ class TopoJson(Layer):
             """)  # noqa
 
     def style_data(self):
-        """TODO: docstring."""
+        """Applies self.style_function to each feature of self.data and returns a corresponding
+        JSON output.
+        """
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
@@ -450,7 +454,7 @@ class TopoJson(Layer):
         return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
-        """TODO: docstring."""
+        """Renders the HTML representation of the element."""
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
@@ -516,7 +520,7 @@ class MarkerCluster(Layer):
             """)
 
     def render(self, **kwargs):
-        """TODO: docstring"""
+        """Renders the HTML representation of the element."""
         super(MarkerCluster, self).render()
 
         figure = self.get_root()

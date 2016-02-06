@@ -25,7 +25,15 @@ class Element(object):
 
     Parameters
     ----------
-    TODO: docstring.
+    template: str, default None
+        A jinaj2-compatible template string for rendering the element.
+        If None, template will be:
+            {% for name, element in this._children.items() %}
+                {{element.render(**kwargs)}}
+            {% endfor %}
+        so that all the element's children are rendered.
+    template_name: str, default None
+        If no template is provided, you can also provide a filename.
     """
     def __init__(self, template=None, template_name=None):
         self._name = 'Element'
@@ -42,7 +50,10 @@ class Element(object):
         """)
 
     def get_name(self):
-        """TODO: docstring."""
+        """Returns a string representation of the object.
+        This string has to be unique and to be a python and javascript-compatible
+        variable name.
+        """
         return _camelify(self._name) + '_' + self._id
 
     def _get_self_bounds(self):
@@ -95,7 +106,7 @@ class Element(object):
         return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
-        """TODO: docstring."""
+        """Returns a dict representation of the object."""
         if ordered:
             dict_fun = OrderedDict
         else:
@@ -109,7 +120,7 @@ class Element(object):
         return out
 
     def to_json(self, depth=-1, **kwargs):
-        """TODO: docstring."""
+        """Returns a JSON representation of the object."""
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
     def get_root(self):
@@ -146,15 +157,15 @@ class Element(object):
 
 
 class Link(Element):
-    """TODO: docstring."""
+    """An abstract class for embedding a link in the HTML."""
     def get_code(self):
-        """TODO : docstring."""
+        """Opens the link and returns the response's content."""
         if self.code is None:
             self.code = urlopen(self.url).read()
         return self.code
 
     def to_dict(self, depth=-1, **kwargs):
-        """TODO : docstring."""
+        """Returns a dict representation of the object."""
         out = super(Link, self).to_dict(depth=-1, **kwargs)
         out['url'] = self.url
         return out
@@ -331,7 +342,7 @@ class Figure(Element):
             """), name='css_style')
 
     def to_dict(self, depth=-1, **kwargs):
-        """TODO: docstring."""
+        """Returns a dict representation of the object."""
         out = super(Figure, self).to_dict(depth=depth, **kwargs)
         out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
         out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
@@ -339,7 +350,7 @@ class Figure(Element):
         return out
 
     def get_root(self):
-        """TODO: docstring."""
+        """Returns the root of the elements tree."""
         return self
 
     def render(self, **kwargs):
@@ -375,7 +386,21 @@ class Figure(Element):
         return iframe
 
     def add_subplot(self, x, y, n, margin=0.05):
-        """TODO: docstring."""
+        """Creates a div child subplot in a matplotlib.figure.add_subplot style.
+        
+        Parameters
+        ----------
+        x : int
+            The number of rows in the grid.
+        y : int
+            The number of columns in the grid.
+        n : int
+            The cell number in the grid, counted from 1 to x*y.
+
+        Example:
+        >>> fig.add_subplot(3,2,5)
+        # Create a div in the 5th cell of a 3rows x 2columns grid(bottom-left corner).
+        """
         width = 1./y
         height = 1./x
         left = ((n-1) % y)*width
@@ -427,11 +452,21 @@ class Html(Element):
 
 
 class Div(Figure):
-    """Create a Map with Folium and Leaflet.js.
+    """Create a Div to be embedded in a Figure.
 
     Parameters
     ----------
-    TODO: docstring.
+    width: int or str, default '100%'
+        The width of the div in pixels (int) or percentage (str).
+    height: int or str, default '100%'
+        The height of the div in pixels (int) or percentage (str).
+    left: int or str, default '0%'
+        The left-position of the div in pixels (int) or percentage (str).
+    top: int or str, default '0%'
+        The top-position of the div in pixels (int) or percentage (str).
+    position: str, default 'relative'
+        The position policy of the div.
+        Usual values are 'relative', 'absolute', 'fixed', 'static'.
     """
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
@@ -475,7 +510,7 @@ class Div(Figure):
         """)
 
     def get_root(self):
-        """TODO: docstring."""
+        """Returns the root of the elements tree."""
         return self
 
     def render(self, **kwargs):
