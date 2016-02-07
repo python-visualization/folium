@@ -264,8 +264,13 @@ class ColorMap(MacroElement):
 
     Parameters
     ----------
-    TODO: docstring"""
-
+    vmin: float
+        The left bound of the color scale.
+    vmax: float
+        The right bound of the color scale.
+    caption: str
+        A caption to draw with the colormap.
+    """
     def __init__(self, vmin=0., vmax=1., caption=""):
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
@@ -278,7 +283,7 @@ class ColorMap(MacroElement):
         self._template = self._env.get_template('color_scale.js')
 
     def render(self, **kwargs):
-        """TODO: docstring"""
+        """Renders the HTML representation of the element."""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
                              k in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]

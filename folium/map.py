@@ -179,7 +179,9 @@ class LegacyMap(MacroElement):
                        API_key=None, max_zoom=18, min_zoom=1,
                        attr=None, tile_name=None, tile_url=None,
                        active=False, detect_retina=False, **kwargs):
-        """TODO: docstring."""
+        """Add a tile layer to the map.
+
+        See TileLayer for options."""
         if tile_name is not None:
             name = tile_name
             warnings.warn("'tile_name' is deprecated. Use 'name' instead.")
@@ -487,7 +489,15 @@ class Marker(MacroElement):
 
 
 class Popup(Element):
-    """TODO: docstring."""
+    """Create a Popup instance that can be linked to a Layer.
+
+    Parameters
+    ----------
+    html: string or Element
+        Content of the Popup.
+    max_width: int, default 300
+        The maximal width of the popup.
+    """
     def __init__(self, html=None, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
