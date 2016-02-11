@@ -81,13 +81,14 @@ class Map(LegacyMap):
         * EPSG3857 : The most common CRS for online maps, used by almost all
         free and commercial tile providers. Uses Spherical Mercator projection.
         Set in by default in Map's crs option.
-        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-        projection.
-        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-        Mercator projection.
-        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-        should still be inverted (going from bottom to top).
+        * EPSG4326 : A common CRS among GIS enthusiasts.
+        Uses simple Equirectangular projection.
+        * EPSG3395 : Rarely used by some commercial tile providers.
+        Uses Elliptical Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into
+        x and y directly. May be used for maps of flat surfaces
+        (e.g. game maps). Note that the y axis should still be inverted
+        (going from bottom to top).
 
     Returns
     -------
@@ -95,7 +96,8 @@ class Map(LegacyMap):
 
     Examples
     --------
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    ...                        width=750, height=500)
     >>> map = folium.LegacyMap(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
@@ -581,11 +583,12 @@ class Map(LegacyMap):
         Examples
         --------
         >>> m.choropleth(geo_path='us-states.json', line_color='blue',
-                         line_weight=3)
+        ...              line_weight=3)
         >>> m.choropleth(geo_path='geo.json', data=df,
-                         columns=['Data 1', 'Data 2'],
-                         key_on='feature.properties.myvalue', fill_color='PuBu',
-                         threshold_scale=[0, 20, 30, 40, 50, 60])
+        ...              columns=['Data 1', 'Data 2'],
+        ...              key_on='feature.properties.myvalue',
+        ...              fill_color='PuBu',
+        ...              threshold_scale=[0, 20, 30, 40, 50, 60])
         >>> m.choropleth(geo_path='countries.json',
         ...              topojson='objects.countries')
 
@@ -656,7 +659,8 @@ class Map(LegacyMap):
                     [u for u in color_domain if
                      u <= color_data[get_by_key(x, key_on)]])]
         else:
-            def color_scale_fun(x): return fill_color
+            def color_scale_fun(x):
+                return fill_color
 
         def style_function(x):
             return {
@@ -668,7 +672,7 @@ class Map(LegacyMap):
             }
 
         if topojson:
-            geo_json = TopoJson(geo_data, topojson, style_function=style_function)
+            geo_json = TopoJson(geo_data, topojson, style_function=style_function)  # noqa
         else:
             geo_json = GeoJson(geo_data, style_function=style_function)
 

@@ -4,7 +4,6 @@ sudo: false
 
 env:
     - PYTHON="2.7"
-    - PYTHON="3.3"
     - PYTHON="3.4"
     - PYTHON="3.5"
 
@@ -28,5 +27,4 @@ before_install:
 
 script:
     - python setup.py test
-    - find ./folium -type f -name "*.py" | xargs flake8 --max-line-length=100
-    - find ./tests -type f -name "*.py" | xargs flake8 --max-line-length=100
+    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100

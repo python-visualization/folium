@@ -334,7 +334,8 @@ def write_png(data, origin='upper', colormap=None):
                           " for this functionality")
 
     if colormap is None:
-        def colormap(x): return (x, x, x, 1)
+        def colormap(x):
+            return (x, x, x, 1)
 
     array = np.atleast_3d(data)
     height, width, nblayers = array.shape
