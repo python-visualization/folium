@@ -161,6 +161,8 @@ class LegacyMap(MacroElement):
                                            layers: [],
                                            crs: L.CRS.{{this.crs}}
                                          });
+
+            var scale = L.control.scale().addTo({{this.get_name()}});
         {% endmacro %}
         """)
 
