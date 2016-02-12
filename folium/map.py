@@ -78,6 +78,8 @@ class LegacyMap(MacroElement):
         * Simple : A simple CRS that maps longitude and latitude into x and y directly.
         May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
         should still be inverted (going from bottom to top).
+    control_scale : bool, default False
+        Whether to add a control scale on the map.
 
     Returns
     -------
@@ -100,7 +102,7 @@ class LegacyMap(MacroElement):
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, detect_retina=False,
-                 crs='EPSG3857'):
+                 crs='EPSG3857', control_scale=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
 
@@ -127,6 +129,7 @@ class LegacyMap(MacroElement):
         self.max_lon = max_lon
 
         self.crs = crs
+        self.control_scale = control_scale
 
         if tiles:
             self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
@@ -161,6 +164,7 @@ class LegacyMap(MacroElement):
                                            layers: [],
                                            crs: L.CRS.{{this.crs}}
                                          });
+            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
         """)
 

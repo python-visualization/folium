@@ -89,6 +89,8 @@ class Map(LegacyMap):
         x and y directly. May be used for maps of flat surfaces
         (e.g. game maps). Note that the y axis should still be inverted
         (going from bottom to top).
+    control_scale : bool, default False
+        Whether to add a control scale on the map.
 
     Returns
     -------
