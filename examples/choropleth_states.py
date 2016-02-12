@@ -11,7 +11,7 @@ state_unemployment = r'US_Unemployment_Oct2012.csv'
 
 state_data = pd.read_csv(state_unemployment)
 
-#Let Folium determine the scale
+# Let Folium determine the scale.
 states = folium.Map(location=[48, -102], zoom_start=3)
 states.geo_json(geo_path=state_geo, data=state_data,
                 columns=['State', 'Unemployment'],
@@ -20,7 +20,7 @@ states.geo_json(geo_path=state_geo, data=state_data,
                 legend_name='Unemployment Rate (%)')
 states.create_map(path='us_state_map.html')
 
-#Let's define our own scale and change the line opacity
+# Let's define our own scale and change the line opacity.
 states2 = folium.Map(location=[48, -102], zoom_start=3)
 states2.geo_json(geo_path=state_geo, data=state_data,
                  columns=['State', 'Unemployment'],

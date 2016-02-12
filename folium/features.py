@@ -39,7 +39,8 @@ class WmsTileLayer(Layer):
     version : str, default '1.1.1'
         Version of the WMS service to use.
     attr : str, default None
-        The attribution of the service. Will be displayed in the bottom right corner.
+        The attribution of the service.
+        Will be displayed in the bottom right corner.
     overlay : bool, default False
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
@@ -52,7 +53,7 @@ class WmsTileLayer(Layer):
     def __init__(self, url, name=None, layers=None, styles=None, format=None,
                  transparent=True, version='1.1.1', attr=None, overlay=True,
                  control=True):
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
         self.attribution = attr if attr is not None else ''
         # Options.
@@ -169,8 +170,8 @@ class Vega(Element):
     ----------
     data: JSON-like str or object
         The Vega description of the chart.
-        It can also ba any object that has a method `to_json`, so that you can (for instance)
-        provide a `vincent` chart.
+        It can also be any object that has a method `to_json`,
+        so that you can (for instance) provide a `vincent` chart.
     width: int or str, default None
         The width of the output element.
         If None, either data['width'] (if available) or '100%' will be used.
@@ -180,11 +181,11 @@ class Vega(Element):
         If None, either data['width'] (if available) or '100%' will be used.
         Ex: 120, '120px', '80%'
     left: int or str, default '0%'
-        The horizontal distance of the output with respect to the parent HTML object.
-        Ex: 120, '120px', '80%'
+        The horizontal distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
     top: int or str, default '0%'
-        The vertical distance of the output with respect to the parent HTML object.
-        Ex: 120, '120px', '80%'
+        The vertical distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
     position: str, default 'relative'
         The `position` argument that the CSS shall contain.
         Ex: 'relative', 'absolute'
@@ -290,8 +291,10 @@ class GeoJson(Layer):
     ...                             '#00ff00'}
     >>> GeoJson(geojson, style_function=style_function)
     """
-    def __init__(self, data, style_function=None, name=None, overlay=True, control=True):
-        super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
+    def __init__(self, data, style_function=None, name=None,
+                 overlay=True, control=True):
+        super(GeoJson, self).__init__(name=name, overlay=overlay,
+                                      control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
             self.embed = True
@@ -321,7 +324,8 @@ class GeoJson(Layer):
             raise ValueError('Unhandled object {!r}.'.format(data))
 
         if style_function is None:
-            def style_function(x): return {}
+            def style_function(x):
+                return {}
         self.style_function = style_function
 
         self._template = Template(u"""
@@ -334,8 +338,10 @@ class GeoJson(Layer):
             """)  # noqa
 
     def style_data(self):
-        """Applies self.style_function to each feature of self.data and returns a corresponding
-        JSON output.
+        """
+        Applies `self.style_function` to each feature of `self.data` and
+        returns a corresponding JSON output.
+
         """
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
@@ -421,7 +427,8 @@ class TopoJson(Layer):
     """
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True):
-        super(TopoJson, self).__init__(name=name, overlay=overlay, control=control)
+        super(TopoJson, self).__init__(name=name, overlay=overlay,
+                                       control=control)
         self._name = 'TopoJson'
         if 'read' in dir(data):
             self.embed = True
@@ -436,7 +443,8 @@ class TopoJson(Layer):
         self.object_path = object_path
 
         if style_function is None:
-            def style_function(x): return {}
+            def style_function(x):
+                return {}
         self.style_function = style_function
 
         self._template = Template(u"""
@@ -452,8 +460,10 @@ class TopoJson(Layer):
             """)  # noqa
 
     def style_data(self):
-        """Applies self.style_function to each feature of self.data and returns a corresponding
-        JSON output.
+        """
+        Applies self.style_function to each feature of self.data and returns
+        a corresponding JSON output.
+
         """
         def recursive_get(data, keys):
             if len(keys):
@@ -522,7 +532,8 @@ class MarkerCluster(Layer):
         Whether the Layer will be included in LayerControls
     """
     def __init__(self, name=None, overlay=True, control=True):
-        super(MarkerCluster, self).__init__(name=name, overlay=overlay, control=control)
+        super(MarkerCluster, self).__init__(name=name, overlay=overlay,
+                                            control=control)
         self._name = 'MarkerCluster'
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -652,8 +663,11 @@ class CircleMarker(Marker):
 
 
 class LatLngPopup(MacroElement):
-    """When one clicks on a Map that contains a LatLngPopup, a popup is shown that displays
-    the latitude and longitude of the pointer."""
+    """
+    When one clicks on a Map that contains a LatLngPopup,
+    a popup is shown that displays the latitude and longitude of the pointer.
+
+    """
     def __init__(self):
         super(LatLngPopup, self).__init__()
         self._name = 'LatLngPopup'
