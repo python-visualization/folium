@@ -139,33 +139,6 @@ class TestFolium(object):
         bounds = map.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
-    def test_wms_layer(self):
-        """Test WMS layer URLs."""
-
-        map = folium.Map(location=[44, -73], zoom_start=3)
-        wms_url = 'http://gis.srh.noaa.gov/arcgis/services/NDFDTemps/'
-        wms_url += 'MapServer/WMSServer'
-        wms_name = "Temperature"
-        wms_layers = 16
-        wms_format = "image/png"
-        map.add_wms_layer(wms_name=wms_name,
-                          wms_url=wms_url,
-                          wms_format=wms_format,
-                          wms_layers=wms_layers,
-                          wms_transparent=True)
-
-        wms_temp = self.env.get_template('wms_layer.js')
-        wms = wms_temp.render({'wms_name': map._children[wms_name].get_name(),
-                               'wms_url': wms_url,
-                               'wms_format': wms_format,
-                               'wms_layer_names': wms_layers,
-                               'wms_transparent': 'true'})
-        assert (''.join(wms.split())[:-1] in
-                ''.join(map.get_root().render().split()))
-
-        bounds = map.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
-
     def test_feature_group(self):
         """Test FeatureGroup."""
 
