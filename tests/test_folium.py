@@ -19,10 +19,13 @@ from jinja2 import Environment, PackageLoader
 import vincent
 import folium
 import base64
-from folium.six import PY3
+
+from branca.six import PY3
+from branca.colormap import ColorMap
+import branca.element
+
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
 from folium.features import GeoJson, TopoJson, PolyLine, MultiPolyLine
-from folium.colormap import ColorMap
 from folium.plugins import ImageOverlay
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -49,7 +52,7 @@ def setup_data():
 def test_get_templates():
     """Test template getting."""
 
-    env = folium.utilities.get_templates()
+    env = branca.utilities.get_templates()
     assert isinstance(env, jinja2.environment.Environment)
 
 
@@ -58,7 +61,7 @@ class TestFolium(object):
 
     def setup(self):
         """Setup Folium Map."""
-        with mock.patch('folium.element.uuid4') as uuid4:
+        with mock.patch('branca.element.uuid4') as uuid4:
             uuid4().hex = '0' * 32
             self.map = folium.Map(location=[45.5236, -122.6750], width=900,
                                   height=400, max_zoom=20, zoom_start=4)
@@ -434,7 +437,7 @@ class TestFolium(object):
 
         # Verify the colorscale
         domain = [4.0, 1000.0, 3000.0, 5000.0, 9000.0]
-        palette = folium.utilities.color_brewer('YlGnBu')
+        palette = branca.utilities.color_brewer('YlGnBu')
         d3range = palette[0: len(domain) + 2]
         colorscale_obj = [val for key, val in self.map._children.items() if
                           isinstance(val, ColorMap)][0]
@@ -650,7 +653,7 @@ class TestFolium(object):
     def test_image_overlay(self):
         """Test image overlay."""
         # from numpy.random import random
-        from folium.utilities import write_png
+        from branca.utilities import write_png
         # import base64
 
         data = [[[1, 0, 0, 1], [0, 0, 0, 0], [0, 0, 0, 0]],

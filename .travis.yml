@@ -16,6 +16,7 @@ before_install:
     - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
     - source activate test
     - conda install --yes --file requirements-dev.txt;
+    - pip install git+https://github.com/python-visualization/branca.git
     - if [[ "$PYTHON" == "3.4" ]]; then
         travis_retry conda install --yes nbconvert jupyter_client ipykernel;
         conda install --yes -c ioos geopandas;

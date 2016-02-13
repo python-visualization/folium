@@ -12,14 +12,15 @@ from __future__ import absolute_import
 import warnings
 import json
 
-from folium.six import text_type, binary_type
+from branca.colormap import StepColormap
+from branca.utilities import color_brewer
+from branca.six import text_type, binary_type
+
 from .map import LegacyMap, Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        CircleMarker, LatLngPopup,
                        ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
                        )
-from .colormap import StepColormap
-from .utilities import color_brewer
 
 
 def initialize_notebook():
@@ -763,7 +764,7 @@ class Map(LegacyMap):
                '`Map.add_children(folium.plugins.ImageOverlay(...))` instead.')
         warnings.warn(msg)
         from .plugins import ImageOverlay
-        from .utilities import write_png
+        from branca.utilities import write_png
 
         if filename:
             image = write_png(data, origin=origin, colormap=colormap)

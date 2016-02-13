@@ -8,7 +8,7 @@ Here we try to execute all notebooks that are in `folium/examples`.
 
 import os
 import sys
-import folium
+import branca.utilities
 
 if sys.version_info[:2] == (3, 4):
     import nbconvert
@@ -37,6 +37,6 @@ if sys.version_info[:2] == (3, 4):
 
     for fn in TestNotebooks._nblist:
                 setattr(TestNotebooks,
-                        'test_'+folium.utilities._camelify(fn[:-6]),
+                        'test_'+branca.utilities._camelify(fn[:-6]),
                         NotebookTester(TestNotebooks._filepath+fn).__call__
                         )

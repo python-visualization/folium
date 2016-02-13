@@ -6,11 +6,12 @@ Folium Features Tests
 """
 
 import os
+
+from branca.six import text_type
+from branca.element import Element
+
 from folium import Map, Popup
 from folium import features
-from folium.six import text_type
-from folium.element import Element
-
 
 tmpl = """
         <!DOCTYPE html>

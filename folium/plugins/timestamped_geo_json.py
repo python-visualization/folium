@@ -22,8 +22,8 @@ A geo-json is timestamped if:
 import json
 from jinja2 import Template
 
-from folium.element import MacroElement, Figure, JavascriptLink, CssLink
-from folium.utilities import none_min, none_max, iter_points
+from branca.element import MacroElement, Figure, JavascriptLink, CssLink
+from branca.utilities import none_min, none_max, iter_points
 
 
 class TimestampedGeoJson(MacroElement):

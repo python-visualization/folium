@@ -12,8 +12,6 @@ from folium.features import (ClickForMarker, CustomIcon, DivIcon,
                              MarkerCluster, MultiPolyLine, PolyLine, Vega,
                              RegularPolygonMarker, TopoJson, WmsTileLayer)
 
-import folium.colormap as colormap
-
 __version__ = '0.3.0.dev'
 
 __all__ = ['Map',
@@ -27,7 +25,6 @@ __all__ = ['Map',
            'Popup',
            'TileLayer',
            'ClickForMarker',
-           'colormap',
            'CustomIcon',
            'DivIcon',
            'GeoJson',
