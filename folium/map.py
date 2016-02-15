@@ -12,12 +12,13 @@ import warnings
 import json
 from collections import OrderedDict
 
-from jinja2 import Template
+from jinja2 import Environment, PackageLoader, Template
 
-from .six import text_type, binary_type
-from .utilities import _parse_size
+from branca.six import text_type, binary_type
+from branca.utilities import _parse_size
+from branca.element import Element, Figure, MacroElement, Html
 
-from .element import Element, Figure, MacroElement, Html
+ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
 class LegacyMap(MacroElement):
@@ -105,6 +106,7 @@ class LegacyMap(MacroElement):
                  crs='EPSG3857', control_scale=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
+        self._env = ENV
 
         if not location:
             # If location is not passed we center and ignore zoom.
@@ -268,6 +270,7 @@ class TileLayer(Layer):
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
                                         control=control)
         self._name = 'TileLayer'
+        self._env = ENV
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom

@@ -8,13 +8,13 @@ Extra features Elements.
 from jinja2 import Template
 import json
 
-from .utilities import (_parse_size,
-                        _locations_mirror, _locations_tolist, image_to_url,
-                        text_type, binary_type,
-                        none_min, none_max, iter_points,
-                        )
+from branca.utilities import (_parse_size,
+                              _locations_mirror, _locations_tolist, image_to_url,
+                              text_type, binary_type,
+                              none_min, none_max, iter_points,
+                              )
+from branca.element import Element, Figure, JavascriptLink, CssLink, MacroElement
 
-from .element import Element, Figure, JavascriptLink, CssLink, MacroElement
 from .map import Layer, Icon, Marker, Popup
 
 

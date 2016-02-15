@@ -10,7 +10,7 @@ Optionally you can append a wind direction.
 import json
 from jinja2 import Template
 
-from folium.element import JavascriptLink, Figure
+from branca.element import JavascriptLink, Figure
 from folium.map import Marker
 
 

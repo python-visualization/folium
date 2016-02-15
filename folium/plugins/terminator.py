@@ -9,7 +9,7 @@ and night regions on maps.
 """
 from jinja2 import Template
 
-from folium.element import JavascriptLink, MacroElement, Figure
+from branca.element import JavascriptLink, MacroElement, Figure
 
 
 class Terminator(MacroElement):

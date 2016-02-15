@@ -10,7 +10,8 @@ the map, implements ILayer interface.
 import json
 from jinja2 import Template
 
-from folium.utilities import image_to_url
+from branca.utilities import image_to_url
+
 from folium.map import Layer
 
 

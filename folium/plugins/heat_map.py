@@ -9,9 +9,10 @@ Create a HeatMap layer
 import json
 from jinja2 import Template
 
-from folium.element import JavascriptLink, Figure
+from branca.element import JavascriptLink, Figure
+from branca.utilities import none_min, none_max
+
 from folium.map import TileLayer
-from folium.utilities import none_min, none_max
 
 
 class HeatMap(TileLayer):

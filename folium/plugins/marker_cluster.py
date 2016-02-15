@@ -8,7 +8,8 @@ Creates a MarkerCluster plugin to add on a folium map.
 
 from jinja2 import Template
 
-from folium.element import JavascriptLink, CssLink, MacroElement, Figure
+from branca.element import JavascriptLink, CssLink, MacroElement, Figure
+
 from folium.map import Popup, Icon, Marker
 
 
