@@ -24,7 +24,7 @@ def test_popup_ascii():
               width='100.0%',
               height='100.0%',
               text='Some text.')
-    assert popup.html.render().strip() == tmpl(**kw).strip()
+    assert ''.join(popup.html.render().split()) == ''.join(tmpl(**kw).split())
 
 
 def test_popup_quotes():
@@ -34,7 +34,7 @@ def test_popup_quotes():
               width='100.0%',
               height='100.0%',
               text='Let&#39;s try quotes')
-    assert popup.html.render().strip() == tmpl(**kw).strip()
+    assert ''.join(popup.html.render().split()) == ''.join(tmpl(**kw).split())
 
 
 def test_popup_unicode():
@@ -44,4 +44,4 @@ def test_popup_unicode():
               width='100.0%',
               height='100.0%',
               text="Ça c&#39;est chouette")
-    assert popup.html.render().strip() == tmpl(**kw).strip()
+    assert ''.join(popup.html.render().split()) == ''.join(tmpl(**kw).split())
