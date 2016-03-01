@@ -66,8 +66,8 @@ class LegacyMap(MacroElement):
         tiles of half the specified size and a bigger zoom level in place
         of one to utilize the high resolution.
     crs : str, default 'EPSG3857'
-        Defines coordinate reference systems for projecting geographical points
-        into pixel (screen) coordinates and back.
+        Defines coordinate reference systems for projecting geographical 
+        points into pixel (screen) coordinates and back.
         You can use Leaflet's values :
         * EPSG3857 : The most common CRS for online maps, used by almost all
         free and commercial tile providers. Uses Spherical Mercator projection.
