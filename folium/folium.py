@@ -163,6 +163,9 @@ class Map(LegacyMap):
             or a tuple of the form (Vincent object, 'vis_path.json')
             It is possible to adjust the width of text/HTML popups
             using the optional keywords `popup_width` (default is 300px).
+		script: boolean
+			If True, popup text will be embedded without escaping
+		    (suitable for embedding html-ready code)
         marker_color
             color of marker you want
         marker_icon
@@ -189,7 +192,7 @@ class Map(LegacyMap):
             raise ValueError("%s is deprecated. Use %s instead" %
                              ("clustered_marker", "MarkerCluster"))
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            popup_ = Popup(popup, script, max_width=popup_width)
+            popup_ = Popup(popup, script=script, max_width=popup_width)
         elif isinstance(popup, tuple):
             popup_ = Popup(max_width=popup_width)
             Vega(

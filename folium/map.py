@@ -507,6 +507,9 @@ class Popup(Element):
     ----------
     html: string or Element
         Content of the Popup.
+	script: boolean
+		If True, popup text will be embedded without escaping
+		(suitable for embedding html-ready code)
     max_width: int, default 300
         The maximal width of the popup.
     """
@@ -524,7 +527,7 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_children(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_children(Html(text_type(html), script))
+            self.html.add_children(Html(text_type(html), script=script))
 
         self.max_width = max_width
 
