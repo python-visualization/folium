@@ -5,6 +5,8 @@ Features
 
 Extra features Elements.
 """
+from types import FunctionType
+
 from jinja2 import Template
 import json
 
@@ -267,8 +269,11 @@ class GeoJson(Layer):
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         A function mapping a GeoJson Feature to a style dict.
-    popup_attribute: string, default None
-        An attribute name to use as a popup for each feature in the layer.
+    popup_function: string or function, default None
+        The popup value for the feature
+        * If string, then an attribute to use as a popup value for the feature
+        * If function, a function taking a GeoJson Feature and returning a
+          html string to be used as the popup
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False
@@ -294,9 +299,14 @@ class GeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
 
     >>> # Provide a popup using the name attribute of each feature.
-    >>> GeoJson(geojson, popup_attribute='name')
+    >>> GeoJson(geojson, popup_function='name')
+
+    >>> # Provide a popup based on the output of a function on each feature
+    >>> GeoJson(
+    ... geojson,
+    ... popup_function=lambda feautre: feautre['properties']['name'])
     """
-    def __init__(self, data, style_function=None, popup_attribute=None,
+    def __init__(self, data, style_function=None, popup_function=None,
                  name=None, overlay=True, control=True):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
@@ -333,33 +343,40 @@ class GeoJson(Layer):
                 return {}
         self.style_function = style_function
 
-        self.popup_attribute = popup_attribute
+        self.popup_attribute = None
+        if isinstance(popup_function, FunctionType):
+            self.popup_attribute = "_popupContent"
+            try:
+                for feature in self.data["features"]:
+                    feature["properties"]["_popupContent"] = popup_function(feature)
+            except TypeError:
+                raise ValueError("Can't use popup_function on file path")
+        elif isinstance(popup_function, text_type):
+            self.popup_attribute = popup_function
+        elif isinstance(popup_function, binary_type):
+            self.popup_attribute = text_type(popup_function, 'utf8')
 
-        if self.popup_attribute:
-            self._template = Template(u"""
-                {% macro script(this, kwargs) %}
-                    function {{this.get_name()}}_EachFeature(feature, layer) {
-                        if (feature.properties && feature.properties.{{this.popup_attribute}}) {
-                            layer.bindPopup(feature.properties.{{this.popup_attribute}});
-                        }
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                {% if this.popup_attribute %}
+                function {{this.get_name()}}_EachFeature(feature, layer) {
+                    if (feature.properties && feature.properties.{{this.popup_attribute}}) {
+                        layer.bindPopup(feature.properties.{{this.popup_attribute}});
                     }
-                    var {{this.get_name()}} = L.geoJson(
-                        {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %},
-                        {{'{'}}onEachFeature: {{this.get_name()}}_EachFeature{{'}'}}
-                        )
-                        .addTo({{this._parent.get_name()}});
-                    {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-                {% endmacro %}
-                """)  # noqa
-        else:
-            self._template = Template(u"""
-                {% macro script(this, kwargs) %}
-                    var {{this.get_name()}} = L.geoJson(
-                        {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %})
-                        .addTo({{this._parent.get_name()}});
-                    {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-                {% endmacro %}
-                """)  # noqa
+                }
+                {% endif %}
+                var {{this.get_name()}} = L.geoJson(
+                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %},
+                    {{'{'}}
+                    {% if this.popup_attribute %}
+                        onEachFeature: {{this.get_name()}}_EachFeature
+                    {% endif %}
+                    {{'}'}}
+                    )
+                    .addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+            {% endmacro %}
+            """)  # noqa
 
     def style_data(self):
         """
