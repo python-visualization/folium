@@ -487,7 +487,6 @@ class TestFolium(object):
             assert feature['properties']['_popupContent'] == \
                    feature['properties']['name']
 
-
         self.map = folium.Map([43, -100], zoom_start=4)
         gj.add_to(self.map)
 
