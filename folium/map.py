@@ -505,7 +505,7 @@ class Popup(Element):
     max_width: int, default 300
         The maximal width of the popup.
     """
-    def __init__(self, html=None, max_width=300):
+    def __init__(self, html=None, script=False, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -519,7 +519,7 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_children(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_children(Html(text_type(html)))
+            self.html.add_children(Html(text_type(html), script))
 
         self.max_width = max_width
 

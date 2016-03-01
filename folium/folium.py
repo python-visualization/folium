@@ -149,7 +149,7 @@ class Map(LegacyMap):
 
     def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
-                      clustered_marker=False, icon_angle=0, popup_width=300):
+                      clustered_marker=False, icon_angle=0, popup_width=300, script=False):
         """Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
@@ -188,7 +188,7 @@ class Map(LegacyMap):
             raise ValueError("%s is deprecated. Use %s instead" %
                              ("clustered_marker", "MarkerCluster"))
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            popup_ = Popup(popup, max_width=popup_width)
+            popup_ = Popup(popup, script, max_width=popup_width)
         elif isinstance(popup, tuple):
             popup_ = Popup(max_width=popup_width)
             Vega(
