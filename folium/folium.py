@@ -510,7 +510,7 @@ class Map(LegacyMap):
                    data=None, columns=None, key_on=None, threshold_scale=None,
                    fill_color='blue', fill_opacity=0.6, line_color='black',
                    line_weight=1, line_opacity=1, legend_name="",
-                   topojson=None, reset=False):
+                   topojson=None, popup_function=None, reset=False):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -576,6 +576,10 @@ class Map(LegacyMap):
         topojson: string, default None
             If using a TopoJSON, passing "objects.yourfeature" to the topojson
             keyword argument will enable conversion to GeoJSON.
+        popup_function: string or function, default None
+            If using GeoJson a string or function to pass through to the
+            map to create popups based on feature attributes. Ignored for
+            topojson.
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
 
@@ -677,7 +681,8 @@ class Map(LegacyMap):
         if topojson:
             geo_json = TopoJson(geo_data, topojson, style_function=style_function)  # noqa
         else:
-            geo_json = GeoJson(geo_data, style_function=style_function)
+            geo_json = GeoJson(geo_data, style_function=style_function,
+                               popup_function=popup_function)
 
         self.add_children(geo_json)
 
