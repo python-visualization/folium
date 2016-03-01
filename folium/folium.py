@@ -149,7 +149,8 @@ class Map(LegacyMap):
 
     def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
-                      clustered_marker=False, icon_angle=0, popup_width=300, script=False):
+                      clustered_marker=False, icon_angle=0, popup_width=300,
+                      script=False):
         """Create a simple stock Leaflet marker on the map, with optional
         popup text or Vincent visualization.
 
