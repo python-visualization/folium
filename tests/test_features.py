@@ -14,43 +14,14 @@ from folium import Map, Popup
 from folium import features
 
 tmpl = """
-        <!DOCTYPE html>
-        <head>
-            <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-            <script src="https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"></script>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" />
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" />
-            <link rel="stylesheet" href="https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css" />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
-            <link rel="stylesheet" href="https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css" />
-            <style>
-            html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                }
-            #map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-        </head>
-        <body>
-        </body>
-        <script>
-        </script>
+<!DOCTYPE html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+</body>
+<script>
+</script>
 """  # noqa
 
 
@@ -75,9 +46,9 @@ def test_figure_rendering():
 def test_figure_html():
     f = features.Figure()
     out = f.render()
-    out = os.linesep.join([s for s in out.splitlines() if s.strip()])
+    out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
     print(out)
-    assert out.strip() == tmpl.strip()
+    assert out.strip() == tmpl.strip(), '\n'+out.strip()+'\n'+'-'*80+'\n'+tmpl.strip()
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
