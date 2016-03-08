@@ -345,8 +345,7 @@ class GeoJson(Layer):
 
         self._popup_function = None
         self.popup_attribute = None
-        self.popup_function = popup_function  # Set the popup function (and
-                                              # attribute)
+        self.popup_function = popup_function  # Set the popup function
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
