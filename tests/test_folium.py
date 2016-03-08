@@ -462,17 +462,19 @@ class TestFolium(object):
         path = os.path.join(rootpath, 'us-counties.json')
         data = json.load(open(path))
         gj = folium.GeoJson(data, popup_function='name')
-        assert gj.popup_attribute == 'name', gj.popup_attribute
 
         self.map = folium.Map([43, -100], zoom_start=4)
         gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == 'name', gj.popup_attribute
 
         bounds = self.map.get_bounds()
         assert bounds == [[18.948267, -171.742517],
                           [71.285909, -66.979601]], bounds
 
     def test_geo_json_popup_function(self):
-        """Test geojson popup as attribute name."""
+        """Test geojson popup as function."""
 
         path = os.path.join(rootpath, 'us-counties.json')
         data = json.load(open(path))
@@ -480,6 +482,11 @@ class TestFolium(object):
             data,
             popup_function=lambda feature: feature['properties']['name']
         )
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
         assert gj.popup_attribute == '_popupContent', gj.popup_attribute
 
         # Test each feature to guarantee popupContent set correctly
@@ -487,8 +494,46 @@ class TestFolium(object):
             assert feature['properties']['_popupContent'] == \
                    feature['properties']['name']
 
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup_afterwards(self):
+        """Test geojson popup as attribute name that is set after the fact"""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(data)
+        gj.popup_attribute = 'name'
+
         self.map = folium.Map([43, -100], zoom_start=4)
         gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == 'name', gj.popup_attribute
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup_function_afterwards(self):
+        """Test geojson popup as function set after the fact."""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(data)
+        gj.popup_function = lambda feature: feature['properties']['name']
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == '_popupContent', gj.popup_attribute
+
+        # Test each feature to guarantee popupContent set correctly
+        for feature in gj.data['features']:
+            assert feature['properties']['_popupContent'] == \
+                   feature['properties']['name']
 
         bounds = self.map.get_bounds()
         assert bounds == [[18.948267, -171.742517],

@@ -343,22 +343,14 @@ class GeoJson(Layer):
                 return {}
         self.style_function = style_function
 
+        self._popup_function = None
         self.popup_attribute = None
-        if isinstance(popup_function, FunctionType):
-            self.popup_attribute = "_popupContent"
-            try:
-                for feature in self.data["features"]:
-                    feature["properties"]["_popupContent"] = popup_function(feature)
-            except TypeError:
-                raise ValueError("Can't use popup_function on file path")
-        elif isinstance(popup_function, text_type):
-            self.popup_attribute = popup_function
-        elif isinstance(popup_function, binary_type):
-            self.popup_attribute = text_type(popup_function, 'utf8')
+        self.popup_function = popup_function  # Set the popup function (and
+                                              # attribute)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                {% if this.popup_attribute %}
+                {% if this.popup_attribute or this.popup_function %}
                 function {{this.get_name()}}_EachFeature(feature, layer) {
                     if (feature.properties && feature.properties.{{this.popup_attribute}}) {
                         layer.bindPopup(feature.properties.{{this.popup_attribute}});
@@ -368,7 +360,7 @@ class GeoJson(Layer):
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %},
                     {{'{'}}
-                    {% if this.popup_attribute %}
+                    {% if this.popup_attribute or this.popup_function %}
                         onEachFeature: {{this.get_name()}}_EachFeature
                     {% endif %}
                     {{'}'}}
@@ -377,6 +369,32 @@ class GeoJson(Layer):
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
             {% endmacro %}
             """)  # noqa
+
+    @property
+    def popup_function(self):
+        return self._popup_function
+
+    @popup_function.setter
+    def popup_function(self, func):
+        """
+        Use a setter so that if the dev sets the property function after the
+        fact the `popup_attribute` is set correctly.
+
+        Parameters
+        ----------
+        func : srting, function or None
+            The popup value for the feature
+            * If string, then an attribute to use as a popup value for the feature
+            * If function, a function taking a GeoJson Feature and returning a
+              html string to be used as the popup
+        """
+        if isinstance(func, FunctionType):
+            self.popup_attribute = "_popupContent"
+        elif isinstance(func, text_type):
+            self.popup_attribute = func
+        elif isinstance(func, binary_type):
+            self.popup_attribute = text_type(func, 'utf8')
+        self._popup_function = func
 
     def style_data(self):
         """
@@ -393,6 +411,13 @@ class GeoJson(Layer):
 
         for feature in self.data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+
+            try:
+                for feature in self.data["features"]:
+                    feature["properties"]["_popupContent"] = self.popup_function(feature)  # noqa
+            except TypeError:
+                pass
+
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
