@@ -41,7 +41,7 @@ class HeatMap(TileLayer):
         gradient : dict, default None
             Color gradient config. e.g. {0.4: 'blue', 0.65: 'lime', 1: 'red'}
         """
-        super(TileLayer, self).__init__()
+        super(TileLayer, self).__init__(name=name)
         self._name = 'HeatMap'
         self.tile_name = name if name is not None else self.get_name()
 
