@@ -44,5 +44,5 @@ def test_heat_map():
     assert tmpl.render(this=hm)
 
     bounds = m.get_bounds()
-    assert bounds == [[3.0302801394447734, 46.218566840847025],
-                      [7.132453997672826, 50.75345011431167]], bounds
+    assert bounds == [[46.218566840847025, 3.0302801394447734],
+                      [50.75345011431167, 7.132453997672826]], bounds

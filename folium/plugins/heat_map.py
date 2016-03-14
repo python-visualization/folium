@@ -40,7 +40,7 @@ class HeatMap(TileLayer):
         gradient : dict, default None
             Color gradient config. e.g. {0.4: 'blue', 0.65: 'lime', 1: 'red'}
         """
-        super(TileLayer, self).__init__()
+        super(TileLayer, self).__init__(name=name)
         self._name = 'HeatMap'
         self.tile_name = name if name is not None else self.get_name()
 
@@ -91,12 +91,12 @@ class HeatMap(TileLayer):
         for point in self.data:
             bounds = [
                 [
-                    none_min(bounds[0][0], point[1]),
-                    none_min(bounds[0][1], point[0]),
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
                 ],
                 [
-                    none_max(bounds[1][0], point[1]),
-                    none_max(bounds[1][1], point[0]),
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
                 ],
             ]
         return bounds
