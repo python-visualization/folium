@@ -400,7 +400,7 @@ class FeatureGroup(Layer):
         LayerControls) or a base layer (ticked with a radio button).
     """
     def __init__(self, name=None, overlay=True, control=True):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control)
+        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
