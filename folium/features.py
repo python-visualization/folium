@@ -507,12 +507,12 @@ class TopoJson(Layer):
                 ymax = none_max(y, ymax)
         return [
             [
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin,  # noqa
                 self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,  # noqa
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin  # noqa
             ],
             [
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax,  # noqa
                 self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
+                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
             ]
 
         ]
