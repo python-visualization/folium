@@ -689,6 +689,7 @@ class Map(LegacyMap):
                 index=color_domain,
                 vmin=color_domain[0],
                 vmax=color_domain[-1],
+                caption=legend_name,
                 )
             self.add_children(color_scale)
 
