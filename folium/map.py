@@ -404,6 +404,7 @@ class FeatureGroup(Layer):
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
+        self.layer_name = name if name is not None else self.get_name()
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
