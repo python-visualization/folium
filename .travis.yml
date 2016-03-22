@@ -13,7 +13,7 @@ before_install:
     - export PATH="$HOME/miniconda/bin:$PATH"
     - conda config --add channels ioos -f
     - conda update --yes --all
-    - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
+    - travis_retry conda create --yes -n test python=$PYTHON nomkl --file requirements.txt
     - source activate test
     - conda install --yes --file requirements-dev.txt;
     - pip install git+https://github.com/python-visualization/branca.git@befdf0bb29ecea488c79147fa1a851e15bfe5a10
