@@ -69,12 +69,12 @@ class WmsTileLayer(Layer):
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
                 {
-                    layers:'{{ this.layers }}',
+                    layers: '{{ this.layers }}',
                     styles: '{{ this.styles }}',
-                    format:'{{ this.format }}',
+                    format: '{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
                     version: '{{ this.version }}',
-                    {% if this.attribution %}, attribution:'{{this.attribution}}'{% endif %}
+                    {% if this.attribution %} attribution: '{{this.attribution}}'{% endif %}
                     }
                 ).addTo({{this._parent.get_name()}});
 
