@@ -14,7 +14,7 @@ from folium.features import (ClickForMarker, CustomIcon, DivIcon,
 
 import folium.colormap as colormap
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 __all__ = ['Map',
            'initialize_notebook',
