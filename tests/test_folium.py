@@ -370,12 +370,16 @@ class TestFolium(object):
 
         # Verify the geo_json object
         obj_temp = jinja2.Template("""
-            var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
+            var {{ this.get_name() }} = L.geoJson(
+                {{ this.style_data() }},
+                {{'{'}}
+                {{'}'}}
+                )
                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
                 """)  # noqa
         obj = obj_temp.render(this=geo_json, json=json)
-        assert ''.join(obj.split())[:-1] in out
+        assert ''.join(obj.split())[:-1] in out, out
 
         bounds = self.map.get_bounds()
         assert bounds == [[18.948267, -171.742517],
@@ -447,6 +451,89 @@ class TestFolium(object):
             'domain': domain,
             'range': d3range})
         assert ''.join(colorscale.split())[:-1] in ''.join(out.split())
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup(self):
+        """Test geojson popup as attribute name."""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(data, popup_function='name')
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == 'name', gj.popup_attribute
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup_function(self):
+        """Test geojson popup as function."""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(
+            data,
+            popup_function=lambda feature: feature['properties']['name']
+        )
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == '_popupContent', gj.popup_attribute
+
+        # Test each feature to guarantee popupContent set correctly
+        for feature in gj.data['features']:
+            assert feature['properties']['_popupContent'] == \
+                   feature['properties']['name']
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup_afterwards(self):
+        """Test geojson popup as attribute name that is set after the fact"""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(data)
+        gj.popup_attribute = 'name'
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == 'name', gj.popup_attribute
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
+    def test_geo_json_popup_function_afterwards(self):
+        """Test geojson popup as function set after the fact."""
+
+        path = os.path.join(rootpath, 'us-counties.json')
+        data = json.load(open(path))
+        gj = folium.GeoJson(data)
+        gj.popup_function = lambda feature: feature['properties']['name']
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+        gj.add_to(self.map)
+        self.map._parent.render()
+
+        assert gj.popup_attribute == '_popupContent', gj.popup_attribute
+
+        # Test each feature to guarantee popupContent set correctly
+        for feature in gj.data['features']:
+            assert feature['properties']['_popupContent'] == \
+                   feature['properties']['name']
 
         bounds = self.map.get_bounds()
         assert bounds == [[18.948267, -171.742517],
