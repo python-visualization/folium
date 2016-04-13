@@ -18,7 +18,7 @@ from branca.six import text_type, binary_type
 
 from .map import LegacyMap, Icon, Marker, Popup, FitBounds
 from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
-                       CircleMarker, LatLngPopup,
+                       CircleMarker, RectangleMarker, Polygon, LatLngPopup,
                        ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
                        )
 
