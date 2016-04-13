@@ -688,7 +688,8 @@ class RectangleMarker(Marker):
 
         Example
         -------
-        >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]], color="blue", fill_color="red", popup='Tokyo, Japan')
+        >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]],
+                          color="blue", fill_color="red", popup='Tokyo, Japan')
         """
         super(RectangleMarker, self).__init__(bounds, popup=popup)
         self._name = 'RectangleMarker'
@@ -763,6 +764,7 @@ class Polygon(Marker):
                 }).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
 
 class LatLngPopup(MacroElement):
     """

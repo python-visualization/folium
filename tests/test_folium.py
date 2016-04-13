@@ -245,7 +245,7 @@ class TestFolium(object):
         rect_templ = self.env.get_template('rectangle_marker.js')
 
         # Single Rectangle marker.
-        bounds=[45.60, -122.8, 45.61, -122.7]
+        bounds = [45.60, -122.8, 45.61, -122.7]
         self.map.add_child(folium.RectangleMarker(bounds=bounds, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         rect_1 = rect_templ.render({'RectangleMarker': marker.get_name(),
@@ -258,7 +258,7 @@ class TestFolium(object):
                 ''.join(self.map.get_root().render().split()))
 
         # Second Rectangle marker.
-        bounds=[45.70, -122.9, 45.75, -122.5]
+        bounds = [45.70, -122.9, 45.75, -122.5]
         self.map.add_child(folium.RectangleMarker(bounds=bounds, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         rect_2 = rect_templ.render({'RectangleMarker': marker.get_name(),
@@ -291,11 +291,11 @@ class TestFolium(object):
         self.map.add_child(folium.Polygon(locations=locations, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         polygon_1 = polygon_templ.render({'Polygon': marker.get_name(),
-                                     'location': locations,
-                                      'color': 'black',
-                                      'fill_color': 'black',
-                                      'fill_opacity': 0.6,
-                                      'weight': 1})
+                                          'location': locations,
+                                          'color': 'black',
+                                          'fill_color': 'black',
+                                          'fill_opacity': 0.6,
+                                          'weight': 1})
         assert (''.join(polygon_1.split())[:-1] in
                 ''.join(self.map.get_root().render().split()))
 
@@ -309,7 +309,7 @@ class TestFolium(object):
                      [35.5682, 138.7588],
                      [35.5663, 138.7627]]
         self.map.add_child(folium.Polygon(locations=locations, color='red',
-                                          fill_color='red', fill_opacity=0.7, 
+                                          fill_color='red', fill_opacity=0.7,
                                           weight=3, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         polygon_2 = polygon_templ.render({'Polygon': marker.get_name(),
@@ -324,7 +324,6 @@ class TestFolium(object):
         bounds = self.map.get_bounds()
         assert bounds == [[[35.5636, 138.7634], [35.5629, 138.7664]],
                           [[35.6636, 139.7634], [35.6629, 139.7664]]], bounds
-
 
     def test_poly_marker(self):
         """Test polygon marker."""
