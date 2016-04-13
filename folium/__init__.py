@@ -7,7 +7,7 @@ from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
 from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 
 
-from folium.folium import Map, initialize_notebook, CircleMarker
+from folium.folium import Map, initialize_notebook, CircleMarker, RectangleMarker, Polygon
 from folium.map import (FeatureGroup, FitBounds, Icon, LayerControl, Marker,
                         Popup, TileLayer)
 from folium.features import (ClickForMarker, CustomIcon, DivIcon,
@@ -32,6 +32,8 @@ __all__ = ['CssLink',
            'Map',
            'initialize_notebook',
            'CircleMarker',
+           'RectangleMarker',
+           'Polygon',
            'FeatureGroup',
            'FitBounds',
            'Icon',
