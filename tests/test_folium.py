@@ -25,7 +25,7 @@ from branca.colormap import ColorMap
 import branca.element
 
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import GeoJson, TopoJson, PolyLine, MultiPolyLine
+from folium.features import GeoJson, TopoJson, PolyLine, MultiPolyLine, RectangleMarker, Polygon
 from folium.plugins import ImageOverlay
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -246,7 +246,7 @@ class TestFolium(object):
 
         # Single Rectangle marker.
         bounds = [45.60, -122.8, 45.61, -122.7]
-        self.map.add_child(folium.RectangleMarker(bounds=bounds, popup='Hi'))
+        self.map.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         rect_1 = rect_templ.render({'RectangleMarker': marker.get_name(),
                                     'location': [45.60, -122.8, 45.61, -122.7],
@@ -259,7 +259,7 @@ class TestFolium(object):
 
         # Second Rectangle marker.
         bounds = [45.70, -122.9, 45.75, -122.5]
-        self.map.add_child(folium.RectangleMarker(bounds=bounds, popup='Hi'))
+        self.map.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         rect_2 = rect_templ.render({'RectangleMarker': marker.get_name(),
                                     'location': [45.70, -122.9, 45.75, -122.5],
@@ -288,7 +288,7 @@ class TestFolium(object):
                      [35.6720, 139.7606],
                      [35.6682, 139.7588],
                      [35.6663, 139.7627]]
-        self.map.add_child(folium.Polygon(locations=locations, popup='Hi'))
+        self.map.add_child(Polygon(locations=locations, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         polygon_1 = polygon_templ.render({'Polygon': marker.get_name(),
                                           'location': locations,
@@ -308,9 +308,9 @@ class TestFolium(object):
                      [35.5720, 138.7606],
                      [35.5682, 138.7588],
                      [35.5663, 138.7627]]
-        self.map.add_child(folium.Polygon(locations=locations, color='red',
-                                          fill_color='red', fill_opacity=0.7,
-                                          weight=3, popup='Hi'))
+        self.map.add_child(Polygon(locations=locations, color='red',
+                                   fill_color='red', fill_opacity=0.7,
+                                   weight=3, popup='Hi'))
         marker = list(self.map._children.values())[-1]
         polygon_2 = polygon_templ.render({'Polygon': marker.get_name(),
                                           'location': locations,
