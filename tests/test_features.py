@@ -133,3 +133,21 @@ def test_color_line():
         opacity=1)
     m.add_child(color_line)
     m._repr_html_()
+
+
+# WmsTileLayer. Non-standard params
+def test_non_standard_params_wms_service():
+    m = Map([40, -100], zoom_start=4)
+    url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
+    w = features.WmsTileLayer(url,
+                              name='test',
+                              format='image/png',
+                              layers='nexrad-n0r-900913',
+                              attr=u"Weather data © 2012 IEM Nexrad",
+                              colorscalerange='auto',
+                              transparent=True)
+    w.add_to(m)
+    m._repr_html_()
+
+    bounds = m.get_bounds()
+    assert bounds == [[None, None], [None, None]], bounds

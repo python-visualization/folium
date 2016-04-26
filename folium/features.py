@@ -53,7 +53,7 @@ class WmsTileLayer(Layer):
     """
     def __init__(self, url, name=None, layers=None, styles=None, format=None,
                  transparent=True, version='1.1.1', attr=None, overlay=True,
-                 control=True):
+                 control=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
         self.attribution = attr if attr is not None else ''
@@ -63,6 +63,9 @@ class WmsTileLayer(Layer):
         self.format = format if format else 'image/jpeg'
         self.transparent = transparent
         self.version = version
+        self.extra_params = []
+        for name, value in kwargs.items():
+            self.extra_params.append((name, value))
         # FIXME: Should be map CRS!
         # self.crs = crs if crs else 'null
         self._template = Template(u"""
@@ -74,8 +77,9 @@ class WmsTileLayer(Layer):
                     styles: '{{ this.styles }}',
                     format: '{{ this.format }}',
                     transparent: {{ this.transparent.__str__().lower() }},
-                    version: '{{ this.version }}',
-                    {% if this.attribution %} attribution: '{{this.attribution}}'{% endif %}
+                    version: '{{ this.version }}'
+                    {% if this.attribution %}, attribution: '{{this.attribution}}'{% endif %}
+                    {% for param in this.extra_params %}, {{param.0}}: '{{param.1}}'{% endfor %}
                     }
                 ).addTo({{this._parent.get_name()}});
 
