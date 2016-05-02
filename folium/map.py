@@ -142,7 +142,8 @@ class LegacyMap(MacroElement):
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=True,
-                 detect_retina=False, crs='EPSG3857', control_scale=False):
+                 detect_retina=False, crs='EPSG3857', control_scale=False,
+                 prefer_canvas=False, no_touch=False, disable_3d=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -175,6 +176,8 @@ class LegacyMap(MacroElement):
 
         self.crs = crs
         self.control_scale = control_scale
+
+        self.global_switches = GlobalSwitches(prefer_canvas, no_touch, disable_3d)
 
         if tiles:
             self.add_tile_layer(
@@ -254,6 +257,9 @@ class LegacyMap(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
+        # Set global switches
+        figure.header.add_child(self.global_switches, name='global_switches')
+
         # Import Javascripts
         for name, url in _default_js:
             figure.header.add_child(JavascriptLink(url), name=name)
@@ -282,6 +288,24 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
+
+
+class GlobalSwitches(Element):
+    def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
+        super(GlobalSwitches, self).__init__()
+        self._name = 'GlobalSwitches'
+
+        self.prefer_canvas = prefer_canvas
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
+
+        self._template = Template(
+            '<script>'
+            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
+            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
+            '</script>'
+        )
 
 
 class Layer(MacroElement):
