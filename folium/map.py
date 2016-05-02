@@ -118,6 +118,17 @@ class LegacyMap(MacroElement):
         (going from bottom to top).
     control_scale : bool, default False
         Whether to add a control scale on the map.
+    prefer_canvas : bool, default False
+        Forces Leaflet to use the Canvas back-end (if available) for
+        vector layers instead of SVG. This can increase performance
+        considerably in some cases (e.g. many thousands of circle
+        markers on the map).
+    no_touch : bool, default False
+        Forces Leaflet to not use touch events even if it detects them.
+    disable_3d : bool, default False
+        Forces Leaflet to not use hardware-accelerated CSS 3D
+        transforms for positioning (which may cause glitches in some
+        rare environments) even if they're supported.
 
     Returns
     -------
