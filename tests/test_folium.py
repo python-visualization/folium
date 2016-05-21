@@ -381,22 +381,38 @@ class TestFolium(object):
         assert bounds == [[18.948267, -171.742517],
                           [71.285909, -66.979601]], bounds
 
-    def test_geo_json_bad_color(self):
-        """Test geojson method."""
-
+    def test_geo_json_smooth_factor(self):
         self.map = folium.Map([43, -100], zoom_start=4)
-
         path = os.path.join(rootpath, 'us-counties.json')
 
-        # Data binding incorrect color value error.
-        data = setup_data()
-        with pytest.raises(ValueError):
-            self.map.geo_json(path, data=data,
-                              columns=['FIPS_Code', 'Unemployed_2011'],
-                              key_on='feature.id', fill_color='blue')
+        data = json.load(open(path))
 
-        bounds = self.map.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
+        for feature in data['features']:
+            feature.setdefault('properties', {}).setdefault('style', {}).update({  # noqa
+                'color': 'black',
+                'opactiy': 1,
+                'fillOpacity': 0.6,
+                'weight': 1,
+                'fillColor': 'blue',
+            })
+
+        self.map.choropleth(geo_str=json.dumps(data),
+                            smooth_factor=0.5)
+
+        geo_json = [x for x in self.map._children.values() if
+                    isinstance(x, GeoJson)][0]
+
+        out = ''.join(self.map._parent.render().split())
+
+        # Verify the geo_json object
+        obj_temp = jinja2.Template("""
+            var {{ this.get_name() }} = L.geoJson({{ this.style_data() }}
+                , {smoothFactor:0.5})
+                .addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
+                """)  # noqa
+        obj = obj_temp.render(this=geo_json, json=json)
+        assert ''.join(obj.split())[:-1] in out
 
     def test_geo_json_bad_threshold_scale(self):
         """Test geojson method."""
