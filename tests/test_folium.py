@@ -355,7 +355,7 @@ class TestFolium(object):
         for feature in data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update({  # noqa
                 'color': 'black',
-                'opactiy': 1,
+                'opacity': 1,
                 'fillOpacity': 0.6,
                 'weight': 1,
                 'fillColor': 'blue',
@@ -373,7 +373,7 @@ class TestFolium(object):
             var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
-                """)  # noqa
+                """)
         obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out
 
@@ -472,6 +472,24 @@ class TestFolium(object):
         bounds = self.map.get_bounds()
         assert bounds == [[41.99187135900012, -124.56617536999985],
                           [46.28768217800006, -116.46422312599977]], bounds
+
+    def test_topo_json_smooth_factor(self):
+        """Test topojson smooth factor method."""
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        # Adding TopoJSON as additional layer.
+        path = os.path.join(rootpath, 'or_counties_topo.json')
+        self.map.choropleth(geo_path=path,
+                            topojson='objects.or_counties_geo',
+                            smooth_factor=0.5)
+
+        out = self.map._parent.render()
+
+        # Verify TopoJson
+        topo_json = [val for key, val in self.map._children.items()
+                     if isinstance(val, TopoJson)][0]
+        topojson_str = topo_json._template.module.script(topo_json)
+        assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
 
     def test_map_build(self):
         """Test map build."""

@@ -510,7 +510,7 @@ class Map(LegacyMap):
                    data=None, columns=None, key_on=None, threshold_scale=None,
                    fill_color='blue', fill_opacity=0.6, line_color='black',
                    line_weight=1, line_opacity=1, legend_name="",
-                   topojson=None, reset=False):
+                   topojson=None, reset=False, smooth_factor=None):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -578,6 +578,10 @@ class Map(LegacyMap):
             keyword argument will enable conversion to GeoJSON.
         reset: boolean, default False
             Remove all current geoJSON layers, start with new layer
+        smooth_factor: float, default None
+            How much to simplify the polyline on each zoom level. More means
+            better performance and smoother look, and less means more accurate
+            representation. Leaflet defaults to 1.0.
 
         Returns
         -------
@@ -675,9 +679,16 @@ class Map(LegacyMap):
             }
 
         if topojson:
-            geo_json = TopoJson(geo_data, topojson, style_function=style_function)  # noqa
+            geo_json = TopoJson(
+                geo_data,
+                topojson,
+                style_function=style_function,
+                smooth_factor=smooth_factor)
         else:
-            geo_json = GeoJson(geo_data, style_function=style_function)
+            geo_json = GeoJson(
+                geo_data,
+                style_function=style_function,
+                smooth_factor=smooth_factor)
 
         self.add_children(geo_json)
 

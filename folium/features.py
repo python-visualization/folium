@@ -273,6 +273,10 @@ class GeoJson(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    smooth_factor: float, default None
+        How much to simplify the polyline on each zoom level. More means
+        better performance and smoother look, and less means more accurate
+        representation. Leaflet defaults to 1.0.
 
     Examples
     --------
@@ -292,7 +296,7 @@ class GeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
     """
     def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True):
+                 overlay=True, control=True, smooth_factor=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
@@ -328,11 +332,15 @@ class GeoJson(Layer):
                 return {}
         self.style_function = style_function
 
+        self.smooth_factor = smooth_factor
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %})
-                    .addTo({{this._parent.get_name()}});
+                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
+                    {% if this.smooth_factor is not none %}
+                        , {smoothFactor:{{this.smooth_factor}}}
+                    {% endif %}).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
             {% endmacro %}
             """)  # noqa
@@ -407,6 +415,10 @@ class TopoJson(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    smooth_factor: float, default None
+        How much to simplify the polyline on each zoom level. More means
+        better performance and smoother look, and less means more accurate
+        representation. Leaflet defaults to 1.0.
 
     Examples
     --------
@@ -426,7 +438,7 @@ class TopoJson(Layer):
     >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
     """
     def __init__(self, data, object_path, style_function=None,
-                 name=None, overlay=True, control=True):
+                 name=None, overlay=True, control=True, smooth_factor=None):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control)
         self._name = 'TopoJson'
@@ -447,13 +459,17 @@ class TopoJson(Layer):
                 return {}
         self.style_function = style_function
 
+        self.smooth_factor = smooth_factor
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}}_data = {{this.style_data()}};
                 var {{this.get_name()}} = L.geoJson(topojson.feature(
                     {{this.get_name()}}_data,
-                    {{this.get_name()}}_data.{{this.object_path}}
-                    )).addTo({{this._parent.get_name()}});
+                    {{this.get_name()}}_data.{{this.object_path}})
+                        {% if this.smooth_factor is not none %}
+                            , {smoothFactor: {{this.smooth_factor}}}
+                        {% endif %}).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
