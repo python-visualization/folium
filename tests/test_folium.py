@@ -381,6 +381,23 @@ class TestFolium(object):
         assert bounds == [[18.948267, -171.742517],
                           [71.285909, -66.979601]], bounds
 
+    def test_geo_json_bad_color(self):
+        """Test geojson method."""
+
+        self.map = folium.Map([43, -100], zoom_start=4)
+
+        path = os.path.join(rootpath, 'us-counties.json')
+
+        # Data binding incorrect color value error.
+        data = setup_data()
+        with pytest.raises(ValueError):
+            self.map.geo_json(path, data=data,
+                              columns=['FIPS_Code', 'Unemployed_2011'],
+                              key_on='feature.id', fill_color='blue')
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[None, None], [None, None]], bounds
+
     def test_geo_json_bad_threshold_scale(self):
         """Test geojson method."""
 
