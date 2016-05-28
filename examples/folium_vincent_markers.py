@@ -45,4 +45,4 @@ buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
                         radius=12, popup=(vis2, 'vis2.json'))
 buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
                         radius=12, popup=(vis3, 'vis3.json'))
-buoy_map.create_map(path='NOAA_buoys.html')
+buoy_map.save(outfile='NOAA_buoys.html')
