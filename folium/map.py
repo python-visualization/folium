@@ -51,7 +51,7 @@ _default_css = [
     ("marker_cluster_css",
      "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
     ("awesome_rotate_css",
-     "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
+     "https://cdn.rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
     ]
 
 

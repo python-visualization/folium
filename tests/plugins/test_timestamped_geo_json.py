@@ -96,10 +96,10 @@ def test_timestamped_geo_json():
     assert ('<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/'
             '1.10.2/jquery-ui.min.js"></script>'
             ) in out
-    assert ('<script src="https://raw.githubusercontent.com/nezasa/'
+    assert ('<script src="https://cdn.rawgit.com/nezasa/'
             'iso8601-js-period/master/iso8601.min.js"></script>'
             ) in out
-    assert ('<script src="https://raw.githubusercontent.com/socib/Leaflet.'
+    assert ('<script src="https://cdn.rawgit.com/socib/Leaflet.'
             'TimeDimension/master/dist/leaflet.timedimension.min.js">'
             '</script>'
             ) in out
