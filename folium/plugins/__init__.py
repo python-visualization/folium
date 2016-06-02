@@ -13,6 +13,7 @@ from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
 from .heat_map import HeatMap
 from .image_overlay import ImageOverlay
+from .fullscreen import Fullscreen
 
 __all__ = ['MarkerCluster',
            'ScrollZoomToggler',
@@ -20,4 +21,5 @@ __all__ = ['MarkerCluster',
            'BoatMarker',
            'TimestampedGeoJson',
            'HeatMap',
-           'ImageOverlay']
+           'ImageOverlay',
+           'Fullscreen']

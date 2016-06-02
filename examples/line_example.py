@@ -28,4 +28,4 @@ coordinates = [
 m = folium.Map(location=[41.9, -97.3], zoom_start=4)
 m.line(coordinates, line_color='#FF0000', line_weight=5)
 
-m.create_map(path='line_example.html')
+m.save(outfile='line_example.html')

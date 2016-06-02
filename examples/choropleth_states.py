@@ -18,7 +18,7 @@ states.geo_json(geo_path=state_geo, data=state_data,
                 key_on='feature.id',
                 fill_color='YlGn', fill_opacity=0.7, line_opacity=0.2,
                 legend_name='Unemployment Rate (%)')
-states.create_map(path='us_state_map.html')
+states.save(outfile='us_state_map.html')
 
 # Let's define our own scale and change the line opacity.
 states2 = folium.Map(location=[48, -102], zoom_start=3)
@@ -29,4 +29,4 @@ states2.geo_json(geo_path=state_geo, data=state_data,
                  fill_color='BuPu', fill_opacity=0.7, line_opacity=0.5,
                  legend_name='Unemployment Rate (%)',
                  reset=True)
-states2.create_map(path='us_state_map_2.html')
+states2.save(outfile='us_state_map_2.html')
