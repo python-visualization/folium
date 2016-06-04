@@ -100,19 +100,20 @@ class LegacyMap(MacroElement):
         tiles of half the specified size and a bigger zoom level in place
         of one to utilize the high resolution.
     crs : str, default 'EPSG3857'
-        Defines coordinate reference systems for projecting geographical points
-        into pixel (screen) coordinates and back.
+        Defines coordinate reference systems for projecting geographical 
+        points into pixel (screen) coordinates and back.
         You can use Leaflet's values :
         * EPSG3857 : The most common CRS for online maps, used by almost all
         free and commercial tile providers. Uses Spherical Mercator projection.
         Set in by default in Map's crs option.
-        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-        projection.
-        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-        Mercator projection.
-        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-        should still be inverted (going from bottom to top).
+        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple
+        Equirectangular projection.
+        * EPSG3395 : Rarely used by some commercial tile providers. Uses
+        Elliptical Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into x and y
+        directly. May be used for maps of flat surfaces (e.g. game maps).
+        Note that the y axis should still be inverted
+        (going from bottom to top).
     control_scale : bool, default False
         Whether to add a control scale on the map.
 
@@ -122,7 +123,8 @@ class LegacyMap(MacroElement):
 
     Examples
     --------
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    width=750, height=500)
     >>> map = folium.LegacyMap(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
@@ -168,7 +170,8 @@ class LegacyMap(MacroElement):
         self.control_scale = control_scale
 
         if tiles:
-            self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+            self.add_tile_layer(tiles=tiles, min_zoom=min_zoom,
+                                max_zoom=max_zoom,
                                 attr=attr, API_key=API_key,
                                 detect_retina=detect_retina)
 
@@ -194,13 +197,15 @@ class LegacyMap(MacroElement):
             var bounds = L.latLngBounds(southWest, northEast);
 
             var {{this.get_name()}} = L.map('{{this.get_name()}}', {
-                                           center:[{{this.location[0]}},{{this.location[1]}}],
+                                           center:[{{this.location[0]}},
+                                           {{this.location[1]}}],
                                            zoom: {{this.zoom_start}},
                                            maxBounds: bounds,
                                            layers: [],
                                            crs: L.CRS.{{this.crs}}
                                          });
-            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+            {% if this.control_scale %}L.control.scale().addTo({{
+            this.get_name()}});{% endif %}
         {% endmacro %}
         """)
 
@@ -571,10 +576,13 @@ class Popup(Element):
     ----------
     html: string or Element
         Content of the Popup.
+	script: boolean
+		If True, popup text will be embedded without escaping
+		(suitable for embedding html-ready code)
     max_width: int, default 300
         The maximal width of the popup.
     """
-    def __init__(self, html=None, max_width=300):
+    def __init__(self, html=None, script=False, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -588,7 +596,7 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_children(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_children(Html(text_type(html)))
+            self.html.add_children(Html(text_type(html), script=script))
 
         self.max_width = max_width
 
