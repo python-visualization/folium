@@ -13,7 +13,7 @@ from folium import plugins
 def test_scroll_zoom_toggler():
     m = folium.Map([45., 3.], zoom_start=4)
     szt = plugins.ScrollZoomToggler()
-    m.add_children(szt)
+    m.add_child(szt)
     m._repr_html_()
 
     out = m._parent.render()

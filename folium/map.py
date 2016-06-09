@@ -150,7 +150,7 @@ class LegacyMap(MacroElement):
             self.location = location
             self.zoom_start = zoom_start
 
-        Figure().add_children(self)
+        Figure().add_child(self)
 
         # Map Size Parameters.
         self.width = _parse_size(width)
@@ -233,7 +233,7 @@ class LegacyMap(MacroElement):
                                min_zoom=min_zoom, max_zoom=max_zoom,
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina)
-        self.add_children(tile_layer, name=tile_layer.tile_name)
+        self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -243,13 +243,13 @@ class LegacyMap(MacroElement):
 
         # Import Javascripts
         for name, url in _default_js:
-            figure.header.add_children(JavascriptLink(url), name=name)
+            figure.header.add_child(JavascriptLink(url), name=name)
 
         # Import Css
         for name, url in _default_css:
-            figure.header.add_children(CssLink(url), name=name)
+            figure.header.add_child(CssLink(url), name=name)
 
-        figure.header.add_children(Element(
+        figure.header.add_child(Element(
             '<style>html, body {'
             'width: 100%;'
             'height: 100%;'
@@ -258,7 +258,7 @@ class LegacyMap(MacroElement):
             '}'
             '</style>'), name='css_style')
 
-        figure.header.add_children(Element(
+        figure.header.add_child(Element(
             '<style>#map {'
             'position:absolute;'
             'top:0;'
@@ -537,11 +537,11 @@ class Marker(MacroElement):
         self._name = 'Marker'
         self.location = location
         if icon is not None:
-            self.add_children(icon)
+            self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_children(Popup(popup))
+            self.add_child(Popup(popup))
         elif popup is not None:
-            self.add_children(popup)
+            self.add_child(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -586,9 +586,9 @@ class Popup(Element):
         self.script._parent = self
 
         if isinstance(html, Element):
-            self.html.add_children(html)
+            self.html.add_child(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_children(Html(text_type(html)))
+            self.html.add_child(Html(text_type(html)))
 
         self.max_width = max_width
 
@@ -616,7 +616,7 @@ class Popup(Element):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.script.add_children(Element(
+        figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
 

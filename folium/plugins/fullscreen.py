@@ -39,13 +39,13 @@ class Fullscreen(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink(
                 "https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"),  # noqa
             name='Control.Fullscreen.js'
         )
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"),  # noqa
             name='Control.FullScreen.css'
         )

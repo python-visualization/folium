@@ -158,7 +158,7 @@ class RegularPolygonMarker(Marker):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
@@ -213,11 +213,11 @@ class Vega(Element):
         """Renders the HTML representation of the element."""
         self.json = json.dumps(self.data)
 
-        self._parent.html.add_children(Element(Template("""
+        self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
-        self._parent.script.add_children(Element(Template("""
+        self._parent.script.add_child(Element(Template("""
             vega_parse({{this.json}},{{this.get_name()}});
             """).render(this=self)), name=self.get_name())
 
@@ -225,7 +225,7 @@ class Vega(Element):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(Element(Template("""
+        figure.header.add_child(Element(Template("""
             <style> #{{this.get_name()}} {
                 position : {{this.position}};
                 width : {{this.width[0]}}{{this.width[1]}};
@@ -235,19 +235,19 @@ class Vega(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
             name='d3')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),  # noqa
             name='vega')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://code.jquery.com/jquery-2.1.0.min.js"),
             name='jquery')
 
-        figure.script.add_children(
+        figure.script.add_child(
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
@@ -499,7 +499,7 @@ class TopoJson(Layer):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
             name='topojson')
 
@@ -536,7 +536,7 @@ class TopoJson(Layer):
 
 class MarkerCluster(Layer):
     """Creates a MarkerCluster element to append into a map with
-    Map.add_children.
+    Map.add_child.
 
     Parameters
     ----------
@@ -565,19 +565,19 @@ class MarkerCluster(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
             name='marker_cluster_src')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
             name='marker_cluster')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
             name='marker_cluster_css')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
             name="marker_cluster_default_css")
 
@@ -740,7 +740,7 @@ class ClickForMarker(MacroElement):
 class PolyLine(MacroElement):
     """
     Creates a PolyLine object to append into a map with
-    Map.add_children.
+    Map.add_child.
 
     Parameters
     ----------
@@ -767,9 +767,9 @@ class PolyLine(MacroElement):
         self.weight = weight
         self.opacity = opacity
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_children(Popup(popup))
+            self.add_child(Popup(popup))
         elif popup is not None:
-            self.add_children(popup)
+            self.add_child(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -806,7 +806,7 @@ class PolyLine(MacroElement):
 class MultiPolyLine(MacroElement):
     """
     Creates a MultiPolyLine object to append into a map with
-    Map.add_children.
+    Map.add_child.
 
     Parameters
     ----------
@@ -833,9 +833,9 @@ class MultiPolyLine(MacroElement):
         self.weight = weight
         self.opacity = opacity
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_children(Popup(popup))
+            self.add_child(Popup(popup))
         elif popup is not None:
-            self.add_children(popup)
+            self.add_child(popup)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}

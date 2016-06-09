@@ -17,7 +17,7 @@ def test_heat_map():
             np.array([[48, 5]])).tolist()
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
     hm = plugins.HeatMap(data)
-    m.add_children(hm)
+    m.add_child(hm)
     m._repr_html_()
 
     out = m._parent.render()

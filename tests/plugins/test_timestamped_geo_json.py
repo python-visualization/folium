@@ -84,7 +84,7 @@ def test_timestamped_geo_json():
 
     m = folium.Map([47, 3], zoom_start=1)
     tgj = plugins.TimestampedGeoJson(data)
-    m.add_children(tgj)
+    m.add_child(tgj)
     m._repr_html_()
 
     out = m._parent.render()

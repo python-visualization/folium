@@ -145,7 +145,7 @@ class Map(LegacyMap):
         wms = WmsTileLayer(wms_url, name=wms_name, format=wms_format,
                            layers=wms_layers, transparent=wms_transparent,
                            attr=None)
-        self.add_children(wms, name=wms_name)
+        self.add_child(wms, name=wms_name)
 
     def simple_marker(self, location=None, popup=None,
                       marker_color='blue', marker_icon='info-sign',
@@ -203,7 +203,7 @@ class Map(LegacyMap):
                         icon=Icon(color=marker_color,
                                   icon=marker_icon,
                                   angle=icon_angle))
-        self.add_children(marker)
+        self.add_child(marker)
 
     def line(self, locations,
              line_color=None, line_opacity=None, line_weight=None,
@@ -249,9 +249,9 @@ class Map(LegacyMap):
                      )
 
         if popup is not None:
-            p.add_children(Popup(popup, max_width=popup_width))
+            p.add_child(Popup(popup, max_width=popup_width))
 
-        self.add_children(p)
+        self.add_child(p)
 
     def multiline(self, locations, line_color=None, line_opacity=None,
                   line_weight=None, popup=None, popup_width=300, latlon=True):
@@ -303,9 +303,9 @@ class Map(LegacyMap):
                           latlon=latlon)
 
         if popup is not None:
-            p.add_children(Popup(popup, max_width=popup_width))
+            p.add_child(Popup(popup, max_width=popup_width))
 
-        self.add_children(p)
+        self.add_child(p)
 
     def circle_marker(self, location=None, radius=500, popup=None,
                       line_color='black', fill_color='black',
@@ -360,7 +360,7 @@ class Map(LegacyMap):
                               fill_color=fill_color,
                               fill_opacity=fill_opacity,
                               popup=popup_)
-        self.add_children(marker)
+        self.add_child(marker)
 
     def polygon_marker(self, location=None, line_color='black', line_opacity=1,
                        line_weight=2, fill_color='blue', fill_opacity=1,
@@ -421,14 +421,14 @@ class Map(LegacyMap):
                                       number_of_sides=num_sides,
                                       rotation=rotation,
                                       radius=radius)
-        self.add_children(marker)
+        self.add_child(marker)
 
     def lat_lng_popover(self):
         """Enable popovers to display Lat and Lon on each click."""
         warnings.warn("%s is deprecated. Use %s instead" %
                       ("lat_lng_popover", "add_children(LatLngPopup)"),
                       FutureWarning, stacklevel=2)
-        self.add_children(LatLngPopup())
+        self.add_child(LatLngPopup())
 
     def click_for_marker(self, popup=None):
         """Enable the addition of markers via clicking on the map. The marker
@@ -448,7 +448,7 @@ class Map(LegacyMap):
         warnings.warn("%s is deprecated. Use %s instead" %
                       ("click_for_marker", "add_children(ClickForMarker)"),
                       FutureWarning, stacklevel=2)
-        self.add_children(ClickForMarker(popup=popup))
+        self.add_child(ClickForMarker(popup=popup))
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):
@@ -476,13 +476,13 @@ class Map(LegacyMap):
         >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
-        self.add_children(FitBounds(bounds,
-                                    padding_top_left=padding_top_left,
-                                    padding_bottom_right=padding_bottom_right,
-                                    padding=padding,
-                                    max_zoom=max_zoom,
-                                    )
-                          )
+        self.add_child(FitBounds(bounds,
+                                 padding_top_left=padding_top_left,
+                                 padding_bottom_right=padding_bottom_right,
+                                 padding=padding,
+                                 max_zoom=max_zoom,
+                                 )
+                       )
 
     def add_plugin(self, plugin):
         """Adds a plugin to the map.
@@ -496,7 +496,7 @@ class Map(LegacyMap):
         warnings.warn("%s is deprecated. Use %s instead" %
                       ("add_plugin", "add_children"),
                       FutureWarning, stacklevel=2)
-        self.add_children(plugin)
+        self.add_child(plugin)
 
     def geo_json(self, *args, **kwargs):
         """This method is deprecated and will be removed in v0.2.1. See
@@ -690,7 +690,7 @@ class Map(LegacyMap):
                 style_function=style_function,
                 smooth_factor=smooth_factor)
 
-        self.add_children(geo_json)
+        self.add_child(geo_json)
 
         # Create ColorMap.
         if color_domain:
@@ -701,7 +701,7 @@ class Map(LegacyMap):
                 vmin=color_domain[0],
                 vmax=color_domain[-1],
                 )
-            self.add_children(color_scale)
+            self.add_child(color_scale)
 
     def image_overlay(self, data, opacity=0.25, min_lat=-90.0, max_lat=90.0,
                       min_lon=-180.0, max_lon=180.0, origin='upper',
@@ -782,9 +782,9 @@ class Map(LegacyMap):
             open(filename, 'wb').write(image)
             data = filename
 
-        self.add_children(ImageOverlay(data, [[min_lat, min_lon],
-                                              [max_lat, max_lon]],
-                                       opacity=opacity,
-                                       origin=origin,
-                                       colormap=colormap,
-                                       mercator_project=mercator_project))
+        self.add_child(ImageOverlay(data, [[min_lat, min_lon],
+                                           [max_lat, max_lon]],
+                                    opacity=opacity,
+                                    origin=origin,
+                                    colormap=colormap,
+                                    mercator_project=mercator_project))

@@ -16,7 +16,7 @@ from folium.map import Popup, Icon, Marker
 class MarkerCluster(MacroElement):
     def __init__(self, locations, popups=None, icons=None):
         """Creates a MarkerCluster plugin to append into a map with
-        Map.add_children.
+        Map.add_child.
 
         Parameters
         ----------
@@ -46,7 +46,7 @@ class MarkerCluster(MacroElement):
                 i = icon
             else:
                 i = Icon(icon)
-            self.add_children(Marker(location, popup=p, icon=i))
+            self.add_child(Marker(location, popup=p, icon=i))
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -62,14 +62,14 @@ class MarkerCluster(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
             name='markerclusterjs')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
             name='markerclustercss')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
             name='markerclusterdefaultcss')
