@@ -634,28 +634,29 @@ class DivIcon(MacroElement):
             """)  # noqa
 
 
-class CircleMarker(Marker):
-    """Creates a CircleMarker object for plotting on a Map.
+class Circle(Marker):
+    """Creates a Circle object for plotting on a Map.
 
     Parameters
     ----------
     location: tuple or list, default None
         Latitude and Longitude of Marker (Northing, Easting)
     radius: int
-        The radius of the circle in pixels.
+        The radius of the circle in meters. For setting the radius in pixel,
+        use CircleMarker.
     color: str, default 'black'
         The color of the marker's edge in a HTML-compatible format.
     fill_color: str, default 'black'
         The fill color of the marker in a HTML-compatible format.
-    fill_opacity: float, default à.6
+    fill_opacity: float, default 0.6
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        super(CircleMarker, self).__init__(location, popup=popup)
-        self._name = 'CircleMarker'
+        super(Circle, self).__init__(location, popup=popup)
+        self._name = 'Circle'
         self.radius = radius
         self.color = color
         self.fill_color = fill_color
@@ -673,6 +674,51 @@ class CircleMarker(Marker):
                     fillOpacity: {{ this.fill_opacity }}
                     }
                 )
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+
+class CircleMarker(Marker):
+    """Creates a CircleMarker object for plotting on a Map.
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Marker (Northing, Easting)
+    radius: int
+        The radius of the circle in pixels. For setting the radius in meter,
+        use Circle.
+    color: str, default 'black'
+        The color of the marker's edge in a HTML-compatible format.
+    fill_color: str, default 'black'
+        The fill color of the marker in a HTML-compatible format.
+    fill_opacity: float, default 0.6
+        The fill opacity of the marker, between 0. and 1.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    """
+    def __init__(self, location, radius=500, color='black',
+                 fill_color='black', fill_opacity=0.6, popup=None):
+        super(CircleMarker, self).__init__(location, popup=popup)
+        self._name = 'CircleMarker'
+        self.radius = radius
+        self.color = color
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var {{this.get_name()}} = L.circleMarker(
+                [{{this.location[0]}},{{this.location[1]}}],
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }}
+                    }
+                )
+                .setRadius({{ this.radius }})
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
