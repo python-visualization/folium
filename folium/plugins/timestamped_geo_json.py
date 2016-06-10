@@ -30,7 +30,7 @@ class TimestampedGeoJson(MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  period="P1D"):
         """Creates a TimestampedGeoJson plugin to append into a map with
-        Map.add_children.
+        Map.add_child.
 
         Parameters
         ----------
@@ -134,27 +134,27 @@ class TimestampedGeoJson(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),  # noqa
             name='jquery2.0.0')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),  # noqa
             name='jqueryui1.10.2')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdn.rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"),  # noqa
             name='iso8601')
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://cdn.rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"),  # noqa
             name='leaflet.timedimension')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),  # noqa
             name='highlight.js_css')
 
-        figure.header.add_children(
+        figure.header.add_child(
             CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
 

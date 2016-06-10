@@ -25,8 +25,8 @@ def test_boat_marker():
         wind_speed=25,
         color="#88f")
 
-    m.add_children(bm1)
-    m.add_children(bm2)
+    m.add_child(bm1)
+    m.add_child(bm2)
     m._repr_html_()
 
     out = m._parent.render()

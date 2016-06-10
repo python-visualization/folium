@@ -78,7 +78,7 @@ class HeatMap(TileLayer):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),  # noqa
             name='leaflet-heat.js')
 

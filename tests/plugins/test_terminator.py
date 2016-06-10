@@ -13,7 +13,7 @@ from folium import plugins
 def test_terminator():
     m = folium.Map([45., 3.], zoom_start=1)
     t = plugins.Terminator()
-    m.add_children(t)
+    m.add_child(t)
     m._repr_html_()
 
     out = m._parent.render()

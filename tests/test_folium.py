@@ -147,10 +147,10 @@ class TestFolium(object):
 
         map = folium.Map()
         feature_group = FeatureGroup()
-        feature_group.add_children(Marker([45, -30], popup=Popup('-30')))
-        feature_group.add_children(Marker([45, 30], popup=Popup('30')))
-        map.add_children(feature_group)
-        map.add_children(folium.map.LayerControl())
+        feature_group.add_child(Marker([45, -30], popup=Popup('-30')))
+        feature_group.add_child(Marker([45, 30], popup=Popup('30')))
+        map.add_child(feature_group)
+        map.add_child(folium.map.LayerControl())
 
         map._repr_html_()
 
@@ -740,7 +740,7 @@ class TestFolium(object):
                                        popup_anchor=(-3, -76),)
         mk = folium.map.Marker([45, -100], icon=i,
                                popup=folium.map.Popup('Hello'))
-        self.map.add_children(mk)
+        self.map.add_child(mk)
         self.map._parent.render()
 
         bounds = self.map.get_bounds()
@@ -749,13 +749,13 @@ class TestFolium(object):
     def test_tile_layer(self):
         mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
         layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
-        mapa.add_children(folium.map.TileLayer(layer, name='MapQuest',
-                                               attr='attribution'))
-        mapa.add_children(folium.map.TileLayer(layer,
-                                               name='MapQuest2',
-                                               attr='attribution2',
-                                               overlay=True))
-        mapa.add_children(folium.map.LayerControl())
+        mapa.add_child(folium.map.TileLayer(layer, name='MapQuest',
+                                            attr='attribution'))
+        mapa.add_child(folium.map.TileLayer(layer,
+                                            name='MapQuest2',
+                                            attr='attribution2',
+                                            overlay=True))
+        mapa.add_child(folium.map.LayerControl())
         mapa._repr_html_()
 
         bounds = self.map.get_bounds()
