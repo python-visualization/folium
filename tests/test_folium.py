@@ -212,8 +212,8 @@ class TestFolium(object):
         circ_templ = self.env.get_template('circle_marker.js')
 
         # Single Circle marker.
-        self.map.circle_marker(location=[45.60, -122.8], popup='Hi')
-        marker = list(self.map._children.values())[-1]
+        marker = folium.features.CircleMarker([45.60, -122.8], popup='Hi')
+        self.map.add_child(marker)
         circle_1 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
@@ -224,8 +224,8 @@ class TestFolium(object):
                 ''.join(self.map.get_root().render().split()))
 
         # Second circle marker.
-        self.map.circle_marker(location=[45.70, -122.9], popup='Hi')
-        marker = list(self.map._children.values())[-1]
+        marker = folium.features.CircleMarker([45.70, -122.9], popup='Hi')
+        self.map.add_child(marker)
         circle_2 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
