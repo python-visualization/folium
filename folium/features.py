@@ -14,8 +14,9 @@ from branca.utilities import (_parse_size,
                               none_min, none_max, iter_points,
                               )
 from branca.element import Element, Figure, JavascriptLink, CssLink, MacroElement
+from branca.colormap import LinearColormap
 
-from .map import Layer, Icon, Marker, Popup
+from .map import Layer, Icon, Marker, Popup, FeatureGroup
 
 
 class WmsTileLayer(Layer):
@@ -978,3 +979,57 @@ class CustomIcon(Icon):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
+
+
+class ColorLine(FeatureGroup):
+    """Draw data on a map with specified colors.
+
+    Parameters
+    ----------
+    positions: tuple or list
+        The list of points latitude and longitude
+    colors: tuple or list
+        The list of segments colors.
+        It must have length equal to `len(positions)-1`.
+    colormap: branca.colormap.Colormap or list or tuple
+        The colormap to use.
+        If a list or tuple of colors is provided, a LinearColormap will be created
+        from it.
+    nb_steps: int, default 12
+        To have lighter output, the colormap will be discretized to that number
+        of colors.
+    opacity: float, default 1
+        Line opacity, scale 0-1
+    weight: int, default 2
+        Stroke weight in pixels
+    **kwargs
+        Further parameters available. See folium.map.FeatureGroup
+
+    Returns
+    -------
+    A ColorLine object that you can `add_to` a Map.
+    """
+    def __init__(self, positions, colors, colormap=None, nb_steps=12,
+                 weight=None, opacity=None, **kwargs):
+        super(ColorLine, self).__init__(**kwargs)
+        self._name = 'ColorLine'
+
+        if colormap is None:
+            cm = LinearColormap(['green', 'yellow', 'red'],
+                                vmin=min(colors),
+                                vmax=max(colors),
+                                ).to_step(nb_steps)
+        elif isinstance(colormap, LinearColormap):
+            cm = colormap.to_step(nb_steps)
+        elif isinstance(colormap, list) or isinstance(colormap, tuple):
+            cm = LinearColormap(colormap,
+                                vmin=min(colors),
+                                vmax=max(colors),
+                                ).to_step(nb_steps)
+        else:
+            cm = colormap
+        out = {}
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):
+            out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
+        for key, val in out.items():
+            self.add_child(MultiPolyLine(val, color=key, weight=weight, opacity=opacity))
