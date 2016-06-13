@@ -119,3 +119,17 @@ def test_wms_service():
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
+
+
+# ColorLine.
+def test_color_line():
+    m = Map([22.5, 22.5], zoom_start=3)
+    color_line = features.ColorLine(
+        [[0, 0], [0, 45], [45, 45], [45, 0], [0, 0]],
+        [0, 1, 2, 3],
+        colormap=['b', 'g', 'y', 'r'],
+        nb_steps=4,
+        weight=10,
+        opacity=1)
+    m.add_child(color_line)
+    m._repr_html_()
