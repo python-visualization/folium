@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-
-# This is to import the repository's version of folium ; not the installed one.
-import sys, os
-sys.path.insert(0, '..')
 import folium
 from folium import plugins
 

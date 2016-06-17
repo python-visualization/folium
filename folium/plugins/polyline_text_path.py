@@ -3,6 +3,8 @@
 PolyLine Text Path
 -----------
 
+https://github.com/makinacorpus/Leaflet.TextPath
+
 Shows a text along a PolyLine.
 
 """
