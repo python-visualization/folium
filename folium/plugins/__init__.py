@@ -14,6 +14,7 @@ from .timestamped_geo_json import TimestampedGeoJson
 from .heat_map import HeatMap
 from .image_overlay import ImageOverlay
 from .fullscreen import Fullscreen
+from .polyline_text_path import PolyLineTextPath
 
 __all__ = ['MarkerCluster',
            'ScrollZoomToggler',
@@ -22,4 +23,5 @@ __all__ = ['MarkerCluster',
            'TimestampedGeoJson',
            'HeatMap',
            'ImageOverlay',
-           'Fullscreen']
+           'Fullscreen',
+           'PolyLineTextPath']
