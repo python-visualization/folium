@@ -16,7 +16,8 @@ from folium.features import MacroElement
 
 class PolyLineTextPath(MacroElement):
     """Shows a text along a PolyLine."""
-    def __init__(self, polyline, text, repeat=False, center=False, below=False, offset=0, orientation=0, attributes={}):
+    def __init__(self, polyline, text, repeat=False, center=False, below=False,
+                 offset=0, orientation=0, attributes={}):
         """Shows a text along a PolyLine.
 
         Parameters
@@ -44,7 +45,8 @@ class PolyLineTextPath(MacroElement):
 
             attributes: dictionary
                 Object containing the attributes applied to the text tag.
-                Check valid attributes here: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
+                Check valid attributes here:
+                    https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
                 Example: {'fill': '#007DEF', 'font-weight': 'bold', 'font-size': '24'}
 
 
