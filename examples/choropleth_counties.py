@@ -29,7 +29,7 @@ def set_id(fips):
 
 # Apply set_id, drop NaN.
 df['GEO_ID'] = df['FIPS_Code'].apply(set_id)
-df = df.dropna()
+df.dropna(subset=['GEO_ID'], inplace=True)
 
 # Number of employed with auto scale.
 map_1 = folium.Map(location=[48, -102], zoom_start=3)
