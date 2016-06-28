@@ -13,7 +13,7 @@ state_data = pd.read_csv(state_unemployment)
 
 # Let Folium determine the scale.
 states = folium.Map(location=[48, -102], zoom_start=3)
-states.geo_json(geo_path=state_geo, data=state_data,
+states.choropleth(geo_path=state_geo, data=state_data,
                 columns=['State', 'Unemployment'],
                 key_on='feature.id',
                 fill_color='YlGn', fill_opacity=0.7, line_opacity=0.2,
@@ -22,7 +22,7 @@ states.save(outfile='us_state_map.html')
 
 # Let's define our own scale and change the line opacity.
 states2 = folium.Map(location=[48, -102], zoom_start=3)
-states2.geo_json(geo_path=state_geo, data=state_data,
+states2.choropleth(geo_path=state_geo, data=state_data,
                  columns=['State', 'Unemployment'],
                  threshold_scale=[5, 6, 7, 8, 9, 10],
                  key_on='feature.id',
