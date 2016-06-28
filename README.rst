@@ -49,7 +49,7 @@ To create a base map, simply pass your starting coordinates to Folium:
 
     import folium
     map_osm = folium.Map(location=[45.5236, -122.6750])
-    map_osm.create_map(path='osm.html')
+    map_osm.save('osm.html')
 
 |baseOSM|
 
@@ -61,7 +61,7 @@ To create a base map, simply pass your starting coordinates to Folium:
 
     stamen = folium.Map(location=[45.5236, -122.6750], tiles='Stamen Toner',
                         zoom_start=13)
-    stamen.create_map(path='stamen_toner.html')
+    stamen.save('stamen_toner.html')
 
 |stamen|
 
@@ -95,7 +95,7 @@ Markers
                        tiles='Stamen Terrain')
     map_1.simple_marker([45.3288, -121.6625], popup='Mt. Hood Meadows')
     map_1.simple_marker([45.3311, -121.7113], popup='Timberline Lodge')
-    map_1.create_map(path='mthood.html')
+    map_1.save('mthood.html')
 
 |hood|
 
@@ -109,7 +109,7 @@ Folium supports colors and marker icon types (from bootstrap)
     map_1.simple_marker([45.3288, -121.6625], popup='Mt. Hood Meadows',marker_icon='cloud')
     map_1.simple_marker([45.3311, -121.7113], popup='Timberline Lodge',marker_color='green')
     map_1.simple_marker([45.3300, -121.6823], popup='Some Other Location',marker_color='red',marker_icon='info-sign')
-    map_1.create_map(path='iconTest.html')
+    map_1.save('iconTest.html')
 
 |iconTest|
 
@@ -123,7 +123,7 @@ Folium also supports circle-style markers, with custom size and color:
     map_2.circle_marker(location=[45.5215, -122.6261], radius=500,
                         popup='Laurelhurst Park', line_color='#3186cc',
                         fill_color='#3186cc')
-    map_2.create_map(path='portland.html')
+    map_2.save('portland.html')
 
 |circle|
 
@@ -136,7 +136,7 @@ Folium has a convenience function to enable lat/lng popovers:
     map_3 = folium.Map(location=[46.1991, -122.1889], tiles='Stamen Terrain',
                        zoom_start=13)
     map_3.lat_lng_popover()
-    map_3.create_map(path='sthelens.html')
+    map_3.save('sthelens.html')
 
 |latlng|
 
@@ -151,7 +151,7 @@ markers:
                        zoom_start=13)
     map_4.simple_marker(location=[46.8354, -121.7325], popup='Camp Muir')
     map_4.click_for_marker(popup='Waypoint')
-    map_4.create_map(path='mtrainier.html')
+    map_4.save('mtrainier.html')
 
 |waypoints|
 
@@ -171,7 +171,7 @@ Folium also supports the Polygon marker set from the
                          fill_color='#769d96', num_sides=6, radius=10)
     map_5.polygon_marker(location=[45.5318, -122.6745], popup='Broadway Bridge',
                          fill_color='#769d96', num_sides=8, radius=10)
-    map_5.create_map(path='bridges.html')
+    map_5.save('bridges.html')
 
 |polygon|
 
@@ -194,7 +194,7 @@ marker type, with the visualization as the popover:
                             radius=12, popup=(vis2, 'vis2.json'))
     buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
                             radius=12, popup=(vis3, 'vis3.json'))
-    buoy_map.create_map(path='NOAA_buoys.html')
+    buoy_map.save('NOAA_buoys.html')
 
 |vincent|
 
@@ -213,9 +213,9 @@ and multiple layers can be visualized on the same map:
 
     ice_map = folium.Map(location=[-59.1759, -11.6016],
                        tiles='Mapbox Bright', zoom_start=2)
-    ice_map.geo_json(geo_path=geo_path)
-    ice_map.geo_json(geo_path=topo_path, topojson='objects.antarctic_ice_shelf')
-    ice_map.create_map(path='ice_map.html')
+    ice_map.choropleth(geo_path=geo_path)
+    ice_map.choropleth(geo_path=topo_path, topojson='objects.antarctic_ice_shelf')
+    ice_map.save('ice_map.html')
 
 |ice|
 
@@ -241,12 +241,12 @@ to quickly visualize different combinations:
 
     #Let Folium determine the scale
     map = folium.Map(location=[48, -102], zoom_start=3)
-    map.geo_json(geo_path=state_geo, data=state_data,
+    map.choropleth(geo_path=state_geo, data=state_data,
                  columns=['State', 'Unemployment'],
                  key_on='feature.id',
                  fill_color='YlGn', fill_opacity=0.7, line_opacity=0.2,
                  legend_name='Unemployment Rate (%)')
-    map.create_map(path='us_states.html')
+    map.save('us_states.html')
 
 |states_1|
 
@@ -258,14 +258,14 @@ own threshold values is simple:
 
 .. code:: python
 
-    map.geo_json(geo_path=state_geo, data=state_data,
+    map.choropleth(geo_path=state_geo, data=state_data,
                  columns=['State', 'Unemployment'],
                  threshold_scale=[5, 6, 7, 8, 9, 10],
                  key_on='feature.id',
                  fill_color='BuPu', fill_opacity=0.7, line_opacity=0.5,
                  legend_name='Unemployment Rate (%)',
                  reset=True)
-    map.create_map(path='us_states.html')
+    map.save('us_states.html')
 
 |states_2|
 
@@ -280,12 +280,12 @@ will visualize:
 
     #Number of employed with auto scale
     map_1 = folium.Map(location=[48, -102], zoom_start=3)
-    map_1.geo_json(geo_path=county_geo, data_out='data1.json', data=df,
+    map_1.choropleth(geo_path=county_geo, data_out='data1.json', data=df,
                    columns=['GEO_ID', 'Employed_2011'],
                    key_on='feature.id',
                    fill_color='YlOrRd', fill_opacity=0.7, line_opacity=0.3,
                    topojson='objects.us_counties_20m')
-    map_1.create_map(path='map_1.html')
+    map_1.save('map_1.html')
 
 |counties_1|
 
@@ -295,14 +295,14 @@ will visualize:
 
     #Unemployment with custom defined scale
     map_2 = folium.Map(location=[40, -99], zoom_start=4)
-    map_2.geo_json(geo_path=county_geo, data_out='data2.json', data=df,
+    map_2.choropleth(geo_path=county_geo, data_out='data2.json', data=df,
                    columns=['GEO_ID', 'Unemployment_rate_2011'],
                    key_on='feature.id',
                    threshold_scale=[0, 5, 7, 9, 11, 13],
                    fill_color='YlGnBu', line_opacity=0.3,
                    legend_name='Unemployment Rate 2011 (%)',
                    topojson='objects.us_counties_20m')
-    map_2.create_map(path='map_2.html')
+    map_2.save('map_2.html')
 
 |counties_2|
 
@@ -312,13 +312,13 @@ will visualize:
 
     #Median Household income
     map_3 = folium.Map(location=[40, -99], zoom_start=4)
-    map_3.geo_json(geo_path=county_geo, data_out='data3.json', data=df,
+    map_3.choropleth(geo_path=county_geo, data_out='data3.json', data=df,
                    columns=['GEO_ID', 'Median_Household_Income_2011'],
                    key_on='feature.id',
                    fill_color='PuRd', line_opacity=0.3,
                    legend_name='Median Household Income 2011 ($)',
                    topojson='objects.us_counties_20m')
-    map_3.create_map(path='map_3.html')
+    map_3.save('map_3.html')
 
 |counties_3|
 
