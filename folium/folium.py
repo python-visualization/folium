@@ -664,6 +664,7 @@ class Map(LegacyMap):
             def color_scale_fun(x):
                 return color_range[len(
                     [u for u in color_domain if
+                     get_by_key(x, key_on) in color_data and
                      u <= color_data[get_by_key(x, key_on)]])]
         else:
             def color_scale_fun(x):
