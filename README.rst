@@ -43,6 +43,8 @@ Installation
 Getting Started
 ---------------
 
+You can find most of the following examples in the notebook **folium_examples.ipynb** in the examples folder.
+
 To create a base map, simply pass your starting coordinates to Folium:
 
 .. code:: python
@@ -93,8 +95,8 @@ Markers
 
     map_1 = folium.Map(location=[45.372, -121.6972], zoom_start=12,
                        tiles='Stamen Terrain')
-    map_1.simple_marker([45.3288, -121.6625], popup='Mt. Hood Meadows')
-    map_1.simple_marker([45.3311, -121.7113], popup='Timberline Lodge')
+    folium.Marker([45.3288, -121.6625], popup='Mt. Hood Meadows').add_to(map_1)
+    folium.Marker([45.3311, -121.7113], popup='Timberline Lodge').add_to(map_1)
     map_1.save('mthood.html')
 
 |hood|
@@ -106,12 +108,15 @@ Folium supports colors and marker icon types (from bootstrap)
 .. code:: python
 
     map_1 = folium.Map(location=[45.372, -121.6972], zoom_start=12,tiles='Stamen Terrain')
-    map_1.simple_marker([45.3288, -121.6625], popup='Mt. Hood Meadows',marker_icon='cloud')
-    map_1.simple_marker([45.3311, -121.7113], popup='Timberline Lodge',marker_color='green')
-    map_1.simple_marker([45.3300, -121.6823], popup='Some Other Location',marker_color='red',marker_icon='info-sign')
+    folium.Marker([45.3288, -121.6625], popup='Mt. Hood Meadows',
+                       icon = folium.Icon(icon = 'cloud')).add_to(map_1)
+    folium.Marker([45.3311, -121.7113], popup='Timberline Lodge',
+                       icon = folium.Icon(color ='green')).add_to(map_1)
+    folium.Marker([45.3300, -121.6823], popup='Some Other Location',
+                       icon = folium.Icon(color ='red')).add_to(map_1)
     map_1.save('iconTest.html')
 
-|iconTest|
+.. iconTest is broken, TODO: Link to the notebook directly.
 
 Folium also supports circle-style markers, with custom size and color:
 
@@ -119,10 +124,10 @@ Folium also supports circle-style markers, with custom size and color:
 
     map_2 = folium.Map(location=[45.5236, -122.6750], tiles='Stamen Toner',
                        zoom_start=13)
-    map_2.simple_marker(location=[45.5244, -122.6699], popup='The Waterfront')
-    map_2.circle_marker(location=[45.5215, -122.6261], radius=500,
-                        popup='Laurelhurst Park', line_color='#3186cc',
-                        fill_color='#3186cc')
+    folium.Marker(location=[45.5244, -122.6699], popup='The Waterfront').add_to(map_2)
+    folium.CircleMarker(location=[45.5215, -122.6261], radius=50,
+                        popup='Laurelhurst Park', color='#3186cc',
+                        fill_color='#3186cc').add_to(map_2)
     map_2.save('portland.html')
 
 |circle|
@@ -135,7 +140,7 @@ Folium has a convenience function to enable lat/lng popovers:
 
     map_3 = folium.Map(location=[46.1991, -122.1889], tiles='Stamen Terrain',
                        zoom_start=13)
-    map_3.lat_lng_popover()
+    folium.LatLngPopup().add_to(map_3)
     map_3.save('sthelens.html')
 
 |latlng|
@@ -149,8 +154,8 @@ markers:
 
     map_4 = folium.Map(location=[46.8527, -121.7649], tiles='Stamen Terrain',
                        zoom_start=13)
-    map_4.simple_marker(location=[46.8354, -121.7325], popup='Camp Muir')
-    map_4.click_for_marker(popup='Waypoint')
+    folium.Marker(location=[46.8354, -121.7325], popup='Camp Muir').add_to(map_4)
+    folium.ClickForMarker(popup='Waypoint').add_to(map_4)
     map_4.save('mtrainier.html')
 
 |waypoints|
@@ -163,14 +168,14 @@ Folium also supports the Polygon marker set from the
 .. code:: python
 
     map_5 = folium.Map(location=[45.5236, -122.6750], zoom_start=13)
-    map_5.polygon_marker(location=[45.5012, -122.6655], popup='Ross Island Bridge',
-                         fill_color='#132b5e', num_sides=3, radius=10)
-    map_5.polygon_marker(location=[45.5132, -122.6708], popup='Hawthorne Bridge',
-                         fill_color='#45647d', num_sides=4, radius=10)
-    map_5.polygon_marker(location=[45.5275, -122.6692], popup='Steel Bridge',
-                         fill_color='#769d96', num_sides=6, radius=10)
-    map_5.polygon_marker(location=[45.5318, -122.6745], popup='Broadway Bridge',
-                         fill_color='#769d96', num_sides=8, radius=10)
+    folium.RegularPolygonMarker(location=[45.5012, -122.6655], popup='Ross Island Bridge',
+                       fill_color='#132b5e', number_of_sides=3, radius=10).add_to(map_5)
+    folium.RegularPolygonMarker(location=[45.5132, -122.6708], popup='Hawthorne Bridge',
+                       fill_color='#45647d', number_of_sides=4, radius=10).add_to(map_5)
+    folium.RegularPolygonMarker(location=[45.5275, -122.6692], popup='Steel Bridge',
+                       fill_color='#769d96', number_of_sides=6, radius=10).add_to(map_5)
+    folium.RegularPolygonMarker(location=[45.5318, -122.6745], popup='Broadway Bridge',
+                       fill_color='#769d96', number_of_sides=8, radius=10).add_to(map_5)
     map_5.save('bridges.html')
 
 |polygon|
@@ -188,12 +193,18 @@ marker type, with the visualization as the popover:
 
     buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
                           tiles='Stamen Terrain')
-    buoy_map.polygon_marker(location=[47.3489, -124.708], fill_color='#43d9de',
-                            radius=12, popup=(vis1, 'vis1.json'))
-    buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
-                            radius=12, popup=(vis2, 'vis2.json'))
-    buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
-                            radius=12, popup=(vis3, 'vis3.json'))
+    popup1 = folium.Popup(max_width=800,
+                         ).add_child(folium.Vega(vis1, width=500, height=250))
+    folium.RegularPolygonMarker([47.3489, -124.708],
+                         fill_color='#43d9de', radius=12, popup=popup1).add_to(buoy_map)
+    popup2 = folium.Popup(max_width=800,
+                         ).add_child(folium.Vega(vis2, width=500, height=250))
+    folium.RegularPolygonMarker([44.639, -124.5339],
+                         fill_color='#43d9de', radius=12, popup=popup2).add_to(buoy_map)
+    popup3 = folium.Popup(max_width=800,
+                         ).add_child(folium.Vega(vis3, width=500, height=250))
+    folium.RegularPolygonMarker([46.216, -124.1280],
+                         fill_color='#43d9de', radius=12, popup=popup3).add_to(buoy_map)
     buoy_map.save('NOAA_buoys.html')
 
 |vincent|
