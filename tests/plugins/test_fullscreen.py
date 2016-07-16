@@ -5,6 +5,7 @@ Test Fullscreen
 """
 import folium
 from folium import plugins
+from jinja2 import Template
 
 
 def test_fullscreen():
@@ -16,4 +17,16 @@ def test_fullscreen():
     out = m._parent.render()
 
     # verify that the fullscreen control was rendered
-    assert 'L.control.fullscreen().addTo' in out
+    tmpl = Template("""
+        L.control.fullscreen({
+            position: '{{this.position}}',
+            title: '{{this.title}}',
+            titleCancel: '{{this.titleCancel}}',
+            forceSeparateButton: {{this.forceSeparateButton}},
+            }).addTo({{this._parent.get_name()}});
+        {{this._parent.get_name()}}.on('enterFullscreen', function(){
+            console.log('entered fullscreen');
+        });
+    """)
+
+    assert ''.join(tmpl.render(this=fs).split()) in ''.join(out.split())

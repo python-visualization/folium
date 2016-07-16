@@ -15,16 +15,42 @@ from branca.element import MacroElement, Figure, JavascriptLink, CssLink
 class Fullscreen(MacroElement):
     """
     Adds a fullscreen button to your map.
+
+    Parameters
+    ----------
+    position : str
+          change the position of the button can be:
+          'topleft', 'topright', 'bottomright' or 'bottomleft'
+          default: 'topleft'
+    title : str
+          change the title of the button,
+          default: 'Full Screen'
+    titleCancel : str
+          change the title of the button when fullscreen is on,
+          default: 'Exit Full Screen'
+    forceSeparateButton : boolean
+          force seperate button to detach from zoom buttons,
+          default: False
     """
 
-    def __init__(self):
+    def __init__(self, position='topleft', title='Full Screen',
+                 titleCancel='Exit Full Screen', forceSeparateButton=False):
         """Add button to take your Folium map fullscreen"""
         super(Fullscreen, self).__init__()
         self._name = 'Fullscreen'
+        self.position = position
+        self.title = title
+        self.titleCancel = titleCancel
+        self.forceSeparateButton = str(forceSeparateButton).lower()
 
         self._template = Template("""
         {% macro script(this, kwargs) %}
-            L.control.fullscreen().addTo({{this._parent.get_name()}});
+            L.control.fullscreen({
+                position: '{{this.position}}',
+                title: '{{this.title}}',
+                titleCancel: '{{this.titleCancel}}',
+                forceSeparateButton: {{this.forceSeparateButton}},
+                }).addTo({{this._parent.get_name()}});
             {{this._parent.get_name()}}.on('enterFullscreen', function(){
                 console.log('entered fullscreen');
             });
