@@ -414,12 +414,30 @@ class FeatureGroup(Layer):
 
 
 class LayerControl(MacroElement):
-    """Creates a LayerControl object to be added on a folium map.
     """
-    def __init__(self):
+    Creates a LayerControl object to be added on a folium map.
+
+    Parameters
+    ----------
+    position : str
+          The position of the control (one of the map corners), can be:
+          'topleft', 'topright', 'bottomleft' or 'bottomright'
+          default: 'topright'
+    collapsed : boolean
+          If true, the control will be collapsed into an icon and expanded on mouse hover
+          or touch.
+          default: True
+    autoZIndex : boolean
+          If true, the control will assign zIndexes in increasing order to all of its
+          layers so that the order is preserved when switching them on/off.
+          default: True
+    """
+    def __init__(self, position='topright', collapsed=True, autoZIndex=True):
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
-
+        self.position = position
+        self.collapsed = str(collapsed).lower()
+        self.autoZIndex = str(autoZIndex).lower()
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
 
@@ -431,8 +449,11 @@ class LayerControl(MacroElement):
                 };
             L.control.layers(
                 {{this.get_name()}}.base_layers,
-                {{this.get_name()}}.overlays
-                ).addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.overlays,
+                {position: '{{this.position}}',
+                 collapsed: {{this.collapsed}},
+                 autoZIndex: {{this.autoZIndex}}
+                }).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
 
