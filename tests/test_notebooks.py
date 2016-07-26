@@ -10,7 +10,7 @@ import os
 import sys
 import branca.utilities
 
-if sys.version_info[:2] == (3, 4):
+if sys.version_info[:2] >= (3, 5):
     import nbconvert
 
     rootpath = os.path.abspath(os.path.dirname(__file__))

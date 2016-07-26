@@ -2,24 +2,34 @@ language: python
 
 sudo: false
 
-python:
-    - 2.7
-    - 3.4
-    - 3.5
+notifications:
+  email: false
 
-env:
-    - TEST_TARGET=branca_release
-    - TEST_TARGET=branca_latest
+matrix:
+  fast_finish: true
+  include:
+    - python: 2.7
+      env: TEST_TARGET=branca_release
+    - python: 3.4
+      env: TEST_TARGET=branca_release
+    - python: 3.5
+      env: TEST_TARGET=branca_release
+  allow_failures:
+    - python: 3.5
+      env: TEST_TARGET=branca_latest
+    - python: 3.4
+      env: TEST_TARGET=branca_latest
+    - python: 2.7
+      env: TEST_TARGET=branca_latest
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
     - conda update --yes --all
-    #- conda config --add channels conda-forge --force
-    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION nomkl --file requirements.txt --file requirements-dev.txt
+    - conda config --add channels conda-forge --force
+    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
     - source activate TEST
-    - pip install vincent
 
     - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
         conda install --yes mock ;
