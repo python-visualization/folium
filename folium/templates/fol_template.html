@@ -66,6 +66,7 @@
         zoom: {{ zoom_level }},
         maxBounds: bounds,
         layers: [],
+        worldCopyJump: {{ world_copy_jump.__str__().lower() }},
         crs: L.CRS.{{crs}}
         });
 
@@ -75,6 +76,8 @@
             {
                 maxZoom: {{tile['max_zoom']}},
                 minZoom: {{tile['min_zoom']}},
+                continuousWorld: {{tile['continuous_world'].__str__().lower()}},
+                noWrap: {{tile['no_wrap'].__str__().lower()}},
                 attribution: '{{tile['attr']}}',
                 detectRetina: {{tile['detect_retina'].__str__().lower()}}
                 }
