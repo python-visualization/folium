@@ -673,7 +673,7 @@ class Map(LegacyMap):
         def style_function(x):
             return {
                 "weight": line_weight,
-                "opactiy": line_opacity,
+                "opacity": line_opacity,
                 "color": line_color,
                 "fillOpacity": fill_opacity,
                 "fillColor": color_scale_fun(x)
