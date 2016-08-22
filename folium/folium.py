@@ -22,14 +22,12 @@ from .features import (WmsTileLayer, RegularPolygonMarker, Vega, GeoJson,
                        ClickForMarker, TopoJson, PolyLine, MultiPolyLine,
                        )
 
-
 def initialize_notebook():
     """Initialize the IPython notebook display elements."""
     warnings.warn("%s is deprecated and no longer required." %
                   ("initialize_notebook",),
                   FutureWarning, stacklevel=2)
     pass
-
 
 class Map(LegacyMap):
     """Create a Map with Folium and Leaflet.js
@@ -673,10 +671,16 @@ class Map(LegacyMap):
         def style_function(x):
             return {
                 "weight": line_weight,
-                "opactiy": line_opacity,
+                "opacity": line_opacity,
                 "color": line_color,
                 "fillOpacity": fill_opacity,
                 "fillColor": color_scale_fun(x)
+            }
+
+        def highlight_function(x):
+            return {
+                "weight": line_weight + 2,
+                "fillOpacity": fill_opacity + .2
             }
 
         if topojson:
@@ -689,7 +693,8 @@ class Map(LegacyMap):
             geo_json = GeoJson(
                 geo_data,
                 style_function=style_function,
-                smooth_factor=smooth_factor)
+                smooth_factor=smooth_factor,
+                highlight_function=highlight_function)
 
         self.add_child(geo_json)
 
