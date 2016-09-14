@@ -370,16 +370,59 @@ class TestFolium(object):
 
         # Verify the geo_json object
         obj_temp = jinja2.Template("""
-            var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
-                .addTo({{ this._parent.get_name() }});
+             var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
+                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
                 """)
         obj = obj_temp.render(this=geo_json, json=json)
+        rendered_obj = ''.join(obj.split())[:-1]
+        
         assert ''.join(obj.split())[:-1] in out
 
         bounds = self.map.get_bounds()
         assert bounds == [[18.948267, -171.742517],
                           [71.285909, -66.979601]], bounds
+
+    def test_geo_json_highlight(self):
+        # Highlight data binding
+        self.map = folium.Map([43, -100], zoom_start=4)
+        path = os.path.join(rootpath, 'us-counties.json')
+
+        data = json.load(open(path))
+
+        for feature in data['features']:
+            feature.setdefault('properties', {}).setdefault('style', {}).update({  # noqa
+                'color': 'black',
+                'opacity': 1,
+                'fillOpacity': 0.6,
+                'weight': 1,
+                'fillColor': 'blue',
+            })
+
+        self.map.geo_json(geo_str=json.dumps(data), highlight=True)
+
+        geo_json = [x for x in self.map._children.values() if
+                    isinstance(x, GeoJson)][0]
+
+        out = ''.join(self.map._parent.render().split())
+
+        # Verify the geo_json object
+        obj_temp = jinja2.Template("""
+             var {{ this.get_name() }} = L.geoJson(
+                    {{ this.style_data() }} 
+                    ,{onEachFeature: {{this.get_name()}}_onEachFeature }
+                ).addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
+                """)
+        obj = obj_temp.render(this=geo_json, json=json)
+        rendered_obj = ''.join(obj.split())[:-1]
+        
+        assert ''.join(obj.split())[:-1] in out
+
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -171.742517],
+                          [71.285909, -66.979601]], bounds
+
 
     def test_geo_json_bad_color(self):
         """Test geojson method."""
