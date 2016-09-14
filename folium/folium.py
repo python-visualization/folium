@@ -508,7 +508,8 @@ class Map(LegacyMap):
                    data=None, columns=None, key_on=None, threshold_scale=None,
                    fill_color='blue', fill_opacity=0.6, line_color='black',
                    line_weight=1, line_opacity=1, legend_name="",
-                   topojson=None, reset=False, smooth_factor=None):
+                   topojson=None, reset=False, smooth_factor=None, 
+                   highlight=None):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -580,6 +581,8 @@ class Map(LegacyMap):
             How much to simplify the polyline on each zoom level. More means
             better performance and smoother look, and less means more accurate
             representation. Leaflet defaults to 1.0.
+        highlight: boolean, default False
+            Enable highlight functionality when hovering over a GeoJSON area.
 
         Returns
         -------
@@ -596,6 +599,12 @@ class Map(LegacyMap):
         ...              threshold_scale=[0, 20, 30, 40, 50, 60])
         >>> m.choropleth(geo_path='countries.json',
         ...              topojson='objects.countries')
+        >>> m.choropleth(geo_path='geo.json', data=df,
+        ...              columns=['Data 1', 'Data 2'],
+        ...              key_on='feature.properties.myvalue',
+        ...              fill_color='PuBu',
+        ...              threshold_scale=[0, 20, 30, 40, 50, 60],
+        ...              highlight=True)
 
         """
         if threshold_scale and len(threshold_scale) > 6:
@@ -677,6 +686,7 @@ class Map(LegacyMap):
                 "fillColor": color_scale_fun(x)
             }
 
+
         def highlight_function(x):
             return {
                 "weight": line_weight + 2,
@@ -694,7 +704,7 @@ class Map(LegacyMap):
                 geo_data,
                 style_function=style_function,
                 smooth_factor=smooth_factor,
-                highlight_function=highlight_function)
+                highlight_function=highlight_function if highlight else None)
 
         self.add_child(geo_json)
 
