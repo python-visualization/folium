@@ -17,7 +17,9 @@ NOAA_46041 = NOAA_46041.dropna()
 # Binned wind speeds for NOAA 46050.
 bins = range(0, 13, 1)
 cuts = pd.cut(NOAA_46050['wind_speed_cwind (m/s)'], bins)
-ws_binned = pd.value_counts(cuts).reindex(cuts.levels)
+#ws_binned = pd.value_counts(cuts).reindex(cuts.values.levels) # cuts is a series, so values should be accessed
+# and also levels have been depreciated
+ws_binned = pd.value_counts(cuts).reindex(cuts.values.categories)
 
 # NOAA 46401 Wave Period.
 vis1 = vincent.Line(NOAA_46041['dominant_wave_period (s)'],
@@ -37,12 +39,23 @@ vis3.axis_titles(x='Time', y='Significant Wave Height (m)')
 vis3.to_json('vis3.json')
 
 # Map all buoys.
-buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
-                      tiles='Stamen Terrain')
-buoy_map.polygon_marker(location=[47.3489, -124.708], fill_color='#43d9de',
-                        radius=12, popup=(vis1, 'vis1.json'))
-buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
-                        radius=12, popup=(vis2, 'vis2.json'))
-buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
-                        radius=12, popup=(vis3, 'vis3.json'))
+# buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,
+#                       tiles='Stamen Terrain')
+# buoy_map.polygon_marker(location=[47.3489, -124.708], fill_color='#43d9de',
+#                         radius=12, popup=(vis1, 'vis1.json'))
+# buoy_map.polygon_marker(location=[44.639, -124.5339], fill_color='#43d9de',
+#                         radius=12, popup=(vis2, 'vis2.json'))
+# buoy_map.polygon_marker(location=[46.216, -124.1280], fill_color='#43d9de',
+#                         radius=12, popup=(vis3, 'vis3.json'))
+# buoy_map.save(outfile='NOAA_buoys.html')
+
+# The example of Vincent/Vega Markers should be updated
+# https://github.com/python-visualization/folium
+buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,tiles='Stamen Terrain')
+popup1 = folium.Popup(max_width=800,).add_child(folium.Vega(vis1, width=500, height=250))
+folium.RegularPolygonMarker([47.3489, -124.708],fill_color='#43d9de', radius=12, popup=popup1).add_to(buoy_map)
+popup2 = folium.Popup(max_width=800,).add_child(folium.Vega(vis2, width=500, height=250))
+folium.RegularPolygonMarker([44.639, -124.5339],fill_color='#43d9de', radius=12, popup=popup2).add_to(buoy_map)
+popup3 = folium.Popup(max_width=800,).add_child(folium.Vega(vis3, width=500, height=250))
+folium.RegularPolygonMarker([46.216, -124.1280],fill_color='#43d9de', radius=12, popup=popup3).add_to(buoy_map)
 buoy_map.save(outfile='NOAA_buoys.html')
