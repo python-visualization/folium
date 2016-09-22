@@ -814,8 +814,10 @@ class RectangleMarker(Marker):
 
         Example
         -------
-        >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]],
-                          color="blue", fill_color="red", popup='Tokyo, Japan')
+        >>> RectangleMarker(
+        ...  bounds=[[35.681, 139.766], [35.691, 139.776]],
+        ...  color='blue', fill_color='red', popup='Tokyo, Japan'
+        ... )
 
         """
         super(RectangleMarker, self).__init__(bounds, popup=popup)
@@ -840,11 +842,11 @@ class RectangleMarker(Marker):
             """)
 
 
-class Polygon(Marker):
+class PolygonMarker(Marker):
     def __init__(self, locations, color='black', weight=1, fill_color='black',
                  fill_opacity=0.6, popup=None, latlon=True):
         """
-        Creates a Polygon object for plotting on a Map.
+        Creates a PolygonMarker object for plotting on a Map.
 
         Parameters
         ----------
