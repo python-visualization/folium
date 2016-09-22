@@ -1,4 +1,4 @@
-var {{ Polygon }} = L.polygon({{location}},
+var {{ PolygonMarker }} = L.polygon({{location}},
                                {
                                    color:'{{ color }}',
                                    fillColor:'{{ fill_color }}',
