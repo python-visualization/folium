@@ -333,7 +333,7 @@ class GeoJson(Layer):
 
         if style_function is None:
             def style_function(x):
-                return {} 
+                return {}
 
         self.style_function = style_function
 
@@ -341,7 +341,7 @@ class GeoJson(Layer):
 
         if highlight_function is None:
             def highlight_function(x):
-                return {} 
+                return {}
 
         self.highlight_function = highlight_function
 
@@ -349,7 +349,7 @@ class GeoJson(Layer):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            
+
             {% if this.highlight %}
                 {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
                     layer.on({
@@ -370,7 +370,7 @@ class GeoJson(Layer):
                         {% if this.smooth_factor is not none  %}
                             smoothFactor:{{this.smooth_factor}}
                         {% endif %}
-                    
+
                         {% if this.highlight %}
                             {% if this.smooth_factor is not none  %}
                             ,
