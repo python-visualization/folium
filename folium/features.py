@@ -4,15 +4,17 @@ Features
 ------
 
 Extra features Elements.
+
 """
+
 import json
 
 from jinja2 import Template
-from six import text_type
+from six import text_type, binary_type
 
 from branca.utilities import (
     _parse_size, _locations_mirror, _locations_tolist, image_to_url,
-    binary_type, none_min, none_max, iter_points,
+    none_min, none_max, iter_points
 )
 from branca.element import (Element, Figure, JavascriptLink, CssLink,
                             MacroElement)
@@ -22,7 +24,8 @@ from .map import Layer, Icon, Marker, Popup, FeatureGroup
 
 
 class WmsTileLayer(Layer):
-    """Creates a Web Map Service (WMS) layer.
+    """
+    Creates a Web Map Service (WMS) layer.
 
     Parameters
     ----------
@@ -86,7 +89,8 @@ class WmsTileLayer(Layer):
 
 
 class RegularPolygonMarker(Marker):
-    """Custom markers using the Leaflet Data Vis Framework.
+    """
+    Custom markers using the Leaflet Data Vis Framework.
 
     Parameters
     ----------
@@ -118,6 +122,7 @@ class RegularPolygonMarker(Marker):
     Polygon marker names and HTML in obj.template_vars
 
     For more information, see https://humangeo.github.io/leaflet-dvf/
+
     """
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
@@ -167,7 +172,8 @@ class RegularPolygonMarker(Marker):
 
 
 class Vega(Element):
-    """Cretes a Vega chart element.
+    """
+    Creates a Vega chart element.
 
     Parameters
     ----------
@@ -192,6 +198,7 @@ class Vega(Element):
     position: str, default 'relative'
         The `position` argument that the CSS shall contain.
         Ex: 'relative', 'absolute'
+
     """
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
@@ -257,7 +264,8 @@ class Vega(Element):
 
 
 class GeoJson(Layer):
-    """Creates a GeoJson object for plotting into a Map.
+    """
+    Creates a GeoJson object for plotting into a Map.
 
     Parameters
     ----------
@@ -283,9 +291,9 @@ class GeoJson(Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> GeoJson(open('foo.json'))
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> GeoJson('foo.json')
     >>> # Providing dict.
     >>> GeoJson(json.load(open('foo.json')))
@@ -297,6 +305,7 @@ class GeoJson(Layer):
     ...                             x['properties']['name']=='Alabama' else
     ...                             '#00ff00'}
     >>> GeoJson(geojson, style_function=style_function)
+
     """
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
@@ -404,8 +413,10 @@ class GeoJson(Layer):
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
@@ -434,7 +445,8 @@ class GeoJson(Layer):
 
 
 class TopoJson(Layer):
-    """Creates a TopoJson object for plotting into a Map.
+    """
+    Creates a TopoJson object for plotting into a Map.
 
     Parameters
     ----------
@@ -477,6 +489,7 @@ class TopoJson(Layer):
     ...                             x['properties']['name']=='Alabama' else
     ...                             '#00ff00'}
     >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
+
     """
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, smooth_factor=None):
@@ -545,8 +558,10 @@ class TopoJson(Layer):
             name='topojson')
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
@@ -576,7 +591,8 @@ class TopoJson(Layer):
 
 
 class MarkerCluster(Layer):
-    """Creates a MarkerCluster element to append into a map with
+    """
+    Creates a MarkerCluster element to append into a map with
     Map.add_child.
 
     Parameters
@@ -587,6 +603,7 @@ class MarkerCluster(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+
     """
     def __init__(self, name=None, overlay=True, control=True):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
@@ -649,6 +666,7 @@ class DivIcon(MacroElement):
 
     For more information see:
     http://leafletjs.com/reference.html#divicon
+
     """
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
@@ -676,7 +694,8 @@ class DivIcon(MacroElement):
 
 
 class Circle(Marker):
-    """Creates a Circle object for plotting on a Map.
+    """
+    Creates a Circle object for plotting on a Map.
 
     Parameters
     ----------
@@ -693,6 +712,7 @@ class Circle(Marker):
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
@@ -721,7 +741,8 @@ class Circle(Marker):
 
 
 class CircleMarker(Marker):
-    """Creates a CircleMarker object for plotting on a Map.
+    """
+    Creates a CircleMarker object for plotting on a Map.
 
     Parameters
     ----------
@@ -738,6 +759,7 @@ class CircleMarker(Marker):
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
@@ -768,7 +790,8 @@ class CircleMarker(Marker):
 class RectangleMarker(Marker):
     def __init__(self, bounds, color='black', weight=1, fill_color='black',
                  fill_opacity=0.6, popup=None):
-        """Creates a RectangleMarker object for plotting on a Map.
+        """
+        Creates a RectangleMarker object for plotting on a Map.
 
         Parameters
         ----------
@@ -793,6 +816,7 @@ class RectangleMarker(Marker):
         -------
         >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]],
                           color="blue", fill_color="red", popup='Tokyo, Japan')
+
         """
         super(RectangleMarker, self).__init__(bounds, popup=popup)
         self._name = 'RectangleMarker'
@@ -819,7 +843,8 @@ class RectangleMarker(Marker):
 class Polygon(Marker):
     def __init__(self, locations, color='black', weight=1, fill_color='black',
                  fill_opacity=0.6, popup=None, latlon=True):
-        """Creates a Polygon object for plotting on a Map.
+        """
+        Creates a Polygon object for plotting on a Map.
 
         Parameters
         ----------
@@ -899,14 +924,16 @@ class LatLngPopup(MacroElement):
 
 
 class ClickForMarker(MacroElement):
-    """When one clicks on a Map that contains a ClickForMarker, a Marker is created
-    at the pointer's position.
+    """
+    When one clicks on a Map that contains a ClickForMarker,
+    a Marker is created at the pointer's position.
 
     Parameters
     ----------
     popup: str, default None
         Text to display in the markers' popups.
         If None, the popups will display the marker's latitude and longitude.
+
     """
     def __init__(self, popup=None):
         super(ClickForMarker, self).__init__()
@@ -951,6 +978,7 @@ class PolyLine(MacroElement):
         while Leaflet polyline's default is latlon=True.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
@@ -980,8 +1008,10 @@ class PolyLine(MacroElement):
             """)  # noqa
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         bounds = [[None, None], [None, None]]
         for point in iter_points(self.data):
@@ -1017,6 +1047,7 @@ class MultiPolyLine(MacroElement):
         while Leaflet polyline's default is latlon=True.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
@@ -1046,8 +1077,10 @@ class MultiPolyLine(MacroElement):
             """)  # noqa
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+
         """
         bounds = [[None, None], [None, None]]
         for point in iter_points(self.data):
@@ -1065,7 +1098,8 @@ class MultiPolyLine(MacroElement):
 
 
 class CustomIcon(Icon):
-    """Create a custom icon, based on an image.
+    """
+    Create a custom icon, based on an image.
 
     Parameters
     ----------
@@ -1094,6 +1128,7 @@ class CustomIcon(Icon):
     popup_anchor : tuple of 2 int
         The coordinates of the point from which popups will "open",
         relative to the icon anchor.
+
     """
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
                  shadow_image=None, shadow_size=None, shadow_anchor=None,
@@ -1130,7 +1165,8 @@ class CustomIcon(Icon):
 
 
 class ColorLine(FeatureGroup):
-    """Draw data on a map with specified colors.
+    """
+    Draw data on a map with specified colors.
 
     Parameters
     ----------
@@ -1155,6 +1191,7 @@ class ColorLine(FeatureGroup):
     Returns
     -------
     A ColorLine object that you can `add_to` a Map.
+
     """
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
