@@ -25,7 +25,8 @@ from branca.colormap import ColorMap
 import branca.element
 
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import GeoJson, TopoJson, PolyLine, MultiPolyLine, RectangleMarker, Polygon
+from folium.features import (GeoJson, TopoJson, PolyLine, MultiPolyLine,
+                             RectangleMarker, Polygon)
 from folium.plugins import ImageOverlay
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -455,12 +456,12 @@ class TestFolium(object):
 
         out = ''.join(self.map._parent.render().split())
 
-        # Verify the geo_json object
+        # Verify the geo_json object.
         obj_temp = jinja2.Template("""
             var {{ this.get_name() }} = L.geoJson({{ this.style_data() }})
                 .addTo({{ this._parent.get_name() }});
             {{ this.get_name() }}.setStyle(function(feature) {return feature.properties.style;});
-                """)
+                """)  # noqa
         obj = obj_temp.render(this=geo_json, json=json)
         assert ''.join(obj.split())[:-1] in out
 
