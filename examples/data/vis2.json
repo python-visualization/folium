@@ -1,0 +1,182 @@
+{
+  "axes": [
+    {
+      "scale": "x",
+      "title": "Wind Speed (m/s)",
+      "type": "x"
+    },
+    {
+      "scale": "y",
+      "title": "# of Obs",
+      "type": "y"
+    }
+  ],
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {
+          "col": "data",
+          "idx": 0,
+          "val": 85
+        },
+        {
+          "col": "data",
+          "idx": 1,
+          "val": 251
+        },
+        {
+          "col": "data",
+          "idx": 2,
+          "val": 389
+        },
+        {
+          "col": "data",
+          "idx": 3,
+          "val": 455
+        },
+        {
+          "col": "data",
+          "idx": 4,
+          "val": 569
+        },
+        {
+          "col": "data",
+          "idx": 5,
+          "val": 473
+        },
+        {
+          "col": "data",
+          "idx": 6,
+          "val": 434
+        },
+        {
+          "col": "data",
+          "idx": 7,
+          "val": 503
+        },
+        {
+          "col": "data",
+          "idx": 8,
+          "val": 500
+        },
+        {
+          "col": "data",
+          "idx": 9,
+          "val": 344
+        },
+        {
+          "col": "data",
+          "idx": 10,
+          "val": 233
+        },
+        {
+          "col": "data",
+          "idx": 11,
+          "val": 83
+        }
+      ]
+    },
+    {
+      "name": "stats",
+      "source": "table",
+      "transform": [
+        {
+          "keys": [
+            "data.idx"
+          ],
+          "type": "facet"
+        },
+        {
+          "type": "stats",
+          "value": "data.val"
+        }
+      ]
+    }
+  ],
+  "height": 200,
+  "legends": [],
+  "marks": [
+    {
+      "from": {
+        "data": "table",
+        "transform": [
+          {
+            "keys": [
+              "data.col"
+            ],
+            "type": "facet"
+          },
+          {
+            "height": "data.val",
+            "point": "data.idx",
+            "type": "stack"
+          }
+        ]
+      },
+      "marks": [
+        {
+          "properties": {
+            "enter": {
+              "fill": {
+                "field": "data.col",
+                "scale": "color"
+              },
+              "width": {
+                "band": true,
+                "offset": -1,
+                "scale": "x"
+              },
+              "x": {
+                "field": "data.idx",
+                "scale": "x"
+              },
+              "y": {
+                "field": "y",
+                "scale": "y"
+              },
+              "y2": {
+                "field": "y2",
+                "scale": "y"
+              }
+            }
+          },
+          "type": "rect"
+        }
+      ],
+      "type": "group"
+    }
+  ],
+  "padding": "auto",
+  "scales": [
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.idx"
+      },
+      "name": "x",
+      "range": "width",
+      "type": "ordinal",
+      "zero": false
+    },
+    {
+      "domain": {
+        "data": "stats",
+        "field": "sum"
+      },
+      "name": "y",
+      "nice": true,
+      "range": "height"
+    },
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.col"
+      },
+      "name": "color",
+      "range": "category20",
+      "type": "ordinal"
+    }
+  ],
+  "width": 400
+}
