@@ -16,7 +16,8 @@ from jinja2 import Environment, PackageLoader, Template
 
 from branca.six import text_type, binary_type
 from branca.utilities import _parse_size
-from branca.element import Element, Figure, MacroElement, Html, JavascriptLink, CssLink
+from branca.element import (Element, Figure, MacroElement, Html,
+                            JavascriptLink, CssLink)
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -135,8 +136,9 @@ class LegacyMap(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-                 zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, detect_retina=False,
+                 zoom_start=10, continuous_world=False, world_copy_jump=False,
+                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
+                 min_lon=-180, max_lon=180, max_bounds=True, detect_retina=False,
                  crs='EPSG3857', control_scale=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
@@ -163,14 +165,18 @@ class LegacyMap(MacroElement):
         self.max_lat = max_lat
         self.min_lon = min_lon
         self.max_lon = max_lon
+        self.max_bounds = max_bounds
+        self.continuous_world = continuous_world
+        self.no_wrap = no_wrap
+        self.world_copy_jump = world_copy_jump
 
         self.crs = crs
         self.control_scale = control_scale
 
         if tiles:
             self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                                attr=attr, API_key=API_key,
-                                detect_retina=detect_retina)
+                                continuous_world=continuous_world, no_wrap=no_wrap,
+                                attr=attr, API_key=API_key, detect_retina=detect_retina)
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -189,20 +195,26 @@ class LegacyMap(MacroElement):
 
         {% macro script(this, kwargs) %}
 
-            var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-            var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-            var bounds = L.latLngBounds(southWest, northEast);
+            {% if this.max_bounds %}
+                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+                var bounds = L.latLngBounds(southWest, northEast);
+            {% else %}
+                var bounds = null;
+            {% endif %}
 
-            var {{this.get_name()}} = L.map('{{this.get_name()}}', {
-                                           center:[{{this.location[0]}},{{this.location[1]}}],
-                                           zoom: {{this.zoom_start}},
-                                           maxBounds: bounds,
-                                           layers: [],
-                                           crs: L.CRS.{{this.crs}}
-                                         });
+            var {{this.get_name()}} = L.map(
+                                  '{{this.get_name()}}',
+                                  {center: [{{this.location[0]}},{{this.location[1]}}],
+                                  zoom: {{this.zoom_start}},
+                                  maxBounds: bounds,
+                                  layers: [],
+                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+                                  crs: L.CRS.{{this.crs}}
+                                 });
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
-        """)
+        """)  # noqa
 
     def _repr_html_(self, **kwargs):
         """Displays the Map in a Jupyter notebook.
@@ -217,8 +229,10 @@ class LegacyMap(MacroElement):
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
-                       attr=None, tile_name=None, tile_url=None,
-                       active=False, detect_retina=False, **kwargs):
+                       continuous_world=False, attr=None,
+                       tile_name=None, tile_url=None,
+                       active=False, detect_retina=False, no_wrap=False,
+                       **kwargs):
         """Add a tile layer to the map.
 
         See TileLayer for options."""
@@ -232,7 +246,9 @@ class LegacyMap(MacroElement):
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
                                attr=attr, API_key=API_key,
-                               detect_retina=detect_retina)
+                               detect_retina=detect_retina,
+                               continuous_world=continuous_world,
+                               no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
@@ -333,7 +349,8 @@ class TileLayer(Layer):
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False, control=True):
+                 continuous_world=False, name=None, overlay=False,
+                 control=True, no_wrap=False):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -343,6 +360,8 @@ class TileLayer(Layer):
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
+        self.no_wrap = no_wrap
+        self.continuous_world = continuous_world
 
         self.detect_retina = detect_retina
 
@@ -374,6 +393,8 @@ class TileLayer(Layer):
                 {
                     maxZoom: {{this.max_zoom}},
                     minZoom: {{this.min_zoom}},
+                    continuousWorld: {{this.continuous_world.__str__().lower()}},
+                    noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
                     detectRetina: {{this.detect_retina.__str__().lower()}}
                     }

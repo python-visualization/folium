@@ -434,8 +434,8 @@ class TestFolium(object):
                           [71.285909, -66.979601]], bounds
 
     def test_geo_json_str(self):
-        # No data binding.
         self.map = folium.Map([43, -100], zoom_start=4)
+        # No data binding.
         path = os.path.join(rootpath, 'us-counties.json')
 
         data = json.load(open(path))
@@ -635,6 +635,8 @@ class TestFolium(object):
              'max_zoom': 20,
              'min_zoom': 1,
              'detect_retina': False,
+             'no_wrap': False,
+             'continuous_world': False
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
@@ -646,6 +648,7 @@ class TestFolium(object):
                 'max_lon': 180,
                 'tile_layers': tile_layers,
                 'crs': 'EPSG3857',
+                'world_copy_jump': False
                 }
         HTML = html_templ.render(tmpl, plugins={})
 
