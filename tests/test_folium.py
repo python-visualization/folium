@@ -23,7 +23,7 @@ import branca.element
 
 import folium
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import TopoJson, RectangleMarker, Polygon
+from folium.features import TopoJson, RectangleMarker, PolygonMarker
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -222,13 +222,13 @@ class TestFolium(object):
         bounds = self.map.get_bounds()
         assert bounds == [[45.6, -122.9], [45.7, -122.8]], bounds
 
-    def test_polygon(self):
+    def test_polygon_marker(self):
         """Test polygon additions."""
 
         self.map = folium.Map(location=[45.60, -122.8])
         polygon_templ = self.env.get_template('polygon.js')
 
-        # Single Polygon.
+        # Single PolygonMarker.
         locations = [[35.6636, 139.7634],
                      [35.6629, 139.7664],
                      [35.6663, 139.7706],
@@ -237,9 +237,9 @@ class TestFolium(object):
                      [35.6720, 139.7606],
                      [35.6682, 139.7588],
                      [35.6663, 139.7627]]
-        self.map.add_child(Polygon(locations=locations, popup='Hi'))
+        self.map.add_child(PolygonMarker(locations=locations, popup='Hi'))
         marker = list(self.map._children.values())[-1]
-        polygon_1 = polygon_templ.render({'Polygon': marker.get_name(),
+        polygon_1 = polygon_templ.render({'PolygonMarker': marker.get_name(),
                                           'location': locations,
                                           'color': 'black',
                                           'fill_color': 'black',
@@ -248,7 +248,7 @@ class TestFolium(object):
         assert (''.join(polygon_1.split())[:-1] in
                 ''.join(self.map.get_root().render().split()))
 
-        # Second Polygon.
+        # Second PolygonMarker.
         locations = [[35.5636, 138.7634],
                      [35.5629, 138.7664],
                      [35.5663, 138.7706],
@@ -257,11 +257,11 @@ class TestFolium(object):
                      [35.5720, 138.7606],
                      [35.5682, 138.7588],
                      [35.5663, 138.7627]]
-        self.map.add_child(Polygon(locations=locations, color='red',
-                                   fill_color='red', fill_opacity=0.7,
-                                   weight=3, popup='Hi'))
+        self.map.add_child(PolygonMarker(locations=locations, color='red',
+                                         fill_color='red', fill_opacity=0.7,
+                                         weight=3, popup='Hi'))
         marker = list(self.map._children.values())[-1]
-        polygon_2 = polygon_templ.render({'Polygon': marker.get_name(),
+        polygon_2 = polygon_templ.render({'PolygonMarker': marker.get_name(),
                                           'location': locations,
                                           'color': 'red',
                                           'fill_color': 'red',

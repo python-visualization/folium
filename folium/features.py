@@ -869,20 +869,20 @@ class PolygonMarker(Marker):
 
         Examples
         --------
-        >>> loc = [[35.6762, 139.7795],
-        ...        [35.6718, 139.7831],
-        ...        [35.6767, 139.7868],
-        ...        [35.6795, 139.7824],
-        ...       [35.6787, 139.7791]]
-        >>> Polygon(loc, color="blue", weight=10, fill_color="red",
-        ...         fill_opacity=0.5, popup="Tokyo, Japan"))
+        >>> locations = [[35.6762, 139.7795],
+        ...              [35.6718, 139.7831],
+        ...              [35.6767, 139.7868],
+        ...              [35.6795, 139.7824],
+        ...              [35.6787, 139.7791]]
+        >>> Polygon(locations, color='blue', weight=10, fill_color='red',
+        ...         fill_opacity=0.5, popup='Tokyo, Japan'))
 
         """
-        super(Polygon, self).__init__((
+        super(PolygonMarker, self).__init__((
             _locations_mirror(locations) if not latlon else
             _locations_tolist(locations)), popup=popup
         )
-        self._name = 'Polygon'
+        self._name = 'PolygonMarker'
         self.color = color
         self.weight = weight
         self.fill_color = fill_color
