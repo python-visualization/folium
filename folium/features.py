@@ -5,15 +5,17 @@ Features
 
 Extra features Elements.
 """
-from jinja2 import Template
 import json
 
-from branca.utilities import (_parse_size,
-                              _locations_mirror, _locations_tolist, image_to_url,
-                              text_type, binary_type,
-                              none_min, none_max, iter_points,
-                              )
-from branca.element import Element, Figure, JavascriptLink, CssLink, MacroElement
+from jinja2 import Template
+from six import text_type
+
+from branca.utilities import (
+    _parse_size, _locations_mirror, _locations_tolist, image_to_url,
+    binary_type, none_min, none_max, iter_points,
+)
+from branca.element import (Element, Figure, JavascriptLink, CssLink,
+                            MacroElement)
 from branca.colormap import LinearColormap
 
 from .map import Layer, Icon, Marker, Popup, FeatureGroup
@@ -762,13 +764,14 @@ class RectangleMarker(Marker):
         self.fill_opacity = fill_opacity
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.rectangle([[{{this.location[0]}}, {{this.location[1]}}],
-                                                   [{{this.location[2]}}, {{this.location[3]}}]],
+            var {{this.get_name()}} = L.rectangle(
+                                  [[{{this.location[0]}},{{this.location[1]}}],
+                                  [{{this.location[2]}},{{this.location[3]}}]],
                 {
-                    color:'{{ this.color }}',
-                    fillColor:'{{ this.fill_color }}',
-                    fillOpacity:{{ this.fill_opacity }},
-                    weight:{{ this.weight }}
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
                 }).addTo({{this._parent.get_name()}});
 
             {% endmacro %}
@@ -799,18 +802,21 @@ class Polygon(Marker):
         -------
         folium.features.Polygon object
 
-        Example
-        -------
-        >>> loc= [[35.6762, 139.7795],
-                  [35.6718, 139.7831],
-                  [35.6767, 139.7868],
-                  [35.6795, 139.7824],
-                  [35.6787, 139.7791]]
-            Polygon(loc, color="blue", weight=10, fill_color="red",
-                          fill_opacity=0.5, popup="Tokyo, Japan"))
+        Examples
+        --------
+        >>> loc = [[35.6762, 139.7795],
+        ...        [35.6718, 139.7831],
+        ...        [35.6767, 139.7868],
+        ...        [35.6795, 139.7824],
+        ...       [35.6787, 139.7791]]
+        >>> Polygon(loc, color="blue", weight=10, fill_color="red",
+        ...         fill_opacity=0.5, popup="Tokyo, Japan"))
+
         """
-        super(Polygon, self).__init__((_locations_mirror(locations) if not latlon else
-                                       _locations_tolist(locations)), popup=popup)
+        super(Polygon, self).__init__((
+            _locations_mirror(locations) if not latlon else
+            _locations_tolist(locations)), popup=popup
+        )
         self._name = 'Polygon'
         self.color = color
         self.weight = weight
@@ -1096,12 +1102,11 @@ class ColorLine(FeatureGroup):
         The list of segments colors.
         It must have length equal to `len(positions)-1`.
     colormap: branca.colormap.Colormap or list or tuple
-        The colormap to use.
-        If a list or tuple of colors is provided, a LinearColormap will be created
-        from it.
+        The colormap to use. If a list or tuple of colors is provided,
+        a LinearColormap will be created from it.
     nb_steps: int, default 12
-        To have lighter output, the colormap will be discretized to that number
-        of colors.
+        To have lighter output the colormap will be discretized
+        to that number of colors.
     opacity: float, default 1
         Line opacity, scale 0-1
     weight: int, default 2
@@ -1133,7 +1138,8 @@ class ColorLine(FeatureGroup):
         else:
             cm = colormap
         out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(MultiPolyLine(val, color=key, weight=weight, opacity=opacity))
+            self.add_child(MultiPolyLine(val, color=key,
+                                         weight=weight, opacity=opacity))
