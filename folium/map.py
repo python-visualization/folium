@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
+
 """
 Map
 ------
 
 Classes for drawing maps.
+
 """
 
 from __future__ import unicode_literals
 
-import warnings
 import json
 from collections import OrderedDict
 
@@ -107,13 +108,14 @@ class LegacyMap(MacroElement):
         * EPSG3857 : The most common CRS for online maps, used by almost all
         free and commercial tile providers. Uses Spherical Mercator projection.
         Set in by default in Map's crs option.
-        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-        projection.
-        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-        Mercator projection.
-        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-        should still be inverted (going from bottom to top).
+        * EPSG4326 : A common CRS among GIS enthusiasts.
+        Uses simple Equirectangular projection.
+        * EPSG3395 : Rarely used by some commercial tile providers.
+        Uses Elliptical Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into
+        x and y directly. May be used for maps of flat surfaces
+        (e.g. game maps). Note that the y axis should still be inverted
+        (going from bottom to top).
     control_scale : bool, default False
         Whether to add a control scale on the map.
 
@@ -123,23 +125,24 @@ class LegacyMap(MacroElement):
 
     Examples
     --------
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
     >>> map = folium.LegacyMap(location=[45.523, -122.675],
-                               tiles='Mapbox Control Room')
+    ...                        width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    ...                        tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
-                               tiles='Cloudmade', API_key='YourKey')
+    ...                        tiles='Cloudmade', API_key='YourKey')
     >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-                               tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                      'mapbox.control-room/{z}/{x}/{y}.png'),
-                                attr='Mapbox attribution')
+    ...                        tiles=('http://{s}.tiles.mapbox.com/v3/'
+    ...                               'mapbox.control-room/{z}/{x}/{y}.png'),
+    ...                        attr='Mapbox attribution')
     """
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=True, detect_retina=False,
-                 crs='EPSG3857', control_scale=False):
+                 min_lon=-180, max_lon=180, max_bounds=True,
+                 detect_retina=False, crs='EPSG3857', control_scale=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -174,9 +177,11 @@ class LegacyMap(MacroElement):
         self.control_scale = control_scale
 
         if tiles:
-            self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                                continuous_world=continuous_world, no_wrap=no_wrap,
-                                attr=attr, API_key=API_key, detect_retina=detect_retina)
+            self.add_tile_layer(
+                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
+                API_key=API_key, detect_retina=detect_retina
+            )
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -229,20 +234,12 @@ class LegacyMap(MacroElement):
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
-                       continuous_world=False, attr=None,
-                       tile_name=None, tile_url=None,
-                       active=False, detect_retina=False, no_wrap=False,
-                       **kwargs):
-        """Add a tile layer to the map.
+                       continuous_world=False, attr=None, active=False,
+                       detect_retina=False, no_wrap=False, **kwargs):
+        """
+        Add a tile layer to the map. See TileLayer for options.
 
-        See TileLayer for options."""
-        if tile_name is not None:
-            name = tile_name
-            warnings.warn("'tile_name' is deprecated. Use 'name' instead.")
-        if tile_url is not None:
-            tiles = tile_url
-            warnings.warn("'tile_url' is deprecated. Use 'tiles' instead.")
-
+        """
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
                                attr=attr, API_key=API_key,
@@ -401,7 +398,7 @@ class TileLayer(Layer):
                 ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
-        """)
+        """)  # noqa
 
 
 class FeatureGroup(Layer):
@@ -421,7 +418,7 @@ class FeatureGroup(Layer):
         LayerControls) or a base layer (ticked with a radio button).
     """
     def __init__(self, name=None, overlay=True, control=True):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)
+        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
@@ -441,16 +438,16 @@ class LayerControl(MacroElement):
     Parameters
     ----------
     position : str
-          The position of the control (one of the map corners), can be:
+          The position of the control (one of the map corners), can be
           'topleft', 'topright', 'bottomleft' or 'bottomright'
           default: 'topright'
     collapsed : boolean
-          If true, the control will be collapsed into an icon and expanded on mouse hover
-          or touch.
+          If true the control will be collapsed into an icon and expanded on
+          mouse hover or touch.
           default: True
     autoZIndex : boolean
-          If true, the control will assign zIndexes in increasing order to all of its
-          layers so that the order is preserved when switching them on/off.
+          If true the control assigns zIndexes in increasing order to all of
+          its layers so that the order is preserved when switching them on/off.
           default: True
     """
     def __init__(self, position='topright', collapsed=True, autoZIndex=True):
