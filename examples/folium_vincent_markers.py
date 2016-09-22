@@ -37,11 +37,17 @@ vis3.axis_titles(x='Time', y='Significant Wave Height (m)')
 vis3.to_json('vis3.json')
 
 # Map all buoys similar to https://github.com/python-visualization/folium#vincentvega-markers
-buoy_map = folium.Map(location=[46.3014, -123.7390], zoom_start=7,tiles='Stamen Terrain')
-popup1 = folium.Popup(max_width=800,).add_child(folium.Vega(vis1, width=500, height=250))
-folium.RegularPolygonMarker([47.3489, -124.708],fill_color='#43d9de', radius=12, popup=popup1).add_to(buoy_map)
-popup2 = folium.Popup(max_width=800,).add_child(folium.Vega(vis2, width=500, height=250))
-folium.RegularPolygonMarker([44.639, -124.5339],fill_color='#43d9de', radius=12, popup=popup2).add_to(buoy_map)
-popup3 = folium.Popup(max_width=800,).add_child(folium.Vega(vis3, width=500, height=250))
-folium.RegularPolygonMarker([46.216, -124.1280],fill_color='#43d9de', radius=12, popup=popup3).add_to(buoy_map)
+kw = dict(fill_color='#43d9de', radius=12)
+buoy_map = folium.Map(location=[46.3014, -123.7390],
+                      zoom_start=7, tiles='Stamen Terrain')
+
+popup1 = folium.Popup(max_width=800).add_child(folium.Vega(vis1, width=500, height=250))
+folium.RegularPolygonMarker([47.3489, -124.708], popup=popup1, **kw).add_to(buoy_map)
+
+popup2 = folium.Popup(max_width=800).add_child(folium.Vega(vis2, width=500, height=250))
+folium.RegularPolygonMarker([44.639, -124.5339], popup=popup2, **kw).add_to(buoy_map)
+
+popup3 = folium.Popup(max_width=800).add_child(folium.Vega(vis3, width=500, height=250))
+folium.RegularPolygonMarker([46.216, -124.1280], popup=popup3, **kw).add_to(buoy_map)
+
 buoy_map.save(outfile='NOAA_buoys.html')
