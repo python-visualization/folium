@@ -299,7 +299,8 @@ class GeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
     """
     def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, smooth_factor=None):
+                 overlay=True, control=True, smooth_factor=None,
+                 highlight_function=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
@@ -332,19 +333,55 @@ class GeoJson(Layer):
 
         if style_function is None:
             def style_function(x):
-                return {}
+                return {} 
+
         self.style_function = style_function
+
+        self.highlight = highlight_function is not None
+
+        if highlight_function is None:
+            def highlight_function(x):
+                return {} 
+
+        self.highlight_function = highlight_function
 
         self.smooth_factor = smooth_factor
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
+            
+            {% if this.highlight %}
+                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) {
+                            e.target.setStyle(e.target.feature.properties.style);},
+                        mouseover: function(e) {
+                            e.target.setStyle(e.target.feature.properties.highlight);},
+                        click: function(e) {
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                        });
+                };
+            {% endif %}
+
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none %}
-                        , {smoothFactor:{{this.smooth_factor}}}
-                    {% endif %}).addTo({{this._parent.get_name()}});
+                    {% if this.smooth_factor is not none or this.highlight %}
+                        , {
+                        {% if this.smooth_factor is not none  %}
+                            smoothFactor:{{this.smooth_factor}}
+                        {% endif %}
+                    
+                        {% if this.highlight %}
+                            {% if this.smooth_factor is not none  %}
+                            ,
+                            {% endif %}
+                            onEachFeature: {{this.get_name()}}_onEachFeature
+                        {% endif %}
+                        }
+                    {% endif %}
+                    ).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+
             {% endmacro %}
             """)  # noqa
 
@@ -363,6 +400,7 @@ class GeoJson(Layer):
 
         for feature in self.data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
