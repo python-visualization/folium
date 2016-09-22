@@ -2,15 +2,24 @@ language: python
 
 sudo: false
 
-python:
-    - 2.7
-    - 3.4
-    - 3.5
-
-env:
-    - TEST_TARGET=branca_release
-    - TEST_TARGET=branca_latest
-    - TEST_TARGET=coding_standards
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TEST_TARGET=branca_release
+  - python: 3.5
+    env: TEST_TARGET=branca_release
+  - python: 3.5
+    env: TEST_TARGET=coding_standards
+  - python: 3.5
+    env: TEST_TARGET=notebooks
+  - python: 2.7
+    env: TEST_TARGET=branca_latest
+  - python: 3.5
+    env: TEST_TARGET=branca_latest
+  allow_failures:
+  - python: 3.5
+    env: TEST_TARGET=branca_latest
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
@@ -31,7 +40,7 @@ install:
 
 script:
     - if [[ $TEST_TARGET == 'branca_release' ]]; then
-        python setup.py test ;
+        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
       fi
 
     - if [[ $TEST_TARGET == 'branca_latest' ]]; then
@@ -41,4 +50,8 @@ script:
 
     - if [[ $TEST_TARGET == 'coding_standards' ]]; then
         find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+      fi
+
+    - if [[ $TEST_TARGET == 'notebooks' ]]; then
+        py.test -vv tests/notebooks/test_notebooks.py ;
       fi
