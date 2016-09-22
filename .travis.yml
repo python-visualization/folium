@@ -2,30 +2,43 @@ language: python
 
 sudo: false
 
+python:
+    - 2.7
+    - 3.4
+    - 3.5
+
 env:
-    - PYTHON="2.7"
-    - PYTHON="3.4"
-    - PYTHON="3.5"
+    - TEST_TARGET=branca_release
+    - TEST_TARGET=branca_latest
+    - TEST_TARGET=coding_standards
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - conda config --add channels ioos -f
     - conda update --yes --all
-    - travis_retry conda create --yes -n test python=$PYTHON nomkl --file requirements.txt
-    - source activate test
-    - conda install --yes --file requirements-dev.txt;
-    - pip install git+https://github.com/python-visualization/branca.git@befdf0bb29ecea488c79147fa1a851e15bfe5a10
-    - if [[ "$PYTHON" == "3.4" ]]; then
-        travis_retry conda install --yes nbconvert jupyter_client ipykernel;
-        conda install --yes -c ioos geopandas;
+    - conda config --add channels conda-forge --force
+    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
+    - source activate TEST
+
+    - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
+        conda install --yes mock ;
       fi
-    - if [[ "$PYTHON" != "3.5" ]]; then
-        travis_retry conda install --yes mock ;
-      fi
-    - travis_retry pip install
+
+# Test source distribution.
+install:
+    - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-    - python setup.py test
-    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100
+    - if [[ $TEST_TARGET == 'branca_release' ]]; then
+        python setup.py test ;
+      fi
+
+    - if [[ $TEST_TARGET == 'branca_latest' ]]; then
+        pip install git+https://github.com/python-visualization/branca.git ;
+        python setup.py test ;
+      fi
+
+    - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+        find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+      fi

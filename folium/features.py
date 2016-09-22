@@ -5,15 +5,17 @@ Features
 
 Extra features Elements.
 """
-from jinja2 import Template
 import json
 
-from branca.utilities import (_parse_size,
-                              _locations_mirror, _locations_tolist, image_to_url,
-                              text_type, binary_type,
-                              none_min, none_max, iter_points,
-                              )
-from branca.element import Element, Figure, JavascriptLink, CssLink, MacroElement
+from jinja2 import Template
+from six import text_type
+
+from branca.utilities import (
+    _parse_size, _locations_mirror, _locations_tolist, image_to_url,
+    binary_type, none_min, none_max, iter_points,
+)
+from branca.element import (Element, Figure, JavascriptLink, CssLink,
+                            MacroElement)
 from branca.colormap import LinearColormap
 
 from .map import Layer, Icon, Marker, Popup, FeatureGroup
@@ -756,6 +758,114 @@ class CircleMarker(Marker):
             """)
 
 
+class RectangleMarker(Marker):
+    def __init__(self, bounds, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None):
+        """Creates a RectangleMarker object for plotting on a Map.
+
+        Parameters
+        ----------
+        bounds: tuple or list, default None
+            Latitude and Longitude of Marker (southWest and northEast)
+        color: string, default ('black')
+            Edge color of a rectangle.
+        weight: float, default (1)
+            Edge line width of a rectangle.
+        fill_color: string, default ('black')
+            Fill color of a rectangle.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a rectangle.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.RectangleMarker object
+
+        Example
+        -------
+        >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]],
+                          color="blue", fill_color="red", popup='Tokyo, Japan')
+        """
+        super(RectangleMarker, self).__init__(bounds, popup=popup)
+        self._name = 'RectangleMarker'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.rectangle(
+                                  [[{{this.location[0]}},{{this.location[1]}}],
+                                  [{{this.location[2]}},{{this.location[3]}}]],
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
+
+            {% endmacro %}
+            """)
+
+
+class Polygon(Marker):
+    def __init__(self, locations, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None, latlon=True):
+        """Creates a Polygon object for plotting on a Map.
+
+        Parameters
+        ----------
+        locations: tuple or list, default None
+            Latitude and Longitude of Polygon
+        color: string, default ('black')
+            Edge color of a polygon.
+        weight: float, default (1)
+            Edge line width of a polygon.
+        fill_color: string, default ('black')
+            Fill color of a polygon.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a polygon.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.Polygon object
+
+        Examples
+        --------
+        >>> loc = [[35.6762, 139.7795],
+        ...        [35.6718, 139.7831],
+        ...        [35.6767, 139.7868],
+        ...        [35.6795, 139.7824],
+        ...       [35.6787, 139.7791]]
+        >>> Polygon(loc, color="blue", weight=10, fill_color="red",
+        ...         fill_opacity=0.5, popup="Tokyo, Japan"))
+
+        """
+        super(Polygon, self).__init__((
+            _locations_mirror(locations) if not latlon else
+            _locations_tolist(locations)), popup=popup
+        )
+        self._name = 'Polygon'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.polygon({{this.location}},
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+
 class LatLngPopup(MacroElement):
     """
     When one clicks on a Map that contains a LatLngPopup,
@@ -1023,12 +1133,11 @@ class ColorLine(FeatureGroup):
         The list of segments colors.
         It must have length equal to `len(positions)-1`.
     colormap: branca.colormap.Colormap or list or tuple
-        The colormap to use.
-        If a list or tuple of colors is provided, a LinearColormap will be created
-        from it.
+        The colormap to use. If a list or tuple of colors is provided,
+        a LinearColormap will be created from it.
     nb_steps: int, default 12
-        To have lighter output, the colormap will be discretized to that number
-        of colors.
+        To have lighter output the colormap will be discretized
+        to that number of colors.
     opacity: float, default 1
         Line opacity, scale 0-1
     weight: int, default 2
@@ -1060,7 +1169,8 @@ class ColorLine(FeatureGroup):
         else:
             cm = colormap
         out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(MultiPolyLine(val, color=key, weight=weight, opacity=opacity))
+            self.add_child(MultiPolyLine(val, color=key,
+                                         weight=weight, opacity=opacity))
