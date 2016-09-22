@@ -2,25 +2,15 @@ language: python
 
 sudo: false
 
-notifications:
-  email: false
+python:
+    - 2.7
+    - 3.4
+    - 3.5
 
-matrix:
-  fast_finish: true
-  include:
-    - python: 2.7
-      env: TEST_TARGET=branca_release
-    - python: 3.4
-      env: TEST_TARGET=branca_release
-    - python: 3.5
-      env: TEST_TARGET=branca_release
-  allow_failures:
-    - python: 3.5
-      env: TEST_TARGET=branca_latest
-    - python: 3.4
-      env: TEST_TARGET=branca_latest
-    - python: 2.7
-      env: TEST_TARGET=branca_latest
+env:
+    - TEST_TARGET=branca_release
+    - TEST_TARGET=branca_latest
+    - TEST_TARGET=coding_standards
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
@@ -35,14 +25,20 @@ before_install:
         conda install --yes mock ;
       fi
 
-    - if [[ $TEST_TARGET == 'branca_latest' ]]; then
-        pip install git+https://github.com/python-visualization/branca.git ;
-      fi
-
 # Test source distribution.
 install:
     - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-    - python setup.py test
-    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100
+    - if [[ $TEST_TARGET == 'branca_release' ]]; then
+        python setup.py test ;
+      fi
+
+    - if [[ $TEST_TARGET == 'branca_latest' ]]; then
+        pip install git+https://github.com/python-visualization/branca.git ;
+        python setup.py test ;
+      fi
+
+    - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+        find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+      fi
