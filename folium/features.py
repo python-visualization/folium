@@ -725,6 +725,110 @@ class CircleMarker(Marker):
             """)
 
 
+class RectangleMarker(Marker):
+    def __init__(self, bounds, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None):
+        """Creates a RectangleMarker object for plotting on a Map.
+
+        Parameters
+        ----------
+        bounds: tuple or list, default None
+            Latitude and Longitude of Marker (southWest and northEast)
+        color: string, default ('black')
+            Edge color of a rectangle.
+        weight: float, default (1)
+            Edge line width of a rectangle.
+        fill_color: string, default ('black')
+            Fill color of a rectangle.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a rectangle.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.RectangleMarker object
+
+        Example
+        -------
+        >>> RectangleMarker(bounds=[[35.681, 139.766], [35.691, 139.776]],
+                          color="blue", fill_color="red", popup='Tokyo, Japan')
+        """
+        super(RectangleMarker, self).__init__(bounds, popup=popup)
+        self._name = 'RectangleMarker'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.rectangle([[{{this.location[0]}}, {{this.location[1]}}],
+                                                   [{{this.location[2]}}, {{this.location[3]}}]],
+                {
+                    color:'{{ this.color }}',
+                    fillColor:'{{ this.fill_color }}',
+                    fillOpacity:{{ this.fill_opacity }},
+                    weight:{{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
+
+            {% endmacro %}
+            """)
+
+
+class Polygon(Marker):
+    def __init__(self, locations, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None, latlon=True):
+        """Creates a Polygon object for plotting on a Map.
+
+        Parameters
+        ----------
+        locations: tuple or list, default None
+            Latitude and Longitude of Polygon
+        color: string, default ('black')
+            Edge color of a polygon.
+        weight: float, default (1)
+            Edge line width of a polygon.
+        fill_color: string, default ('black')
+            Fill color of a polygon.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a polygon.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.Polygon object
+
+        Example
+        -------
+        >>> loc= [[35.6762, 139.7795],
+                  [35.6718, 139.7831],
+                  [35.6767, 139.7868],
+                  [35.6795, 139.7824],
+                  [35.6787, 139.7791]]
+            Polygon(loc, color="blue", weight=10, fill_color="red",
+                          fill_opacity=0.5, popup="Tokyo, Japan"))
+        """
+        super(Polygon, self).__init__((_locations_mirror(locations) if not latlon else
+                                       _locations_tolist(locations)), popup=popup)
+        self._name = 'Polygon'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.polygon({{this.location}},
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+
 class LatLngPopup(MacroElement):
     """
     When one clicks on a Map that contains a LatLngPopup,
