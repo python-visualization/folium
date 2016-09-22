@@ -32,7 +32,7 @@ if sys.version_info[:2] >= (3, 5):
                 open(filename, 'w').write(out_nb[0].encode('utf-8'))
 
     class TestNotebooks(object):
-        _filepath = rootpath.rstrip('/')+'/../examples/'
+        _filepath = rootpath.rstrip('/') + '/../../examples/'
         _nblist = [x for x in os.listdir(_filepath) if x.endswith('.ipynb')]
 
     for fn in TestNotebooks._nblist:
