@@ -80,6 +80,9 @@ class TestFolium(object):
         assert self.map.width == (900, 'px')
         assert self.map.left == (0, '%')
         assert self.map.top == (0, '%')
+        assert self.map.global_switches.prefer_canvas is False
+        assert self.map.global_switches.no_touch is False
+        assert self.map.global_switches.disable_3d is False
         assert self.map.to_dict() == {
             "name": "Map",
             "id": "00000000000000000000000000000000",
@@ -422,3 +425,24 @@ class TestFolium(object):
 
         bounds = self.map.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
+
+    def test_global_switches(self):
+        mapa = folium.Map(prefer_canvas=True)
+        assert (mapa.global_switches.prefer_canvas is True and
+                mapa.global_switches.no_touch is False and
+                mapa.global_switches.disable_3d is False)
+
+        mapb = folium.Map(no_touch=True)
+        assert (mapb.global_switches.prefer_canvas is False and
+                mapb.global_switches.no_touch is True and
+                mapb.global_switches.disable_3d is False)
+
+        mapc = folium.Map(disable_3d=True)
+        assert (mapc.global_switches.prefer_canvas is False and
+                mapc.global_switches.no_touch is False and
+                mapc.global_switches.disable_3d is True)
+
+        mapd = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
+        assert (mapd.global_switches.prefer_canvas is True and
+                mapd.global_switches.no_touch is True and
+                mapd.global_switches.disable_3d is True)
