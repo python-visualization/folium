@@ -21,7 +21,8 @@ def test_scroll_zoom_toggler():
     # Verify that the div has been created.
     tmpl = Template("""
         <img id="{{this.get_name()}}" alt="scroll"
-        src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/png/512/arrow-move.png"
+        src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/arrow-move.png"
+        style="z-index: 999999"
         onclick="{{this._parent.get_name()}}.toggleScroll()"></img>
     """)
     assert ''.join(tmpl.render(this=szt).split()) in ''.join(out.split())
