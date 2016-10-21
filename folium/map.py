@@ -24,7 +24,7 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/leaflet.js"),
     ('jquery',
      "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"),
     ('bootstrap',
@@ -32,14 +32,14 @@ _default_js = [
     ('awesome_markers',
      "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"),  # noqa
     ('marker_cluster_src',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js"),  # noqa
     ('marker_cluster',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
     ]
 
 _default_css = [
     ("leaflet_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"),
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.0/leaflet.css"),
     ("bootstrap_css",
      "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"),
     ("bootstrap_theme_css",
@@ -49,9 +49,9 @@ _default_css = [
     ("awesome_markers_css",
      "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"),  # noqa
     ("marker_cluster_default_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
     ("marker_cluster_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
+     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
     ("awesome_rotate_css",
      "https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
     ]
