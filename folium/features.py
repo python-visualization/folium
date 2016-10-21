@@ -167,7 +167,7 @@ class RegularPolygonMarker(Marker):
                                             "if it's not in a Figure.")
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
 
