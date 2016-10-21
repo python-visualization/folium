@@ -28,11 +28,11 @@ def test_marker_cluster():
 
     # We verify that imports
     assert ('<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.'
-            'markercluster/0.4.0/leaflet.markercluster.js"></script>') in out
+            'markercluster/1.0.0/leaflet.markercluster.js"></script>') in out
     assert ('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/'
-            'libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />') in out
+            'libs/leaflet.markercluster/1.0.0/MarkerCluster.css" />') in out
     assert ('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/'
-            'libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />'
+            'libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css" />'
             ) in out
 
     # Verify the script part is okay.
