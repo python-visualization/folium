@@ -36,7 +36,7 @@ class ScrollZoomToggler(MacroElement):
 
             {% macro html(this,kwargs) %}
             <img id="{{this.get_name()}}" alt="scroll"
-                 src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/1.5.2/png/512/arrow-move.png"
+                 src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/arrow-move.png"
                  style="z-index: 999999"       
                  onclick="{{this._parent.get_name()}}.toggleScroll()">
             </img>
