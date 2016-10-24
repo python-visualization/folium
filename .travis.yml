@@ -2,6 +2,10 @@ language: python
 
 sudo: false
 
+env:
+  global:
+    - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
+
 matrix:
   fast_finish: true
   include:
@@ -35,6 +39,9 @@ before_install:
     - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
         conda install --yes mock ;
       fi
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
+        conda install --yes doctr ;
+      fi
 
 # Test source distribution.
 install:
@@ -57,4 +64,5 @@ script:
 
     - if [[ $TEST_TARGET == 'notebooks' ]]; then
         py.test -vv tests/notebooks/test_notebooks.py ;
+        cd tests/notebooks && doctr deploy --built-docs=results --gh-pages-docs=gallery ;
       fi
