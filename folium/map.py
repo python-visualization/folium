@@ -485,7 +485,7 @@ class Marker(MacroElement):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
-            var {{this.get_name()}} = L.marker(
+            var {{this.get_name()}} = new walnutMarker(
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
                     icon: new L.Icon.Default(),
