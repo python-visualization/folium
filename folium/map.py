@@ -461,10 +461,12 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
     """
-    def __init__(self, location, popup=None, icon=None):
+    def __init__(self, location, popup=None, icon=None, id=None, layer_id=None):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = location
+        self.id = id
+        self.layer_id = layer_id
         if icon is not None:
             self.add_children(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
@@ -478,10 +480,16 @@ class Marker(MacroElement):
             var {{this.get_name()}} = L.marker(
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
-                    icon: new L.Icon.Default()
+                    icon: new L.Icon.Default(),
+                    id: "{{this.id}}"
                     }
                 )
-                .addTo({{this._parent.get_name()}});
+                .addTo({{this._parent.get_name()}}).on('click', parent.onMarkerClick);
+                
+            var {{this.layer_id}} = L.layerGroup([{{this.get_name()}}]); 
+          
+            all_markerlayers.push({{this.layer_id}});
+            all_markers.push(["{{this.id}}", {{this.get_name()}}]);
             {% endmacro %}
             """)
 
