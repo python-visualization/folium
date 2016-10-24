@@ -146,6 +146,7 @@ class LegacyMap(MacroElement):
                 top: {{this.top[0]}}{{this.top[1]}};
                 }
             </style>
+            <script type="text/javascript" src="js/leaflet.smoothmarkerbouncing.js"></script>
         {% endmacro %}
         {% macro html(this, kwargs) %}
             <div class="folium-map" id="{{this.get_name()}}" ></div>
