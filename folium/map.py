@@ -308,6 +308,14 @@ class TileLayer(Layer):
                     }
                 ).addTo({{this._parent.get_name()}});
 
+            walnutMarker = L.Marker.extend({                                                                                                                                       
+                options: {                                                                                                                                        
+                    id: 'markerId'         
+                }                                                                                                                               
+            });
+
+            var all_markers = [];
+            var all_markerlayers = [];
         {% endmacro %}
         """)
 
