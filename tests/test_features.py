@@ -48,7 +48,7 @@ def test_figure_html():
     out = f.render()
     out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
     print(out)
-    assert out.strip() == tmpl.strip(), '\n'+out.strip()+'\n'+'-'*80+'\n'+tmpl.strip()
+    assert out.strip() == tmpl.strip(), '\n' + out.strip() + '\n' + '-' * 80 + '\n' + tmpl.strip()  # noqa
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
@@ -83,10 +83,10 @@ def test_polyline_popups():
     features.PolyLine([[40, -80], [45, -80]], popup="PolyLine").add_to(m)
     features.PolyLine([[40, -90], [45, -90]],
                       popup=Popup("PolyLine")).add_to(m)
-    features.MultiPolyLine([[[40, -110], [45, -110]]],
-                           popup="MultiPolyLine").add_to(m)
-    features.MultiPolyLine([[[40, -120], [45, -120]]],
-                           popup=Popup("MultiPolyLine")).add_to(m)
+    features.PolyLine([[[40, -110], [45, -110]]],
+                      popup="MultiPolyLine").add_to(m)
+    features.PolyLine([[[40, -120], [45, -120]]],
+                      popup=Popup("MultiPolyLine")).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
