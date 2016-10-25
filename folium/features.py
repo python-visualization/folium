@@ -1030,75 +1030,6 @@ class PolyLine(MacroElement):
         return bounds
 
 
-class MultiPolyLine(MacroElement):
-    """
-    Creates a MultiPolyLine object to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
-    color: string, default Leaflet's default ('#03f')
-    weight: float, default Leaflet's default (5)
-    opacity: float, default Leaflet's default (0.5)
-    latlon: bool, default True
-        Whether locations are given in the form [[lat, lon]]
-        or not ([[lon, lat]] if False).
-        Note that the default GeoJson format is latlon=False,
-        while Leaflet polyline's default is latlon=True.
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-
-    """
-    def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True, popup=None):
-        super(MultiPolyLine, self).__init__()
-        self._name = 'MultiPolyLine'
-        self.data = (_locations_mirror(locations) if not latlon else
-                     _locations_tolist(locations))
-        self.color = color
-        self.weight = weight
-        self.opacity = opacity
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.multiPolyline(
-                    {{this.data}},
-                    {
-                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
-                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
-                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
-                        });
-                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
-
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]].
-
-        """
-        bounds = [[None, None], [None, None]]
-        for point in iter_points(self.data):
-            bounds = [
-                [
-                    none_min(bounds[0][0], point[0]),
-                    none_min(bounds[0][1], point[1]),
-                ],
-                [
-                    none_max(bounds[1][0], point[0]),
-                    none_max(bounds[1][1], point[1]),
-                ],
-            ]
-        return bounds
-
-
 class CustomIcon(Icon):
     """
     Create a custom icon, based on an image.
@@ -1218,5 +1149,4 @@ class ColorLine(FeatureGroup):
         for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(MultiPolyLine(val, color=key,
-                                         weight=weight, opacity=opacity))
+            self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))  # noqa

@@ -13,7 +13,7 @@ from .map import (
 )
 from .features import (
     ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup, CircleMarker,
-    MarkerCluster, MultiPolyLine, PolyLine, Vega, RegularPolygonMarker,
+    MarkerCluster, PolyLine, Vega, RegularPolygonMarker,
     TopoJson, WmsTileLayer
 )
 
@@ -50,7 +50,6 @@ __all__ = [
     'GeoJsonStyle',
     'LatLngPopup',
     'MarkerCluster',
-    'MultiPolyLine',
     'PolyLine',
     'Vega',
     'RegularPolygonMarker',

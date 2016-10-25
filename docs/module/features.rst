@@ -64,12 +64,6 @@
 .. autoclass:: folium.features.PolyLine
    :members:
 
-`MultiPolyLine`
----------------
-
-.. autoclass:: folium.features.MultiPolyLine
-   :members:
-
 `CustomIcon`
 ------------
 
