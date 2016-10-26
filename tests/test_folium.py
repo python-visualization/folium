@@ -413,11 +413,11 @@ class TestFolium(object):
 
     def test_tile_layer(self):
         mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
-        layer = 'http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png'
-        mapa.add_child(folium.map.TileLayer(layer, name='MapQuest',
+        layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        mapa.add_child(folium.map.TileLayer(layer, name='OpenStreetMap',
                                             attr='attribution'))
         mapa.add_child(folium.map.TileLayer(layer,
-                                            name='MapQuest2',
+                                            name='OpenStreetMap2',
                                             attr='attribution2',
                                             overlay=True))
         mapa.add_child(folium.map.LayerControl())
