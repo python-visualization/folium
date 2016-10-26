@@ -24,8 +24,6 @@ class Map(LegacyMap):
     to Folium. Pass any of the following to the "tiles" keyword:
 
         - "OpenStreetMap"
-        - "MapQuest Open"
-        - "MapQuest Open Aerial"
         - "Mapbox Bright" (Limited levels of zoom for free tiles)
         - "Mapbox Control Room" (Limited levels of zoom for free tiles)
         - "Stamen" (Terrain, Toner, and Watercolor)

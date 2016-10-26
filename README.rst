@@ -28,8 +28,8 @@ map for choropleth visualizations as well as passing Vincent/Vega
 visualizations as markers on the map.
 
 The library has a number of built-in tilesets from OpenStreetMap,
-MapQuest Open, MapQuest Open Aerial, Mapbox, and Stamen, and supports
-custom tilesets with Mapbox or Cloudmade API keys. Folium supports both
+Mapbox, and Stamen, and supports custom tilesets with Mapbox 
+or Cloudmade API keys. Folium supports both
 GeoJSON and TopoJSON overlays, as well as the binding of data to those
 overlays to create choropleth maps with color-brewer color schemes.
 

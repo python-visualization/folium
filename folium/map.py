@@ -65,8 +65,6 @@ class LegacyMap(MacroElement):
     to Folium. Pass any of the following to the "tiles" keyword:
 
         - "OpenStreetMap"
-        - "MapQuest Open"
-        - "MapQuest Open Aerial"
         - "Mapbox Bright" (Limited levels of zoom for free tiles)
         - "Mapbox Control Room" (Limited levels of zoom for free tiles)
         - "Stamen" (Terrain, Toner, and Watercolor)
@@ -348,8 +346,6 @@ class TileLayer(Layer):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "MapQuest Open"
-            - "MapQuest Open Aerial"
             - "Mapbox Bright" (Limited levels of zoom for free tiles)
             - "Mapbox Control Room" (Limited levels of zoom for free tiles)
             - "Stamen" (Terrain, Toner, and Watercolor)
