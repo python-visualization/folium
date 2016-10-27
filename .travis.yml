@@ -64,5 +64,5 @@ script:
 
     - if [[ $TEST_TARGET == 'notebooks' ]]; then
         py.test -vv tests/notebooks/test_notebooks.py ;
-        cd tests/notebooks && doctr deploy --built-docs=results --gh-pages-docs=gallery ;
+        doctr deploy --built-docs=examples/results --gh-pages-docs=gallery ;
       fi
