@@ -723,7 +723,7 @@ class Circle(Marker):
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
         if class_name is not None:
-            self.class_name = class
+            self.class_name = class_name
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
