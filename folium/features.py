@@ -732,7 +732,7 @@ class Circle(Marker):
                 [{{this.location[0]}},{{this.location[1]}}],
                 {{ this.radius }},
                 {
-                    className: '{{this.class_name}}'
+                    className: '{{this.class_name}}',
                     color: '{{ this.color }}',
                     fillColor: '{{ this.fill_color }}',
                     fillOpacity: {{ this.fill_opacity }}
