@@ -3,7 +3,7 @@
 Heat Map with time dimension
 --------
 
-Create a HeatMapWithTime layer
+Create a HeatMapWithTime layer that can be added to a folium map
 
 """
 import json
@@ -15,20 +15,46 @@ from branca.utilities import none_min, none_max
 from folium.map import TileLayer
 
 class HeatMapWithTime(TileLayer):
-    def __init__(self, data, index=None, times=None, name=None, radius=15, max_opacity=0.6, scale_radius=False,
-                 use_local_extrema=False, default_weight=1, overlay=True,
-                 auto_play=False, backward_button=True, display_date=True,
-                 forward_button=True, limit_minimum_range=5, limit_sliders=False,
-                 loop_button=False, min_speed=0.1, max_speed=10, play_button=True,
-                 play_reverse_button=False, position="bottomleft", speed_slider=True,
-                 speed_step=0.1, style_NS = "leaflet-control-timecontrol", time_slider=True,
-                 time_slider_drap_update=False, time_steps=1, time_control_title="Time Control"
+    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0, max_opacity=0.6,
+                 scale_radius=False, use_local_extrema=False, auto_play=False, display_index=True,
+                 index_steps=1, min_speed=0.1, max_speed=10, speed_step=0.1, position="bottomleft"
                  ):
         """Create a HeatMapWithTime layer
 
         Parameters
         ----------
-
+        data : list of list of points of the form [lat, lng] or [lat, lng, weight]
+            The points you want to plot. The outer list corresponds to the various time
+            steps in sequential order. (weight defaults to 1 if not specified for a point)
+        index: Index giving the label (or timestamp) of the elements of data. Should have
+            the same length as data, or is replaced by a simple count if not specified.
+        name : str
+            The name of the layer that will be created.
+        radius  : default 15.
+            The radius used around points for the heatmap.
+        min_opacity : default 0
+            The minimum opacity for the heatmap.
+        max_opacity : default 0.6
+            The maximum opacity for the heatmap.
+        scale_radius: default False
+            Scale the radius of the points based on the zoom level.
+        use_local_extrema: default False
+            Defines whether the heatmap uses a global extrema set found from the input data
+            OR a local extrema (the maximum and minimum of the currently displayed view).
+        auto_play: default False
+            Automatically play the animation across time.
+        display_index: default True
+            Display the index (usually time) in the time control.
+        index_steps: default 1
+            Steps to take in the index dimension between aimation steps.
+        min_speed: default 0.1
+            Minimum fps speed for animation.
+        max_speed: default 10
+            Maximum fps speed for animation.
+        speed_step: default 0.1
+            Step between different fps speeds on the speed slider.
+        position: default "bottomleft"
+            Position string for the time slider. Format: "bottom/top"+"left/right".
         """
         super(TileLayer, self).__init__(name=name)
         self._name = 'HeatMap'
@@ -38,36 +64,39 @@ class HeatMapWithTime(TileLayer):
         # input data
         self.data = data
         self.index = index if index is not None else [str(i) for i in range(1, len(data)+1)]
-        self.times = times if times is not None else range(1, len(data)+1)
+        if len(self.data) != len(self.index):
+            raise ValueError("Input data and index are not of compatible lengths.")
+        self.times = range(1, len(data)+1)
 
         # heatmap settings
         self.radius = radius
+        self.min_opacity = min_opacity
         self.max_opacity = max_opacity
         self.scale_radius = "true" if scale_radius else "false"
         self.use_local_extrema = "true" if use_local_extrema else "false"
-        self.default_weight = default_weight
-        self.overlay = overlay
 
         # time dimension settings
         self.auto_play = "true" if auto_play else "false"
-        self.backward_button = "true" if backward_button else "false"
-        self.display_date = "true" if display_date else "false"
-        self.forward_button = "true" if forward_button else "false"
-        self.limit_minimum_range = "true" if limit_minimum_range else "false"
-        self.limit_sliders = "true" if limit_sliders else "false"
-        self.loop_button = "true" if loop_button else "false"
+        self.display_index = "true" if display_index else "false"
         self.min_speed = min_speed
         self.max_speed = max_speed
-        self.play_button = "true" if play_button else "false"
-        self.play_reverse_button = "true" if play_reverse_button else "false"
         self.position = position
-        self.speed_slider = "true" if speed_slider else "false"
         self.speed_step = speed_step
-        self.style_NS = style_NS
-        self.time_slider = "true" if time_slider else "false"
-        self.time_slider_drap_update = "true" if time_slider_drap_update else "false"
-        self.time_steps = time_steps
-        self.time_control_title = time_control_title
+        self.index_steps = index_steps
+
+        # hard coded defaults for simplicity
+        self.backward_button = "true"
+        self.forward_button = "true"
+        self.limit_sliders = "true"
+        self.limit_minimum_range = 5
+        self.loop_button = "true"
+        self.speed_slider = "true"
+        self.time_slider = "true"
+        self.play_button = "true"
+        self.play_reverse_button = "true"
+        self.time_slider_drap_update = "false"
+        self.style_NS = "leaflet-control-timecontrol"
+
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -79,7 +108,7 @@ class HeatMapWithTime(TileLayer):
             var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
                 autoPlay: {{this.auto_play}},
                 backwardButton: {{this.backward_button}},
-                displayDate: {{this.display_date}},
+                displayDate: {{this.display_index}},
                 forwardButton: {{this.forward_button}},
                 limitMinimumRange: {{this.limit_minimum_range}},
                 limitSliders: {{this.limit_sliders}},
@@ -94,18 +123,18 @@ class HeatMapWithTime(TileLayer):
                 styleNS: "{{this.style_NS}}",
                 timeSlider: {{this.time_slider}},
                 timeSliderDrapUpdate: {{this.time_slider_drap_update}},
-                timeSteps: {{this.time_steps}},
-                title: "{{this.time_control_title}}"
+                timeSteps: {{this.index_steps}}
                 })
                 .addTo({{this._parent.get_name()}});
 
                 var {{this.get_name()}} = new TDHeatmap({{this.data}},
                 {heatmapOptions: {
                         radius: {{this.radius}},
+                        minOpacity: {{this.min_opacity}},
                         maxOpacity: {{this.max_opacity}},
                         scaleRadius: {{this.scale_radius}},
                         useLocalExtrema: {{this.use_local_extrema}},
-                        defaultWeight: {{this.default_weight}}
+                        defaultWeight: 1 ,
                     }
                 })
                 .addTo({{this._parent.get_name()}});
