@@ -857,7 +857,7 @@ class CustomCircleMarker(Marker):
     clickUrl: specify a url to follow in a new tab when clicked on object, default empty.
         Input url(text)
     hover_color: change the color when hovered over the object, default black.
-        Input hex code. Recommendation: import matplotlib.colors as colors and use colors.rgb2hex(color)
+        Input hex code. Recommendation: do "import matplotlib.colors as colors" and use "colors.rgb2hex(your_color)"
     hover_opacity: define an opacity for the object when hovered over, default 1.0
         Input value between 0.0 and 1.0
     boxtxt: Define a text to be displayed in the legend when clicked on object. Will disappear on doubleclick
