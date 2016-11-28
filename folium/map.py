@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
+
 """
 Map
 ------
 
 Classes for drawing maps.
+
 """
 
 from __future__ import unicode_literals
 
-import warnings
 import json
 from collections import OrderedDict
 
@@ -16,42 +17,43 @@ from jinja2 import Environment, PackageLoader, Template
 
 from branca.six import text_type, binary_type
 from branca.utilities import _parse_size
-from branca.element import Element, Figure, MacroElement, Html, JavascriptLink, CssLink
+from branca.element import (Element, Figure, MacroElement, Html,
+                            JavascriptLink, CssLink)
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"),
+     'https://unpkg.com/leaflet@1.0.1/dist/leaflet.js'),
     ('jquery',
-     "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"),
+     'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
     ('bootstrap',
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"),
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
-     "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.min.js"),  # noqa
+     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
     ('marker_cluster_src',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js'),  # noqa
     ('marker_cluster',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
     ]
 
 _default_css = [
-    ("leaflet_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"),
-    ("bootstrap_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"),
-    ("bootstrap_theme_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"),  # noqa
-    ("awesome_markers_font_css",
-     "https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),  # noqa
-    ("awesome_markers_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"),  # noqa
-    ("marker_cluster_default_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
-    ("marker_cluster_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
-    ("awesome_rotate_css",
-     "https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
+    ('leaflet_css',
+     'https://unpkg.com/leaflet@1.0.1/dist/leaflet.css'),
+    ('bootstrap_css',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
+    ('bootstrap_theme_css',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'),  # noqa
+    ('awesome_markers_font_css',
+     'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'),  # noqa
+    ('awesome_markers_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
+    ('marker_cluster_default_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css'),  # noqa
+    ('marker_cluster_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css'),  # noqa
+    ('awesome_rotate_css',
+     'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
 
@@ -63,8 +65,6 @@ class LegacyMap(MacroElement):
     to Folium. Pass any of the following to the "tiles" keyword:
 
         - "OpenStreetMap"
-        - "MapQuest Open"
-        - "MapQuest Open Aerial"
         - "Mapbox Bright" (Limited levels of zoom for free tiles)
         - "Mapbox Control Room" (Limited levels of zoom for free tiles)
         - "Stamen" (Terrain, Toner, and Watercolor)
@@ -106,15 +106,27 @@ class LegacyMap(MacroElement):
         * EPSG3857 : The most common CRS for online maps, used by almost all
         free and commercial tile providers. Uses Spherical Mercator projection.
         Set in by default in Map's crs option.
-        * EPSG4326 : A common CRS among GIS enthusiasts. Uses simple Equirectangular
-        projection.
-        * EPSG3395 : Rarely used by some commercial tile providers. Uses Elliptical
-        Mercator projection.
-        * Simple : A simple CRS that maps longitude and latitude into x and y directly.
-        May be used for maps of flat surfaces (e.g. game maps). Note that the y axis
-        should still be inverted (going from bottom to top).
+        * EPSG4326 : A common CRS among GIS enthusiasts.
+        Uses simple Equirectangular projection.
+        * EPSG3395 : Rarely used by some commercial tile providers.
+        Uses Elliptical Mercator projection.
+        * Simple : A simple CRS that maps longitude and latitude into
+        x and y directly. May be used for maps of flat surfaces
+        (e.g. game maps). Note that the y axis should still be inverted
+        (going from bottom to top).
     control_scale : bool, default False
         Whether to add a control scale on the map.
+    prefer_canvas : bool, default False
+        Forces Leaflet to use the Canvas back-end (if available) for
+        vector layers instead of SVG. This can increase performance
+        considerably in some cases (e.g. many thousands of circle
+        markers on the map).
+    no_touch : bool, default False
+        Forces Leaflet to not use touch events even if it detects them.
+    disable_3d : bool, default False
+        Forces Leaflet to not use hardware-accelerated CSS 3D
+        transforms for positioning (which may cause glitches in some
+        rare environments) even if they're supported.
 
     Returns
     -------
@@ -122,22 +134,25 @@ class LegacyMap(MacroElement):
 
     Examples
     --------
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], width=750, height=500)
     >>> map = folium.LegacyMap(location=[45.523, -122.675],
-                               tiles='Mapbox Control Room')
+    ...                        width=750, height=500)
+    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    ...                        tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
-                               tiles='Cloudmade', API_key='YourKey')
+    ...                        tiles='Cloudmade', API_key='YourKey')
     >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-                               tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                      'mapbox.control-room/{z}/{x}/{y}.png'),
-                                attr='Mapbox attribution')
+    ...                        tiles=('http://{s}.tiles.mapbox.com/v3/'
+    ...                               'mapbox.control-room/{z}/{x}/{y}.png'),
+    ...                        attr='Mapbox attribution')
     """
     def __init__(self, location=None, width='100%', height='100%',
                  left="0%", top="0%", position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-                 zoom_start=10, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, detect_retina=False,
-                 crs='EPSG3857', control_scale=False):
+                 zoom_start=10, continuous_world=False, world_copy_jump=False,
+                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
+                 min_lon=-180, max_lon=180, max_bounds=True,
+                 detect_retina=False, crs='EPSG3857', control_scale=False,
+                 prefer_canvas=False, no_touch=False, disable_3d=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -163,14 +178,22 @@ class LegacyMap(MacroElement):
         self.max_lat = max_lat
         self.min_lon = min_lon
         self.max_lon = max_lon
+        self.max_bounds = max_bounds
+        self.continuous_world = continuous_world
+        self.no_wrap = no_wrap
+        self.world_copy_jump = world_copy_jump
 
         self.crs = crs
         self.control_scale = control_scale
 
+        self.global_switches = GlobalSwitches(prefer_canvas, no_touch, disable_3d)
+
         if tiles:
-            self.add_tile_layer(tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                                attr=attr, API_key=API_key,
-                                detect_retina=detect_retina)
+            self.add_tile_layer(
+                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
+                API_key=API_key, detect_retina=detect_retina
+            )
 
         self._template = Template(u"""
         {% macro header(this, kwargs) %}
@@ -189,20 +212,26 @@ class LegacyMap(MacroElement):
 
         {% macro script(this, kwargs) %}
 
-            var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-            var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-            var bounds = L.latLngBounds(southWest, northEast);
+            {% if this.max_bounds %}
+                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+                var bounds = L.latLngBounds(southWest, northEast);
+            {% else %}
+                var bounds = null;
+            {% endif %}
 
-            var {{this.get_name()}} = L.map('{{this.get_name()}}', {
-                                           center:[{{this.location[0]}},{{this.location[1]}}],
-                                           zoom: {{this.zoom_start}},
-                                           maxBounds: bounds,
-                                           layers: [],
-                                           crs: L.CRS.{{this.crs}}
-                                         });
+            var {{this.get_name()}} = L.map(
+                                  '{{this.get_name()}}',
+                                  {center: [{{this.location[0]}},{{this.location[1]}}],
+                                  zoom: {{this.zoom_start}},
+                                  maxBounds: bounds,
+                                  layers: [],
+                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+                                  crs: L.CRS.{{this.crs}}
+                                 });
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
-        """)
+        """)  # noqa
 
     def _repr_html_(self, **kwargs):
         """Displays the Map in a Jupyter notebook.
@@ -217,22 +246,18 @@ class LegacyMap(MacroElement):
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
-                       attr=None, tile_name=None, tile_url=None,
-                       active=False, detect_retina=False, **kwargs):
-        """Add a tile layer to the map.
+                       continuous_world=False, attr=None, active=False,
+                       detect_retina=False, no_wrap=False, **kwargs):
+        """
+        Add a tile layer to the map. See TileLayer for options.
 
-        See TileLayer for options."""
-        if tile_name is not None:
-            name = tile_name
-            warnings.warn("'tile_name' is deprecated. Use 'name' instead.")
-        if tile_url is not None:
-            tiles = tile_url
-            warnings.warn("'tile_url' is deprecated. Use 'tiles' instead.")
-
+        """
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
                                attr=attr, API_key=API_key,
-                               detect_retina=detect_retina)
+                               detect_retina=detect_retina,
+                               continuous_world=continuous_world,
+                               no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
@@ -240,6 +265,9 @@ class LegacyMap(MacroElement):
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
+
+        # Set global switches
+        figure.header.add_child(self.global_switches, name='global_switches')
 
         # Import Javascripts
         for name, url in _default_js:
@@ -271,6 +299,24 @@ class LegacyMap(MacroElement):
         super(LegacyMap, self).render(**kwargs)
 
 
+class GlobalSwitches(Element):
+    def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
+        super(GlobalSwitches, self).__init__()
+        self._name = 'GlobalSwitches'
+
+        self.prefer_canvas = prefer_canvas
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
+
+        self._template = Template(
+            '<script>'
+            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
+            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
+            '</script>'
+        )
+
+
 class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
     It will be used to define whether an object will be included in
@@ -300,8 +346,6 @@ class TileLayer(Layer):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "MapQuest Open"
-            - "MapQuest Open Aerial"
             - "Mapbox Bright" (Limited levels of zoom for free tiles)
             - "Mapbox Control Room" (Limited levels of zoom for free tiles)
             - "Stamen" (Terrain, Toner, and Watercolor)
@@ -333,7 +377,8 @@ class TileLayer(Layer):
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False, control=True):
+                 continuous_world=False, name=None, overlay=False,
+                 control=True, no_wrap=False):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -343,6 +388,8 @@ class TileLayer(Layer):
 
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
+        self.no_wrap = no_wrap
+        self.continuous_world = continuous_world
 
         self.detect_retina = detect_retina
 
@@ -374,13 +421,15 @@ class TileLayer(Layer):
                 {
                     maxZoom: {{this.max_zoom}},
                     minZoom: {{this.min_zoom}},
+                    continuousWorld: {{this.continuous_world.__str__().lower()}},
+                    noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
                     detectRetina: {{this.detect_retina.__str__().lower()}}
                     }
                 ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
-        """)
+        """)  # noqa
 
 
 class FeatureGroup(Layer):
@@ -400,7 +449,7 @@ class FeatureGroup(Layer):
         LayerControls) or a base layer (ticked with a radio button).
     """
     def __init__(self, name=None, overlay=True, control=True):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)
+        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
@@ -420,16 +469,16 @@ class LayerControl(MacroElement):
     Parameters
     ----------
     position : str
-          The position of the control (one of the map corners), can be:
+          The position of the control (one of the map corners), can be
           'topleft', 'topright', 'bottomleft' or 'bottomright'
           default: 'topright'
     collapsed : boolean
-          If true, the control will be collapsed into an icon and expanded on mouse hover
-          or touch.
+          If true the control will be collapsed into an icon and expanded on
+          mouse hover or touch.
           default: True
     autoZIndex : boolean
-          If true, the control will assign zIndexes in increasing order to all of its
-          layers so that the order is preserved when switching them on/off.
+          If true the control assigns zIndexes in increasing order to all of
+          its layers so that the order is preserved when switching them on/off.
           default: True
     """
     def __init__(self, position='topright', collapsed=True, autoZIndex=True):

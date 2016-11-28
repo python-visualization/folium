@@ -63,13 +63,13 @@ class MarkerCluster(MacroElement):
                                             "if it's not in a Figure.")
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
             name='markerclusterjs')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
             name='markerclustercss')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
             name='markerclusterdefaultcss')

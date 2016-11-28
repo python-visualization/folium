@@ -4,23 +4,28 @@ Features
 ------
 
 Extra features Elements.
+
 """
-from jinja2 import Template
+
 import json
 
-from branca.utilities import (_parse_size,
-                              _locations_mirror, _locations_tolist, image_to_url,
-                              text_type, binary_type,
-                              none_min, none_max, iter_points,
-                              )
-from branca.element import Element, Figure, JavascriptLink, CssLink, MacroElement
+from jinja2 import Template
+from six import text_type, binary_type
+
+from branca.utilities import (
+    _parse_size, _locations_mirror, _locations_tolist, image_to_url,
+    none_min, none_max, iter_points
+)
+from branca.element import (Element, Figure, JavascriptLink, CssLink,
+                            MacroElement)
 from branca.colormap import LinearColormap
 
 from .map import Layer, Icon, Marker, Popup, FeatureGroup
 
 
 class WmsTileLayer(Layer):
-    """Creates a Web Map Service (WMS) layer.
+    """
+    Creates a Web Map Service (WMS) layer.
 
     Parameters
     ----------
@@ -84,7 +89,8 @@ class WmsTileLayer(Layer):
 
 
 class RegularPolygonMarker(Marker):
-    """Custom markers using the Leaflet Data Vis Framework.
+    """
+    Custom markers using the Leaflet Data Vis Framework.
 
     Parameters
     ----------
@@ -116,6 +122,7 @@ class RegularPolygonMarker(Marker):
     Polygon marker names and HTML in obj.template_vars
 
     For more information, see https://humangeo.github.io/leaflet-dvf/
+
     """
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
@@ -160,12 +167,13 @@ class RegularPolygonMarker(Marker):
                                             "if it's not in a Figure.")
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.2/leaflet-dvf.markers.min.js"),  # noqa
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js"),  # noqa
             name='dvf_js')
 
 
 class Vega(Element):
-    """Cretes a Vega chart element.
+    """
+    Creates a Vega chart element.
 
     Parameters
     ----------
@@ -190,6 +198,7 @@ class Vega(Element):
     position: str, default 'relative'
         The `position` argument that the CSS shall contain.
         Ex: 'relative', 'absolute'
+
     """
     def __init__(self, data, width=None, height=None,
                  left="0%", top="0%", position='relative'):
@@ -255,7 +264,8 @@ class Vega(Element):
 
 
 class GeoJson(Layer):
-    """Creates a GeoJson object for plotting into a Map.
+    """
+    Creates a GeoJson object for plotting into a Map.
 
     Parameters
     ----------
@@ -281,9 +291,9 @@ class GeoJson(Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> GeoJson(open('foo.json'))
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> GeoJson('foo.json')
     >>> # Providing dict.
     >>> GeoJson(json.load(open('foo.json')))
@@ -295,9 +305,11 @@ class GeoJson(Layer):
     ...                             x['properties']['name']=='Alabama' else
     ...                             '#00ff00'}
     >>> GeoJson(geojson, style_function=style_function)
+
     """
     def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, smooth_factor=None):
+                 overlay=True, control=True, smooth_factor=None,
+                 highlight_function=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
@@ -331,18 +343,54 @@ class GeoJson(Layer):
         if style_function is None:
             def style_function(x):
                 return {}
+
         self.style_function = style_function
+
+        self.highlight = highlight_function is not None
+
+        if highlight_function is None:
+            def highlight_function(x):
+                return {}
+
+        self.highlight_function = highlight_function
 
         self.smooth_factor = smooth_factor
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
+
+            {% if this.highlight %}
+                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) {
+                            e.target.setStyle(e.target.feature.properties.style);},
+                        mouseover: function(e) {
+                            e.target.setStyle(e.target.feature.properties.highlight);},
+                        click: function(e) {
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                        });
+                };
+            {% endif %}
+
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none %}
-                        , {smoothFactor:{{this.smooth_factor}}}
-                    {% endif %}).addTo({{this._parent.get_name()}});
+                    {% if this.smooth_factor is not none or this.highlight %}
+                        , {
+                        {% if this.smooth_factor is not none  %}
+                            smoothFactor:{{this.smooth_factor}}
+                        {% endif %}
+
+                        {% if this.highlight %}
+                            {% if this.smooth_factor is not none  %}
+                            ,
+                            {% endif %}
+                            onEachFeature: {{this.get_name()}}_onEachFeature
+                        {% endif %}
+                        }
+                    {% endif %}
+                    ).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+
             {% endmacro %}
             """)  # noqa
 
@@ -361,11 +409,14 @@ class GeoJson(Layer):
 
         for feature in self.data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
@@ -394,7 +445,8 @@ class GeoJson(Layer):
 
 
 class TopoJson(Layer):
-    """Creates a TopoJson object for plotting into a Map.
+    """
+    Creates a TopoJson object for plotting into a Map.
 
     Parameters
     ----------
@@ -437,6 +489,7 @@ class TopoJson(Layer):
     ...                             x['properties']['name']=='Alabama' else
     ...                             '#00ff00'}
     >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
+
     """
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, smooth_factor=None):
@@ -505,8 +558,10 @@ class TopoJson(Layer):
             name='topojson')
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         if not self.embed:
             raise ValueError('Cannot compute bounds of non-embedded TopoJSON.')
@@ -536,7 +591,8 @@ class TopoJson(Layer):
 
 
 class MarkerCluster(Layer):
-    """Creates a MarkerCluster element to append into a map with
+    """
+    Creates a MarkerCluster element to append into a map with
     Map.add_child.
 
     Parameters
@@ -547,6 +603,7 @@ class MarkerCluster(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+
     """
     def __init__(self, name=None, overlay=True, control=True):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
@@ -567,19 +624,19 @@ class MarkerCluster(Layer):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js"),  # noqa
             name='marker_cluster_src')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
             name='marker_cluster')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
             name='marker_cluster_css')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
+            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
             name="marker_cluster_default_css")
 
 
@@ -609,6 +666,7 @@ class DivIcon(MacroElement):
 
     For more information see:
     http://leafletjs.com/reference.html#divicon
+
     """
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
@@ -636,7 +694,8 @@ class DivIcon(MacroElement):
 
 
 class Circle(Marker):
-    """Creates a Circle object for plotting on a Map.
+    """
+    Creates a Circle object for plotting on a Map.
 
     Parameters
     ----------
@@ -653,6 +712,7 @@ class Circle(Marker):
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
@@ -681,7 +741,8 @@ class Circle(Marker):
 
 
 class CircleMarker(Marker):
-    """Creates a CircleMarker object for plotting on a Map.
+    """
+    Creates a CircleMarker object for plotting on a Map.
 
     Parameters
     ----------
@@ -698,6 +759,7 @@ class CircleMarker(Marker):
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
@@ -721,6 +783,119 @@ class CircleMarker(Marker):
                 )
                 .setRadius({{ this.radius }})
                 .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+
+class RectangleMarker(Marker):
+    def __init__(self, bounds, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None):
+        """
+        Creates a RectangleMarker object for plotting on a Map.
+
+        Parameters
+        ----------
+        bounds: tuple or list, default None
+            Latitude and Longitude of Marker (southWest and northEast)
+        color: string, default ('black')
+            Edge color of a rectangle.
+        weight: float, default (1)
+            Edge line width of a rectangle.
+        fill_color: string, default ('black')
+            Fill color of a rectangle.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a rectangle.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.RectangleMarker object
+
+        Example
+        -------
+        >>> RectangleMarker(
+        ...  bounds=[[35.681, 139.766], [35.691, 139.776]],
+        ...  color='blue', fill_color='red', popup='Tokyo, Japan'
+        ... )
+
+        """
+        super(RectangleMarker, self).__init__(bounds, popup=popup)
+        self._name = 'RectangleMarker'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.rectangle(
+                                  [[{{this.location[0]}},{{this.location[1]}}],
+                                  [{{this.location[2]}},{{this.location[3]}}]],
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
+
+            {% endmacro %}
+            """)
+
+
+class PolygonMarker(Marker):
+    def __init__(self, locations, color='black', weight=1, fill_color='black',
+                 fill_opacity=0.6, popup=None, latlon=True):
+        """
+        Creates a PolygonMarker object for plotting on a Map.
+
+        Parameters
+        ----------
+        locations: tuple or list, default None
+            Latitude and Longitude of Polygon
+        color: string, default ('black')
+            Edge color of a polygon.
+        weight: float, default (1)
+            Edge line width of a polygon.
+        fill_color: string, default ('black')
+            Fill color of a polygon.
+        fill_opacity: float, default (0.6)
+            Fill opacity of a polygon.
+        popup: string or folium.Popup, default None
+            Input text or visualization for object.
+
+        Returns
+        -------
+        folium.features.Polygon object
+
+        Examples
+        --------
+        >>> locations = [[35.6762, 139.7795],
+        ...              [35.6718, 139.7831],
+        ...              [35.6767, 139.7868],
+        ...              [35.6795, 139.7824],
+        ...              [35.6787, 139.7791]]
+        >>> Polygon(locations, color='blue', weight=10, fill_color='red',
+        ...         fill_opacity=0.5, popup='Tokyo, Japan'))
+
+        """
+        super(PolygonMarker, self).__init__((
+            _locations_mirror(locations) if not latlon else
+            _locations_tolist(locations)), popup=popup
+        )
+        self._name = 'PolygonMarker'
+        self.color = color
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.polygon({{this.location}},
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: {{ this.fill_opacity }},
+                    weight: {{ this.weight }}
+                }).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
@@ -751,14 +926,16 @@ class LatLngPopup(MacroElement):
 
 
 class ClickForMarker(MacroElement):
-    """When one clicks on a Map that contains a ClickForMarker, a Marker is created
-    at the pointer's position.
+    """
+    When one clicks on a Map that contains a ClickForMarker,
+    a Marker is created at the pointer's position.
 
     Parameters
     ----------
     popup: str, default None
         Text to display in the markers' popups.
         If None, the popups will display the marker's latitude and longitude.
+
     """
     def __init__(self, popup=None):
         super(ClickForMarker, self).__init__()
@@ -803,6 +980,7 @@ class PolyLine(MacroElement):
         while Leaflet polyline's default is latlon=True.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+
     """
     def __init__(self, locations, color=None, weight=None,
                  opacity=None, latlon=True, popup=None):
@@ -832,74 +1010,10 @@ class PolyLine(MacroElement):
             """)  # noqa
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        bounds = [[None, None], [None, None]]
-        for point in iter_points(self.data):
-            bounds = [
-                [
-                    none_min(bounds[0][0], point[0]),
-                    none_min(bounds[0][1], point[1]),
-                ],
-                [
-                    none_max(bounds[1][0], point[0]),
-                    none_max(bounds[1][1], point[1]),
-                ],
-            ]
-        return bounds
-
-
-class MultiPolyLine(MacroElement):
-    """
-    Creates a MultiPolyLine object to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
-    color: string, default Leaflet's default ('#03f')
-    weight: float, default Leaflet's default (5)
-    opacity: float, default Leaflet's default (0.5)
-    latlon: bool, default True
-        Whether locations are given in the form [[lat, lon]]
-        or not ([[lon, lat]] if False).
-        Note that the default GeoJson format is latlon=False,
-        while Leaflet polyline's default is latlon=True.
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-    """
-    def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True, popup=None):
-        super(MultiPolyLine, self).__init__()
-        self._name = 'MultiPolyLine'
-        self.data = (_locations_mirror(locations) if not latlon else
-                     _locations_tolist(locations))
-        self.color = color
-        self.weight = weight
-        self.opacity = opacity
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.multiPolyline(
-                    {{this.data}},
-                    {
-                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
-                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
-                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
-                        });
-                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
-
-    def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         bounds = [[None, None], [None, None]]
         for point in iter_points(self.data):
@@ -917,7 +1031,8 @@ class MultiPolyLine(MacroElement):
 
 
 class CustomIcon(Icon):
-    """Create a custom icon, based on an image.
+    """
+    Create a custom icon, based on an image.
 
     Parameters
     ----------
@@ -946,6 +1061,7 @@ class CustomIcon(Icon):
     popup_anchor : tuple of 2 int
         The coordinates of the point from which popups will "open",
         relative to the icon anchor.
+
     """
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
                  shadow_image=None, shadow_size=None, shadow_anchor=None,
@@ -982,7 +1098,8 @@ class CustomIcon(Icon):
 
 
 class ColorLine(FeatureGroup):
-    """Draw data on a map with specified colors.
+    """
+    Draw data on a map with specified colors.
 
     Parameters
     ----------
@@ -992,12 +1109,11 @@ class ColorLine(FeatureGroup):
         The list of segments colors.
         It must have length equal to `len(positions)-1`.
     colormap: branca.colormap.Colormap or list or tuple
-        The colormap to use.
-        If a list or tuple of colors is provided, a LinearColormap will be created
-        from it.
+        The colormap to use. If a list or tuple of colors is provided,
+        a LinearColormap will be created from it.
     nb_steps: int, default 12
-        To have lighter output, the colormap will be discretized to that number
-        of colors.
+        To have lighter output the colormap will be discretized
+        to that number of colors.
     opacity: float, default 1
         Line opacity, scale 0-1
     weight: int, default 2
@@ -1008,6 +1124,7 @@ class ColorLine(FeatureGroup):
     Returns
     -------
     A ColorLine object that you can `add_to` a Map.
+
     """
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
@@ -1029,7 +1146,7 @@ class ColorLine(FeatureGroup):
         else:
             cm = colormap
         out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(MultiPolyLine(val, color=key, weight=weight, opacity=opacity))
+            self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))  # noqa
