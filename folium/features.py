@@ -309,7 +309,7 @@ class GeoJson(Layer):
     """
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None):
+                 highlight_function=None, popup=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
@@ -356,6 +356,8 @@ class GeoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
+        self.popup = popup
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -369,18 +371,26 @@ class GeoJson(Layer):
                         click: function(e) {
                             {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
                         });
+
+                        {% if this.popup %}
+                            layer.bindPopup({{this.popup}});
+                        {% endif %}
+                };
+            {% elif this.popup %}
+                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                    layer.bindPopup({{this.popup}});
                 };
             {% endif %}
 
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
+                    {% if this.smooth_factor is not none or this.highlight or this.popup %}
                         , {
                         {% if this.smooth_factor is not none  %}
                             smoothFactor:{{this.smooth_factor}}
                         {% endif %}
 
-                        {% if this.highlight %}
+                        {% if this.highlight or this.popup %}
                             {% if this.smooth_factor is not none  %}
                             ,
                             {% endif %}
