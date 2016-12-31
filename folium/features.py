@@ -753,6 +753,8 @@ class CircleMarker(Marker):
         use Circle.
     color: str, default 'black'
         The color of the marker's edge in a HTML-compatible format.
+    weight: int, default 2
+        Stroke weight in pixels
     fill_color: str, default 'black'
         The fill color of the marker in a HTML-compatible format.
     fill_opacity: float, default 0.6
@@ -762,11 +764,13 @@ class CircleMarker(Marker):
 
     """
     def __init__(self, location, radius=500, color='black',
-                 fill_color='black', fill_opacity=0.6, popup=None):
+                 weight=2, fill_color='black', fill_opacity=0.6,
+                 popup=None):
         super(CircleMarker, self).__init__(location, popup=popup)
         self._name = 'CircleMarker'
         self.radius = radius
         self.color = color
+        self.weight = weight
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
 
@@ -777,6 +781,7 @@ class CircleMarker(Marker):
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
                     color: '{{ this.color }}',
+                    weight: {{ this.weight }},
                     fillColor: '{{ this.fill_color }}',
                     fillOpacity: {{ this.fill_opacity }}
                     }
