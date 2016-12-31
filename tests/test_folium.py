@@ -169,7 +169,7 @@ class TestFolium(object):
         circle_1 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
-                                      'width': 2,
+                                      'weight': 2,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
@@ -177,12 +177,12 @@ class TestFolium(object):
                 ''.join(self.map.get_root().render().split()))
 
         # Second circle marker.
-        marker = folium.features.CircleMarker([45.70, -122.9], popup='Hi', width=1)
+        marker = folium.features.CircleMarker([45.70, -122.9], popup='Hi', weight=1)
         self.map.add_child(marker)
         circle_2 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
-                                      'width': 1,
+                                      'weight': 1,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
