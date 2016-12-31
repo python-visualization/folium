@@ -781,7 +781,7 @@ class CircleMarker(Marker):
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
                     color: '{{ this.color }}',
-                    weight: '{{ this.weight }}',
+                    weight: {{ this.weight }},
                     fillColor: '{{ this.fill_color }}',
                     fillOpacity: {{ this.fill_opacity }}
                     }
