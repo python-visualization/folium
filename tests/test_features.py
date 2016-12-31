@@ -72,6 +72,7 @@ def test_marker_popups():
     features.RegularPolygonMarker([45, 0], popup=Popup('0')).add_to(m)
     features.CircleMarker([45, 60], popup='60').add_to(m)
     features.CircleMarker([45, 120], popup=Popup('120')).add_to(m)
+    features.CircleMarker([45, 90], popup=Popup('90'), weight=0).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
