@@ -21,7 +21,7 @@ def test_fast_marker_cluster():
     ]).tolist()
     m = folium.Map([45., 3.], zoom_start=4)
     mc = plugins.FastMarkerCluster(data, callback=None)
-    m.add_children(mc)
+    m.add_child(mc)
     m._repr_html_()
 
     out = m._parent.render()
