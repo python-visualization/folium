@@ -7,6 +7,7 @@ Add different objects/effects on a folium map.
 """
 
 from .marker_cluster import MarkerCluster
+from .fast_marker_cluster import FastMarkerCluster
 from .scroll_zoom_toggler import ScrollZoomToggler
 from .terminator import Terminator
 from .boat_marker import BoatMarker
@@ -15,6 +16,7 @@ from .heat_map import HeatMap
 from .image_overlay import ImageOverlay
 
 __all__ = ['MarkerCluster',
+           'FastMarkerCluster'
            'ScrollZoomToggler',
            'Terminator',
            'BoatMarker',
