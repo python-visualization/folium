@@ -30,14 +30,14 @@ class FastMarkerCluster(MarkerCluster):
         self._name = 'Script'
         self._data = data
         if callback is None:
-            from flexx.pyscript import py2js
-            self._callback = py2js(self.create_marker, new_name="callback")
+            self._callback = self.create_marker()
         else:
             self._callback = "var callback = {};".format(callback)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
             {{this._callback}}
+
             (function(){
                 var data = {{this._data}};
                 var map = {{this._parent.get_name()}};
@@ -53,9 +53,16 @@ class FastMarkerCluster(MarkerCluster):
             })();
             {% endmacro %}""")
 
-    def create_marker(self, row):
-        """Returns a L.marker object"""
-        icon = L.AwesomeMarkers.icon()
-        marker = L.marker(L.LatLng(row[0], row[1]))
-        marker.setIcon(icon)
-        return marker
+    def create_marker(self):
+        """Returns a L.msarker object"""
+        t = ('var callback;\n' +
+             'callback = function (row) {\n' +
+             '\tvar icon, marker;\n' +
+             '\t// Returns a L.marker object\n' +
+             '\ticon = L.AwesomeMarkers.icon();\n' +
+             '\tmarker = L.marker(new L.LatLng(row[0], row[1]));\n' +
+             '\tmarker.setIcon(icon);\n' +
+             '\treturn marker;\n' +
+             '};')
+
+        return t
