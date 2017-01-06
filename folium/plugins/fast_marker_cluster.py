@@ -54,7 +54,7 @@ class FastMarkerCluster(MarkerCluster):
             {% endmacro %}""")
 
     def create_marker(self):
-        """Returns a L.msarker object"""
+        """Returns a L.marker object"""
         t = ('var callback;\n' +
              'callback = function (row) {\n' +
              '\tvar icon, marker;\n' +

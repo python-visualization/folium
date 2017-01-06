@@ -38,20 +38,21 @@ def test_fast_marker_cluster():
     # Verify the script part is okay.
     tmpl = Template("""
         {% macro script(this, kwargs) %}
-            (function(){
-                var data = {{this._data}};
-                var map = {{this._parent.get_name()}};
-                var cluster = L.markerClusterGroup();
-                {{this._callback}}
+        (function() {
+            var data = {{this._data}};
+            var map = {{this._parent.get_name()}};
+            var cluster = L.markerClusterGroup();
+            {{this._callback}}
 
-                for (var i = 0; i < data.length; i++) {
-                    var row = data[i];
-                    var marker = callback(row, popup='names');
-                    marker.addTo(cluster);
-                }
+            for (var i = 0; i < data.length; i++) {
+                var row = data[i];
+                var marker = callback(row, popup='names');
+                marker.addTo(cluster);
+            }
 
-                cluster.addTo(map);
-            })();
-            {% endmacro %}
+            cluster.addTo(map);
+        })();
+        {% endmacro %}
     """)
+
     assert ''.join(tmpl.render(this=mc).split()) in ''.join(out.split())
