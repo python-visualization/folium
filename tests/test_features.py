@@ -48,7 +48,7 @@ def test_figure_html():
     out = f.render()
     out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
     print(out)
-    assert out.strip() == tmpl.strip(), '\n'+out.strip()+'\n'+'-'*80+'\n'+tmpl.strip()
+    assert out.strip() == tmpl.strip(), '\n' + out.strip() + '\n' + '-' * 80 + '\n' + tmpl.strip()  # noqa
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
@@ -72,6 +72,7 @@ def test_marker_popups():
     features.RegularPolygonMarker([45, 0], popup=Popup('0')).add_to(m)
     features.CircleMarker([45, 60], popup='60').add_to(m)
     features.CircleMarker([45, 120], popup=Popup('120')).add_to(m)
+    features.CircleMarker([45, 90], popup=Popup('90'), weight=0).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
@@ -83,10 +84,10 @@ def test_polyline_popups():
     features.PolyLine([[40, -80], [45, -80]], popup="PolyLine").add_to(m)
     features.PolyLine([[40, -90], [45, -90]],
                       popup=Popup("PolyLine")).add_to(m)
-    features.MultiPolyLine([[[40, -110], [45, -110]]],
-                           popup="MultiPolyLine").add_to(m)
-    features.MultiPolyLine([[[40, -120], [45, -120]]],
-                           popup=Popup("MultiPolyLine")).add_to(m)
+    features.PolyLine([[[40, -110], [45, -110]]],
+                      popup="MultiPolyLine").add_to(m)
+    features.PolyLine([[[40, -120], [45, -120]]],
+                      popup=Popup("MultiPolyLine")).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
@@ -119,3 +120,17 @@ def test_wms_service():
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
+
+
+# ColorLine.
+def test_color_line():
+    m = Map([22.5, 22.5], zoom_start=3)
+    color_line = features.ColorLine(
+        [[0, 0], [0, 45], [45, 45], [45, 0], [0, 0]],
+        [0, 1, 2, 3],
+        colormap=['b', 'g', 'y', 'r'],
+        nb_steps=4,
+        weight=10,
+        opacity=1)
+    m.add_child(color_line)
+    m._repr_html_()

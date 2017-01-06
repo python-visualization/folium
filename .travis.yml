@@ -3,29 +3,66 @@ language: python
 sudo: false
 
 env:
-    - PYTHON="2.7"
-    - PYTHON="3.4"
-    - PYTHON="3.5"
+  global:
+    - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
+
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TEST_TARGET=branca_release
+  - python: 3.5
+    env: TEST_TARGET=branca_release
+  - python: 3.5
+    env: TEST_TARGET=coding_standards
+  - python: 3.5
+    env: TEST_TARGET=notebooks
+  - python: 2.7
+    env: TEST_TARGET=branca_latest
+  - python: 3.5
+    env: TEST_TARGET=branca_latest
+  allow_failures:
+  - python: 2.7
+    env: TEST_TARGET=branca_latest
+  - python: 3.5
+    env: TEST_TARGET=branca_latest
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
-    - conda config --add channels ioos -f
     - conda update --yes --all
-    - travis_retry conda create --yes -n test python=$PYTHON nomkl --file requirements.txt
-    - source activate test
-    - conda install --yes --file requirements-dev.txt;
-    - pip install git+https://github.com/python-visualization/branca.git@befdf0bb29ecea488c79147fa1a851e15bfe5a10
-    - if [[ "$PYTHON" == "3.4" ]]; then
-        travis_retry conda install --yes nbconvert jupyter_client ipykernel;
-        conda install --yes -c ioos geopandas;
+    - conda config --add channels conda-forge --force
+    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
+    - source activate TEST
+
+    - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
+        conda install --yes mock ;
       fi
-    - if [[ "$PYTHON" != "3.5" ]]; then
-        travis_retry conda install --yes mock ;
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
+        conda install --yes doctr ;
       fi
-    - travis_retry pip install
+
+# Test source distribution.
+install:
+    - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-    - python setup.py test
-    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100
+    - if [[ $TEST_TARGET == 'branca_release' ]]; then
+        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+      fi
+
+    - if [[ $TEST_TARGET == 'branca_latest' ]]; then
+        pip install git+https://github.com/python-visualization/branca.git ;
+        python setup.py test ;
+      fi
+
+    - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+        find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
+      fi
+
+    - if [[ $TEST_TARGET == 'notebooks' ]]; then
+        py.test -vv tests/notebooks/test_notebooks.py ;
+        doctr deploy --built-docs=examples/results --gh-pages-docs=gallery ;
+      fi

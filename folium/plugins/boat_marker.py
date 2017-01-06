@@ -60,6 +60,6 @@ class BoatMarker(Marker):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(
+        figure.header.add_child(
             JavascriptLink("https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"),  # noqa
             name='markerclusterjs')
