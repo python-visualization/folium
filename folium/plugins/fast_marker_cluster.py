@@ -30,7 +30,16 @@ class FastMarkerCluster(MarkerCluster):
         self._name = 'Script'
         self._data = data
         if callback is None:
-            self._callback = self.create_marker()
+            self._callback = ('var callback;\n' +
+                              'callback = function (row) {\n' +
+                              '\tvar icon, marker;\n' +
+                              '\t// Returns a L.marker object\n' +
+                              '\ticon = L.AwesomeMarkers.icon();\n' +
+                              '\tmarker = L.marker(new L.LatLng(row[0], ' +
+                              'row[1]));\n' +
+                              '\tmarker.setIcon(icon);\n' +
+                              '\treturn marker;\n' +
+                              '};')
         else:
             self._callback = "var callback = {};".format(callback)
 
@@ -52,17 +61,3 @@ class FastMarkerCluster(MarkerCluster):
                 cluster.addTo(map);
             })();
             {% endmacro %}""")
-
-    def create_marker(self):
-        """Returns a L.marker object"""
-        t = ('var callback;\n' +
-             'callback = function (row) {\n' +
-             '\tvar icon, marker;\n' +
-             '\t// Returns a L.marker object\n' +
-             '\ticon = L.AwesomeMarkers.icon();\n' +
-             '\tmarker = L.marker(new L.LatLng(row[0], row[1]));\n' +
-             '\tmarker.setIcon(icon);\n' +
-             '\treturn marker;\n' +
-             '};')
-
-        return t
