@@ -12,23 +12,31 @@ from . import MarkerCluster
 
 
 class FastMarkerCluster(MarkerCluster):
-    """Creates a FasterMarkerCluster plugin to append into a map with
-        FasterMarkerCluster(data, callback=create_marker).add_to(map)
-        map.add_to(fig).
+    """Add marker clusters to a map using in-browser rendering"""
+    def __init__(self, data, callback=None):
+        """Add marker clusters to a map using in-browser rendering.
+           Using FastMarkerCluster it is possible to render 000's of
+           points far quicker than the MarkerCluster class. Be aware
+           that the FastMarkerCluster class does not retain a
+           reference to any marker data, and therefore methods such as
+           get_bounds() are not available when using it.
 
         Parameters
         ----------
-            data: list of list or array of shape (n,2).
-                Data points of the form [[lat, lng]].
+            data: list
+                List of list of shape [[], []]. Data points should be of
+                the form [[lat, lng]].
 
-            callback: list of length n.
+            callback: string, default None
+                A string representation of a valid Javascript function
+                that will be passed a lat, lon coordinate pair. See the
+                FasterMarkerCluster for an example of a custom callback.
 
-            popup: popup for each marker
-    """
-    def __init__(self, data, callback=None):
+        """
         super(FastMarkerCluster, self).__init__([])
-        self._name = 'Script'
+        self._name = 'FastMarkerCluster'
         self._data = data
+
         if callback is None:
             self._callback = ('var callback;\n' +
                               'callback = function (row) {\n' +
