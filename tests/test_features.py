@@ -134,3 +134,18 @@ def test_color_line():
         opacity=1)
     m.add_child(color_line)
     m._repr_html_()
+    
+    
+def test_custom_legend():
+    m = Map([22.5, 22.5], zoom_start=3)
+    features.CustomLegend(content="This is a test case", position="topright", style="padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;box-shadow: 0 0 15px;background: white;border-radius: 5px").add_to(m)
+    m._repr_html_()
+    
+    
+def test_multi_option_circle_marker():
+    m = Map([43, -100], zoom_start=4)
+    features.CustomLegend(content="This is a test case", position="topright", style="padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;box-shadow: 0 0 15px;background: white;border-radius: 5px").add_to(m)
+    features.CustomCircleMarker([40, -80], radius=100, color="green", fill_color="black", fill_opacity=0.6, clickUrl="www.example.com", boxtxt="And it works..").add_to(m)
+    
+    m._repr_html_()
+    

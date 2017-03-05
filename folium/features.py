@@ -792,6 +792,134 @@ class CircleMarker(Marker):
             """)
 
 
+class CustomLegend(Layer):
+    """
+    Creates a customizable Legend in one of the corners of the map. Customization highly recommended.
+    this._div.innerHTML can be easily altered (must contain html as a string) but anything can be displayed here with any css style.
+    This class is essential for the use of CustomCircleMarker.
+
+    Parameters
+    ----------
+    content: Content of the Legend box
+    position: position on the screen, default topright
+        e.g. bottomright, topleft, bottomleft
+    style: define a css style for the box, default as given.
+        Input: any css formated string
+    """
+
+    def __init__(self, content, position="topright", style="padding: 6px 8px;font: 14px/16px Arial, Helvetica, sans-serif;box-shadow: 0 0 15px;background: white;border-radius: 5px"):
+        super(CustomLegend,self).__init__()
+        self._name = 'Legend'
+        self.position = position
+        self.content = content
+        self.style = style
+
+        self._template = Template(u"""
+           {% macro script(this, kwargs) %}
+
+            var info = L.control({position: '{{ this.position }}'});
+
+            info.onAdd = function () {
+            this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+            this.update();
+            return this._div;
+            };
+
+            info.update = function (boxtxt) {
+            this._div.innerHTML = (boxtxt ? '<div style="{{ this.style }}">{{ this.content }}' + boxtext + </div> : '<div style="{{ this.style }}">{{ this.content }}</div>')
+            };
+
+            info.addTo({{this._parent.get_name()}});
+
+
+
+        {% endmacro %}
+        """)
+
+
+class CustomCircleMarker(Marker):
+    """
+    Create a CircleMarker with several options for plotting on a map. Use together with a CustomLegend (MUST). Define
+    CustomLegend before this circle marker.
+
+    Parameters
+    ----------
+    location: tuple or list, default None
+        Latitude and Longitude of Marker (Northing, Easting)
+    radius: int
+        The radius of the circle in pixels. For setting the radius in meter,
+        use Circle.
+    color: str, default 'black'
+        The color of the marker's edge in a HTML-compatible format.
+    fill_color: str, default 'black'
+        The fill color of the marker in a HTML-compatible format.
+    fill_opacity: float, default 0.6
+        The fill opacity of the marker, between 0. and 1.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+    riseOnHover: bring the element in the foreground when mose hovers it, default false
+        Input true or false
+    clickUrl: specify a url to follow in a new tab when clicked on object, default empty.
+        Input url(text)
+    hover_color: change the color when hovered over the object, default black.
+        Input hex code. Recommendation: do "import matplotlib.colors as colors" and use "colors.rgb2hex(your_color)"
+    hover_opacity: define an opacity for the object when hovered over, default 1.0
+        Input value between 0.0 and 1.0
+    boxtxt: Define a text to be displayed in the legend when clicked on object. Will disappear on doubleclick
+        IMPORTANT: must be used together with CustomLegend. CustomLegend must be defined before this circle marker.
+
+
+    """
+    def __init__(self, location, radius=500, color='black',
+                 fill_color='black', fill_opacity=0.6, popup=None, riseOnHover = 'false', clickUrl = "", hover_color = "#000000", hover_opacity = 1.0, boxtxt=""):
+        super(CustomCircleMarker, self).__init__(location, popup=popup)
+        self._name = 'CircleMarker'
+        self.radius = radius
+        self.color = color
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self.riseOnHover = riseOnHover
+        self.hover_color = hover_color
+        self.hover_opacity = hover_opacity
+        self.clickUrl = clickUrl
+        self.boxtxt = boxtxt
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var {{this.get_name()}} = L.circleMarker(
+                [{{this.location[0]}},{{this.location[1]}}],
+                {
+                    color: '{{ this.color }}',
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: '{{ this.fill_opacity }}',
+                    riseOnHover: {{this.riseOnHover }}
+                    }
+                )
+                .on('click', function() {
+                    info.update('{{ this.boxtxt }}')
+                })
+                .on('dblclick', function() {
+                    info.update()
+                })
+                .on('mouseover', function(e){
+                    this.setStyle({
+                    fillColor: '{{ this.hover_color }}',
+                    fillOpacity: '{{ this.hover_opacity }}'
+                    })
+                })
+                .on('mouseout', function(e){
+                    this.setStyle({
+                    fillColor: '{{ this.fill_color }}',
+                    fillOpacity: '{{ this.fill_opacity }}'
+                    })
+                })
+                .setRadius({{ this.radius }})
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+
 class RectangleMarker(Marker):
     def __init__(self, bounds, color='black', weight=1, fill_color='black',
                  fill_opacity=0.6, popup=None):
