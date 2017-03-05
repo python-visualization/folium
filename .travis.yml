@@ -11,20 +11,20 @@ matrix:
   include:
   - python: 2.7
     env: TEST_TARGET=branca_release
-  - python: 3.5
+  - python: 3.6
     env: TEST_TARGET=branca_release
-  - python: 3.5
+  - python: 3.6
     env: TEST_TARGET=coding_standards
-  - python: 3.5
+  - python: 3.6
     env: TEST_TARGET=notebooks
   - python: 2.7
     env: TEST_TARGET=branca_latest
-  - python: 3.5
+  - python: 3.6
     env: TEST_TARGET=branca_latest
   allow_failures:
   - python: 2.7
     env: TEST_TARGET=branca_latest
-  - python: 3.5
+  - python: 3.6
     env: TEST_TARGET=branca_latest
 
 before_install:
@@ -36,10 +36,10 @@ before_install:
     - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
     - source activate TEST
 
-    - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
         conda install --yes mock ;
       fi
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
         conda install --yes doctr ;
       fi
 
