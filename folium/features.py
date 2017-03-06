@@ -127,7 +127,7 @@ class RegularPolygonMarker(Marker):
                  number_of_sides=4, rotation=0, radius=15, popup=None):
         super(RegularPolygonMarker, self).__init__(location, popup=popup)
         self._name = 'RegularPolygonMarker'
-        self.color=color
+        self.color = color
         self.opacity = opacity
         self.weight = weight
         self.fill_color = fill_color
