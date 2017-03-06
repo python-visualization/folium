@@ -68,8 +68,6 @@ class WmsTileLayer(Layer):
         self.format = format if format else 'image/jpeg'
         self.transparent = transparent
         self.version = version
-        # FIXME: Should be map CRS!
-        # self.crs = crs if crs else 'null
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
