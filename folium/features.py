@@ -68,8 +68,6 @@ class WmsTileLayer(Layer):
         self.format = format if format else 'image/jpeg'
         self.transparent = transparent
         self.version = version
-        # FIXME: Should be map CRS!
-        # self.crs = crs if crs else 'null
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
@@ -129,7 +127,7 @@ class RegularPolygonMarker(Marker):
                  number_of_sides=4, rotation=0, radius=15, popup=None):
         super(RegularPolygonMarker, self).__init__(location, popup=popup)
         self._name = 'RegularPolygonMarker'
-        self.color = color
+        self.color=color
         self.opacity = opacity
         self.weight = weight
         self.fill_color = fill_color
