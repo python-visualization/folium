@@ -18,8 +18,6 @@ matrix:
   - python: 3.6
     env: TEST_TARGET=default
   - python: 3.6
-    env: TEST_TARGET=coding_standards
-  - python: 3.6
     env: TEST_TARGET=notebooks
   - python: 2.7
     env: TEST_TARGET=latest_branca
@@ -61,12 +59,8 @@ script:
         python setup.py test ;
       fi
 
-    - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-        find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
-        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
-      fi
-
     - if [[ $TEST_TARGET == 'notebooks' ]]; then
+        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
         py.test -vv tests/notebooks/test_notebooks.py ;
         doctr deploy --built-docs=examples/results --gh-pages-docs=gallery ;
       fi
