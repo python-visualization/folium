@@ -252,7 +252,6 @@ class Map(LegacyMap):
 
         # Create GeoJson object
         if geo_path:
-            print("Using new folium")
             if geo_path.lower().startswith(('http','ftp','https')): 
                 geo_data = requests.get(geo_path).json()
             else: 
