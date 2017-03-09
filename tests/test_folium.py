@@ -29,9 +29,9 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 
 # For testing remote requests
 remote_url = '/'.join([
-	'https://raw.githubusercontent.com',
-	'python-visualization/folium/master',
-	'examples/data/us-states.json'])
+    'https://raw.githubusercontent.com',
+    'python-visualization/folium/master',
+    'examples/data/us-states.json'])
 
 def setup_data():
     """Import economic data for testing."""
