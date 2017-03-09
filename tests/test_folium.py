@@ -27,6 +27,11 @@ from folium.features import TopoJson, RectangleMarker, PolygonMarker
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
+# For testing remote requests
+remote_url = '/'.join([
+    'https://raw.githubusercontent.com',
+    'python-visualization/folium/master',
+    'examples/data/us-states.json'])
 
 def setup_data():
     """Import economic data for testing."""
@@ -448,3 +453,15 @@ class TestFolium(object):
         assert (mapd.global_switches.prefer_canvas is True and
                 mapd.global_switches.no_touch is True and
                 mapd.global_switches.disable_3d is True)
+
+    def test_json_request(self):
+        """Test requests for remote GeoJSON files."""
+        self.map = folium.Map(zoom_start=4)
+
+        # Adding remote GeoJSON as additional layer.
+        self.map.choropleth(geo_path=remote_url,
+                            smooth_factor=0.5)
+
+        self.map._parent.render()
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds
