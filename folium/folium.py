@@ -252,7 +252,7 @@ class Map(LegacyMap):
 
         # Create GeoJson object
         if geo_path:
-            if geo_path.lower().startswith(('http:', 'ftp':, 'https:')):
+            if geo_path.lower().startswith(('http:', 'ftp:', 'https:')):
                 geo_data = requests.get(geo_path).json()
             else:
                 geo_data = open(geo_path)
