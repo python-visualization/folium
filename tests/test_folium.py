@@ -21,14 +21,17 @@ from jinja2 import Environment, PackageLoader
 from six import PY3
 import branca.element
 
-import requests
-
 import folium
 from folium.map import Popup, Marker, FitBounds, FeatureGroup
 from folium.features import TopoJson, RectangleMarker, PolygonMarker
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
+# For testing remote requests
+remote_url = '/'.join([
+	'https://raw.githubusercontent.com',
+	'python-visualization/folium/master',
+	'examples/data/us-states.json'])
 
 def setup_data():
     """Import economic data for testing."""
@@ -456,8 +459,7 @@ class TestFolium(object):
         self.map = folium.Map(zoom_start=4)
 
         # Adding remote GeoJSON as additional layer.
-        path = 'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json'
-        self.map.choropleth(geo_path=path,
+        self.map.choropleth(geo_path=remote_url,
                             smooth_factor=0.5)
 
         self.map._parent.render()
