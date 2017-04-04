@@ -365,6 +365,7 @@ class GeoJson(Layer):
                         mouseover: function(e) {
                             e.target.setStyle(e.target.feature.properties.highlight);},
                         click: function(e) {
+                            layer.openPopup();
                             {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
                         });
                 };
