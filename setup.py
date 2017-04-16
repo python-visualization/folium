@@ -62,8 +62,7 @@ long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
 
 # Dependencies.
 with open('requirements.txt') as f:
-    tests_require = f.readlines()
-install_requires = [t.strip() for t in tests_require]
+    install_requires = f.read().splitlines()
 
 
 config = dict(name='folium',
