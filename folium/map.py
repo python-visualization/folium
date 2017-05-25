@@ -152,7 +152,8 @@ class LegacyMap(MacroElement):
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=True,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False):
+                 prefer_canvas=False, no_touch=False, disable_3d=False,
+                 subdomains='abc'):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -192,7 +193,8 @@ class LegacyMap(MacroElement):
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                 continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina
+                API_key=API_key, detect_retina=detect_retina,
+                subdomains=subdomains
             )
 
         self._template = Template(u"""
@@ -247,7 +249,8 @@ class LegacyMap(MacroElement):
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
                        continuous_world=False, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, **kwargs):
+                       detect_retina=False, no_wrap=False, subdomains='abc',
+                       **kwargs):
         """
         Add a tile layer to the map. See TileLayer for options.
 
@@ -257,6 +260,7 @@ class LegacyMap(MacroElement):
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina,
                                continuous_world=continuous_world,
+                               subdomains=subdomains,
                                no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
 
@@ -374,11 +378,13 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    subdomains: string, default 'abc'
+        Subdomains of the tile service.
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
                  continuous_world=False, name=None, overlay=False,
-                 control=True, no_wrap=False):
+                 control=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -390,6 +396,7 @@ class TileLayer(Layer):
         self.max_zoom = max_zoom
         self.no_wrap = no_wrap
         self.continuous_world = continuous_world
+        self.subdomains = subdomains
 
         self.detect_retina = detect_retina
 
@@ -424,7 +431,8 @@ class TileLayer(Layer):
                     continuousWorld: {{this.continuous_world.__str__().lower()}},
                     noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
-                    detectRetina: {{this.detect_retina.__str__().lower()}}
+                    detectRetina: {{this.detect_retina.__str__().lower()}},
+                    subdomains: '{{this.subdomains}}'
                     }
                 ).addTo({{this._parent.get_name()}});
 
