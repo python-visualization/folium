@@ -9,7 +9,6 @@ Classes for drawing maps.
 """
 
 from __future__ import unicode_literals
-import numbers
 import json
 from collections import OrderedDict
 
@@ -312,9 +311,10 @@ class LegacyMap(MacroElement):
             raise ValueError("Location should have two values, [lat, lon]")
         
         for val in value:
-            if not isinstance(val, numbers.Rational):
-                raise TypeError("Location values should be numeric, {val} is not a number".format(val))
-        
+            try:
+                float(val)
+            except:
+                raise TypeError("Location values should be numeric, {} is not a number".format(val))
         
         self._location = value
 
