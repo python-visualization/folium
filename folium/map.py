@@ -9,7 +9,7 @@ Classes for drawing maps.
 """
 
 from __future__ import unicode_literals
-
+import numbers
 import json
 from collections import OrderedDict
 
@@ -297,6 +297,26 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
+    
+    @property
+    def location(self):
+        return self._location
+    
+    @location.setter
+    def location(self, value):
+        """Validates the location values before setting"""
+        if type(value) not in [list, tuple]:
+            raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
+        
+        if len(value) != 2:
+            raise ValueError("Location should have two values, [lat, lon]")
+        
+        for val in value:
+            if not isinstance(val, numbers.Rational):
+                raise TypeError("Location values should be numeric, {val} is not a number".format(val))
+        
+        
+        self._location = value
 
 
 class GlobalSwitches(Element):
