@@ -124,7 +124,9 @@ class TimestampedGeoJson(MacroElement):
             {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-                L.geoJson({{this.data}}),
+                L.geoJson({{this.data}}, {'style': function (feature) {
+                    return feature.properties.style
+                }}),
                 {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
