@@ -124,7 +124,7 @@ def test_timestamped_geo_json():
 
         var {{this.get_name()}} = L.timeDimension.layer.geoJson(
             L.geoJson({{this.data}}),
-            {updateTimeDimension: true,addlastPoint: true}
+            {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
             ).addTo({{this._parent.get_name()}});
     """)  # noqa
 

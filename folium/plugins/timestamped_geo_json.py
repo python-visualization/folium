@@ -27,7 +27,7 @@ from branca.utilities import none_min, none_max, iter_points
 
 
 class TimestampedGeoJson(MacroElement):
-    def __init__(self, data, transition_time=200, loop=True, auto_play=True,
+    def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
                  period="P1D"):
         """Creates a TimestampedGeoJson plugin to append into a map with
         Map.add_child.
@@ -82,6 +82,8 @@ class TimestampedGeoJson(MacroElement):
             Whether the animation shall loop.
         auto_play : bool, default True
             Whether the animation shall start automatically at startup.
+        add_last_point: bool, default True
+            Whether a point is added at the last valid coordinate of a LineString.
         period : str, default "P1D"
             Used to construct the array of available times starting
             from the first available time. Format: ISO8601 Duration
@@ -106,6 +108,7 @@ class TimestampedGeoJson(MacroElement):
         self.transition_time = int(transition_time)
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
+        self.add_last_point = bool(add_last_point)
         self.period = period
 
         self._template = Template("""
@@ -122,7 +125,7 @@ class TimestampedGeoJson(MacroElement):
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(
                 L.geoJson({{this.data}}),
-                {updateTimeDimension: true,addlastPoint: true}
+                {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
