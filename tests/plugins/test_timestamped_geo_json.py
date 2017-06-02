@@ -50,8 +50,11 @@ def test_timestamped_geo_json():
                         },
                     "properties": {
                         "times": [1435708800000+i*86400000 for
-                                  i in np.linspace(0, 25, 25)]
-                        }
+                                  i in np.linspace(0, 25, 25)],
+                        "style": {
+                            "color": "red"
+                            },
+                        },
                     },
                 {
                     "type": "Feature",
@@ -123,8 +126,10 @@ def test_timestamped_geo_json():
         {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
 
         var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-            L.geoJson({{this.data}}),
-            {updateTimeDimension: true,addlastPoint: true}
+            L.geoJson({{this.data}}, {'style': function (feature) {
+                return feature.properties.style
+            }}),
+            {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
             ).addTo({{this._parent.get_name()}});
     """)  # noqa
 
