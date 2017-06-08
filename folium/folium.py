@@ -176,7 +176,7 @@ class Map(LegacyMap):
         Parameters
         ----------
         geo_path: string, default None
-            URL or File path to your GeoJSON data
+            File path to your GeoJSON data
         geo_str: string, default None
             String of GeoJSON, alternative to geo_path
         data_out: string, default 'data.json'
