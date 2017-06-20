@@ -10,17 +10,6 @@ import versioneer
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.verbose = True
-
-    def run_tests(self):
-        import pytest
-        errno = pytest.main(self.test_args)
-        sys.exit(errno)
-
-
 def read(*parts):
     return open(os.path.join(rootpath, *parts), 'r').read()
 
@@ -76,7 +65,6 @@ config = dict(
         'Development Status :: 5 - Production/Stable'],
     packages=pkgs,
     package_data=pkg_data,
-    cmdclass=dict(test=PyTest),
     tests_require=['pytest'],
     license=LICENSE,
     install_requires=install_requires,
