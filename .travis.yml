@@ -54,7 +54,7 @@ script:
 
     - if [[ $TEST_TARGET == 'latest_branca' ]]; then
         pip install git+https://github.com/python-visualization/branca.git ;
-        python setup.py test ;
+        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
       fi
 
     - if [[ $TEST_TARGET == 'notebooks' ]]; then
