@@ -10,6 +10,9 @@ Classes for drawing maps.
 
 from __future__ import unicode_literals
 
+import os
+import tempfile
+
 import json
 from collections import OrderedDict
 
@@ -157,6 +160,7 @@ class LegacyMap(MacroElement):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
+        self._png_image = None
 
         if not location:
             # If location is not passed we center and ignore zoom.
@@ -236,8 +240,7 @@ class LegacyMap(MacroElement):
         """)  # noqa
 
     def _repr_html_(self, **kwargs):
-        """Displays the Map in a Jupyter notebook.
-        """
+        """Displays the HTML Map in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
             out = self._parent._repr_html_(**kwargs)
@@ -245,6 +248,26 @@ class LegacyMap(MacroElement):
         else:
             out = self._parent._repr_html_(**kwargs)
         return out
+
+    def _repr_png_(self):
+        """Displays the PNG Map in a Jupyter notebook."""
+        # https://github.com/ipython/ipython/issues/7899#issuecomment-76541102
+        if self._png_image is None:
+            import selenium.webdriver
+
+            with tempfile.NamedTemporaryFile(suffix=".html") as f:
+                fname = f.name
+                self.save(fname)
+                driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
+                driver.get('file://{}'.format(fname))
+                driver.maximize_window()
+                # Ignore user map size.
+                driver.execute_script("document.body.style.width = '100%';")
+                png = driver.get_screenshot_as_png()
+                driver.quit()
+                self._png_image = png
+        return self._png_image
+
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
