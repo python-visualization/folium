@@ -39,7 +39,7 @@ class WmsTileLayer(Layer):
         Comma-separated list of WMS styles.
     format : str, default None
         The format of the service output.
-        Ex: 'iamge/png'
+        Ex: 'image/png'
     transparent: bool, default True
         Whether the layer shall allow transparency.
     version : str, default '1.1.1'
