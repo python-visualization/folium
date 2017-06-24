@@ -147,6 +147,28 @@ class TestFolium(object):
         bounds = map.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
+    def test_custom_tile_subdomains(self):
+        """Test custom tile subdomains."""
+
+        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
+        map = folium.Map(location=[45.52, -122.67], tiles=url,
+                         attr='attribution',
+                         subdomains='1234')
+
+        url_with_name = 'http://{s}.custom_tiles-subdomains.org/{z}/{x}/{y}.png'
+        tile_layer = folium.map.TileLayer(url,
+                                          name='subdomains2',
+                                          attr='attribution',
+                                          subdomains='5678')
+        map.add_child(tile_layer)
+        map.add_tile_layer(tiles=url_with_name, attr='attribution',
+                           subdomains='9012')
+
+        out = map._parent.render()
+        assert '1234' in out
+        assert '5678' in out
+        assert '9012' in out
+
     def test_feature_group(self):
         """Test FeatureGroup."""
 
@@ -320,7 +342,8 @@ class TestFolium(object):
              'min_zoom': 1,
              'detect_retina': False,
              'no_wrap': False,
-             'continuous_world': False
+             'continuous_world': False,
+             'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,

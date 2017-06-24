@@ -33,7 +33,7 @@ before_install:
     - export PATH="$HOME/miniconda/bin:$PATH"
     - conda update --yes --all
     - conda config --add channels conda-forge --force
-    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
+    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
     - source activate TEST
 
     - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
@@ -54,7 +54,7 @@ script:
 
     - if [[ $TEST_TARGET == 'latest_branca' ]]; then
         pip install git+https://github.com/python-visualization/branca.git ;
-        python setup.py test ;
+        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
       fi
 
     - if [[ $TEST_TARGET == 'notebooks' ]]; then

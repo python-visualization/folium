@@ -17,7 +17,11 @@ from .features import (
     TopoJson, WmsTileLayer
 )
 
-__version__ = '0.4.0.dev0'
+
+from ._version import get_versions
+
+__version__ = get_versions()['version']
+del get_versions
 
 __all__ = [
     'CssLink',
