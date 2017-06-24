@@ -27,6 +27,11 @@ from folium.features import TopoJson, RectangleMarker, PolygonMarker
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
+# For testing remote requests
+remote_url = '/'.join([
+    'https://raw.githubusercontent.com',
+    'python-visualization/folium/master',
+    'examples/data/us-states.json'])
 
 def setup_data():
     """Import economic data for testing."""
@@ -141,6 +146,28 @@ class TestFolium(object):
 
         bounds = map.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
+
+    def test_custom_tile_subdomains(self):
+        """Test custom tile subdomains."""
+
+        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
+        map = folium.Map(location=[45.52, -122.67], tiles=url,
+                         attr='attribution',
+                         subdomains='1234')
+
+        url_with_name = 'http://{s}.custom_tiles-subdomains.org/{z}/{x}/{y}.png'
+        tile_layer = folium.map.TileLayer(url,
+                                          name='subdomains2',
+                                          attr='attribution',
+                                          subdomains='5678')
+        map.add_child(tile_layer)
+        map.add_tile_layer(tiles=url_with_name, attr='attribution',
+                           subdomains='9012')
+
+        out = map._parent.render()
+        assert '1234' in out
+        assert '5678' in out
+        assert '9012' in out
 
     def test_feature_group(self):
         """Test FeatureGroup."""
@@ -315,7 +342,8 @@ class TestFolium(object):
              'min_zoom': 1,
              'detect_retina': False,
              'no_wrap': False,
-             'continuous_world': False
+             'continuous_world': False,
+             'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
@@ -448,3 +476,15 @@ class TestFolium(object):
         assert (mapd.global_switches.prefer_canvas is True and
                 mapd.global_switches.no_touch is True and
                 mapd.global_switches.disable_3d is True)
+
+    def test_json_request(self):
+        """Test requests for remote GeoJSON files."""
+        self.map = folium.Map(zoom_start=4)
+
+        # Adding remote GeoJSON as additional layer.
+        self.map.choropleth(geo_path=remote_url,
+                            smooth_factor=0.5)
+
+        self.map._parent.render()
+        bounds = self.map.get_bounds()
+        assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds

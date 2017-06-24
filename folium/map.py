@@ -10,6 +10,10 @@ Classes for drawing maps.
 
 from __future__ import unicode_literals
 
+import os
+import tempfile
+import time
+
 import json
 from collections import OrderedDict
 
@@ -152,10 +156,14 @@ class LegacyMap(MacroElement):
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=True,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False):
+                 prefer_canvas=False, no_touch=False, disable_3d=False,
+                 subdomains='abc', png_enabled=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
+        # Undocumented for now b/c this will be subject to a re-factor soon.
+        self._png_image = None
+        self.png_enabled = png_enabled
 
         if not location:
             # If location is not passed we center and ignore zoom.
@@ -192,7 +200,8 @@ class LegacyMap(MacroElement):
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                 continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina
+                API_key=API_key, detect_retina=detect_retina,
+                subdomains=subdomains
             )
 
         self._template = Template(u"""
@@ -234,8 +243,7 @@ class LegacyMap(MacroElement):
         """)  # noqa
 
     def _repr_html_(self, **kwargs):
-        """Displays the Map in a Jupyter notebook.
-        """
+        """Displays the HTML Map in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
             out = self._parent._repr_html_(**kwargs)
@@ -244,10 +252,40 @@ class LegacyMap(MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
+    def _to_png(self):
+        """Export the HTML to byte representation of a PNG image."""
+        if self._png_image is None:
+            import selenium.webdriver
+
+            with tempfile.NamedTemporaryFile(suffix=".html") as f:
+                fname = f.name
+                self.save(fname)
+                driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
+                driver.get('file://{}'.format(fname))
+                driver.maximize_window()
+                # Ignore user map size.
+                driver.execute_script("document.body.style.width = '100%';")
+                # We should probably monitor if some element is present,
+                # but this is OK for now.
+                time.sleep(3)
+                png = driver.get_screenshot_as_png()
+                driver.quit()
+                self._png_image = png
+        return self._png_image
+
+    def _repr_png_(self):
+        """Displays the PNG Map in a Jupyter notebook."""
+        # The notebook calls all _repr_*_ by default.
+        # We don't want that here b/c this one is quite slow.
+        if not self.png_enabled:
+            return None
+        return self._to_png()
+
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
                        continuous_world=False, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, **kwargs):
+                       detect_retina=False, no_wrap=False, subdomains='abc',
+                       **kwargs):
         """
         Add a tile layer to the map. See TileLayer for options.
 
@@ -257,6 +295,7 @@ class LegacyMap(MacroElement):
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina,
                                continuous_world=continuous_world,
+                               subdomains=subdomains,
                                no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
 
@@ -374,11 +413,13 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    subdomains: string, default 'abc'
+        Subdomains of the tile service.
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
                  continuous_world=False, name=None, overlay=False,
-                 control=True, no_wrap=False):
+                 control=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -390,6 +431,7 @@ class TileLayer(Layer):
         self.max_zoom = max_zoom
         self.no_wrap = no_wrap
         self.continuous_world = continuous_world
+        self.subdomains = subdomains
 
         self.detect_retina = detect_retina
 
@@ -424,7 +466,8 @@ class TileLayer(Layer):
                     continuousWorld: {{this.continuous_world.__str__().lower()}},
                     noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
-                    detectRetina: {{this.detect_retina.__str__().lower()}}
+                    detectRetina: {{this.detect_retina.__str__().lower()}},
+                    subdomains: '{{this.subdomains}}'
                     }
                 ).addTo({{this._parent.get_name()}});
 
