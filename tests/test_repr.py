@@ -15,8 +15,8 @@ import PIL.Image
 
 
 @pytest.fixture
-def make_map():
-    m = folium.Map()
+def make_map(png_enabled=False):
+    m = folium.Map(png_enabled=png_enabled)
     return m
 
 
@@ -37,12 +37,17 @@ def test_valid_html():
     assert parts[5] == '/div>'
 
 
+def test__repr_png_no_image():
+    png = make_map(png_enabled=False)._repr_png_()
+    assert png is None
+
+
 def test__repr_png_is_bytes():
-    png = make_map()._repr_png_()
+    png = make_map(png_enabled=True)._repr_png_()
     assert isinstance(png, bytes)
 
 
 def test_valid_png():
-    png = make_map()._repr_png_()
+    png = make_map(png_enabled=True)._repr_png_()
     img = PIL.Image.open(io.BytesIO(png))
     isinstance(img, PIL.PngImagePlugin.PngImageFile)

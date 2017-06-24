@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 
 import os
 import tempfile
+import time
 
 import json
 from collections import OrderedDict
@@ -156,11 +157,13 @@ class LegacyMap(MacroElement):
                  min_lon=-180, max_lon=180, max_bounds=True,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc'):
+                 subdomains='abc', png_enabled=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
+        # Undocumented for now b/c this will be subject to a re-factor soon.
         self._png_image = None
+        self.png_enabled = png_enabled
 
         if not location:
             # If location is not passed we center and ignore zoom.
@@ -249,9 +252,8 @@ class LegacyMap(MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _repr_png_(self):
-        """Displays the PNG Map in a Jupyter notebook."""
-        # https://github.com/ipython/ipython/issues/7899#issuecomment-76541102
+    def _to_png(self):
+        """Export the HTML to byte representation of a PNG image."""
         if self._png_image is None:
             import selenium.webdriver
 
@@ -263,11 +265,21 @@ class LegacyMap(MacroElement):
                 driver.maximize_window()
                 # Ignore user map size.
                 driver.execute_script("document.body.style.width = '100%';")
+                # We should probably monitor if some element is present,
+                # but this is OK for now.
+                time.sleep(3)
                 png = driver.get_screenshot_as_png()
                 driver.quit()
                 self._png_image = png
         return self._png_image
 
+    def _repr_png_(self):
+        """Displays the PNG Map in a Jupyter notebook."""
+        # The notebook calls all _repr_*_ by default.
+        # We don't want that here b/c this one is quite slow.
+        if not self.png_enabled:
+            return None
+        return self._to_png()
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
