@@ -276,6 +276,8 @@ class GeoJson(Layer):
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         A function mapping a GeoJson Feature to a style dict.
+    highlight_function: function, default None
+        A function mapping a GeoJson Feature to a style dict for mouse over events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False
