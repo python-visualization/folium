@@ -4,10 +4,11 @@ Test Terminator
 ---------------
 """
 
-from jinja2 import Template
-
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
 
 
 def test_terminator():
