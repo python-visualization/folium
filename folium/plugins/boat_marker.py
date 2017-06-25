@@ -7,11 +7,15 @@ Creates a marker shaped like a boat.
 Optionally you can append a wind direction.
 
 """
-import json
-from jinja2 import Template
 
-from branca.element import JavascriptLink, Figure
+import json
+
+
+from branca.element import Figure, JavascriptLink
+
 from folium.map import Marker
+
+from jinja2 import Template
 
 
 class BoatMarker(Marker):
@@ -57,9 +61,9 @@ class BoatMarker(Marker):
         super(BoatMarker, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"),  # noqa
+            JavascriptLink('https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js'),  # noqa
             name='markerclusterjs')

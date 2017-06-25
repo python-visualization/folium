@@ -8,16 +8,18 @@ https://github.com/makinacorpus/Leaflet.TextPath
 Shows a text along a PolyLine.
 
 """
-from jinja2 import Template
 
-from branca.element import JavascriptLink, Figure
+from branca.element import Figure, JavascriptLink
+
 from folium.features import MacroElement
+
+from jinja2 import Template
 
 
 class PolyLineTextPath(MacroElement):
     """Shows a text along a PolyLine."""
     def __init__(self, polyline, text, repeat=False, center=False, below=False,
-                 offset=0, orientation=0, attributes={}):
+                 offset=0, orientation=0, attributes=None):
         """Shows a text along a PolyLine.
 
         Parameters
@@ -79,8 +81,8 @@ class PolyLineTextPath(MacroElement):
         super(PolyLineTextPath, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
             JavascriptLink("https://rawgit.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"),  # noqa

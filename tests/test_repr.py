@@ -7,11 +7,11 @@ Folium _repr_*_ Tests
 
 import io
 
+import PIL.Image
+
 import folium
 
 import pytest
-
-import PIL.Image
 
 
 @pytest.fixture

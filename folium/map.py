@@ -10,19 +10,19 @@ Classes for drawing maps.
 
 from __future__ import unicode_literals
 
+import json
 import os
 import tempfile
 import time
 
-import json
 from collections import OrderedDict
+
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement
+from branca.utilities import _parse_size
 
 from jinja2 import Environment, PackageLoader, Template
 
-from branca.six import text_type, binary_type
-from branca.utilities import _parse_size
-from branca.element import (Element, Figure, MacroElement, Html,
-                            JavascriptLink, CssLink)
+from six import binary_type, text_type
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -150,7 +150,7 @@ class LegacyMap(MacroElement):
     ...                        attr='Mapbox attribution')
     """
     def __init__(self, location=None, width='100%', height='100%',
-                 left="0%", top="0%", position='relative',
+                 left='0%', top='0%', position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
@@ -257,14 +257,14 @@ class LegacyMap(MacroElement):
         if self._png_image is None:
             import selenium.webdriver
 
-            with tempfile.NamedTemporaryFile(suffix=".html") as f:
+            with tempfile.NamedTemporaryFile(suffix='.html') as f:
                 fname = f.name
                 self.save(fname)
                 driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
                 driver.get('file://{}'.format(fname))
                 driver.maximize_window()
                 # Ignore user map size.
-                driver.execute_script("document.body.style.width = '100%';")
+                driver.execute_script("document.body.style.width = '100%';")  # noqa
                 # We should probably monitor if some element is present,
                 # but this is OK for now.
                 time.sleep(3)
@@ -302,8 +302,8 @@ class LegacyMap(MacroElement):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         # Set global switches
         figure.header.add_child(self.global_switches, name='global_switches')
@@ -726,8 +726,8 @@ class Popup(Element):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),

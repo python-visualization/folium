@@ -7,9 +7,10 @@ https://github.com/brunob/leaflet.fullscreen
 
 Adds fullscreen button to your maps.
 """
-from jinja2 import Template
 
-from branca.element import MacroElement, Figure, JavascriptLink, CssLink
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
+from jinja2 import Template
 
 
 class Fullscreen(MacroElement):
@@ -62,16 +63,15 @@ class Fullscreen(MacroElement):
         super(Fullscreen, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink(
-                "https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js'),  # noqa
             name='Control.Fullscreen.js'
         )
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css'),  # noqa
             name='Control.FullScreen.css'
         )

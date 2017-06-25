@@ -4,11 +4,13 @@ Test MarkerCluster
 ------------------
 """
 
-from jinja2 import Template
-import numpy as np
-
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
+
+import numpy as np
 
 
 def test_marker_cluster():
