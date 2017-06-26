@@ -22,6 +22,13 @@ from branca.element import (Element, Figure, MacroElement, Html,
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
+_d3_js = [
+    ('d3', 'http://d3js.org/d3.v4.min.js'),
+    ('topojson', 'https://d3js.org/topojson.v2.min.js'),
+    ('d3-scale-chromatic', 'https://d3js.org/d3-scale-chromatic.v1.min.js'),
+    ('d3-geo-projection', 'https://d3js.org/d3-geo-projection.v1.min.js')
+    ]
+
 _default_js = [
     ('leaflet',
      'https://unpkg.com/leaflet@1.0.1/dist/leaflet.js'),
@@ -36,6 +43,9 @@ _default_js = [
     ('marker_cluster',
      'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
     ]
+
+for js in _d3_js: 
+    _default_js.append(js)
 
 _default_css = [
     ('leaflet_css',
@@ -231,6 +241,60 @@ class LegacyMap(MacroElement):
                                   worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
                                   crs: L.CRS.{{this.crs}}
                                  });
+
+            // ------------------- inserted code for creating time slider --------------------------
+            // ACTUALLY all of this should be moved to the template for GeoJson elements? 
+            // The time slider must be inserted here, but ranges can be laoded dynamically
+            // data, currently placed in feature_properties, can be fed to GeoJson constructor and assigned a name prefixed with geojson name
+            // Then it will be possible to create a map with several geojson features, and select the active one from a LayerControl
+            var normalization_constant = 5; // TO DO: set dynamically and change to colormap_min/max values for normalizing color range
+            var feature_properties; // 
+            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
+                                   // It is not really necessary, since it should be possible to get value from slider element directly
+
+            function set_feature_color(data, year){
+                    d3.selectAll('.leaflet-interactive').attr("fill", '#fff').style('opacity', 0);
+                    for (var feature_id in data[year]){
+                        let color = parseFloat(data[year][feature_id]["total_score-mean"]) / normalization_constant;
+                        d3.selectAll('#feature-'+feature_id).attr("fill", d3.interpolateReds(color)).style('opacity', 0.8);;
+                    }
+                    
+                }
+
+            function main(error, timestamps, data){
+                if(error) { console.log(error); }
+        
+                d3.select("body").insert("p", ":first-child").append("input")   
+                .attr("type", "range")
+                .attr("min", 0)
+                .attr("max", timestamps.length - 1)
+                .attr("value", 0)
+                .attr("id", "slider")
+                .attr("step", "1");
+                
+                current_timestamp = timestamps[0];
+                feature_properties = data;
+
+                console.log('done');
+
+                d3.select("#slider").on("input", function() {
+                    let timestamp = timestamps[this.value];
+                    console.log(timestamp);
+                    set_feature_color(data, timestamp);
+                    current_timestamp = timestamp;
+                }); 
+
+                set_feature_color(data, timestamps[0]);
+
+            }
+
+            d3.queue()
+            .defer(d3.json, "timestamps.json")
+            .defer(d3.json, "titties.json")
+            .await(main);
+
+            // ------------------------------------ end of inserted code ----------------------
+                                 
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
         """)  # noqa
@@ -464,7 +528,7 @@ class FeatureGroup(Layer):
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.featureGroup(
+            var {{this.get_name() asd}} = L.featureGroup(
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
