@@ -366,7 +366,7 @@ class GeoJson(Layer):
                             if(e.target.feature.id in feature_properties[current_timestamp]){
                                 var color = d3.interpolateReds(feature_properties[current_timestamp][e.target.feature.id]["total_score-mean"]/normalization_constant);
                                 var opacity = feature_properties[current_timestamp][e.target.feature.id]["total_score-count"]
-                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', opacity);
+                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', 0.8);
                             }
                         },
                         mouseover: function(e) {
