@@ -242,58 +242,7 @@ class LegacyMap(MacroElement):
                                   crs: L.CRS.{{this.crs}}
                                  });
 
-            // ------------------- inserted code for creating time slider --------------------------
-            // ACTUALLY all of this should be moved to the template for GeoJson elements? 
-            // The time slider must be inserted here, but ranges can be laoded dynamically
-            // data, currently placed in feature_properties, can be fed to GeoJson constructor and assigned a name prefixed with geojson name
-            // Then it will be possible to create a map with several geojson features, and select the active one from a LayerControl
-            var normalization_constant = 5; // TO DO: set dynamically and change to colormap_min/max values for normalizing color range
-            var feature_properties; // 
-            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
-                                   // It is not really necessary, since it should be possible to get value from slider element directly
-
-            function set_feature_color(data, year){
-                    d3.selectAll('.leaflet-interactive').attr("fill", '#fff').style('opacity', 0);
-                    for (var feature_id in data[year]){
-                        let color = parseFloat(data[year][feature_id]["total_score-mean"]) / normalization_constant;
-                        d3.selectAll('#feature-'+feature_id).attr("fill", d3.interpolateReds(color)).style('opacity', 0.8);;
-                    }
-                    
-                }
-
-            function main(error, timestamps, data){
-                if(error) { console.log(error); }
-        
-                d3.select("body").insert("p", ":first-child").append("input")   
-                .attr("type", "range")
-                .attr("min", 0)
-                .attr("max", timestamps.length - 1)
-                .attr("value", 0)
-                .attr("id", "slider")
-                .attr("step", "1");
-                
-                current_timestamp = timestamps[0];
-                feature_properties = data;
-
-                console.log('done');
-
-                d3.select("#slider").on("input", function() {
-                    let timestamp = timestamps[this.value];
-                    console.log(timestamp);
-                    set_feature_color(data, timestamp);
-                    current_timestamp = timestamp;
-                }); 
-
-                set_feature_color(data, timestamps[0]);
-
-            }
-
-            d3.queue()
-            .defer(d3.json, "timestamps.json")
-            .defer(d3.json, "titties.json")
-            .await(main);
-
-            // ------------------------------------ end of inserted code ----------------------
+            
                                  
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
