@@ -153,8 +153,6 @@ class RegularPolygonMarker(Marker):
                     }
                 )
                 .addTo({{this._parent.get_name()}});
-
-
             {% endmacro %}
             """)
 
@@ -363,22 +361,12 @@ class GeoJson(Layer):
                 {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
                     layer.on({
                         mouseout: function(e) {
-                            if(e.target.feature.id in feature_properties[current_timestamp]){
-                                var color = d3.interpolateReds(feature_properties[current_timestamp][e.target.feature.id]["total_score-mean"]/normalization_constant);
-                                var opacity = feature_properties[current_timestamp][e.target.feature.id]["total_score-count"]
-                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', 0.8);
-                            }
-                        },
+                            e.target.setStyle(e.target.feature.properties.style);},
                         mouseover: function(e) {
-                            if(e.target.feature.id in feature_properties[current_timestamp]){
-                                var color = d3.interpolateReds(feature_properties[current_timestamp][e.target.feature.id]["total_score-mean"]/normalization_constant);
-                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', 1);
-                            }
-                        },
+                            e.target.setStyle(e.target.feature.properties.highlight);},
                         click: function(e) {
-                            map_44086f5b1db7451089af63824a52efbf.fitBounds(e.target.getBounds());
-                            }
-                    });
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                        });
                 };
             {% endif %}
 
@@ -400,10 +388,6 @@ class GeoJson(Layer):
                     {% endif %}
                     ).addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-                {{ this.get_name() }}.eachLayer(function (layer) {
-                    layer._path.id = 'feature-' + layer.feature.properties.id;
-                    });
 
             {% endmacro %}
             """)  # noqa
