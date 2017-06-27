@@ -60,7 +60,7 @@ _default_css = [
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
-def _format_lat_lon(values):
+def _validate_location(values):
         """Validates and formats location values before setting"""
         if type(values) not in [list, tuple]:
             raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
@@ -73,6 +73,7 @@ def _format_lat_lon(values):
         except:
             raise ValueError("Location values should be numeric, {} is not a number".format(val))
         return values
+
 
 class LegacyMap(MacroElement):
     """Create a Map with Folium and Leaflet.js
