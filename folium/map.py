@@ -60,19 +60,23 @@ _default_css = [
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
-def _validate_location(values):
-        """Validates and formats location values before setting"""
-        if type(values) not in [list, tuple]:
-            raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
 
-        if len(values) != 2:
-            raise ValueError("Location should have two values, [lat, lon]")
+def _validate_location(location):
+        """Validates and formats location values before setting"""
+        if type(location) not in [list, tuple]:
+            raise TypeError('Expected tuple/list for location, got '
+                            '{!r}'.format(location))
+
+        if len(location) != 2:
+            raise ValueError('Expected two values for location [lat, lon], '
+                             'got {}'.format(len(location)))
 
         try:
-            values = [float(val) for val in values]
+            location = [float(val) for val in location]
         except:
-            raise ValueError("Location values should be numeric, {} is not a number".format(val))
-        return values
+            raise ValueError('Location values must be valid numeric values, '
+                             'got {!r}'.format(location))
+        return location
 
 
 class LegacyMap(MacroElement):
@@ -350,6 +354,7 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
+
 
 class GlobalSwitches(Element):
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
