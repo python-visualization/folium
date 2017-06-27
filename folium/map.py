@@ -184,7 +184,7 @@ class LegacyMap(MacroElement):
             self.location = [0, 0]
             self.zoom_start = min_zoom
         else:
-            self.location = _format_lat_lon(location)
+            self.location = _validate_location(location)
             self.zoom_start = zoom_start
 
         Figure().add_child(self)
