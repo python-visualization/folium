@@ -60,6 +60,20 @@ _default_css = [
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
+def _validate_location(values):
+        """Validates and formats location values before setting"""
+        if type(values) not in [list, tuple]:
+            raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
+
+        if len(values) != 2:
+            raise ValueError("Location should have two values, [lat, lon]")
+
+        try:
+            values = [float(val) for val in values]
+        except:
+            raise ValueError("Location values should be numeric, {} is not a number".format(val))
+        return values
+
 
 class LegacyMap(MacroElement):
     """Create a Map with Folium and Leaflet.js
@@ -170,7 +184,7 @@ class LegacyMap(MacroElement):
             self.location = [0, 0]
             self.zoom_start = min_zoom
         else:
-            self.location = location
+            self.location = _validate_location(location)
             self.zoom_start = zoom_start
 
         Figure().add_child(self)
@@ -336,7 +350,6 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
-
 
 class GlobalSwitches(Element):
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
