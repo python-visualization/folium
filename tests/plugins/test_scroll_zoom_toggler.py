@@ -4,10 +4,11 @@ Test ScrollZoomToggler
 ----------------------
 """
 
-from jinja2 import Template
-
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
 
 
 def test_scroll_zoom_toggler():

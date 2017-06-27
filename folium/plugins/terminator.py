@@ -7,9 +7,10 @@ Leaflet.Terminator is a simple plug-in to the Leaflet library to overlay day
 and night regions on maps.
 
 """
-from jinja2 import Template
 
-from branca.element import JavascriptLink, MacroElement, Figure
+from branca.element import Figure, JavascriptLink, MacroElement
+
+from jinja2 import Template
 
 
 class Terminator(MacroElement):
@@ -39,8 +40,8 @@ class Terminator(MacroElement):
         super(Terminator, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
             JavascriptLink("https://rawgithub.com/joergdietrich/Leaflet.Terminator/master/L.Terminator.js"),  # noqa

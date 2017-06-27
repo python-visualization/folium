@@ -5,9 +5,10 @@ ScrollZoomToggler plugin
 
 Adds a button to enable/disable zoom scrolling.
 """
-from jinja2 import Template
 
 from branca.element import MacroElement
+
+from jinja2 import Template
 
 
 class ScrollZoomToggler(MacroElement):

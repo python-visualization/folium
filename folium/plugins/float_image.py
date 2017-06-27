@@ -5,9 +5,11 @@ FloatImage plugin
 
 Adds a floating image in HTML canvas on top of the map.
 """
-from jinja2 import Template
+
 
 from branca.element import MacroElement
+
+from jinja2 import Template
 
 
 class FloatImage(MacroElement):
