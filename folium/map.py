@@ -72,7 +72,7 @@ def _format_lat_lon(values):
             values = [float(val) for val in values]
         except:
             raise ValueError("Location values should be numeric, {} is not a number".format(val))
-        return value
+        return values
 
 class LegacyMap(MacroElement):
     """Create a Map with Folium and Leaflet.js
