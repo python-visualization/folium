@@ -51,9 +51,9 @@ class TimeDynamicGeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
 
     """
-    def __init__(self, data, style_function=None, name=None,
+    def __init__(self, data, styledict, infodict, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None, feature_properties=None):
+                 highlight_function=None):
         super(TimeDynamicGeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
@@ -84,6 +84,15 @@ class TimeDynamicGeoJson(Layer):
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
+
+        self.styledict = styledict
+        self.infodict = infodict
+        
+        self.timestamps = set()
+        for feature in self.styledict.values(): 
+            self.timestamps.update(set(feature.keys()))
+        self.timestamps = sorted(list(self.timestamps))
+
         if style_function is None:
             def style_function(x):
                 return {}
@@ -102,82 +111,67 @@ class TimeDynamicGeoJson(Layer):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            // ------------------- inserted code for creating time slider --------------------------
-            // ACTUALLY all of this should be moved to the template for GeoJson elements? 
-            // The time slider must be inserted here, but ranges can be laoded dynamically
-            // data, currently placed in feature_properties, can be fed to GeoJson constructor and assigned a name prefixed with geojson name
-            // Then it will be possible to create a map with several geojson features, and select the active one from a LayerControl
-            
-            var normalization_constant = 5; // TO DO: set dynamically and change to colormap_min/max values for normalizing color range
-            var feature_properties; // 
-            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
-                                   // It is not really necessary, since it should be possible to get value from slider element directly
+	            
+	            var timestamps = {{ this.timestamps }};
+	            var styledict = {{ this.styledict }};
+            	var infodict = {{ this.infodict }};
+	            
+	            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
+	                                   // It is not really necessary, since it should be possible to get value from slider element directly
 
-            function set_feature_color(data, year){
-                    d3.selectAll('.leaflet-interactive').attr("fill", '#fff').style('opacity', 0);
-                    for (var feature_id in data[year]){
-                        let color = parseFloat(data[year][feature_id]["total_score-mean"]) / normalization_constant;
-                        d3.selectAll('#feature-'+feature_id).attr("fill", d3.interpolateReds(color)).style('opacity', 0.8);;
+	    
+	            d3.select("body").insert("p", ":first-child").append("input")   
+	            .attr("type", "range")
+	            .attr("min", 0)
+	            .attr("max", timestamps.length - 1)
+	            .attr("value", 0)
+	            .attr("id", "slider")
+	            .attr("step", "1");
+	            
+	            current_timestamp = timestamps[0];
+
+                
+                fill_map = function(){
+                    for (var feature_id in styledict){
+                        let style = styledict[feature_id]//[current_timestamp];
+                        var fillColor = 'white';
+                        var opacity = 0;
+                        if (current_timestamp in style){
+                            fillColor = style[current_timestamp]['color'];
+                            opacity = style[current_timestamp]['opacity'];
+                        }
+                        d3.selectAll('#feature-'+feature_id).transition().delay(100).attr('fill', fillColor).style('fill-opacity', opacity);
                     }
-                    
                 }
 
-            function main(error, timestamps, data){
-                if(error) { console.log(error); }
-        
-                d3.select("body").insert("p", ":first-child").append("input")   
-                .attr("type", "range")
-                .attr("min", 0)
-                .attr("max", timestamps.length - 1)
-                .attr("value", 0)
-                .attr("id", "slider")
-                .attr("step", "1");
-                
-                current_timestamp = timestamps[0];
-                feature_properties = data;
+	            d3.select("#slider").on("input", function() {
+	                current_timestamp = timestamps[this.value];
+                    fill_map();
+	            }); 
 
-                console.log('done');
+	            
 
-                d3.select("#slider").on("input", function() {
-                    let timestamp = timestamps[this.value];
-                    console.log(timestamp);
-                    set_feature_color(data, timestamp);
-                    current_timestamp = timestamp;
-                }); 
-
-                set_feature_color(data, timestamps[0]);
-
-            }
-
-            d3.queue()
-            .defer(d3.json, "timestamps.json")
-            .defer(d3.json, "titties.json")
-            .await(main);
-
-            // ------------------------------------ end of inserted code ----------------------
-
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                            if(e.target.feature.id in feature_properties[current_timestamp]){
-                                var color = d3.interpolateReds(feature_properties[current_timestamp][e.target.feature.id]["total_score-mean"]/normalization_constant);
-                                var opacity = feature_properties[current_timestamp][e.target.feature.id]["total_score-count"]
-                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', 0.8);
+	            {% if this.highlight %}
+	                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+	                    layer.on({
+	                    	mouseout: function(e) {
+                                if (current_timestamp in styledict[e.target.feature.id]){
+                                    var opacity = styledict[e.target.feature.id][current_timestamp]['opacity'];
+                                    d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', opacity);
+                                }
+                            },
+	                        mouseover: function(e) {
+                                if (current_timestamp in styledict[e.target.feature.id]){
+                                    d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', 1);
+                                }
+                            },
+	                        click: function(e) {
+	                            map_b8f7044de0124208b3f693137000f0b4.fitBounds(e.target.getBounds());
                             }
-                        },
-                        mouseover: function(e) {
-                            if(e.target.feature.id in feature_properties[current_timestamp]){
-                                var color = d3.interpolateReds(feature_properties[current_timestamp][e.target.feature.id]["total_score-mean"]/normalization_constant);
-                                d3.selectAll('#feature-'+e.target.feature.id).attr("fill", color).style('opacity', 1);
-                            }
-                        },
-                        click: function(e) {
-                            map_44086f5b1db7451089af63824a52efbf.fitBounds(e.target.getBounds());
-                            }
-                    });
-                };
-            {% endif %}
+	                    });
+	                };
+
+	            {% endif %}
 
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
@@ -195,16 +189,26 @@ class TimeDynamicGeoJson(Layer):
                         {% endif %}
                         }
                     {% endif %}
-                    ).addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+                    ).addTo({{this._parent.get_name()}}
+                );
+                
+               
+        		{{this.get_name()}}.setStyle(function(feature) {feature.properties.style;});
+            	
 
+                
                 {{ this.get_name() }}.eachLayer(function (layer) {
                     layer._path.id = 'feature-' + layer.feature.properties.id;
                     });
 
+                
+                fill_map();
+                d3.selectAll('path').attr('stroke', 'white').attr('stroke-width', 0.8).attr('stroke-dasharray', '5,5')
+
+
             {% endmacro %}
             """)  # noqa
-
+  
     def style_data(self):
         """
         Applies `self.style_function` to each feature of `self.data` and
@@ -221,7 +225,6 @@ class TimeDynamicGeoJson(Layer):
         for feature in self.data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
             feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
-        print(self.data)
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
