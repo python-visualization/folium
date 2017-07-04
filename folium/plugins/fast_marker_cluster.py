@@ -16,10 +16,13 @@ class FastMarkerCluster(MarkerCluster):
     def __init__(self, data, callback=None):
         """Add marker clusters to a map using in-browser rendering.
            Using FastMarkerCluster it is possible to render 000's of
-           points far quicker than the MarkerCluster class. Be aware
-           that the FastMarkerCluster class does not retain a
-           reference to any marker data, and therefore methods such as
-           get_bounds() are not available when using it.
+           points far quicker than the MarkerCluster class.
+
+           Be aware that the FastMarkerCluster class passes an empty
+           list to the parent class' __init__ method during initialisation.
+           This means that the add_child method is never called, and
+           no reference to any marker data are retained. Methids such
+           as get_bounds() are therefore not available when using it.
 
         Parameters
         ----------
