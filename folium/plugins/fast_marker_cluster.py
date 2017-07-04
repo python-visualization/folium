@@ -8,7 +8,7 @@ Creates a MarkerCluster plugin to add on a folium map.
 
 from jinja2 import Template
 
-from . import MarkerCluster
+from folium.plugins.marker_cluster import MarkerCluster
 
 
 class FastMarkerCluster(MarkerCluster):
