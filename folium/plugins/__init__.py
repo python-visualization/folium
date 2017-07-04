@@ -7,6 +7,7 @@ Add different objects/effects on a folium map.
 """
 
 from .boat_marker import BoatMarker
+from .fast_marker_cluster import FastMarkerCluster
 from .float_image import FloatImage
 from .fullscreen import Fullscreen
 from .heat_map import HeatMap
