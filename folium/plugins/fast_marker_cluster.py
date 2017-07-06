@@ -21,7 +21,7 @@ class FastMarkerCluster(MarkerCluster):
            Be aware that the FastMarkerCluster class passes an empty
            list to the parent class' __init__ method during initialisation.
            This means that the add_child method is never called, and
-           no reference to any marker data are retained. Methids such
+           no reference to any marker data are retained. Methods such
            as get_bounds() are therefore not available when using it.
 
         Parameters
