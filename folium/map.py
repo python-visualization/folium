@@ -168,7 +168,7 @@ class LegacyMap(MacroElement):
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=True,
+                 min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
                  subdomains='abc', png_enabled=False):
