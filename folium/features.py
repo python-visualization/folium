@@ -323,10 +323,6 @@ class VegaLite(Element):
             vg.embed({{this.get_name()}}, embedSpec, function(error, result) {});
         """).render(this=self)), name=self.get_name())
 
-        # self._parent.script.add_child(Element(Template("""
-        #     vega.embed({{this.get_name()}}, embedSpec, function(error, result) {});
-        #     """).render(this=self)), name=self.get_name())
-
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
