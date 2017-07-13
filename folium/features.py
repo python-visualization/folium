@@ -35,7 +35,7 @@ class WmsTileLayer(Layer):
         The names of the layers to be displayed.
     styles : str, default None
         Comma-separated list of WMS styles.
-    format : str, default None
+    fmt : str, default None
         The format of the service output.
         Ex: 'image/png'
     transparent: bool, default True
