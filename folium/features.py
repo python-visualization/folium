@@ -51,6 +51,10 @@ class WmsTileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    **kwargs : additional keyword arguments
+        Passed through to the underlying tileLayer.wms object and can be used
+        for setting extra tileLayer.wms parameters or as extra parameters in
+        the WMS request.
 
     For more information see:
     http://leafletjs.com/reference.html#tilelayer-wms
@@ -58,7 +62,7 @@ class WmsTileLayer(Layer):
     """
     def __init__(self, url, name=None, layers=None, styles=None, format=None,
                  transparent=True, version='1.1.1', attr=None, overlay=True,
-                 control=True):
+                 control=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
         self.attribution = attr if attr is not None else ''
@@ -68,11 +72,15 @@ class WmsTileLayer(Layer):
         self.format = format if format else 'image/jpeg'
         self.transparent = transparent
         self.version = version
+        self.kwargs = kwargs
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
                 {
+                    {% for key, value in this.kwargs.items() %}
+                    {{key}}: '{{ value }}',
+                    {% endfor %}
                     layers: '{{ this.layers }}',
                     styles: '{{ this.styles }}',
                     format: '{{ this.format }}',
