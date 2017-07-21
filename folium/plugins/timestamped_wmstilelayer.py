@@ -21,6 +21,7 @@ A geo-json is timestamped if:
 
 from jinja2 import Template
 
+from branca.element import Figure, JavascriptLink, CssLink
 from ..map import Layer
 
 
@@ -106,7 +107,6 @@ class TimestampedWmsTileLayer(Layer):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
-
 
     def render(self, **kwargs):
         super(TimestampedWmsTileLayer, self).render()
