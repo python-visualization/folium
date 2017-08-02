@@ -51,7 +51,7 @@ class TimeDynamicGeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
 
     """
-    def __init__(self, data, styledict, infodict, style_function=None, name=None,
+    def __init__(self, data, styledict, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
                  highlight_function=None):
         super(TimeDynamicGeoJson, self).__init__(name=name, overlay=overlay,
@@ -86,7 +86,6 @@ class TimeDynamicGeoJson(Layer):
 
 
         self.styledict = styledict
-        self.infodict = infodict
         
         self.timestamps = set()
         for feature in self.styledict.values(): 
@@ -114,7 +113,6 @@ class TimeDynamicGeoJson(Layer):
 	            
 	            var timestamps = {{ this.timestamps }};
 	            var styledict = {{ this.styledict }};
-            	var infodict = {{ this.infodict }};
 	            
 	            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
 	                                   // It is not really necessary, since it should be possible to get value from slider element directly
@@ -140,7 +138,7 @@ class TimeDynamicGeoJson(Layer):
                             fillColor = style[current_timestamp]['color'];
                             opacity = style[current_timestamp]['opacity'];
                         }
-                        d3.selectAll('#feature-'+feature_id).transition().delay(100).attr('fill', fillColor).style('fill-opacity', opacity);
+                        d3.selectAll('#feature-'+feature_id).attr('fill', fillColor).style('fill-opacity', opacity);
                     }
                 }
 
