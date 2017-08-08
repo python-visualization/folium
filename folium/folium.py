@@ -12,8 +12,10 @@ from __future__ import absolute_import
 from branca.colormap import StepColormap
 from branca.utilities import color_brewer
 
-from .map import LegacyMap, FitBounds
+import requests
+
 from .features import GeoJson, TopoJson
+from .map import FitBounds, LegacyMap
 
 
 class Map(LegacyMap):
@@ -143,7 +145,7 @@ class Map(LegacyMap):
     def choropleth(self, geo_path=None, geo_str=None, data_out='data.json',
                    data=None, columns=None, key_on=None, threshold_scale=None,
                    fill_color='blue', fill_opacity=0.6, line_color='black',
-                   line_weight=1, line_opacity=1, legend_name="",
+                   line_weight=1, line_opacity=1, legend_name='',
                    topojson=None, reset=False, smooth_factor=None,
                    highlight=None):
         """
@@ -251,7 +253,10 @@ class Map(LegacyMap):
 
         # Create GeoJson object
         if geo_path:
-            geo_data = open(geo_path)
+            if geo_path.lower().startswith(('http:', 'ftp:', 'https:')):
+                geo_data = requests.get(geo_path).json()
+            else:
+                geo_data = open(geo_path)
         elif geo_str:
             geo_data = geo_str
         else:
@@ -309,17 +314,17 @@ class Map(LegacyMap):
 
         def style_function(x):
             return {
-                "weight": line_weight,
-                "opacity": line_opacity,
-                "color": line_color,
-                "fillOpacity": fill_opacity,
-                "fillColor": color_scale_fun(x)
+                'weight': line_weight,
+                'opacity': line_opacity,
+                'color': line_color,
+                'fillOpacity': fill_opacity,
+                'fillColor': color_scale_fun(x)
             }
 
         def highlight_function(x):
             return {
-                "weight": line_weight + 2,
-                "fillOpacity": fill_opacity + .2
+                'weight': line_weight + 2,
+                'fillOpacity': fill_opacity + .2
             }
 
         if topojson:

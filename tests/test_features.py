@@ -7,8 +7,8 @@ Folium Features Tests
 
 import os
 
-from branca.six import text_type
 from branca.element import Element
+from branca.six import text_type
 
 from folium import Map, Popup
 from folium import features
@@ -47,7 +47,6 @@ def test_figure_html():
     f = features.Figure()
     out = f.render()
     out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
-    print(out)
     assert out.strip() == tmpl.strip(), '\n' + out.strip() + '\n' + '-' * 80 + '\n' + tmpl.strip()  # noqa
 
     bounds = f.get_bounds()
@@ -72,6 +71,7 @@ def test_marker_popups():
     features.RegularPolygonMarker([45, 0], popup=Popup('0')).add_to(m)
     features.CircleMarker([45, 60], popup='60').add_to(m)
     features.CircleMarker([45, 120], popup=Popup('120')).add_to(m)
+    features.CircleMarker([45, 90], popup=Popup('90'), weight=0).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
@@ -80,13 +80,13 @@ def test_marker_popups():
 
 def test_polyline_popups():
     m = Map([43, -100], zoom_start=4)
-    features.PolyLine([[40, -80], [45, -80]], popup="PolyLine").add_to(m)
+    features.PolyLine([[40, -80], [45, -80]], popup='PolyLine').add_to(m)
     features.PolyLine([[40, -90], [45, -90]],
-                      popup=Popup("PolyLine")).add_to(m)
+                      popup=Popup('PolyLine')).add_to(m)
     features.PolyLine([[[40, -110], [45, -110]]],
-                      popup="MultiPolyLine").add_to(m)
+                      popup='MultiPolyLine').add_to(m)
     features.PolyLine([[[40, -120], [45, -120]]],
-                      popup=Popup("MultiPolyLine")).add_to(m)
+                      popup=Popup('MultiPolyLine')).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
@@ -110,9 +110,9 @@ def test_wms_service():
     url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
     w = features.WmsTileLayer(url,
                               name='test',
-                              format='image/png',
+                              fmt='image/png',
                               layers='nexrad-n0r-900913',
-                              attr=u"Weather data © 2012 IEM Nexrad",
+                              attr=u'Weather data © 2012 IEM Nexrad',
                               transparent=True)
     w.add_to(m)
     m._repr_html_()

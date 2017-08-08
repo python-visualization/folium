@@ -11,20 +11,24 @@ Classes for drawing maps.
 from __future__ import unicode_literals
 
 import json
+import os
+import tempfile
+import time
+
 from collections import OrderedDict
+
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement
+from branca.utilities import _parse_size
 
 from jinja2 import Environment, PackageLoader, Template
 
-from branca.six import text_type, binary_type
-from branca.utilities import _parse_size
-from branca.element import (Element, Figure, MacroElement, Html,
-                            JavascriptLink, CssLink)
+from six import binary_type, text_type
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     'https://unpkg.com/leaflet@1.0.1/dist/leaflet.js'),
+     'https://unpkg.com/leaflet@1.1.0/dist/leaflet.js'),
     ('jquery',
      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
     ('bootstrap',
@@ -39,7 +43,7 @@ _default_js = [
 
 _default_css = [
     ('leaflet_css',
-     'https://unpkg.com/leaflet@1.0.1/dist/leaflet.css'),
+     'https://unpkg.com/leaflet@1.1.0/dist/leaflet.css'),
     ('bootstrap_css',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
     ('bootstrap_theme_css',
@@ -55,6 +59,20 @@ _default_css = [
     ('awesome_rotate_css',
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
+
+def _validate_location(values):
+        """Validates and formats location values before setting"""
+        if type(values) not in [list, tuple]:
+            raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
+
+        if len(values) != 2:
+            raise ValueError("Location should have two values, [lat, lon]")
+
+        try:
+            values = [float(val) for val in values]
+        except:
+            raise ValueError("Location values should be numeric, {} is not a number".format(val))
+        return values
 
 
 class LegacyMap(MacroElement):
@@ -146,23 +164,27 @@ class LegacyMap(MacroElement):
     ...                        attr='Mapbox attribution')
     """
     def __init__(self, location=None, width='100%', height='100%',
-                 left="0%", top="0%", position='relative',
+                 left='0%', top='0%', position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=True,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False):
+                 prefer_canvas=False, no_touch=False, disable_3d=False,
+                 subdomains='abc', png_enabled=False):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
+        # Undocumented for now b/c this will be subject to a re-factor soon.
+        self._png_image = None
+        self.png_enabled = png_enabled
 
         if not location:
             # If location is not passed we center and ignore zoom.
             self.location = [0, 0]
             self.zoom_start = min_zoom
         else:
-            self.location = location
+            self.location = _validate_location(location)
             self.zoom_start = zoom_start
 
         Figure().add_child(self)
@@ -192,7 +214,8 @@ class LegacyMap(MacroElement):
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                 continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina
+                API_key=API_key, detect_retina=detect_retina,
+                subdomains=subdomains
             )
 
         self._template = Template(u"""
@@ -234,8 +257,7 @@ class LegacyMap(MacroElement):
         """)  # noqa
 
     def _repr_html_(self, **kwargs):
-        """Displays the Map in a Jupyter notebook.
-        """
+        """Displays the HTML Map in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
             out = self._parent._repr_html_(**kwargs)
@@ -244,10 +266,40 @@ class LegacyMap(MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
+    def _to_png(self):
+        """Export the HTML to byte representation of a PNG image."""
+        if self._png_image is None:
+            import selenium.webdriver
+
+            with tempfile.NamedTemporaryFile(suffix='.html') as f:
+                fname = f.name
+                self.save(fname)
+                driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
+                driver.get('file://{}'.format(fname))
+                driver.maximize_window()
+                # Ignore user map size.
+                driver.execute_script("document.body.style.width = '100%';")  # noqa
+                # We should probably monitor if some element is present,
+                # but this is OK for now.
+                time.sleep(3)
+                png = driver.get_screenshot_as_png()
+                driver.quit()
+                self._png_image = png
+        return self._png_image
+
+    def _repr_png_(self):
+        """Displays the PNG Map in a Jupyter notebook."""
+        # The notebook calls all _repr_*_ by default.
+        # We don't want that here b/c this one is quite slow.
+        if not self.png_enabled:
+            return None
+        return self._to_png()
+
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
                        continuous_world=False, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, **kwargs):
+                       detect_retina=False, no_wrap=False, subdomains='abc',
+                       **kwargs):
         """
         Add a tile layer to the map. See TileLayer for options.
 
@@ -257,14 +309,15 @@ class LegacyMap(MacroElement):
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina,
                                continuous_world=continuous_world,
+                               subdomains=subdomains,
                                no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         # Set global switches
         figure.header.add_child(self.global_switches, name='global_switches')
@@ -297,7 +350,6 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
-
 
 class GlobalSwitches(Element):
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
@@ -374,11 +426,13 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    subdomains: string, default 'abc'
+        Subdomains of the tile service.
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
                  continuous_world=False, name=None, overlay=False,
-                 control=True, no_wrap=False):
+                 control=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -390,6 +444,7 @@ class TileLayer(Layer):
         self.max_zoom = max_zoom
         self.no_wrap = no_wrap
         self.continuous_world = continuous_world
+        self.subdomains = subdomains
 
         self.detect_retina = detect_retina
 
@@ -424,7 +479,8 @@ class TileLayer(Layer):
                     continuousWorld: {{this.continuous_world.__str__().lower()}},
                     noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
-                    detectRetina: {{this.detect_retina.__str__().lower()}}
+                    detectRetina: {{this.detect_retina.__str__().lower()}},
+                    subdomains: '{{this.subdomains}}'
                     }
                 ).addTo({{this._parent.get_name()}});
 
@@ -683,8 +739,8 @@ class Popup(Element):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),

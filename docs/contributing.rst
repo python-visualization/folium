@@ -1,16 +1,10 @@
-Contributing
-============
+Contributing to folium
+======================
 
-Choose the sandbox folder of your choice (`~/sandbox` for example)
-::
+We welcome contributions to folum in many forms.
 
-$ cd ~/sandbox
+Examples of contributions include:
 
-Clone `folium` from github:
-::
-
-$ git clone https://github.com/python-visualization/folium
-
-Push code to your fors, and write a pull request.
-
-TODO: end up this section.
+* Code patches
+* Documentation improvements
+* Bug reports and patch reviews

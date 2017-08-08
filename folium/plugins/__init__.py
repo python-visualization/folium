@@ -6,20 +6,22 @@ Folium plugins
 Add different objects/effects on a folium map.
 """
 
+from .boat_marker import BoatMarker
+from .fast_marker_cluster import FastMarkerCluster
+from .float_image import FloatImage
+from .fullscreen import Fullscreen
+from .heat_map import HeatMap
+from .heat_map_withtime import HeatMapWithTime
+from .image_overlay import ImageOverlay
 from .marker_cluster import MarkerCluster
+from .polyline_text_path import PolyLineTextPath
 from .scroll_zoom_toggler import ScrollZoomToggler
 from .terminator import Terminator
-from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
-from .heat_map import HeatMap
-from .image_overlay import ImageOverlay
-from .fullscreen import Fullscreen
-from .polyline_text_path import PolyLineTextPath
-from .float_image import FloatImage
-from .heat_map_withtime import HeatMapWithTime
 
 __all__ = [
     'MarkerCluster',
+    'FastMarkerCluster',
     'ScrollZoomToggler',
     'Terminator',
     'BoatMarker',

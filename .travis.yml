@@ -10,22 +10,22 @@ matrix:
   fast_finish: true
   include:
   - python: 2.7
-    env: TEST_TARGET=branca_release
+    env: TEST_TARGET=default
   - python: 3.5
-    env: TEST_TARGET=branca_release
-  - python: 3.5
-    env: TEST_TARGET=coding_standards
-  - python: 3.5
+    env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=default
+  - python: 3.6
     env: TEST_TARGET=notebooks
   - python: 2.7
-    env: TEST_TARGET=branca_latest
-  - python: 3.5
-    env: TEST_TARGET=branca_latest
+    env: TEST_TARGET=latest_branca
+  - python: 3.6
+    env: TEST_TARGET=latest_branca
   allow_failures:
   - python: 2.7
-    env: TEST_TARGET=branca_latest
-  - python: 3.5
-    env: TEST_TARGET=branca_latest
+    env: TEST_TARGET=latest_branca
+  - python: 3.6
+    env: TEST_TARGET=latest_branca
 
 before_install:
     - wget http://bit.ly/miniconda -O miniconda.sh
@@ -33,13 +33,13 @@ before_install:
     - export PATH="$HOME/miniconda/bin:$PATH"
     - conda update --yes --all
     - conda config --add channels conda-forge --force
-    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
+    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
     - source activate TEST
 
-    - if [[ "$TRAVIS_PYTHON_VERSION" != "3.5" ]]; then
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
         conda install --yes mock ;
       fi
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
         conda install --yes doctr ;
       fi
 
@@ -48,21 +48,17 @@ install:
     - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-    - if [[ $TEST_TARGET == 'branca_release' ]]; then
+    - if [[ $TEST_TARGET == 'default' ]]; then
         py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
       fi
 
-    - if [[ $TEST_TARGET == 'branca_latest' ]]; then
+    - if [[ $TEST_TARGET == 'latest_branca' ]]; then
         pip install git+https://github.com/python-visualization/branca.git ;
-        python setup.py test ;
-      fi
-
-    - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-        find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
-        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
+        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
       fi
 
     - if [[ $TEST_TARGET == 'notebooks' ]]; then
+        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
         py.test -vv tests/notebooks/test_notebooks.py ;
-        cd tests/notebooks && doctr deploy --built-docs=results --gh-pages-docs=gallery ;
+        doctr deploy --built-docs=examples/results gallery ;
       fi

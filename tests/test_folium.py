@@ -5,27 +5,37 @@ Folium Tests
 -------
 
 """
+
+import json
+import os
+
+import branca.element
+
+import folium
+from folium.features import PolygonMarker, RectangleMarker, TopoJson
+
+import jinja2
+from jinja2 import Environment, PackageLoader
+
+import pandas as pd
+
 import pytest
 
-import os
-import json
+from six import PY3
+
 try:
     from unittest import mock
 except ImportError:
     import mock
 
-import pandas as pd
-import jinja2
-from jinja2 import Environment, PackageLoader
-
-from six import PY3
-import branca.element
-
-import folium
-from folium.map import Popup, Marker, FitBounds, FeatureGroup
-from folium.features import TopoJson, RectangleMarker, PolygonMarker
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
+
+# For testing remote requests
+remote_url = '/'.join([
+    'https://raw.githubusercontent.com',
+    'python-visualization/folium/master',
+    'examples/data/us-states.json'])
 
 
 def setup_data():
@@ -60,37 +70,37 @@ class TestFolium(object):
         """Setup Folium Map."""
         with mock.patch('branca.element.uuid4') as uuid4:
             uuid4().hex = '0' * 32
-            self.map = folium.Map(location=[45.5236, -122.6750], width=900,
-                                  height=400, max_zoom=20, zoom_start=4)
+            self.m = folium.Map(location=[45.5236, -122.6750], width=900,
+                                height=400, max_zoom=20, zoom_start=4)
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
         """Test map initialization."""
 
-        assert self.map.get_name() == 'map_00000000000000000000000000000000'
-        assert self.map.get_root() == self.map._parent
-        assert self.map.location == [45.5236, -122.6750]
-        assert self.map.zoom_start == 4
-        assert self.map.max_lat == 90
-        assert self.map.min_lat == -90
-        assert self.map.max_lon == 180
-        assert self.map.min_lon == -180
-        assert self.map.position == 'relative'
-        assert self.map.height == (400, 'px')
-        assert self.map.width == (900, 'px')
-        assert self.map.left == (0, '%')
-        assert self.map.top == (0, '%')
-        assert self.map.global_switches.prefer_canvas is False
-        assert self.map.global_switches.no_touch is False
-        assert self.map.global_switches.disable_3d is False
-        assert self.map.to_dict() == {
-            "name": "Map",
-            "id": "00000000000000000000000000000000",
-            "children": {
-                "openstreetmap": {
-                    "name": "TileLayer",
-                    "id": "00000000000000000000000000000000",
-                    "children": {}
+        assert self.m.get_name() == 'map_00000000000000000000000000000000'
+        assert self.m.get_root() == self.m._parent
+        assert self.m.location == [45.5236, -122.6750]
+        assert self.m.zoom_start == 4
+        assert self.m.max_lat == 90
+        assert self.m.min_lat == -90
+        assert self.m.max_lon == 180
+        assert self.m.min_lon == -180
+        assert self.m.position == 'relative'
+        assert self.m.height == (400, 'px')
+        assert self.m.width == (900, 'px')
+        assert self.m.left == (0, '%')
+        assert self.m.top == (0, '%')
+        assert self.m.global_switches.prefer_canvas is False
+        assert self.m.global_switches.no_touch is False
+        assert self.m.global_switches.disable_3d is False
+        assert self.m.to_dict() == {
+            'name': 'Map',
+            'id': '00000000000000000000000000000000',
+            'children': {
+                'openstreetmap': {
+                    'name': 'TileLayer',
+                    'id': '00000000000000000000000000000000',
+                    'children': {}
                     }
                 }
             }
@@ -100,12 +110,12 @@ class TestFolium(object):
         with pytest.raises(ValueError):
             folium.Map(location=[45.5236, -122.6750], tiles='cloudmade')
 
-        map = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
-                         API_key='###')
+        m = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
+                       API_key='###')
         cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
-        assert map._children['cloudmade'].tiles == cloudmade
+        assert m._children['cloudmade'].tiles == cloudmade
 
-        bounds = map.get_bounds()
+        bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
     def test_builtin_tile(self):
@@ -113,17 +123,17 @@ class TestFolium(object):
 
         default_tiles = ['OpenStreetMap', 'Stamen Terrain', 'Stamen Toner']
         for tiles in default_tiles:
-            map = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
+            m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
             tiles = ''.join(tiles.lower().strip().split())
             url = 'tiles/{}/tiles.txt'.format
             attr = 'tiles/{}/attr.txt'.format
-            url = map._env.get_template(url(tiles)).render()
-            attr = map._env.get_template(attr(tiles)).render()
+            url = m._env.get_template(url(tiles)).render()
+            attr = m._env.get_template(attr(tiles)).render()
 
-            assert map._children[tiles].tiles == url
-            assert map._children[tiles].attr == attr
+            assert m._children[tiles].tiles == url
+            assert m._children[tiles].attr == attr
 
-        bounds = map.get_bounds()
+        bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
     def test_custom_tile(self):
@@ -135,71 +145,98 @@ class TestFolium(object):
         with pytest.raises(ValueError):
             folium.Map(location=[45.5236, -122.6750], tiles=url)
 
-        map = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
-        assert map._children[url].tiles == url
-        assert map._children[url].attr == attr
+        m = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
+        assert m._children[url].tiles == url
+        assert m._children[url].attr == attr
 
-        bounds = map.get_bounds()
+        bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
+
+    def test_custom_tile_subdomains(self):
+        """Test custom tile subdomains."""
+
+        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
+        m = folium.Map(location=[45.52, -122.67], tiles=url,
+                       attr='attribution',
+                       subdomains='1234')
+
+        url_with_name = 'http://{s}.custom_tiles-subdomains.org/{z}/{x}/{y}.png'  # noqa
+        tile_layer = folium.TileLayer(url,
+                                      name='subdomains2',
+                                      attr='attribution',
+                                      subdomains='5678')
+        m.add_child(tile_layer)
+        m.add_tile_layer(tiles=url_with_name, attr='attribution',
+                         subdomains='9012')
+
+        out = m._parent.render()
+        assert '1234' in out
+        assert '5678' in out
+        assert '9012' in out
 
     def test_feature_group(self):
         """Test FeatureGroup."""
 
-        map = folium.Map()
-        feature_group = FeatureGroup()
-        feature_group.add_child(Marker([45, -30], popup=Popup('-30')))
-        feature_group.add_child(Marker([45, 30], popup=Popup('30')))
-        map.add_child(feature_group)
-        map.add_child(folium.map.LayerControl())
+        m = folium.Map()
+        feature_group = folium.FeatureGroup()
+        feature_group.add_child(folium.Marker([45, -30],
+                                              popup=folium.Popup('-30')))
+        feature_group.add_child(folium.Marker([45, 30],
+                                              popup=folium.Popup('30')))
+        m.add_child(feature_group)
+        m.add_child(folium.LayerControl())
 
-        map._repr_html_()
+        m._repr_html_()
 
-        bounds = map.get_bounds()
+        bounds = m.get_bounds()
         assert bounds == [[45, -30], [45, 30]], bounds
 
     def test_circle_marker(self):
         """Test circle marker additions."""
 
-        self.map = folium.Map(location=[45.60, -122.8])
+        self.m = folium.Map(location=[45.60, -122.8])
         circ_templ = self.env.get_template('circle_marker.js')
 
         # Single Circle marker.
         marker = folium.features.CircleMarker([45.60, -122.8], popup='Hi')
-        self.map.add_child(marker)
+        self.m.add_child(marker)
         circle_1 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.60,
                                       'lon': -122.8, 'radius': 500,
+                                      'weight': 2,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
         assert (''.join(circle_1.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
         # Second circle marker.
-        marker = folium.features.CircleMarker([45.70, -122.9], popup='Hi')
-        self.map.add_child(marker)
+        marker = folium.features.CircleMarker([45.70, -122.9], popup='Hi',
+                                              weight=1)
+        self.m.add_child(marker)
         circle_2 = circ_templ.render({'circle': marker.get_name(),
                                       'lat': 45.70,
                                       'lon': -122.9, 'radius': 500,
+                                      'weight': 1,
                                       'line_color': 'black',
                                       'fill_color': 'black',
                                       'fill_opacity': 0.6})
         assert (''.join(circle_2.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
-        bounds = self.map.get_bounds()
+        bounds = self.m.get_bounds()
         assert bounds == [[45.6, -122.9], [45.7, -122.8]], bounds
 
     def test_rectangle_marker(self):
         """Test rectangle marker additions."""
 
-        self.map = folium.Map(location=[45.60, -122.8])
+        self.m = folium.Map(location=[45.60, -122.8])
         rect_templ = self.env.get_template('rectangle_marker.js')
 
         # Single Rectangle marker.
         bounds = [45.60, -122.8, 45.61, -122.7]
-        self.map.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
-        marker = list(self.map._children.values())[-1]
+        self.m.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
+        marker = list(self.m._children.values())[-1]
         rect_1 = rect_templ.render({'RectangleMarker': marker.get_name(),
                                     'location': [45.60, -122.8, 45.61, -122.7],
                                     'color': 'black',
@@ -207,12 +244,12 @@ class TestFolium(object):
                                     'fill_opacity': 0.6,
                                     'weight': 1})
         assert (''.join(rect_1.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
         # Second Rectangle marker.
         bounds = [45.70, -122.9, 45.75, -122.5]
-        self.map.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
-        marker = list(self.map._children.values())[-1]
+        self.m.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
+        marker = list(self.m._children.values())[-1]
         rect_2 = rect_templ.render({'RectangleMarker': marker.get_name(),
                                     'location': [45.70, -122.9, 45.75, -122.5],
                                     'color': 'black',
@@ -220,15 +257,15 @@ class TestFolium(object):
                                     'fill_opacity': 0.6,
                                     'weight': 1})
         assert (''.join(rect_2.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
-        bounds = self.map.get_bounds()
+        bounds = self.m.get_bounds()
         assert bounds == [[45.6, -122.9], [45.7, -122.8]], bounds
 
     def test_polygon_marker(self):
         """Test polygon additions."""
 
-        self.map = folium.Map(location=[45.60, -122.8])
+        self.m = folium.Map(location=[45.60, -122.8])
         polygon_templ = self.env.get_template('polygon.js')
 
         # Single PolygonMarker.
@@ -240,8 +277,8 @@ class TestFolium(object):
                      [35.6720, 139.7606],
                      [35.6682, 139.7588],
                      [35.6663, 139.7627]]
-        self.map.add_child(PolygonMarker(locations=locations, popup='Hi'))
-        marker = list(self.map._children.values())[-1]
+        self.m.add_child(PolygonMarker(locations=locations, popup='Hi'))
+        marker = list(self.m._children.values())[-1]
         polygon_1 = polygon_templ.render({'PolygonMarker': marker.get_name(),
                                           'location': locations,
                                           'color': 'black',
@@ -249,7 +286,7 @@ class TestFolium(object):
                                           'fill_opacity': 0.6,
                                           'weight': 1})
         assert (''.join(polygon_1.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
         # Second PolygonMarker.
         locations = [[35.5636, 138.7634],
@@ -260,10 +297,10 @@ class TestFolium(object):
                      [35.5720, 138.7606],
                      [35.5682, 138.7588],
                      [35.5663, 138.7627]]
-        self.map.add_child(PolygonMarker(locations=locations, color='red',
-                                         fill_color='red', fill_opacity=0.7,
-                                         weight=3, popup='Hi'))
-        marker = list(self.map._children.values())[-1]
+        self.m.add_child(PolygonMarker(locations=locations, color='red',
+                                       fill_color='red', fill_opacity=0.7,
+                                       weight=3, popup='Hi'))
+        marker = list(self.m._children.values())[-1]
         polygon_2 = polygon_templ.render({'PolygonMarker': marker.get_name(),
                                           'location': locations,
                                           'color': 'red',
@@ -271,26 +308,26 @@ class TestFolium(object):
                                           'fill_opacity': 0.7,
                                           'weight': 3})
         assert (''.join(polygon_2.split())[:-1] in
-                ''.join(self.map.get_root().render().split()))
+                ''.join(self.m.get_root().render().split()))
 
-        bounds = self.map.get_bounds()
+        bounds = self.m.get_bounds()
         assert bounds == [[[35.5636, 138.7634], [35.5629, 138.7664]],
                           [[35.6636, 139.7634], [35.6629, 139.7664]]], bounds
 
     def test_topo_json_smooth_factor(self):
         """Test topojson smooth factor method."""
-        self.map = folium.Map([43, -100], zoom_start=4)
+        self.m = folium.Map([43, -100], zoom_start=4)
 
         # Adding TopoJSON as additional layer.
         path = os.path.join(rootpath, 'or_counties_topo.json')
-        self.map.choropleth(geo_path=path,
-                            topojson='objects.or_counties_geo',
-                            smooth_factor=0.5)
+        self.m.choropleth(geo_path=path,
+                          topojson='objects.or_counties_geo',
+                          smooth_factor=0.5)
 
-        out = self.map._parent.render()
+        out = self.m._parent.render()
 
         # Verify TopoJson
-        topo_json = [val for key, val in self.map._children.items()
+        topo_json = [val for key, val in self.m._children.items()
                      if isinstance(val, TopoJson)][0]
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
@@ -300,7 +337,7 @@ class TestFolium(object):
 
         # Standard map.
         self.setup()
-        out = self.map._parent.render()
+        out = self.m._parent.render()
         html_templ = self.env.get_template('fol_template.html')
         attr = ('Data by <a href="http://openstreetmap.org">OpenStreetMap'
                 '</a>,under '
@@ -313,7 +350,8 @@ class TestFolium(object):
              'min_zoom': 1,
              'detect_retina': False,
              'no_wrap': False,
-             'continuous_world': False
+             'continuous_world': False,
+             'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
@@ -339,26 +377,26 @@ class TestFolium(object):
         """
 
         if not PY3:
-            map = folium.Map(location=[45.5236, -122.6750],
-                             tiles='test', attr=b'unicode')
-            map._parent.render()
+            m = folium.Map(location=[45.5236, -122.6750],
+                           tiles='test', attr=b'unicode')
+            m._parent.render()
         else:
-            map = folium.Map(location=[45.5236, -122.6750],
-                             tiles='test', attr=u'юникод')
-            map._parent.render()
-        map = folium.Map(location=[45.5236, -122.6750],
-                         tiles='test', attr='юникод')
-        map._parent.render()
+            m = folium.Map(location=[45.5236, -122.6750],
+                           tiles='test', attr=u'юникод')
+            m._parent.render()
+        m = folium.Map(location=[45.5236, -122.6750],
+                       tiles='test', attr='юникод')
+        m._parent.render()
 
     def test_fit_bounds(self):
         """Test fit_bounds."""
         bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
 
         self.setup()
-        self.map.fit_bounds(bounds)
-        fitbounds = [val for key, val in self.map._children.items() if
-                     isinstance(val, FitBounds)][0]
-        out = self.map._parent.render()
+        self.m.fit_bounds(bounds)
+        fitbounds = [val for key, val in self.m._children.items() if
+                     isinstance(val, folium.FitBounds)][0]
+        out = self.m._parent.render()
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
@@ -369,10 +407,10 @@ class TestFolium(object):
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
         self.setup()
-        self.map.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
-        fitbounds = [val for key, val in self.map._children.items() if
-                     isinstance(val, FitBounds)][0]
-        out = self.map._parent.render()
+        self.m.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
+        fitbounds = [val for key, val in self.m._children.items() if
+                     isinstance(val, folium.FitBounds)][0]
+        out = self.m._parent.render()
 
         fit_bounds_tpl = self.env.get_template('fit_bounds.js')
         fit_bounds_rendered = fit_bounds_tpl.render({
@@ -385,17 +423,17 @@ class TestFolium(object):
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
-        bounds = self.map.get_bounds()
+        bounds = self.m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
     def test_custom_icon(self):
         """Test CustomIcon."""
         self.setup()
 
-        icon_image = "http://leafletjs.com/docs/images/leaf-green.png"
-        shadow_image = "http://leafletjs.com/docs/images/leaf-shadow.png"
+        icon_image = 'http://leafletjs.com/docs/images/leaf-green.png'
+        shadow_image = 'http://leafletjs.com/docs/images/leaf-shadow.png'
 
-        self.map = folium.Map([45, -100], zoom_start=4)
+        self.m = folium.Map([45, -100], zoom_start=4)
         i = folium.features.CustomIcon(icon_image,
                                        icon_size=(38, 95),
                                        icon_anchor=(22, 94),
@@ -403,46 +441,58 @@ class TestFolium(object):
                                        shadow_size=(50, 64),
                                        shadow_anchor=(4, 62),
                                        popup_anchor=(-3, -76),)
-        mk = folium.map.Marker([45, -100], icon=i,
-                               popup=folium.map.Popup('Hello'))
-        self.map.add_child(mk)
-        self.map._parent.render()
+        mk = folium.Marker([45, -100], icon=i,
+                           popup=folium.Popup('Hello'))
+        self.m.add_child(mk)
+        self.m._parent.render()
 
-        bounds = self.map.get_bounds()
+        bounds = self.m.get_bounds()
         assert bounds == [[45, -100], [45, -100]], bounds
 
     def test_tile_layer(self):
-        mapa = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+        m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
         layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        mapa.add_child(folium.map.TileLayer(layer, name='OpenStreetMap',
-                                            attr='attribution'))
-        mapa.add_child(folium.map.TileLayer(layer,
-                                            name='OpenStreetMap2',
-                                            attr='attribution2',
-                                            overlay=True))
-        mapa.add_child(folium.map.LayerControl())
-        mapa._repr_html_()
+        m.add_child(folium.TileLayer(layer, name='OpenStreetMap',
+                                     attr='attribution'))
+        m.add_child(folium.TileLayer(layer,
+                                     name='OpenStreetMap2',
+                                     attr='attribution2',
+                                     overlay=True))
+        m.add_child(folium.LayerControl())
+        m._repr_html_()
 
-        bounds = self.map.get_bounds()
+        bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
     def test_global_switches(self):
-        mapa = folium.Map(prefer_canvas=True)
-        assert (mapa.global_switches.prefer_canvas is True and
-                mapa.global_switches.no_touch is False and
-                mapa.global_switches.disable_3d is False)
+        m = folium.Map(prefer_canvas=True)
+        assert (m.global_switches.prefer_canvas is True and
+                m.global_switches.no_touch is False and
+                m.global_switches.disable_3d is False)
 
-        mapb = folium.Map(no_touch=True)
-        assert (mapb.global_switches.prefer_canvas is False and
-                mapb.global_switches.no_touch is True and
-                mapb.global_switches.disable_3d is False)
+        m = folium.Map(no_touch=True)
+        assert (m.global_switches.prefer_canvas is False and
+                m.global_switches.no_touch is True and
+                m.global_switches.disable_3d is False)
 
-        mapc = folium.Map(disable_3d=True)
-        assert (mapc.global_switches.prefer_canvas is False and
-                mapc.global_switches.no_touch is False and
-                mapc.global_switches.disable_3d is True)
+        m = folium.Map(disable_3d=True)
+        assert (m.global_switches.prefer_canvas is False and
+                m.global_switches.no_touch is False and
+                m.global_switches.disable_3d is True)
 
-        mapd = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
-        assert (mapd.global_switches.prefer_canvas is True and
-                mapd.global_switches.no_touch is True and
-                mapd.global_switches.disable_3d is True)
+        m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
+        assert (m.global_switches.prefer_canvas is True and
+                m.global_switches.no_touch is True and
+                m.global_switches.disable_3d is True)
+
+    def test_json_request(self):
+        """Test requests for remote GeoJSON files."""
+        self.m = folium.Map(zoom_start=4)
+
+        # Adding remote GeoJSON as additional layer.
+        self.m.choropleth(geo_path=remote_url,
+                          smooth_factor=0.5)
+
+        self.m._parent.render()
+        bounds = self.m.get_bounds()
+        assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds  # noqa

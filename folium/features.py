@@ -9,18 +9,16 @@ Extra features Elements.
 
 import json
 
-from jinja2 import Template
-from six import text_type, binary_type
-
-from branca.utilities import (
-    _parse_size, _locations_mirror, _locations_tolist, image_to_url,
-    none_min, none_max, iter_points
-)
-from branca.element import (Element, Figure, JavascriptLink, CssLink,
-                            MacroElement)
 from branca.colormap import LinearColormap
+from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)
+from branca.utilities import (_locations_mirror, _locations_tolist, _parse_size,
+                              image_to_url, iter_points, none_max, none_min)
 
-from .map import Layer, Icon, Marker, Popup, FeatureGroup
+from jinja2 import Template
+
+from six import binary_type, text_type
+
+from .map import FeatureGroup, Icon, Layer, Marker, Popup
 
 
 class WmsTileLayer(Layer):
@@ -39,7 +37,7 @@ class WmsTileLayer(Layer):
         Comma-separated list of WMS styles.
     format : str, default None
         The format of the service output.
-        Ex: 'iamge/png'
+        Ex: 'image/png'
     transparent: bool, default True
         Whether the layer shall allow transparency.
     version : str, default '1.1.1'
@@ -56,7 +54,7 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, layers=None, styles=None, format=None,
+    def __init__(self, url, name=None, layers=None, styles=None, fmt=None,
                  transparent=True, version='1.1.1', attr=None, overlay=True,
                  control=True):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
@@ -65,11 +63,9 @@ class WmsTileLayer(Layer):
         # Options.
         self.layers = layers if layers else ''
         self.styles = styles if styles else ''
-        self.format = format if format else 'image/jpeg'
+        self.format = fmt if fmt else 'image/jpeg'
         self.transparent = transparent
         self.version = version
-        # FIXME: Should be map CRS!
-        # self.crs = crs if crs else 'null
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
@@ -163,11 +159,11 @@ class RegularPolygonMarker(Marker):
         super(RegularPolygonMarker, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
             name='dvf_js')
 
 
@@ -201,7 +197,7 @@ class Vega(Element):
 
     """
     def __init__(self, data, width=None, height=None,
-                 left="0%", top="0%", position='relative'):
+                 left='0%', top='0%', position='relative'):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
@@ -217,7 +213,7 @@ class Vega(Element):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
-        self._template = Template(u"")
+        self._template = Template(u'')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -232,8 +228,8 @@ class Vega(Element):
             """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(Element(Template("""
             <style> #{{this.get_name()}} {
@@ -246,15 +242,15 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink("https://code.jquery.com/jquery-2.1.0.min.js"),
+            JavascriptLink('https://code.jquery.com/jquery-2.1.0.min.js'),
             name='jquery')
 
         figure.script.add_child(
@@ -278,6 +274,8 @@ class GeoJson(Layer):
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         A function mapping a GeoJson Feature to a style dict.
+    highlight_function: function, default None
+        A function mapping a GeoJson Feature to a style dict for mouse over events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False
@@ -550,11 +548,11 @@ class TopoJson(Layer):
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
             name='topojson')
 
     def _get_self_bounds(self):
@@ -621,23 +619,23 @@ class MarkerCluster(Layer):
         super(MarkerCluster, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js'),  # noqa
             name='marker_cluster_src')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
             name='marker_cluster')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css'),  # noqa
             name='marker_cluster_css')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
-            name="marker_cluster_default_css")
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css'),  # noqa
+            name='marker_cluster_default_css')
 
 
 class DivIcon(MacroElement):
@@ -753,6 +751,8 @@ class CircleMarker(Marker):
         use Circle.
     color: str, default 'black'
         The color of the marker's edge in a HTML-compatible format.
+    weight: int, default 2
+        Stroke weight in pixels
     fill_color: str, default 'black'
         The fill color of the marker in a HTML-compatible format.
     fill_opacity: float, default 0.6
@@ -762,11 +762,13 @@ class CircleMarker(Marker):
 
     """
     def __init__(self, location, radius=500, color='black',
-                 fill_color='black', fill_opacity=0.6, popup=None):
+                 weight=2, fill_color='black', fill_opacity=0.6,
+                 popup=None):
         super(CircleMarker, self).__init__(location, popup=popup)
         self._name = 'CircleMarker'
         self.radius = radius
         self.color = color
+        self.weight = weight
         self.fill_color = fill_color
         self.fill_opacity = fill_opacity
 
@@ -777,6 +779,7 @@ class CircleMarker(Marker):
                 [{{this.location[0]}},{{this.location[1]}}],
                 {
                     color: '{{ this.color }}',
+                    weight: {{ this.weight }},
                     fillColor: '{{ this.fill_color }}',
                     fillOpacity: {{ this.fill_opacity }}
                     }

@@ -2,22 +2,25 @@
 
 from __future__ import absolute_import
 
+from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
                             JavascriptLink, Link, MacroElement)
-from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 
+from ._version import get_versions
+
+from .features import (
+    CircleMarker, ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup,
+    MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, WmsTileLayer,
+)
 
 from .folium import Map
+
 from .map import (
     FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup, TileLayer
 )
-from .features import (
-    ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup, CircleMarker,
-    MarkerCluster, PolyLine, Vega, RegularPolygonMarker,
-    TopoJson, WmsTileLayer
-)
 
-__version__ = '0.3.0.dev'
+__version__ = get_versions()['version']
+del get_versions
 
 __all__ = [
     'CssLink',

@@ -6,13 +6,16 @@ Heat map
 Create a HeatMap layer
 
 """
-import json
-from jinja2 import Template
 
-from branca.element import JavascriptLink, Figure
-from branca.utilities import none_min, none_max
+import json
+
+
+from branca.element import Figure, JavascriptLink
+from branca.utilities import none_max, none_min
 
 from folium.map import TileLayer
+
+from jinja2 import Template
 
 
 class HeatMap(TileLayer):
@@ -52,7 +55,7 @@ class HeatMap(TileLayer):
         self.radius = radius
         self.blur = blur
         self.gradient = (json.dumps(gradient, sort_keys=True) if
-                         gradient is not None else "null")
+                         gradient is not None else 'null')
         self.overlay = overlay
 
         self._template = Template(u"""
@@ -75,11 +78,11 @@ class HeatMap(TileLayer):
         super(TileLayer, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"),  # noqa
+            JavascriptLink('https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),  # noqa
             name='leaflet-heat.js')
 
     def _get_self_bounds(self):

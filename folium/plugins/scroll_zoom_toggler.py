@@ -5,9 +5,10 @@ ScrollZoomToggler plugin
 
 Adds a button to enable/disable zoom scrolling.
 """
-from jinja2 import Template
 
 from branca.element import MacroElement
+
+from jinja2 import Template
 
 
 class ScrollZoomToggler(MacroElement):
@@ -37,7 +38,7 @@ class ScrollZoomToggler(MacroElement):
             {% macro html(this,kwargs) %}
             <img id="{{this.get_name()}}" alt="scroll"
                  src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/arrow-move.png"
-                 style="z-index: 999999"       
+                 style="z-index: 999999"
                  onclick="{{this._parent.get_name()}}.toggleScroll()">
             </img>
             {% endmacro %}

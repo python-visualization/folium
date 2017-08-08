@@ -20,15 +20,16 @@ A geo-json is timestamped if:
 """
 
 import json
-from jinja2 import Template
 
-from branca.element import MacroElement, Figure, JavascriptLink, CssLink
-from branca.utilities import none_min, none_max, iter_points
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.utilities import iter_points, none_max, none_min
+
+from jinja2 import Template
 
 
 class TimestampedGeoJson(MacroElement):
-    def __init__(self, data, transition_time=200, loop=True, auto_play=True,
-                 period="P1D"):
+    def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
+                 period='P1D'):
         """Creates a TimestampedGeoJson plugin to append into a map with
         Map.add_child.
 
@@ -82,6 +83,8 @@ class TimestampedGeoJson(MacroElement):
             Whether the animation shall loop.
         auto_play : bool, default True
             Whether the animation shall start automatically at startup.
+        add_last_point: bool, default True
+            Whether a point is added at the last valid coordinate of a LineString.
         period : str, default "P1D"
             Used to construct the array of available times starting
             from the first available time. Format: ISO8601 Duration
@@ -106,6 +109,7 @@ class TimestampedGeoJson(MacroElement):
         self.transition_time = int(transition_time)
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
+        self.add_last_point = bool(add_last_point)
         self.period = period
 
         self._template = Template("""
@@ -121,8 +125,10 @@ class TimestampedGeoJson(MacroElement):
             {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-                L.geoJson({{this.data}}),
-                {updateTimeDimension: true,addlastPoint: true}
+                L.geoJson({{this.data}}, {'style': function (feature) {
+                    return feature.properties.style
+                }}),
+                {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
@@ -131,27 +137,27 @@ class TimestampedGeoJson(MacroElement):
         super(TimestampedGeoJson, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
             name='jquery2.0.0')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
             name='highlight.js_css')
 
         figure.header.add_child(
