@@ -88,6 +88,10 @@ class Map(LegacyMap):
         Forces Leaflet to not use hardware-accelerated CSS 3D
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
+    custom_css : string array, default []
+        Additional css rules to allow customization of map display.
+        Each element in the array wil get prefixed with the current map id
+        so it only applies to this map instance
 
     Returns
     -------

@@ -145,6 +145,10 @@ class LegacyMap(MacroElement):
         Forces Leaflet to not use hardware-accelerated CSS 3D
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
+    custom_css : string array, default []
+        Additional css rules to allow customization of map display.
+        Each element in the array wil get prefixed with the current map id
+        so it only applies to this map instance
 
     Returns
     -------
@@ -171,7 +175,7 @@ class LegacyMap(MacroElement):
                  min_lon=-180, max_lon=180, max_bounds=True,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False):
+                 subdomains='abc', png_enabled=False, custom_css=[]):
         super(LegacyMap, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -209,6 +213,7 @@ class LegacyMap(MacroElement):
         self.control_scale = control_scale
 
         self.global_switches = GlobalSwitches(prefer_canvas, no_touch, disable_3d)
+        self.custom_css = custom_css
 
         if tiles:
             self.add_tile_layer(
@@ -227,6 +232,9 @@ class LegacyMap(MacroElement):
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
                 }
+                {% for rule in this.custom_css %}
+                #{{this.get_name()}} {{rule}}
+                {% endfor %}
             </style>
         {% endmacro %}
         {% macro html(this, kwargs) %}
