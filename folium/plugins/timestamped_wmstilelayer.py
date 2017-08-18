@@ -25,7 +25,7 @@ from branca.element import Figure, JavascriptLink, CssLink
 from ..map import Layer
 
 
-class TimestampedWmsTileLayer(Layer):
+class TimestampedWmsTileLayers(Layer):
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
                  period="P1D"):
         """Creates a TimestampedWmsTileLayer subclass of Layer that takes a
@@ -55,8 +55,8 @@ class TimestampedWmsTileLayer(Layer):
               w.add_to(m)
 
               # Add WmsTileLayer to time control
-              time = plugins.TimestampedWmsTileLayer(w)
-              time.add_to(m)
+              time = plugins.TimestampedWmsTileLayers(w)
+              time.add_to([m,])
 
         transition_time : int, default 200.
             The duration in ms of a transition from between timestamps.
@@ -85,9 +85,8 @@ class TimestampedWmsTileLayer(Layer):
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
         self.period = period
-        self.layer = data
+        self.layers = data
         self._template = Template("""
-        print kwargs
         {% macro script(this, kwargs) %}
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
             {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
@@ -99,12 +98,13 @@ class TimestampedWmsTileLayer(Layer):
                     });
             {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
 
-
-            var {{this.get_name()}} = L.timeDimension.layer.wms({{ this.layer.get_name() }},
+            {% for layer in this.layers %}
+            var {{this.get_name()}} = L.timeDimension.layer.wms({{ layer.get_name() }},
                 {updateTimeDimension: true,
-                 wmsVersion: '{{ this.layer.version }}',
+                 wmsVersion: '{{ layer.version }}',
                 }
                 ).addTo({{this._parent.get_name()}});
+            {% endfor %}
         {% endmacro %}
         """)
 

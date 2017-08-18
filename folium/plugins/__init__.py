@@ -16,7 +16,7 @@ from .image_overlay import ImageOverlay
 from .fullscreen import Fullscreen
 from .polyline_text_path import PolyLineTextPath
 from .float_image import FloatImage
-from .timestamped_wmstilelayer import TimestampedWmsTileLayer
+from .timestamped_wmstilelayer import TimestampedWmsTileLayers
 
 __all__ = [
     'MarkerCluster',
