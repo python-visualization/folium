@@ -23,11 +23,12 @@ from jinja2 import Template
 
 from branca.element import Figure, JavascriptLink, CssLink
 from ..map import Layer
+from ..features import WmsTileLayer
 
 
 class TimestampedWmsTileLayers(Layer):
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period="P1D"):
+                 period="P1D", time_interval=False):
         """Creates a TimestampedWmsTileLayer subclass of Layer that takes a
         WmsTileLayer and adds time control with the Leaflet.TimeDimension
         plugin.
@@ -42,7 +43,7 @@ class TimestampedWmsTileLayers(Layer):
 
            examples :
               # Create WmsTileLayer
-              w = features.WmsTileLayer(
+              w1 = features.WmsTileLayer(
                   "http://this.wms.server/ncWMS/wms",
                   name="Test WMS Data",
                   styles="",
@@ -52,11 +53,24 @@ class TimestampedWmsTileLayers(Layer):
                   COLORSCALERANGE="0,10",
                   )
               # Add to map
-              w.add_to(m)
+              w1.add_to(m)
 
-              # Add WmsTileLayer to time control
-              time = plugins.TimestampedWmsTileLayers(w)
-              time.add_to([m,])
+              # Create WmsTileLayer
+              w2 = features.WmsTileLayer(
+                  "http://this.wms.server/ncWMS/wms",
+                  name="Test WMS Data",
+                  styles="",
+                  format="image/png",
+                  transparent=True,
+                  layers="test_data_2",
+                  COLORSCALERANGE="0,5",
+                  )
+              # Add to map
+              w2.add_to(m)
+
+              # Add WmsTileLayers to time control
+              time = plugins.TimestampedWmsTileLayers([w1,w2])
+              time.add_to(m)
 
         transition_time : int, default 200.
             The duration in ms of a transition from between timestamps.
@@ -76,19 +90,28 @@ class TimestampedWmsTileLayers(Layer):
             Note: this seems to be overridden by the WMS Tile Layer
             GetCapabilities.
         """
-        super(TimestampedWmsTileLayer, self).__init__(overlay=True,
-                                                      control=data.control,
-                                                      name=data.layer_name)
-        self._name = 'TimestampedWmsTileLayer'
+        super(TimestampedWmsTileLayers, self).__init__(overlay=True,
+                                                       control=False,
+                                                       name="timestampedwms")
+        self._name = 'TimestampedWmsTileLayers'
 
         self.transition_time = int(transition_time)
         self.loop = bool(loop)
         self.auto_play = bool(auto_play)
         self.period = period
-        self.layers = data
+        self.time_interval = time_interval
+        if isinstance(data, WmsTileLayer):
+            self.layers = [data]
+        else:
+            self.layers = data  # Assume iterable
         self._template = Template("""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension({
+                period:"{{this.period}}",
+                {% if this.time_interval %}
+                timeInterval: "{{ this.time_interval }}",
+                {% endif %}
+                });
             {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
                 position: 'bottomleft',
                 autoPlay: {{'true' if this.auto_play else 'false'}},
@@ -99,8 +122,8 @@ class TimestampedWmsTileLayers(Layer):
             {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
 
             {% for layer in this.layers %}
-            var {{this.get_name()}} = L.timeDimension.layer.wms({{ layer.get_name() }},
-                {updateTimeDimension: true,
+            var {{ layer.get_name() }} = L.timeDimension.layer.wms({{ layer.get_name() }},
+                {updateTimeDimension: false,
                  wmsVersion: '{{ layer.version }}',
                 }
                 ).addTo({{this._parent.get_name()}});
@@ -109,7 +132,7 @@ class TimestampedWmsTileLayers(Layer):
         """)
 
     def render(self, **kwargs):
-        super(TimestampedWmsTileLayer, self).render()
+        super(TimestampedWmsTileLayers, self).render()
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ("You cannot render this Element "
