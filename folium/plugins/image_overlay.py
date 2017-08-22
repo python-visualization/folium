@@ -7,12 +7,14 @@ Used to load and display a single image over specific bounds of
 the map, implements ILayer interface.
 
 """
+
 import json
-from jinja2 import Template
 
 from branca.utilities import image_to_url
 
 from folium.map import Layer
+
+from jinja2 import Template
 
 
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):

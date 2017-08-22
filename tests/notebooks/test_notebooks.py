@@ -8,6 +8,7 @@ Here we try to execute all notebooks that are in `folium/examples`.
 
 import os
 import sys
+
 import branca.utilities
 
 if sys.version_info[:2] >= (3, 5):

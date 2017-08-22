@@ -6,11 +6,12 @@ Marker Cluster plugin
 Creates a MarkerCluster plugin to add on a folium map.
 """
 
+
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
+from folium.map import Icon, Marker, Popup
+
 from jinja2 import Template
-
-from branca.element import JavascriptLink, CssLink, MacroElement, Figure
-
-from folium.map import Popup, Icon, Marker
 
 
 class MarkerCluster(MacroElement):
@@ -59,17 +60,17 @@ class MarkerCluster(MacroElement):
         super(MarkerCluster, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
             name='markerclusterjs')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css'),  # noqa
             name='markerclustercss')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css'),  # noqa
             name='markerclusterdefaultcss')
