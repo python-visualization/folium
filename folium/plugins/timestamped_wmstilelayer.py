@@ -28,7 +28,7 @@ from ..features import WmsTileLayer
 
 class TimestampedWmsTileLayers(Layer):
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period="P1D", time_interval=False):
+                 period='P1D', time_interval=False):
         """Creates a TimestampedWmsTileLayer subclass of Layer that takes a
         WmsTileLayer and adds time control with the Leaflet.TimeDimension
         plugin.

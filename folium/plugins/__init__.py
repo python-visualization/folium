@@ -31,5 +31,5 @@ __all__ = [
     'Fullscreen',
     'PolyLineTextPath',
     'FloatImage',
-    'TimestampedWmsTileLayer'
+    'TimestampedWmsTileLayers'
     ]
