@@ -35,7 +35,7 @@ class WmsTileLayer(Layer):
         The names of the layers to be displayed.
     styles : str, default None
         Comma-separated list of WMS styles.
-    format : str, default None
+    fmt : str, default None
         The format of the service output.
         Ex: 'image/png'
     transparent: bool, default True
@@ -257,6 +257,101 @@ class Vega(Element):
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
+
+
+class VegaLite(Element):
+    """
+    Creates a Vega-Lite chart element.
+
+    Parameters
+    ----------
+    data: JSON-like str or object
+        The Vega-Lite description of the chart.
+        It can also be any object that has a method `to_json`,
+        so that you can (for instance) provide an `Altair` chart.
+    width: int or str, default None
+        The width of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    height: int or str, default None
+        The height of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    left: int or str, default '0%'
+        The horizontal distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    top: int or str, default '0%'
+        The vertical distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    position: str, default 'relative'
+        The `position` argument that the CSS shall contain.
+        Ex: 'relative', 'absolute'
+
+    """
+    def __init__(self, data, width=None, height=None,
+                 left='0%', top='0%', position='relative'):
+        super(VegaLite, self).__init__()
+        self._name = 'VegaLite'
+        self.data = data.to_json() if hasattr(data, 'to_json') else data
+        # FIXME:
+        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+            self.data = json.loads(self.data)
+
+        # Size Parameters.
+        self.width = _parse_size(self.data.get('width', '100%') if
+                                 width is None else width)
+        self.height = _parse_size(self.data.get('height', '100%') if
+                                  height is None else height)
+        self.left = _parse_size(left)
+        self.top = _parse_size(top)
+        self.position = position
+        self._template = Template(u'')
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        self.json = json.dumps(self.data)
+
+        self._parent.html.add_child(Element(Template("""
+            <div id="{{this.get_name()}}"></div>
+            """).render(this=self, kwargs=kwargs)), name=self.get_name())
+
+        self._parent.script.add_child(Element(Template("""
+            var embedSpec = {
+                mode: "vega-lite",
+                spec: {{this.json}}
+            };
+            vg.embed({{this.get_name()}}, embedSpec, function(error, result) {});
+        """).render(this=self)), name=self.get_name())
+
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+
+        figure.header.add_child(Element(Template("""
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+            """).render(this=self, **kwargs)), name=self.get_name())
+
+        figure.header.add_child(
+            JavascriptLink('https://d3js.org/d3.v3.min.js'),
+            name='d3')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),
+            name='vega')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),
+            name='vega-lite')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),
+            name='vega-embed')
 
 
 class GeoJson(Layer):

@@ -10,7 +10,7 @@ from ._version import get_versions
 
 from .features import (
     CircleMarker, ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup,
-    MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, WmsTileLayer,
+    MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, VegaLite, WmsTileLayer,
 )
 
 from .folium import Map
@@ -55,6 +55,7 @@ __all__ = [
     'MarkerCluster',
     'PolyLine',
     'Vega',
+    'VegaLite',
     'RegularPolygonMarker',
     'TopoJson',
     'WmsTileLayer'
