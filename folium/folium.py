@@ -12,10 +12,11 @@ from __future__ import absolute_import
 from branca.colormap import StepColormap
 from branca.utilities import color_brewer
 
-from .map import LegacyMap, FitBounds
-from .features import GeoJson, TopoJson
-
 import requests
+
+from .features import GeoJson, TopoJson
+from .map import FitBounds, LegacyMap
+
 
 class Map(LegacyMap):
     """Create a Map with Folium and Leaflet.js
@@ -144,7 +145,7 @@ class Map(LegacyMap):
     def choropleth(self, geo_path=None, geo_str=None, data_out='data.json',
                    data=None, columns=None, key_on=None, threshold_scale=None,
                    fill_color='blue', fill_opacity=0.6, line_color='black',
-                   line_weight=1, line_opacity=1, legend_name="",
+                   line_weight=1, line_opacity=1, legend_name='',
                    topojson=None, reset=False, smooth_factor=None,
                    highlight=None):
         """
@@ -313,17 +314,17 @@ class Map(LegacyMap):
 
         def style_function(x):
             return {
-                "weight": line_weight,
-                "opacity": line_opacity,
-                "color": line_color,
-                "fillOpacity": fill_opacity,
-                "fillColor": color_scale_fun(x)
+                'weight': line_weight,
+                'opacity': line_opacity,
+                'color': line_color,
+                'fillOpacity': fill_opacity,
+                'fillColor': color_scale_fun(x)
             }
 
         def highlight_function(x):
             return {
-                "weight": line_weight + 2,
-                "fillOpacity": fill_opacity + .2
+                'weight': line_weight + 2,
+                'fillOpacity': fill_opacity + .2
             }
 
         if topojson:
