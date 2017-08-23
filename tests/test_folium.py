@@ -70,8 +70,14 @@ class TestFolium(object):
         """Setup Folium Map."""
         with mock.patch('branca.element.uuid4') as uuid4:
             uuid4().hex = '0' * 32
-            self.m = folium.Map(location=[45.5236, -122.6750], width=900,
-                                height=400, max_zoom=20, zoom_start=4)
+            self.m = folium.Map(
+                location=[45.5236, -122.6750],
+                width=900,
+                height=400,
+                max_zoom=20,
+                zoom_start=4,
+                max_bounds=True
+            )
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
@@ -357,6 +363,7 @@ class TestFolium(object):
                 'lat': 45.5236, 'lon': -122.675,
                 'size': 'width: 900.0px; height: 400.0px;',
                 'zoom_level': 4,
+                'max_bounds': True,
                 'min_lat': -90,
                 'max_lat': 90,
                 'min_lon': -180,
