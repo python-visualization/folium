@@ -209,7 +209,6 @@ class Vega(Element):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        # FIXME:
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
@@ -301,7 +300,6 @@ class VegaLite(Element):
         super(VegaLite, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        # FIXME:
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
