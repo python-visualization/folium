@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 TimestampedGeoJson plugin
---------------
+-------------------------
 
 Add a timestamped geojson feature collection on a folium map.
 This is based on Leaflet.TimeDimension.
@@ -96,7 +96,6 @@ class TimestampedGeoJson(MacroElement):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
-        # self.template = self.env.get_template('timestamped_geo_json.tpl')
         if 'read' in dir(data):
             self.embed = True
             self.data = data.read()

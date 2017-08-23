@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-TimestampedGeoJson plugin
---------------
+TimestampedWmsTileLayers plugin
+-------------------------------
 
-Add a timestamped geojson feature collection on a folium map.
+Add timestamped WMS Tile Layers on a folium map.
 This is based on Leaflet.TimeDimension.
 
 https://github.com/socib/Leaflet.TimeDimension
 
-A geo-json is timestamped if:
-    * it contains only features of types LineString, MultiPoint,
-      MultiLineString and MultiPolygon.
-    * each feature has a "times" property with the same length as the
-      coordinates array.
-    * each element of each "times" property is a timestamp in ms since epoch,
-     or in ISO string.  Eventually, you may have Point features with a
-     "times" property being an array of length 1.
+A WMS layer is timestamped if it contains timepositions information.
 
 """
 
@@ -44,26 +37,26 @@ class TimestampedWmsTileLayers(Layer):
            examples :
               # Create WmsTileLayer
               w1 = features.WmsTileLayer(
-                  "http://this.wms.server/ncWMS/wms",
-                  name="Test WMS Data",
-                  styles="",
-                  format="image/png",
+                  'http://this.wms.server/ncWMS/wms',
+                  name='Test WMS Data',
+                  styles='',
+                  format='image/png',
                   transparent=True,
-                  layers="test_data",
-                  COLORSCALERANGE="0,10",
+                  layers='test_data',
+                  COLORSCALERANGE='0,10',
                   )
               # Add to map
               w1.add_to(m)
 
               # Create WmsTileLayer
               w2 = features.WmsTileLayer(
-                  "http://this.wms.server/ncWMS/wms",
-                  name="Test WMS Data",
-                  styles="",
-                  format="image/png",
+                  'http://this.wms.server/ncWMS/wms',
+                  name='Test WMS Data',
+                  styles='',
+                  format='image/png',
                   transparent=True,
-                  layers="test_data_2",
-                  COLORSCALERANGE="0,5",
+                  layers='test_data_2',
+                  COLORSCALERANGE='0,5',
                   )
               # Add to map
               w2.add_to(m)
@@ -80,19 +73,19 @@ class TimestampedWmsTileLayers(Layer):
         auto_play : bool, default False
             Whether the animation shall start automatically at startup, default
             is to reduce load on WMS services.
-        period : str, default "P1D"
+        period : str, default 'P1D'
             Used to construct the array of available times starting
             from the first available time. Format: ISO8601 Duration
-            ex: "P1M" -> 1/month
-                "P1D"  -> 1/day
-                "PT1H"  -> 1/hour
-                "PT1M"  -> 1/minute
+            ex: 'P1M' -> 1/month
+                'P1D'  -> 1/day
+                'PT1H'  -> 1/hour
+                'PT1M'  -> 1/minute
             Note: this seems to be overridden by the WMS Tile Layer
             GetCapabilities.
         """
         super(TimestampedWmsTileLayers, self).__init__(overlay=True,
                                                        control=False,
-                                                       name="timestampedwms")
+                                                       name='timestampedwms')
         self._name = 'TimestampedWmsTileLayers'
 
         self.transition_time = int(transition_time)
@@ -135,29 +128,29 @@ class TimestampedWmsTileLayers(Layer):
         super(TimestampedWmsTileLayers, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
             name='jquery2.0.0')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
             name='highlight.js_css')
 
         figure.header.add_child(
-            CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
+            CssLink('http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css'),  # noqa
             name='leaflet.timedimension_css')
