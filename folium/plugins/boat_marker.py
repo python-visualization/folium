@@ -65,5 +65,5 @@ class BoatMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js'),  # noqa
+            JavascriptLink('https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),  # noqa
             name='markerclusterjs')
