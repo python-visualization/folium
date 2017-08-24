@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function)
 
 from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,

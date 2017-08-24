@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Image Overlay
 -------------
@@ -7,6 +6,8 @@ Used to load and display a single image over specific bounds of
 the map, implements ILayer interface.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 import json
 

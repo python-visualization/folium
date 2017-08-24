@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Map
 ------
@@ -8,6 +6,7 @@ Classes for drawing maps.
 
 """
 
+from __future__ import (absolute_import, division, print_function)
 from __future__ import unicode_literals
 
 import json

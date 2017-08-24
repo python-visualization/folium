@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Features
 ------
@@ -6,6 +5,8 @@ Features
 Extra features Elements.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 import json
 

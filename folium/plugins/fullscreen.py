@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Fullscreen
 --------------
@@ -7,6 +6,8 @@ https://github.com/brunob/leaflet.fullscreen
 
 Adds fullscreen button to your maps.
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 

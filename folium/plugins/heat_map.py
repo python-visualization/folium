@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Heat map
 --------
@@ -7,8 +6,9 @@ Create a HeatMap layer
 
 """
 
-import json
+from __future__ import (absolute_import, division, print_function)
 
+import json
 
 from branca.element import Figure, JavascriptLink
 from branca.utilities import none_max, none_min

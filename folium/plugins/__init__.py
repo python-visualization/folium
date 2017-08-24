@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 Folium plugins
 --------------
 
 Add different objects/effects on a folium map.
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from .boat_marker import BoatMarker
 from .fast_marker_cluster import FastMarkerCluster
