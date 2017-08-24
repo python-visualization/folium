@@ -5,6 +5,8 @@ Measure plugin
 Coordinate, linear, and area measure control for folium maps.
 """
 
+from __future__ import (absolute_import, division, print_function)
+
 import json
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement

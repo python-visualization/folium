@@ -12,6 +12,8 @@ A WMS layer is timestamped if it contains timepositions information.
 
 """
 
+from __future__ import (absolute_import, division, print_function)
+
 from branca.element import CssLink, Figure, JavascriptLink
 
 from folium.features import WmsTileLayer

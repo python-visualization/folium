@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 PolyLine Text Path
 -----------
@@ -8,6 +7,8 @@ https://github.com/makinacorpus/Leaflet.TextPath
 Shows a text along a PolyLine.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import Figure, JavascriptLink
 

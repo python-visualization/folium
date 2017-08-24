@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 ScrollZoomToggler plugin
 ------------------------
 
 Adds a button to enable/disable zoom scrolling.
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import MacroElement
 

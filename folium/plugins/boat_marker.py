@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Boat marker
 -----------
@@ -8,8 +7,9 @@ Optionally you can append a wind direction.
 
 """
 
-import json
+from __future__ import (absolute_import, division, print_function)
 
+import json
 
 from branca.element import Figure, JavascriptLink
 

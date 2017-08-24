@@ -6,6 +6,8 @@ Used to load and display a video over the map.
 
 """
 
+from __future__ import (absolute_import, division, print_function)
+
 import json
 
 from folium.map import Layer

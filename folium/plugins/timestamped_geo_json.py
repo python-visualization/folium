@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 TimestampedGeoJson plugin
 -------------------------
@@ -18,6 +17,8 @@ A geo-json is timestamped if:
      "times" property being an array of length 1.
 
 """
+
+from __future__ import (absolute_import, division, print_function)
 
 import json
 

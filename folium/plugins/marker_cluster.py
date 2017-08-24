@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Marker Cluster plugin
 ---------------------
@@ -6,6 +5,7 @@ Marker Cluster plugin
 Creates a MarkerCluster plugin to add on a folium map.
 """
 
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 

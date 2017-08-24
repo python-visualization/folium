@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 FloatImage plugin
 -----------------
@@ -6,6 +5,7 @@ FloatImage plugin
 Adds a floating image in HTML canvas on top of the map.
 """
 
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import MacroElement
 
