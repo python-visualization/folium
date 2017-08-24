@@ -12,14 +12,13 @@ import json
 
 from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
-from branca.utilities import (_locations_mirror, _locations_tolist, _parse_size,
-                              image_to_url, iter_points, none_max, none_min)
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
+
+from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
 
 from jinja2 import Template
 
 from six import binary_type, text_type
-
-from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
 
 
 class WmsTileLayer(Layer):
@@ -951,7 +950,7 @@ class RectangleMarker(Marker):
 
 class PolygonMarker(Marker):
     def __init__(self, locations, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None, latlon=True):
+                 fill_opacity=0.6, popup=None):
         """
         Creates a PolygonMarker object for plotting on a Map.
 
@@ -985,9 +984,9 @@ class PolygonMarker(Marker):
         ...         fill_opacity=0.5, popup='Tokyo, Japan'))
 
         """
-        super(PolygonMarker, self).__init__((
-            _locations_mirror(locations) if not latlon else
-            _locations_tolist(locations)), popup=popup
+        super(PolygonMarker, self).__init__(
+            _locations_tolist(locations),
+            popup=popup
         )
         self._name = 'PolygonMarker'
         self.color = color
@@ -1080,21 +1079,15 @@ class PolyLine(MacroElement):
     color: string, default Leaflet's default ('#03f')
     weight: float, default Leaflet's default (5)
     opacity: float, default Leaflet's default (0.5)
-    latlon: bool, default True
-        Whether locations are given in the form [[lat, lon]]
-        or not ([[lon, lat]] if False).
-        Note that the default GeoJson format is latlon=False,
-        while Leaflet polyline's default is latlon=True.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
 
     """
     def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True, popup=None):
+                 opacity=None, popup=None):
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
-        self.data = (_locations_mirror(locations) if not latlon else
-                     _locations_tolist(locations))
+        self.data = _locations_tolist(locations)
         self.color = color
         self.weight = weight
         self.opacity = opacity
