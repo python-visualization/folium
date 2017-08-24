@@ -7,7 +7,7 @@ Coordinate, linear, and area measure control for folium maps.
 
 import json
 
-from branca.element import MacroElement, Figure, JavascriptLink, CssLink
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 

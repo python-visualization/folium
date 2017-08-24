@@ -6,9 +6,9 @@ Marker Cluster plugin
 Creates a MarkerCluster plugin to add on a folium map.
 """
 
-from jinja2 import Template
-
 from folium.plugins.marker_cluster import MarkerCluster
+
+from jinja2 import Template
 
 
 class FastMarkerCluster(MarkerCluster):
@@ -52,7 +52,7 @@ class FastMarkerCluster(MarkerCluster):
                               '\treturn marker;\n' +
                               '};')
         else:
-            self._callback = "var callback = {};".format(callback)
+            self._callback = 'var callback = {};'.format(callback)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
