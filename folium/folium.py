@@ -13,8 +13,8 @@ from branca.utilities import color_brewer
 
 import requests
 
-from .features import GeoJson, TopoJson
-from .map import FitBounds, LegacyMap
+from folium.features import GeoJson, TopoJson
+from folium.map import FitBounds, LegacyMap
 
 
 class Map(LegacyMap):

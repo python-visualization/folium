@@ -19,7 +19,7 @@ from jinja2 import Template
 
 from six import binary_type, text_type
 
-from .map import FeatureGroup, Icon, Layer, Marker, Popup
+from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
 
 
 class WmsTileLayer(Layer):
