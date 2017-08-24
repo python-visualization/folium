@@ -3,6 +3,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 from folium.plugins.marker_cluster import MarkerCluster
+from folium.utilities import _validate_coordinates
 
 from jinja2 import Template
 
@@ -34,7 +35,7 @@ class FastMarkerCluster(MarkerCluster):
     def __init__(self, data, callback=None):
         super(FastMarkerCluster, self).__init__([])
         self._name = 'FastMarkerCluster'
-        self._data = data
+        self._data = _validate_coordinates(data)
 
         if callback is None:
             self._callback = ('var callback;\n' +

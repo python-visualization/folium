@@ -17,6 +17,7 @@ from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroEleme
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
+from folium.utilities import _validate_coordinates, _validate_location
 
 from jinja2 import Template
 
@@ -133,7 +134,10 @@ class RegularPolygonMarker(Marker):
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15, popup=None):
-        super(RegularPolygonMarker, self).__init__(location, popup=popup)
+        super(RegularPolygonMarker, self).__init__(
+            _locations_tolist(location),
+            popup=popup
+        )
         self._name = 'RegularPolygonMarker'
         self.color = color
         self.opacity = opacity
@@ -819,7 +823,10 @@ class Circle(Marker):
     """
     def __init__(self, location, radius=500, color='black',
                  fill_color='black', fill_opacity=0.6, popup=None):
-        super(Circle, self).__init__(location, popup=popup)
+        super(Circle, self).__init__(
+            _validate_location(location),
+            popup=popup
+        )
         self._name = 'Circle'
         self.radius = radius
         self.color = color
@@ -928,7 +935,10 @@ class RectangleMarker(Marker):
         ... )
 
         """
-        super(RectangleMarker, self).__init__(bounds, popup=popup)
+        super(RectangleMarker, self).__init__(
+            _validate_coordinates(bounds),
+            popup=popup
+        )
         self._name = 'RectangleMarker'
         self.color = color
         self.weight = weight
@@ -986,10 +996,7 @@ class PolygonMarker(Marker):
         ...         fill_opacity=0.5, popup='Tokyo, Japan'))
 
         """
-        super(PolygonMarker, self).__init__(
-            _locations_tolist(locations),
-            popup=popup
-        )
+        super(PolygonMarker, self).__init__(locations, popup=popup)
         self._name = 'PolygonMarker'
         self.color = color
         self.weight = weight
@@ -1089,7 +1096,7 @@ class PolyLine(MacroElement):
                  opacity=None, popup=None):
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
-        self.data = _locations_tolist(locations)
+        self.data = _validate_coordinates(locations)
         self.color = color
         self.weight = weight
         self.opacity = opacity

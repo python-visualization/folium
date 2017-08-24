@@ -7,6 +7,7 @@ import json
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Marker
+from folium.utilities import _validate_location
 
 from jinja2 import Template
 
@@ -35,7 +36,11 @@ class BoatMarker(Marker):
     """
     def __init__(self, location, popup=None, icon=None,
                  heading=0, wind_heading=None, wind_speed=0, **kwargs):
-        super(BoatMarker, self).__init__(location, popup=popup, icon=icon)
+        super(BoatMarker, self).__init__(
+            _validate_location(location),
+            popup=popup,
+            icon=icon
+        )
         self._name = 'BoatMarker'
         self.heading = heading
         self.wind_heading = wind_heading

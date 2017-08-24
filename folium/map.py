@@ -20,6 +20,8 @@ from collections import OrderedDict
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 from branca.utilities import _parse_size
 
+from folium.utilities import _validate_coordinates, _validate_location
+
 from jinja2 import Environment, PackageLoader, Template
 
 from six import binary_type, text_type
@@ -59,24 +61,6 @@ _default_css = [
     ('awesome_rotate_css',
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
-
-
-def _validate_location(location):
-        """Validates and formats location values before setting"""
-        if type(location) not in [list, tuple]:
-            raise TypeError('Expected tuple/list for location, got '
-                            '{!r}'.format(location))
-
-        if len(location) != 2:
-            raise ValueError('Expected two values for location [lat, lon], '
-                             'got {}'.format(len(location)))
-
-        try:
-            location = [float(val) for val in location]
-        except:
-            raise ValueError('Location values must be valid numeric values, '
-                             'got {!r}'.format(location))
-        return location
 
 
 class LegacyMap(MacroElement):
@@ -668,11 +652,14 @@ class Marker(MacroElement):
     --------
     >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
+
     """
     def __init__(self, location, popup=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = location
+        # Must be _validate_coordinates b/c some markers are defined with
+        # multiple coordinates values, like Polygons.
+        self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
