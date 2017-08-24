@@ -8,7 +8,8 @@ from ._version import get_versions
 
 from .features import (
     CircleMarker, ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup,
-    MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, VegaLite, WmsTileLayer,
+    MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, VegaLite,
+    WmsTileLayer,
 )
 
 from .folium import Map

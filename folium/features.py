@@ -11,7 +11,7 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.colormap import LinearColormap
-from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)
+from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_mirror, _locations_tolist, _parse_size,
                               image_to_url, iter_points, none_max, none_min)
 
@@ -250,11 +250,11 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
             name='vega')
 
         figure.header.add_child(
@@ -327,7 +327,9 @@ class VegaLite(Element):
                 mode: "vega-lite",
                 spec: {{this.json}}
             };
-            vg.embed({{this.get_name()}}, embedSpec, function(error, result) {});
+            vg.embed(
+                {{this.get_name()}}, embedSpec, function(error, result) {}
+            );
         """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
@@ -349,15 +351,15 @@ class VegaLite(Element):
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
             name='vega-lite')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
             name='vega-embed')
 
 
@@ -375,9 +377,9 @@ class GeoJson(Layer):
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
-        A function mapping a GeoJson Feature to a style dict.
+        Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
-        A function mapping a GeoJson Feature to a style dict for mouse over events.
+        Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False

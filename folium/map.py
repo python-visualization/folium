@@ -16,7 +16,7 @@ import time
 
 from collections import OrderedDict
 
-from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 from branca.utilities import _parse_size
 
 from jinja2 import Environment, PackageLoader, Template
@@ -211,7 +211,11 @@ class LegacyMap(MacroElement):
         self.crs = crs
         self.control_scale = control_scale
 
-        self.global_switches = GlobalSwitches(prefer_canvas, no_touch, disable_3d)
+        self.global_switches = GlobalSwitches(
+            prefer_canvas,
+            no_touch,
+            disable_3d
+        )
 
         if tiles:
             self.add_tile_layer(
@@ -277,7 +281,9 @@ class LegacyMap(MacroElement):
             with tempfile.NamedTemporaryFile(suffix='.html') as f:
                 fname = f.name
                 self.save(fname)
-                driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
+                driver = selenium.webdriver.PhantomJS(
+                    service_log_path=os.path.devnull
+                )
                 driver.get('file://{}'.format(fname))
                 driver.maximize_window()
                 # Ignore user map size.
