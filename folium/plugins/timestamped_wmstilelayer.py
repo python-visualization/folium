@@ -12,11 +12,12 @@ A WMS layer is timestamped if it contains timepositions information.
 
 """
 
-from jinja2 import Template
+from branca.element import CssLink, Figure, JavascriptLink
 
-from branca.element import Figure, JavascriptLink, CssLink
-from ..map import Layer
-from ..features import WmsTileLayer
+from folium.features import WmsTileLayer
+from folium.map import Layer
+
+from jinja2 import Template
 
 
 class TimestampedWmsTileLayers(Layer):
