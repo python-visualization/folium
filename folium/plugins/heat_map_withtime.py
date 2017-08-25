@@ -62,7 +62,7 @@ class HeatMapWithTime(TileLayer):
         self.index = index if index is not None else [str(i) for i in range(1, len(data)+1)]
         if len(self.data) != len(self.index):
             raise ValueError('Input data and index are not of compatible lengths.')
-        self.times = range(1, len(data)+1)
+        self.times = list(range(1, len(data)+1))
 
         # Heatmap settings.
         self.radius = radius
