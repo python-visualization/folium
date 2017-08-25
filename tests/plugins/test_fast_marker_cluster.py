@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+
 """
 Test FastMarkerCluster
 ------------------
 """
 
-from jinja2 import Template
-import numpy as np
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
+
+import numpy as np
 
 
 def test_fast_marker_cluster():
