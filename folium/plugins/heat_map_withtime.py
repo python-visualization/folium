@@ -145,7 +145,7 @@ class HeatMapWithTime(TileLayer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  #noqa
+            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension.min.js')
 
         figure.header.add_child(
@@ -154,7 +154,7 @@ class HeatMapWithTime(TileLayer):
             name='heatmap.min.js')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js'),  # moqa
+            JavascriptLink('https://rawgit.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js'),  # noqa
             name='leaflet-heatmap.js')
 
         figure.header.add_child(
