@@ -11,7 +11,7 @@ from jinja2 import Template
 class HeatMapWithTime(TileLayer):
     """
     Create a HeatMapWithTime layer
-    
+
     Parameters
     ----------
     data: list of list of points of the form [lat, lng] or [lat, lng, weight]
@@ -98,7 +98,9 @@ class HeatMapWithTime(TileLayer):
 
             var times = {{this.times}};
 
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({times : times, currentTime: new Date(1)});
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+                {times : times, currentTime: new Date(1)}
+            );
 
             var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
                 autoPlay: {{this.auto_play}},
