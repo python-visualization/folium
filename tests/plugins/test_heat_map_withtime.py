@@ -38,7 +38,9 @@ def test_heat_map_with_time():
     tmpl = Template("""
             var times = {{this.times}};
 
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({times : times, currentTime: new Date(1)});
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+                {times : times, currentTime: new Date(1)}
+            );
 
             var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
                 autoPlay: {{this.auto_play}},
