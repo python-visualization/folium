@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Marker Cluster plugin
----------------------
-
-Creates a MarkerCluster plugin to add on a folium map.
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
@@ -17,21 +10,23 @@ from jinja2 import Template
 
 
 class MarkerCluster(MacroElement):
+    """
+    Creates a MarkerCluster plugin to append into a map with
+    Map.add_child.
+
+    Parameters
+    ----------
+    locations: list of list or array of shape (n,2).
+        Data points of the form [[lat, lng]].
+
+    popups: list of length n.
+        Popup for each marker.
+
+    icons: list of length n.
+        Icon for each marker.
+
+    """
     def __init__(self, locations, popups=None, icons=None):
-        """Creates a MarkerCluster plugin to append into a map with
-        Map.add_child.
-
-        Parameters
-        ----------
-            locations: list of list or array of shape (n,2).
-                Data points of the form [[lat, lng]].
-
-            popups: list of length n.
-                Popup for each marker.
-
-            icons: list of length n.
-                Icon for each marker.
-        """
         super(MarkerCluster, self).__init__()
         self._name = 'MarkerCluster'
 

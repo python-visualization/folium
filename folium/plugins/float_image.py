@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-FloatImage plugin
------------------
-
-Adds a floating image in HTML canvas on top of the map.
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 from branca.element import MacroElement
@@ -15,8 +8,8 @@ from jinja2 import Template
 
 
 class FloatImage(MacroElement):
+    """Adds a floating image in HTML canvas on top of the map."""
     def __init__(self, image, bottom=75, left=75):
-        """Adds a floating image in HTML canvas on top of the map."""
         super(FloatImage, self).__init__()
         self._name = 'FloatImage'
         self.image = image
