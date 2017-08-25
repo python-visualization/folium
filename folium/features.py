@@ -815,16 +815,19 @@ class Circle(Marker):
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
+    class_name: string, default is an empty string
+        Class name to associate with the circle, known as ClassName in the leaflet spec
 
     """
     def __init__(self, location, radius=500, color='black',
-                 fill_color='black', fill_opacity=0.6, popup=None):
+                 fill_color='black', fill_opacity=0.6, popup=None, class_name=''):
         super(Circle, self).__init__(location, popup=popup)
         self._name = 'Circle'
         self.radius = radius
         self.color = color
         self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
+        self.fill_opacity = fill_opacity        
+        self.class_name = class_name
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -833,6 +836,7 @@ class Circle(Marker):
                 [{{this.location[0]}},{{this.location[1]}}],
                 {{ this.radius }},
                 {
+                    className: '{{this.class_name}}',
                     color: '{{ this.color }}',
                     fillColor: '{{ this.fill_color }}',
                     fillOpacity: {{ this.fill_opacity }}
