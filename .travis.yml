@@ -28,36 +28,39 @@ matrix:
     env: TEST_TARGET=latest_branca
 
 before_install:
-    - wget http://bit.ly/miniconda -O miniconda.sh
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - conda update --yes --all
-    - conda config --add channels conda-forge --force
-    - conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
-    - source activate TEST
+  - wget http://bit.ly/miniconda -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+  - conda update conda
+  - conda config --add channels conda-forge --force
+  - conda create --name TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
+  - source activate TEST
 
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-        conda install --yes mock ;
-      fi
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
-        conda install --yes doctr ;
-      fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      conda install mock ;
+    fi
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
+      conda install doctr ;
+    fi
 
 # Test source distribution.
 install:
-    - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
+  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-    - if [[ $TEST_TARGET == 'default' ]]; then
-        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
-      fi
+  - cp -r tests/ examples/ /tmp && cd /tmp
+  - if [[ $TEST_TARGET == 'default' ]]; then
+      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+    fi
 
-    - if [[ $TEST_TARGET == 'latest_branca' ]]; then
-        pip install git+https://github.com/python-visualization/branca.git ;
-        py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
-      fi
+  - if [[ $TEST_TARGET == 'latest_branca' ]]; then
+      conda uninstall branca ;
+      pip install git+https://github.com/python-visualization/branca.git ;
+      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+    fi
 
-    - if [[ $TEST_TARGET == 'notebooks' ]]; then
-        for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402 --max-line-length=100 --show-source ; done ;
-        py.test -vv tests/notebooks/test_notebooks.py ;
-      fi
+  - if [[ $TEST_TARGET == 'notebooks' ]]; then
+      for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
+      py.test -vv tests/notebooks/test_notebooks.py ;
+    fi
