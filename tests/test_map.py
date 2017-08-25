@@ -5,12 +5,13 @@ Folium map Tests
 ----------------
 
 """
-from __future__ import unicode_literals
+
+from __future__ import (absolute_import, division, print_function)
 
 from folium.map import Popup
 
 
-tmpl = """
+tmpl = u"""
         <div id="{id}"
                 style="width: {width}; height: {height};">
                 {text}</div>
@@ -42,12 +43,12 @@ def test_popup_quotes():
 
 
 def test_popup_unicode():
-    popup = Popup("Ça c'est chouette")
+    popup = Popup(u"Ça c'est chouette")
     _id = list(popup.html._children.keys())[0]
     kw = {
         'id': _id,
         'width': '100.0%',
         'height': '100.0%',
-        'text': 'Ça c&#39;est chouette',
+        'text': u'Ça c&#39;est chouette',
     }
     assert ''.join(popup.html.render().split()) == ''.join(tmpl(**kw).split())

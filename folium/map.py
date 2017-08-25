@@ -9,7 +9,6 @@ Classes for drawing maps.
 """
 
 from __future__ import (absolute_import, division, print_function)
-from __future__ import unicode_literals
 
 import json
 import os
@@ -282,7 +281,7 @@ class LegacyMap(MacroElement):
 
             with tempfile.NamedTemporaryFile(suffix='.html') as f:
                 fname = f.name
-                self.save(fname)
+                self.save(fname, close_file=False)
                 driver = selenium.webdriver.PhantomJS(
                     service_log_path=os.path.devnull
                 )

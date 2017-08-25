@@ -13,10 +13,10 @@ from __future__ import (absolute_import, division, print_function)
 from branca.colormap import StepColormap
 from branca.utilities import color_brewer
 
-import requests
-
 from folium.features import GeoJson, TopoJson
 from folium.map import FitBounds, LegacyMap
+
+import requests
 
 
 class Map(LegacyMap):

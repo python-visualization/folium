@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import JavascriptLink, Figure, CssLink, Element
-from branca.utilities import none_min, none_max
+from branca.element import CssLink, Element, Figure, JavascriptLink
+from branca.utilities import none_max, none_min
 
 from folium.map import TileLayer
 
@@ -244,8 +244,8 @@ class HeatMapWithTime(TileLayer):
                 }
             });
             </script>
-                """,
-                template_name="timeControlScript"
+                """,  # noqa
+                template_name='timeControlScript'
             )
         )
 
