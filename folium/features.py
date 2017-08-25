@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Features
 ------
@@ -7,18 +8,19 @@ Extra features Elements.
 
 """
 
+from __future__ import (absolute_import, division, print_function)
+
 import json
 
 from branca.colormap import LinearColormap
-from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)
-from branca.utilities import (_locations_mirror, _locations_tolist, _parse_size,
-                              image_to_url, iter_points, none_max, none_min)
+from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
+
+from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
 
 from jinja2 import Template
 
 from six import binary_type, text_type
-
-from .map import FeatureGroup, Icon, Layer, Marker, Popup
 
 
 class WmsTileLayer(Layer):
@@ -35,7 +37,7 @@ class WmsTileLayer(Layer):
         The names of the layers to be displayed.
     styles : str, default None
         Comma-separated list of WMS styles.
-    format : str, default None
+    fmt : str, default None
         The format of the service output.
         Ex: 'image/png'
     transparent: bool, default True
@@ -49,6 +51,10 @@ class WmsTileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    **kwargs : additional keyword arguments
+        Passed through to the underlying tileLayer.wms object and can be used
+        for setting extra tileLayer.wms parameters or as extra parameters in
+        the WMS request.
 
     For more information see:
     http://leafletjs.com/reference.html#tilelayer-wms
@@ -56,7 +62,7 @@ class WmsTileLayer(Layer):
     """
     def __init__(self, url, name=None, layers=None, styles=None, fmt=None,
                  transparent=True, version='1.1.1', attr=None, overlay=True,
-                 control=True):
+                 control=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
         self.attribution = attr if attr is not None else ''
@@ -66,11 +72,15 @@ class WmsTileLayer(Layer):
         self.format = fmt if fmt else 'image/jpeg'
         self.transparent = transparent
         self.version = version
+        self.kwargs = kwargs
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
                 {
+                    {% for key, value in this.kwargs.items() %}
+                    {{key}}: '{{ value }}',
+                    {% endfor %}
                     layers: '{{ this.layers }}',
                     styles: '{{ this.styles }}',
                     format: '{{ this.format }}',
@@ -201,7 +211,6 @@ class Vega(Element):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        # FIXME:
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
@@ -242,11 +251,11 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
             name='vega')
 
         figure.header.add_child(
@@ -257,6 +266,102 @@ class Vega(Element):
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
+
+
+class VegaLite(Element):
+    """
+    Creates a Vega-Lite chart element.
+
+    Parameters
+    ----------
+    data: JSON-like str or object
+        The Vega-Lite description of the chart.
+        It can also be any object that has a method `to_json`,
+        so that you can (for instance) provide an `Altair` chart.
+    width: int or str, default None
+        The width of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    height: int or str, default None
+        The height of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    left: int or str, default '0%'
+        The horizontal distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    top: int or str, default '0%'
+        The vertical distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    position: str, default 'relative'
+        The `position` argument that the CSS shall contain.
+        Ex: 'relative', 'absolute'
+
+    """
+    def __init__(self, data, width=None, height=None,
+                 left='0%', top='0%', position='relative'):
+        super(VegaLite, self).__init__()
+        self._name = 'VegaLite'
+        self.data = data.to_json() if hasattr(data, 'to_json') else data
+        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+            self.data = json.loads(self.data)
+
+        # Size Parameters.
+        self.width = _parse_size(self.data.get('width', '100%') if
+                                 width is None else width)
+        self.height = _parse_size(self.data.get('height', '100%') if
+                                  height is None else height)
+        self.left = _parse_size(left)
+        self.top = _parse_size(top)
+        self.position = position
+        self._template = Template(u'')
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        self.json = json.dumps(self.data)
+
+        self._parent.html.add_child(Element(Template("""
+            <div id="{{this.get_name()}}"></div>
+            """).render(this=self, kwargs=kwargs)), name=self.get_name())
+
+        self._parent.script.add_child(Element(Template("""
+            var embedSpec = {
+                mode: "vega-lite",
+                spec: {{this.json}}
+            };
+            vg.embed(
+                {{this.get_name()}}, embedSpec, function(error, result) {}
+            );
+        """).render(this=self)), name=self.get_name())
+
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+
+        figure.header.add_child(Element(Template("""
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+            """).render(this=self, **kwargs)), name=self.get_name())
+
+        figure.header.add_child(
+            JavascriptLink('https://d3js.org/d3.v3.min.js'),
+            name='d3')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
+            name='vega')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
+            name='vega-lite')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
+            name='vega-embed')
 
 
 class GeoJson(Layer):
@@ -273,9 +378,9 @@ class GeoJson(Layer):
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
-        A function mapping a GeoJson Feature to a style dict.
+        Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
-        A function mapping a GeoJson Feature to a style dict for mouse over events.
+        Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False
@@ -847,7 +952,7 @@ class RectangleMarker(Marker):
 
 class PolygonMarker(Marker):
     def __init__(self, locations, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None, latlon=True):
+                 fill_opacity=0.6, popup=None):
         """
         Creates a PolygonMarker object for plotting on a Map.
 
@@ -881,9 +986,9 @@ class PolygonMarker(Marker):
         ...         fill_opacity=0.5, popup='Tokyo, Japan'))
 
         """
-        super(PolygonMarker, self).__init__((
-            _locations_mirror(locations) if not latlon else
-            _locations_tolist(locations)), popup=popup
+        super(PolygonMarker, self).__init__(
+            _locations_tolist(locations),
+            popup=popup
         )
         self._name = 'PolygonMarker'
         self.color = color
@@ -976,21 +1081,15 @@ class PolyLine(MacroElement):
     color: string, default Leaflet's default ('#03f')
     weight: float, default Leaflet's default (5)
     opacity: float, default Leaflet's default (0.5)
-    latlon: bool, default True
-        Whether locations are given in the form [[lat, lon]]
-        or not ([[lon, lat]] if False).
-        Note that the default GeoJson format is latlon=False,
-        while Leaflet polyline's default is latlon=True.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
 
     """
     def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True, popup=None):
+                 opacity=None, popup=None):
         super(PolyLine, self).__init__()
         self._name = 'PolyLine'
-        self.data = (_locations_mirror(locations) if not latlon else
-                     _locations_tolist(locations))
+        self.data = _locations_tolist(locations)
         self.color = color
         self.weight = weight
         self.opacity = opacity

@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Image Overlay
--------------
 
-Used to load and display a single image over specific bounds of
-the map, implements ILayer interface.
-
-"""
+from __future__ import (absolute_import, division, print_function)
 
 import json
 
@@ -18,7 +12,8 @@ from jinja2 import Template
 
 
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
-    """Transforms an image computed in (longitude,latitude) coordinates into
+    """
+    Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
 
     Parameters
@@ -41,6 +36,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
         If None, the height of the input is used.
 
     See https://en.wikipedia.org/wiki/Web_Mercator for more details.
+
     """
     import numpy as np
 
@@ -77,44 +73,44 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
 
 
 class ImageOverlay(Layer):
+    """
+    Used to load and display a single image over specific bounds of
+    the map, implements ILayer interface.
+
+    Parameters
+    ----------
+    image: string, file or array-like object
+        The data you want to draw on the map.
+        * If string, it will be written directly in the output file.
+        * If file, it's content will be converted as embedded in the
+          output file.
+        * If array-like, it will be converted to PNG base64 string
+          and embedded in the output.
+    bounds: list
+        Image bounds on the map in the form [[lat_min, lon_min],
+        [lat_max, lon_max]]
+    opacity: float, default Leaflet's default (1.0)
+    attr: string, default Leaflet's default ("")
+    origin : ['upper' | 'lower'], optional, default 'upper'
+        Place the [0,0] index of the array in the upper left or
+        lower left corner of the axes.
+    colormap : callable, used only for `mono` image.
+        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
+        for transforming a mono image into RGB.
+        It must output iterables of length 3 or 4,
+        with values between 0 and 1.
+        Hint : you can use colormaps from `matplotlib.cm`.
+    mercator_project : bool, default False.
+        Used only for array-like image.  Transforms the data to
+        project (longitude, latitude) coordinates to the
+        Mercator projection.
+        Beware that this will only work if `image` is an array-like
+        object.
+
+    """
     def __init__(self, image, bounds, opacity=1., attr=None,
                  origin='upper', colormap=None, mercator_project=False,
                  overlay=True, control=True):
-        """
-        Used to load and display a single image over specific bounds of
-        the map, implements ILayer interface.
-
-        Parameters
-        ----------
-        image: string, file or array-like object
-            The data you want to draw on the map.
-            * If string, it will be written directly in the output file.
-            * If file, it's content will be converted as embedded in the
-              output file.
-            * If array-like, it will be converted to PNG base64 string
-              and embedded in the output.
-        bounds: list
-            Image bounds on the map in the form [[lat_min, lon_min],
-            [lat_max, lon_max]]
-        opacity: float, default Leaflet's default (1.0)
-        attr: string, default Leaflet's default ("")
-        origin : ['upper' | 'lower'], optional, default 'upper'
-            Place the [0,0] index of the array in the upper left or
-            lower left corner of the axes.
-        colormap : callable, used only for `mono` image.
-            Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-            for transforming a mono image into RGB.
-            It must output iterables of length 3 or 4,
-            with values between 0 and 1.
-            Hint : you can use colormaps from `matplotlib.cm`.
-        mercator_project : bool, default False.
-            Used only for array-like image.  Transforms the data to
-            project (longitude, latitude) coordinates to the
-            Mercator projection.
-            Beware that this will only work if `image` is an array-like
-            object.
-
-        """
         super(ImageOverlay, self).__init__(overlay=overlay, control=control)
         self._name = 'ImageOverlay'
         self.overlay = overlay
@@ -145,7 +141,9 @@ class ImageOverlay(Layer):
             """)
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        """
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+
         """
         return self.bounds

@@ -34,7 +34,7 @@ def test_boat_marker():
     out = m._parent.render()
 
     # We verify that the script import is present.
-    script = '<script src="https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"></script>'  # noqa
+    script = '<script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.

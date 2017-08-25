@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Fullscreen
---------------
 
-https://github.com/brunob/leaflet.fullscreen
-
-Adds fullscreen button to your maps.
-"""
+from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
@@ -26,31 +20,31 @@ class Fullscreen(MacroElement):
     title : str
           change the title of the button,
           default: 'Full Screen'
-    titleCancel : str
+    title_cancel : str
           change the title of the button when fullscreen is on,
           default: 'Exit Full Screen'
-    forceSeparateButton : boolean
+    force_separate_button : boolean
           force seperate button to detach from zoom buttons,
           default: False
-    """
+    See https://github.com/brunob/leaflet.fullscreen for more information.
 
+    """
     def __init__(self, position='topleft', title='Full Screen',
-                 titleCancel='Exit Full Screen', forceSeparateButton=False):
-        """Add button to take your Folium map fullscreen"""
+                 title_cancel='Exit Full Screen', force_separate_button=False):
         super(Fullscreen, self).__init__()
         self._name = 'Fullscreen'
         self.position = position
         self.title = title
-        self.titleCancel = titleCancel
-        self.forceSeparateButton = str(forceSeparateButton).lower()
+        self.title_cancel = title_cancel
+        self.force_separate_button = str(force_separate_button).lower()
 
         self._template = Template("""
         {% macro script(this, kwargs) %}
             L.control.fullscreen({
                 position: '{{this.position}}',
                 title: '{{this.title}}',
-                titleCancel: '{{this.titleCancel}}',
-                forceSeparateButton: {{this.forceSeparateButton}},
+                titleCancel: '{{this.title_cancel}}',
+                forceSeparateButton: {{this.force_separate_button}},
                 }).addTo({{this._parent.get_name()}});
             {{this._parent.get_name()}}.on('enterFullscreen', function(){
                 console.log('entered fullscreen');

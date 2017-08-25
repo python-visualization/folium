@@ -8,6 +8,7 @@ Classes for drawing maps.
 
 """
 
+from __future__ import (absolute_import, division, print_function)
 from __future__ import unicode_literals
 
 import json
@@ -17,7 +18,7 @@ import time
 
 from collections import OrderedDict
 
-from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 from branca.utilities import _parse_size
 
 from jinja2 import Environment, PackageLoader, Template
@@ -28,7 +29,7 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     'https://unpkg.com/leaflet@1.1.0/dist/leaflet.js'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.1.0/dist/leaflet.js'),
     ('jquery',
      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
     ('bootstrap',
@@ -43,7 +44,7 @@ _default_js = [
 
 _default_css = [
     ('leaflet_css',
-     'https://unpkg.com/leaflet@1.1.0/dist/leaflet.css'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.1.0/dist/leaflet.css'),
     ('bootstrap_css',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
     ('bootstrap_theme_css',
@@ -60,19 +61,23 @@ _default_css = [
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
-def _validate_location(values):
-        """Validates and formats location values before setting"""
-        if type(values) not in [list, tuple]:
-            raise TypeError("Location is not a list, expecting ex: location=[45.523, -122.675]")
 
-        if len(values) != 2:
-            raise ValueError("Location should have two values, [lat, lon]")
+def _validate_location(location):
+        """Validates and formats location values before setting"""
+        if type(location) not in [list, tuple]:
+            raise TypeError('Expected tuple/list for location, got '
+                            '{!r}'.format(location))
+
+        if len(location) != 2:
+            raise ValueError('Expected two values for location [lat, lon], '
+                             'got {}'.format(len(location)))
 
         try:
-            values = [float(val) for val in values]
+            location = [float(val) for val in location]
         except:
-            raise ValueError("Location values should be numeric, {} is not a number".format(val))
-        return values
+            raise ValueError('Location values must be valid numeric values, '
+                             'got {!r}'.format(location))
+        return location
 
 
 class LegacyMap(MacroElement):
@@ -168,7 +173,7 @@ class LegacyMap(MacroElement):
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
                  zoom_start=10, continuous_world=False, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=True,
+                 min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
                  subdomains='abc', png_enabled=False):
@@ -208,7 +213,11 @@ class LegacyMap(MacroElement):
         self.crs = crs
         self.control_scale = control_scale
 
-        self.global_switches = GlobalSwitches(prefer_canvas, no_touch, disable_3d)
+        self.global_switches = GlobalSwitches(
+            prefer_canvas,
+            no_touch,
+            disable_3d
+        )
 
         if tiles:
             self.add_tile_layer(
@@ -274,7 +283,9 @@ class LegacyMap(MacroElement):
             with tempfile.NamedTemporaryFile(suffix='.html') as f:
                 fname = f.name
                 self.save(fname)
-                driver = selenium.webdriver.PhantomJS(service_log_path=os.path.devnull)
+                driver = selenium.webdriver.PhantomJS(
+                    service_log_path=os.path.devnull
+                )
                 driver.get('file://{}'.format(fname))
                 driver.maximize_window()
                 # Ignore user map size.
@@ -350,6 +361,7 @@ class LegacyMap(MacroElement):
             '</style>'), name='map_style')
 
         super(LegacyMap, self).render(**kwargs)
+
 
 class GlobalSwitches(Element):
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):

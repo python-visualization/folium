@@ -1,9 +1,20 @@
 0.4.0
 ~~~~~
+- Changed default `max_bounds` to `False` to reflect leaflet's default value (rdd9999 #641)
+- Added `MeasureControl` (ocefpaf #669)
+- Added `VideoOverlay` plugin (ocefpaf #665)
+- Added `TimestampedWmsTileLayers` plugin (acrosby #644 and #660)
+- Vega-Lite features support via altair (njwilson23 #643)
 - Experimental support for a static png output (ocefpaf #634)
 - Added support for subdomains options in TileLayer (damselem #623)
 - Updated to leaflet 1.1.0 (ocefpaf #639)
 - Added `FastMarkerCluster` (James Gardiner #585 (proposed by @ruoyu0088))
+
+Bug Fixes
+
+- Checking if the lat, lon locations are floats to avoid empty maps
+  (radumas #626)
+
 
 0.3.0
 ~~~~~
@@ -11,7 +22,8 @@
 - Added `FastMarkerCluster` (James Gardiner #585 (proposed by @ruoyu0088))
 - Added style option to 'Timestamped geojson' plugin (soymsk #627)
 - Switched to `leaflet 1.0.1` (juoceano #531 and ocefpaf #535)
-- Added `continuous_world`, `world_copy_jump`, and `no_wrap` options (ocefpaf #508)
+- Added `continuous_world`, `world_copy_jump`, and `no_wrap` options
+  (ocefpaf #508)
 - Update font-awesome to 4.6.3 (ocefpaf #478)
 - Added text path (talespaiva #451 and ocefpaf #474)
 - More options added to `LayerControl` (qingkaikong #473)
@@ -19,18 +31,22 @@
 - Added `ColorLine` object (bibmartin #449)
 - Added highlight function to `GeoJSON`, and `Chrorpleth` (JoshuaCano #341)
 - Added `fullscreen` plugin (sanga #437)
-- Added `smooth_factor `option to `GeoJSON`, `TopoJSON` and `Choropleth` (JamesGardiner #428)
+- Added `smooth_factor `option to `GeoJSON`, `TopoJSON` and `Choropleth`
+  (JamesGardiner #428)
 - `Map` object now accepts Leaflet global switches (sgvandijk #424)
 - Added weight option to CircleMarker (palewire #581)
-- Added requests support to enable http(s) and ftp for geo_path parameter (jreades #602)
+- Added requests support to enable http(s) and ftp for geo_path parameter
+  (jreades #602)
 
 Bug Fixes
 
 - Fixed image order (juoceano #536)
 - Fixed Icon rotation (juoceano #530 and sseemayer #527)
 - Fixed MIME type (text/plain) is not executable (talespaiva #440)
-- Update Travis-CI testing to incorporate branca and fix notebook tests (ocefpaf #436)
-- Removed MultiPolyLine and MultiPolygon, both are handled by PolyLine and PolyLine in leaflet 1.0.* (ocefpaf #554)
+- Update Travis-CI testing to incorporate branca and fix notebook tests
+  (ocefpaf #436)
+- Removed MultiPolyLine and MultiPolygon, both are handled by PolyLine and
+  PolyLine in leaflet 1.0.* (ocefpaf #554)
 - Removed deprecated MapQuest tiles (HashCode55 #562)
 
 0.2.1
