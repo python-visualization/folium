@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Marker Cluster plugin
----------------------
-
-Creates a MarkerCluster plugin to add on a folium map.
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 from folium.plugins.marker_cluster import MarkerCluster
@@ -15,30 +8,30 @@ from jinja2 import Template
 
 
 class FastMarkerCluster(MarkerCluster):
-    """Add marker clusters to a map using in-browser rendering"""
+    """
+    Add marker clusters to a map using in-browser rendering.
+    Using FastMarkerCluster it is possible to render 000's of
+    points far quicker than the MarkerCluster class.
+
+    Be aware that the FastMarkerCluster class passes an empty
+    list to the parent class' __init__ method during initialisation.
+    This means that the add_child method is never called, and
+    no reference to any marker data are retained. Methods such
+    as get_bounds() are therefore not available when using it.
+
+    Parameters
+    ----------
+    data: list
+        List of list of shape [[], []]. Data points should be of
+        the form [[lat, lng]].
+
+    callback: string, default None
+        A string representation of a valid Javascript function
+        that will be passed a lat, lon coordinate pair. See the
+        FasterMarkerCluster for an example of a custom callback.
+
+    """
     def __init__(self, data, callback=None):
-        """Add marker clusters to a map using in-browser rendering.
-           Using FastMarkerCluster it is possible to render 000's of
-           points far quicker than the MarkerCluster class.
-
-           Be aware that the FastMarkerCluster class passes an empty
-           list to the parent class' __init__ method during initialisation.
-           This means that the add_child method is never called, and
-           no reference to any marker data are retained. Methods such
-           as get_bounds() are therefore not available when using it.
-
-        Parameters
-        ----------
-            data: list
-                List of list of shape [[], []]. Data points should be of
-                the form [[lat, lng]].
-
-            callback: string, default None
-                A string representation of a valid Javascript function
-                that will be passed a lat, lon coordinate pair. See the
-                FasterMarkerCluster for an example of a custom callback.
-
-        """
         super(FastMarkerCluster, self).__init__([])
         self._name = 'FastMarkerCluster'
         self._data = data

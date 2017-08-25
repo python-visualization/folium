@@ -1,13 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Video Overlay
--------------
-
-Used to load and display a video over the map.
-
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 import json
@@ -18,21 +10,21 @@ from jinja2 import Template
 
 
 class VideoOverlay(Layer):
+    """
+    Used to load and display a video over the map.
+
+    Parameters
+    ----------
+    video_url: URL of the video
+    bounds: list
+        Video bounds on the map in the form [[lat_min, lon_min],
+        [lat_max, lon_max]]
+    opacity: float, default Leaflet's default (1.0)
+    attr: string, default Leaflet's default ('')
+
+    """
     def __init__(self, video_url, bounds, opacity=1., attr=None,
                  autoplay=True, loop=True):
-        """
-        Used to load and display a video over the map.
-
-        Parameters
-        ----------
-        video_url: URL of the video
-        bounds: list
-            Video bounds on the map in the form [[lat_min, lon_min],
-            [lat_max, lon_max]]
-        opacity: float, default Leaflet's default (1.0)
-        attr: string, default Leaflet's default ('')
-
-        """
         super(VideoOverlay, self).__init__()
         self._name = 'VideoOverlay'
 
@@ -58,7 +50,9 @@ class VideoOverlay(Layer):
             """)
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
+        """
+        Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
         """
         return self.bounds

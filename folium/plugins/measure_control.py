@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-Measure plugin
---------------
-
-Coordinate, linear, and area measure control for folium maps.
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 import json
@@ -31,10 +24,9 @@ class MeasureControl(MacroElement):
     primary_area_unit and secondary_area_unit: ara units
         defaults are 'sqmeters' and 'acres' respectively.
 
-    For more information see https://github.com/ljagis/leaflet-measure
+    See https://github.com/ljagis/leaflet-measure for more information.
 
     """
-
     def __init__(self, position='topright', primary_length_unit='meters',
                  secondary_length_unit='miles', primary_area_unit='sqmeters',
                  secondary_area_unit='acres'):

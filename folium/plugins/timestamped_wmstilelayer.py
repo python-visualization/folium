@@ -1,18 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-TimestampedWmsTileLayers plugin
--------------------------------
-
-Add timestamped WMS Tile Layers on a folium map.
-This is based on Leaflet.TimeDimension.
-
-https://github.com/socib/Leaflet.TimeDimension
-
-A WMS layer is timestamped if it contains timepositions information.
-
-"""
-
 from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink
@@ -24,69 +11,73 @@ from jinja2 import Template
 
 
 class TimestampedWmsTileLayers(Layer):
+    """
+    Creates a TimestampedWmsTileLayer subclass of Layer that takes a
+    WmsTileLayer and adds time control with the Leaflet.TimeDimension
+    plugin.
+
+    Parameters
+    ----------
+    data: WmsTileLayer.
+       The WmsTileLayer that you want to add time support to.
+
+       * Should be created like a typical WmsTileLayer and added to the map
+         before being passed to this class.
+
+       examples :
+          # Create WmsTileLayer
+          w1 = features.WmsTileLayer(
+              'http://this.wms.server/ncWMS/wms',
+              name='Test WMS Data',
+              styles='',
+              format='image/png',
+              transparent=True,
+              layers='test_data',
+              COLORSCALERANGE='0,10',
+              )
+          # Add to map
+          w1.add_to(m)
+
+          # Create WmsTileLayer
+          w2 = features.WmsTileLayer(
+              'http://this.wms.server/ncWMS/wms',
+              name='Test WMS Data',
+              styles='',
+              format='image/png',
+              transparent=True,
+              layers='test_data_2',
+              COLORSCALERANGE='0,5',
+              )
+          # Add to map
+          w2.add_to(m)
+
+          # Add WmsTileLayers to time control
+          time = plugins.TimestampedWmsTileLayers([w1,w2])
+          time.add_to(m)
+
+    transition_time : int, default 200.
+        The duration in ms of a transition from between timestamps.
+    loop : bool, default False
+        Whether the animation shall loop, default is to reduce load on WMS
+        services.
+    auto_play : bool, default False
+        Whether the animation shall start automatically at startup, default
+        is to reduce load on WMS services.
+    period : str, default 'P1D'
+        Used to construct the array of available times starting
+        from the first available time. Format: ISO8601 Duration
+        ex: 'P1M' -> 1/month
+            'P1D'  -> 1/day
+            'PT1H'  -> 1/hour
+            'PT1M'  -> 1/minute
+        Note: this seems to be overridden by the WMS Tile Layer
+        GetCapabilities.
+
+    See https://github.com/socib/Leaflet.TimeDimension for more information.
+
+    """
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
                  period='P1D', time_interval=False):
-        """Creates a TimestampedWmsTileLayer subclass of Layer that takes a
-        WmsTileLayer and adds time control with the Leaflet.TimeDimension
-        plugin.
-
-        Parameters
-        ----------
-        data: WmsTileLayer.
-           The WmsTileLayer that you want to add time support to.
-
-           * Should be created like a typical WmsTileLayer and added to the map
-             before being passed to this class.
-
-           examples :
-              # Create WmsTileLayer
-              w1 = features.WmsTileLayer(
-                  'http://this.wms.server/ncWMS/wms',
-                  name='Test WMS Data',
-                  styles='',
-                  format='image/png',
-                  transparent=True,
-                  layers='test_data',
-                  COLORSCALERANGE='0,10',
-                  )
-              # Add to map
-              w1.add_to(m)
-
-              # Create WmsTileLayer
-              w2 = features.WmsTileLayer(
-                  'http://this.wms.server/ncWMS/wms',
-                  name='Test WMS Data',
-                  styles='',
-                  format='image/png',
-                  transparent=True,
-                  layers='test_data_2',
-                  COLORSCALERANGE='0,5',
-                  )
-              # Add to map
-              w2.add_to(m)
-
-              # Add WmsTileLayers to time control
-              time = plugins.TimestampedWmsTileLayers([w1,w2])
-              time.add_to(m)
-
-        transition_time : int, default 200.
-            The duration in ms of a transition from between timestamps.
-        loop : bool, default False
-            Whether the animation shall loop, default is to reduce load on WMS
-            services.
-        auto_play : bool, default False
-            Whether the animation shall start automatically at startup, default
-            is to reduce load on WMS services.
-        period : str, default 'P1D'
-            Used to construct the array of available times starting
-            from the first available time. Format: ISO8601 Duration
-            ex: 'P1M' -> 1/month
-                'P1D'  -> 1/day
-                'PT1H'  -> 1/hour
-                'PT1M'  -> 1/minute
-            Note: this seems to be overridden by the WMS Tile Layer
-            GetCapabilities.
-        """
         super(TimestampedWmsTileLayers, self).__init__(overlay=True,
                                                        control=False,
                                                        name='timestampedwms')

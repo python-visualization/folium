@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+
 """
 Test Fullscreen
------------------------
+----------------
+
 """
 
 import folium
@@ -24,8 +26,8 @@ def test_fullscreen():
         L.control.fullscreen({
             position: '{{this.position}}',
             title: '{{this.title}}',
-            titleCancel: '{{this.titleCancel}}',
-            forceSeparateButton: {{this.forceSeparateButton}},
+            titleCancel: '{{this.title_cancel}}',
+            forceSeparateButton: {{this.force_separate_button}},
             }).addTo({{this._parent.get_name()}});
         {{this._parent.get_name()}}.on('enterFullscreen', function(){
             console.log('entered fullscreen');

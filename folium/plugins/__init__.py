@@ -4,7 +4,8 @@
 Folium plugins
 --------------
 
-Add different objects/effects on a folium map.
+Wrap some of the most populat leaflet external plugins.
+
 """
 
 from __future__ import (absolute_import, division, print_function)
