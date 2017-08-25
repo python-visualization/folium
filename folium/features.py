@@ -17,7 +17,7 @@ from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroEleme
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
-from folium.utilities import _validate_coordinates, _validate_location
+from folium.utilities import _parse_path, _validate_coordinates, _validate_location
 
 from jinja2 import Template
 
@@ -809,95 +809,81 @@ class Circle(Marker):
     location: tuple or list, default None
         Latitude and Longitude of Marker (Northing, Easting)
     radius: int
-        The radius of the circle in meters. For setting the radius in pixel,
-        use CircleMarker.
-    color: str, default 'black'
+        The radius of the circle in meters.
+        For setting the radius in pixel, use CircleMarker.
+    color: str, default '#3388ff'
         The color of the marker's edge in a HTML-compatible format.
-    fill_color: str, default 'black'
+    fill: bool, default False
+        If true the circle will be filled.
+    fill_color: str, default to the same as color
         The fill color of the marker in a HTML-compatible format.
-    fill_opacity: float, default 0.6
+    fill_opacity: float, default 0.2
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
 
+    See http://leafletjs.com/reference-1.2.0.html#path for more otions.
+
     """
-    def __init__(self, location, radius=500, color='black',
-                 fill_color='black', fill_opacity=0.6, popup=None):
-        super(Circle, self).__init__(
-            _validate_location(location),
-            popup=popup
-        )
-        self._name = 'Circle'
-        self.radius = radius
-        self.color = color
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
+    def __init__(self, location, radius=10, popup=None, **kw):
+        super(Circle, self).__init__(_validate_location(location), popup=popup)
+        self._name = 'circle'
+        options = _parse_path(**kw)
+
+        options.update({'radius': radius})
+        self.options = json.dumps(options, sort_keys=True)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.circle(
                 [{{this.location[0]}},{{this.location[1]}}],
-                {{ this.radius }},
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }}
-                    }
-                )
-                .addTo({{this._parent.get_name()}});
+                {{ this.options }}
+                ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
 
 class CircleMarker(Marker):
     """
-    Creates a CircleMarker object for plotting on a Map.
+    Creates a Circle object for plotting on a Map.
 
     Parameters
     ----------
     location: tuple or list, default None
         Latitude and Longitude of Marker (Northing, Easting)
     radius: int
-        The radius of the circle in pixels. For setting the radius in meter,
-        use Circle.
-    color: str, default 'black'
+        The radius of the circle in pixels.
+        For setting the radius in meter, use Circle.
+    color: str, default '#3388ff'
         The color of the marker's edge in a HTML-compatible format.
-    weight: int, default 2
-        Stroke weight in pixels
-    fill_color: str, default 'black'
+    fill: bool, default False
+        If true the circle will be filled.
+    fill_color: str, default to the same as color
         The fill color of the marker in a HTML-compatible format.
-    fill_opacity: float, default 0.6
+    fill_opacity: float, default 0.2
         The fill opacity of the marker, between 0. and 1.
     popup: string or folium.Popup, default None
         Input text or visualization for object.
 
+    See http://leafletjs.com/reference-1.2.0.html#path for more otions.
+
     """
-    def __init__(self, location, radius=500, color='black',
-                 weight=2, fill_color='black', fill_opacity=0.6,
-                 popup=None):
-        super(CircleMarker, self).__init__(location, popup=popup)
+    def __init__(self, location, radius=10, popup=None, **kw):
+        super(CircleMarker, self).__init__(_validate_location(location), popup=popup)
         self._name = 'CircleMarker'
-        self.radius = radius
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
+        options = _parse_path(**kw)
+
+        options.update({'radius': radius})
+        self.options = json.dumps(options, sort_keys=True)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.circleMarker(
                 [{{this.location[0]}},{{this.location[1]}}],
-                {
-                    color: '{{ this.color }}',
-                    weight: {{ this.weight }},
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }}
-                    }
-                )
-                .setRadius({{ this.radius }})
-                .addTo({{this._parent.get_name()}});
+                {{ this.options }}
+                ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 

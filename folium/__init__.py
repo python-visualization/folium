@@ -9,7 +9,7 @@ from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
 from folium._version import get_versions
 
 from folium.features import (
-    CircleMarker, ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup,
+    Circle, CircleMarker, ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup,
     MarkerCluster, PolyLine, RegularPolygonMarker, TopoJson, Vega, VegaLite,
     WmsTileLayer,
 )
@@ -37,6 +37,7 @@ __all__ = [
     'LinearColormap',
     'StepColormap',
     'Map',
+    'Circle',
     'CircleMarker',
     'RectangleMarker',
     'Polygon',
