@@ -69,7 +69,7 @@ class WmsTileLayer(Layer):
         # Options.
         self.layers = layers if layers else ''
         self.styles = styles if styles else ''
-        self.format = fmt if fmt else 'image/jpeg'
+        self.fmt = fmt if fmt else 'image/jpeg'
         self.transparent = transparent
         self.version = version
         self.kwargs = kwargs
@@ -83,7 +83,7 @@ class WmsTileLayer(Layer):
                     {% endfor %}
                     layers: '{{ this.layers }}',
                     styles: '{{ this.styles }}',
-                    format: '{{ this.format }}',
+                    format: '{{ this.fmt }}',
                     transparent: {{ this.transparent.__str__().lower() }},
                     version: '{{ this.version }}',
                     {% if this.attribution %} attribution: '{{this.attribution}}'{% endif %}
