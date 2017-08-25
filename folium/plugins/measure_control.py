@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Measure plugin
 --------------
@@ -15,19 +17,22 @@ from jinja2 import Template
 
 
 class MeasureControl(MacroElement):
-    """Adds a measurem widget on the map.
-        Parameters
-        ----------
-            position: location of the widget
-                default is 'topright'.
+    """
+    Adds a measurem widget on the map.
 
-            primary_length_unit and secondary_length_unit: length units
-                 defaults are 'meters' and 'miles' respectively.
+    Parameters
+    ----------
+    position: location of the widget
+        default is 'topright'.
 
-            primary_area_unit and secondary_area_unit: ara units
-                defaults are 'sqmeters' and 'acres' respectively.
+    primary_length_unit and secondary_length_unit: length units
+         defaults are 'meters' and 'miles' respectively.
+
+    primary_area_unit and secondary_area_unit: ara units
+        defaults are 'sqmeters' and 'acres' respectively.
 
     For more information see https://github.com/ljagis/leaflet-measure
+
     """
 
     def __init__(self, position='topright', primary_length_unit='meters',

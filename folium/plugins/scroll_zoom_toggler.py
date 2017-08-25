@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
+
 """
 ScrollZoomToggler plugin
 ------------------------
 
 Adds a button to enable/disable zoom scrolling.
+
 """
 
 from __future__ import (absolute_import, division, print_function)
@@ -14,8 +17,7 @@ from jinja2 import Template
 
 class ScrollZoomToggler(MacroElement):
     def __init__(self):
-        """Creates a button for enabling/disabling scroll on the Map.
-        """
+        """Creates a button for enabling/disabling scroll on the Map."""
         super(ScrollZoomToggler, self).__init__()
         self._name = 'ScrollZoomToggler'
 
