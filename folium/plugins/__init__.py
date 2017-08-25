@@ -15,6 +15,7 @@ from folium.plugins.fast_marker_cluster import FastMarkerCluster
 from folium.plugins.float_image import FloatImage
 from folium.plugins.fullscreen import Fullscreen
 from folium.plugins.heat_map import HeatMap
+from folium.plugins.heat_map_withtime import HeatMapWithTime
 from folium.plugins.image_overlay import ImageOverlay
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
@@ -30,6 +31,7 @@ __all__ = [
     'FloatImage',
     'Fullscreen',
     'HeatMap',
+    'HeatMapWithTime',
     'ImageOverlay',
     'MarkerCluster',
     'MeasureControl',
