@@ -8,6 +8,7 @@ from branca.element import Figure, JavascriptLink
 from branca.utilities import none_max, none_min
 
 from folium.map import TileLayer
+from folium.utilities import _isnan
 
 from jinja2 import Template
 
@@ -41,9 +42,11 @@ class HeatMap(TileLayer):
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
                  max_val=1.0, radius=25, blur=15, gradient=None, overlay=True):
         super(TileLayer, self).__init__(name=name)
+        if _isnan(data):
+            raise ValueError('data cannot contain NaNs, '
+                             'got:\n{!r}'.format(data))
         self._name = 'HeatMap'
         self.tile_name = name if name is not None else self.get_name()
-
         self.data = [[x for x in line] for line in data]
         self.min_opacity = min_opacity
         self.max_zoom = max_zoom
