@@ -831,7 +831,7 @@ class Circle(Marker):
         options = _parse_path(**kw)
 
         options.update({'radius': radius})
-        self.options = json.dumps(options, sort_keys=True)
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -875,7 +875,7 @@ class CircleMarker(Marker):
         options = _parse_path(**kw)
 
         options.update({'radius': radius})
-        self.options = json.dumps(options, sort_keys=True)
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
