@@ -5,8 +5,7 @@
    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.1.0/dist/leaflet.js"></script>
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>   
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"></script>
 
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.1.0/dist/leaflet.css" />
@@ -68,7 +67,7 @@
         layers: [],
         worldCopyJump: {{ world_copy_jump.__str__().lower() }},
         crs: L.CRS.{{crs}}
-        });
+    });
 
     {% for tile in tile_layers %}
         var {{tile['id']}} = L.tileLayer(
