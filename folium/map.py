@@ -693,10 +693,12 @@ class Popup(Element):
     ----------
     html: string or Element
         Content of the Popup.
+    parse_html: bool, default False
+        True if the popup is a template that needs to the rendered first.
     max_width: int, default 300
         The maximal width of the popup.
     """
-    def __init__(self, html=None, max_width=300):
+    def __init__(self, html=None, parse_html=False, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -707,10 +709,12 @@ class Popup(Element):
         self.html._parent = self
         self.script._parent = self
 
+        script = not parse_html
+
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_child(Html(text_type(html)))
+            self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
 
