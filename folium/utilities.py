@@ -48,3 +48,23 @@ def _flatten(container):
 def _isnan(values):
     """Check if there are NaNs values in the iterable."""
     return any(math.isnan(value) for value in _flatten(values))
+
+
+def _parse_path(**kw):
+    """Parse Path http://leafletjs.com/reference-1.2.0.html#path options."""
+    color = kw.pop('color', '#3388ff')
+    return {
+        'stroke': kw.pop('stroke', True),
+        'color': color,
+        'weight': kw.pop('weight', 3),
+        'opacity': kw.pop('opacity', 1.0),
+        'lineCap': kw.pop('line_cap', 'round'),
+        'lineJoin': kw.pop('line_join', 'round'),
+        'dashArray': kw.pop('dash_array', None),
+        'dashOffset': kw.pop('dash_offset', None),
+        'fill': kw.pop('fill', False),
+        'fillColor': kw.pop('fill_color', color),
+        'fillOpacity': kw.pop('fill_opacity', 0.2),
+        'fillRule': kw.pop('fill_rule', 'evenodd'),
+        'bubblingMouseEvents': kw.pop('bubbling_mouse_events', True),
+    }
