@@ -217,12 +217,6 @@ class LegacyMap(MacroElement):
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
                 }
-                #{{this.get_name()}} .leaflet-image-layer {
-                    image-rendering: pixelated; /* chrome */
-                    image-rendering: -moz-crisp-edges; /* firefox */
-                    image-rendering: -o-crisp-edges; /* opera */
-                    -ms-interpolation-mode: nearest-neighbor; /* internet explorer */
-                }
             </style>
         {% endmacro %}
         {% macro html(this, kwargs) %}
