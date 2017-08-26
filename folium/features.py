@@ -846,7 +846,7 @@ class Circle(Marker):
 
 class CircleMarker(Marker):
     """
-    Creates a Circle object for plotting on a Map.
+    Creates a CircleMarker object for plotting on a Map.
 
     Parameters
     ----------
