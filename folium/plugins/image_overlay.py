@@ -4,6 +4,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 
+from branca.element import Element, Figure
 from branca.utilities import image_to_url
 
 from folium.map import Layer
@@ -110,10 +111,11 @@ class ImageOverlay(Layer):
     """
     def __init__(self, image, bounds, opacity=1., attr=None,
                  origin='upper', colormap=None, mercator_project=False,
-                 overlay=True, control=True):
+                 overlay=True, control=True, pixelated=True):
         super(ImageOverlay, self).__init__(overlay=overlay, control=control)
         self._name = 'ImageOverlay'
         self.overlay = overlay
+        self.pixelated = pixelated
 
         if mercator_project:
             image = mercator_transform(image,
@@ -139,6 +141,26 @@ class ImageOverlay(Layer):
                     ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def render(self, **kwargs):
+        super(ImageOverlay, self).render()
+
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+        pixelated = """<style>
+        .leaflet-image-layer {
+        image-rendering: -webkit-optimize-contrast; /* old android/safari*/
+        image-rendering: crisp-edges; /* safari */
+        image-rendering: pixelated; /* chrome */
+        image-rendering: -moz-crisp-edges; /* firefox */
+        image-rendering: -o-crisp-edges; /* opera */
+        -ms-interpolation-mode: nearest-neighbor; /* ie */
+        }
+        </style>"""
+
+        if self.pixelated:
+            figure.header.add_child(Element(pixelated), name='leaflet-image-layer')
 
     def _get_self_bounds(self):
         """
