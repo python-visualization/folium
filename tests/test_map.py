@@ -31,7 +31,7 @@ def test_popup_ascii():
 
 
 def test_popup_quotes():
-    popup = Popup("Let's try quotes")
+    popup = Popup("Let's try quotes", parse_html=True)
     _id = list(popup.html._children.keys())[0]
     kw = {
         'id': _id,
@@ -43,7 +43,7 @@ def test_popup_quotes():
 
 
 def test_popup_unicode():
-    popup = Popup(u"Ça c'est chouette")
+    popup = Popup(u"Ça c'est chouette", parse_html=True)
     _id = list(popup.html._children.keys())[0]
     kw = {
         'id': _id,
