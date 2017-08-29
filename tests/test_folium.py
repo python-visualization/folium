@@ -322,7 +322,6 @@ class TestFolium(object):
              'min_zoom': 1,
              'detect_retina': False,
              'no_wrap': False,
-             'continuous_world': False,
              'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,

@@ -152,7 +152,7 @@ class LegacyMap(MacroElement):
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
                  tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-                 zoom_start=10, continuous_world=False, world_copy_jump=False,
+                 zoom_start=10, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
@@ -187,7 +187,6 @@ class LegacyMap(MacroElement):
         self.min_lon = min_lon
         self.max_lon = max_lon
         self.max_bounds = max_bounds
-        self.continuous_world = continuous_world
         self.no_wrap = no_wrap
         self.world_copy_jump = world_copy_jump
 
@@ -203,7 +202,7 @@ class LegacyMap(MacroElement):
         if tiles:
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                continuous_world=continuous_world, no_wrap=no_wrap, attr=attr,
+                no_wrap=no_wrap, attr=attr,
                 API_key=API_key, detect_retina=detect_retina,
                 subdomains=subdomains
             )
@@ -289,7 +288,7 @@ class LegacyMap(MacroElement):
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
                        API_key=None, max_zoom=18, min_zoom=1,
-                       continuous_world=False, attr=None, active=False,
+                       attr=None, active=False,
                        detect_retina=False, no_wrap=False, subdomains='abc',
                        **kwargs):
         """
@@ -300,7 +299,6 @@ class LegacyMap(MacroElement):
                                min_zoom=min_zoom, max_zoom=max_zoom,
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina,
-                               continuous_world=continuous_world,
                                subdomains=subdomains,
                                no_wrap=no_wrap)
         self.add_child(tile_layer, name=tile_layer.tile_name)
@@ -424,7 +422,7 @@ class TileLayer(Layer):
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
-                 continuous_world=False, name=None, overlay=False,
+                 name=None, overlay=False,
                  control=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -436,7 +434,6 @@ class TileLayer(Layer):
         self.min_zoom = min_zoom
         self.max_zoom = max_zoom
         self.no_wrap = no_wrap
-        self.continuous_world = continuous_world
         self.subdomains = subdomains
 
         self.detect_retina = detect_retina
@@ -469,7 +466,6 @@ class TileLayer(Layer):
                 {
                     maxZoom: {{this.max_zoom}},
                     minZoom: {{this.min_zoom}},
-                    continuousWorld: {{this.continuous_world.__str__().lower()}},
                     noWrap: {{this.no_wrap.__str__().lower()}},
                     attribution: '{{this.attr}}',
                     detectRetina: {{this.detect_retina.__str__().lower()}},
