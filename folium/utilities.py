@@ -68,3 +68,16 @@ def _parse_path(**kw):
         'fillRule': kw.pop('fill_rule', 'evenodd'),
         'bubblingMouseEvents': kw.pop('bubbling_mouse_events', True),
     }
+
+
+def _parse_wms(**kw):
+    """Parse tilelayer-wms http://leafletjs.com/reference-1.2.0.html#tilelayer-wms options."""
+    return {
+        'layers': kw.pop('layers', ''),
+        'styles': kw.pop('styles', ''),
+        'format': kw.pop('fmt', 'image/jpeg'),
+        'transparent': kw.pop('transparent', False),
+        'version': kw.pop('version', '1.1.1'),
+        'crs': kw.pop('crs', None),
+        'uppercase': kw.pop('uppercase', False),
+    }

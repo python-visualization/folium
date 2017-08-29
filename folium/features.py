@@ -17,7 +17,7 @@ from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroEleme
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
-from folium.utilities import _parse_path, _validate_coordinates, _validate_location
+from folium.utilities import _parse_path, _parse_wms, _validate_coordinates, _validate_location
 
 from jinja2 import Template
 
@@ -34,11 +34,11 @@ class WmsTileLayer(Layer):
         The url of the WMS server.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
-    layers : str, default None
+    layers : str, default ''
         The names of the layers to be displayed.
-    styles : str, default None
+    styles : str, default ''
         Comma-separated list of WMS styles.
-    fmt : str, default None
+    fmt : str, default 'image/jpeg'
         The format of the service output.
         Ex: 'image/png'
     transparent: bool, default True
@@ -61,34 +61,20 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, layers=None, styles=None, fmt=None,
-                 transparent=True, version='1.1.1', attr=None, overlay=True,
-                 control=True, **kwargs):
+    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
-        self.attribution = attr if attr is not None else ''
         # Options.
-        self.layers = layers if layers else ''
-        self.styles = styles if styles else ''
-        self.fmt = fmt if fmt else 'image/jpeg'
-        self.transparent = transparent
-        self.version = version
-        self.kwargs = kwargs
+        options = _parse_wms(**kwargs)
+        options.update({'attribution': attr})
+
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
-                {
-                    {% for key, value in this.kwargs.items() %}
-                    {{key}}: '{{ value }}',
-                    {% endfor %}
-                    layers: '{{ this.layers }}',
-                    styles: '{{ this.styles }}',
-                    format: '{{ this.fmt }}',
-                    transparent: {{ this.transparent.__str__().lower() }},
-                    version: '{{ this.version }}',
-                    {% if this.attribution %} attribution: '{{this.attribution}}'{% endif %}
-                    }
+                {{ this.options }}
                 ).addTo({{this._parent.get_name()}});
 
         {% endmacro %}
@@ -825,10 +811,10 @@ class Circle(Marker):
     See http://leafletjs.com/reference-1.2.0.html#path for more otions.
 
     """
-    def __init__(self, location, radius=10, popup=None, **kw):
+    def __init__(self, location, radius=10, popup=None, **kwargs):
         super(Circle, self).__init__(_validate_location(location), popup=popup)
         self._name = 'circle'
-        options = _parse_path(**kw)
+        options = _parse_path(**kwargs)
 
         options.update({'radius': radius})
         self.options = json.dumps(options, sort_keys=True, indent=2)
