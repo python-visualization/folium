@@ -16,12 +16,72 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker, Popup
-from folium.utilities import _parse_path, _parse_wms, _validate_coordinates, _validate_location
+from folium.map import FeatureGroup, Icon, Layer, Marker
+from folium.utilities import _parse_path, _parse_wms
 
 from jinja2 import Template
 
 from six import binary_type, text_type
+
+
+class PolyLine(Marker):
+    """
+    Creates a PolyLine (array) or MultiPolyline (array of arrays) object to
+    append into a map.
+
+    Parameters
+    ----------
+    locations: list of points (latitude, longitude)
+        Latitude and Longitude of line (Northing, Easting)
+    color: string, default Leaflet's default ('#03f')
+    weight: float, default Leaflet's default (5)
+    opacity: float, default Leaflet's default (0.5)
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
+
+    See http://leafletjs.com/reference-1.2.0.html#polyline for more options.
+
+    """
+    def __init__(self, locations, popup=None, **kw):
+        super(PolyLine, self).__init__(location=locations, popup=popup)
+        self._name = 'PolyLine'
+        options = _parse_path(**kw)
+        options.update(
+            {
+                'smoothFactor': kw.pop('smooth_factor', 1.0),
+                'noClip': kw.pop('no_clip', False),
+            }
+        )
+
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.polyline(
+                    {{this.location}},
+                    {{ this.options }}).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)  # noqa
+
+    def _get_self_bounds(self):
+        """
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+
+        """
+        bounds = [[None, None], [None, None]]
+        for point in iter_points(self.location):
+            bounds = [
+                [
+                    none_min(bounds[0][0], point[0]),
+                    none_min(bounds[0][1], point[1]),
+                ],
+                [
+                    none_max(bounds[1][0], point[0]),
+                    none_max(bounds[1][1], point[1]),
+                ],
+            ]
+        return bounds
 
 
 class WmsTileLayer(Layer):
@@ -61,7 +121,7 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):
+    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
         self.url = url
         # Options.
@@ -792,7 +852,7 @@ class Circle(Marker):
 
     Parameters
     ----------
-    location: tuple or list, default None
+    location: tuple or list
         Latitude and Longitude of Marker (Northing, Easting)
     radius: int
         The radius of the circle in meters.
@@ -812,7 +872,7 @@ class Circle(Marker):
 
     """
     def __init__(self, location, radius=10, popup=None, **kwargs):
-        super(Circle, self).__init__(_validate_location(location), popup=popup)
+        super(Circle, self).__init__(location=location, popup=popup)
         self._name = 'circle'
         options = _parse_path(**kwargs)
 
@@ -836,7 +896,7 @@ class CircleMarker(Marker):
 
     Parameters
     ----------
-    location: tuple or list, default None
+    location: tuple or list
         Latitude and Longitude of Marker (Northing, Easting)
     radius: int
         The radius of the circle in pixels.
@@ -856,7 +916,7 @@ class CircleMarker(Marker):
 
     """
     def __init__(self, location, radius=10, popup=None, **kw):
-        super(CircleMarker, self).__init__(_validate_location(location), popup=popup)
+        super(CircleMarker, self).__init__(location=location, popup=popup)
         self._name = 'CircleMarker'
         options = _parse_path(**kw)
 
@@ -865,7 +925,6 @@ class CircleMarker(Marker):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-
             var {{this.get_name()}} = L.circleMarker(
                 [{{this.location[0]}},{{this.location[1]}}],
                 {{ this.options }}
@@ -907,10 +966,7 @@ class RectangleMarker(Marker):
         ... )
 
         """
-        super(RectangleMarker, self).__init__(
-            _validate_coordinates(bounds),
-            popup=popup
-        )
+        super(RectangleMarker, self).__init__(bounds, popup=popup)
         self._name = 'RectangleMarker'
         self.color = color
         self.weight = weight
@@ -1046,69 +1102,6 @@ class ClickForMarker(MacroElement):
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
             """)  # noqa
-
-
-class PolyLine(MacroElement):
-    """
-    Creates a PolyLine object to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
-    color: string, default Leaflet's default ('#03f')
-    weight: float, default Leaflet's default (5)
-    opacity: float, default Leaflet's default (0.5)
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-
-    """
-    def __init__(self, locations, color=None, weight=None,
-                 opacity=None, popup=None):
-        super(PolyLine, self).__init__()
-        self._name = 'PolyLine'
-        self.data = _validate_coordinates(locations)
-        self.color = color
-        self.weight = weight
-        self.opacity = opacity
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.polyline(
-                    {{this.data}},
-                    {
-                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
-                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
-                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
-                        });
-                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
-
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-
-        """
-        bounds = [[None, None], [None, None]]
-        for point in iter_points(self.data):
-            bounds = [
-                [
-                    none_min(bounds[0][0], point[0]),
-                    none_min(bounds[0][1], point[1]),
-                ],
-                [
-                    none_max(bounds[1][0], point[0]),
-                    none_max(bounds[1][1], point[1]),
-                ],
-            ]
-        return bounds
 
 
 class CustomIcon(Icon):
