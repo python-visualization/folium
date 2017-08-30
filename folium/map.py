@@ -626,7 +626,8 @@ class Icon(MacroElement):
 
 
 class Marker(MacroElement):
-    """Create a simple stock Leaflet marker on the map, with optional
+    """
+    Create a simple stock Leaflet marker on the map, with optional
     popup text or Vincent visualization.
 
     Parameters

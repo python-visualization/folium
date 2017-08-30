@@ -12,7 +12,6 @@ from folium.utilities import image_to_url, mercator_transform
 from jinja2 import Template
 
 
-
 class ImageOverlay(Layer):
     """
     Used to load and display a single image over specific bounds of
@@ -50,7 +49,8 @@ class ImageOverlay(Layer):
     pixelated: bool, default True
         Sharp sharp/crips (True) or aliased corners (False).
 
-    See http://leafletjs.com/reference-1.2.0.html#imageoverlay for more options.
+    See http://leafletjs.com/reference-1.2.0.html#imageoverlay for more
+    options.
 
     """
     def __init__(self, image, bounds, origin='upper', colormap=None,
