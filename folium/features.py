@@ -757,16 +757,16 @@ class MarkerCluster(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls
     icon_create_function : string, default None
-        Override the default behaviour, making possible to customize markers colors and sizes 
-       
+        Override the default behaviour, making possible to customize markers colors and sizes
+    
     Example
     -------
     >>> icon_create_function = '''
     ... function (cluster) {
     ...     var childCount = cluster.getChildCount();
     ...     var c = ' marker-cluster-small';
-    ...     return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>', 
-                               className: 'marker-cluster' + c, 
+    ...     return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>',
+                               className: 'marker-cluster' + c,
                                iconSize: new L.Point(40, 40) });
     ...     }
     ... '''
