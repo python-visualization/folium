@@ -758,7 +758,7 @@ class MarkerCluster(Layer):
         Whether the Layer will be included in LayerControls
     icon_create_function : string, default None
         Override the default behaviour, making possible to customize markers colors and sizes
-    
+
     Example
     -------
     >>> icon_create_function = '''
