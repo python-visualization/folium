@@ -758,13 +758,16 @@ class MarkerCluster(Layer):
         Whether the Layer will be included in LayerControls
 
     """
-    def __init__(self, name=None, overlay=True, control=True):
+    def __init__(self, name=None, overlay=True, control=True, icon_create_function=""):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control)
         self._name = 'MarkerCluster'
+        self._icon_create_function = icon_create_function.strip()
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup();
+            var {{this.get_name()}} = L.markerClusterGroup({
+                {% if this._icon_create_function != "" %}iconCreateFunction: {{this._icon_create_function}}{% else %}{% endif %}
+            });
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)
