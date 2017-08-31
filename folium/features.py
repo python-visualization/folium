@@ -756,9 +756,10 @@ class MarkerCluster(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
-
+    icon_create_function : string, default None
+        Override the default behaviour, making possible to customize markers colors and sizes 
     """
-    def __init__(self, name=None, overlay=True, control=True, icon_create_function=""):
+    def __init__(self, name=None, overlay=True, control=True, icon_create_function=None):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control)
         self._name = 'MarkerCluster'
@@ -766,7 +767,7 @@ class MarkerCluster(Layer):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function != "" %}
+                {% if this._icon_create_function %}
                    iconCreateFunction: {{this._icon_create_function}}
                 {% endif %}
             });
