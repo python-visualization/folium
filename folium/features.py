@@ -766,7 +766,9 @@ class MarkerCluster(Layer):
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function != "" %}iconCreateFunction: {{this._icon_create_function}}{% else %}{% endif %}
+                {% if this._icon_create_function != "" %}
+                   iconCreateFunction: {{this._icon_create_function}}
+                {% endif %}
             });
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
