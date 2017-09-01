@@ -1,5 +1,6 @@
 0.4.0
 ~~~~~
+- Optional `iconCreateFunction` for `MarkerCluster` to customize the icons (odovad #701)
 - Added `HeatMapWithTime` (Padarn #567)
 - Added `MeasureControl` (ocefpaf #669)
 - Added `VideoOverlay` plugin (ocefpaf #665)
@@ -14,6 +15,8 @@
 
 API changes
 
+- `choropleth` now takes a single `geo_data` instad of `geo_path`/`geo_str`
+  leaving the parsing to `GeoJSON`, and can take geopandas obj (ocefpaf #702)
 - All popups are considered HTML text by default (ocefpaf #689)
   If a popup requires rendering use the `kwarg` `parse_html=True`.
 - `PolyLine`, `Circle` and `CircleMarker` are set to leaflet's defaults and
