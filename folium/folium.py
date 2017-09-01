@@ -141,11 +141,10 @@ class Map(LegacyMap):
                                  )
                        )
 
-    def choropleth(self, geo_data, data_out='data.json',
-                   data=None, columns=None, key_on=None, threshold_scale=None,
-                   fill_color='blue', fill_opacity=0.6, line_color='black',
-                   line_weight=1, line_opacity=1, legend_name='',
-                   topojson=None, reset=False, smooth_factor=None,
+    def choropleth(self, geo_data, data=None, columns=None, key_on=None,
+                   threshold_scale=None, fill_color='blue', fill_opacity=0.6,
+                   line_color='black', line_weight=1, line_opacity=1,
+                   legend_name='', topojson=None, reset=False, smooth_factor=None,
                    highlight=None):
         """
         Apply a GeoJSON overlay to the map.
@@ -179,8 +178,6 @@ class Map(LegacyMap):
             URL or File path to your GeoJSON data
         geo_str: string, default None
             String of GeoJSON, alternative to geo_path
-        data_out: string, default 'data.json'
-            Path to write Pandas DataFrame/Series to JSON if binding data
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
