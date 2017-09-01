@@ -21,6 +21,8 @@ from folium.utilities import _parse_path, _parse_wms
 
 from jinja2 import Template
 
+import requests
+
 from six import binary_type, text_type
 
 
@@ -473,8 +475,11 @@ class GeoJson(Layer):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
-            if data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.embed = True
+            self.embed = True
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                self.data = requests.get(data).json()
+                print(data)
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.data = json.loads(data)
             else:  # This is a filename
                 self.embed = False
