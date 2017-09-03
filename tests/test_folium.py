@@ -291,10 +291,8 @@ class TestFolium(object):
         self.m = folium.Map([43, -100], zoom_start=4)
 
         # Adding TopoJSON as additional layer.
-        path = os.path.join(rootpath, 'or_counties_topo.json')
-        self.m.choropleth(geo_path=path,
-                          topojson='objects.or_counties_geo',
-                          smooth_factor=0.5)
+        with open(os.path.join(rootpath, 'or_counties_topo.json')) as f:
+            self.m.choropleth(f, topojson='objects.or_counties_geo', smooth_factor=0.5)
 
         out = self.m._parent.render()
 
@@ -462,8 +460,7 @@ class TestFolium(object):
         self.m = folium.Map(zoom_start=4)
 
         # Adding remote GeoJSON as additional layer.
-        self.m.choropleth(geo_path=remote_url,
-                          smooth_factor=0.5)
+        self.m.choropleth(remote_url, smooth_factor=0.5)
 
         self.m._parent.render()
         bounds = self.m.get_bounds()

@@ -16,8 +16,6 @@ from branca.utilities import color_brewer
 from folium.features import GeoJson, TopoJson
 from folium.map import FitBounds, LegacyMap
 
-import requests
-
 
 class Map(LegacyMap):
     """Create a Map with Folium and Leaflet.js
@@ -143,11 +141,10 @@ class Map(LegacyMap):
                                  )
                        )
 
-    def choropleth(self, geo_path=None, geo_str=None, data_out='data.json',
-                   data=None, columns=None, key_on=None, threshold_scale=None,
-                   fill_color='blue', fill_opacity=0.6, line_color='black',
-                   line_weight=1, line_opacity=1, legend_name='',
-                   topojson=None, reset=False, smooth_factor=None,
+    def choropleth(self, geo_data, data=None, columns=None, key_on=None,
+                   threshold_scale=None, fill_color='blue', fill_opacity=0.6,
+                   line_color='black', line_weight=1, line_opacity=1,
+                   legend_name='', topojson=None, reset=False, smooth_factor=None,
                    highlight=None):
         """
         Apply a GeoJSON overlay to the map.
@@ -177,12 +174,8 @@ class Map(LegacyMap):
 
         Parameters
         ----------
-        geo_path: string, default None
-            URL or File path to your GeoJSON data
-        geo_str: string, default None
-            String of GeoJSON, alternative to geo_path
-        data_out: string, default 'data.json'
-            Path to write Pandas DataFrame/Series to JSON if binding data
+        geo_path: string/object
+            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
@@ -251,17 +244,6 @@ class Map(LegacyMap):
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
-
-        # Create GeoJson object
-        if geo_path:
-            if geo_path.lower().startswith(('http:', 'ftp:', 'https:')):
-                geo_data = requests.get(geo_path).json()
-            else:
-                geo_data = open(geo_path)
-        elif geo_str:
-            geo_data = geo_str
-        else:
-            geo_data = {}
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
