@@ -174,10 +174,8 @@ class Map(LegacyMap):
 
         Parameters
         ----------
-        geo_path: string, default None
-            URL or File path to your GeoJSON data
-        geo_str: string, default None
-            String of GeoJSON, alternative to geo_path
+        geo_path: string/object
+            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
