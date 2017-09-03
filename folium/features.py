@@ -16,7 +16,7 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker
+from folium.map import FeatureGroup, Icon, Layer, Popup, Marker
 from folium.utilities import _parse_path, _parse_wms
 
 from jinja2 import Template
@@ -742,74 +742,6 @@ class TopoJson(Layer):
             ]
 
         ]
-
-
-class MarkerCluster(Layer):
-    """
-    Creates a MarkerCluster element to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls
-    overlay : bool, default False
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls
-    icon_create_function : string, default None
-        Override the default behaviour, making possible to customize markers colors and sizes
-
-    Example
-    -------
-    >>> icon_create_function = '''
-    ... function (cluster) {
-    ...     var childCount = cluster.getChildCount();
-    ...     var c = ' marker-cluster-small';
-    ...     return new L.DivIcon({ html: '<div><span>' + childCount + '</span></div>',
-                               className: 'marker-cluster' + c,
-                               iconSize: new L.Point(40, 40) });
-    ...     }
-    ... '''
-    """
-    def __init__(self, name=None, overlay=True, control=True, icon_create_function=None):
-        super(MarkerCluster, self).__init__(name=name, overlay=overlay,
-                                            control=control)
-        self._name = 'MarkerCluster'
-        self._icon_create_function = icon_create_function.strip()
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function %}
-                   iconCreateFunction: {{this._icon_create_function}}
-                {% endif %}
-            });
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        super(MarkerCluster, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js'),  # noqa
-            name='marker_cluster_src')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
-            name='marker_cluster')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css'),  # noqa
-            name='marker_cluster_css')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css'),  # noqa
-            name='marker_cluster_default_css')
 
 
 class DivIcon(MacroElement):
