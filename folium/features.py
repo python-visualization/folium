@@ -468,22 +468,18 @@ class GeoJson(Layer):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
-        if hasattr(data, 'read'):
-            self.embed = True
-            self.data = json.load(data)
-        elif isinstance(data, dict):
+        if isinstance(data, dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
             self.embed = True
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 self.data = requests.get(data).json()
-                print(data)
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.data = json.loads(data)
             else:  # This is a filename
-                self.embed = False
-                self.data = data
+                with open(data) as f:
+                    self.data = json.loads(f.read())
         elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
             self.embed = True
             if hasattr(data, '__geo_interface__'):
