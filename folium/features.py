@@ -110,7 +110,7 @@ class WmsTileLayer(Layer):
     attr : str, default None
         The attribution of the service.
         Will be displayed in the bottom right corner.
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
