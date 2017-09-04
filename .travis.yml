@@ -1,3 +1,5 @@
+# http://lint.travis-ci.org/
+
 language: python
 
 sudo: false
@@ -17,6 +19,8 @@ matrix:
     env: TEST_TARGET=notebooks
   - python: 3.6
     env: TEST_TARGET=latest_branca
+  - python: 3.6
+    env: TEST_TARGET=docs
   allow_failures:
   - python: 2.7
     env: TEST_TARGET=latest_branca
@@ -36,16 +40,16 @@ before_install:
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
       conda install mock ;
     fi
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.6" ]]; then
-      conda install doctr ;
-    fi
 
 # Test source distribution.
 install:
   - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-  - cp -r tests/ examples/ /tmp && cd /tmp
+  - if [[ $TEST_TARGET != 'docs' ]]; then
+      cp -r tests/ examples/ /tmp && cd /tmp ;
+    fi
+
   - if [[ $TEST_TARGET == 'default' ]]; then
       py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
@@ -59,4 +63,13 @@ script:
   - if [[ $TEST_TARGET == 'notebooks' ]]; then
       for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
       py.test -vv tests/notebooks/test_notebooks.py ;
+    fi
+
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      pushd docs ;
+      make clean html ;
+      popd ;
+      doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH";
     fi
