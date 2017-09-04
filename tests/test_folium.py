@@ -72,13 +72,15 @@ class TestFolium(object):
         """Setup Folium Map."""
         with mock.patch('branca.element.uuid4') as uuid4:
             uuid4().hex = '0' * 32
+            attr = 'http://openstreetmap.org'
             self.m = folium.Map(
                 location=[45.5236, -122.6750],
                 width=900,
                 height=400,
                 max_zoom=20,
                 zoom_start=4,
-                max_bounds=True
+                max_bounds=True,
+                attr=attr
             )
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -309,9 +311,7 @@ class TestFolium(object):
         self.setup()
         out = self.m._parent.render()
         html_templ = self.env.get_template('fol_template.html')
-        attr = ('Data by <a href="http://openstreetmap.org">OpenStreetMap'
-                '</a>,under '
-                '<a href="http://www.openstreetmap.org/copyright">ODbL</a>.')
+        attr = 'http://openstreetmap.org'
         tile_layers = [
             {'id': 'tile_layer_'+'0'*32,
              'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

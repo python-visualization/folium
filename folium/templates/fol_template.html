@@ -63,12 +63,12 @@
    var {{tile['id']}} = L.tileLayer(
       '{{tile['address']}}',
       {
-        maxZoom: {{tile['max_zoom']}},
-        minZoom: {{tile['min_zoom']}},
-        noWrap: {{tile['no_wrap'].__str__().lower()}},
-        attribution: '{{tile['attr']}}',
-        detectRetina: {{tile['detect_retina'].__str__().lower()}},
-        subdomains: '{{tile['subdomains']}}'
+        "attribution": "{{tile['attr']}}",
+        "detectRetina": {{tile['detect_retina'].__str__().lower()}},
+        "maxZoom": {{tile['max_zoom']}},
+        "minZoom": {{tile['min_zoom']}},
+        "noWrap": {{tile['no_wrap'].__str__().lower()}},
+        "subdomains": "{{tile['subdomains']}}"
        }).addTo({{ map_id }});
   {% endfor %}
 </script>
