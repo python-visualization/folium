@@ -15,7 +15,7 @@
 
 API changes
 
-- removed features `MarkerCluster` in lieu of the plugin version (ocefpaf #704)
+- Removed features `MarkerCluster` in lieu of the plugin version (ocefpaf #704)
 - `choropleth` now takes a single `geo_data` instad of `geo_path`/`geo_str`
   leaving the parsing to `GeoJSON`, remove the unused `data_out` option,
   add geopandas support (ocefpaf #702)
@@ -32,6 +32,8 @@ API changes
 
 Bug Fixes
 
+- `subdomain` option in `TileLayer` should be a list and `WmsTileLayer`
+  `overlay` default is `True` (ocefpaf #707)
 - Checking if the lat, lon locations are floats to avoid empty maps
   (radumas #626)
 

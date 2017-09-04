@@ -411,7 +411,7 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
-    subdomains: string, default 'abc'
+    subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
@@ -425,12 +425,15 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
-        self.min_zoom = min_zoom
-        self.max_zoom = max_zoom
-        self.no_wrap = no_wrap
-        self.subdomains = subdomains
-
-        self.detect_retina = detect_retina
+        options = {
+            'minZoom': min_zoom,
+            'maxZoom': max_zoom,
+            'noWrap': no_wrap,
+            'attribution': attr,
+            'subdomains': subdomains,
+            'detectRetina': detect_retina,
+        }
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
@@ -457,16 +460,8 @@ class TileLayer(Layer):
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer(
                 '{{this.tiles}}',
-                {
-                    maxZoom: {{this.max_zoom}},
-                    minZoom: {{this.min_zoom}},
-                    noWrap: {{this.no_wrap.__str__().lower()}},
-                    attribution: '{{this.attr}}',
-                    detectRetina: {{this.detect_retina.__str__().lower()}},
-                    subdomains: '{{this.subdomains}}'
-                    }
+                {{ this.options }}
                 ).addTo({{this._parent.get_name()}});
-
         {% endmacro %}
         """)  # noqa
 
