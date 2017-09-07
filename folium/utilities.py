@@ -10,11 +10,19 @@ import zlib
 
 from six import binary_type, text_type
 
-
 try:
     import numpy as np
 except ImportError:
     np = None
+
+try:
+    from urllib.parse import uses_relative, uses_netloc, uses_params, urlparse
+except ImportError:
+    from urlparse import uses_relative, uses_netloc, uses_params, urlparse
+
+
+_VALID_URLS = set(uses_relative + uses_netloc + uses_params)
+_VALID_URLS.discard('')
 
 
 def _validate_location(location):
@@ -143,8 +151,12 @@ def image_to_url(image, colormap=None, origin='upper'):
     return url.replace('\n', ' ')
 
 
-def _is_url(name):
-    return any(scheme in name for scheme in ['http://', 'https://'])
+def _is_url(url):
+    """Check to see if `url` has a valid protocol."""
+    try:
+        return urlparse(url).scheme in _VALID_URLS
+    except:
+        return False
 
 
 def write_png(data, origin='upper', colormap=None):
