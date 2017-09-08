@@ -143,7 +143,7 @@ class Map(LegacyMap):
 
     def choropleth(self, geo_data, data=None, columns=None, key_on=None,
                    threshold_scale=None, fill_color='blue', fill_opacity=0.6,
-                   line_color='black', line_weight=1, line_opacity=1,
+                   line_color='black', line_weight=1, line_opacity=1, name=None,
                    legend_name='', topojson=None, reset=False, smooth_factor=None,
                    highlight=None):
         """
@@ -314,11 +314,13 @@ class Map(LegacyMap):
             geo_json = TopoJson(
                 geo_data,
                 topojson,
+                name=name,
                 style_function=style_function,
                 smooth_factor=smooth_factor)
         else:
             geo_json = GeoJson(
                 geo_data,
+                name=name,
                 style_function=style_function,
                 smooth_factor=smooth_factor,
                 highlight_function=highlight_function if highlight else None)
