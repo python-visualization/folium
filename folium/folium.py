@@ -166,7 +166,7 @@ class Map(LegacyMap):
         passed to `threshold_scale` of length <=6, in order to match the
         color brewer range.
 
-        TopoJSONs can be passed as "geo_path", but the "topojson" keyword must
+        TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
         also be passed with the reference to the topojson objects to convert.
         See the topojson.feature method in the TopoJSON API reference:
         https://github.com/mbostock/topojson/wiki/API-Reference
@@ -174,7 +174,7 @@ class Map(LegacyMap):
 
         Parameters
         ----------
-        geo_path: string/object
+        geo_data: string/object
             URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
@@ -222,16 +222,16 @@ class Map(LegacyMap):
 
         Examples
         --------
-        >>> m.choropleth(geo_path='us-states.json', line_color='blue',
+        >>> m.choropleth(geo_data='us-states.json', line_color='blue',
         ...              line_weight=3)
-        >>> m.choropleth(geo_path='geo.json', data=df,
+        >>> m.choropleth(geo_data='geo.json', data=df,
         ...              columns=['Data 1', 'Data 2'],
         ...              key_on='feature.properties.myvalue',
         ...              fill_color='PuBu',
         ...              threshold_scale=[0, 20, 30, 40, 50, 60])
-        >>> m.choropleth(geo_path='countries.json',
+        >>> m.choropleth(geo_data='countries.json',
         ...              topojson='objects.countries')
-        >>> m.choropleth(geo_path='geo.json', data=df,
+        >>> m.choropleth(geo_data='geo.json', data=df,
         ...              columns=['Data 1', 'Data 2'],
         ...              key_on='feature.properties.myvalue',
         ...              fill_color='PuBu',
