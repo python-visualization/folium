@@ -12,68 +12,56 @@ from jinja2 import Template
 
 class TimestampedGeoJson(MacroElement):
     """
-    Creates a TimestampedGeoJson plugin to append into a map with
-    Map.add_child.
+    Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
+    into a map with Map.add_child.
+
+    A geo-json is timestamped if:
+    * it contains only features of types LineString, MultiPoint, MultiLineString and MultiPolygon.
+    * each feature has a 'times' property with the same length as the coordinates array.
+    * each element of each 'times' property is a timestamp in ms since epoch, or in ISO string.
+
+    Eventually, you may have Point features with a 'times' property being an array of length 1.
 
     Parameters
     ----------
     data: file, dict or str.
-       The timestamped geo-json data you want to plot.
+        The timestamped geo-json data you want to plot.
+        * If file, then data will be read in the file and fully embedded in Leaflet's javascript.
+        * If dict, then data will be converted to json and embedded in the javascript.
+        * If str, then data will be passed to the javascript as-is.
 
-       * If file, then data will be read in the file and fully
-         embedded in Leaflet's javascript.
-       * If dict, then data will be converted to json and embedded in
-         the javascript.
-       * If str, then data will be passed to the javascript as-is.
 
-       A geo-json is timestamped if:
-           * it contains only features of types LineString,
-             MultiPoint, MultiLineString and MultiPolygon.
-           * each feature has a "times" property with the same length
-             as the coordinates array.
-           * each element of each "times" property is a timestamp in
-             ms since epoch, or in ISO string.
-           Eventually, you may have Point features with a "times"
-           property being an array of length 1.
-
-       examples :
-          # providing file
-          TimestampedGeoJson(open('foo.json'))
-
-          # providing dict
-          TimestampedGeoJson({
-            "type": "FeatureCollection",
-               "features": [
-                 {
-                   "type": "Feature",
-                   "geometry": {
-                     "type": "LineString",
-                     "coordinates": [[-70,-25],[-70,35],[70,35]],
-                     },
-                   "properties": {
-                     "times": [1435708800000, 1435795200000, 1435881600000]
-                     }
-                   }
-                 ]
-               })
-
-          # providing string
-          TimestampedGeoJson(open('foo.json').read())
-    transition_time : int, default 200.
+    transition_time: int, default 200.
         The duration in ms of a transition from between timestamps.
-    loop : bool, default True
+    loop: bool, default True
         Whether the animation shall loop.
-    auto_play : bool, default True
+    auto_play: bool, default True
         Whether the animation shall start automatically at startup.
     add_last_point: bool, default True
         Whether a point is added at the last valid coordinate of a LineString.
-    period : str, default "P1D"
+    period: str, default "P1D"
         Used to construct the array of available times starting
         from the first available time. Format: ISO8601 Duration
-        ex: "P1M" -> 1/month
-            "P1D"  -> 1/day
-            "PT1H"  -> 1/hour
-            "PT1M"  -> 1/minute
+        ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and'PT1M' -> 1/minute
+
+    Examples
+    --------
+    >>> TimestampedGeoJson({
+    ...     'type': 'FeatureCollection',
+    ...     'features': [
+    ...       {
+    ...         'type': 'Feature',
+    ...         'geometry': {
+    ...           'type': 'LineString',
+    ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
+    ...           },
+    ...         'properties': {
+    ...           'times': [1435708800000, 1435795200000, 1435881600000]
+    ...           }
+    ...         }
+    ...       ]
+    ...     })
+
     See https://github.com/socib/Leaflet.TimeDimension for more information.
 
     """

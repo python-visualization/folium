@@ -68,8 +68,14 @@ script:
   - if [[ $TEST_TARGET == 'docs' ]]; then
       set -e ;
       conda install doctr ;
+      cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
       pushd docs ;
-      make clean html ;
+      make clean html linkcheck ;
       popd ;
-      doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH";
+      python -m doctr deploy --sync .;
+      python -m doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH" ;
     fi
+
+doctr:
+  require-master: true
+  sync: False

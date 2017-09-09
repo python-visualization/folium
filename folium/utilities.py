@@ -169,7 +169,7 @@ def write_png(data, origin='upper', colormap=None):
     >>> "data:image/png;base64,"+png_str.encode('base64')
 
     Inspired from
-    http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
+    https://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
 
     Parameters
     ----------

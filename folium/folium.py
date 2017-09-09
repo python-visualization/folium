@@ -33,8 +33,7 @@ class Map(LegacyMap):
         - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
-    URL to the tiles parameter:
-    http://{s}.yourtiles.com/{z}/{x}/{y}.png
+    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
 
     Parameters
     ----------
@@ -100,10 +99,12 @@ class Map(LegacyMap):
                                tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
                                tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-                               tiles=('http://{s}.tiles.mapbox.com/v3/'
-                                      'mapbox.control-room/{z}/{x}/{y}.png'),
-                                attr='Mapbox attribution')
+    >>> map = folium.LegacyMap(
+    ...    location=[45.523, -122.675],
+    ...    zoom_start=2,
+    ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+    ...    attr='Mapbox attribution'
+    ...)
 
     """
 
@@ -169,7 +170,7 @@ class Map(LegacyMap):
         TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
         also be passed with the reference to the topojson objects to convert.
         See the topojson.feature method in the TopoJSON API reference:
-        https://github.com/mbostock/topojson/wiki/API-Reference
+        https://github.com/topojson/topojson/wiki/API-Reference
 
 
         Parameters

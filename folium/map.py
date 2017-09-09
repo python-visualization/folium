@@ -71,8 +71,7 @@ class LegacyMap(MacroElement):
         - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
-    URL to the tiles parameter:
-    http://{s}.yourtiles.com/{z}/{x}/{y}.png
+    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
 
     Parameters
     ----------
@@ -138,10 +137,13 @@ class LegacyMap(MacroElement):
     ...                        tiles='Mapbox Control Room')
     >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
     ...                        tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.LegacyMap(location=[45.523, -122.675], zoom_start=2,
-    ...                        tiles=('http://{s}.tiles.mapbox.com/v3/'
-    ...                               'mapbox.control-room/{z}/{x}/{y}.png'),
-    ...                        attr='Mapbox attribution')
+    >>> map = folium.LegacyMap(
+    ...    location=[45.523, -122.675],
+    ...    zoom_start=2,
+    ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+    ...    attr='Mapbox attribution'
+    ...)
+
     """
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
@@ -391,8 +393,7 @@ class TileLayer(Layer):
             - "CartoDB" (positron and dark_matter)
 
         You can pass a custom tileset to Folium by passing a Leaflet-style
-        URL to the tiles parameter:
-        http://{s}.yourtiles.com/{z}/{x}/{y}.png
+        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
     min_zoom: int, default 1
         Minimal zoom for which the layer will be displayed.
     max_zoom: int, default 18

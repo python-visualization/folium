@@ -36,10 +36,10 @@ class PolyLineTextPath(MacroElement):
     orientation: int, default 0
         Rotate text to a specified angle.
 
-    attributes: dictionary
+    attributes: dict
         Object containing the attributes applied to the text tag.
         Check valid attributes here:
-            https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
+        https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
         Example: {'fill': '#007DEF', 'font-weight': 'bold', 'font-size': '24'}
 
     See https://github.com/makinacorpus/Leaflet.TextPath for more information.
