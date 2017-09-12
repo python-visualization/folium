@@ -29,6 +29,7 @@ from folium.plugins.video_overlay import VideoOverlay
 
 __all__ = [
     'BoatMarker',
+    'Draw',
     'FastMarkerCluster',
     'FloatImage',
     'Fullscreen',
