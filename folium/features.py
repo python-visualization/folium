@@ -103,7 +103,7 @@ class WmsTileLayer(Layer):
     fmt : str, default 'image/jpeg'
         The format of the service output.
         Ex: 'image/png'
-    transparent: bool, default True
+    transparent: bool, default False
         Whether the layer shall allow transparency.
     version : str, default '1.1.1'
         Version of the WMS service to use.
