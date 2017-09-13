@@ -11,6 +11,7 @@ Wrap some of the most populat leaflet external plugins.
 from __future__ import (absolute_import, division, print_function)
 
 from folium.plugins.boat_marker import BoatMarker
+from folium.plugins.draw import Draw
 from folium.plugins.fast_marker_cluster import FastMarkerCluster
 from folium.plugins.float_image import FloatImage
 from folium.plugins.fullscreen import Fullscreen
@@ -28,6 +29,7 @@ from folium.plugins.video_overlay import VideoOverlay
 
 __all__ = [
     'BoatMarker',
+    'Draw',
     'FastMarkerCluster',
     'FloatImage',
     'Fullscreen',
