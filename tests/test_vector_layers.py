@@ -14,6 +14,7 @@ from folium import Map
 from folium.features import Circle, CircleMarker, Polygon, Rectangle
 from folium.utilities import get_bounds
 
+
 def test_circle():
     m = Map()
     radius = 10000
@@ -71,14 +72,14 @@ def test_circle():
     }}
     )
     .addTo({map});
-    """.format(name=circle.get_name(), location=location, radius=radius, map=m.get_name())
+    """.format(name=circle.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle._template.module.script(circle)
     assert rendered.strip().split() == expected_rendered.strip().split()
     assert circle.get_bounds() == [location, location]
     assert json.dumps(circle.to_dict()) == circle.to_json()
     assert circle.location == [-27.551667, -48.478889]
-    assert circle.options == json.dumps(expected_options, sort_keys=True, indent=2)
+    assert circle.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
 
 
 def test_circle_marker():
@@ -139,14 +140,14 @@ def test_circle_marker():
     }}
     )
     .addTo({map});
-    """.format(name=circle_marker.get_name(), location=location, radius=radius, map=m.get_name())
+    """.format(name=circle_marker.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle_marker._template.module.script(circle_marker)
     assert rendered.strip().split() == expected_rendered.strip().split()
     assert circle_marker.get_bounds() == expected_bounds
     assert json.dumps(circle_marker.to_dict()) == circle_marker.to_json()
     assert circle_marker.location == location
-    assert circle_marker.options == json.dumps(options, sort_keys=True, indent=2)
+    assert circle_marker.options == json.dumps(options, sort_keys=True, indent=2)  # noqa
 
 
 def test_rectangle():
@@ -207,7 +208,7 @@ def test_rectangle():
     assert rendered.strip().split() == expected_rendered.strip().split()
     assert rectangle.get_bounds() == location
     assert json.dumps(rectangle.to_dict()) == rectangle.to_json()
-    assert rectangle.options == json.dumps(expected_options, sort_keys=True, indent=2)
+    assert rectangle.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
 
 
 def test_polygon_marker():
@@ -266,4 +267,4 @@ def test_polygon_marker():
     assert rendered.strip().split() == expected_rendered.strip().split()
     assert polygon.get_bounds() == get_bounds(locations)
     assert json.dumps(polygon.to_dict()) == polygon.to_json()
-    assert polygon.options == json.dumps(expected_options, sort_keys=True, indent=2)
+    assert polygon.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa

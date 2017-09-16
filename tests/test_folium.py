@@ -14,7 +14,7 @@ import os
 import branca.element
 
 import folium
-from folium.features import Polygon, Rectangle, TopoJson
+from folium.features import TopoJson
 
 import jinja2
 from jinja2 import Environment, PackageLoader
@@ -207,7 +207,9 @@ class TestFolium(object):
 
         # Adding TopoJSON as additional layer.
         with open(os.path.join(rootpath, 'or_counties_topo.json')) as f:
-            self.m.choropleth(f, topojson='objects.or_counties_geo', smooth_factor=0.5)
+            self.m.choropleth(f,
+                              topojson='objects.or_counties_geo',
+                              smooth_factor=0.5)
 
         out = self.m._parent.render()
 
