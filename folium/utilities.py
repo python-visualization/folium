@@ -77,10 +77,17 @@ def _parse_path(**kw):
     Parse leaflet `Path` options.
     http://leafletjs.com/reference-1.2.0.html#path
 
+    The presence of `fill_color` will override `fill=False`.
+
     """
     color = kw.pop('color', '#3388ff')
-    fill_color = kw.pop('fill_color', color)
-    fill = False if not fill_color else True
+    fill_color = kw.pop('fill_color', False)
+    if fill_color:
+        fill = True
+    elif not fill_color:
+        fill_color = color
+        fill = kw.pop('fill', False)
+
     return {
         'stroke': kw.pop('stroke', True),
         'color': color,
