@@ -20,7 +20,7 @@ from collections import OrderedDict
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 from branca.utilities import _parse_size
 
-from folium.utilities import _validate_coordinates, _validate_location
+from folium.utilities import _validate_coordinates, _validate_location, get_bounds
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -656,7 +656,7 @@ class Marker(MacroElement):
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.marker(
-                [{{this.location[0]}},{{this.location[1]}}],
+                [{{this.location[0]}}, {{this.location[1]}}],
                 {
                     icon: new L.Icon.Default()
                     }
@@ -666,11 +666,12 @@ class Marker(MacroElement):
             """)
 
     def _get_self_bounds(self):
-        """Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
-        return [[self.location[0], self.location[1]],
-                [self.location[0], self.location[1]]]
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+
+        """
+        return get_bounds(self.location)
 
 
 class Popup(Element):

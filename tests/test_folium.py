@@ -14,7 +14,7 @@ import os
 import branca.element
 
 import folium
-from folium.features import PolygonMarker, RectangleMarker, TopoJson
+from folium.features import TopoJson
 
 import jinja2
 from jinja2 import Environment, PackageLoader
@@ -201,100 +201,15 @@ class TestFolium(object):
         bounds = m.get_bounds()
         assert bounds == [[45, -30], [45, 30]], bounds
 
-    def test_rectangle_marker(self):
-        """Test rectangle marker additions."""
-
-        self.m = folium.Map(location=[45.60, -122.8])
-        rect_templ = self.env.get_template('rectangle_marker.js')
-
-        # Single Rectangle marker.
-        bounds = [45.60, -122.8, 45.61, -122.7]
-        self.m.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
-        marker = list(self.m._children.values())[-1]
-        rect_1 = rect_templ.render({'RectangleMarker': marker.get_name(),
-                                    'location': [45.60, -122.8, 45.61, -122.7],
-                                    'color': 'black',
-                                    'fill_color': 'black',
-                                    'fill_opacity': 0.6,
-                                    'weight': 1})
-        assert (''.join(rect_1.split())[:-1] in
-                ''.join(self.m.get_root().render().split()))
-
-        # Second Rectangle marker.
-        bounds = [45.70, -122.9, 45.75, -122.5]
-        self.m.add_child(RectangleMarker(bounds=bounds, popup='Hi'))
-        marker = list(self.m._children.values())[-1]
-        rect_2 = rect_templ.render({'RectangleMarker': marker.get_name(),
-                                    'location': [45.70, -122.9, 45.75, -122.5],
-                                    'color': 'black',
-                                    'fill_color': 'black',
-                                    'fill_opacity': 0.6,
-                                    'weight': 1})
-        assert (''.join(rect_2.split())[:-1] in
-                ''.join(self.m.get_root().render().split()))
-
-        bounds = self.m.get_bounds()
-        assert bounds == [[45.6, -122.9], [45.7, -122.8]], bounds
-
-    def test_polygon_marker(self):
-        """Test polygon additions."""
-
-        self.m = folium.Map(location=[45.60, -122.8])
-        polygon_templ = self.env.get_template('polygon.js')
-
-        # Single PolygonMarker.
-        locations = [[35.6636, 139.7634],
-                     [35.6629, 139.7664],
-                     [35.6663, 139.7706],
-                     [35.6725, 139.7632],
-                     [35.6728, 139.7627],
-                     [35.6720, 139.7606],
-                     [35.6682, 139.7588],
-                     [35.6663, 139.7627]]
-        self.m.add_child(PolygonMarker(locations=locations, popup='Hi'))
-        marker = list(self.m._children.values())[-1]
-        polygon_1 = polygon_templ.render({'PolygonMarker': marker.get_name(),
-                                          'location': locations,
-                                          'color': 'black',
-                                          'fill_color': 'black',
-                                          'fill_opacity': 0.6,
-                                          'weight': 1})
-        assert (''.join(polygon_1.split())[:-1] in
-                ''.join(self.m.get_root().render().split()))
-
-        # Second PolygonMarker.
-        locations = [[35.5636, 138.7634],
-                     [35.5629, 138.7664],
-                     [35.5663, 138.7706],
-                     [35.5725, 138.7632],
-                     [35.5728, 138.7627],
-                     [35.5720, 138.7606],
-                     [35.5682, 138.7588],
-                     [35.5663, 138.7627]]
-        self.m.add_child(PolygonMarker(locations=locations, color='red',
-                                       fill_color='red', fill_opacity=0.7,
-                                       weight=3, popup='Hi'))
-        marker = list(self.m._children.values())[-1]
-        polygon_2 = polygon_templ.render({'PolygonMarker': marker.get_name(),
-                                          'location': locations,
-                                          'color': 'red',
-                                          'fill_color': 'red',
-                                          'fill_opacity': 0.7,
-                                          'weight': 3})
-        assert (''.join(polygon_2.split())[:-1] in
-                ''.join(self.m.get_root().render().split()))
-
-        bounds = self.m.get_bounds()
-        assert bounds == [[[35.5636, 138.7634], [35.5629, 138.7664]],
-                          [[35.6636, 139.7634], [35.6629, 139.7664]]], bounds
-
     def test_topo_json_smooth_factor(self):
         """Test topojson smooth factor method."""
         self.m = folium.Map([43, -100], zoom_start=4)
 
         # Adding TopoJSON as additional layer.
         with open(os.path.join(rootpath, 'or_counties_topo.json')) as f:
-            self.m.choropleth(f, topojson='objects.or_counties_geo', smooth_factor=0.5)
+            self.m.choropleth(f,
+                              topojson='objects.or_counties_geo',
+                              smooth_factor=0.5)
 
         out = self.m._parent.render()
 
@@ -455,6 +370,7 @@ class TestFolium(object):
                 m.global_switches.no_touch is True and
                 m.global_switches.disable_3d is True)
 
+    @pytest.mark.web
     def test_json_request(self):
         """Test requests for remote GeoJSON files."""
         self.m = folium.Map(zoom_start=4)

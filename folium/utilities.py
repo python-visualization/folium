@@ -77,8 +77,17 @@ def _parse_path(**kw):
     Parse leaflet `Path` options.
     http://leafletjs.com/reference-1.2.0.html#path
 
+    The presence of `fill_color` will override `fill=False`.
+
     """
     color = kw.pop('color', '#3388ff')
+    fill_color = kw.pop('fill_color', False)
+    if fill_color:
+        fill = True
+    elif not fill_color:
+        fill_color = color
+        fill = kw.pop('fill', False)
+
     return {
         'stroke': kw.pop('stroke', True),
         'color': color,
@@ -88,8 +97,8 @@ def _parse_path(**kw):
         'lineJoin': kw.pop('line_join', 'round'),
         'dashArray': kw.pop('dash_array', None),
         'dashOffset': kw.pop('dash_offset', None),
-        'fill': kw.pop('fill', False),
-        'fillColor': kw.pop('fill_color', color),
+        'fill': fill,
+        'fillColor': fill_color,
         'fillOpacity': kw.pop('fill_opacity', 0.2),
         'fillRule': kw.pop('fill_rule', 'evenodd'),
         'bubblingMouseEvents': kw.pop('bubbling_mouse_events', True),
@@ -309,3 +318,61 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     if origin == 'upper':
         out = out[::-1, :, :]
     return out
+
+
+def none_min(x, y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return min(x, y)
+
+
+def none_max(x, y):
+    if x is None:
+        return y
+    elif y is None:
+        return x
+    else:
+        return max(x, y)
+
+
+def iter_points(x):
+    """Iterates over a list representing a feature, and returns a list of points,
+    whatever the shape of the array (Point, MultiPolyline, etc).
+    """
+    if isinstance(x, (list, tuple)):
+        if len(x):
+            if isinstance(x[0], (list, tuple)):
+                out = []
+                for y in x:
+                    out += iter_points(y)
+                return out
+            else:
+                return [x]
+        else:
+            return []
+    else:
+        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
+
+
+def get_bounds(locations):
+    """
+    Computes the bounds of the object in the form
+    [[lat_min, lon_min], [lat_max, lon_max]]
+
+    """
+    bounds = [[None, None], [None, None]]
+    for point in iter_points(locations):
+        bounds = [
+            [
+                none_min(bounds[0][0], point[0]),
+                none_min(bounds[0][1], point[1]),
+            ],
+            [
+                none_max(bounds[1][0], point[0]),
+                none_max(bounds[1][1], point[1]),
+            ],
+        ]
+    return bounds
