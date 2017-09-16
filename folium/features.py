@@ -44,9 +44,10 @@ class PolyLine(Marker):
     See http://leafletjs.com/reference-1.2.0.html#polyline for more options.
 
     """
-    def __init__(self, locations, popup=None, **kw):
+    def __init__(self, locations, popup=None, tooltip=None, **kw):
         super(PolyLine, self).__init__(location=locations, popup=popup)
         self._name = 'PolyLine'
+        self.tooltip = tooltip
         options = _parse_path(**kw)
         options.update(
             {
@@ -61,29 +62,12 @@ class PolyLine(Marker):
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.polyline(
                     {{this.location}},
-                    {{ this.options }}).addTo({{this._parent.get_name()}});
+                    {{ this.options }}
+                    )
+                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)  # noqa
-
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-
-        """
-        bounds = [[None, None], [None, None]]
-        for point in iter_points(self.location):
-            bounds = [
-                [
-                    none_min(bounds[0][0], point[0]),
-                    none_min(bounds[0][1], point[1]),
-                ],
-                [
-                    none_max(bounds[1][0], point[0]),
-                    none_max(bounds[1][1], point[1]),
-                ],
-            ]
-        return bounds
 
 
 class WmsTileLayer(Layer):
@@ -464,10 +448,11 @@ class GeoJson(Layer):
     """
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None):
+                 highlight_function=None, tooltip=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
+        self.tooltip = tooltip
         if isinstance(data, dict):
             self.embed = True
             self.data = data
@@ -542,7 +527,9 @@ class GeoJson(Layer):
                         {% endif %}
                         }
                     {% endif %}
-                    ).addTo({{this._parent.get_name()}});
+                    )
+                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
@@ -566,7 +553,7 @@ class GeoJson(Layer):
             feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
-    def _get_self_bounds(self):
+    def get_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -646,10 +633,12 @@ class TopoJson(Layer):
 
     """
     def __init__(self, data, object_path, style_function=None,
-                 name=None, overlay=True, control=True, smooth_factor=None):
+                 name=None, overlay=True, control=True, smooth_factor=None,
+                 tooltip=None):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control)
         self._name = 'TopoJson'
+        self.tooltip = tooltip
         if 'read' in dir(data):
             self.embed = True
             self.data = json.load(data)
@@ -677,7 +666,10 @@ class TopoJson(Layer):
                     {{this.get_name()}}_data.{{this.object_path}})
                         {% if this.smooth_factor is not none %}
                             , {smoothFactor: {{this.smooth_factor}}}
-                        {% endif %}).addTo({{this._parent.get_name()}});
+                        {% endif %}
+                        )
+                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                        .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
@@ -711,7 +703,7 @@ class TopoJson(Layer):
             JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
             name='topojson')
 
-    def _get_self_bounds(self):
+    def get_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -822,11 +814,12 @@ class Circle(Marker):
     See http://leafletjs.com/reference-1.2.0.html#path for more otions.
 
     """
-    def __init__(self, location, radius=10, popup=None, **kwargs):
+    def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
         super(Circle, self).__init__(location=location, popup=popup)
         self._name = 'circle'
-        options = _parse_path(**kwargs)
+        self.tooltip = tooltip
 
+        options = _parse_path(**kwargs)
         options.update({'radius': radius})
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
@@ -834,9 +827,11 @@ class Circle(Marker):
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.circle(
-                [{{this.location[0]}},{{this.location[1]}}],
+                [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
+                )
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
@@ -866,130 +861,111 @@ class CircleMarker(Marker):
     See http://leafletjs.com/reference-1.2.0.html#path for more otions.
 
     """
-    def __init__(self, location, radius=10, popup=None, **kw):
+    def __init__(self, location, radius=10, popup=None, tooltip=None, **kw):
         super(CircleMarker, self).__init__(location=location, popup=popup)
         self._name = 'CircleMarker'
-        options = _parse_path(**kw)
+        self.tooltip = tooltip
 
+        options = _parse_path(**kw)
         options.update({'radius': radius})
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.circleMarker(
-                [{{this.location[0]}},{{this.location[1]}}],
+                [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
+                )
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
 
-class RectangleMarker(Marker):
-    def __init__(self, bounds, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None):
-        """
-        Creates a RectangleMarker object for plotting on a Map.
+class Rectangle(Marker):
+    """
+    Creates a Rectangle Marker object for plotting on a Map.
 
-        Parameters
-        ----------
-        bounds: tuple or list, default None
-            Latitude and Longitude of Marker (southWest and northEast)
-        color: string, default ('black')
-            Edge color of a rectangle.
-        weight: float, default (1)
-            Edge line width of a rectangle.
-        fill_color: string, default ('black')
-            Fill color of a rectangle.
-        fill_opacity: float, default (0.6)
-            Fill opacity of a rectangle.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
+    Parameters
+    ----------
+    bounds: tuple or list, default None
+        Latitude and Longitude of Marker (southWest and northEast)
+    color: string, default ('black')
+        Edge color of a rectangle.
+    weight: float, default (1)
+        Edge line width of a rectangle.
+    fill_color: string, default ('black')
+        Fill color of a rectangle.
+    fill_opacity: float, default (0.6)
+        Fill opacity of a rectangle.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
 
-        Returns
-        -------
-        folium.features.RectangleMarker object
+    See http://leafletjs.com/reference-1.2.0.html#path for more otions.
 
-        Example
-        -------
-        >>> RectangleMarker(
-        ...  bounds=[[35.681, 139.766], [35.691, 139.776]],
-        ...  color='blue', fill_color='red', popup='Tokyo, Japan'
-        ... )
+    """
+    def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
+        super(Rectangle, self).__init__(location=bounds, popup=popup)
+        self._name = 'rectangle'
+        self.tooltip = tooltip
 
-        """
-        super(RectangleMarker, self).__init__(bounds, popup=popup)
-        self._name = 'RectangleMarker'
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
+        options = _parse_path(**kwargs)
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
+
             var {{this.get_name()}} = L.rectangle(
-                                  [[{{this.location[0]}},{{this.location[1]}}],
-                                  [{{this.location[2]}},{{this.location[3]}}]],
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }},
-                    weight: {{ this.weight }}
-                }).addTo({{this._parent.get_name()}});
+                {{this.location}},
+                {{ this.options }}
+                )
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                .addTo({{this._parent.get_name()}});
 
             {% endmacro %}
             """)
 
 
-class PolygonMarker(Marker):
-    def __init__(self, locations, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None):
-        """
-        Creates a PolygonMarker object for plotting on a Map.
+class Polygon(Marker):
+    """
+    Creates a Polygon Marker object for plotting on a Map.
 
-        Parameters
-        ----------
-        locations: tuple or list, default None
-            Latitude and Longitude of Polygon
-        color: string, default ('black')
-            Edge color of a polygon.
-        weight: float, default (1)
-            Edge line width of a polygon.
-        fill_color: string, default ('black')
-            Fill color of a polygon.
-        fill_opacity: float, default (0.6)
-            Fill opacity of a polygon.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
+    Parameters
+    ----------
+    locations: tuple or list, default None
+        Latitude and Longitude of Polygon
+    color: string, default ('black')
+        Edge color of a polygon.
+    weight: float, default (1)
+        Edge line width of a polygon.
+    fill_color: string, default ('black')
+        Fill color of a polygon.
+    fill_opacity: float, default (0.6)
+        Fill opacity of a polygon.
+    popup: string or folium.Popup, default None
+        Input text or visualization for object.
 
-        Returns
-        -------
-        folium.features.Polygon object
+    See http://leafletjs.com/reference-1.2.0.html#path for more otions.
 
-        Examples
-        --------
-        >>> locations = [[35.6762, 139.7795],
-        ...              [35.6718, 139.7831],
-        ...              [35.6767, 139.7868],
-        ...              [35.6795, 139.7824],
-        ...              [35.6787, 139.7791]]
-        >>> Polygon(locations, color='blue', weight=10, fill_color='red',
-        ...         fill_opacity=0.5, popup='Tokyo, Japan'))
+    """
+    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+        super(Polygon, self).__init__(locations, popup=popup)
+        self._name = 'Polygon'
+        self.tooltip = tooltip
 
-        """
-        super(PolygonMarker, self).__init__(locations, popup=popup)
-        self._name = 'PolygonMarker'
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
+        options = _parse_path(**kwargs)
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.polygon({{this.location}},
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }},
-                    weight: {{ this.weight }}
-                }).addTo({{this._parent.get_name()}});
+
+            var {{this.get_name()}} = L.polygon(
+                {{this.location}},
+                {{ this.options }}
+                )
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                .addTo({{this._parent.get_name()}});
+
             {% endmacro %}
             """)
 
