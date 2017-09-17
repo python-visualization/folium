@@ -639,11 +639,10 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
 
     """
-    def __init__(self, location, popup=None, icon=None):
+    def __init__(self, location, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        # Must be _validate_coordinates b/c some markers are defined with
-        # multiple coordinates values, like Polygons.
+        self.tooltip = tooltip
         self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
@@ -661,6 +660,7 @@ class Marker(MacroElement):
                     icon: new L.Icon.Default()
                     }
                 )
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
