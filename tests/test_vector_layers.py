@@ -11,8 +11,8 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from folium import Map
-from folium.features import Circle, CircleMarker, Polygon, Rectangle
 from folium.utilities import get_bounds
+from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
 
 
 def test_circle():
@@ -268,3 +268,118 @@ def test_polygon_marker():
     assert polygon.get_bounds() == get_bounds(locations)
     assert json.dumps(polygon.to_dict()) == polygon.to_json()
     assert polygon.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+
+
+def test_polyline():
+    m = Map()
+    locations = [[40, -80], [45, -80]]
+    polyline = PolyLine(locations=locations, popup='I am PolyLine')
+    polyline.add_to(m)
+
+    expected_options = {
+        'smoothFactor': 1.0,
+        'noClip': False,
+        'bubblingMouseEvents': True,
+        'color': '#3388ff',
+        'dashArray': None,
+        'dashOffset': None,
+        'fill': False,
+        'fillColor': '#3388ff',
+        'fillOpacity': 0.2,
+        'fillRule': 'evenodd',
+        'lineCap': 'round',
+        'lineJoin': 'round',
+        'opacity': 1.0,
+        'stroke': True,
+        'weight': 3,
+    }
+
+    m._repr_html_()
+    expected_rendered = """
+    var {name} = L.polyline(
+    {locations},
+    {{
+    "bubblingMouseEvents": true,
+    "color": "#3388ff",
+    "dashArray": null,
+    "dashOffset": null,
+    "fill": false,
+    "fillColor": "#3388ff",
+    "fillOpacity": 0.2,
+    "fillRule": "evenodd",
+    "lineCap": "round",
+    "lineJoin": "round",
+    "noClip": false,
+    "opacity": 1.0,
+    "smoothFactor": 1.0,
+    "stroke": true,
+    "weight": 3
+    }}
+    )
+    .addTo({map});
+    """.format(locations=locations, name=polyline.get_name(), map=m.get_name())
+
+    rendered = polyline._template.module.script(polyline)
+    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert polyline.get_bounds() == get_bounds(locations)
+    assert json.dumps(polyline.to_dict()) == polyline.to_json()
+    assert polyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+
+
+def test_mulyipolyline():
+    m = Map()
+
+    locations = [[[45.51, -122.68], [37.77, -122.43], [34.04, -118.2]],
+                 [[40.78, -73.91], [41.83, -87.62], [32.76, -96.72]]]
+
+    multipolyline = PolyLine(locations=locations, popup='MultiPolyLine')
+    multipolyline.add_to(m)
+
+    expected_options = {
+        'smoothFactor': 1.0,
+        'noClip': False,
+        'bubblingMouseEvents': True,
+        'color': '#3388ff',
+        'dashArray': None,
+        'dashOffset': None,
+        'fill': False,
+        'fillColor': '#3388ff',
+        'fillOpacity': 0.2,
+        'fillRule': 'evenodd',
+        'lineCap': 'round',
+        'lineJoin': 'round',
+        'opacity': 1.0,
+        'stroke': True,
+        'weight': 3,
+    }
+
+    m._repr_html_()
+    expected_rendered = """
+    var {name} = L.polyline(
+    {locations},
+    {{
+    "bubblingMouseEvents": true,
+    "color": "#3388ff",
+    "dashArray": null,
+    "dashOffset": null,
+    "fill": false,
+    "fillColor": "#3388ff",
+    "fillOpacity": 0.2,
+    "fillRule": "evenodd",
+    "lineCap": "round",
+    "lineJoin": "round",
+    "noClip": false,
+    "opacity": 1.0,
+    "smoothFactor": 1.0,
+    "stroke": true,
+    "weight": 3
+    }}
+    )
+    .addTo({map});
+    """.format(locations=locations, name=multipolyline.get_name(), map=m.get_name())
+
+    rendered = multipolyline._template.module.script(multipolyline)
+    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert multipolyline.get_bounds() == get_bounds(locations)
+    assert json.dumps(multipolyline.to_dict()) == multipolyline.to_json()
+    assert multipolyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
