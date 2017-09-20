@@ -17,7 +17,7 @@ from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroEleme
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker
-from folium.utilities import _parse_wms
+from folium.utilities import _parse_wms, get_bounds
 from folium.vector_layers import PolyLine
 
 from jinja2 import Template
@@ -510,37 +510,13 @@ class GeoJson(Layer):
             feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
-    def get_bounds(self):
+    def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
-        if not self.embed:
-            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
-
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
-        bounds = [[None, None], [None, None]]
-        for feature in self.data['features']:
-            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
-                bounds = [
-                    [
-                        none_min(bounds[0][0], point[1]),
-                        none_min(bounds[0][1], point[0]),
-                        ],
-                    [
-                        none_max(bounds[1][0], point[1]),
-                        none_max(bounds[1][1], point[0]),
-                        ],
-                    ]
-        return bounds
-
+        return get_bounds(self.data, lonlat=True)
 
 class TopoJson(Layer):
     """
