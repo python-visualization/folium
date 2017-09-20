@@ -338,33 +338,52 @@ def none_max(x, y):
         return max(x, y)
 
 
-def iter_points(x):
-    """Iterates over a list representing a feature, and returns a list of points,
-    whatever the shape of the array (Point, MultiPolyline, etc).
+def iter_coords(obj):
     """
-    if isinstance(x, (list, tuple)):
-        if len(x):
-            if isinstance(x[0], (list, tuple)):
-                out = []
-                for y in x:
-                    out += iter_points(y)
-                return out
-            else:
-                return [x]
-        else:
-            return []
+    Returns all the coordinate tuples from a geometry or feature.
+
+    """
+    if isinstance(obj, (tuple, list)):
+        coords = obj
+    elif 'features' in obj:
+        coords = [geom['geometry']['coordinates'] for geom in obj['features']]
+    elif 'geometry' in obj:
+        coords = obj['geometry']['coordinates']
     else:
-        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
+        coords = obj.get('coordinates', obj)
+    for coord in coords:
+        if isinstance(coord, (float, int)):
+            yield tuple(coords)
+            break
+        else:
+            for f in iter_coords(coord):
+                yield f
+
+def _locations_mirror(x):
+    """
+    Mirrors the points in a list-of-list-of-...-of-list-of-points.
+    For example:
+    >>> _locations_mirror([[[1, 2], [3, 4]], [5, 6], [7, 8]])
+    [[[2, 1], [4, 3]], [6, 5], [8, 7]]
+
+    """
+    if hasattr(x, '__iter__'):
+        if hasattr(x[0], '__iter__'):
+            return list(map(_locations_mirror, x))
+        else:
+            return list(x[::-1])
+    else:
+        return x
 
 
-def get_bounds(locations):
+def get_bounds(locations, lonlat=False):
     """
     Computes the bounds of the object in the form
     [[lat_min, lon_min], [lat_max, lon_max]]
 
     """
     bounds = [[None, None], [None, None]]
-    for point in iter_points(locations):
+    for point in iter_coords(locations):
         bounds = [
             [
                 none_min(bounds[0][0], point[0]),
@@ -375,4 +394,6 @@ def get_bounds(locations):
                 none_max(bounds[1][1], point[1]),
             ],
         ]
+    if lonlat:
+        bounds = _locations_mirror(bounds)
     return bounds
