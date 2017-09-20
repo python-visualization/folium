@@ -359,6 +359,7 @@ def iter_coords(obj):
             for f in iter_coords(coord):
                 yield f
 
+
 def _locations_mirror(x):
     """
     Mirrors the points in a list-of-list-of-...-of-list-of-points.
