@@ -162,27 +162,6 @@ class TestFolium(object):
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
-    def test_custom_tile_subdomains(self):
-        """Test custom tile subdomains."""
-
-        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
-        m = folium.Map(location=[45.52, -122.67], tiles=url,
-                       attr='attribution',
-                       subdomains='1234')
-
-        url_with_name = 'http://{s}.custom_tiles-subdomains.org/{z}/{x}/{y}.png'  # noqa
-        tile_layer = folium.TileLayer(url,
-                                      name='subdomains2',
-                                      attr='attribution',
-                                      subdomains='5678')
-        m.add_child(tile_layer)
-        m.add_tile_layer(tiles=url_with_name, attr='attribution',
-                         subdomains='9012')
-
-        out = m._parent.render()
-        assert '1234' in out
-        assert '5678' in out
-        assert '9012' in out
 
     def test_feature_group(self):
         """Test FeatureGroup."""
@@ -333,21 +312,6 @@ class TestFolium(object):
 
         bounds = self.m.get_bounds()
         assert bounds == [[45, -100], [45, -100]], bounds
-
-    def test_tile_layer(self):
-        m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
-        layer = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        m.add_child(folium.TileLayer(layer, name='OpenStreetMap',
-                                     attr='attribution'))
-        m.add_child(folium.TileLayer(layer,
-                                     name='OpenStreetMap2',
-                                     attr='attribution2',
-                                     overlay=True))
-        m.add_child(folium.LayerControl())
-        m._repr_html_()
-
-        bounds = m.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
 
     def test_global_switches(self):
         m = folium.Map(prefer_canvas=True)
