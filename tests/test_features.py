@@ -92,23 +92,6 @@ def test_divicon():
     assert div.html == html
 
 
-# WmsTileLayer.
-def test_wms_service():
-    m = Map([40, -100], zoom_start=4)
-    url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
-    w = folium.WmsTileLayer(url,
-                              name='test',
-                              fmt='image/png',
-                              layers='nexrad-n0r-900913',
-                              attr=u'Weather data © 2012 IEM Nexrad',
-                              transparent=True)
-    w.add_to(m)
-    m._repr_html_()
-
-    bounds = m.get_bounds()
-    assert bounds == [[None, None], [None, None]], bounds
-
-
 # ColorLine.
 def test_color_line():
     m = Map([22.5, 22.5], zoom_start=3)

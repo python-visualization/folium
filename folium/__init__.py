@@ -11,13 +11,14 @@ from folium._version import get_versions
 from folium.features import (
     ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
-    WmsTileLayer,
 )
+
+# from folium.raster_layers imoort TileLayer, WmsTileLayer
 
 from folium.folium import Map
 
 from folium.map import (
-    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup, TileLayer
+    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup
 )
 
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle  # noqa

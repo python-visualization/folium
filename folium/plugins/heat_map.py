@@ -7,7 +7,7 @@ import json
 from branca.element import Figure, JavascriptLink
 from branca.utilities import none_max, none_min
 
-from folium.map import TileLayer
+from folium.raster_layers import TileLayer
 from folium.utilities import _isnan
 
 from jinja2 import Template

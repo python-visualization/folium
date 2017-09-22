@@ -17,7 +17,7 @@ from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroEleme
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker
-from folium.utilities import _parse_wms, get_bounds
+from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
 from jinja2 import Template
@@ -25,63 +25,6 @@ from jinja2 import Template
 import requests
 
 from six import binary_type, text_type
-
-
-class WmsTileLayer(Layer):
-    """
-    Creates a Web Map Service (WMS) layer.
-
-    Parameters
-    ----------
-    url : str
-        The url of the WMS server.
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls
-    layers : str, default ''
-        The names of the layers to be displayed.
-    styles : str, default ''
-        Comma-separated list of WMS styles.
-    fmt : str, default 'image/jpeg'
-        The format of the service output.
-        Ex: 'image/png'
-    transparent: bool, default False
-        Whether the layer shall allow transparency.
-    version : str, default '1.1.1'
-        Version of the WMS service to use.
-    attr : str, default None
-        The attribution of the service.
-        Will be displayed in the bottom right corner.
-    overlay : bool, default True
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls
-    **kwargs : additional keyword arguments
-        Passed through to the underlying tileLayer.wms object and can be used
-        for setting extra tileLayer.wms parameters or as extra parameters in
-        the WMS request.
-
-    For more information see:
-    http://leafletjs.com/reference.html#tilelayer-wms
-
-    """
-    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
-        self.url = url
-        # Options.
-        options = _parse_wms(**kwargs)
-        options.update({'attribution': attr})
-
-        self.options = json.dumps(options, sort_keys=True, indent=2)
-
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.tileLayer.wms(
-                '{{ this.url }}',
-                {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
-
-        {% endmacro %}
-        """)  # noqa
 
 
 class RegularPolygonMarker(Marker):
@@ -517,6 +460,7 @@ class GeoJson(Layer):
 
         """
         return get_bounds(self.data, lonlat=True)
+
 
 class TopoJson(Layer):
     """
