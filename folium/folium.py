@@ -10,14 +10,70 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 from __future__ import (absolute_import, division, print_function)
 
+import os
+import tempfile
+import time
+
 from branca.colormap import StepColormap
-from branca.utilities import color_brewer
+from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from branca.utilities import _parse_size, color_brewer
 
 from folium.features import GeoJson, TopoJson
-from folium.map import FitBounds, LegacyMap
+from folium.map import FitBounds
+from folium.raster_layers import TileLayer
+from folium.utilities import _validate_location
+
+from jinja2 import Environment, PackageLoader, Template
+
+ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
-class Map(LegacyMap):
+_default_js = [
+    ('leaflet',
+     'https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.js'),
+    ('jquery',
+     'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
+    ('bootstrap',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
+    ('awesome_markers',
+     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
+    ]
+
+_default_css = [
+    ('leaflet_css',
+     'https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.css'),
+    ('bootstrap_css',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
+    ('bootstrap_theme_css',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'),  # noqa
+    ('awesome_markers_font_css',
+     'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'),  # noqa
+    ('awesome_markers_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
+    ('awesome_rotate_css',
+     'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+    ]
+
+
+class GlobalSwitches(Element):
+    def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
+        super(GlobalSwitches, self).__init__()
+        self._name = 'GlobalSwitches'
+
+        self.prefer_canvas = prefer_canvas
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
+
+        self._template = Template(
+            '<script>'
+            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
+            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
+            '</script>'
+        )
+
+
+class Map(MacroElement):
     """Create a Map with Folium and Leaflet.js
 
     Generate a base map of given width and height with either default
@@ -89,17 +145,17 @@ class Map(LegacyMap):
 
     Returns
     -------
-    Folium LegacyMap Object
+    Folium Map Object
 
     Examples
     --------
-    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    >>> map = folium.Map(location=[45.523, -122.675],
     ...                        width=750, height=500)
-    >>> map = folium.LegacyMap(location=[45.523, -122.675],
+    >>> map = folium.Map(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
-    >>> map = folium.LegacyMap(location=(45.523, -122.675), max_zoom=20,
+    >>> map = folium.Map(location=(45.523, -122.675), max_zoom=20,
                                tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.LegacyMap(
+    >>> map = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
     ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
@@ -107,6 +163,198 @@ class Map(LegacyMap):
     ...)
 
     """
+
+    def __init__(self, location=None, width='100%', height='100%',
+                 left='0%', top='0%', position='relative',
+                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
+                 zoom_start=10, world_copy_jump=False,
+                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
+                 min_lon=-180, max_lon=180, max_bounds=False,
+                 detect_retina=False, crs='EPSG3857', control_scale=False,
+                 prefer_canvas=False, no_touch=False, disable_3d=False,
+                 subdomains='abc', png_enabled=False):
+        super(Map, self).__init__()
+        self._name = 'Map'
+        self._env = ENV
+        # Undocumented for now b/c this will be subject to a re-factor soon.
+        self._png_image = None
+        self.png_enabled = png_enabled
+
+        if not location:
+            # If location is not passed we center and ignore zoom.
+            self.location = [0, 0]
+            self.zoom_start = min_zoom
+        else:
+            self.location = _validate_location(location)
+            self.zoom_start = zoom_start
+
+        Figure().add_child(self)
+
+        # Map Size Parameters.
+        self.width = _parse_size(width)
+        self.height = _parse_size(height)
+        self.left = _parse_size(left)
+        self.top = _parse_size(top)
+        self.position = position
+
+        self.min_lat = min_lat
+        self.max_lat = max_lat
+        self.min_lon = min_lon
+        self.max_lon = max_lon
+        self.max_bounds = max_bounds
+        self.no_wrap = no_wrap
+        self.world_copy_jump = world_copy_jump
+
+        self.crs = crs
+        self.control_scale = control_scale
+
+        self.global_switches = GlobalSwitches(
+            prefer_canvas,
+            no_touch,
+            disable_3d
+        )
+
+        if tiles:
+            self.add_tile_layer(
+                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
+                no_wrap=no_wrap, attr=attr,
+                API_key=API_key, detect_retina=detect_retina,
+                subdomains=subdomains
+            )
+
+        self._template = Template(u"""
+        {% macro header(this, kwargs) %}
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+                }
+            </style>
+        {% endmacro %}
+        {% macro html(this, kwargs) %}
+            <div class="folium-map" id="{{this.get_name()}}" ></div>
+        {% endmacro %}
+
+        {% macro script(this, kwargs) %}
+
+            {% if this.max_bounds %}
+                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+                var bounds = L.latLngBounds(southWest, northEast);
+            {% else %}
+                var bounds = null;
+            {% endif %}
+
+            var {{this.get_name()}} = L.map(
+                                  '{{this.get_name()}}',
+                                  {center: [{{this.location[0]}},{{this.location[1]}}],
+                                  zoom: {{this.zoom_start}},
+                                  maxBounds: bounds,
+                                  layers: [],
+                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+                                  crs: L.CRS.{{this.crs}}
+                                 });
+            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+        {% endmacro %}
+        """)  # noqa
+
+    def _repr_html_(self, **kwargs):
+        """Displays the HTML Map in a Jupyter notebook."""
+        if self._parent is None:
+            self.add_to(Figure())
+            out = self._parent._repr_html_(**kwargs)
+            self._parent = None
+        else:
+            out = self._parent._repr_html_(**kwargs)
+        return out
+
+    def _to_png(self):
+        """Export the HTML to byte representation of a PNG image."""
+        if self._png_image is None:
+            import selenium.webdriver
+
+            with tempfile.NamedTemporaryFile(suffix='.html') as f:
+                fname = f.name
+                self.save(fname, close_file=False)
+                driver = selenium.webdriver.PhantomJS(
+                    service_log_path=os.path.devnull
+                )
+                driver.get('file://{}'.format(fname))
+                driver.maximize_window()
+                # Ignore user map size.
+                driver.execute_script("document.body.style.width = '100%';")  # noqa
+                # We should probably monitor if some element is present,
+                # but this is OK for now.
+                time.sleep(3)
+                png = driver.get_screenshot_as_png()
+                driver.quit()
+                self._png_image = png
+        return self._png_image
+
+    def _repr_png_(self):
+        """Displays the PNG Map in a Jupyter notebook."""
+        # The notebook calls all _repr_*_ by default.
+        # We don't want that here b/c this one is quite slow.
+        if not self.png_enabled:
+            return None
+        return self._to_png()
+
+    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
+                       API_key=None, max_zoom=18, min_zoom=1,
+                       attr=None, active=False,
+                       detect_retina=False, no_wrap=False, subdomains='abc',
+                       **kwargs):
+        """
+        Add a tile layer to the map. See TileLayer for options.
+
+        """
+        tile_layer = TileLayer(tiles=tiles, name=name,
+                               min_zoom=min_zoom, max_zoom=max_zoom,
+                               attr=attr, API_key=API_key,
+                               detect_retina=detect_retina,
+                               subdomains=subdomains,
+                               no_wrap=no_wrap)
+        self.add_child(tile_layer, name=tile_layer.tile_name)
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+
+        # Set global switches
+        figure.header.add_child(self.global_switches, name='global_switches')
+
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
+
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)
+
+        figure.header.add_child(Element(
+            '<style>html, body {'
+            'width: 100%;'
+            'height: 100%;'
+            'margin: 0;'
+            'padding: 0;'
+            '}'
+            '</style>'), name='css_style')
+
+        figure.header.add_child(Element(
+            '<style>#map {'
+            'position:absolute;'
+            'top:0;'
+            'bottom:0;'
+            'right:0;'
+            'left:0;'
+            '}'
+            '</style>'), name='map_style')
+
+        super(Map, self).render(**kwargs)
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):
