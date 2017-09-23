@@ -15,6 +15,9 @@ from folium.utilities import get_bounds
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
 
 
+def _normalize(rendered):
+    return [line.strip() for line in rendered.splitlines() if line.strip()]
+
 def test_circle():
     m = Map()
     radius = 10000
@@ -75,7 +78,7 @@ def test_circle():
     """.format(name=circle.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle._template.module.script(circle)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert circle.get_bounds() == [location, location]
     assert json.dumps(circle.to_dict()) == circle.to_json()
     assert circle.location == [-27.551667, -48.478889]
@@ -143,7 +146,7 @@ def test_circle_marker():
     """.format(name=circle_marker.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle_marker._template.module.script(circle_marker)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert circle_marker.get_bounds() == expected_bounds
     assert json.dumps(circle_marker.to_dict()) == circle_marker.to_json()
     assert circle_marker.location == location
@@ -176,7 +179,9 @@ def test_rectangle():
         'fillRule': 'evenodd',
         'lineCap': 'round',
         'lineJoin': 'round',
+        'noClip': False,
         'opacity': 1,
+        'smoothFactor': 1.0,
         'stroke': True,
         'weight': 2,
     }
@@ -196,7 +201,9 @@ def test_rectangle():
     "fillRule": "evenodd",
     "lineCap": "round",
     "lineJoin": "round",
+    "noClip": false,
     "opacity": 1,
+    "smoothFactor": 1.0,
     "stroke": true,
     "weight": 2
     }}
@@ -205,7 +212,7 @@ def test_rectangle():
     """.format(name=rectangle.get_name(), location=location, map=m.get_name())
 
     rendered = rectangle._template.module.script(rectangle)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert rectangle.get_bounds() == location
     assert json.dumps(rectangle.to_dict()) == rectangle.to_json()
     assert rectangle.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
@@ -235,7 +242,9 @@ def test_polygon_marker():
         'fillRule': 'evenodd',
         'lineCap': 'round',
         'lineJoin': 'round',
+        'noClip': False,
         'opacity': 1.0,
+        'smoothFactor': 1.0,
         'stroke': True,
         'weight': 3,
     }
@@ -255,7 +264,9 @@ def test_polygon_marker():
     "fillRule": "evenodd",
     "lineCap": "round",
     "lineJoin": "round",
+    "noClip": false,
     "opacity": 1.0,
+    "smoothFactor": 1.0,
     "stroke": true,
     "weight": 3
     }}
@@ -264,7 +275,7 @@ def test_polygon_marker():
     """.format(locations=locations, name=polygon.get_name(), map=m.get_name())
 
     rendered = polygon._template.module.script(polygon)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert polygon.get_bounds() == get_bounds(locations)
     assert json.dumps(polygon.to_dict()) == polygon.to_json()
     assert polygon.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
@@ -320,7 +331,7 @@ def test_polyline():
     """.format(locations=locations, name=polyline.get_name(), map=m.get_name())
 
     rendered = polyline._template.module.script(polyline)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert polyline.get_bounds() == get_bounds(locations)
     assert json.dumps(polyline.to_dict()) == polyline.to_json()
     assert polyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
@@ -379,7 +390,7 @@ def test_mulyipolyline():
     """.format(locations=locations, name=multipolyline.get_name(), map=m.get_name())
 
     rendered = multipolyline._template.module.script(multipolyline)
-    assert rendered.strip().split() == expected_rendered.strip().split()
+    assert _normalize(rendered) == _normalize(expected_rendered)
     assert multipolyline.get_bounds() == get_bounds(locations)
     assert json.dumps(multipolyline.to_dict()) == multipolyline.to_json()
     assert multipolyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa

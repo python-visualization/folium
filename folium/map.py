@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """
-Map
-------
-
 Classes for drawing maps.
 
 """

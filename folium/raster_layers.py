@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Raster Layers
--------------
+Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 
 """
 
