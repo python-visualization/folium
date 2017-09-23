@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Leaflet GeoJson and miscellaneous features. 
+Leaflet GeoJson and miscellaneous features.
 
 """
 
