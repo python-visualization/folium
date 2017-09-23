@@ -7,13 +7,13 @@
 .. image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
    :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
 
-Folium
+folium
 ======
 
-|Folium|
+|folium|
 
-Python Data. Leaflet.js Maps.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Python Data, Leaflet.js Maps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 `folium` builds on the data wrangling strengths of the Python ecosystem
 and the mapping strengths of the Leaflet.js library.
@@ -44,4 +44,4 @@ Gallery
 
 http://python-visualization.github.io/folium/docs-master/
 
-.. |Folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+.. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
