@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Features
---------
-
-Extra features Elements.
+Leaflet GeoJson and miscellaneous features.
 
 """
 

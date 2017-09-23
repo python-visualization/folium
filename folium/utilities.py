@@ -72,39 +72,6 @@ def _isnan(values):
     return any(math.isnan(value) for value in _flatten(values))
 
 
-def _parse_path(**kw):
-    """
-    Parse leaflet `Path` options.
-    http://leafletjs.com/reference-1.2.0.html#path
-
-    The presence of `fill_color` will override `fill=False`.
-
-    """
-    color = kw.pop('color', '#3388ff')
-    fill_color = kw.pop('fill_color', False)
-    if fill_color:
-        fill = True
-    elif not fill_color:
-        fill_color = color
-        fill = kw.pop('fill', False)
-
-    return {
-        'stroke': kw.pop('stroke', True),
-        'color': color,
-        'weight': kw.pop('weight', 3),
-        'opacity': kw.pop('opacity', 1.0),
-        'lineCap': kw.pop('line_cap', 'round'),
-        'lineJoin': kw.pop('line_join', 'round'),
-        'dashArray': kw.pop('dash_array', None),
-        'dashOffset': kw.pop('dash_offset', None),
-        'fill': fill,
-        'fillColor': fill_color,
-        'fillOpacity': kw.pop('fill_opacity', 0.2),
-        'fillRule': kw.pop('fill_rule', 'evenodd'),
-        'bubblingMouseEvents': kw.pop('bubbling_mouse_events', True),
-    }
-
-
 def _parse_wms(**kw):
     """
     Parse leaflet TileLayer.WMS options.

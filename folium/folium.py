@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 """
-Folium
--------
-
 Make beautiful, interactive maps with Python and Leaflet.js
 
 """

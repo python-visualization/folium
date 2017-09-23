@@ -16,19 +16,28 @@
    :show-inheritance:
 
 
-:mod:`features`
----------------
+:mod:`Vector Layers`
+--------------------
 
-.. automodule:: folium.features
+.. automodule:: folium.vector_layers
    :members:
    :undoc-members:
    :show-inheritance:
 
 
-:mod:`utilities`
-----------------
+:mod:`Raster Layers`
+--------------------
 
-.. automodule:: folium.utilities
+.. automodule:: folium.raster_layers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+:mod:`Extra Features`
+---------------------
+
+.. automodule:: folium.features
    :members:
    :undoc-members:
    :show-inheritance:
