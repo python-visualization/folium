@@ -53,11 +53,8 @@ class RegularPolygonMarker(Marker):
         or a folium.Popup object.
         If None, no popup will be displayed.
 
-    Returns
-    -------
-    Polygon marker names and HTML in obj.template_vars
 
-    For more information, see https://humangeo.github.io/leaflet-dvf/
+    https://humangeo.github.io/leaflet-dvf/
 
     """
     def __init__(self, location, color='black', opacity=1, weight=2,
@@ -634,8 +631,8 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    For more information see:
-    http://leafletjs.com/reference.html#divicon
+
+    http://leafletjs.com/reference-1.2.0.html#divicon
 
     """
     def __init__(self, html=None, icon_size=None, icon_anchor=None,

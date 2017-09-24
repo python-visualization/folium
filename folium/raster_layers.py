@@ -23,7 +23,8 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
 class TileLayer(Layer):
-    """Create a tile layer to append on a Map.
+    """
+    Create a tile layer to append on a Map.
 
     Parameters
     ----------
@@ -59,6 +60,7 @@ class TileLayer(Layer):
         Whether the Layer will be included in LayerControls.
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
+
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
@@ -145,8 +147,8 @@ class WmsTileLayer(Layer):
         for setting extra tileLayer.wms parameters or as extra parameters in
         the WMS request.
 
-    For more information see:
-    http://leafletjs.com/reference.html#tilelayer-wms
+
+    http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
 
     """
     def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
