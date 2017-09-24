@@ -161,8 +161,9 @@ class Icon(MacroElement):
         The prefix states the source of the icon. 'fa' for font-awesome or
         'glyphicon' for bootstrap 3.
 
-    For more details see:
+
     https://github.com/lvoogdt/Leaflet.awesome-markers
+
     """
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
                  angle=0, prefix='glyphicon'):
