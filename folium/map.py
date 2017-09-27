@@ -238,9 +238,6 @@ class LegacyMap(MacroElement):
                                   worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
                                   crs: L.CRS.{{this.crs}}
                                  });
-
-            
-                                 
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
         """)  # noqa
@@ -474,7 +471,7 @@ class FeatureGroup(Layer):
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
-            var {{this.get_name() asd}} = L.featureGroup(
+            var {{this.get_name()}} = L.featureGroup(
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
