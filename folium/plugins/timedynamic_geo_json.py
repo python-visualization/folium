@@ -152,16 +152,12 @@ class TimeDynamicGeoJson(Layer):
                     }
                 }
 
-
                 d3.select("#slider").on("input", function() {
                     current_timestamp = timestamps[this.value];
                 var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
                 d3.select("output#slider-value").text(datestring);
                 fill_map();
                 }); 
-        
-
-                
 
                 {% if this.highlight %}
                     {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
@@ -203,11 +199,8 @@ class TimeDynamicGeoJson(Layer):
                     {% endif %}
                     ).addTo({{this._parent.get_name()}}
                 );
-                
                
         	{{this.get_name()}}.setStyle(function(feature) {feature.properties.style;});
-            	
-
                 
                 {{ this.get_name() }}.eachLayer(function (layer) {
                     layer._path.id = 'feature-' + layer.feature.id;
