@@ -86,7 +86,8 @@ class TimeDynamicGeoJson(Layer):
 
 
         self.styledict = styledict
-        
+       
+        # make set of timestamps
         self.timestamps = set()
         for feature in self.styledict.values(): 
             self.timestamps.update(set(feature.keys()))
@@ -110,25 +111,33 @@ class TimeDynamicGeoJson(Layer):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-	            
-	            var timestamps = {{ this.timestamps }};
-	            var styledict = {{ this.styledict }};
-	            
-	            var current_timestamp; // TO DO: variable is used by the geojson mouseon/out setters in GeoJson
-	                                   // It is not really necessary, since it should be possible to get value from slider element directly
-
-	    
-	            d3.select("body").insert("p", ":first-child").append("input")   
-	            .attr("type", "range")
-	            .attr("min", 0)
-	            .attr("max", timestamps.length - 1)
-	            .attr("value", 0)
-	            .attr("id", "slider")
-	            .attr("step", "1");
-	            
-	            current_timestamp = timestamps[0];
-
                 
+                var timestamps = {{ this.timestamps }};
+                var styledict = {{ this.styledict }};
+                var current_timestamp = timestamps[0];
+
+                // insert time slider
+                d3.select("body").insert("p", ":first-child").append("input")   
+                    .attr("type", "range")
+                    .attr("width", "100px")
+                    .attr("min", 0)
+                    .attr("max", timestamps.length - 1)
+                    .attr("value", 0)
+                    .attr("id", "slider")
+                    .attr("step", "1")
+                    .style('align', 'center');
+
+                // insert time slider output BEFORE time slider (text on top of slider)
+                d3.select("body").insert("p", ":first-child").append("output")   
+                    .attr("width", "100")
+                    .attr("id", "slider-value")
+                    .style('font-size', '18px')
+                    .style('text-align', 'center')
+                    .style('font-weight', '500%');
+
+                var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+                d3.select("output#slider-value").text(datestring);
+
                 fill_map = function(){
                     for (var feature_id in styledict){
                         let style = styledict[feature_id]//[current_timestamp];
@@ -137,39 +146,44 @@ class TimeDynamicGeoJson(Layer):
                         if (current_timestamp in style){
                             fillColor = style[current_timestamp]['color'];
                             opacity = style[current_timestamp]['opacity'];
+                            d3.selectAll('#feature-'+feature_id).attr('fill', fillColor).style('fill-opacity', opacity);
                         }
-                        d3.selectAll('#feature-'+feature_id).attr('fill', fillColor).style('fill-opacity', opacity);
+                        
                     }
                 }
 
-	            d3.select("#slider").on("input", function() {
-	                current_timestamp = timestamps[this.value];
-                    fill_map();
-	            }); 
 
-	            
+                d3.select("#slider").on("input", function() {
+                    current_timestamp = timestamps[this.value];
+                var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+                d3.select("output#slider-value").text(datestring);
+                fill_map();
+                }); 
+        
 
-	            {% if this.highlight %}
-	                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-	                    layer.on({
-	                    	mouseout: function(e) {
-                                if (current_timestamp in styledict[e.target.feature.id]){
-                                    var opacity = styledict[e.target.feature.id][current_timestamp]['opacity'];
-                                    d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', opacity);
-                                }
-                            },
-	                        mouseover: function(e) {
-                                if (current_timestamp in styledict[e.target.feature.id]){
-                                    d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', 1);
-                                }
-                            },
-	                        click: function(e) {
-	                            map_b8f7044de0124208b3f693137000f0b4.fitBounds(e.target.getBounds());
+                
+
+                {% if this.highlight %}
+                    {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                        layer.on({
+                            mouseout: function(e) {
+                            if (current_timestamp in styledict[e.target.feature.id]){
+                                var opacity = styledict[e.target.feature.id][current_timestamp]['opacity'];
+                                d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', opacity);
                             }
-	                    });
-	                };
+                        },
+                            mouseover: function(e) {
+                            if (current_timestamp in styledict[e.target.feature.id]){
+                                d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', 1);
+                            }
+                        },
+                            click: function(e) {
+                                {{this._parent.get_name()}}.fitBounds(e.target.getBounds());
+                        }
+                        });
+                    };
 
-	            {% endif %}
+                {% endif %}
 
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
@@ -191,19 +205,18 @@ class TimeDynamicGeoJson(Layer):
                 );
                 
                
-        		{{this.get_name()}}.setStyle(function(feature) {feature.properties.style;});
+        	{{this.get_name()}}.setStyle(function(feature) {feature.properties.style;});
             	
 
                 
                 {{ this.get_name() }}.eachLayer(function (layer) {
-                    layer._path.id = 'feature-' + layer.feature.properties.id;
+                    layer._path.id = 'feature-' + layer.feature.id;
                     });
 
-                
+                d3.selectAll('path').attr('stroke', 'white').attr('stroke-width', 0.8).attr('stroke-dasharray', '5,5').attr('fill-opacity', 0);
                 fill_map();
-                d3.selectAll('path').attr('stroke', 'white').attr('stroke-width', 0.8).attr('stroke-dasharray', '5,5')
 
-
+            
             {% endmacro %}
             """)  # noqa
   
