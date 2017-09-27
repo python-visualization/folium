@@ -24,9 +24,6 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _d3_js = [
     ('d3', 'http://d3js.org/d3.v4.min.js'),
-    ('topojson', 'https://d3js.org/topojson.v2.min.js'),
-    ('d3-scale-chromatic', 'https://d3js.org/d3-scale-chromatic.v1.min.js'),
-    ('d3-geo-projection', 'https://d3js.org/d3-geo-projection.v1.min.js')
     ]
 
 _default_js = [
