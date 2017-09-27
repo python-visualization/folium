@@ -24,6 +24,7 @@ __all__ = [
     'Terminator',
     'BoatMarker',
     'TimestampedGeoJson',
+    'TimeDynamicGeoJson',
     'HeatMap',
     'ImageOverlay',
     'Fullscreen',
