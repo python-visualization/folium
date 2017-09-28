@@ -2,7 +2,6 @@ from ..map import Layer
 import json
 from jinja2 import Template
 
-from branca.element import MacroElement, Figure, JavascriptLink, CssLink
 from branca.utilities import none_min, none_max, iter_points
 from six import text_type, binary_type
 
@@ -84,12 +83,11 @@ class TimeDynamicGeoJson(Layer):
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
-
         self.styledict = styledict
        
         # make set of timestamps
         self.timestamps = set()
-        for feature in self.styledict.values(): 
+        for feature in self.styledict.values():
             self.timestamps.update(set(feature.keys()))
         self.timestamps = sorted(list(self.timestamps))
 
@@ -208,7 +206,6 @@ class TimeDynamicGeoJson(Layer):
 
                 d3.selectAll('path').attr('stroke', 'white').attr('stroke-width', 0.8).attr('stroke-dasharray', '5,5').attr('fill-opacity', 0);
                 fill_map();
-
             
             {% endmacro %}
             """)  # noqa

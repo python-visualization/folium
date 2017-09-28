@@ -41,7 +41,7 @@ _default_js = [
      'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
     ]
 
-for js in _d3_js: 
+for js in _d3_js:
     _default_js.append(js)
 
 _default_css = [
