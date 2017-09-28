@@ -1,7 +1,6 @@
-from ..map import Layer
 import json
+from ..map import Layer
 from jinja2 import Template
-
 from branca.utilities import none_min, none_max, iter_points
 from six import text_type, binary_type
 
@@ -54,7 +53,7 @@ class TimeDynamicGeoJson(Layer):
                  overlay=True, control=True, smooth_factor=None,
                  highlight_function=None):
         super(TimeDynamicGeoJson, self).__init__(name=name, overlay=overlay,
-                                      control=control)
+                                                control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
             self.embed = True
@@ -84,7 +83,7 @@ class TimeDynamicGeoJson(Layer):
             raise ValueError('Unhandled object {!r}.'.format(data))
 
         self.styledict = styledict
-       
+
         # make set of timestamps
         self.timestamps = set()
         for feature in self.styledict.values():
@@ -146,7 +145,6 @@ class TimeDynamicGeoJson(Layer):
                             opacity = style[current_timestamp]['opacity'];
                             d3.selectAll('#feature-'+feature_id).attr('fill', fillColor).style('fill-opacity', opacity);
                         }
-                        
                     }
                 }
 
@@ -209,12 +207,11 @@ class TimeDynamicGeoJson(Layer):
             
             {% endmacro %}
             """)  # noqa
-  
+
     def style_data(self):
         """
         Applies `self.style_function` to each feature of `self.data` and
         returns a corresponding JSON output.
-
         """
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
