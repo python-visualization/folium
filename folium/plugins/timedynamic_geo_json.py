@@ -51,6 +51,9 @@ class TimeDynamicGeoJson(GeoJson):
     """
     def __init__(self, data, styledict, **kwargs):
         super(TimeDynamicGeoJson, self).__init__(data, **kwargs)
+        assert isinstance(styledict, dict), 'styledict must be a dictionary'
+        for k, v in styledict.items():
+            assert isinstance(v, dict), 'each item in styledict must be a dictionary'
 
         self.styledict = styledict
 
