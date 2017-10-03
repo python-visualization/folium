@@ -2,10 +2,10 @@ import json
 from jinja2 import Template
 from branca.utilities import none_min, none_max, iter_points
 from six import text_type, binary_type
-from folium.map import Layer
+from folium.features import GeoJson
 
 
-class TimeDynamicGeoJson(Layer):
+class TimeDynamicGeoJson(GeoJson):
     """
     Creates a GeoJson object for plotting into a Map.
 
@@ -49,38 +49,8 @@ class TimeDynamicGeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
 
     """
-    def __init__(self, data, styledict, style_function=None, name=None,
-                 overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None):
-        super(TimeDynamicGeoJson, self).__init__(name=name, overlay=overlay,
-                                                 control=control)
-        self._name = 'GeoJson'
-        if hasattr(data, 'read'):
-            self.embed = True
-            self.data = json.load(data)
-        elif isinstance(data, dict):
-            self.embed = True
-            self.data = data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
-            if data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.embed = True
-                self.data = json.loads(data)
-            else:  # This is a filename
-                self.embed = False
-                self.data = data
-        elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
-            self.embed = True
-            if hasattr(data, '__geo_interface__'):
-                # We have a GeoPandas 0.2 object.
-                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))  # noqa
-            elif hasattr(data, 'columns'):
-                # We have a GeoDataFrame 0.1
-                self.data = json.loads(data.to_crs(epsg='4326').to_json())
-            else:
-                msg = 'Unable to transform this object to a GeoJSON.'
-                raise ValueError(msg)
-        else:
-            raise ValueError('Unhandled object {!r}.'.format(data))
+    def __init__(self, data, styledict, **kwargs):
+        super(TimeDynamicGeoJson, self).__init__(data, **kwargs)
 
         self.styledict = styledict
 
@@ -89,22 +59,6 @@ class TimeDynamicGeoJson(Layer):
         for feature in self.styledict.values():
             self.timestamps.update(set(feature.keys()))
         self.timestamps = sorted(list(self.timestamps))
-
-        if style_function is None:
-            def style_function(x):
-                return {}
-
-        self.style_function = style_function
-
-        self.highlight = highlight_function is not None
-
-        if highlight_function is None:
-            def highlight_function(x):
-                return {}
-
-        self.highlight_function = highlight_function
-
-        self.smooth_factor = smooth_factor
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -206,52 +160,7 @@ class TimeDynamicGeoJson(Layer):
                 fill_map();
             
             {% endmacro %}
-            """)  # noqa
+            """)
 
-    def style_data(self):
-        """
-        Applies `self.style_function` to each feature of `self.data` and
-        returns a corresponding JSON output.
-        """
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-        for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
 
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-
-        """
-        if not self.embed:
-            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
-
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
-        bounds = [[None, None], [None, None]]
-        for feature in self.data['features']:
-            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
-                bounds = [
-                    [
-                        none_min(bounds[0][0], point[1]),
-                        none_min(bounds[0][1], point[0]),
-                        ],
-                    [
-                        none_max(bounds[1][0], point[1]),
-                        none_max(bounds[1][1], point[0]),
-                        ],
-                    ]
-        return bounds
