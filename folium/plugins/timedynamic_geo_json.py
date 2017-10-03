@@ -1,8 +1,8 @@
 import json
-from ..map import Layer
 from jinja2 import Template
 from branca.utilities import none_min, none_max, iter_points
 from six import text_type, binary_type
+from folium.map import Layer
 
 
 class TimeDynamicGeoJson(Layer):
@@ -53,7 +53,7 @@ class TimeDynamicGeoJson(Layer):
                  overlay=True, control=True, smooth_factor=None,
                  highlight_function=None):
         super(TimeDynamicGeoJson, self).__init__(name=name, overlay=overlay,
-                                                control=control)
+                                                 control=control)
         self._name = 'GeoJson'
         if hasattr(data, 'read'):
             self.embed = True
