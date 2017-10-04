@@ -172,4 +172,4 @@ class TimeDynamicGeoJson(GeoJson):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-        figure.header.add_child(JavascriptLink('http://d3js.org/d3.v4.min.js'))  # noqa
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v4.min.js'))  # noqa
