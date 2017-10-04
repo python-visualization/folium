@@ -1,1 +1,0 @@
-var layer_list = { {{ layers }} };

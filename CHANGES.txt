@@ -1,13 +1,87 @@
+0.6.0
+~~~~~
+
+- Improved Vector Layers docs, notebooks, and optional arguments (ocefpaf #731)
+- Implemented `export=False/True` option to the Draw plugin layer for saving
+  GeoJSON files (ocefpaf #727)
+- Internal re-factor to reflect leaflet's organization (ocefpaf #725)
+- Added `tooltip` support to `Marker`s (ocefpaf #724)
+- Added `tooltip` support to all vector layers (ocefpaf #722)
+
+API changes
+
+- Refactor `ImageOverlay`, `VideoOverlay`, `WmsTileLayer`, and `TileLayer` to a
+  new `raster_layers.py` module (ocefpaf #729)
+- `Rectangle` and `Polygon` were renamed and set to leaflet's defaults.
+  Both now accepted all `Path`'s optional arguments (ocefpaf #722)
+
+Bug Fixes
+
+- Unify `get_bounds` routine to avoid wrong responses
+- If Path option `fill_color` is present it will override `fill=False`
+
+0.5.0
+~~~~~
+
+- Added `Draw` plugin (ocefpaf #720)
+- Better handling of URL input (ocefpaf #717)
+- Versioned docs! Visit http://python-visualization.github.io/folium/docs-v{{version}}
+  or simply http://python-visualization.github.io/folium/ for the latest version.
+
+Bug Fixes
+
+- Fix `VideoOverlay` import (ocefpaf #719)
+- Fix `choropleth` docstring (lsetiawan #713)
+- Fix `choropleth` name in `LayerControl` (ocefpaf #493)
+
 0.4.0
 ~~~~~
+- Optional `iconCreateFunction` for `MarkerCluster` to customize the icons (odovad #701)
+- Added `HeatMapWithTime` (Padarn #567)
+- Added `MeasureControl` (ocefpaf #669)
+- Added `VideoOverlay` plugin (ocefpaf #665)
+- Added `TimestampedWmsTileLayers` plugin (acrosby #644 and #660)
+- Vega-Lite features support via altair (njwilson23 #643)
+- Experimental support for a static png output (ocefpaf #634)
 - Added support for subdomains options in TileLayer (damselem #623)
+- Updated to leaflet 1.2.0 (ocefpaf #693)
+- Added `FastMarkerCluster` (James Gardiner #585 (proposed by ruoyu0088))
+- Use the GIS standard "pixelated" css image-rendering in
+  image overlays by default (dirkvdb #684 and ocefpaf #686)
+
+API changes
+
+- Removed features `MarkerCluster` in lieu of the plugin version (ocefpaf #704)
+- `choropleth` now takes a single `geo_data` instad of `geo_path`/`geo_str`
+  leaving the parsing to `GeoJSON`, remove the unused `data_out` option,
+  add geopandas support (ocefpaf #702)
+- All popups are considered HTML text by default (ocefpaf #689)
+  If a popup requires rendering use the `kwarg` `parse_html=True`.
+- `PolyLine`, `Circle` and `CircleMarker` are set to leaflet's defaults and
+  accepted all `Path`'s optional arguments (ocefpaf #683 and #697)
+- `WmsTileLayer` and `ImageOverlay` are set to leaflet's defaults and accepted
+  all `TileLayer.WMS` and `ImageOverlay` optional arguments respectively (ocefpaf #695 and #697)
+- Changed default `max_bounds` to `False` to reflect leaflet's default value (rdd9999 #641)
+- Modified `Fullscreen` plugin `kwargs` to be more "pythonic"
+- All `.format` properties are now `.fmt` for consistency
+- Removed the `kwarg` `continuous_world` that is no longer in leaflet's API (ocefpaf #695)
+
+Bug Fixes
+
+- `subdomain` option in `TileLayer` should be a list and `WmsTileLayer`
+  `overlay` default is `True` (ocefpaf #707)
+- Checking if the lat, lon locations are floats to avoid empty maps
+  (radumas #626)
+
 
 0.3.0
 ~~~~~
 
+- Added `FastMarkerCluster` (James Gardiner #585 (proposed by ruoyu0088))
 - Added style option to 'Timestamped geojson' plugin (soymsk #627)
 - Switched to `leaflet 1.0.1` (juoceano #531 and ocefpaf #535)
-- Added `continuous_world`, `world_copy_jump`, and `no_wrap` options (ocefpaf #508)
+- Added `continuous_world`, `world_copy_jump`, and `no_wrap` options
+  (ocefpaf #508)
 - Update font-awesome to 4.6.3 (ocefpaf #478)
 - Added text path (talespaiva #451 and ocefpaf #474)
 - More options added to `LayerControl` (qingkaikong #473)
@@ -15,18 +89,22 @@
 - Added `ColorLine` object (bibmartin #449)
 - Added highlight function to `GeoJSON`, and `Chrorpleth` (JoshuaCano #341)
 - Added `fullscreen` plugin (sanga #437)
-- Added `smooth_factor `option to `GeoJSON`, `TopoJSON` and `Choropleth` (JamesGardiner #428)
+- Added `smooth_factor `option to `GeoJSON`, `TopoJSON` and `Choropleth`
+  (JamesGardiner #428)
 - `Map` object now accepts Leaflet global switches (sgvandijk #424)
 - Added weight option to CircleMarker (palewire #581)
-- Added requests support to enable http(s) and ftp for geo_path parameter (jreades #602)
+- Added requests support to enable http(s) and ftp for geo_path parameter
+  (jreades #602)
 
 Bug Fixes
 
 - Fixed image order (juoceano #536)
 - Fixed Icon rotation (juoceano #530 and sseemayer #527)
 - Fixed MIME type (text/plain) is not executable (talespaiva #440)
-- Update Travis-CI testing to incorporate branca and fix notebook tests (ocefpaf #436)
-- Removed MultiPolyLine and MultiPolygon, both are handled by PolyLine and PolyLine in leaflet 1.0.* (ocefpaf #554)
+- Update Travis-CI testing to incorporate branca and fix notebook tests
+  (ocefpaf #436)
+- Removed MultiPolyLine and MultiPolygon, both are handled by PolyLine and
+  PolyLine in leaflet 1.0.* (ocefpaf #554)
 - Removed deprecated MapQuest tiles (HashCode55 #562)
 
 0.2.1
@@ -105,7 +183,7 @@ Bug Fixes
 
 0.1.3
 ~~~~~
-- Bootstrap glyphicon marker icons.  @birdage
+- Bootstrap glyphicon marker icons.  birdage
 - Cluster marker group, and simple markers . (birdage 801d91c)
 - WMS tile. (birdage 26f9668)
 - Expanded color support to 253 with colorbrewer. (Adam Pah 3ba39ae)
@@ -120,7 +198,7 @@ Bug Fixes
 
 - Vincent popups take padding into account. (Kyle Corbitt 26556fe)
 - Simple popups correctly escape internal quotes. (Kyle Corbitt 20c979f)
-- Add encoding specification.  @jmduke
+- Add encoding specification.  jmduke
 - Reverted change to mathchColor. (Roy Keyes 70d7f5c)
 - Changed no-data fill to null/no-fill, rather than #fff. (Rob Story 6ff80a6)
 - Fixed issue with counties TopoJSON. (Rob Story cddaab3)

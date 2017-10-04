@@ -1,101 +1,75 @@
 # -*- coding: utf-8 -*-
-"""
-TimestampedGeoJson plugin
---------------
 
-Add a timestamped geojson feature collection on a folium map.
-This is based on Leaflet.TimeDimension.
-
-https://github.com/socib/Leaflet.TimeDimension
-
-A geo-json is timestamped if:
-    * it contains only features of types LineString, MultiPoint,
-      MultiLineString and MultiPolygon.
-    * each feature has a "times" property with the same length as the
-      coordinates array.
-    * each element of each "times" property is a timestamp in ms since epoch,
-     or in ISO string.  Eventually, you may have Point features with a
-     "times" property being an array of length 1.
-
-"""
+from __future__ import (absolute_import, division, print_function)
 
 import json
-from jinja2 import Template
 
-from branca.element import MacroElement, Figure, JavascriptLink, CssLink
-from branca.utilities import none_min, none_max, iter_points
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.utilities import iter_points, none_max, none_min
+
+from jinja2 import Template
 
 
 class TimestampedGeoJson(MacroElement):
+    """
+    Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
+    into a map with Map.add_child.
+
+    A geo-json is timestamped if:
+    * it contains only features of types LineString, MultiPoint, MultiLineString and MultiPolygon.
+    * each feature has a 'times' property with the same length as the coordinates array.
+    * each element of each 'times' property is a timestamp in ms since epoch, or in ISO string.
+
+    Eventually, you may have Point features with a 'times' property being an array of length 1.
+
+    Parameters
+    ----------
+    data: file, dict or str.
+        The timestamped geo-json data you want to plot.
+        * If file, then data will be read in the file and fully embedded in Leaflet's javascript.
+        * If dict, then data will be converted to json and embedded in the javascript.
+        * If str, then data will be passed to the javascript as-is.
+
+
+    transition_time: int, default 200.
+        The duration in ms of a transition from between timestamps.
+    loop: bool, default True
+        Whether the animation shall loop.
+    auto_play: bool, default True
+        Whether the animation shall start automatically at startup.
+    add_last_point: bool, default True
+        Whether a point is added at the last valid coordinate of a LineString.
+    period: str, default "P1D"
+        Used to construct the array of available times starting
+        from the first available time. Format: ISO8601 Duration
+        ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and'PT1M' -> 1/minute
+
+    Examples
+    --------
+    >>> TimestampedGeoJson({
+    ...     'type': 'FeatureCollection',
+    ...     'features': [
+    ...       {
+    ...         'type': 'Feature',
+    ...         'geometry': {
+    ...           'type': 'LineString',
+    ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
+    ...           },
+    ...         'properties': {
+    ...           'times': [1435708800000, 1435795200000, 1435881600000]
+    ...           }
+    ...         }
+    ...       ]
+    ...     })
+
+    See https://github.com/socib/Leaflet.TimeDimension for more information.
+
+    """
     def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
-                 period="P1D"):
-        """Creates a TimestampedGeoJson plugin to append into a map with
-        Map.add_child.
-
-        Parameters
-        ----------
-        data: file, dict or str.
-           The timestamped geo-json data you want to plot.
-
-           * If file, then data will be read in the file and fully
-             embedded in Leaflet's javascript.
-           * If dict, then data will be converted to json and embedded in
-             the javascript.
-           * If str, then data will be passed to the javascript as-is.
-
-           A geo-json is timestamped if:
-               * it contains only features of types LineString,
-                 MultiPoint, MultiLineString and MultiPolygon.
-               * each feature has a "times" property with the same length
-                 as the coordinates array.
-               * each element of each "times" property is a timestamp in
-                 ms since epoch, or in ISO string.
-               Eventually, you may have Point features with a "times"
-               property being an array of length 1.
-
-           examples :
-              # providing file
-              TimestampedGeoJson(open('foo.json'))
-
-              # providing dict
-              TimestampedGeoJson({
-                "type": "FeatureCollection",
-                   "features": [
-                     {
-                       "type": "Feature",
-                       "geometry": {
-                         "type": "LineString",
-                         "coordinates": [[-70,-25],[-70,35],[70,35]],
-                         },
-                       "properties": {
-                         "times": [1435708800000, 1435795200000, 1435881600000]
-                         }
-                       }
-                     ]
-                   })
-
-              # providing string
-              TimestampedGeoJson(open('foo.json').read())
-        transition_time : int, default 200.
-            The duration in ms of a transition from between timestamps.
-        loop : bool, default True
-            Whether the animation shall loop.
-        auto_play : bool, default True
-            Whether the animation shall start automatically at startup.
-        add_last_point: bool, default True
-            Whether a point is added at the last valid coordinate of a LineString.
-        period : str, default "P1D"
-            Used to construct the array of available times starting
-            from the first available time. Format: ISO8601 Duration
-            ex: "P1M" -> 1/month
-                "P1D"  -> 1/day
-                "PT1H"  -> 1/hour
-                "PT1M"  -> 1/minute
-        """
+                 period='P1D'):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
-        # self.template = self.env.get_template('timestamped_geo_json.tpl')
         if 'read' in dir(data):
             self.embed = True
             self.data = data.read()
@@ -136,27 +110,27 @@ class TimestampedGeoJson(MacroElement):
         super(TimestampedGeoJson, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
             name='jquery2.0.0')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"),  # noqa
+            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"),  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
             name='highlight.js_css')
 
         figure.header.add_child(

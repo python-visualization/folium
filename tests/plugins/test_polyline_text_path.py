@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
+
 """
 Test PolyLineTextPath
 ---------------
 """
 
-from jinja2 import Template
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
 
 
 def test_polyline_text_path():
@@ -33,7 +37,7 @@ def test_polyline_text_path():
     wind_line = folium.PolyLine(wind_locations, weight=15, color='#8EE9FF')
     attr = {'fill': '#007DEF', 'font-weight': 'bold', 'font-size': '24'}
     wind_textpath = plugins.PolyLineTextPath(wind_line,
-                                             ") ",
+                                             ') ',
                                              repeat=True,
                                              offset=7,
                                              attributes=attr)

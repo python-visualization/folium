@@ -1,24 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
+from __future__ import (absolute_import, division, print_function)
 
+from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
                             JavascriptLink, Link, MacroElement)
-from branca.colormap import (ColorMap, LinearColormap, StepColormap)
 
+from folium._version import get_versions
 
-from .folium import Map
-from .map import (
-    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup, TileLayer
-)
-from .features import (
-    ClickForMarker, CustomIcon, DivIcon, GeoJson, LatLngPopup, CircleMarker,
-    MarkerCluster, PolyLine, Vega, RegularPolygonMarker,
-    TopoJson, WmsTileLayer
+from folium.features import (
+    ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
+    LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
 )
 
+# from folium.raster_layers imoort TileLayer, WmsTileLayer
 
-from ._version import get_versions
+from folium.folium import Map
+
+from folium.map import (
+    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup
+)
+
+from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle  # noqa
 
 __version__ = get_versions()['version']
 del get_versions
@@ -34,12 +37,10 @@ __all__ = [
     'Link',
     'MacroElement',
     'ColorMap',
+    'ColorLine',
     'LinearColormap',
     'StepColormap',
     'Map',
-    'CircleMarker',
-    'RectangleMarker',
-    'Polygon',
     'FeatureGroup',
     'FitBounds',
     'Icon',
@@ -54,9 +55,16 @@ __all__ = [
     'GeoJsonStyle',
     'LatLngPopup',
     'MarkerCluster',
-    'PolyLine',
     'Vega',
+    'VegaLite',
     'RegularPolygonMarker',
     'TopoJson',
-    'WmsTileLayer'
+    'WmsTileLayer',
+    # vector_layers
+    'Circle',
+    'CircleMarker',
+    'PolyLine',
+    'Polygon',
+    'Polyline',
+    'Rectangle',
 ]

@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+
 """
 Test MarkerCluster
 ------------------
 """
 
-from jinja2 import Template
-import numpy as np
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
+
+import numpy as np
 
 
 def test_marker_cluster():
@@ -27,17 +32,17 @@ def test_marker_cluster():
     out = m._parent.render()
 
     # We verify that imports
-    assert ('<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.'
-            'markercluster/1.0.0/leaflet.markercluster.js"></script>') in out
-    assert ('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/'
-            'libs/leaflet.markercluster/1.0.0/MarkerCluster.css" />') in out
-    assert ('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/'
-            'libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css" />'
-            ) in out
+    assert '<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>' in out  # noqa
+    assert '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css" />' in out  # noqa
+    assert '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css" />' in out  # noqa
 
     # Verify the script part is okay.
     tmpl = Template("""
-        var {{this.get_name()}} = L.markerClusterGroup();
+        var {{this.get_name()}} = L.markerClusterGroup({
+                {% if this._icon_create_function %}
+                   iconCreateFunction: {{this._icon_create_function}}
+                {% endif %}
+            });
         {{this._parent.get_name()}}.addLayer({{this.get_name()}});
 
         {% for marker in this._children.values() %}

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """
 Folium Notebooks Tests
 ----------------------
@@ -6,8 +7,11 @@ Folium Notebooks Tests
 Here we try to execute all notebooks that are in `folium/examples`.
 """
 
+from __future__ import (absolute_import, division, print_function)
+
 import os
 import sys
+
 import branca.utilities
 
 if sys.version_info[:2] >= (3, 5):

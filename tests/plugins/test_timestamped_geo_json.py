@@ -1,13 +1,20 @@
 # -*- coding: utf-8 -*-
+
 """
 Test TimestampedGeoJson
 -----------------------
+
 """
-from jinja2 import Template
-import numpy as np
+
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
+
+import numpy as np
 
 
 def test_timestamped_geo_json():
@@ -17,68 +24,68 @@ def test_timestamped_geo_json():
                      in np.linspace(0, 2*np.pi, 25)]] for
                    lon in np.linspace(-150, 150, 7)]
     data = {
-        "type": "FeatureCollection",
-        "features": [
+        'type': 'FeatureCollection',
+        'features': [
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [0, 0],
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'Point',
+                        'coordinates': [0, 0],
                         },
-                    "properties": {
-                        "times": [1435708800000+12*86400000]
+                    'properties': {
+                        'times': [1435708800000+12*86400000]
                         }
                     },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "MultiPoint",
-                        "coordinates": [[lon, -25] for
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'MultiPoint',
+                        'coordinates': [[lon, -25] for
                                         lon in np.linspace(-150, 150, 49)],
                         },
-                    "properties": {
-                        "times": [1435708800000+i*86400000 for
+                    'properties': {
+                        'times': [1435708800000+i*86400000 for
                                   i in np.linspace(0, 25, 49)]
                         }
                     },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": [[lon, 25] for
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'LineString',
+                        'coordinates': [[lon, 25] for
                                         lon in np.linspace(-150, 150, 25)],
                         },
-                    "properties": {
-                        "times": [1435708800000+i*86400000 for
+                    'properties': {
+                        'times': [1435708800000+i*86400000 for
                                   i in np.linspace(0, 25, 25)],
-                        "style": {
-                            "color": "red"
+                        'style': {
+                            'color': 'red'
                             },
                         },
                     },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "MultiLineString",
-                        "coordinates": [[[lon-4*np.sin(theta),
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'MultiLineString',
+                        'coordinates': [[[lon-4*np.sin(theta),
                                           47+3*np.cos(theta)] for theta
                                          in np.linspace(0, 2*np.pi, 25)]
                                         for lon in
                                         np.linspace(-150, 150, 13)],
                         },
-                    "properties": {
-                        "times": [1435708800000+i*86400000 for
+                    'properties': {
+                        'times': [1435708800000+i*86400000 for
                                   i in np.linspace(0, 25, 13)]
                         }
                     },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "MultiPolygon",
-                        "coordinates": coordinates,
+                    'type': 'Feature',
+                    'geometry': {
+                        'type': 'MultiPolygon',
+                        'coordinates': coordinates,
                         },
-                    "properties": {
-                        "times": [1435708800000+i*86400000 for
+                    'properties': {
+                        'times': [1435708800000+i*86400000 for
                                   i in np.linspace(0, 25, 7)]
                         }
                     },

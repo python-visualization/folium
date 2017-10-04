@@ -1,13 +1,18 @@
 # -*- coding: utf-8 -*-
+
 """
 Test BoatMarker
 ---------------
 
 """
-from jinja2 import Template
+
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
 
 
 def test_boat_marker():
@@ -17,13 +22,13 @@ def test_boat_marker():
         heading=45,
         wind_heading=150,
         wind_speed=45,
-        color="#8f8")
+        color='#8f8')
     bm2 = plugins.BoatMarker(
         (46, -30),
         heading=-20,
         wind_heading=46,
         wind_speed=25,
-        color="#88f")
+        color='#88f')
 
     m.add_child(bm1)
     m.add_child(bm2)
@@ -32,7 +37,7 @@ def test_boat_marker():
     out = m._parent.render()
 
     # We verify that the script import is present.
-    script = '<script src="https://thomasbrueggemann.github.io/leaflet.boatmarker/js/leaflet.boatmarker.min.js"></script>'  # noqa
+    script = '<script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.

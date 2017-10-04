@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
+
 """
 Test HeatMap
 ------------
 """
 
-from jinja2 import Template
-import numpy as np
+from __future__ import (absolute_import, division, print_function)
 
 import folium
+
 from folium import plugins
+
+from jinja2 import Template
+
+import numpy as np
 
 
 def test_heat_map():

@@ -1,89 +1,27 @@
 # -*- coding: utf-8 -*-
-"""
-Features
-------
-
-Extra features Elements.
 
 """
+Leaflet GeoJson and miscellaneous features.
+
+"""
+
+from __future__ import (absolute_import, division, print_function)
 
 import json
 
-from jinja2 import Template
-from six import text_type, binary_type
-
-from branca.utilities import (
-    _parse_size, _locations_mirror, _locations_tolist, image_to_url,
-    none_min, none_max, iter_points
-)
-from branca.element import (Element, Figure, JavascriptLink, CssLink,
-                            MacroElement)
 from branca.colormap import LinearColormap
+from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from .map import Layer, Icon, Marker, Popup, FeatureGroup
+from folium.map import FeatureGroup, Icon, Layer, Marker
+from folium.utilities import get_bounds
+from folium.vector_layers import PolyLine
 
+from jinja2 import Template
 
-class WmsTileLayer(Layer):
-    """
-    Creates a Web Map Service (WMS) layer.
+import requests
 
-    Parameters
-    ----------
-    url : str
-        The url of the WMS server.
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls
-    layers : str, default None
-        The names of the layers to be displayed.
-    styles : str, default None
-        Comma-separated list of WMS styles.
-    format : str, default None
-        The format of the service output.
-        Ex: 'iamge/png'
-    transparent: bool, default True
-        Whether the layer shall allow transparency.
-    version : str, default '1.1.1'
-        Version of the WMS service to use.
-    attr : str, default None
-        The attribution of the service.
-        Will be displayed in the bottom right corner.
-    overlay : bool, default False
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls
-
-    For more information see:
-    http://leafletjs.com/reference.html#tilelayer-wms
-
-    """
-    def __init__(self, url, name=None, layers=None, styles=None, format=None,
-                 transparent=True, version='1.1.1', attr=None, overlay=True,
-                 control=True):
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
-        self.url = url
-        self.attribution = attr if attr is not None else ''
-        # Options.
-        self.layers = layers if layers else ''
-        self.styles = styles if styles else ''
-        self.format = format if format else 'image/jpeg'
-        self.transparent = transparent
-        self.version = version
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.tileLayer.wms(
-                '{{ this.url }}',
-                {
-                    layers: '{{ this.layers }}',
-                    styles: '{{ this.styles }}',
-                    format: '{{ this.format }}',
-                    transparent: {{ this.transparent.__str__().lower() }},
-                    version: '{{ this.version }}',
-                    {% if this.attribution %} attribution: '{{this.attribution}}'{% endif %}
-                    }
-                ).addTo({{this._parent.get_name()}});
-
-        {% endmacro %}
-        """)  # noqa
+from six import binary_type, text_type
 
 
 class RegularPolygonMarker(Marker):
@@ -115,17 +53,17 @@ class RegularPolygonMarker(Marker):
         or a folium.Popup object.
         If None, no popup will be displayed.
 
-    Returns
-    -------
-    Polygon marker names and HTML in obj.template_vars
 
-    For more information, see https://humangeo.github.io/leaflet-dvf/
+    https://humangeo.github.io/leaflet-dvf/
 
     """
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15, popup=None):
-        super(RegularPolygonMarker, self).__init__(location, popup=popup)
+        super(RegularPolygonMarker, self).__init__(
+            _locations_tolist(location),
+            popup=popup
+        )
         self._name = 'RegularPolygonMarker'
         self.color = color
         self.opacity = opacity
@@ -161,11 +99,11 @@ class RegularPolygonMarker(Marker):
         super(RegularPolygonMarker, self).render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
             name='dvf_js')
 
 
@@ -199,11 +137,10 @@ class Vega(Element):
 
     """
     def __init__(self, data, width=None, height=None,
-                 left="0%", top="0%", position='relative'):
+                 left='0%', top='0%', position='relative'):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        # FIXME:
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
@@ -215,7 +152,7 @@ class Vega(Element):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
-        self._template = Template(u"")
+        self._template = Template(u'')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -230,8 +167,8 @@ class Vega(Element):
             """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(Element(Template("""
             <style> #{{this.get_name()}} {
@@ -244,21 +181,117 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink("https://code.jquery.com/jquery-2.1.0.min.js"),
+            JavascriptLink('https://code.jquery.com/jquery-2.1.0.min.js'),
             name='jquery')
 
         figure.script.add_child(
             Template("""function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
             name='vega_parse')
+
+
+class VegaLite(Element):
+    """
+    Creates a Vega-Lite chart element.
+
+    Parameters
+    ----------
+    data: JSON-like str or object
+        The Vega-Lite description of the chart.
+        It can also be any object that has a method `to_json`,
+        so that you can (for instance) provide an `Altair` chart.
+    width: int or str, default None
+        The width of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    height: int or str, default None
+        The height of the output element.
+        If None, either data['width'] (if available) or '100%' will be used.
+        Ex: 120, '120px', '80%'
+    left: int or str, default '0%'
+        The horizontal distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    top: int or str, default '0%'
+        The vertical distance of the output with respect to the parent
+        HTML object. Ex: 120, '120px', '80%'
+    position: str, default 'relative'
+        The `position` argument that the CSS shall contain.
+        Ex: 'relative', 'absolute'
+
+    """
+    def __init__(self, data, width=None, height=None,
+                 left='0%', top='0%', position='relative'):
+        super(VegaLite, self).__init__()
+        self._name = 'VegaLite'
+        self.data = data.to_json() if hasattr(data, 'to_json') else data
+        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+            self.data = json.loads(self.data)
+
+        # Size Parameters.
+        self.width = _parse_size(self.data.get('width', '100%') if
+                                 width is None else width)
+        self.height = _parse_size(self.data.get('height', '100%') if
+                                  height is None else height)
+        self.left = _parse_size(left)
+        self.top = _parse_size(top)
+        self.position = position
+        self._template = Template(u'')
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        self.json = json.dumps(self.data)
+
+        self._parent.html.add_child(Element(Template("""
+            <div id="{{this.get_name()}}"></div>
+            """).render(this=self, kwargs=kwargs)), name=self.get_name())
+
+        self._parent.script.add_child(Element(Template("""
+            var embedSpec = {
+                mode: "vega-lite",
+                spec: {{this.json}}
+            };
+            vg.embed(
+                {{this.get_name()}}, embedSpec, function(error, result) {}
+            );
+        """).render(this=self)), name=self.get_name())
+
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+
+        figure.header.add_child(Element(Template("""
+            <style> #{{this.get_name()}} {
+                position : {{this.position}};
+                width : {{this.width[0]}}{{this.width[1]}};
+                height: {{this.height[0]}}{{this.height[1]}};
+                left: {{this.left[0]}}{{this.left[1]}};
+                top: {{this.top[0]}}{{this.top[1]}};
+            </style>
+            """).render(this=self, **kwargs)), name=self.get_name())
+
+        figure.header.add_child(
+            JavascriptLink('https://d3js.org/d3.v3.min.js'),
+            name='d3')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
+            name='vega')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
+            name='vega-lite')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
+            name='vega-embed')
 
 
 class GeoJson(Layer):
@@ -275,7 +308,9 @@ class GeoJson(Layer):
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
-        A function mapping a GeoJson Feature to a style dict.
+        Function mapping a GeoJson Feature to a style dict.
+    highlight_function: function, default None
+        Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default False
@@ -307,23 +342,23 @@ class GeoJson(Layer):
     """
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None):
+                 highlight_function=None, tooltip=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control)
         self._name = 'GeoJson'
-        if hasattr(data, 'read'):
-            self.embed = True
-            self.data = json.load(data)
-        elif isinstance(data, dict):
+        self.tooltip = tooltip
+        if isinstance(data, dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
-            if data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.embed = True
+            self.embed = True
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                self.data = requests.get(data).json()
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.data = json.loads(data)
             else:  # This is a filename
-                self.embed = False
-                self.data = data
+                with open(data) as f:
+                    self.data = json.loads(f.read())
         elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
             self.embed = True
             if hasattr(data, '__geo_interface__'):
@@ -386,7 +421,9 @@ class GeoJson(Layer):
                         {% endif %}
                         }
                     {% endif %}
-                    ).addTo({{this._parent.get_name()}});
+                    )
+                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
@@ -413,33 +450,10 @@ class GeoJson(Layer):
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
-        if not self.embed:
-            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
-
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
-        bounds = [[None, None], [None, None]]
-        for feature in self.data['features']:
-            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
-                bounds = [
-                    [
-                        none_min(bounds[0][0], point[1]),
-                        none_min(bounds[0][1], point[0]),
-                        ],
-                    [
-                        none_max(bounds[1][0], point[1]),
-                        none_max(bounds[1][1], point[0]),
-                        ],
-                    ]
-        return bounds
+        return get_bounds(self.data, lonlat=True)
 
 
 class TopoJson(Layer):
@@ -490,10 +504,12 @@ class TopoJson(Layer):
 
     """
     def __init__(self, data, object_path, style_function=None,
-                 name=None, overlay=True, control=True, smooth_factor=None):
+                 name=None, overlay=True, control=True, smooth_factor=None,
+                 tooltip=None):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control)
         self._name = 'TopoJson'
+        self.tooltip = tooltip
         if 'read' in dir(data):
             self.embed = True
             self.data = json.load(data)
@@ -521,7 +537,10 @@ class TopoJson(Layer):
                     {{this.get_name()}}_data.{{this.object_path}})
                         {% if this.smooth_factor is not none %}
                             , {smoothFactor: {{this.smooth_factor}}}
-                        {% endif %}).addTo({{this._parent.get_name()}});
+                        {% endif %}
+                        )
+                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                        .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
             {% endmacro %}
@@ -548,14 +567,14 @@ class TopoJson(Layer):
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
             name='topojson')
 
-    def _get_self_bounds(self):
+    def get_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -588,56 +607,6 @@ class TopoJson(Layer):
         ]
 
 
-class MarkerCluster(Layer):
-    """
-    Creates a MarkerCluster element to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls
-    overlay : bool, default False
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls
-
-    """
-    def __init__(self, name=None, overlay=True, control=True):
-        super(MarkerCluster, self).__init__(name=name, overlay=overlay,
-                                            control=control)
-        self._name = 'MarkerCluster'
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup();
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        super(MarkerCluster, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
-        figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster-src.js"),  # noqa
-            name='marker_cluster_src')
-
-        figure.header.add_child(
-            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js"),  # noqa
-            name='marker_cluster')
-
-        figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.css"),  # noqa
-            name='marker_cluster_css')
-
-        figure.header.add_child(
-            CssLink("https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/MarkerCluster.Default.css"),  # noqa
-            name="marker_cluster_default_css")
-
-
 class DivIcon(MacroElement):
     """
     Represents a lightweight icon for markers that uses a simple `div`
@@ -662,8 +631,8 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    For more information see:
-    http://leafletjs.com/reference.html#divicon
+
+    http://leafletjs.com/reference-1.2.0.html#divicon
 
     """
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
@@ -689,218 +658,6 @@ class DivIcon(MacroElement):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
-
-
-class Circle(Marker):
-    """
-    Creates a Circle object for plotting on a Map.
-
-    Parameters
-    ----------
-    location: tuple or list, default None
-        Latitude and Longitude of Marker (Northing, Easting)
-    radius: int
-        The radius of the circle in meters. For setting the radius in pixel,
-        use CircleMarker.
-    color: str, default 'black'
-        The color of the marker's edge in a HTML-compatible format.
-    fill_color: str, default 'black'
-        The fill color of the marker in a HTML-compatible format.
-    fill_opacity: float, default 0.6
-        The fill opacity of the marker, between 0. and 1.
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-
-    """
-    def __init__(self, location, radius=500, color='black',
-                 fill_color='black', fill_opacity=0.6, popup=None):
-        super(Circle, self).__init__(location, popup=popup)
-        self._name = 'Circle'
-        self.radius = radius
-        self.color = color
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-            var {{this.get_name()}} = L.circle(
-                [{{this.location[0]}},{{this.location[1]}}],
-                {{ this.radius }},
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }}
-                    }
-                )
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
-
-
-class CircleMarker(Marker):
-    """
-    Creates a CircleMarker object for plotting on a Map.
-
-    Parameters
-    ----------
-    location: tuple or list, default None
-        Latitude and Longitude of Marker (Northing, Easting)
-    radius: int
-        The radius of the circle in pixels. For setting the radius in meter,
-        use Circle.
-    color: str, default 'black'
-        The color of the marker's edge in a HTML-compatible format.
-    weight: int, default 2
-        Stroke weight in pixels
-    fill_color: str, default 'black'
-        The fill color of the marker in a HTML-compatible format.
-    fill_opacity: float, default 0.6
-        The fill opacity of the marker, between 0. and 1.
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-
-    """
-    def __init__(self, location, radius=500, color='black',
-                 weight=2, fill_color='black', fill_opacity=0.6,
-                 popup=None):
-        super(CircleMarker, self).__init__(location, popup=popup)
-        self._name = 'CircleMarker'
-        self.radius = radius
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-            var {{this.get_name()}} = L.circleMarker(
-                [{{this.location[0]}},{{this.location[1]}}],
-                {
-                    color: '{{ this.color }}',
-                    weight: {{ this.weight }},
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }}
-                    }
-                )
-                .setRadius({{ this.radius }})
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
-
-
-class RectangleMarker(Marker):
-    def __init__(self, bounds, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None):
-        """
-        Creates a RectangleMarker object for plotting on a Map.
-
-        Parameters
-        ----------
-        bounds: tuple or list, default None
-            Latitude and Longitude of Marker (southWest and northEast)
-        color: string, default ('black')
-            Edge color of a rectangle.
-        weight: float, default (1)
-            Edge line width of a rectangle.
-        fill_color: string, default ('black')
-            Fill color of a rectangle.
-        fill_opacity: float, default (0.6)
-            Fill opacity of a rectangle.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-
-        Returns
-        -------
-        folium.features.RectangleMarker object
-
-        Example
-        -------
-        >>> RectangleMarker(
-        ...  bounds=[[35.681, 139.766], [35.691, 139.776]],
-        ...  color='blue', fill_color='red', popup='Tokyo, Japan'
-        ... )
-
-        """
-        super(RectangleMarker, self).__init__(bounds, popup=popup)
-        self._name = 'RectangleMarker'
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.rectangle(
-                                  [[{{this.location[0]}},{{this.location[1]}}],
-                                  [{{this.location[2]}},{{this.location[3]}}]],
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }},
-                    weight: {{ this.weight }}
-                }).addTo({{this._parent.get_name()}});
-
-            {% endmacro %}
-            """)
-
-
-class PolygonMarker(Marker):
-    def __init__(self, locations, color='black', weight=1, fill_color='black',
-                 fill_opacity=0.6, popup=None, latlon=True):
-        """
-        Creates a PolygonMarker object for plotting on a Map.
-
-        Parameters
-        ----------
-        locations: tuple or list, default None
-            Latitude and Longitude of Polygon
-        color: string, default ('black')
-            Edge color of a polygon.
-        weight: float, default (1)
-            Edge line width of a polygon.
-        fill_color: string, default ('black')
-            Fill color of a polygon.
-        fill_opacity: float, default (0.6)
-            Fill opacity of a polygon.
-        popup: string or folium.Popup, default None
-            Input text or visualization for object.
-
-        Returns
-        -------
-        folium.features.Polygon object
-
-        Examples
-        --------
-        >>> locations = [[35.6762, 139.7795],
-        ...              [35.6718, 139.7831],
-        ...              [35.6767, 139.7868],
-        ...              [35.6795, 139.7824],
-        ...              [35.6787, 139.7791]]
-        >>> Polygon(locations, color='blue', weight=10, fill_color='red',
-        ...         fill_opacity=0.5, popup='Tokyo, Japan'))
-
-        """
-        super(PolygonMarker, self).__init__((
-            _locations_mirror(locations) if not latlon else
-            _locations_tolist(locations)), popup=popup
-        )
-        self._name = 'PolygonMarker'
-        self.color = color
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.polygon({{this.location}},
-                {
-                    color: '{{ this.color }}',
-                    fillColor: '{{ this.fill_color }}',
-                    fillOpacity: {{ this.fill_opacity }},
-                    weight: {{ this.weight }}
-                }).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
 
 
 class LatLngPopup(MacroElement):
@@ -962,75 +719,6 @@ class ClickForMarker(MacroElement):
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
             """)  # noqa
-
-
-class PolyLine(MacroElement):
-    """
-    Creates a PolyLine object to append into a map with
-    Map.add_child.
-
-    Parameters
-    ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
-    color: string, default Leaflet's default ('#03f')
-    weight: float, default Leaflet's default (5)
-    opacity: float, default Leaflet's default (0.5)
-    latlon: bool, default True
-        Whether locations are given in the form [[lat, lon]]
-        or not ([[lon, lat]] if False).
-        Note that the default GeoJson format is latlon=False,
-        while Leaflet polyline's default is latlon=True.
-    popup: string or folium.Popup, default None
-        Input text or visualization for object.
-
-    """
-    def __init__(self, locations, color=None, weight=None,
-                 opacity=None, latlon=True, popup=None):
-        super(PolyLine, self).__init__()
-        self._name = 'PolyLine'
-        self.data = (_locations_mirror(locations) if not latlon else
-                     _locations_tolist(locations))
-        self.color = color
-        self.weight = weight
-        self.opacity = opacity
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.polyline(
-                    {{this.data}},
-                    {
-                        {% if this.color != None %}color: '{{ this.color }}',{% endif %}
-                        {% if this.weight != None %}weight: {{ this.weight }},{% endif %}
-                        {% if this.opacity != None %}opacity: {{ this.opacity }},{% endif %}
-                        });
-                {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
-
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-
-        """
-        bounds = [[None, None], [None, None]]
-        for point in iter_points(self.data):
-            bounds = [
-                [
-                    none_min(bounds[0][0], point[0]),
-                    none_min(bounds[0][1], point[1]),
-                ],
-                [
-                    none_max(bounds[1][0], point[0]),
-                    none_max(bounds[1][1], point[1]),
-                ],
-            ]
-        return bounds
 
 
 class CustomIcon(Icon):
