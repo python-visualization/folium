@@ -41,4 +41,5 @@ __all__ = [
     'Terminator',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
+    'TimeDynamicGeoJson'
     ]

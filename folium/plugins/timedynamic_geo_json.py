@@ -1,6 +1,6 @@
 """
-module containing the class TimeDynamicGeoJson, which can be used to 
-create choropleth maps with a time slider. 
+module containing the class TimeDynamicGeoJson, which can be used to
+create choropleth maps with a time slider.
 """
 from jinja2 import Template
 from branca.element import JavascriptLink, Figure
@@ -67,13 +67,13 @@ class TimeDynamicGeoJson(GeoJson):
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-                
+
                 var timestamps = {{ this.timestamps }};
                 var styledict = {{ this.styledict }};
                 var current_timestamp = timestamps[0];
 
                 // insert time slider
-                d3.select("body").insert("p", ":first-child").append("input")   
+                d3.select("body").insert("p", ":first-child").append("input")
                     .attr("type", "range")
                     .attr("width", "100px")
                     .attr("min", 0)
@@ -84,7 +84,7 @@ class TimeDynamicGeoJson(GeoJson):
                     .style('align', 'center');
 
                 // insert time slider output BEFORE time slider (text on top of slider)
-                d3.select("body").insert("p", ":first-child").append("output")   
+                d3.select("body").insert("p", ":first-child").append("output")
                     .attr("width", "100")
                     .attr("id", "slider-value")
                     .style('font-size', '18px')
@@ -112,7 +112,7 @@ class TimeDynamicGeoJson(GeoJson):
                 var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
                 d3.select("output#slider-value").text(datestring);
                 fill_map();
-                }); 
+                });
 
                 {% if this.highlight %}
                     {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
@@ -154,16 +154,16 @@ class TimeDynamicGeoJson(GeoJson):
                     {% endif %}
                     ).addTo({{this._parent.get_name()}}
                 );
-               
+
         	{{this.get_name()}}.setStyle(function(feature) {feature.properties.style;});
-                
+
                 {{ this.get_name() }}.eachLayer(function (layer) {
                     layer._path.id = 'feature-' + layer.feature.id;
                     });
 
                 d3.selectAll('path').attr('stroke', 'white').attr('stroke-width', 0.8).attr('stroke-dasharray', '5,5').attr('fill-opacity', 0);
                 fill_map();
-            
+
             {% endmacro %}
             """)
 

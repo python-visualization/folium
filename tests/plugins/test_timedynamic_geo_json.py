@@ -8,6 +8,7 @@ import numpy as np
 import folium
 from branca.colormap import linear
 
+
 def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeDynamicGeoJson
@@ -22,9 +23,10 @@ def test_timedynamic_geo_json():
     styledata = {}
 
     for country in gdf.index:
-        pdf = pd.DataFrame({'color': np.random.normal(size=n_periods),
-                            'opacity': np.random.normal(size=n_periods)},
-                            index=dt_index)
+        pdf = pd.DataFrame(
+            {'color': np.random.normal(size=n_periods),
+            'opacity': np.random.normal(size=n_periods)},
+            index=dt_index)
         styledata[country] = pdf.cumsum()
 
     max_color, min_color = 0, 0
@@ -34,7 +36,10 @@ def test_timedynamic_geo_json():
         min_color = min(max_color, data['color'].min())
 
     cmap = linear.PuRd.scale(min_color, max_color)
-    norm = lambda x: (x - x.min())/(x.max()-x.min())
+
+    # Define function to normalize column into range [0,1]
+    def norm(col):
+        return (col - col.min())/(col.max()-col.min())
 
     for country, data in styledata.items():
         data['color'] = data['color'].apply(cmap)
