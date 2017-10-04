@@ -50,7 +50,6 @@ def test_timedynamic_geo_json():
         styledict
     ).add_to(m)
 
-    m.save('testmap.html')
     m._repr_html_()
 
     out = m._parent.render()
