@@ -11,7 +11,6 @@ from .scroll_zoom_toggler import ScrollZoomToggler
 from .terminator import Terminator
 from .boat_marker import BoatMarker
 from .timestamped_geo_json import TimestampedGeoJson
-from .timedynamic_geo_json import TimeDynamicGeoJson
 from .heat_map import HeatMap
 from .image_overlay import ImageOverlay
 from .fullscreen import Fullscreen
@@ -24,7 +23,6 @@ __all__ = [
     'Terminator',
     'BoatMarker',
     'TimestampedGeoJson',
-    'TimeDynamicGeoJson',
     'HeatMap',
     'ImageOverlay',
     'Fullscreen',

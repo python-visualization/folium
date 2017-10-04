@@ -22,7 +22,6 @@ from branca.element import (Element, Figure, MacroElement, Html,
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
-
 _default_js = [
     ('leaflet',
      'https://unpkg.com/leaflet@1.0.1/dist/leaflet.js'),
@@ -37,7 +36,6 @@ _default_js = [
     ('marker_cluster',
      'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.0.0/leaflet.markercluster.js'),  # noqa
     ]
-
 
 _default_css = [
     ('leaflet_css',
