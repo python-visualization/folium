@@ -1,6 +1,7 @@
 import json
 from jinja2 import Template
 from branca.utilities import none_min, none_max, iter_points
+from branca.element import JavascriptLink, Figure
 from six import text_type, binary_type
 from folium.features import GeoJson
 
@@ -165,5 +166,10 @@ class TimeDynamicGeoJson(GeoJson):
             {% endmacro %}
             """)
 
-
+    def render(self, **kwargs):
+        super(TimeDynamicGeoJson, self).render(**kwargs)
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+        figure.header.add_child(JavascriptLink('http://d3js.org/d3.v4.min.js'))  # noqa
 
