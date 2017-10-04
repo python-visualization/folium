@@ -1,8 +1,9 @@
-import json
+"""
+module containing the class TimeDynamicGeoJson, which can be used to 
+create choropleth maps with a time slider. 
+"""
 from jinja2 import Template
-from branca.utilities import none_min, none_max, iter_points
 from branca.element import JavascriptLink, Figure
-from six import text_type, binary_type
 from folium.features import GeoJson
 
 
@@ -53,8 +54,8 @@ class TimeDynamicGeoJson(GeoJson):
     def __init__(self, data, styledict, **kwargs):
         super(TimeDynamicGeoJson, self).__init__(data, **kwargs)
         assert isinstance(styledict, dict), 'styledict must be a dictionary'
-        for k, v in styledict.items():
-            assert isinstance(v, dict), 'each item in styledict must be a dictionary'
+        for val in styledict.values():
+            assert isinstance(val, dict), 'each item in styledict must be a dictionary'
 
         self.styledict = styledict
 
@@ -172,4 +173,3 @@ class TimeDynamicGeoJson(GeoJson):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
         figure.header.add_child(JavascriptLink('http://d3js.org/d3.v4.min.js'))  # noqa
-
