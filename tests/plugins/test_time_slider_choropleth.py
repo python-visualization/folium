@@ -1,24 +1,34 @@
 """
-tests for folium.plugins.TimeDynamicGeoJson
+tests TimeSliderChoropleth
+--------------------------
+
 """
+
+from __future__ import (absolute_import, division, print_function)
+
 import json
-import geopandas as gpd
-import pandas as pd
-import numpy as np
-import folium
-from folium.plugins import TimeDynamicGeoJson
+
 from branca.colormap import linear
+
+import folium
+from folium.plugins import TimeSliderChoropleth
+
+import geopandas as gpd
+
+import numpy as np
+
+import pandas as pd
 
 
 def test_timedynamic_geo_json():
     """
-    tests folium.plugins.TimeDynamicGeoJson
+    tests folium.plugins.TimeSliderChoropleth
     """
     assert 'naturalearth_lowres' in gpd.datasets.available
     datapath = gpd.datasets.get_path('naturalearth_lowres')
     gdf = gpd.read_file(datapath)
 
-    n_periods = 10
+    n_periods = 3
     dt_index = pd.date_range('2016-1-1', periods=n_periods, freq='M').strftime('%s')
 
     styledata = {}
@@ -26,7 +36,7 @@ def test_timedynamic_geo_json():
     for country in gdf.index:
         pdf = pd.DataFrame(
             {'color': np.random.normal(size=n_periods),
-            'opacity': np.random.normal(size=n_periods)},
+             'opacity': np.random.normal(size=n_periods)},
             index=dt_index)
         styledata[country] = pdf.cumsum()
 
@@ -51,23 +61,21 @@ def test_timedynamic_geo_json():
 
     m = folium.Map((0, 0), tiles='Stamen Watercolor', zoom_start=2)
 
-    folium.plugins.TimeDynamicGeoJson(
+    time_slider_choropleth = TimeSliderChoropleth(
         gdf.to_json(),
         styledict
-    ).add_to(m)
+    )
+    time_slider_choropleth.add_to(m)
+
+    rendered = time_slider_choropleth._template.module.script(time_slider_choropleth)
 
     m._repr_html_()
-
     out = m._parent.render()
+    assert '<script src="https://d3js.org/d3.v4.min.js"></script>' in out
 
-    # We verify that imports
-    assert '<script src="https://d3js.org/d3.v4.min.js' in out  # noqa
+    # We verify that data has been inserted correctly
+    expected_timestamps = """var timestamps = ["1454198400", "1456704000", "1459382400"];"""  # noqa
+    assert expected_timestamps.split(';')[0].strip() == rendered.split(';')[0].strip()
 
-    # We verify that data has been inserted currectly
-    expected_timestamps = ("var timestamps = ['1454166000', '1456671600', '1459350000', "
-                           "'1461942000', '1464620400', '1467212400', '1469890800', "
-                           "'1472569200', '1475161200', '1477839600'];")
-    #assert expected_timestamps in out
-
-    expected_styledict = json.dumps(styledict).replace('"', "'")
-    assert expected_styledict in out
+    expected_styledict = json.dumps(styledict, sort_keys=True, indent=2)
+    assert expected_styledict in rendered
