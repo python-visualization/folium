@@ -70,4 +70,4 @@ def test_timedynamic_geo_json():
     #assert expected_timestamps in out
 
     expected_styledict = json.dumps(styledict).replace('"', "'")
-    #assert expected_styledict in out
+    assert expected_styledict in out
