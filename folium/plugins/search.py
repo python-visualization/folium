@@ -91,8 +91,3 @@ class Search(MacroElement):
             CssLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.3.6/dist/leaflet-search.min.css'),  # noqa
             name='Leaflet.Search.css'
         )
-
-        #figure.header.add_child(
-        #    CssLink('https://www.ovrdc.org/apps/assets/ovrdc-css/modern-ui.css'),
-        #    name='modern.ui.search'
-        #)
