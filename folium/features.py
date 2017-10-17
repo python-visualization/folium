@@ -448,7 +448,6 @@ class GeoJson(Layer):
         return get_bounds(self.data, lonlat=True)
 
 
-
 class GeoJsonCss(Layer):
     """
     Creates a GeoJsonCss object for plotting into a Map.
@@ -493,7 +492,7 @@ class GeoJsonCss(Layer):
                  overlay=True, control=True, smooth_factor=None,
                  highlight_function=None, tooltip=None):
         super(GeoJsonCss, self).__init__(name=name, overlay=overlay,
-                                      control=control)
+                                         control=control)
         self._name = 'GeoJsonCss'
         self.tooltip = tooltip
         if isinstance(data, dict):
