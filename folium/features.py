@@ -448,6 +448,149 @@ class GeoJson(Layer):
         return get_bounds(self.data, lonlat=True)
 
 
+
+class GeoJsonCss(Layer):
+    """
+    Creates a GeoJsonCss object for plotting into a Map.
+
+    Parameters
+    ----------
+    data: file, dict or str.
+        The GeoJSON data you want to plot.
+        * If file, then data will be read in the file and fully
+        embedded in Leaflet's JavaScript.
+        * If dict, then data will be converted to JSON and embedded
+        in the JavaScript.
+        * If str, then data will be passed to the JavaScript as-is.
+    highlight_function: function, default None
+        Function mapping a GeoJson Feature to a style dict for mouse events.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls
+    smooth_factor: float, default None
+        How much to simplify the polyline on each zoom level. More means
+        better performance and smoother look, and less means more accurate
+        representation. Leaflet defaults to 1.0.
+
+    Examples
+    --------
+    >>> # Providing file that shall be embedded.
+    >>> GeoJsonCss(open('foo.json'))
+    >>> # Providing filename that shall not be embedded.
+    >>> GeoJsonCss('foo.json')
+    >>> # Providing dict.
+    >>> GeoJsonCss(json.load(open('foo.json')))
+    >>> # Providing string.
+    >>> GeoJsonCss(open('foo.json').read())
+
+    >>> GeoJsonCss(geojson_with_css)
+
+    """
+    def __init__(self, data, name=None,
+                 overlay=True, control=True, smooth_factor=None,
+                 highlight_function=None, tooltip=None):
+        super(GeoJsonCss, self).__init__(name=name, overlay=overlay,
+                                      control=control)
+        self._name = 'GeoJsonCss'
+        self.tooltip = tooltip
+        if isinstance(data, dict):
+            self.embed = True
+            self.data = data
+        elif isinstance(data, text_type) or isinstance(data, binary_type):
+            self.embed = True
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                self.data = requests.get(data).json()
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
+                self.data = json.loads(data)
+            else:  # This is a filename
+                with open(data) as f:
+                    self.data = json.loads(f.read())
+        elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
+            self.embed = True
+            if hasattr(data, '__geo_interface__'):
+                # We have a GeoPandas 0.2 object.
+                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))  # noqa
+            elif hasattr(data, 'columns'):
+                # We have a GeoDataFrame 0.1
+                self.data = json.loads(data.to_crs(epsg='4326').to_json())
+            else:
+                msg = 'Unable to transform this object to a GeoJSON.'
+                raise ValueError(msg)
+        else:
+            raise ValueError('Unhandled object {!r}.'.format(data))
+
+        self.highlight = highlight_function is not None
+
+        if highlight_function is None:
+            def highlight_function(x):
+                return {}
+
+        self.highlight_function = highlight_function
+
+        self.smooth_factor = smooth_factor
+
+        self._template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            {% if this.highlight %}
+                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) {
+                            e.target.setStyle(e.target.feature.properties.style);},
+                        mouseover: function(e) {
+                            e.target.setStyle(e.target.feature.properties.highlight);},
+                        click: function(e) {
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                        });
+                };
+            {% endif %}
+
+                var {{this.get_name()}} = L.geoJson.css(
+                    {{this.data}}
+                    {% if this.smooth_factor is not none or this.highlight %}
+                        , {
+                        {% if this.smooth_factor is not none  %}
+                            smoothFactor:{{this.smooth_factor}}
+                        {% endif %}
+
+                        {% if this.highlight %}
+                            {% if this.smooth_factor is not none  %}
+                            ,
+                            {% endif %}
+                            onEachFeature: {{this.get_name()}}_onEachFeature
+                        {% endif %}
+                        }
+                    {% endif %}
+                    )
+                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    .addTo({{this._parent.get_name()}});
+
+            {% endmacro %}
+            """)  # noqa
+
+    def _get_self_bounds(self):
+        """
+        Computes the bounds of the object itself (not including it's children)
+        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+
+        """
+        return get_bounds(self.data, lonlat=True)
+
+    def render(self, **kwargs):
+        super(GeoJsonCss, self).render(**kwargs)
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdn.rawgit.com/albburtsev/Leaflet.geojsonCSS/master/leaflet.geojsoncss.min.js'),  # noqa
+            name='Leaflet.GeoJsonCss.js'
+        )
+
+
 class TopoJson(Layer):
     """
     Creates a TopoJson object for plotting into a Map.
