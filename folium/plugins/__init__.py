@@ -24,6 +24,7 @@ from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.terminator import Terminator
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
+from folium.plugins.search import Search
 
 __all__ = [
     'BoatMarker',
@@ -40,4 +41,5 @@ __all__ = [
     'Terminator',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
+    'Search',
     ]
