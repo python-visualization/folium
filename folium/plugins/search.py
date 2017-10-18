@@ -31,7 +31,7 @@ class Search(MacroElement):
         self._template = Template("""
         {% macro script(this, kwargs) %}
 
-            var {{this.get_name()}} = new L.GeoJSON({{this.data}});
+            var {{this.get_name()}} = new L.geoJson.css({{this.data}});
 
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
 
@@ -90,4 +90,9 @@ class Search(MacroElement):
         figure.header.add_child(
             CssLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.3.6/dist/leaflet-search.min.css'),  # noqa
             name='Leaflet.Search.css'
+        )
+
+        figure.header.add_child(
+            JavascriptLink('https://cdn.rawgit.com/albburtsev/Leaflet.geojsonCSS/master/leaflet.geojsoncss.min.js'),  # noqa
+            name='Leaflet.GeoJsonCss.js'
         )
