@@ -80,7 +80,8 @@ class TestFolium(object):
                 max_zoom=20,
                 zoom_start=4,
                 max_bounds=True,
-                attr=attr
+                attr=attr,
+                zoomControl=True
             )
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
