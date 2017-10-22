@@ -20,7 +20,7 @@ class Search(MacroElement):
     See https://github.com/stefanocudini/leaflet-search for more information.
 
     """
-    def __init__(self, data, search_zoom=12, search_label='name', geom_type='Point', 
+    def __init__(self, data, search_zoom=12, search_label='name', geom_type='Point',
                  position='topleft', popup_on_found=True):
         super(Search, self).__init__()
         self.position = position
