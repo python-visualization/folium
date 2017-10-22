@@ -169,7 +169,7 @@ class Map(MacroElement):
                  min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False):
+                 subdomains='abc', png_enabled=False, zoomControl=True):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -204,6 +204,7 @@ class Map(MacroElement):
 
         self.crs = crs
         self.control_scale = control_scale
+        self.zoomControl = zoomControl
 
         self.global_switches = GlobalSwitches(
             prefer_canvas,
@@ -251,7 +252,8 @@ class Map(MacroElement):
                                   maxBounds: bounds,
                                   layers: [],
                                   worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-                                  crs: L.CRS.{{this.crs}}
+                                  crs: L.CRS.{{this.crs}},
+                                  zoomControl: {{'true' if this.zoomControl else 'false'}}
                                  });
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
         {% endmacro %}
