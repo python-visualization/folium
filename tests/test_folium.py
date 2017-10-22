@@ -227,6 +227,7 @@ class TestFolium(object):
                 'max_lon': 180,
                 'tile_layers': tile_layers,
                 'crs': 'EPSG3857',
+                'zoomControl':true,
                 'world_copy_jump': False
                 }
         HTML = html_templ.render(tmpl, plugins={})
