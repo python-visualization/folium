@@ -44,6 +44,14 @@ class Search(MacroElement):
                     position:'{{this.position}}',
                     hideMarkerOnCollapse: true
                 });
+
+                searchControl.on('search:locationfound', function(e) {
+
+                    if(e.layer._popup)
+                        e.layer.openPopup();
+
+                });
+                
             } else if ('{{this.geom_type}}' == 'Polygon') {
                 var searchControl = new L.Control.Search({
                     layer: {{this.get_name()}},
