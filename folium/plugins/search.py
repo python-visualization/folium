@@ -49,6 +49,7 @@ class Search(MacroElement):
                     layer: {{this.get_name()}},
                     propertyName: '{{this.search_label}}',
                     marker: false,
+                    position:'{{this.position}}',
                     moveToLocation: function(latlng, title, map) {
                         var zoom = {{this._parent.get_name()}}.getBoundsZoom(latlng.layer.getBounds());
                         {{this._parent.get_name()}}.setView(latlng, zoom); // access the zoom
