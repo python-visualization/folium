@@ -80,7 +80,8 @@ class TestFolium(object):
                 max_zoom=20,
                 zoom_start=4,
                 max_bounds=True,
-                attr=attr
+                attr=attr,
+                zoomControl=True
             )
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -227,6 +228,7 @@ class TestFolium(object):
                 'max_lon': 180,
                 'tile_layers': tile_layers,
                 'crs': 'EPSG3857',
+                'zoomControl': True,
                 'world_copy_jump': False
                 }
         HTML = html_templ.render(tmpl, plugins={})
