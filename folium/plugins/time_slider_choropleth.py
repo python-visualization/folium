@@ -16,7 +16,6 @@ class TimeSliderChoropleth(GeoJson):
             if not isinstance(val, dict):
                 raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))
 
-
         # Make set of timestamps.
         timestamps = set()
         for feature in styledict.values():
@@ -139,7 +138,4 @@ class TimeSliderChoropleth(GeoJson):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-        figure.header.add_child(
-        JavascriptLink('https://d3js.org/d3.v4.min.js'),
-        name='d3v4'
-        )
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v4.min.js'), name='d3v4')
