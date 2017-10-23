@@ -13,7 +13,7 @@ from folium.features import (
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
 )
 
-# from folium.raster_layers imoort TileLayer, WmsTileLayer
+from folium.raster_layers imoort TileLayer, WmsTileLayer
 
 from folium.folium import Map
 
