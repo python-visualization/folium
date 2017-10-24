@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+
+from __future__ import (absolute_import, division, print_function)
+
 import json
 
 from branca.element import Figure, JavascriptLink
@@ -8,6 +12,18 @@ from jinja2 import Template
 
 
 class TimeSliderChoropleth(GeoJson):
+    """
+    Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.
+
+    Parameters
+    ----------
+    data: str
+        geojson string
+    styledict: dict
+        A dictionary where the keys are the geojson feature ids and the values are
+        dicts of `{time: style_options_dict}`
+
+    """
     def __init__(self, data, styledict, name=None, overlay=True, control=True, **kwargs):
         super(TimeSliderChoropleth, self).__init__(data, name=name, overlay=overlay, control=control)
         if not isinstance(styledict, dict):
