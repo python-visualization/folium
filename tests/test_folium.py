@@ -39,7 +39,7 @@ remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/mast
 
 def setup_data():
     """Import economic data for testing."""
-    with open(os.path.join(rootpath, 'us-counties.json'), 'r') as f:
+    with open(os.path.join(rootpath, 'us-counties.json')) as f:
         get_id = json.load(f)
 
     county_codes = [x['id'] for x in get_id['features']]
