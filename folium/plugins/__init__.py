@@ -22,6 +22,7 @@ from folium.plugins.measure_control import MeasureControl
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.terminator import Terminator
+from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 
@@ -38,6 +39,7 @@ __all__ = [
     'PolyLineTextPath',
     'ScrollZoomToggler',
     'Terminator',
+    'TimeSliderChoropleth',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
     ]
