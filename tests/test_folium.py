@@ -159,7 +159,6 @@ class TestFolium(object):
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
-
     def test_feature_group(self):
         """Test FeatureGroup."""
 
@@ -233,7 +232,7 @@ class TestFolium(object):
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode
 
-        Test not cover b'юникод'
+        Test does not cover b'юникод'
         because for python 3 bytes can only contain ASCII literal characters.
         """
 
