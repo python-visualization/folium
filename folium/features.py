@@ -373,19 +373,11 @@ class GeoJson(Layer):
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
-        if style_function is None:
-            def style_function(x):
-                return {}
-
-        self.style_function = style_function
+        self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
 
-        if highlight_function is None:
-            def highlight_function(x):
-                return {}
-
-        self.highlight_function = highlight_function
+        self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
 

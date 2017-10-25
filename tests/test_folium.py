@@ -34,15 +34,12 @@ except ImportError:
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 # For testing remote requests
-remote_url = '/'.join([
-    'https://raw.githubusercontent.com',
-    'python-visualization/folium/master',
-    'examples/data/us-states.json'])
+remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json'  # noqa
 
 
 def setup_data():
     """Import economic data for testing."""
-    with open(os.path.join(rootpath, 'us-counties.json'), 'r') as f:
+    with open(os.path.join(rootpath, 'us-counties.json')) as f:
         get_id = json.load(f)
 
     county_codes = [x['id'] for x in get_id['features']]
@@ -162,7 +159,6 @@ class TestFolium(object):
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
 
-
     def test_feature_group(self):
         """Test FeatureGroup."""
 
@@ -236,7 +232,7 @@ class TestFolium(object):
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode
 
-        Test not cover b'юникод'
+        Test does not cover b'юникод'
         because for python 3 bytes can only contain ASCII literal characters.
         """
 
@@ -315,24 +311,24 @@ class TestFolium(object):
 
     def test_global_switches(self):
         m = folium.Map(prefer_canvas=True)
-        assert (m.global_switches.prefer_canvas is True and
-                m.global_switches.no_touch is False and
-                m.global_switches.disable_3d is False)
+        assert m.global_switches.prefer_canvas
+        assert not m.global_switches.no_touch
+        assert not m.global_switches.disable_3d
 
         m = folium.Map(no_touch=True)
-        assert (m.global_switches.prefer_canvas is False and
-                m.global_switches.no_touch is True and
-                m.global_switches.disable_3d is False)
+        assert not m.global_switches.prefer_canvas
+        assert m.global_switches.no_touch
+        assert not m.global_switches.disable_3d
 
         m = folium.Map(disable_3d=True)
-        assert (m.global_switches.prefer_canvas is False and
-                m.global_switches.no_touch is False and
-                m.global_switches.disable_3d is True)
+        assert not m.global_switches.prefer_canvas
+        assert not m.global_switches.no_touch
+        assert m.global_switches.disable_3d
 
         m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
-        assert (m.global_switches.prefer_canvas is True and
-                m.global_switches.no_touch is True and
-                m.global_switches.disable_3d is True)
+        assert m.global_switches.prefer_canvas
+        assert m.global_switches.no_touch
+        assert m.global_switches.disable_3d
 
     @pytest.mark.web
     def test_json_request(self):
