@@ -8,12 +8,10 @@ import os
 import struct
 import zlib
 
+import numpy as np
+
 from six import binary_type, text_type
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
 
 try:
     from urllib.parse import uses_relative, uses_netloc, uses_params, urlparse
@@ -60,7 +58,7 @@ def _locations_tolist(x):
 
 def _flatten(container):
     for i in container:
-        if isinstance(i, (list, tuple)):
+        if isinstance(i, (list, tuple, np.ndarray)):
             for j in _flatten(i):
                 yield j
         else:
@@ -167,10 +165,6 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
 
     """
-    if np is None:
-        raise ImportError('The NumPy package is required '
-                          ' for this functionality')
-
     if colormap is None:
         def colormap(x):
             return (x, x, x, 1)
