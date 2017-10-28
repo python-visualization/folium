@@ -65,12 +65,12 @@ class Search(MacroElement):
 
                     {{this.get_name()}}.eachLayer(function(layer) {   //restore feature color
                         {{this.get_name()}}.resetStyle(layer);
-                    }); 
+                    });
                 });
             }
 
-    
-            {{this._parent.get_name()}}.addControl( searchControl ); 
+
+            {{this._parent.get_name()}}.addControl( searchControl );
 
         {% endmacro %}
         """)  # noqa
