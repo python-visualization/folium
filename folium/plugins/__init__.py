@@ -25,6 +25,7 @@ from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
+from folium.plugins.search import Search
 
 __all__ = [
     'BoatMarker',
@@ -42,4 +43,5 @@ __all__ = [
     'TimeSliderChoropleth',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
+    'Search',
     ]
