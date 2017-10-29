@@ -13,10 +13,19 @@ class Search(MacroElement):
 
     Parameters
     ----------
-    position : str
-          change the position of the search bar, can be:
-          'topleft', 'topright', 'bottomright' or 'bottomleft'
-          default: 'topleft'
+    data: str/JSON
+        GeoJSON strings
+    search_zoom: int
+        zoom level when searching features, default 12
+    search_label: str
+        label to index the search, default 'name'
+    geom_type: str
+        geometry type, default 'Point'
+    position: str
+        Change the position of the search bar, can be:
+        'topleft', 'topright', 'bottomright' or 'bottomleft',
+        default 'topleft'
+
     See https://github.com/stefanocudini/leaflet-search for more information.
 
     """
@@ -35,26 +44,23 @@ class Search(MacroElement):
 
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
 
-            if ('{{this.geom_type}}' == 'Point'){
-                var searchControl = new L.Control.Search({
-                    layer: {{this.get_name()}},
-                    propertyName: '{{this.search_label}}',
-                    initial: false,
-                    zoom: {{this.search_zoom}},
-                    position:'{{this.position}}',
-                    hideMarkerOnCollapse: true
+            var searchControl = new L.Control.Search({
+                layer: {{this.get_name()}},
+                propertyName: '{{this.search_label}}',
+            {% if this.geom_type == 'Point' %}
+                initial: false,
+                zoom: {{this.search_zoom}},
+                position:'{{this.position}}',
+                hideMarkerOnCollapse: true
+            {% endif %}
+            {% if this.geom_type == 'Polygon' %}
+                marker: false,
+                moveToLocation: function(latlng, title, map) {
+                var zoom = {{this._parent.get_name()}}.getBoundsZoom(latlng.layer.getBounds());
+                    {{this._parent.get_name()}}.setView(latlng, zoom); // access the zoom
+                }
+            {% endif %}
                 });
-            } else if ('{{this.geom_type}}' == 'Polygon') {
-                var searchControl = new L.Control.Search({
-                    layer: {{this.get_name()}},
-                    propertyName: '{{this.search_label}}',
-                    marker: false,
-                    moveToLocation: function(latlng, title, map) {
-                        var zoom = {{this._parent.get_name()}}.getBoundsZoom(latlng.layer.getBounds());
-                        {{this._parent.get_name()}}.setView(latlng, zoom); // access the zoom
-                    }
-                });
-
                 searchControl.on('search:locationfound', function(e) {
 
                     e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
@@ -67,9 +73,6 @@ class Search(MacroElement):
                         {{this.get_name()}}.resetStyle(layer);
                     });
                 });
-            }
-
-
             {{this._parent.get_name()}}.addControl( searchControl );
 
         {% endmacro %}
