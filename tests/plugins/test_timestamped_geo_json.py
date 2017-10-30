@@ -125,26 +125,15 @@ def test_timestamped_geo_json():
 
     # Verify that the script is okay.
     tmpl = Template("""
-        L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
                 _getDisplayDateFormat: function(date){
                     var newdate = new moment(date);
                     console.log(newdate)
-                    return newdate.format("{{this.dateOptions}}");
-                }    
+                    return newdate.format("{{this.date_options}}");
+                }
             });
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-            var timeDimensionControl = new L.Control.TimeDimensionCustom({
-                position: 'bottomleft',
-                minSpeed: {{this.minSpeed}},
-                maxSpeed: {{this.maxSpeed}},
-                autoPlay: {{'true' if this.auto_play else 'false'}},
-                loopButton: {{'true' if this.loopButton else 'false'}},
-                timeSliderDragUpdate: {{'true' if this.timeSliderDragUpdate else 'false'}},
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}},
-                    startOver: true}
-                    });
+            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
             console.log("{{this.marker}}");
@@ -172,15 +161,13 @@ def test_timestamped_geo_json():
                     },
                     style: function (feature) {
                         return feature.properties.style;
-                    }, 
+                    },
                     onEachFeature: function(feature, layer) {
                         if (feature.properties.popup) {
                         layer.bindPopup(feature.properties.popup);
                         }
                     }
                 })
-
-
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
                 {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}

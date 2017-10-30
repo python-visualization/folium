@@ -29,8 +29,6 @@ class TimestampedGeoJson(MacroElement):
         * If file, then data will be read in the file and fully embedded in Leaflet's javascript.
         * If dict, then data will be converted to json and embedded in the javascript.
         * If str, then data will be passed to the javascript as-is.
-
-
     transition_time: int, default 200.
         The duration in ms of a transition from between timestamps.
     loop: bool, default True
@@ -66,8 +64,8 @@ class TimestampedGeoJson(MacroElement):
 
     """
     def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
-                 period='P1D', minSpeed=0.1, maxSpeed=10, speedStep=0.1, loopButton=False,
-                 dateOptions='YYYY/MM/DD hh:mm:ss', timeSliderDragUpdate=False):
+                 period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
+                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
@@ -80,17 +78,24 @@ class TimestampedGeoJson(MacroElement):
         else:
             self.embed = False
             self.data = data
-        self.transition_time = int(transition_time)
-        self.loop = bool(loop)
-        self.auto_play = bool(auto_play)
         self.add_last_point = bool(add_last_point)
         self.period = period
-        self.minSpeed = minSpeed
-        self.maxSpeed = maxSpeed
-        self.speedStep = speedStep
-        self.loopButton = loopButton
-        self.dateOptions = dateOptions
-        self.timeSliderDragUpdate = timeSliderDragUpdate
+        self.date_options = date_options
+
+        options = {
+            'position': 'bottomleft',
+            'minSpeed': min_speed,
+            'maxSpeed': max_speed,
+            'autoPlay': auto_play,
+            'loopButton': loop_button,
+            'timeSliderDragUpdate': time_slider_drag_update,
+            'playerOptions': {
+                'transitionTime': int(transition_time),
+                'loop': loop,
+                'startOver': True
+            }
+        }
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template("""
         {% macro script(this, kwargs) %}
@@ -98,22 +103,11 @@ class TimestampedGeoJson(MacroElement):
                 _getDisplayDateFormat: function(date){
                     var newdate = new moment(date);
                     console.log(newdate)
-                    return newdate.format("{{this.dateOptions}}");
-                }    
+                    return newdate.format("{{this.date_options}}");
+                }
             });
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-            var timeDimensionControl = new L.Control.TimeDimensionCustom({
-                position: 'bottomleft',
-                minSpeed: {{this.minSpeed}},
-                maxSpeed: {{this.maxSpeed}},
-                autoPlay: {{'true' if this.auto_play else 'false'}},
-                loopButton: {{'true' if this.loopButton else 'false'}},
-                timeSliderDragUpdate: {{'true' if this.timeSliderDragUpdate else 'false'}},
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}},
-                    startOver: true}
-                    });
+            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
             console.log("{{this.marker}}");
@@ -141,15 +135,13 @@ class TimestampedGeoJson(MacroElement):
                     },
                     style: function (feature) {
                         return feature.properties.style;
-                    }, 
+                    },
                     onEachFeature: function(feature, layer) {
                         if (feature.properties.popup) {
                         layer.bindPopup(feature.properties.popup);
                         }
                     }
                 })
-
-
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
                 {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
