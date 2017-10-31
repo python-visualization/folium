@@ -119,25 +119,59 @@ def test_timestamped_geo_json():
     assert ('<link rel="stylesheet" href="http://apps.socib.es/Leaflet.'
             'TimeDimension/dist/leaflet.timedimension.control.min.css" />'
             ) in out
+    assert ('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js">'
+            '</script>'
+            ) in out
 
     # Verify that the script is okay.
     tmpl = Template("""
-        {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-        {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
-            position: 'bottomleft',
-            autoPlay: {{'true' if this.auto_play else 'false'}},
-            playerOptions: {
-                transitionTime: {{this.transition_time}},
-                loop: {{'true' if this.loop else 'false'}}}
-                });
-        {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+                _getDisplayDateFormat: function(date){
+                    var newdate = new moment(date);
+                    console.log(newdate)
+                    return newdate.format("{{this.date_options}}");
+                }
+            });
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
+            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
+            {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
-        var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-            L.geoJson({{this.data}}, {'style': function (feature) {
-                return feature.properties.style
-            }}),
-            {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
-            ).addTo({{this._parent.get_name()}});
+            console.log("{{this.marker}}");
+
+            var geoJsonLayer = L.geoJson({{this.data}}, {
+                    pointToLayer: function (feature, latLng) {
+                        if (feature.properties.icon == 'marker') {
+                            if(feature.properties.iconstyle){
+                                return new L.Marker(latLng, {
+                                    icon: L.icon(feature.properties.iconstyle)});
+                            }
+                            //else
+                            return new L.Marker(latLng);
+                        }
+                        if (feature.properties.icon == 'circle') {
+                            if (feature.properties.iconstyle) {
+                                return new L.circleMarker(latLng, feature.properties.iconstyle)
+                                };
+                            //else
+                            return new L.circleMarker(latLng);
+                        }
+                        //else
+
+                        return new L.Marker(latLng);
+                    },
+                    style: function (feature) {
+                        return feature.properties.style;
+                    },
+                    onEachFeature: function(feature, layer) {
+                        if (feature.properties.popup) {
+                        layer.bindPopup(feature.properties.popup);
+                        }
+                    }
+                })
+
+            var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
+                {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
+                ).addTo({{this._parent.get_name()}});
     """)  # noqa
 
     assert ''.join(tmpl.render(this=tgj).split()) in ''.join(out.split())

@@ -29,8 +29,6 @@ class TimestampedGeoJson(MacroElement):
         * If file, then data will be read in the file and fully embedded in Leaflet's javascript.
         * If dict, then data will be converted to json and embedded in the javascript.
         * If str, then data will be passed to the javascript as-is.
-
-
     transition_time: int, default 200.
         The duration in ms of a transition from between timestamps.
     loop: bool, default True
@@ -66,7 +64,8 @@ class TimestampedGeoJson(MacroElement):
 
     """
     def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
-                 period='P1D'):
+                 period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
+                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
@@ -79,28 +78,72 @@ class TimestampedGeoJson(MacroElement):
         else:
             self.embed = False
             self.data = data
-        self.transition_time = int(transition_time)
-        self.loop = bool(loop)
-        self.auto_play = bool(auto_play)
         self.add_last_point = bool(add_last_point)
         self.period = period
+        self.date_options = date_options
+
+        options = {
+            'position': 'bottomleft',
+            'minSpeed': min_speed,
+            'maxSpeed': max_speed,
+            'autoPlay': auto_play,
+            'loopButton': loop_button,
+            'timeSliderDragUpdate': time_slider_drag_update,
+            'playerOptions': {
+                'transitionTime': int(transition_time),
+                'loop': loop,
+                'startOver': True
+            }
+        }
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template("""
         {% macro script(this, kwargs) %}
+            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+                _getDisplayDateFormat: function(date){
+                    var newdate = new moment(date);
+                    console.log(newdate)
+                    return newdate.format("{{this.date_options}}");
+                }
+            });
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-            {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
-                position: 'bottomleft',
-                autoPlay: {{'true' if this.auto_play else 'false'}},
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}}}
-                    });
-            {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
+            {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
-            var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-                L.geoJson({{this.data}}, {'style': function (feature) {
-                    return feature.properties.style
-                }}),
+            console.log("{{this.marker}}");
+
+            var geoJsonLayer = L.geoJson({{this.data}}, {
+                    pointToLayer: function (feature, latLng) {
+                        if (feature.properties.icon == 'marker') {
+                            if(feature.properties.iconstyle){
+                                return new L.Marker(latLng, {
+                                    icon: L.icon(feature.properties.iconstyle)});
+                            }
+                            //else
+                            return new L.Marker(latLng);
+                        }
+                        if (feature.properties.icon == 'circle') {
+                            if (feature.properties.iconstyle) {
+                                return new L.circleMarker(latLng, feature.properties.iconstyle)
+                                };
+                            //else
+                            return new L.circleMarker(latLng);
+                        }
+                        //else
+
+                        return new L.Marker(latLng);
+                    },
+                    style: function (feature) {
+                        return feature.properties.style;
+                    },
+                    onEachFeature: function(feature, layer) {
+                        if (feature.properties.popup) {
+                        layer.bindPopup(feature.properties.popup);
+                        }
+                    }
+                })
+
+            var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
                 {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
@@ -136,6 +179,10 @@ class TimestampedGeoJson(MacroElement):
         figure.header.add_child(
             CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'),
+            name='moment')
 
     def _get_self_bounds(self):
         """
