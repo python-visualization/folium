@@ -270,7 +270,7 @@ class Map(MacroElement):
     def _to_png(self, delay=3):
         """Export the HTML to byte representation of a PNG image.
 
-        Uses Phantom JS to render the HTML and record a PNG. You may need to 
+        Uses Phantom JS to render the HTML and record a PNG. You may need to
         adjust the `delay` time keyword argument if maps render without data or tiles.
 
         Examples
