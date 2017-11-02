@@ -267,19 +267,18 @@ class Map(MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, time=3):
+    def _to_png(self, delay=3):
         """Export the HTML to byte representation of a PNG image.
-        
+
         Uses Phantom JS to render the HTML and record a PNG. You may need to 
-        adjust the time keyword argument if maps render without data or tiles. 
+        adjust the `delay` time keyword argument if maps render without data or tiles. 
+
         Examples
         --------
-        
-        map._to_png()
-        
-        map._to_png(time=10) # Wait 10 seconds between render and snapshot. 
-        
+        >>> map._to_png()
+        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot. 
         """
+
         if self._png_image is None:
             import selenium.webdriver
 
@@ -295,7 +294,7 @@ class Map(MacroElement):
                 driver.execute_script("document.body.style.width = '100%';")  # noqa
                 # We should probably monitor if some element is present,
                 # but this is OK for now.
-                time.sleep(time)
+                time.sleep(delay)
                 png = driver.get_screenshot_as_png()
                 driver.quit()
                 self._png_image = png
