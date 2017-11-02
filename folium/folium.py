@@ -271,12 +271,12 @@ class Map(MacroElement):
         """Export the HTML to byte representation of a PNG image.
 
         Uses Phantom JS to render the HTML and record a PNG. You may need to 
-        adjust the `delay` time keyword argument if maps render without data or tiles. 
+        adjust the `delay` time keyword argument if maps render without data or tiles.
 
         Examples
         --------
         >>> map._to_png()
-        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot. 
+        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot.
         """
 
         if self._png_image is None:
