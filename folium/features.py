@@ -343,18 +343,14 @@ class GeoJson(Layer):
                  highlight_function=None, tooltip=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
 
-        self.style_function = style_function or (lambda x: {})
-
-        self.highlight = highlight_function is not None
-
-        self.highlight_function = highlight_function or (lambda x: {})
-
         self._name = 'GeoJson'
         self.tooltip = tooltip
-        self.style_function = style_function
         self.highlight = highlight_function is not None
-        self.highlight_function = highlight_function
+        self.highlight_function = highlight_function or (lambda x: {})
+        self.style_function = style_function or (lambda x: {})
         self.smooth_factor = smooth_factor
+
+        self.data = geojsonlike2dict(data)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -373,7 +369,7 @@ class GeoJson(Layer):
             {% endif %}
 
                 var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
+                    {{this.style_data()}}
                     {% if this.smooth_factor is not none or this.highlight %}
                         , {
                         {% if this.smooth_factor is not none  %}
@@ -436,14 +432,11 @@ class GeoJsonCss(GeoJson):
                  smooth_factor=None, highlight_function=None, tooltip=None):
         super(GeoJsonCss, self).__init__(data=data, name=name, overlay=overlay,
                                          control=control)
-        if highlight_function is None:
-            def highlight_function(x):
-                return {}
 
         self._name = 'GeoJsonCss'
         self.tooltip = tooltip
         self.highlight = highlight_function is not None
-        self.highlight_function = highlight_function
+        self.highlight_function = highlight_function or (lambda x: {})
         self.smooth_factor = smooth_factor
 
         self.data = geojsonlike2dict(data)
