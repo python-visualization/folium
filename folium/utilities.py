@@ -9,6 +9,7 @@ import struct
 import zlib
 
 import numpy as np
+import requests
 
 from six import binary_type, text_type
 
@@ -129,7 +130,7 @@ def _is_url(url):
     """Check to see if `url` has a valid protocol."""
     try:
         return urlparse(url).scheme in _VALID_URLS
-    except:
+    except Exception:
         return False
 
 
@@ -165,6 +166,10 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
 
     """
+    if np is None:
+        raise ImportError('The NumPy package is required '
+                          ' for this functionality')
+
     if colormap is None:
         def colormap(x):
             return (x, x, x, 1)
@@ -359,3 +364,32 @@ def get_bounds(locations, lonlat=False):
     if lonlat:
         bounds = _locations_mirror(bounds)
     return bounds
+
+
+def geojsonlike2dict(data):
+    """Convert GeoJSON data to a Python dictionary."""
+    # If it is already a dict, do nothing.
+    if isinstance(data, dict):
+        return data
+    # Read from GeoPandas.
+    elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
+        if hasattr(data, '__geo_interface__'):
+            # GeoPandas 0.2 object.
+            return json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))
+        elif hasattr(data, 'columns'):
+            # GeoDataFrame 0.1
+            return json.loads(data.to_crs(epsg='4326').to_json())
+        else:
+            raise ValueError('Do not know how convert this GeoPandas object {!r} to a GeoJSON.'.format(data))
+    # Read from GeoJSON inline string.
+    elif isinstance(data, (text_type, binary_type)) and data.lstrip()[0] in '[{':
+        return json.loads(data)
+    # Read from remote URL.
+    elif isinstance(data, (text_type, binary_type)) and data.lower().startswith(('http:', 'ftp:', 'https:')):
+        return requests.get(data).json()
+    # Assume it is a from local file and let open/json.loads deal with it.
+    elif isinstance(data, (text_type, binary_type)):
+        with open(data) as f:
+            return json.loads(f.read())
+    else:
+        raise ValueError('Do not know how to transform {!r} to a GeoJSON.'.format(data))

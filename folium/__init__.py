@@ -53,7 +53,6 @@ __all__ = [
     'DivIcon',
     'GeoJson',
     'GeoJsonCss',
-    'GeoJsonStyle',
     'LatLngPopup',
     'MarkerCluster',
     'Vega',
