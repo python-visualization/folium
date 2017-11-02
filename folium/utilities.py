@@ -166,9 +166,6 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
 
     """
-    if np is None:
-        raise ImportError('The NumPy package is required '
-                          ' for this functionality')
 
     if colormap is None:
         def colormap(x):
