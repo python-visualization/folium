@@ -307,6 +307,9 @@ class GeoJson(Layer):
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         Function mapping a GeoJson Feature to a style dict.
+        style_function will overwrite `geojsoncss`.
+    geojsoncss: bool, default False
+        If True folium will try to read style data from the GeoJson object.
     highlight_function: function, default None
         Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
@@ -340,15 +343,16 @@ class GeoJson(Layer):
     """
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None, tooltip=None):
+                 highlight_function=None, tooltip=None, geojsoncss=False):
         super(GeoJson, self).__init__(name=name, overlay=overlay, control=control)
 
         self._name = 'GeoJson'
         self.tooltip = tooltip
         self.highlight = highlight_function is not None
         self.highlight_function = highlight_function or (lambda x: {})
-        self.style_function = style_function or (lambda x: {})
+        self.style_function = style_function
         self.smooth_factor = smooth_factor
+        self.geojsoncss = geojsoncss
 
         self.data = geojsonlike2dict(data)
 
@@ -368,7 +372,7 @@ class GeoJson(Layer):
                 };
             {% endif %}
 
-                var {{this.get_name()}} = L.geoJson(
+                var {{this.get_name()}} = L.geoJson{% if this.geojsoncss %}.css{% endif %}(
                     {{this.style_data()}}
                     {% if this.smooth_factor is not none or this.highlight %}
                         , {
@@ -387,10 +391,21 @@ class GeoJson(Layer):
                     )
                     {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                     .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+                {% if this.style_function %}{{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});{% endif %}
 
             {% endmacro %}
             """)  # noqa
+
+    def render(self, **kwargs):
+        super(GeoJson, self).render(**kwargs)
+        figure = self.get_root()
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
+        if self.geojsoncss:
+            figure.header.add_child(
+                JavascriptLink('https://cdn.rawgit.com/albburtsev/Leaflet.geojsonCSS/master/leaflet.geojsoncss.min.js'),  # noqa
+                name='Leaflet.GeoJsonCss.js'
+            )
 
     def style_data(self):
         """
@@ -398,17 +413,18 @@ class GeoJson(Layer):
         returns a corresponding JSON output.
 
         """
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
+        if self.style_function:
+            if 'features' not in self.data.keys():
+                # Catch case when GeoJSON is just a single Feature or a geometry.
+                if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
+                    # Catch case when GeoJSON is just a geometry.
+                    self.data = {'type': 'Feature', 'geometry': self.data}
+                self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-        for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
+            for feature in self.data['features']:
+                feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+                feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+        return self.data
 
     def _get_self_bounds(self):
         """
@@ -417,79 +433,6 @@ class GeoJson(Layer):
 
         """
         return get_bounds(self.data, lonlat=True)
-
-
-class GeoJsonCss(GeoJson):
-    """
-    `GeoJsonCss` augumets GeoJson by using properties in the GeoJson file to style
-    the document.
-    See `GeoJson` for the docs and
-    https://github.com/albburtsev/Leaflet.geojsonCSS
-    for more Information on the plugin.
-
-    """
-    def __init__(self, data, name=None, overlay=True, control=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
-        super(GeoJsonCss, self).__init__(data=data, name=name, overlay=overlay,
-                                         control=control)
-
-        self._name = 'GeoJsonCss'
-        self.tooltip = tooltip
-        self.highlight = highlight_function is not None
-        self.highlight_function = highlight_function or (lambda x: {})
-        self.smooth_factor = smooth_factor
-
-        self.data = geojsonlike2dict(data)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                            e.target.setStyle(e.target.feature.properties.style);},
-                        mouseover: function(e) {
-                            e.target.setStyle(e.target.feature.properties.highlight);},
-                        click: function(e) {
-                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                        });
-                };
-            {% endif %}
-
-                var {{this.get_name()}} = L.geoJson.css(
-                    {{this.data}}
-                    {% if this.smooth_factor is not none or this.highlight %}
-                        , {
-                        {% if this.smooth_factor is not none  %}
-                            smoothFactor:{{this.smooth_factor}}
-                        {% endif %}
-
-                        {% if this.highlight %}
-                            {% if this.smooth_factor is not none  %}
-                            ,
-                            {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
-                        {% endif %}
-                        }
-                    {% endif %}
-                    )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
-                    .addTo({{this._parent.get_name()}});
-
-            {% endmacro %}
-            """)  # noqa
-
-    def render(self, **kwargs):
-        super(GeoJsonCss, self).render(**kwargs)
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.rawgit.com/albburtsev/Leaflet.geojsonCSS/master/leaflet.geojsoncss.min.js'),  # noqa
-            name='Leaflet.GeoJsonCss.js'
-        )
 
 
 class TopoJson(Layer):

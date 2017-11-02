@@ -9,7 +9,7 @@ from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
 from folium._version import get_versions
 
 from folium.features import (
-    ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson, GeoJsonCss,
+    ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
 )
 
@@ -52,7 +52,6 @@ __all__ = [
     'CustomIcon',
     'DivIcon',
     'GeoJson',
-    'GeoJsonCss',
     'LatLngPopup',
     'MarkerCluster',
     'Vega',
