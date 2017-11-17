@@ -9,6 +9,7 @@ import struct
 import zlib
 
 import numpy as np
+
 import requests
 
 from six import binary_type, text_type
