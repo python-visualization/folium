@@ -295,7 +295,6 @@ class VegaLite(Element):
 class GeoJson(Layer):
     """
     Creates a GeoJson object for plotting into a Map.
-
     Parameters
     ----------
     data: file, dict or str.
@@ -307,9 +306,10 @@ class GeoJson(Layer):
         * If str, then data will be passed to the JavaScript as-is.
     style_function: function, default None
         Function mapping a GeoJson Feature to a style dict.
-        style_function will overwrite `geojsoncss`.
+        style_function will overwrite the `geojsoncss` in the GeoJSON.
     geojsoncss: bool, default False
         If True folium will try to read style data from the GeoJson object.
+        See https://github.com/albburtsev/Leaflet.geojsonCSS for more information.
     highlight_function: function, default None
         Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
@@ -333,7 +333,6 @@ class GeoJson(Layer):
     >>> GeoJson(json.load(open('foo.json')))
     >>> # Providing string.
     >>> GeoJson(open('foo.json').read())
-
     >>> # Provide a style_function that color all states green but Alabama.
     >>> style_function = lambda x: {'fillColor': '#0000ff' if
     ...                             x['properties']['name']=='Alabama' else
@@ -348,13 +347,12 @@ class GeoJson(Layer):
 
         self._name = 'GeoJson'
         self.tooltip = tooltip
+        self.data = geojsonlike2dict(data)
+        self.style_function = style_function or (lambda x: {})
         self.highlight = highlight_function is not None
         self.highlight_function = highlight_function or (lambda x: {})
-        self.style_function = style_function
         self.smooth_factor = smooth_factor
         self.geojsoncss = geojsoncss
-
-        self.data = geojsonlike2dict(data)
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -411,26 +409,23 @@ class GeoJson(Layer):
         """
         Applies `self.style_function` to each feature of `self.data` and
         returns a corresponding JSON output.
-
         """
-        if self.style_function:
-            if 'features' not in self.data.keys():
-                # Catch case when GeoJSON is just a single Feature or a geometry.
-                if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                    # Catch case when GeoJSON is just a geometry.
-                    self.data = {'type': 'Feature', 'geometry': self.data}
-                self.data = {'type': 'FeatureCollection', 'features': [self.data]}
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type': 'Feature', 'geometry': self.data}
+            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-            for feature in self.data['features']:
-                feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-                feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
-        return self.data
+        for feature in self.data['features']:
+            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+        return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
-
         """
         return get_bounds(self.data, lonlat=True)
 
