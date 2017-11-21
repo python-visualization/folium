@@ -38,6 +38,10 @@ Documentation
 
 http://python-visualization.github.io/folium/docs-master/
 
+Cheatsheet
+----------
+
+[Here](http://www.andrewchallis.co.uk/category/python/python-a-folium-cheatsheet/) is a cheatsheet made by *Andy Challis*.
 
 Gallery
 -------
