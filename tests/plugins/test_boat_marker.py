@@ -6,13 +6,12 @@ Test BoatMarker
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
-import folium
-
-from folium import plugins
+from __future__ import absolute_import, division, print_function
 
 from jinja2 import Template
+
+import folium
+from folium import plugins
 
 
 def test_boat_marker():
@@ -37,15 +36,33 @@ def test_boat_marker():
     out = m._parent.render()
 
     # We verify that the script import is present.
-    script = '<script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>'  # noqa
-    assert script in out
+    turfjs_script = '<script src="https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js"></script>'  # noqa
+    assert turfjs_script in out
+
+    boatmarker_script = '<script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>'  # noqa
+    assert boatmarker_script in out
 
     # We verify that the script part is correct.
     tmpl = Template("""
+            {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.boatMarker(
                     [{{this.location[0]}},{{this.location[1]}}],
                     {{this.kwargs}}).addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
+                var animate = {{this.animate}}
+                var boatMarker = {{this.get_name()}};
+                boatMarker.setHeadingWind({{this.heading}},
+                    {{this.wind_speed}}, {{this.wind_heading}});
+
+                if (animate === 1) {
+                    window.setInterval(function() {
+                        var destination = turf.destination(
+                            boatMarker.toGeoJSON(), 0.02, 60,"kilometers");
+
+                        boatMarker.setLatLng(
+                            destination.geometry.coordinates.reverse());
+                    }, 488);
+                }
+            {% endmacro %}
     """)  # noqa
 
     assert tmpl.render(this=bm1) in out
