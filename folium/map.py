@@ -59,9 +59,13 @@ class FeatureGroup(Layer):
     overlay : bool, default True
         Whether your layer will be an overlay (ticked with a check box in
         LayerControls) or a base layer (ticked with a radio button).
+    control: bool, default True
+        Whether the layer will be included in LayerControls.
+    hide: bool, default False
+        Whether the layer will be hidden by default, if it is an overlay.
     """
-    def __init__(self, name=None, overlay=True, control=True):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+    def __init__(self, name=None, overlay=True, control=True, hide=False):
+        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name, hide=hide)  # noqa
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()

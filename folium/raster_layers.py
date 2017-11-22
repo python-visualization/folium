@@ -58,18 +58,20 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    hide: bool, default False
+        Whether the layer will be hidden by default, if it is an overlay.
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
 
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False,
-                 control=True, no_wrap=False, subdomains='abc'):
+                 name=None, overlay=False, control=True, hide=False,
+                 no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
-                                        control=control)
+                                        control=control, hide=hide)
         self._name = 'TileLayer'
         self._env = ENV
 

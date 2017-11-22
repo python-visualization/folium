@@ -317,6 +317,8 @@ class GeoJson(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    hide: bool, default False
+        Whether the layer will be hidden by default, if it is an overlay.
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -341,10 +343,10 @@ class GeoJson(Layer):
 
     """
     def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None, tooltip=None):
+                 overlay=True, control=True, hide=False,
+                 smooth_factor=None, highlight_function=None, tooltip=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
-                                      control=control)
+                                      control=control, hide=hide)
         self._name = 'GeoJson'
         self.tooltip = tooltip
         if isinstance(data, dict):
