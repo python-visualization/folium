@@ -33,12 +33,15 @@ class Layer(MacroElement):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    hide: bool, default False
+        Whether the layer will be hidden by default, if it is an overlay.
     """
-    def __init__(self, name=None, overlay=False, control=True):
+    def __init__(self, name=None, overlay=False, control=True, hide=False):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
         self.control = control
+        self.hide = hide
 
 
 class FeatureGroup(Layer):
@@ -98,6 +101,7 @@ class LayerControl(MacroElement):
         self.autoZIndex = str(autoZIndex).lower()
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
+        self.overlays_hidden = []
 
         self._template = Template("""
         {% macro script(this,kwargs) %}
@@ -112,23 +116,24 @@ class LayerControl(MacroElement):
                  collapsed: {{this.collapsed}},
                  autoZIndex: {{this.autoZIndex}}
                 }).addTo({{this._parent.get_name()}});
+            {% for val in this.overlays_hidden %}
+                {{ val }}.remove();{% endfor %}
         {% endmacro %}
         """)  # noqa
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer) and
-             (not hasattr(val, 'overlay') or not val.overlay) and
-             (not hasattr(val, 'control') or val.control)])
-        # We select all Layers for which (control and overlay).
+             self._parent._children.items() if isinstance(val, Layer)
+             and not val.overlay and val.control])
         self.overlays = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer) and
-             (hasattr(val, 'overlay') and val.overlay) and
-             (not hasattr(val, 'control') or val.control)])
+             self._parent._children.items() if isinstance(val, Layer)
+             and val.overlay and val.control])
+        self.overlays_hidden = [val.get_name() for val in
+            self._parent._children.values() if isinstance(val, Layer)
+            and val.overlay and val.control and val.hide]
         super(LayerControl, self).render()
 
 
