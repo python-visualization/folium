@@ -135,7 +135,8 @@ class LayerControl(MacroElement):
             [(val.layer_name, val.get_name()) for key, val in
              self._parent._children.items() if isinstance(val, Layer)
              and val.overlay and val.control])
-        self.overlays_hidden = [val.get_name() for val in
+        self.overlays_hidden = [
+            val.get_name() for val in
             self._parent._children.values() if isinstance(val, Layer)
             and val.overlay and val.control and val.hide]
         super(LayerControl, self).render()
