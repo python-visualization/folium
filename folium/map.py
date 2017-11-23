@@ -261,7 +261,7 @@ class Popup(Element):
     max_width: int, default 300
         The maximal width of the popup.
     """
-    def __init__(self, html=None, parse_html=False, max_width=300):
+    def __init__(self, html=None, parse_html=False, max_width=300, default_open=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -280,6 +280,7 @@ class Popup(Element):
             self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
+        self.default_open = default_open
 
         self._template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
@@ -289,7 +290,8 @@ class Popup(Element):
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}}).openPopup();
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
+            {{% if this.default_open %}.openPopup(){% endif %};
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
