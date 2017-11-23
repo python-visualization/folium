@@ -279,7 +279,7 @@ class Popup(Element):
     """
     _template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'}
-            {% if this.default_open %},{autoClose: false}{% endif %});
+            {% if this.default_open %}, autoClose: false{% endif %}});
             {% for name, element in this.html._children.items() %}
                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
                 {{this.get_name()}}.setContent({{name}});
@@ -314,6 +314,25 @@ class Popup(Element):
         self.max_width = max_width
         self.default_open = default_open
 
+<<<<<<< HEAD
+=======
+        self._template = Template(u"""
+            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
+            {% if this.default_open %}, autoClose: false{% endif %}});
+
+            {% for name, element in this.html._children.items() %}
+                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
+                {{this.get_name()}}.setContent({{name}});
+            {% endfor %}
+
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
+            {% if this.default_open %}.openPopup(){% endif %};
+
+            {% for name, element in this.script._children.items() %}
+                {{element.render()}}
+            {% endfor %}
+        """)  # noqa
+>>>>>>> options are one dictionary, not separate
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
