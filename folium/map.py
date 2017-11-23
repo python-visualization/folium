@@ -278,8 +278,8 @@ class Popup(Element):
         The maximal width of the popup.
     """
     _template = Template(u"""
-            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}', autoClose: false});
-
+            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
+            {% if this.default_open %},{autoClose: false}{% endif %});
             {% for name, element in this.html._children.items() %}
                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
                 {{this.get_name()}}.setContent({{name}});
