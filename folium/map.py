@@ -285,7 +285,7 @@ class Popup(Element):
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}}).openPopup();
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
