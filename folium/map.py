@@ -284,7 +284,7 @@ class Popup(Element):
 
         self._template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
-            {% if this.default_open %}, autoClose: false{% endif %}});
+            {% if this.default_open %}, autoClose: false, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
