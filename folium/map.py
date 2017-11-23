@@ -286,7 +286,7 @@ class Popup(Element):
             {% endfor %}
 
             {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
-            {{% if this.default_open %}.openPopup(){% endif %};
+            {% if this.default_open %}.openPopup(){% endif %};
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
