@@ -34,6 +34,9 @@ _default_js = [
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
+    ('beautify_marker_js',
+     'https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'),  # noqa
+
     ]
 
 _default_css = [
@@ -49,6 +52,8 @@ _default_css = [
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
      'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+    ('beautify_marker_css',
+     'https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'),  # noqa
     ]
 
 
