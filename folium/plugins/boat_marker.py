@@ -32,11 +32,20 @@ class BoatMarker(Marker):
     wind_speed: int, default 0
         Speed of the wind in knots.
 
+    speed: int, default 0
+        Speed of the boat in kilometers per hour
+
+    animate: boolean, default True
+        Option to animate marker travel
+
+    update_frequency: int, default 500
+        Update frequency for marker location changes
+
     """
 
     def __init__(self, location, popup=None, icon=None,
-                 heading=0, wind_heading=None, wind_speed=0, animate=True,
-                 **kwargs):
+                 heading=0, wind_heading=None, wind_speed=0, speed=0,
+                 animate=True, update_frequency=500, **kwargs):
         super(BoatMarker, self).__init__(
             _validate_location(location),
             popup=popup,
@@ -46,8 +55,10 @@ class BoatMarker(Marker):
         self.heading = heading
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed
+        self.speed = speed  # kilometers per hour
         self.kwargs = json.dumps(kwargs)
         self.animate = 1 if animate else 0
+        self.update_frequency = update_frequency  # milliseconds
 
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -59,14 +70,29 @@ class BoatMarker(Marker):
                 boatMarker.setHeadingWind({{this.heading}},
                     {{this.wind_speed}}, {{this.wind_heading}});
 
-                if (animate === 1) {
+                if (animate === 1 && {{this.speed}} > 0) {
+                    var updatesPerHour = function(s) {
+                        return parseInt(
+                            (60*60*1000)/s
+                        );
+                    }
+                    var updateInterval = updatesPerHour(
+                        {{this.update_frequency}});
+
                     window.setInterval(function() {
                         var destination = turf.destination(
-                            boatMarker.toGeoJSON(), 0.02, 60,"kilometers");
+                            boatMarker.toGeoJSON(),
+                            {{this.speed}} / updateInterval,
+                            {{this.heading}},
+                            "kilometers");
 
                         boatMarker.setLatLng(
                             destination.geometry.coordinates.reverse());
-                    }, 488);
+
+                        if (!{{this._parent.get_name()}}.getBounds().contains({{this.get_name()}}.getLatLng())) {
+                            {{this._parent.get_name()}}.panTo({{this.get_name()}}.getLatLng());
+                        }
+                    }, {{this.update_frequency}});
                 }
             {% endmacro %}
             """)

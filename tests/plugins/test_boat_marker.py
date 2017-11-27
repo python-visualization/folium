@@ -53,14 +53,29 @@ def test_boat_marker():
                 boatMarker.setHeadingWind({{this.heading}},
                     {{this.wind_speed}}, {{this.wind_heading}});
 
-                if (animate === 1) {
+                if (animate === 1 && {{this.speed}} > 0) {
+                    var updatesPerHour = function(s) {
+                        return parseInt(
+                            (60*60*1000)/s
+                        );
+                    }
+                    var updateInterval = updatesPerHour(
+                        {{this.update_frequency}});
+
                     window.setInterval(function() {
                         var destination = turf.destination(
-                            boatMarker.toGeoJSON(), 0.02, 60,"kilometers");
+                            boatMarker.toGeoJSON(),
+                            {{this.speed}} / updateInterval,
+                            {{this.heading}},
+                            "kilometers");
 
                         boatMarker.setLatLng(
                             destination.geometry.coordinates.reverse());
-                    }, 488);
+
+                        if (!{{this._parent.get_name()}}.getBounds().contains({{this.get_name()}}.getLatLng())) {
+                            {{this._parent.get_name()}}.panTo({{this.get_name()}}.getLatLng());
+                        }
+                    }, {{this.update_frequency}});
                 }
             {% endmacro %}
     """)  # noqa
