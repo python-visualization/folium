@@ -148,7 +148,7 @@ class HeatMapWithTime(Layer):
         """)
 
     def render(self, **kwargs):
-        super(TileLayer, self).render()
+        super(HeatMapWithTime, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '

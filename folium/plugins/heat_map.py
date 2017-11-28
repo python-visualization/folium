@@ -79,7 +79,7 @@ class HeatMap(Layer):
         """)
 
     def render(self, **kwargs):
-        super(HeatMap, self).render()
+        super(HeatMap, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
