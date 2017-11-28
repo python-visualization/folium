@@ -7,13 +7,13 @@ import json
 from branca.element import Figure, JavascriptLink
 from branca.utilities import none_max, none_min
 
-from folium.raster_layers import TileLayer
+from folium.map import Layer
 from folium.utilities import _isnan
 
 from jinja2 import Template
 
 
-class HeatMap(TileLayer):
+class HeatMap(Layer):
     """
     Create a Heatmap layer
 
@@ -22,8 +22,8 @@ class HeatMap(TileLayer):
     data : list of points of the form [lat, lng] or [lat, lng, weight]
         The points you want to plot.
         You can also provide a numpy.array of shape (n,2) or (n,3).
-    name : str
-        The name of the layer that will be created.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
     min_opacity  : default 1.
         The minimum opacity the heat will start at.
     max_zoom : default 18
@@ -37,16 +37,22 @@ class HeatMap(TileLayer):
         Amount of blur
     gradient : dict, default None
         Color gradient config. e.g. {0.4: 'blue', 0.65: 'lime', 1: 'red'}
-
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     """
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
-                 max_val=1.0, radius=25, blur=15, gradient=None, overlay=True):
-        super(TileLayer, self).__init__(name=name)
+                 max_val=1.0, radius=25, blur=15, gradient=None,
+                 overlay=True, control=True, show=True):
+        super(HeatMap, self).__init__(name=name, overlay=overlay,
+                                      control=control, show=show)
         if _isnan(data):
             raise ValueError('data cannot contain NaNs, '
                              'got:\n{!r}'.format(data))
         self._name = 'HeatMap'
-        self.tile_name = name if name is not None else self.get_name()
         self.data = [[x for x in line] for line in data]
         self.min_opacity = min_opacity
         self.max_zoom = max_zoom
@@ -55,7 +61,6 @@ class HeatMap(TileLayer):
         self.blur = blur
         self.gradient = (json.dumps(gradient, sort_keys=True) if
                          gradient is not None else 'null')
-        self.overlay = overlay
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -74,7 +79,7 @@ class HeatMap(TileLayer):
         """)
 
     def render(self, **kwargs):
-        super(TileLayer, self).render()
+        super(HeatMap, self).render()
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
