@@ -58,20 +58,20 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
-    hide: bool, default False
-        Whether the layer will be hidden by default, if it is an overlay.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
 
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False, control=True, hide=False,
+                 name=None, overlay=False, control=True, show=True,
                  no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
-                                        control=control, hide=hide)
+                                        control=control, show=show)
         self._name = 'TileLayer'
         self._env = ENV
 
@@ -143,7 +143,9 @@ class WmsTileLayer(Layer):
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
-        Whether the Layer will be included in LayerControls
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     **kwargs : additional keyword arguments
         Passed through to the underlying tileLayer.wms object and can be used
         for setting extra tileLayer.wms parameters or as extra parameters in
@@ -153,8 +155,10 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+    def __init__(self, url, name=None, attr='', overlay=True, control=True,
+                 show=True, **kwargs):
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
+                                           name=name, show=show)
         self.url = url
         # Options.
         options = _parse_wms(**kwargs)
@@ -207,15 +211,24 @@ class ImageOverlay(Layer):
         object.
     pixelated: bool, default True
         Sharp sharp/crips (True) or aliased corners (False).
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     See http://leafletjs.com/reference-1.2.0.html#imageoverlay for more
     options.
 
     """
     def __init__(self, image, bounds, origin='upper', colormap=None,
-                 mercator_project=False, overlay=True, control=True,
-                 pixelated=True, name=None, **kwargs):
-        super(ImageOverlay, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+                 mercator_project=False, pixelated=True,
+                 name=None, overlay=True, control=True, show=True, **kwargs):
+        super(ImageOverlay, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
 
         options = {
             'opacity': kwargs.pop('opacity', 1.),
@@ -291,11 +304,21 @@ class VideoOverlay(Layer):
         [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
     attr: string, default Leaflet's default ('')
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     """
     def __init__(self, video_url, bounds, opacity=1., attr=None,
-                 autoplay=True, loop=True):
-        super(VideoOverlay, self).__init__()
+                 autoplay=True, loop=True,
+                 name=None, overlay=True, control=True, show=True):
+        super(VideoOverlay, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
         self._name = 'VideoOverlay'
 
         self.video_url = video_url

@@ -25,15 +25,24 @@ class FastMarkerCluster(MarkerCluster):
     data: list
         List of list of shape [[], []]. Data points should be of
         the form [[lat, lng]].
-
     callback: string, default None
         A string representation of a valid Javascript function
         that will be passed a lat, lon coordinate pair. See the
         FasterMarkerCluster for an example of a custom callback.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     """
-    def __init__(self, data, callback=None):
-        super(FastMarkerCluster, self).__init__([])
+    def __init__(self, data, callback=None,
+                 name=None, overlay=True, control=True, show=True):
+        super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
+                                                control=control, show=show)
         self._name = 'FastMarkerCluster'
         self._data = _validate_coordinates(data)
 

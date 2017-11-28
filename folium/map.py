@@ -33,15 +33,15 @@ class Layer(MacroElement):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
-    hide: bool, default False
-        Whether the layer will be hidden by default, if it is an overlay.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     """
-    def __init__(self, name=None, overlay=False, control=True, hide=False):
+    def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
         self.control = control
-        self.hide = hide
+        self.show = show
 
 
 class FeatureGroup(Layer):
@@ -61,11 +61,12 @@ class FeatureGroup(Layer):
         LayerControls) or a base layer (ticked with a radio button).
     control: bool, default True
         Whether the layer will be included in LayerControls.
-    hide: bool, default False
-        Whether the layer will be hidden by default, if it is an overlay.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     """
-    def __init__(self, name=None, overlay=True, control=True, hide=False):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name, hide=hide)  # noqa
+    def __init__(self, name=None, overlay=True, control=True, show=True):
+        super(FeatureGroup, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
@@ -138,7 +139,7 @@ class LayerControl(MacroElement):
         self.overlays_hidden = [
             val.get_name() for val in
             self._parent._children.values() if isinstance(val, Layer)
-            and val.overlay and val.control and val.hide]
+            and val.overlay and val.control and not val.show]
         super(LayerControl, self).render()
 
 
