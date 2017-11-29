@@ -106,7 +106,7 @@ class LayerControl(MacroElement):
         self.autoZIndex = str(autoZIndex).lower()
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
-        self.overlays_hidden = []
+        self.overlays_untoggle = []
 
         self._template = Template("""
         {% macro script(this,kwargs) %}
@@ -121,7 +121,7 @@ class LayerControl(MacroElement):
                  collapsed: {{this.collapsed}},
                  autoZIndex: {{this.autoZIndex}}
                 }).addTo({{this._parent.get_name()}});
-            {% for val in this.overlays_hidden %}
+            {% for val in this.overlays_untoggle %}
                 {{ val }}.remove();{% endfor %}
         {% endmacro %}
         """)  # noqa
@@ -136,7 +136,7 @@ class LayerControl(MacroElement):
             [(val.layer_name, val.get_name()) for key, val in
              self._parent._children.items() if isinstance(val, Layer)
              and val.overlay and val.control])
-        self.overlays_hidden = [
+        self.overlays_untoggle = [
             val.get_name() for val in
             self._parent._children.values() if isinstance(val, Layer)
             and val.overlay and val.control and not val.show]
