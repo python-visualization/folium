@@ -40,10 +40,10 @@ class TileLayer(Layer):
 
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
-    min_zoom: int, default 1
-        Minimal zoom for which the layer will be displayed.
+    min_zoom: int, default 0
+        Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
-        Maximal zoom for which the layer will be displayed.
+        Maximum allowed zoom level for this tile layer.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
     API_key: str, default None
@@ -62,7 +62,7 @@ class TileLayer(Layer):
         Subdomains of the tile service.
 
     """
-    def __init__(self, tiles='OpenStreetMap', min_zoom=1, max_zoom=18,
+    def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
                  attr=None, API_key=None, detect_retina=False,
                  name=None, overlay=False,
                  control=True, no_wrap=False, subdomains='abc'):
