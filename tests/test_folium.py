@@ -208,6 +208,7 @@ class TestFolium(object):
              'attr': attr,
              'max_zoom': 20,
              'min_zoom': 0,
+             'max_native_zoom': folium.raster_layers.TileLayer._get_max_native_zoom('openstreetmap'),  # noqa
              'detect_retina': False,
              'no_wrap': False,
              'subdomains': 'abc'

@@ -36,7 +36,7 @@ class TileLayer(Layer):
             - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
-            
+
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
         You must then also provide attribution, use the `attr` keyword.
