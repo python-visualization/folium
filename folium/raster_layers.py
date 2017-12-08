@@ -44,6 +44,10 @@ class TileLayer(Layer):
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
         Maximum allowed zoom level for this tile layer.
+    max_native_zoom: int, default None
+        The highest zoom level at which the tile server can provide tiles.
+        If provided you can zoom in past this level. Else tiles will turn grey.
+        For the listed free tileset providers it will be set automatically.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
     API_key: str, default None
@@ -63,6 +67,7 @@ class TileLayer(Layer):
 
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
+                 max_native_zoom=None,
                  attr=None, API_key=None, detect_retina=False,
                  name=None, overlay=False,
                  control=True, no_wrap=False, subdomains='abc'):
@@ -72,16 +77,6 @@ class TileLayer(Layer):
                                         control=control)
         self._name = 'TileLayer'
         self._env = ENV
-
-        options = {
-            'minZoom': min_zoom,
-            'maxZoom': max_zoom,
-            'noWrap': no_wrap,
-            'attribution': attr,
-            'subdomains': subdomains,
-            'detectRetina': detect_retina,
-        }
-        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self.tiles = ''.join(tiles.lower().strip().split())
         if self.tiles in ('cloudmade', 'mapbox') and not API_key:
@@ -103,6 +98,13 @@ class TileLayer(Layer):
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
+
+        options = {'minZoom': min_zoom, 'maxZoom': max_zoom, 'noWrap': no_wrap,
+                   'attribution': attr, 'subdomains': subdomains,
+                   'detectRetina': detect_retina}
+        if max_native_zoom:
+            options['maxNativeZoom'] = max_native_zoom
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
