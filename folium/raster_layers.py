@@ -47,7 +47,6 @@ class TileLayer(Layer):
     max_native_zoom: int, default None
         The highest zoom level at which the tile server can provide tiles.
         If provided you can zoom in past this level. Else tiles will turn grey.
-        For the listed free tileset providers it will be set automatically.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
     API_key: str, default None
@@ -78,6 +77,13 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
+        options = {'minZoom': min_zoom, 'maxZoom': max_zoom, 'noWrap': no_wrap,
+                   'attribution': attr, 'subdomains': subdomains,
+                   'detectRetina': detect_retina}
+        if max_native_zoom:
+            options['maxNativeZoom'] = max_native_zoom
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
         tiles_flat = ''.join(tiles.lower().strip().split())
         if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
@@ -90,8 +96,6 @@ class TileLayer(Layer):
         if tile_template in templates and attr_template in templates:
             self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
             self.attr = self._env.get_template(attr_template).render()
-            if not max_native_zoom and not API_key:
-                max_native_zoom = self._get_max_native_zoom(tiles_flat)
         else:
             self.tiles = tiles
             if not attr:
@@ -99,13 +103,6 @@ class TileLayer(Layer):
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
-
-        options = {'minZoom': min_zoom, 'maxZoom': max_zoom, 'noWrap': no_wrap,
-                   'attribution': attr, 'subdomains': subdomains,
-                   'detectRetina': detect_retina}
-        if max_native_zoom:
-            options['maxNativeZoom'] = max_native_zoom
-        self.options = json.dumps(options, sort_keys=True, indent=2)
 
         self._template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -115,16 +112,6 @@ class TileLayer(Layer):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
-
-    @staticmethod
-    def _get_max_native_zoom(tiles_flat):
-        """Return the maximum available zoom level for the given tileset."""
-        native_zoom_vals = {'openstreetmap': 19, 'mapboxbright': 11,
-                            'mapboxcontrolroom': 8, 'stamenterrain': 18,
-                            'stamentoner': 18, 'stamenwatercolor': 18,
-                            'cartodbpositron': 30, 'cartodbdark_matter': 30}
-        if tiles_flat in native_zoom_vals:
-            return native_zoom_vals[tiles_flat]
 
 
 class WmsTileLayer(Layer):

@@ -7,7 +7,6 @@ Test raster_layers
 """
 
 from __future__ import (absolute_import, division, print_function)
-import requests
 
 import folium
 
@@ -35,38 +34,6 @@ def test_tile_layer():
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
-
-
-def test_verify_maximum_native_zoom_levels():
-    """Verify that the max available zoom levels in the code are correct."""
-    _env = folium.raster_layers.ENV
-    tile_layer = folium.raster_layers.TileLayer()
-    tilesets = ['openstreetmap', 'mapboxcontrolroom', 'mapboxbright',
-                'stamenterrain', 'stamentoner', 'stamenwatercolor',
-                'cartodbpositron', 'cartodbdark_matter']
-    for name in tilesets:
-        if name.startswith('stamen'):
-            continue  # stamen is weird, gives HTTP 503, infite zoom.
-        zoom_in_code = tile_layer._get_max_native_zoom(name)
-        template = 'tiles/' + name + '/tiles.txt'
-        tiles = _env.get_template(template).render()
-        session = requests.session()
-        if _is_working_zoom_level(zoom_in_code, tiles, session):
-            step = 1
-            test_range = range(zoom_in_code + 1, 40)
-        else:
-            step = -1
-            test_range = range(zoom_in_code - 1, 1, step)
-        for zoom in test_range:
-            if not _is_working_zoom_level(zoom, tiles, session):
-                zoom_in_test = zoom - step
-                break
-        else:
-            raise RuntimeError('Did not get any respons for tileset {}.'.format(name))  # noqa
-        if zoom_in_test != zoom_in_code:
-            txt = ('max_native_zoom of tileset {} is {} in the code, but the'
-                   ' test indicates it should be {}.')
-            raise ValueError(txt.format(name, zoom_in_code, zoom_in_test))
 
 
 def _is_working_zoom_level(zoom, tiles, session):
