@@ -31,15 +31,15 @@ class TileLayer(Layer):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "Mapbox Bright" (Limited levels of zoom for free tiles)
-            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-            - "Stamen" (Terrain, Toner, and Watercolor)
+            - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
+            - "CartoDB positron", "CartoDB dark_matter"
+            - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
-            - "CartoDB" (positron and dark_matter)
-
+            
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
+        You must then also provide attribution, use the `attr` keyword.
     min_zoom: int, default 0
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
@@ -78,23 +78,24 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
-        self.tiles = ''.join(tiles.lower().strip().split())
-        if self.tiles in ('cloudmade', 'mapbox') and not API_key:
+        tiles_flat = ''.join(tiles.lower().strip().split())
+        if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
                              ' or non-default Mapbox tiles.')
         templates = list(self._env.list_templates(
             filter_func=lambda x: x.startswith('tiles/')))
-        tile_template = 'tiles/'+self.tiles+'/tiles.txt'
-        attr_template = 'tiles/'+self.tiles+'/attr.txt'
+        tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
+        attr_template = 'tiles/' + tiles_flat + '/attr.txt'
 
         if tile_template in templates and attr_template in templates:
             self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
             self.attr = self._env.get_template(attr_template).render()
+            if not max_native_zoom and not API_key:
+                max_native_zoom = self._get_max_native_zoom(tiles_flat)
         else:
             self.tiles = tiles
             if not attr:
-                raise ValueError('Custom tiles must'
-                                 ' also be passed an attribution.')
+                raise ValueError('Custom tiles must have an attribution.')
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
@@ -113,7 +114,17 @@ class TileLayer(Layer):
                 {{ this.options }}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)  # noqa
+        """)
+
+    @staticmethod
+    def _get_max_native_zoom(tiles_flat):
+        """Return the maximum available zoom level for the given tileset."""
+        native_zoom_vals = {'openstreetmap': 19, 'mapboxbright': 11,
+                            'mapboxcontrolroom': 8, 'stamenterrain': 18,
+                            'stamentoner': 18, 'stamenwatercolor': 18,
+                            'cartodbpositron': 30, 'cartodbdark_matter': 30}
+        if tiles_flat in native_zoom_vals:
+            return native_zoom_vals[tiles_flat]
 
 
 class WmsTileLayer(Layer):
