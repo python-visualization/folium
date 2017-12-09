@@ -15,10 +15,9 @@ folium
 Python Data, Leaflet.js Maps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-`folium` builds on the data wrangling strengths of the Python ecosystem
-and the mapping strengths of the Leaflet.js library.
-Manipulate your data in Python,
-then visualize it in on a Leaflet map via `folium`.
+`folium` builds on the data wrangling strengths of the Python ecosystem and the
+mapping strengths of the Leaflet.js library. Manipulate your data in Python, 
+then visualize it in a Leaflet map via `folium`.
 
 Installation
 ------------
@@ -38,10 +37,18 @@ Documentation
 
 http://python-visualization.github.io/folium/docs-master/
 
+Note that the documentation on Read the Docs is for the deprecated version
+0.2.0.
 
 Gallery
 -------
 
-http://python-visualization.github.io/folium/docs-master/
+There are two galleries of Jupyter notebooks with examples, which you can see
+using Jupyter's nbviewer:
+
+http://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/examples/
+
+https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
+
 
 .. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
