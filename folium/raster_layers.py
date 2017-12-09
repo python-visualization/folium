@@ -66,9 +66,8 @@ class TileLayer(Layer):
 
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
-                 max_native_zoom=None,
-                 attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False,
+                 max_native_zoom=None, attr=None, API_key=None,
+                 detect_retina=False, name=None, overlay=False,
                  control=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
