@@ -260,8 +260,10 @@ class Popup(Element):
         True if the popup is a template that needs to the rendered first.
     max_width: int, default 300
         The maximal width of the popup.
+    show: bool, default False
+        True renders the popup open on page load
     """
-    def __init__(self, html=None, parse_html=False, max_width=300, default_open=False):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -280,11 +282,11 @@ class Popup(Element):
             self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
-        self.default_open = default_open
+        self.show = show
 
         self._template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
-            {% if this.default_open %}, autoClose: false, closeOnClick: false{% endif %}});
+            {% if this.show %}, autoClose: false, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
@@ -292,7 +294,7 @@ class Popup(Element):
             {% endfor %}
 
             {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
-            {% if this.default_open %}.openPopup(){% endif %};
+            {% if this.show %}.openPopup(){% endif %};
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
