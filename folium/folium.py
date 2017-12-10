@@ -497,11 +497,16 @@ class Map(MacroElement):
         ...              highlight=True)
 
         """
-        if threshold_scale and len(threshold_scale) > 6:
-            raise ValueError
+        if threshold_scale is not None and len(threshold_scale) > 6:
+            raise ValueError('The length of threshold_scale is {}, but it may '
+                             'not be longer than 6.'.format(len(threshold_scale)))  # noqa
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
+        if key_on is not None and type(key_on) is not str:
+            raise ValueError('key_on should be a string, indicating the path to'
+                             ' the data key in geo_data. For example: '
+                             '\'features.properties.statename\'.')
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
@@ -516,7 +521,7 @@ class Map(MacroElement):
             color_data = None
 
         # Compute color_domain
-        if threshold_scale:
+        if threshold_scale is not None:
             color_domain = list(threshold_scale)
         elif color_data:
             # To avoid explicit pandas dependency ; changed default behavior.
@@ -535,7 +540,7 @@ class Map(MacroElement):
         else:
             color_domain = None
 
-        if color_domain and key_on:
+        if color_domain and key_on is not None:
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
             color_range = color_brewer(fill_color, n=len(color_domain))
 
