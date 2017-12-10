@@ -289,7 +289,7 @@ class Popup(Element):
 
         self._template = Template(u"""
             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
-            {% if this.show or this.sticky %}, autoClose: false{% endif %}} 
+            {% if this.show or this.sticky %}, autoClose: false{% endif %}
             {% if this.sticky %}, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
