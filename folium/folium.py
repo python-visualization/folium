@@ -433,14 +433,15 @@ class Map(MacroElement):
         Parameters
         ----------
         geo_data: string/object
-            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
+            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+            geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
             If the data is a Pandas DataFrame, the columns of data to be bound.
             Must pass column 1 as the key, and column 2 the values.
         key_on: string, default None
-            Variable in the GeoJSON file to bind the data to. Must always
+            Variable in the `geo_data` GeoJSON file to bind the data to. Must
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
         threshold_scale: list, default None
@@ -503,10 +504,6 @@ class Map(MacroElement):
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
-        if key_on is not None and type(key_on) is not str:
-            raise ValueError('key_on should be a string, indicating the path to'
-                             ' the data key in geo_data. For example: '
-                             '\'features.properties.statename\'.')
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
