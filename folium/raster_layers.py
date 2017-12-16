@@ -76,11 +76,13 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
-        options = {'minZoom': min_zoom, 'maxZoom': max_zoom, 'noWrap': no_wrap,
-                   'attribution': attr, 'subdomains': subdomains,
+        options = {'minZoom': min_zoom,
+                   'maxZoom': max_zoom,
+                   'maxNativeZoom': max_native_zoom or max_zoom,
+                   'noWrap': no_wrap,
+                   'attribution': attr,
+                   'subdomains': subdomains,
                    'detectRetina': detect_retina}
-        if max_native_zoom:
-            options['maxNativeZoom'] = max_native_zoom
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
         tiles_flat = ''.join(tiles.lower().strip().split())
