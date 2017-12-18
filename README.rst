@@ -35,6 +35,9 @@ or
 Documentation
 -------------
 
+http://python-visualization.github.io/folium/docs-v0.5.0/
+
+The documentation for the development version can be found here:
 http://python-visualization.github.io/folium/docs-master/
 
 Note that the documentation on Read the Docs is for the deprecated version
