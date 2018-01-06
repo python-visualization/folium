@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Test ImageOverlay
+Test raster_layers
 -----------------
 
 """
@@ -34,6 +34,15 @@ def test_tile_layer():
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
+
+
+def _is_working_zoom_level(zoom, tiles, session):
+    """Check if the zoom level works for the given tileset."""
+    url = tiles.format(s='a', x=0, y=0, z=zoom)
+    response = session.get(url, timeout=5)
+    if response.status_code < 400:
+        return True
+    return False
 
 
 def test_custom_tile_subdomains():

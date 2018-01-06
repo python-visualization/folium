@@ -213,7 +213,8 @@ class Marker(MacroElement):
     location: tuple or list, default None
         Latitude and Longitude of Marker (Northing, Easting)
     popup: string or folium.Popup, default None
-        Input text or visualization for object.
+        Label for the Marker; either an escaped HTML string to initialize
+        folium.Popup or a folium.Popup instance.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -225,7 +226,9 @@ class Marker(MacroElement):
     --------
     >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
-
+    # If the popup label has characters that need to be escaped in HTML
+    >>> Marker(location=[45.5, -122.3],
+               popoup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     def __init__(self, location, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()

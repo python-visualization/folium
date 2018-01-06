@@ -207,7 +207,7 @@ class TestFolium(object):
              'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
              'attr': attr,
              'max_zoom': 20,
-             'min_zoom': 1,
+             'min_zoom': 0,
              'detect_retina': False,
              'no_wrap': False,
              'subdomains': 'abc'

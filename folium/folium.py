@@ -101,8 +101,13 @@ class Map(MacroElement):
         pass a custom URL or pass `None` to create a map without tiles.
     API_key: str, default None
         API key for Cloudmade or Mapbox tiles.
+    min_zoom: int, default 0
+        Minimum allowed zoom level for the tile layer that is created.
     max_zoom: int, default 18
-        Maximum zoom depth for the map.
+        Maximum allowed zoom level for the tile layer that is created.
+    max_native_zoom: int, default None
+        The highest zoom level at which the tile server can provide tiles.
+        If provided you can zoom in past this level. Else tiles will turn grey.
     zoom_start: int, default 10
         Initial zoom level for the map.
     attr: string, default None
@@ -163,8 +168,8 @@ class Map(MacroElement):
 
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=1,
-                 zoom_start=10, world_copy_jump=False,
+                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=0,
+                 max_native_zoom=None, zoom_start=10, world_copy_jump=False,
                  no_wrap=False, attr=None, min_lat=-90, max_lat=90,
                  min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
@@ -178,9 +183,9 @@ class Map(MacroElement):
         self.png_enabled = png_enabled
 
         if not location:
-            # If location is not passed we center and ignore zoom.
+            # If location is not passed we center and zoom out.
             self.location = [0, 0]
-            self.zoom_start = min_zoom
+            self.zoom_start = 1
         else:
             self.location = _validate_location(location)
             self.zoom_start = zoom_start
@@ -214,7 +219,7 @@ class Map(MacroElement):
         if tiles:
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                no_wrap=no_wrap, attr=attr,
+                max_native_zoom=max_native_zoom, no_wrap=no_wrap, attr=attr,
                 API_key=API_key, detect_retina=detect_retina,
                 subdomains=subdomains
             )
@@ -309,8 +314,8 @@ class Map(MacroElement):
         return self._to_png()
 
     def add_tile_layer(self, tiles='OpenStreetMap', name=None,
-                       API_key=None, max_zoom=18, min_zoom=1,
-                       attr=None, active=False,
+                       API_key=None, max_zoom=18, min_zoom=0,
+                       max_native_zoom=None, attr=None, active=False,
                        detect_retina=False, no_wrap=False, subdomains='abc',
                        **kwargs):
         """
@@ -319,6 +324,7 @@ class Map(MacroElement):
         """
         tile_layer = TileLayer(tiles=tiles, name=name,
                                min_zoom=min_zoom, max_zoom=max_zoom,
+                               max_native_zoom=max_native_zoom,
                                attr=attr, API_key=API_key,
                                detect_retina=detect_retina,
                                subdomains=subdomains,
