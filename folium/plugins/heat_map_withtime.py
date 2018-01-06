@@ -48,52 +48,7 @@ class HeatMapWithTime(TileLayer):
         Position string for the time slider. Format: 'bottom/top'+'left/right'.
 
     """
-    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0, max_opacity=0.6,
-                 scale_radius=False, use_local_extrema=False, auto_play=False, display_index=True,
-                 index_steps=1, min_speed=0.1, max_speed=10, speed_step=0.1, position='bottomleft'
-                 ):
-        super(TileLayer, self).__init__(name=name)
-        self._name = 'HeatMap'
-        self._control_name = self.get_name() + 'Control'
-        self.tile_name = name if name is not None else self.get_name()
-
-        # Input data.
-        self.data = data
-        self.index = index if index is not None else [str(i) for i in range(1, len(data)+1)]
-        if len(self.data) != len(self.index):
-            raise ValueError('Input data and index are not of compatible lengths.')
-        self.times = list(range(1, len(data)+1))
-
-        # Heatmap settings.
-        self.radius = radius
-        self.min_opacity = min_opacity
-        self.max_opacity = max_opacity
-        self.scale_radius = 'true' if scale_radius else 'false'
-        self.use_local_extrema = 'true' if use_local_extrema else 'false'
-
-        # Time dimension settings.
-        self.auto_play = 'true' if auto_play else 'false'
-        self.display_index = 'true' if display_index else 'false'
-        self.min_speed = min_speed
-        self.max_speed = max_speed
-        self.position = position
-        self.speed_step = speed_step
-        self.index_steps = index_steps
-
-        # Hard coded defaults for simplicity.
-        self.backward_button = 'true'
-        self.forward_button = 'true'
-        self.limit_sliders = 'true'
-        self.limit_minimum_range = 5
-        self.loop_button = 'true'
-        self.speed_slider = 'true'
-        self.time_slider = 'true'
-        self.play_button = 'true'
-        self.play_reverse_button = 'true'
-        self.time_slider_drap_update = 'false'
-        self.style_NS = 'leaflet-control-timecontrol'
-
-        self._template = Template(u"""
+    _template = Template(u"""
         {% macro script(this, kwargs) %}
 
             var times = {{this.times}};
@@ -138,6 +93,51 @@ class HeatMapWithTime(TileLayer):
 
         {% endmacro %}
         """)
+
+    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0, max_opacity=0.6,
+                 scale_radius=False, use_local_extrema=False, auto_play=False, display_index=True,
+                 index_steps=1, min_speed=0.1, max_speed=10, speed_step=0.1, position='bottomleft'
+                 ):
+        super(TileLayer, self).__init__(name=name)
+        self._name = 'HeatMap'
+        self._control_name = self.get_name() + 'Control'
+        self.tile_name = name if name is not None else self.get_name()
+
+        # Input data.
+        self.data = data
+        self.index = index if index is not None else [str(i) for i in range(1, len(data)+1)]
+        if len(self.data) != len(self.index):
+            raise ValueError('Input data and index are not of compatible lengths.')
+        self.times = list(range(1, len(data)+1))
+
+        # Heatmap settings.
+        self.radius = radius
+        self.min_opacity = min_opacity
+        self.max_opacity = max_opacity
+        self.scale_radius = 'true' if scale_radius else 'false'
+        self.use_local_extrema = 'true' if use_local_extrema else 'false'
+
+        # Time dimension settings.
+        self.auto_play = 'true' if auto_play else 'false'
+        self.display_index = 'true' if display_index else 'false'
+        self.min_speed = min_speed
+        self.max_speed = max_speed
+        self.position = position
+        self.speed_step = speed_step
+        self.index_steps = index_steps
+
+        # Hard coded defaults for simplicity.
+        self.backward_button = 'true'
+        self.forward_button = 'true'
+        self.limit_sliders = 'true'
+        self.limit_minimum_range = 5
+        self.loop_button = 'true'
+        self.speed_slider = 'true'
+        self.time_slider = 'true'
+        self.play_button = 'true'
+        self.play_reverse_button = 'true'
+        self.time_slider_drap_update = 'false'
+        self.style_NS = 'leaflet-control-timecontrol'
 
     def render(self, **kwargs):
         super(TileLayer, self).render()

@@ -39,6 +39,22 @@ class HeatMap(TileLayer):
         Color gradient config. e.g. {0.4: 'blue', 0.65: 'lime', 1: 'red'}
 
     """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.heatLayer(
+                {{this.data}},
+                {
+                    minOpacity: {{this.min_opacity}},
+                    maxZoom: {{this.max_zoom}},
+                    max: {{this.max_val}},
+                    radius: {{this.radius}},
+                    blur: {{this.blur}},
+                    gradient: {{this.gradient}}
+                    })
+                .addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
                  max_val=1.0, radius=25, blur=15, gradient=None, overlay=True):
         super(TileLayer, self).__init__(name=name)
@@ -56,22 +72,6 @@ class HeatMap(TileLayer):
         self.gradient = (json.dumps(gradient, sort_keys=True) if
                          gradient is not None else 'null')
         self.overlay = overlay
-
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.heatLayer(
-                {{this.data}},
-                {
-                    minOpacity: {{this.min_opacity}},
-                    maxZoom: {{this.max_zoom}},
-                    max: {{this.max_val}},
-                    radius: {{this.radius}},
-                    blur: {{this.blur}},
-                    gradient: {{this.gradient}}
-                    })
-                .addTo({{this._parent.get_name()}});
-        {% endmacro %}
-        """)
 
     def render(self, **kwargs):
         super(TileLayer, self).render()

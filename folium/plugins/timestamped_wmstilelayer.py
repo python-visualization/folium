@@ -65,23 +65,7 @@ class TimestampedWmsTileLayers(Layer):
     See https://github.com/socib/Leaflet.TimeDimension for more information.
 
     """
-    def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period='P1D', time_interval=False):
-        super(TimestampedWmsTileLayers, self).__init__(overlay=True,
-                                                       control=False,
-                                                       name='timestampedwms')
-        self._name = 'TimestampedWmsTileLayers'
-
-        self.transition_time = int(transition_time)
-        self.loop = bool(loop)
-        self.auto_play = bool(auto_play)
-        self.period = period
-        self.time_interval = time_interval
-        if isinstance(data, WmsTileLayer):
-            self.layers = [data]
-        else:
-            self.layers = data  # Assume iterable
-        self._template = Template("""
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({
                 period:"{{this.period}}",
@@ -107,6 +91,23 @@ class TimestampedWmsTileLayers(Layer):
             {% endfor %}
         {% endmacro %}
         """)
+
+    def __init__(self, data, transition_time=200, loop=False, auto_play=False,
+                 period='P1D', time_interval=False):
+        super(TimestampedWmsTileLayers, self).__init__(overlay=True,
+                                                       control=False,
+                                                       name='timestampedwms')
+        self._name = 'TimestampedWmsTileLayers'
+
+        self.transition_time = int(transition_time)
+        self.loop = bool(loop)
+        self.auto_play = bool(auto_play)
+        self.period = period
+        self.time_interval = time_interval
+        if isinstance(data, WmsTileLayer):
+            self.layers = [data]
+        else:
+            self.layers = data  # Assume iterable
 
     def render(self, **kwargs):
         super(TimestampedWmsTileLayers, self).render()

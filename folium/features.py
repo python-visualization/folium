@@ -57,24 +57,7 @@ class RegularPolygonMarker(Marker):
     https://humangeo.github.io/leaflet-dvf/
 
     """
-    def __init__(self, location, color='black', opacity=1, weight=2,
-                 fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15, popup=None):
-        super(RegularPolygonMarker, self).__init__(
-            _locations_tolist(location),
-            popup=popup
-        )
-        self._name = 'RegularPolygonMarker'
-        self.color = color
-        self.opacity = opacity
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-        self.number_of_sides = number_of_sides
-        self.rotation = rotation
-        self.radius = radius
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = new L.RegularPolygonMarker(
                 new L.LatLng({{this.location[0]}},{{this.location[1]}}),
@@ -93,6 +76,23 @@ class RegularPolygonMarker(Marker):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, location, color='black', opacity=1, weight=2,
+                 fill_color='blue', fill_opacity=1,
+                 number_of_sides=4, rotation=0, radius=15, popup=None):
+        super(RegularPolygonMarker, self).__init__(
+            _locations_tolist(location),
+            popup=popup
+        )
+        self._name = 'RegularPolygonMarker'
+        self.color = color
+        self.opacity = opacity
+        self.weight = weight
+        self.fill_color = fill_color
+        self.fill_opacity = fill_opacity
+        self.number_of_sides = number_of_sides
+        self.rotation = rotation
+        self.radius = radius
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -136,6 +136,8 @@ class Vega(Element):
         Ex: 'relative', 'absolute'
 
     """
+    _template = Template(u'')
+
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
         super(Vega, self).__init__()
@@ -152,7 +154,6 @@ class Vega(Element):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
-        self._template = Template(u'')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -227,6 +228,8 @@ class VegaLite(Element):
         Ex: 'relative', 'absolute'
 
     """
+    _template = Template(u'')
+
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
         super(VegaLite, self).__init__()
@@ -243,7 +246,6 @@ class VegaLite(Element):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
-        self._template = Template(u'')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -340,6 +342,46 @@ class GeoJson(Layer):
     >>> GeoJson(geojson, style_function=style_function)
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            {% if this.highlight %}
+                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) {
+                            e.target.setStyle(e.target.feature.properties.style);},
+                        mouseover: function(e) {
+                            e.target.setStyle(e.target.feature.properties.highlight);},
+                        click: function(e) {
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                        });
+                };
+            {% endif %}
+
+                var {{this.get_name()}} = L.geoJson(
+                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
+                    {% if this.smooth_factor is not none or this.highlight %}
+                        , {
+                        {% if this.smooth_factor is not none  %}
+                            smoothFactor:{{this.smooth_factor}}
+                        {% endif %}
+
+                        {% if this.highlight %}
+                            {% if this.smooth_factor is not none  %}
+                            ,
+                            {% endif %}
+                            onEachFeature: {{this.get_name()}}_onEachFeature
+                        {% endif %}
+                        }
+                    {% endif %}
+                    )
+                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    .addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+
+            {% endmacro %}
+            """)  # noqa
+
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, smooth_factor=None,
                  highlight_function=None, tooltip=None):
@@ -380,46 +422,6 @@ class GeoJson(Layer):
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                            e.target.setStyle(e.target.feature.properties.style);},
-                        mouseover: function(e) {
-                            e.target.setStyle(e.target.feature.properties.highlight);},
-                        click: function(e) {
-                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                        });
-                };
-            {% endif %}
-
-                var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
-                        , {
-                        {% if this.smooth_factor is not none  %}
-                            smoothFactor:{{this.smooth_factor}}
-                        {% endif %}
-
-                        {% if this.highlight %}
-                            {% if this.smooth_factor is not none  %}
-                            ,
-                            {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
-                        {% endif %}
-                        }
-                    {% endif %}
-                    )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
-                    .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
 
     def style_data(self):
         """
@@ -495,6 +497,23 @@ class TopoJson(Layer):
     >>> TopoJson(topo_json, 'object.myobject', style_function=style_function)
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}}_data = {{this.style_data()}};
+                var {{this.get_name()}} = L.geoJson(topojson.feature(
+                    {{this.get_name()}}_data,
+                    {{this.get_name()}}_data.{{this.object_path}})
+                        {% if this.smooth_factor is not none %}
+                            , {smoothFactor: {{this.smooth_factor}}}
+                        {% endif %}
+                        )
+                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                        .addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+
+            {% endmacro %}
+            """)  # noqa
+
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, smooth_factor=None,
                  tooltip=None):
@@ -520,23 +539,6 @@ class TopoJson(Layer):
         self.style_function = style_function
 
         self.smooth_factor = smooth_factor
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}}_data = {{this.style_data()}};
-                var {{this.get_name()}} = L.geoJson(topojson.feature(
-                    {{this.get_name()}}_data,
-                    {{this.get_name()}}_data.{{this.object_path}})
-                        {% if this.smooth_factor is not none %}
-                            , {smoothFactor: {{this.smooth_factor}}}
-                        {% endif %}
-                        )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
-                        .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
 
     def style_data(self):
         """
@@ -627,17 +629,7 @@ class DivIcon(MacroElement):
     http://leafletjs.com/reference-1.2.0.html#divicon
 
     """
-    def __init__(self, html=None, icon_size=None, icon_anchor=None,
-                 popup_anchor=None, class_name='empty'):
-        super(DivIcon, self).__init__()
-        self._name = 'DivIcon'
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-        self.popup_anchor = popup_anchor
-        self.html = html
-        self.className = class_name
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
                 var {{this.get_name()}} = L.divIcon({
@@ -651,6 +643,16 @@ class DivIcon(MacroElement):
             {% endmacro %}
             """)  # noqa
 
+    def __init__(self, html=None, icon_size=None, icon_anchor=None,
+                 popup_anchor=None, class_name='empty'):
+        super(DivIcon, self).__init__()
+        self._name = 'DivIcon'
+        self.icon_size = icon_size
+        self.icon_anchor = icon_anchor
+        self.popup_anchor = popup_anchor
+        self.html = html
+        self.className = class_name
+
 
 class LatLngPopup(MacroElement):
     """
@@ -658,11 +660,7 @@ class LatLngPopup(MacroElement):
     a popup is shown that displays the latitude and longitude of the pointer.
 
     """
-    def __init__(self):
-        super(LatLngPopup, self).__init__()
-        self._name = 'LatLngPopup'
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.popup();
                 function latLngPop(e) {
@@ -675,6 +673,10 @@ class LatLngPopup(MacroElement):
                 {{this._parent.get_name()}}.on('click', latLngPop);
             {% endmacro %}
             """)  # noqa
+
+    def __init__(self):
+        super(LatLngPopup, self).__init__()
+        self._name = 'LatLngPopup'
 
 
 class ClickForMarker(MacroElement):
@@ -689,16 +691,7 @@ class ClickForMarker(MacroElement):
         If None, the popups will display the marker's latitude and longitude.
 
     """
-    def __init__(self, popup=None):
-        super(ClickForMarker, self).__init__()
-        self._name = 'ClickForMarker'
-
-        if popup:
-            self.popup = ''.join(['"', popup, '"'])
-        else:
-            self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
                 function newMarker(e){
                     var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
@@ -711,6 +704,15 @@ class ClickForMarker(MacroElement):
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
             """)  # noqa
+
+    def __init__(self, popup=None):
+        super(ClickForMarker, self).__init__()
+        self._name = 'ClickForMarker'
+
+        if popup:
+            self.popup = ''.join(['"', popup, '"'])
+        else:
+            self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
 
 
 class CustomIcon(Icon):
@@ -746,22 +748,7 @@ class CustomIcon(Icon):
         relative to the icon anchor.
 
     """
-    def __init__(self, icon_image, icon_size=None, icon_anchor=None,
-                 shadow_image=None, shadow_size=None, shadow_anchor=None,
-                 popup_anchor=None):
-        super(Icon, self).__init__()
-        self._name = 'CustomIcon'
-        self.icon_url = image_to_url(icon_image)
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-
-        self.shadow_url = (image_to_url(shadow_image)
-                           if shadow_image is not None else None)
-        self.shadow_size = shadow_size
-        self.shadow_anchor = shadow_anchor
-        self.popup_anchor = popup_anchor
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
                 var {{this.get_name()}} = L.icon({
@@ -778,6 +765,21 @@ class CustomIcon(Icon):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)  # noqa
+
+    def __init__(self, icon_image, icon_size=None, icon_anchor=None,
+                 shadow_image=None, shadow_size=None, shadow_anchor=None,
+                 popup_anchor=None):
+        super(Icon, self).__init__()
+        self._name = 'CustomIcon'
+        self.icon_url = image_to_url(icon_image)
+        self.icon_size = icon_size
+        self.icon_anchor = icon_anchor
+
+        self.shadow_url = (image_to_url(shadow_image)
+                           if shadow_image is not None else None)
+        self.shadow_size = shadow_size
+        self.shadow_anchor = shadow_anchor
+        self.popup_anchor = popup_anchor
 
 
 class ColorLine(FeatureGroup):

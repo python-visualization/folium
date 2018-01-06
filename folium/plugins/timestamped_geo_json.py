@@ -63,41 +63,7 @@ class TimestampedGeoJson(MacroElement):
     See https://github.com/socib/Leaflet.TimeDimension for more information.
 
     """
-    def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
-                 period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
-                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
-        super(TimestampedGeoJson, self).__init__()
-        self._name = 'TimestampedGeoJson'
-
-        if 'read' in dir(data):
-            self.embed = True
-            self.data = data.read()
-        elif type(data) is dict:
-            self.embed = True
-            self.data = json.dumps(data)
-        else:
-            self.embed = False
-            self.data = data
-        self.add_last_point = bool(add_last_point)
-        self.period = period
-        self.date_options = date_options
-
-        options = {
-            'position': 'bottomleft',
-            'minSpeed': min_speed,
-            'maxSpeed': max_speed,
-            'autoPlay': auto_play,
-            'loopButton': loop_button,
-            'timeSliderDragUpdate': time_slider_drag_update,
-            'playerOptions': {
-                'transitionTime': int(transition_time),
-                'loop': loop,
-                'startOver': True
-            }
-        }
-        self.options = json.dumps(options, sort_keys=True, indent=2)
-
-        self._template = Template("""
+    _template = Template("""
         {% macro script(this, kwargs) %}
             L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
                 _getDisplayDateFormat: function(date){
@@ -148,6 +114,40 @@ class TimestampedGeoJson(MacroElement):
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
+
+    def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
+                 period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
+                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
+        super(TimestampedGeoJson, self).__init__()
+        self._name = 'TimestampedGeoJson'
+
+        if 'read' in dir(data):
+            self.embed = True
+            self.data = data.read()
+        elif type(data) is dict:
+            self.embed = True
+            self.data = json.dumps(data)
+        else:
+            self.embed = False
+            self.data = data
+        self.add_last_point = bool(add_last_point)
+        self.period = period
+        self.date_options = date_options
+
+        options = {
+            'position': 'bottomleft',
+            'minSpeed': min_speed,
+            'maxSpeed': max_speed,
+            'autoPlay': auto_play,
+            'loopButton': loop_button,
+            'timeSliderDragUpdate': time_slider_drag_update,
+            'playerOptions': {
+                'transitionTime': int(transition_time),
+                'loop': loop,
+                'startOver': True
+            }
+        }
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
         super(TimestampedGeoJson, self).render()

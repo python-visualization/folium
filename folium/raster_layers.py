@@ -65,6 +65,15 @@ class TileLayer(Layer):
         Subdomains of the tile service.
 
     """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.tileLayer(
+                '{{this.tiles}}',
+                {{ this.options }}
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
                  max_native_zoom=None, attr=None, API_key=None,
                  detect_retina=False, name=None, overlay=False,
@@ -105,15 +114,6 @@ class TileLayer(Layer):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
 
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.tileLayer(
-                '{{this.tiles}}',
-                {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
-        {% endmacro %}
-        """)
-
 
 class WmsTileLayer(Layer):
     """
@@ -152,16 +152,7 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
-        self.url = url
-        # Options.
-        options = _parse_wms(**kwargs)
-        options.update({'attribution': attr})
-
-        self.options = json.dumps(options, sort_keys=True, indent=2)
-
-        self._template = Template(u"""
+    _template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.tileLayer.wms(
                 '{{ this.url }}',
@@ -170,6 +161,15 @@ class WmsTileLayer(Layer):
 
         {% endmacro %}
         """)  # noqa
+
+    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+        self.url = url
+        # Options.
+        options = _parse_wms(**kwargs)
+        options.update({'attribution': attr})
+
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
 
 class ImageOverlay(Layer):
@@ -211,6 +211,16 @@ class ImageOverlay(Layer):
     options.
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.imageOverlay(
+                    '{{ this.url }}',
+                    {{ this.bounds }},
+                    {{ this.options }}
+                    ).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
     def __init__(self, image, bounds, origin='upper', colormap=None,
                  mercator_project=False, overlay=True, control=True,
                  pixelated=True, name=None, **kwargs):
@@ -239,15 +249,6 @@ class ImageOverlay(Layer):
 
         self.bounds = json.loads(json.dumps(bounds))
         self.options = json.dumps(options, sort_keys=True, indent=2)
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
 
     def render(self, **kwargs):
         super(ImageOverlay, self).render()
@@ -292,6 +293,16 @@ class VideoOverlay(Layer):
     attr: string, default Leaflet's default ('')
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.videoOverlay(
+                    '{{ this.video_url }}',
+                    {{ this.bounds }},
+                    {{ this.options }}
+                    ).addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
     def __init__(self, video_url, bounds, opacity=1., attr=None,
                  autoplay=True, loop=True):
         super(VideoOverlay, self).__init__()
@@ -307,16 +318,6 @@ class VideoOverlay(Layer):
             'autoplay': autoplay,
         }
         self.options = json.dumps(options)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.videoOverlay(
-                    '{{ this.video_url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
 
     def _get_self_bounds(self):
         """

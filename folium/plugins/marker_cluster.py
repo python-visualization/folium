@@ -42,6 +42,17 @@ class MarkerCluster(Layer):
     }'''
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.markerClusterGroup({
+                {% if this._icon_create_function %}
+                   iconCreateFunction: {{this._icon_create_function}}
+                {% endif %}
+            });
+            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, icon_create_function=None):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay, control=control)  # noqa
@@ -58,16 +69,6 @@ class MarkerCluster(Layer):
 
         self._name = 'MarkerCluster'
         self._icon_create_function = icon_create_function.strip() if icon_create_function else ''  # noqa
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function %}
-                   iconCreateFunction: {{this._icon_create_function}}
-                {% endif %}
-            });
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)

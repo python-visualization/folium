@@ -20,12 +20,7 @@ class Draw(MacroElement):
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
 
     """
-    def __init__(self, export=False):
-        super(Draw, self).__init__()
-        self._name = 'DrawControl'
-        self.export = export
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo({{this._parent.get_name()}});
@@ -56,6 +51,11 @@ class Draw(MacroElement):
         }
             {% endmacro %}
             """)
+
+    def __init__(self, export=False):
+        super(Draw, self).__init__()
+        self._name = 'DrawControl'
+        self.export = export
 
     def render(self, **kwargs):
         super(Draw, self).render()
