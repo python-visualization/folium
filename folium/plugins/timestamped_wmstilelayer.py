@@ -35,6 +35,14 @@ class TimestampedWmsTileLayers(Layer):
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and 'PT1M' -> 1/minute
         Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     Examples
     --------
@@ -66,10 +74,12 @@ class TimestampedWmsTileLayers(Layer):
 
     """
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period='P1D', time_interval=False):
-        super(TimestampedWmsTileLayers, self).__init__(overlay=True,
-                                                       control=False,
-                                                       name='timestampedwms')
+                 period='P1D', time_interval=False, name=None,
+                 overlay=True, control=True, show=True):
+        super(TimestampedWmsTileLayers, self).__init__(name=name,
+                                                       overlay=overlay,
+                                                       control=control,
+                                                       show=show)
         self._name = 'TimestampedWmsTileLayers'
 
         self.transition_time = int(transition_time)

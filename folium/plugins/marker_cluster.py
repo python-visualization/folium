@@ -17,10 +17,12 @@ class MarkerCluster(Layer):
     ----------
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
-        Whether the Layer will be included in LayerControls
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     icon_create_function : string, default None
         Override the default behaviour, making possible to customize
         markers colors and sizes.
@@ -43,8 +45,10 @@ class MarkerCluster(Layer):
 
     """
     def __init__(self, locations=None, popups=None, icons=None, name=None,
-                 overlay=True, control=True, icon_create_function=None):
-        super(MarkerCluster, self).__init__(name=name, overlay=overlay, control=control)  # noqa
+                 overlay=True, control=True, show=True,
+                 icon_create_function=None):
+        super(MarkerCluster, self).__init__(name=name, overlay=overlay,
+                                            control=control, show=show)
 
         if locations is not None:
             if popups is None:
