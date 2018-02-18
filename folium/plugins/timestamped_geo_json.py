@@ -41,6 +41,10 @@ class TimestampedGeoJson(MacroElement):
         Used to construct the array of available times starting
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and'PT1M' -> 1/minute
+    propagate_properties: list[str], default None
+        Any property named here will be propagated to the Leaflet marker when rendered.
+        This is to work together with other Leaflet plugins that is installed and
+        configured by marker properties.
 
     Examples
     --------
@@ -65,7 +69,8 @@ class TimestampedGeoJson(MacroElement):
     """
     def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
                  period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
-                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
+                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False,
+                 propagate_properties=None):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
@@ -81,6 +86,7 @@ class TimestampedGeoJson(MacroElement):
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
+        self.propagate_properties = json.dumps(propagate_properties or [])
 
         options = {
             'position': 'bottomleft',
@@ -109,6 +115,33 @@ class TimestampedGeoJson(MacroElement):
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
             var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
+             
+            function __propagateProperties(props) {
+                if(!props) { return {}; }
+            
+                var propertiesToExtract = {{ this.propagate_properties }},
+                    ps = {};
+                
+                if(propertiesToExtract.length == 0) { return {}; }
+                
+                for(var i = 0, p = null;i < propertiesToExtract.length;i++) {
+                    var p = propertiesToExtract[i];
+                    if(props[p]) { ps[p] = props[p]; }
+                }
+                
+                return ps;
+            }
+            
+            function __merge(first, second) {
+                var merged = {};
+                first = first || {};
+                second = second || {};
+                
+                for (var attrname in first)  { merged[attrname] = first[attrname]; }
+                for (var attrname in second) { merged[attrname] = second[attrname]; }
+                
+                return merged;
+            }
 
             console.log("{{this.marker}}");
 
@@ -116,22 +149,22 @@ class TimestampedGeoJson(MacroElement):
                     pointToLayer: function (feature, latLng) {
                         if (feature.properties.icon == 'marker') {
                             if(feature.properties.iconstyle){
-                                return new L.Marker(latLng, {
-                                    icon: L.icon(feature.properties.iconstyle)});
+                                return new L.Marker(latLng, __merge(__propagateProperties(feature.properties), {
+                                    icon: L.icon(feature.properties.iconstyle)}));
                             }
                             //else
-                            return new L.Marker(latLng);
+                            return new L.Marker(latLng, __propagateProperties(feature.properties));
                         }
                         if (feature.properties.icon == 'circle') {
                             if (feature.properties.iconstyle) {
-                                return new L.circleMarker(latLng, feature.properties.iconstyle)
-                                };
+                                return new L.circleMarker(latLng, __merge(__propagateProperties(feature.properties), feature.properties.iconstyle))
+                            }
                             //else
-                            return new L.circleMarker(latLng);
+                            return new L.circleMarker(latLng, __propagateProperties(feature.properties));
                         }
                         //else
 
-                        return new L.Marker(latLng);
+                        return new L.Marker(latLng, __propagateProperties(feature.properties));
                     },
                     style: function (feature) {
                         return feature.properties.style;

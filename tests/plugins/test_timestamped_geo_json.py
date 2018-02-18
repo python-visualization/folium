@@ -135,6 +135,33 @@ def test_timestamped_geo_json():
             {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
             var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
+             
+            function __propagateProperties(props) {
+                if(!props) { return {}; }
+            
+                var propertiesToExtract = {{ this.propagate_properties }},
+                    ps = {};
+                
+                if(propertiesToExtract.length == 0) { return {}; }
+                
+                for(var i = 0, p = null;i < propertiesToExtract.length;i++) {
+                    var p = propertiesToExtract[i];
+                    if(props[p]) { ps[p] = props[p]; }
+                }
+                
+                return ps;
+            }
+            
+            function __merge(first, second) {
+                var merged = {};
+                first = first || {};
+                second = second || {};
+                
+                for (var attrname in first)  { merged[attrname] = first[attrname]; }
+                for (var attrname in second) { merged[attrname] = second[attrname]; }
+                
+                return merged;
+            }
 
             console.log("{{this.marker}}");
 
@@ -142,22 +169,22 @@ def test_timestamped_geo_json():
                     pointToLayer: function (feature, latLng) {
                         if (feature.properties.icon == 'marker') {
                             if(feature.properties.iconstyle){
-                                return new L.Marker(latLng, {
-                                    icon: L.icon(feature.properties.iconstyle)});
+                                return new L.Marker(latLng, __merge(__propagateProperties(feature.properties), {
+                                    icon: L.icon(feature.properties.iconstyle)}));
                             }
                             //else
-                            return new L.Marker(latLng);
+                            return new L.Marker(latLng, __propagateProperties(feature.properties));
                         }
                         if (feature.properties.icon == 'circle') {
                             if (feature.properties.iconstyle) {
-                                return new L.circleMarker(latLng, feature.properties.iconstyle)
-                                };
+                                return new L.circleMarker(latLng, __merge(__propagateProperties(feature.properties), feature.properties.iconstyle))
+                            }
                             //else
-                            return new L.circleMarker(latLng);
+                            return new L.circleMarker(latLng, __propagateProperties(feature.properties));
                         }
                         //else
 
-                        return new L.Marker(latLng);
+                        return new L.Marker(latLng, __propagateProperties(feature.properties));
                     },
                     style: function (feature) {
                         return feature.properties.style;
@@ -178,3 +205,108 @@ def test_timestamped_geo_json():
 
     bounds = m.get_bounds()
     assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds
+
+
+def test_propagates_named_feature_properties_when_asked():
+    data = {
+        'type': 'FeatureCollection',
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [0, 0],
+                },
+                'properties': {
+                    'times': [1435708800000 + 12 * 86400000]
+                }
+            },
+        ]
+    }
+    data['features'][0]['properties']['rotationAngle'] = 45
+
+    m = folium.Map([47, 3], zoom_start=1)
+    tgj = plugins.TimestampedGeoJson(data, propagate_properties=['rotationAngle'])
+    m.add_child(tgj)
+
+    out = m._parent.render()
+
+    # language=js
+    tmpl = Template("""
+            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+                _getDisplayDateFormat: function(date){
+                    var newdate = new moment(date);
+                    console.log(newdate)
+                    return newdate.format("{{this.date_options}}");
+                }
+            });
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
+            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
+            {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
+             
+            function __propagateProperties(props) {
+                if(!props) { return {}; }
+            
+                var propertiesToExtract = ["rotationAngle"],
+                    ps = {};
+                
+                if(propertiesToExtract.length == 0) { return {}; }
+                
+                for(var i = 0, p = null;i < propertiesToExtract.length;i++) {
+                    var p = propertiesToExtract[i];
+                    if(props[p]) { ps[p] = props[p]; }
+                }
+                
+                return ps;
+            }
+            
+            function __merge(first, second) {
+                var merged = {};
+                first = first || {};
+                second = second || {};
+                
+                for (var attrname in first)  { merged[attrname] = first[attrname]; }
+                for (var attrname in second) { merged[attrname] = second[attrname]; }
+                
+                return merged;
+            }
+
+            console.log("{{this.marker}}");
+
+            var geoJsonLayer = L.geoJson({{this.data}}, {
+                    pointToLayer: function (feature, latLng) {
+                        if (feature.properties.icon == 'marker') {
+                            if(feature.properties.iconstyle){
+                                return new L.Marker(latLng, __merge(__propagateProperties(feature.properties), {
+                                    icon: L.icon(feature.properties.iconstyle)}));
+                            }
+                            //else
+                            return new L.Marker(latLng, __propagateProperties(feature.properties));
+                        }
+                        if (feature.properties.icon == 'circle') {
+                            if (feature.properties.iconstyle) {
+                                return new L.circleMarker(latLng, __merge(__propagateProperties(feature.properties), feature.properties.iconstyle))
+                            }
+                            //else
+                            return new L.circleMarker(latLng, __propagateProperties(feature.properties));
+                        }
+                        //else
+
+                        return new L.Marker(latLng, __propagateProperties(feature.properties));
+                    },
+                    style: function (feature) {
+                        return feature.properties.style;
+                    },
+                    onEachFeature: function(feature, layer) {
+                        if (feature.properties.popup) {
+                        layer.bindPopup(feature.properties.popup);
+                        }
+                    }
+                })
+
+            var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
+                {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
+                ).addTo({{this._parent.get_name()}});
+    """)  # noqa
+
+    assert tmpl.render(this=tgj) in out
