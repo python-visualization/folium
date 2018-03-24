@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
+import json
 
 from branca.element import CssLink, Figure, JavascriptLink
 
@@ -26,6 +27,8 @@ class MarkerCluster(Layer):
     icon_create_function : string, default None
         Override the default behaviour, making possible to customize
         markers colors and sizes.
+    options : dict, default None
+        A dictionary with options for Leaflet.markercluster.
 
     locations: list of list or array of shape (n, 2).
         Data points of the form [[lat, lng]].
@@ -46,7 +49,7 @@ class MarkerCluster(Layer):
     """
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
-                 icon_create_function=None):
+                 icon_create_function=None, options=None):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control, show=show)
 
@@ -60,15 +63,15 @@ class MarkerCluster(Layer):
                 i = icon if icon is None or isinstance(icon, Icon) else Icon(icon)  # noqa
                 self.add_child(Marker(location, popup=p, icon=i))
 
+        options = {} if options is None else options
+        if icon_create_function is not None:
+            options['iconCreateFunction'] = icon_create_function.strip()
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
         self._name = 'MarkerCluster'
-        self._icon_create_function = icon_create_function.strip() if icon_create_function else ''  # noqa
         self._template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function %}
-                   iconCreateFunction: {{this._icon_create_function}}
-                {% endif %}
-            });
+            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)

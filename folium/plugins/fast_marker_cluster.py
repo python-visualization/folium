@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
+import json
 
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.utilities import _validate_coordinates
@@ -37,12 +38,15 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    options : dict, default None
+        A dictionary with options for Leaflet.markercluster.
 
     """
-    def __init__(self, data, callback=None,
+    def __init__(self, data, callback=None, options=None,
                  name=None, overlay=True, control=True, show=True):
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
-                                                control=control, show=show)
+                                                control=control, show=show,
+                                                options=options)
         self._name = 'FastMarkerCluster'
         self._data = _validate_coordinates(data)
 
@@ -67,7 +71,7 @@ class FastMarkerCluster(MarkerCluster):
             (function(){
                 var data = {{this._data}};
                 var map = {{this._parent.get_name()}};
-                var cluster = L.markerClusterGroup();
+                var cluster = L.markerClusterGroup({{ this.options }});
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
