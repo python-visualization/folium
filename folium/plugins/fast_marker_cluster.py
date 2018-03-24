@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
-import json
 
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.utilities import _validate_coordinates
