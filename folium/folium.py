@@ -216,6 +216,8 @@ class Map(MacroElement):
             disable_3d
         )
 
+        self.objects_to_stay_in_front = []
+
         if tiles:
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
@@ -259,6 +261,14 @@ class Map(MacroElement):
                                   crs: L.CRS.{{this.crs}}
                                  });
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+            
+            {% if this.objects_to_stay_in_front %}
+            {{ this.get_name() }}.on("overlayadd", function(event) {  
+                {% for obj in this.objects_to_stay_in_front %}    
+                    {{ obj.get_name() }}.bringToFront();
+                {% endfor %}
+                });
+            {% endif %}
         {% endmacro %}
         """)  # noqa
 
@@ -600,3 +610,20 @@ class Map(MacroElement):
                 caption=legend_name,
                 )
             self.add_child(color_scale)
+
+    def keep_in_front(self, obj):
+        """Pass an object that must stay in front when overlays are toggled.
+        
+        Note that this does not put the object in front at load. That's up to
+        the ordering in which the user added them to the map. The last one added
+        is on top.
+        
+        Parameters
+        ----------
+        obj : object
+            Any folium object that counts as an overlay. For example a 
+            FeatureGroup or a vector object.
+        """
+        self.objects_to_stay_in_front.append(obj)
+
+
