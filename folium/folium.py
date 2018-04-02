@@ -613,19 +613,18 @@ class Map(MacroElement):
                 )
             self.add_child(color_scale)
 
-    def keep_in_front(self, obj):
-        """Pass an object that must stay in front when overlays are toggled.
+    def keep_in_front(self, *args):
+        """Pass one or multiples object that must stay in front.
         
-        Note that this does not put the object in front at load. That's up to
-        the ordering in which the user added them to the map. The last one added
-        is on top.
+        The ordering matters, the last one is put on top.
         
         Parameters
         ----------
-        obj : object
-            Any folium object that counts as an overlay. For example a 
-            FeatureGroup or a vector object.
+        *args : 
+            Variable length argument list. Any folium object that counts as an 
+            overlay. For example FeatureGroup or a vector object such as Marker.
         """
-        self.objects_to_stay_in_front.append(obj)
+        for obj in args:
+            self.objects_to_stay_in_front.append(obj)
 
 
