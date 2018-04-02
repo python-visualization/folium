@@ -263,11 +263,13 @@ class Map(MacroElement):
             {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
             
             {% if this.objects_to_stay_in_front %}
-            {{ this.get_name() }}.on("overlayadd", function(event) {  
+            function objects_in_front() {
                 {% for obj in this.objects_to_stay_in_front %}    
                     {{ obj.get_name() }}.bringToFront();
                 {% endfor %}
-                });
+            };
+            {{ this.get_name() }}.on("overlayadd", objects_in_front);
+            $(document).ready(objects_in_front);
             {% endif %}
         {% endmacro %}
         """)  # noqa
