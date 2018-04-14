@@ -206,7 +206,6 @@ class TestFolium(object):
             {'id': 'tile_layer_'+'0'*32,
              'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
              'attr': attr,
-             'max_native_zoom': 20,
              'max_zoom': 20,
              'min_zoom': 0,
              'detect_retina': False,
