@@ -22,6 +22,14 @@ class TimeSliderChoropleth(GeoJson):
     styledict: dict
         A dictionary where the keys are the geojson feature ids and the values are
         dicts of `{time: style_options_dict}`
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     """
     _template = Template(u"""
@@ -132,13 +140,16 @@ class TimeSliderChoropleth(GeoJson):
             {% endmacro %}
             """)
 
-    def __init__(self, data, styledict, name=None, overlay=True, control=True, **kwargs):
-        super(TimeSliderChoropleth, self).__init__(data, name=name, overlay=overlay, control=control)
+    def __init__(self, data, styledict, name=None, overlay=True, control=True,
+                 show=True):
+        super(TimeSliderChoropleth, self).__init__(data, name=name,
+                                                   overlay=overlay,
+                                                   control=control, show=show)
         if not isinstance(styledict, dict):
-            raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))
+            raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))  # noqa
         for val in styledict.values():
             if not isinstance(val, dict):
-                raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))
+                raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))  # noqa
 
         # Make set of timestamps.
         timestamps = set()
@@ -148,6 +159,7 @@ class TimeSliderChoropleth(GeoJson):
 
         self.timestamps = json.dumps(timestamps)
         self.styledict = json.dumps(styledict, sort_keys=True, indent=2)
+
 
     def render(self, **kwargs):
         super(TimeSliderChoropleth, self).render(**kwargs)

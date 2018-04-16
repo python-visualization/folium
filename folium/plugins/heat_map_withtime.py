@@ -3,12 +3,12 @@
 from branca.element import CssLink, Element, Figure, JavascriptLink
 from branca.utilities import none_max, none_min
 
-from folium.raster_layers import TileLayer
+from folium.map import Layer
 
 from jinja2 import Template
 
 
-class HeatMapWithTime(TileLayer):
+class HeatMapWithTime(Layer):
     """
     Create a HeatMapWithTime layer
 
@@ -19,8 +19,8 @@ class HeatMapWithTime(TileLayer):
         steps in sequential order. (weight defaults to 1 if not specified for a point)
     index: Index giving the label (or timestamp) of the elements of data. Should have
         the same length as data, or is replaced by a simple count if not specified.
-    name: str
-        The name of the layer that will be created.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
     radius: default 15.
         The radius used around points for the heatmap.
     min_opacity: default 0
@@ -46,6 +46,12 @@ class HeatMapWithTime(TileLayer):
         Step between different fps speeds on the speed slider.
     position: default 'bottomleft'
         Position string for the time slider. Format: 'bottom/top'+'left/right'.
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     """
     _template = Template(u"""
@@ -94,20 +100,22 @@ class HeatMapWithTime(TileLayer):
         {% endmacro %}
         """)
 
-    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0, max_opacity=0.6,
-                 scale_radius=False, use_local_extrema=False, auto_play=False, display_index=True,
-                 index_steps=1, min_speed=0.1, max_speed=10, speed_step=0.1, position='bottomleft'
-                 ):
-        super(TileLayer, self).__init__(name=name)
+    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
+                 max_opacity=0.6, scale_radius=False, use_local_extrema=False,
+                 auto_play=False, display_index=True, index_steps=1,
+                 min_speed=0.1, max_speed=10, speed_step=0.1,
+                 position='bottomleft', overlay=True, control=True, show=True):
+        super(HeatMapWithTime, self).__init__(name=name, overlay=overlay,
+                                              control=control, show=show)
         self._name = 'HeatMap'
         self._control_name = self.get_name() + 'Control'
-        self.tile_name = name if name is not None else self.get_name()
 
         # Input data.
         self.data = data
-        self.index = index if index is not None else [str(i) for i in range(1, len(data)+1)]
+        self.index = index if index is not None else [str(i) for i in
+                                                      range(1, len(data)+1)]
         if len(self.data) != len(self.index):
-            raise ValueError('Input data and index are not of compatible lengths.')
+            raise ValueError('Input data and index are not of compatible lengths.')  # noqa
         self.times = list(range(1, len(data)+1))
 
         # Heatmap settings.
@@ -140,7 +148,7 @@ class HeatMapWithTime(TileLayer):
         self.style_NS = 'leaflet-control-timecontrol'
 
     def render(self, **kwargs):
-        super(TileLayer, self).render()
+        super(HeatMapWithTime, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
