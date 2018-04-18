@@ -33,12 +33,15 @@ class Layer(MacroElement):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     """
-    def __init__(self, name=None, overlay=False, control=True):
+    def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
         self.control = control
+        self.show = show
 
 
 class FeatureGroup(Layer):
@@ -56,9 +59,14 @@ class FeatureGroup(Layer):
     overlay : bool, default True
         Whether your layer will be an overlay (ticked with a check box in
         LayerControls) or a base layer (ticked with a radio button).
+    control: bool, default True
+        Whether the layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     """
-    def __init__(self, name=None, overlay=True, control=True):
-        super(FeatureGroup, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+    def __init__(self, name=None, overlay=True, control=True, show=True):
+        super(FeatureGroup, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
@@ -98,6 +106,7 @@ class LayerControl(MacroElement):
         self.autoZIndex = str(autoZIndex).lower()
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
+        self.layers_untoggle = []
 
         self._template = Template("""
         {% macro script(this,kwargs) %}
@@ -112,23 +121,27 @@ class LayerControl(MacroElement):
                  collapsed: {{this.collapsed}},
                  autoZIndex: {{this.autoZIndex}}
                 }).addTo({{this._parent.get_name()}});
+            {% for val in this.layers_untoggle %}
+                {{ val }}.remove();{% endfor %}
         {% endmacro %}
         """)  # noqa
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        # We select all Layers for which (control and not overlay).
         self.base_layers = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer) and
-             (not hasattr(val, 'overlay') or not val.overlay) and
-             (not hasattr(val, 'control') or val.control)])
-        # We select all Layers for which (control and overlay).
+             self._parent._children.items() if isinstance(val, Layer)
+             and not val.overlay and val.control])
         self.overlays = OrderedDict(
             [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer) and
-             (hasattr(val, 'overlay') and val.overlay) and
-             (not hasattr(val, 'control') or val.control)])
+             self._parent._children.items() if isinstance(val, Layer)
+             and val.overlay and val.control])
+        self.layers_untoggle = [
+            val.get_name() for val in
+            self._parent._children.values() if isinstance(val, Layer)
+            and val.overlay and val.control and not val.show]
+        for additional_base_layer in list(self.base_layers.values())[1:]:
+            self.layers_untoggle.append(additional_base_layer)
         super(LayerControl, self).render()
 
 

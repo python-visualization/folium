@@ -31,19 +31,22 @@ class TileLayer(Layer):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "Mapbox Bright" (Limited levels of zoom for free tiles)
-            - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-            - "Stamen" (Terrain, Toner, and Watercolor)
+            - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
+            - "CartoDB positron", "CartoDB dark_matter"
+            - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
-            - "CartoDB" (positron and dark_matter)
 
         You can pass a custom tileset to Folium by passing a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
+        You must then also provide attribution, use the `attr` keyword.
     min_zoom: int, default 0
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
         Maximum allowed zoom level for this tile layer.
+    max_native_zoom: int, default None
+        The highest zoom level at which the tile server can provide tiles.
+        If provided you can zoom in past this level. Else tiles will turn grey.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
     API_key: str, default None
@@ -58,39 +61,40 @@ class TileLayer(Layer):
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
 
     """
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
-                 attr=None, API_key=None, detect_retina=False,
-                 name=None, overlay=False,
-                 control=True, no_wrap=False, subdomains='abc'):
+                 max_native_zoom=None, attr=None, API_key=None,
+                 detect_retina=False, name=None, overlay=False,
+                 control=True, show=True, no_wrap=False, subdomains='abc'):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
-                                        control=control)
+                                        control=control, show=show)
         self._name = 'TileLayer'
         self._env = ENV
 
-        options = {
-            'minZoom': min_zoom,
-            'maxZoom': max_zoom,
-            'noWrap': no_wrap,
-            'attribution': attr,
-            'subdomains': subdomains,
-            'detectRetina': detect_retina,
-        }
+        options = {'minZoom': min_zoom,
+                   'maxZoom': max_zoom,
+                   'maxNativeZoom': max_native_zoom or max_zoom,
+                   'noWrap': no_wrap,
+                   'attribution': attr,
+                   'subdomains': subdomains,
+                   'detectRetina': detect_retina}
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
-        self.tiles = ''.join(tiles.lower().strip().split())
-        if self.tiles in ('cloudmade', 'mapbox') and not API_key:
+        tiles_flat = ''.join(tiles.lower().strip().split())
+        if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
                              ' or non-default Mapbox tiles.')
         templates = list(self._env.list_templates(
             filter_func=lambda x: x.startswith('tiles/')))
-        tile_template = 'tiles/'+self.tiles+'/tiles.txt'
-        attr_template = 'tiles/'+self.tiles+'/attr.txt'
+        tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
+        attr_template = 'tiles/' + tiles_flat + '/attr.txt'
 
         if tile_template in templates and attr_template in templates:
             self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
@@ -98,8 +102,7 @@ class TileLayer(Layer):
         else:
             self.tiles = tiles
             if not attr:
-                raise ValueError('Custom tiles must'
-                                 ' also be passed an attribution.')
+                raise ValueError('Custom tiles must have an attribution.')
             if isinstance(attr, binary_type):
                 attr = text_type(attr, 'utf8')
             self.attr = attr
@@ -111,7 +114,7 @@ class TileLayer(Layer):
                 {{ this.options }}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)  # noqa
+        """)
 
 
 class WmsTileLayer(Layer):
@@ -141,7 +144,9 @@ class WmsTileLayer(Layer):
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
-        Whether the Layer will be included in LayerControls
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     **kwargs : additional keyword arguments
         Passed through to the underlying tileLayer.wms object and can be used
         for setting extra tileLayer.wms parameters or as extra parameters in
@@ -151,8 +156,10 @@ class WmsTileLayer(Layer):
     http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
 
     """
-    def __init__(self, url, name=None, attr='', overlay=True, control=True, **kwargs):  # noqa
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+    def __init__(self, url, name=None, attr='', overlay=True, control=True,
+                 show=True, **kwargs):
+        super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
+                                           name=name, show=show)
         self.url = url
         # Options.
         options = _parse_wms(**kwargs)
@@ -205,15 +212,24 @@ class ImageOverlay(Layer):
         object.
     pixelated: bool, default True
         Sharp sharp/crips (True) or aliased corners (False).
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     See http://leafletjs.com/reference-1.2.0.html#imageoverlay for more
     options.
 
     """
     def __init__(self, image, bounds, origin='upper', colormap=None,
-                 mercator_project=False, overlay=True, control=True,
-                 pixelated=True, name=None, **kwargs):
-        super(ImageOverlay, self).__init__(overlay=overlay, control=control, name=name)  # noqa
+                 mercator_project=False, pixelated=True,
+                 name=None, overlay=True, control=True, show=True, **kwargs):
+        super(ImageOverlay, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
 
         options = {
             'opacity': kwargs.pop('opacity', 1.),
@@ -289,11 +305,21 @@ class VideoOverlay(Layer):
         [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
     attr: string, default Leaflet's default ('')
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     """
     def __init__(self, video_url, bounds, opacity=1., attr=None,
-                 autoplay=True, loop=True):
-        super(VideoOverlay, self).__init__()
+                 autoplay=True, loop=True,
+                 name=None, overlay=True, control=True, show=True):
+        super(VideoOverlay, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
         self._name = 'VideoOverlay'
 
         self.video_url = video_url

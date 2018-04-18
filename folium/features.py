@@ -313,10 +313,12 @@ class GeoJson(Layer):
         Function mapping a GeoJson Feature to a style dict for mouse events.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -341,10 +343,10 @@ class GeoJson(Layer):
 
     """
     def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, smooth_factor=None,
-                 highlight_function=None, tooltip=None):
+                 overlay=True, control=True, show=True,
+                 smooth_factor=None, highlight_function=None, tooltip=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
-                                      control=control)
+                                      control=control, show=show)
         self._name = 'GeoJson'
         self.tooltip = tooltip
         if isinstance(data, dict):
@@ -471,7 +473,9 @@ class TopoJson(Layer):
     overlay : bool, default False
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
-        Whether the Layer will be included in LayerControls
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -496,10 +500,10 @@ class TopoJson(Layer):
 
     """
     def __init__(self, data, object_path, style_function=None,
-                 name=None, overlay=True, control=True, smooth_factor=None,
-                 tooltip=None):
+                 name=None, overlay=True, control=True, show=True,
+                 smooth_factor=None, tooltip=None):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
-                                       control=control)
+                                       control=control, show=show)
         self._name = 'TopoJson'
         self.tooltip = tooltip
         if 'read' in dir(data):
