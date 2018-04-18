@@ -36,7 +36,7 @@ def test_heat_map_with_time():
     assert script in out
     script = '<script src="https://rawgit.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>'  # noqa
     assert script in out
-    script = '<link rel="stylesheet" href="http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css" />'  # noqa
+    script = '<link rel="stylesheet" href="http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"/>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.
