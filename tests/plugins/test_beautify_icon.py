@@ -29,7 +29,7 @@ def test_beautify_icon():
     bm1 = folium.Marker(location=[46, -122],
                         popup='Portland, OR',
                         icon=ic1
-                       ).add_to(m)
+                        ).add_to(m)
 
     bm2 = folium.Marker(
         location=[50, -121],
