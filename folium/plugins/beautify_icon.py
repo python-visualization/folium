@@ -14,31 +14,31 @@ from jinja2 import Template
 class BeautifyIcon(MacroElement):
     """
     Create a BeautifyIcon that can be added to a Marker
+
     Parameters
     ----------
-    icon: string
+    icon: string, default None
         the Font-Awesome icon name to use to render the marker.
-    icon_shape: string
+    icon_shape: string, default None
         the icon shape
-    border_width: integer
+    border_width: integer, default 3
         the border width of the icon
-    border_color: string with hexadecimal RGB
+    border_color: string with hexadecimal RGB, default '#000'
         the border color of the icon
-    text_color: string with hexadecimal RGB
+    text_color: string with hexadecimal RGB, default '#000'
         the text color of the icon
-    background_color: string with hexadecimal RGB
+    background_color: string with hexadecimal RGB, default '#FFF'
         the background color of the icon
-    inner_icon_style: string with css styles for the icon.
+    inner_icon_style: string with css styles for the icon, default ''
         the css styles of the icon
-    spin: boolean
+    spin: boolean, default False
         allow the icon to be spinning.
-    number: integer
+    number: integer, default None
         the number of the icon.
-    Returns
-    -------
-    Icon names and HTML in obj.template_vars
+
     Examples
     --------
+    Plugin Website: https://github.com/marslan390/BeautifyMarker
     >>> BeautifyIcon(text_color='#000', border_color='transparent',
                      background_color='#FFF').add_to(marker)
     >>> number_icon = BeautifyIcon(text_color='#000', border_color='transparent',
