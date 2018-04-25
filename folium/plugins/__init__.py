@@ -10,7 +10,7 @@ Wrap some of the most popular leaflet external plugins.
 
 from __future__ import (absolute_import, division, print_function)
 
-from folium.plugins.beautify_marker import BeautifyMarker
+from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
 from folium.plugins.draw import Draw
 from folium.plugins.fast_marker_cluster import FastMarkerCluster
@@ -29,7 +29,7 @@ from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 from folium.plugins.search import Search
 
 __all__ = [
-    'BeautifyMarker',
+    'BeautifyIcon',
     'BoatMarker',
     'Draw',
     'FastMarkerCluster',
