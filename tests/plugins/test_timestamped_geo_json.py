@@ -114,10 +114,10 @@ def test_timestamped_geo_json():
             '</script>'
             ) in out
     assert ('<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/'
-            'libs/highlight.js/8.4/styles/default.min.css" />'
+            'libs/highlight.js/8.4/styles/default.min.css"/>'
             ) in out
     assert ('<link rel="stylesheet" href="http://apps.socib.es/Leaflet.'
-            'TimeDimension/dist/leaflet.timedimension.control.min.css" />'
+            'TimeDimension/dist/leaflet.timedimension.control.min.css"/>'
             ) in out
     assert ('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js">'
             '</script>'
