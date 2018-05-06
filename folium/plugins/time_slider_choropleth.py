@@ -32,27 +32,7 @@ class TimeSliderChoropleth(GeoJson):
         Whether the layer will be shown on opening (only for overlays).
 
     """
-    def __init__(self, data, styledict, name=None, overlay=True, control=True,
-                 show=True):
-        super(TimeSliderChoropleth, self).__init__(data, name=name,
-                                                   overlay=overlay,
-                                                   control=control, show=show)
-        if not isinstance(styledict, dict):
-            raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))  # noqa
-        for val in styledict.values():
-            if not isinstance(val, dict):
-                raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))  # noqa
-
-        # Make set of timestamps.
-        timestamps = set()
-        for feature in styledict.values():
-            timestamps.update(set(feature.keys()))
-        timestamps = sorted(list(timestamps))
-
-        self.timestamps = json.dumps(timestamps)
-        self.styledict = json.dumps(styledict, sort_keys=True, indent=2)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
                 var timestamps = {{ this.timestamps }};
@@ -159,6 +139,27 @@ class TimeSliderChoropleth(GeoJson):
 
             {% endmacro %}
             """)
+
+    def __init__(self, data, styledict, name=None, overlay=True, control=True,
+                 show=True):
+        super(TimeSliderChoropleth, self).__init__(data, name=name,
+                                                   overlay=overlay,
+                                                   control=control, show=show)
+        if not isinstance(styledict, dict):
+            raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))  # noqa
+        for val in styledict.values():
+            if not isinstance(val, dict):
+                raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))  # noqa
+
+        # Make set of timestamps.
+        timestamps = set()
+        for feature in styledict.values():
+            timestamps.update(set(feature.keys()))
+        timestamps = sorted(list(timestamps))
+
+        self.timestamps = json.dumps(timestamps)
+        self.styledict = json.dumps(styledict, sort_keys=True, indent=2)
+
 
     def render(self, **kwargs):
         super(TimeSliderChoropleth, self).render(**kwargs)

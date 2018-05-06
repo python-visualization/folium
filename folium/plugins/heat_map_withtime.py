@@ -54,6 +54,52 @@ class HeatMapWithTime(Layer):
         Whether the layer will be shown on opening (only for overlays).
 
     """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+
+            var times = {{this.times}};
+
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+                {times : times, currentTime: new Date(1)}
+            );
+
+            var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
+                autoPlay: {{this.auto_play}},
+                backwardButton: {{this.backward_button}},
+                displayDate: {{this.display_index}},
+                forwardButton: {{this.forward_button}},
+                limitMinimumRange: {{this.limit_minimum_range}},
+                limitSliders: {{this.limit_sliders}},
+                loopButton: {{this.loop_button}},
+                maxSpeed: {{this.max_speed}},
+                minSpeed: {{this.min_speed}},
+                playButton: {{this.play_button}},
+                playReverseButton: {{this.play_reverse_button}},
+                position: "{{this.position}}",
+                speedSlider: {{this.speed_slider}},
+                speedStep: {{this.speed_step}},
+                styleNS: "{{this.style_NS}}",
+                timeSlider: {{this.time_slider}},
+                timeSliderDrapUpdate: {{this.time_slider_drap_update}},
+                timeSteps: {{this.index_steps}}
+                })
+                .addTo({{this._parent.get_name()}});
+
+                var {{this.get_name()}} = new TDHeatmap({{this.data}},
+                {heatmapOptions: {
+                        radius: {{this.radius}},
+                        minOpacity: {{this.min_opacity}},
+                        maxOpacity: {{this.max_opacity}},
+                        scaleRadius: {{this.scale_radius}},
+                        useLocalExtrema: {{this.use_local_extrema}},
+                        defaultWeight: 1 ,
+                    }
+                })
+                .addTo({{this._parent.get_name()}});
+
+        {% endmacro %}
+        """)
+
     def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
                  max_opacity=0.6, scale_radius=False, use_local_extrema=False,
                  auto_play=False, display_index=True, index_steps=1,
@@ -100,52 +146,6 @@ class HeatMapWithTime(Layer):
         self.play_reverse_button = 'true'
         self.time_slider_drap_update = 'false'
         self.style_NS = 'leaflet-control-timecontrol'
-
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-
-            var times = {{this.times}};
-
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension(
-                {times : times, currentTime: new Date(1)}
-            );
-
-            var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
-                autoPlay: {{this.auto_play}},
-                backwardButton: {{this.backward_button}},
-                displayDate: {{this.display_index}},
-                forwardButton: {{this.forward_button}},
-                limitMinimumRange: {{this.limit_minimum_range}},
-                limitSliders: {{this.limit_sliders}},
-                loopButton: {{this.loop_button}},
-                maxSpeed: {{this.max_speed}},
-                minSpeed: {{this.min_speed}},
-                playButton: {{this.play_button}},
-                playReverseButton: {{this.play_reverse_button}},
-                position: "{{this.position}}",
-                speedSlider: {{this.speed_slider}},
-                speedStep: {{this.speed_step}},
-                styleNS: "{{this.style_NS}}",
-                timeSlider: {{this.time_slider}},
-                timeSliderDrapUpdate: {{this.time_slider_drap_update}},
-                timeSteps: {{this.index_steps}}
-                })
-                .addTo({{this._parent.get_name()}});
-
-                var {{this.get_name()}} = new TDHeatmap({{this.data}},
-                {heatmapOptions: {
-                        radius: {{this.radius}},
-                        minOpacity: {{this.min_opacity}},
-                        maxOpacity: {{this.max_opacity}},
-                        scaleRadius: {{this.scale_radius}},
-                        useLocalExtrema: {{this.use_local_extrema}},
-                        defaultWeight: 1 ,
-                    }
-                })
-                .addTo({{this._parent.get_name()}});
-
-        {% endmacro %}
-        """)
 
     def render(self, **kwargs):
         super(HeatMapWithTime, self).render(**kwargs)
