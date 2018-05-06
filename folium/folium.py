@@ -549,9 +549,13 @@ class Map(MacroElement):
                                    '.'.join(key.split('.')[1:])))
 
             def color_scale_fun(x):
-                idx = len([u for u in color_domain if
-                     get_by_key(x, key_on) in color_data and
-                     u <= color_data[get_by_key(x, key_on)]])
+                idx = len(
+                    [
+                        u for u in color_domain if
+                        get_by_key(x, key_on) in color_data and
+                        u <= color_data[get_by_key(x, key_on)]
+                    ]
+                )
                 return color_range[idx-1]
         else:
             def color_scale_fun(x):
