@@ -46,7 +46,7 @@ def test_timedynamic_geo_json():
         max_color = max(max_color, data['color'].max())
         min_color = min(max_color, data['color'].min())
 
-    cmap = linear.PuRd.scale(min_color, max_color)
+    cmap = linear.PuRd_09.scale(min_color, max_color)
 
     # Define function to normalize column into range [0,1]
     def norm(col):
