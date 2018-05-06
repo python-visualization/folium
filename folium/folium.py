@@ -63,9 +63,9 @@ class GlobalSwitches(Element):
 
         self._template = Template(
             '<script>'
-            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
-            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
-            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
+            'L_PREFER_CANVAS={% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+            'L_NO_TOUCH={% if this.no_touch %}true{% else %}false{% endif %}; '
+            'L_DISABLE_3D={% if this.disable_3d %}true{% else %}false{% endif %};'
             '</script>'
         )
 
@@ -225,42 +225,42 @@ class Map(MacroElement):
             )
 
         self._template = Template(u"""
-        {% macro header(this, kwargs) %}
-            <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
-                }
-            </style>
-        {% endmacro %}
-        {% macro html(this, kwargs) %}
-            <div class="folium-map" id="{{this.get_name()}}" ></div>
-        {% endmacro %}
+{% macro header(this, kwargs) %}
+    <style>#{{this.get_name()}} {
+      position: {{this.position}};
+      width: {{this.width[0]}}{{this.width[1]}};
+      height: {{this.height[0]}}{{this.height[1]}};
+      left: {{this.left[0]}}{{this.left[1]}};
+      top: {{this.top[0]}}{{this.top[1]}};
+     }
+    </style>
+{% endmacro %}
 
-        {% macro script(this, kwargs) %}
 
-            {% if this.max_bounds %}
-                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-                var bounds = L.latLngBounds(southWest, northEast);
-            {% else %}
-                var bounds = null;
-            {% endif %}
+{% macro html(this, kwargs) -%}
+    <div class="folium-map" id="{{this.get_name()}}" ></div>
+{%- endmacro %}
 
-            var {{this.get_name()}} = L.map(
-                                  '{{this.get_name()}}',
-                                  {center: [{{this.location[0]}},{{this.location[1]}}],
-                                  zoom: {{this.zoom_start}},
-                                  maxBounds: bounds,
-                                  layers: [],
-                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-                                  crs: L.CRS.{{this.crs}}
-                                 });
-            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
-        {% endmacro %}
-        """)  # noqa
+{% macro script(this, kwargs) -%}
+{% if this.max_bounds -%}
+    var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+    var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+    var bounds = L.latLngBounds(southWest, northEast);
+{% else %}
+    var bounds = null;
+{%- endif %}
+    var {{this.get_name()}} = L.map(
+        '{{this.get_name()}}', {
+        center: [{{this.location[0]}}, {{this.location[1]}}],
+        zoom: {{this.zoom_start}},
+        maxBounds: bounds,
+        layers: [],
+        worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+        crs: L.CRS.{{this.crs}}
+        });
+{% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+{% endmacro -%}
+""")  # noqa
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -549,10 +549,14 @@ class Map(MacroElement):
                                    '.'.join(key.split('.')[1:])))
 
             def color_scale_fun(x):
-                return color_range[len(
-                    [u for u in color_domain if
-                     get_by_key(x, key_on) in color_data and
-                     u <= color_data[get_by_key(x, key_on)]])]
+                idx = len(
+                    [
+                        u for u in color_domain if
+                        get_by_key(x, key_on) in color_data and
+                        u <= color_data[get_by_key(x, key_on)]
+                    ]
+                )
+                return color_range[idx-1]
         else:
             def color_scale_fun(x):
                 return fill_color

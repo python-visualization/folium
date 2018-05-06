@@ -85,7 +85,7 @@ class TileLayer(Layer):
                    'attribution': attr,
                    'subdomains': subdomains,
                    'detectRetina': detect_retina}
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.options = json.dumps(options, sort_keys=True, indent=8)
 
         tiles_flat = ''.join(tiles.lower().strip().split())
         if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
@@ -108,13 +108,12 @@ class TileLayer(Layer):
             self.attr = attr
 
         self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.tileLayer(
-                '{{this.tiles}}',
-                {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
-        {% endmacro %}
-        """)
+{% macro script(this, kwargs) -%}
+    var {{this.get_name()}} = L.tileLayer(
+        '{{this.tiles}}',
+        {{ this.options }}).addTo({{this._parent.get_name()}});
+{%- endmacro %}
+""")  # noqa
 
 
 class WmsTileLayer(Layer):
