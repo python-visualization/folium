@@ -47,10 +47,10 @@ def test_beautify_icon():
     assert script in out
 
     # We verify that the css import is present.
-    css = '<link rel="stylesheet" href="https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css" />'  # noqa
+    css = '<link rel="stylesheet" href="https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css"/>'  # noqa
     assert css in out
 
-    # We verify that the Beautiful Icons are rendered correctly
+    # We verify that the Beautiful Icons are rendered correctly.
     tmpl = Template(u"""
                 var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options }})
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
