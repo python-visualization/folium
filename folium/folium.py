@@ -169,28 +169,27 @@ class Map(MacroElement):
     _template = Template(u"""
 {% macro header(this, kwargs) %}
     <style>#{{this.get_name()}} {
-      position: {{this.position}};
-      width: {{this.width[0]}}{{this.width[1]}};
-      height: {{this.height[0]}}{{this.height[1]}};
-      left: {{this.left[0]}}{{this.left[1]}};
-      top: {{this.top[0]}}{{this.top[1]}};
-     }
+        position: {{this.position}};
+        width: {{this.width[0]}}{{this.width[1]}};
+        height: {{this.height[0]}}{{this.height[1]}};
+        left: {{this.left[0]}}{{this.left[1]}};
+        top: {{this.top[0]}}{{this.top[1]}};
+        }
     </style>
 {% endmacro %}
-
-
-{% macro html(this, kwargs) -%}
+{% macro html(this, kwargs) %}
     <div class="folium-map" id="{{this.get_name()}}" ></div>
-{%- endmacro %}
+{% endmacro %}
 
-{% macro script(this, kwargs) -%}
-{% if this.max_bounds -%}
-    var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-    var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-    var bounds = L.latLngBounds(southWest, northEast);
-{% else %}
-    var bounds = null;
-{%- endif %}
+{% macro script(this, kwargs) %}
+    {% if this.max_bounds %}
+        var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+        var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+        var bounds = L.latLngBounds(southWest, northEast);
+    {% else %}
+        var bounds = null;
+    {% endif %}
+
     var {{this.get_name()}} = L.map(
         '{{this.get_name()}}', {
         center: [{{this.location[0]}}, {{this.location[1]}}],
@@ -201,7 +200,18 @@ class Map(MacroElement):
         crs: L.CRS.{{this.crs}}
         });
 {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
-{% endmacro -%}
+    
+    {% if this.objects_to_stay_in_front %}
+    function objects_in_front() {
+        {% for obj in this.objects_to_stay_in_front %}    
+            {{ obj.get_name() }}.bringToFront();
+        {% endfor %}
+    };
+
+{{ this.get_name() }}.on("overlayadd", objects_in_front);
+$(document).ready(objects_in_front);
+{% endif %}
+{% endmacro %}
 """)  # noqa
 
     def __init__(self, location=None, width='100%', height='100%',
@@ -253,6 +263,8 @@ class Map(MacroElement):
             no_touch,
             disable_3d
         )
+
+        self.objects_to_stay_in_front = []
 
         if tiles:
             self.add_tile_layer(
@@ -604,3 +616,17 @@ class Map(MacroElement):
                 caption=legend_name,
                 )
             self.add_child(color_scale)
+
+    def keep_in_front(self, *args):
+        """Pass one or multiples object that must stay in front.
+
+        The ordering matters, the last one is put on top.
+
+        Parameters
+        ----------
+        *args :
+            Variable length argument list. Any folium object that counts as an
+            overlay. For example FeatureGroup or a vector object such as Marker.
+        """
+        for obj in args:
+            self.objects_to_stay_in_front.append(obj)
