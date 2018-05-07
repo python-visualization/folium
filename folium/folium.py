@@ -449,14 +449,15 @@ $(document).ready(objects_in_front);
         Parameters
         ----------
         geo_data: string/object
-            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
+            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+            geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
             If the data is a Pandas DataFrame, the columns of data to be bound.
             Must pass column 1 as the key, and column 2 the values.
         key_on: string, default None
-            Variable in the GeoJSON file to bind the data to. Must always
+            Variable in the `geo_data` GeoJSON file to bind the data to. Must
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
         threshold_scale: list, default None
@@ -513,8 +514,9 @@ $(document).ready(objects_in_front);
         ...              highlight=True)
 
         """
-        if threshold_scale and len(threshold_scale) > 6:
-            raise ValueError
+        if threshold_scale is not None and len(threshold_scale) > 6:
+            raise ValueError('The length of threshold_scale is {}, but it may '
+                             'not be longer than 6.'.format(len(threshold_scale)))  # noqa
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
@@ -532,7 +534,7 @@ $(document).ready(objects_in_front);
             color_data = None
 
         # Compute color_domain
-        if threshold_scale:
+        if threshold_scale is not None:
             color_domain = list(threshold_scale)
         elif color_data:
             # To avoid explicit pandas dependency ; changed default behavior.
@@ -551,7 +553,7 @@ $(document).ready(objects_in_front);
         else:
             color_domain = None
 
-        if color_domain and key_on:
+        if color_domain and key_on is not None:
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
             color_range = color_brewer(fill_color, n=len(color_domain))
 
