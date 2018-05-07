@@ -9,14 +9,7 @@ from jinja2 import Template
 
 class FloatImage(MacroElement):
     """Adds a floating image in HTML canvas on top of the map."""
-    def __init__(self, image, bottom=75, left=75):
-        super(FloatImage, self).__init__()
-        self._name = 'FloatImage'
-        self.image = image
-        self.bottom = bottom
-        self.left = left
-
-        self._template = Template("""
+    _template = Template("""
             {% macro header(this,kwargs) %}
                 <style>
                     #{{this.get_name()}} {
@@ -34,3 +27,10 @@ class FloatImage(MacroElement):
             </img>
             {% endmacro %}
             """)
+
+    def __init__(self, image, bottom=75, left=75):
+        super(FloatImage, self).__init__()
+        self._name = 'FloatImage'
+        self.image = image
+        self.bottom = bottom
+        self.left = left

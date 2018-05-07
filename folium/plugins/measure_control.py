@@ -27,6 +27,15 @@ class MeasureControl(MacroElement):
     See https://github.com/ljagis/leaflet-measure for more information.
 
     """
+    _template = Template("""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = new L.Control.Measure(
+            {{ this.options }});
+            {{this._parent.get_name()}}.addControl({{this.get_name()}});
+
+        {% endmacro %}
+        """)  # noqa
+
     def __init__(self, position='topright', primary_length_unit='meters',
                  secondary_length_unit='miles', primary_area_unit='sqmeters',
                  secondary_area_unit='acres'):
@@ -42,15 +51,6 @@ class MeasureControl(MacroElement):
             'secondaryAreaUnit': secondary_area_unit,
         }
         self.options = json.dumps(options)
-
-        self._template = Template("""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.Control.Measure(
-            {{ this.options }});
-            {{this._parent.get_name()}}.addControl({{this.get_name()}});
-
-        {% endmacro %}
-        """)  # noqa
 
     def render(self, **kwargs):
         super(MeasureControl, self).render()
