@@ -29,15 +29,7 @@ class Search(MacroElement):
     See https://github.com/stefanocudini/leaflet-search for more information.
 
     """
-    def __init__(self, data, search_zoom=12, search_label='name', geom_type='Point', position='topleft'):
-        super(Search, self).__init__()
-        self.position = position
-        self.data = data
-        self.search_label = search_label
-        self.search_zoom = search_zoom
-        self.geom_type = geom_type
-
-        self._template = Template("""
+    _template = Template("""
         {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = new L.GeoJSON({{this.data}});
@@ -77,6 +69,14 @@ class Search(MacroElement):
 
         {% endmacro %}
         """)  # noqa
+
+    def __init__(self, data, search_zoom=12, search_label='name', geom_type='Point', position='topleft'):
+        super(Search, self).__init__()
+        self.position = position
+        self.data = data
+        self.search_label = search_label
+        self.search_zoom = search_zoom
+        self.geom_type = geom_type
 
     def render(self, **kwargs):
         super(Search, self).render()

@@ -9,11 +9,7 @@ from jinja2 import Template
 
 class ScrollZoomToggler(MacroElement):
     """Creates a button for enabling/disabling scroll on the Map."""
-    def __init__(self):
-        super(ScrollZoomToggler, self).__init__()
-        self._name = 'ScrollZoomToggler'
-
-        self._template = Template("""
+    _template = Template("""
             {% macro header(this,kwargs) %}
                 <style>
                     #{{this.get_name()}} {
@@ -55,3 +51,7 @@ class ScrollZoomToggler(MacroElement):
                     {{this._parent.get_name()}}.toggleScroll();
             {% endmacro %}
             """)
+
+    def __init__(self):
+        super(ScrollZoomToggler, self).__init__()
+        self._name = 'ScrollZoomToggler'

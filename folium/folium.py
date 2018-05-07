@@ -53,6 +53,15 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
+
+    _template = Template(
+        '<script>'
+        'L_PREFER_CANVAS={% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+        'L_NO_TOUCH={% if this.no_touch %}true{% else %}false{% endif %}; '
+        'L_DISABLE_3D={% if this.disable_3d %}true{% else %}false{% endif %};'
+        '</script>'
+    )
+
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
@@ -60,14 +69,6 @@ class GlobalSwitches(Element):
         self.prefer_canvas = prefer_canvas
         self.no_touch = no_touch
         self.disable_3d = disable_3d
-
-        self._template = Template(
-            '<script>'
-            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
-            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
-            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
-            '</script>'
-        )
 
 
 class Map(MacroElement):
@@ -165,6 +166,53 @@ class Map(MacroElement):
     ...)
 
     """
+    _template = Template(u"""
+{% macro header(this, kwargs) %}
+    <style>#{{this.get_name()}} {
+        position: {{this.position}};
+        width: {{this.width[0]}}{{this.width[1]}};
+        height: {{this.height[0]}}{{this.height[1]}};
+        left: {{this.left[0]}}{{this.left[1]}};
+        top: {{this.top[0]}}{{this.top[1]}};
+        }
+    </style>
+{% endmacro %}
+{% macro html(this, kwargs) %}
+    <div class="folium-map" id="{{this.get_name()}}" ></div>
+{% endmacro %}
+
+{% macro script(this, kwargs) %}
+    {% if this.max_bounds %}
+        var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+        var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+        var bounds = L.latLngBounds(southWest, northEast);
+    {% else %}
+        var bounds = null;
+    {% endif %}
+
+    var {{this.get_name()}} = L.map(
+        '{{this.get_name()}}', {
+        center: [{{this.location[0]}}, {{this.location[1]}}],
+        zoom: {{this.zoom_start}},
+        maxBounds: bounds,
+        layers: [],
+        worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+        crs: L.CRS.{{this.crs}}
+        });
+{% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+    
+    {% if this.objects_to_stay_in_front %}
+    function objects_in_front() {
+        {% for obj in this.objects_to_stay_in_front %}    
+            {{ obj.get_name() }}.bringToFront();
+        {% endfor %}
+    };
+
+{{ this.get_name() }}.on("overlayadd", objects_in_front);
+$(document).ready(objects_in_front);
+{% endif %}
+{% endmacro %}
+""")  # noqa
 
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
@@ -216,6 +264,8 @@ class Map(MacroElement):
             disable_3d
         )
 
+        self.objects_to_stay_in_front = []
+
         if tiles:
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
@@ -223,44 +273,6 @@ class Map(MacroElement):
                 API_key=API_key, detect_retina=detect_retina,
                 subdomains=subdomains
             )
-
-        self._template = Template(u"""
-        {% macro header(this, kwargs) %}
-            <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
-                }
-            </style>
-        {% endmacro %}
-        {% macro html(this, kwargs) %}
-            <div class="folium-map" id="{{this.get_name()}}" ></div>
-        {% endmacro %}
-
-        {% macro script(this, kwargs) %}
-
-            {% if this.max_bounds %}
-                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-                var bounds = L.latLngBounds(southWest, northEast);
-            {% else %}
-                var bounds = null;
-            {% endif %}
-
-            var {{this.get_name()}} = L.map(
-                                  '{{this.get_name()}}',
-                                  {center: [{{this.location[0]}},{{this.location[1]}}],
-                                  zoom: {{this.zoom_start}},
-                                  maxBounds: bounds,
-                                  layers: [],
-                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-                                  crs: L.CRS.{{this.crs}}
-                                 });
-            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
-        {% endmacro %}
-        """)  # noqa
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -549,10 +561,14 @@ class Map(MacroElement):
                                    '.'.join(key.split('.')[1:])))
 
             def color_scale_fun(x):
-                return color_range[len(
-                    [u for u in color_domain if
-                     get_by_key(x, key_on) in color_data and
-                     u <= color_data[get_by_key(x, key_on)]])]
+                idx = len(
+                    [
+                        u for u in color_domain if
+                        get_by_key(x, key_on) in color_data and
+                        u <= color_data[get_by_key(x, key_on)]
+                    ]
+                )
+                return color_range[idx-1]
         else:
             def color_scale_fun(x):
                 return fill_color
@@ -600,3 +616,17 @@ class Map(MacroElement):
                 caption=legend_name,
                 )
             self.add_child(color_scale)
+
+    def keep_in_front(self, *args):
+        """Pass one or multiples object that must stay in front.
+
+        The ordering matters, the last one is put on top.
+
+        Parameters
+        ----------
+        *args :
+            Variable length argument list. Any folium object that counts as an
+            overlay. For example FeatureGroup or a vector object such as Marker.
+        """
+        for obj in args:
+            self.objects_to_stay_in_front.append(obj)

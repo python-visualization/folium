@@ -34,6 +34,19 @@ class BoatMarker(Marker):
         Speed of the wind in knots.
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                var {{this.get_name()}} = L.boatMarker(
+                    [{{this.location[0]}},{{this.location[1]}}],
+                    {{this.kwargs}}).addTo({{this._parent.get_name()}});
+                {% if this.wind_heading is not none -%}
+                {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
+                {% else -%}
+                {{this.get_name()}}.setHeading({{this.heading}});
+                {% endif -%}
+            {% endmacro %}
+            """)  # noqa
+
     def __init__(self, location, popup=None, icon=None,
                  heading=0, wind_heading=None, wind_speed=0, **kwargs):
         super(BoatMarker, self).__init__(
@@ -46,19 +59,6 @@ class BoatMarker(Marker):
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed
         self.kwargs = json.dumps(kwargs)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.boatMarker(
-                    [{{this.location[0]}},{{this.location[1]}}],
-                    {{this.kwargs}}).addTo({{this._parent.get_name()}});
-                {% if this.wind_heading is not none -%}
-                {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
-                {% else -%}
-                {{this.get_name()}}.setHeading({{this.heading}});
-                {% endif -%}
-            {% endmacro %}
-            """)  # noqa
 
     def render(self, **kwargs):
         super(BoatMarker, self).render(**kwargs)
