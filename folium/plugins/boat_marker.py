@@ -39,7 +39,11 @@ class BoatMarker(Marker):
                 var {{this.get_name()}} = L.boatMarker(
                     [{{this.location[0]}},{{this.location[1]}}],
                     {{this.kwargs}}).addTo({{this._parent.get_name()}});
+                {% if this.wind_heading is not none -%}
                 {{this.get_name()}}.setHeadingWind({{this.heading}}, {{this.wind_speed}}, {{this.wind_heading}});
+                {% else -%}
+                {{this.get_name()}}.setHeading({{this.heading}});
+                {% endif -%}
             {% endmacro %}
             """)  # noqa
 
