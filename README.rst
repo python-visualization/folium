@@ -30,7 +30,7 @@ or
 
 .. code:: bash
 
-    $ conda install folium
+    $ conda install -c conda-forge folium
 
 Documentation
 -------------
