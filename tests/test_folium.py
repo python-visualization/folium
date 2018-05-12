@@ -199,7 +199,8 @@ class TestFolium(object):
 
         # Standard map.
         self.setup()
-        out = self.m._parent.render()
+        rendered = [line.strip() for line in self.m._parent.render().splitlines() if line.strip()]
+
         html_templ = self.env.get_template('fol_template.html')
         attr = 'http://openstreetmap.org'
         tile_layers = [
@@ -215,7 +216,8 @@ class TestFolium(object):
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
-                'size': 'width: 900.0px; height: 400.0px;',
+                'width': 'width: 900.0px;',
+                'height': 'height: 400.0px;',
                 'zoom_level': 4,
                 'max_bounds': True,
                 'min_lat': -90,
@@ -227,8 +229,9 @@ class TestFolium(object):
                 'world_copy_jump': False
                 }
         HTML = html_templ.render(tmpl, plugins={})
+        expected = [line.strip() for line in HTML.splitlines() if line.strip()]
 
-        assert ''.join(out.split()) == ''.join(HTML.split())
+        assert rendered == expected
 
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode

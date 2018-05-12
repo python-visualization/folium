@@ -47,11 +47,19 @@ class MarkerCluster(Layer):
     }'''
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
+            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            {% endmacro %}
+            """)
+
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
                  icon_create_function=None, options=None):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control, show=show)
+        self._name = 'MarkerCluster'
 
         if locations is not None:
             if popups is None:
@@ -67,14 +75,6 @@ class MarkerCluster(Layer):
         if icon_create_function is not None:
             options['iconCreateFunction'] = icon_create_function.strip()
         self.options = json.dumps(options, sort_keys=True, indent=2)
-
-        self._name = 'MarkerCluster'
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)

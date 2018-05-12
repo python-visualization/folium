@@ -153,14 +153,7 @@ class PolyLine(Marker):
     http://leafletjs.com/reference-1.2.0.html#polyline
 
     """
-    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(location=locations, popup=popup)
-        self._name = 'PolyLine'
-        self.tooltip = tooltip
-
-        self.options = _parse_options(line=True, **kwargs)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.polyline(
                     {{this.location}},
@@ -170,6 +163,13 @@ class PolyLine(Marker):
                     .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)  # noqa
+
+    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+        super(PolyLine, self).__init__(location=locations, popup=popup)
+        self._name = 'PolyLine'
+        self.tooltip = tooltip
+
+        self.options = _parse_options(line=True, **kwargs)
 
 
 class Polygon(Marker):
@@ -193,14 +193,7 @@ class Polygon(Marker):
     http://leafletjs.com/reference-1.2.0.html#polygon
 
     """
-    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(Polygon, self).__init__(locations, popup=popup)
-        self._name = 'Polygon'
-        self.tooltip = tooltip
-
-        self.options = _parse_options(line=True, **kwargs)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.polygon(
@@ -211,6 +204,13 @@ class Polygon(Marker):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+        super(Polygon, self).__init__(locations, popup=popup)
+        self._name = 'Polygon'
+        self.tooltip = tooltip
+
+        self.options = _parse_options(line=True, **kwargs)
 
 
 class Rectangle(Marker):
@@ -234,14 +234,7 @@ class Rectangle(Marker):
     http://leafletjs.com/reference-1.2.0.html#rectangle
 
     """
-    def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(location=bounds, popup=popup)
-        self._name = 'rectangle'
-        self.tooltip = tooltip
-
-        self.options = _parse_options(line=True, **kwargs)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.rectangle(
@@ -252,6 +245,13 @@ class Rectangle(Marker):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
+        super(Rectangle, self).__init__(location=bounds, popup=popup)
+        self._name = 'rectangle'
+        self.tooltip = tooltip
+
+        self.options = _parse_options(line=True, **kwargs)
 
 
 class Circle(Marker):
@@ -280,14 +280,7 @@ class Circle(Marker):
     http://leafletjs.com/reference-1.2.0.html#circle
 
     """
-    def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location=location, popup=popup)
-        self._name = 'circle'
-        self.tooltip = tooltip
-
-        self.options = _parse_options(line=False, radius=radius, **kwargs)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.circle(
@@ -298,6 +291,13 @@ class Circle(Marker):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
+        super(Circle, self).__init__(location=location, popup=popup)
+        self._name = 'circle'
+        self.tooltip = tooltip
+
+        self.options = _parse_options(line=False, radius=radius, **kwargs)
 
 
 class CircleMarker(Marker):
@@ -321,14 +321,7 @@ class CircleMarker(Marker):
     http://leafletjs.com/reference-1.2.0.html#circlemarker
 
     """
-    def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location=location, popup=popup)
-        self._name = 'CircleMarker'
-        self.tooltip = tooltip
-
-        self.options = _parse_options(line=False, radius=radius, **kwargs)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.circleMarker(
                 [{{this.location[0]}}, {{this.location[1]}}],
@@ -338,3 +331,10 @@ class CircleMarker(Marker):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
+        super(CircleMarker, self).__init__(location=location, popup=popup)
+        self._name = 'CircleMarker'
+        self.tooltip = tooltip
+
+        self.options = _parse_options(line=False, radius=radius, **kwargs)

@@ -41,6 +41,25 @@ class FastMarkerCluster(MarkerCluster):
         A dictionary with options for Leaflet.markercluster.
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+            {{this._callback}}
+
+            (function(){
+                var data = {{this._data}};
+                var map = {{this._parent.get_name()}};
+                var cluster = L.markerClusterGroup({{ this.options }});
+
+                for (var i = 0; i < data.length; i++) {
+                    var row = data[i];
+                    var marker = callback(row);
+                    marker.addTo(cluster);
+                }
+
+                cluster.addTo(map);
+            })();
+            {% endmacro %}""")
+
     def __init__(self, data, callback=None, options=None,
                  name=None, overlay=True, control=True, show=True):
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
@@ -62,22 +81,3 @@ class FastMarkerCluster(MarkerCluster):
                               '};')
         else:
             self._callback = 'var callback = {};'.format(callback)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-            {{this._callback}}
-
-            (function(){
-                var data = {{this._data}};
-                var map = {{this._parent.get_name()}};
-                var cluster = L.markerClusterGroup({{ this.options }});
-
-                for (var i = 0; i < data.length; i++) {
-                    var row = data[i];
-                    var marker = callback(row);
-                    marker.addTo(cluster);
-                }
-
-                cluster.addTo(map);
-            })();
-            {% endmacro %}""")

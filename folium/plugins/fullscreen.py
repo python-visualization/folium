@@ -29,16 +29,7 @@ class Fullscreen(MacroElement):
     See https://github.com/brunob/leaflet.fullscreen for more information.
 
     """
-    def __init__(self, position='topleft', title='Full Screen',
-                 title_cancel='Exit Full Screen', force_separate_button=False):
-        super(Fullscreen, self).__init__()
-        self._name = 'Fullscreen'
-        self.position = position
-        self.title = title
-        self.title_cancel = title_cancel
-        self.force_separate_button = str(force_separate_button).lower()
-
-        self._template = Template("""
+    _template = Template("""
         {% macro script(this, kwargs) %}
             L.control.fullscreen({
                 position: '{{this.position}}',
@@ -52,6 +43,15 @@ class Fullscreen(MacroElement):
 
         {% endmacro %}
         """)  # noqa
+
+    def __init__(self, position='topleft', title='Full Screen',
+                 title_cancel='Exit Full Screen', force_separate_button=False):
+        super(Fullscreen, self).__init__()
+        self._name = 'Fullscreen'
+        self.position = position
+        self.title = title
+        self.title_cancel = title_cancel
+        self.force_separate_button = str(force_separate_button).lower()
 
     def render(self, **kwargs):
         super(Fullscreen, self).render()

@@ -45,6 +45,19 @@ class PolyLineTextPath(MacroElement):
     See https://github.com/makinacorpus/Leaflet.TextPath for more information.
 
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                {{this.polyline.get_name()}}.setText("{{this.text}}", {
+                    repeat: {{'true' if this.repeat else 'false'}},
+                    center: {{'true' if this.center else 'false'}},
+                    below: {{'true' if this.below else 'false'}},
+                    offset: {{this.offset}},
+                    orientation: {{this.orientation}},
+                    attributes: {{this.attributes}}
+                });
+            {% endmacro %}
+            """)  # noqa
+
     def __init__(self, polyline, text, repeat=False, center=False, below=False,
                  offset=0, orientation=0, attributes=None):
         super(PolyLineTextPath, self).__init__()
@@ -57,19 +70,6 @@ class PolyLineTextPath(MacroElement):
         self.orientation = orientation
         self.offset = offset
         self.attributes = attributes
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {{this.polyline.get_name()}}.setText("{{this.text}}", {
-                    repeat: {{'true' if this.repeat else 'false'}},
-                    center: {{'true' if this.center else 'false'}},
-                    below: {{'true' if this.below else 'false'}},
-                    offset: {{this.offset}},
-                    orientation: {{this.orientation}},
-                    attributes: {{this.attributes}}
-                });
-            {% endmacro %}
-            """)  # noqa
 
     def render(self, **kwargs):
         super(PolyLineTextPath, self).render(**kwargs)

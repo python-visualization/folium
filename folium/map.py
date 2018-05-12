@@ -64,19 +64,19 @@ class FeatureGroup(Layer):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.featureGroup(
+                ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
+
     def __init__(self, name=None, overlay=True, control=True, show=True):
         super(FeatureGroup, self).__init__(name=name, overlay=overlay,
                                            control=control, show=show)
         self._name = 'FeatureGroup'
 
         self.tile_name = name if name is not None else self.get_name()
-
-        self._template = Template(u"""
-        {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.featureGroup(
-                ).addTo({{this._parent.get_name()}});
-        {% endmacro %}
-        """)
 
 
 class LayerControl(MacroElement):
@@ -98,17 +98,7 @@ class LayerControl(MacroElement):
           its layers so that the order is preserved when switching them on/off.
           default: True
     """
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True):
-        super(LayerControl, self).__init__()
-        self._name = 'LayerControl'
-        self.position = position
-        self.collapsed = str(collapsed).lower()
-        self.autoZIndex = str(autoZIndex).lower()
-        self.base_layers = OrderedDict()
-        self.overlays = OrderedDict()
-        self.layers_untoggle = []
-
-        self._template = Template("""
+    _template = Template("""
         {% macro script(this,kwargs) %}
             var {{this.get_name()}} = {
                 base_layers : { {% for key,val in this.base_layers.items() %}"{{key}}" : {{val}},{% endfor %} },
@@ -125,6 +115,16 @@ class LayerControl(MacroElement):
                 {{ val }}.remove();{% endfor %}
         {% endmacro %}
         """)  # noqa
+
+    def __init__(self, position='topright', collapsed=True, autoZIndex=True):
+        super(LayerControl, self).__init__()
+        self._name = 'LayerControl'
+        self.position = position
+        self.collapsed = str(collapsed).lower()
+        self.autoZIndex = str(autoZIndex).lower()
+        self.base_layers = OrderedDict()
+        self.overlays = OrderedDict()
+        self.layers_untoggle = []
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -178,17 +178,7 @@ class Icon(MacroElement):
     https://github.com/lvoogdt/Leaflet.awesome-markers
 
     """
-    def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon'):
-        super(Icon, self).__init__()
-        self._name = 'Icon'
-        self.color = color
-        self.icon = icon
-        self.icon_color = icon_color
-        self.angle = angle
-        self.prefix = prefix
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
                 var {{this.get_name()}} = L.AwesomeMarkers.icon({
@@ -201,6 +191,16 @@ class Icon(MacroElement):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, color='blue', icon_color='white', icon='info-sign',
+                 angle=0, prefix='glyphicon'):
+        super(Icon, self).__init__()
+        self._name = 'Icon'
+        self.color = color
+        self.icon = icon
+        self.icon_color = icon_color
+        self.angle = angle
+        self.prefix = prefix
 
 
 class Marker(MacroElement):
@@ -230,19 +230,7 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3],
                popoup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
-    def __init__(self, location, popup=None, tooltip=None, icon=None):
-        super(Marker, self).__init__()
-        self._name = 'Marker'
-        self.tooltip = tooltip
-        self.location = _validate_coordinates(location)
-        if icon is not None:
-            self.add_child(icon)
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.marker(
@@ -255,6 +243,18 @@ class Marker(MacroElement):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self, location, popup=None, tooltip=None, icon=None):
+        super(Marker, self).__init__()
+        self._name = 'Marker'
+        self.tooltip = tooltip
+        self.location = _validate_coordinates(location)
+        if icon is not None:
+            self.add_child(icon)
+        if isinstance(popup, text_type) or isinstance(popup, binary_type):
+            self.add_child(Popup(popup))
+        elif popup is not None:
+            self.add_child(popup)
 
     def _get_self_bounds(self):
         """
@@ -277,6 +277,21 @@ class Popup(Element):
     max_width: int, default 300
         The maximal width of the popup.
     """
+    _template = Template(u"""
+            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
+
+            {% for name, element in this.html._children.items() %}
+                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
+                {{this.get_name()}}.setContent({{name}});
+            {% endfor %}
+
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+
+            {% for name, element in this.script._children.items() %}
+                {{element.render()}}
+            {% endfor %}
+        """)  # noqa
+
     def __init__(self, html=None, parse_html=False, max_width=300):
         super(Popup, self).__init__()
         self._name = 'Popup'
@@ -296,21 +311,6 @@ class Popup(Element):
             self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
-
-        self._template = Template(u"""
-            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
-
-            {% for name, element in this.html._children.items() %}
-                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
-                {{this.get_name()}}.setContent({{name}});
-            {% endfor %}
-
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
-
-            {% for name, element in this.script._children.items() %}
-                {{element.render()}}
-            {% endfor %}
-        """)  # noqa
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -346,6 +346,19 @@ class FitBounds(MacroElement):
     max_zoom: int, default None
         Maximum zoom to be used.
     """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                {% if this.autobounds %}
+                    var autobounds = L.featureGroup({{ this.features }}).getBounds()
+                {% endif %}
+
+                {{this._parent.get_name()}}.fitBounds(
+                    {% if this.bounds %}{{ this.bounds }}{% else %}"autobounds"{% endif %},
+                    {{ this.fit_bounds_options }}
+                    );
+            {% endmacro %}
+            """)  # noqa
+
     def __init__(self, bounds, padding_top_left=None,
                  padding_bottom_right=None, padding=None, max_zoom=None):
         super(FitBounds, self).__init__()
@@ -360,16 +373,3 @@ class FitBounds(MacroElement):
         self.fit_bounds_options = json.dumps({key: val for key, val in
                                               options.items() if val},
                                              sort_keys=True)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {% if this.autobounds %}
-                    var autobounds = L.featureGroup({{ this.features }}).getBounds()
-                {% endif %}
-
-                {{this._parent.get_name()}}.fitBounds(
-                    {% if this.bounds %}{{ this.bounds }}{% else %}"autobounds"{% endif %},
-                    {{ this.fit_bounds_options }}
-                    );
-            {% endmacro %}
-            """)  # noqa

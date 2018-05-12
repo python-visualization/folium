@@ -53,3 +53,24 @@ def test_boat_marker():
 
     bounds = m.get_bounds()
     assert bounds == [[34, -43], [46, -30]], bounds
+
+
+def test_boat_marker_with_no_wind_speed_or_heading():
+    m = folium.Map([30., 0.], zoom_start=3)
+    bm1 = plugins.BoatMarker(
+        (34, -43),
+        heading=45,
+        color='#8f8')
+    m.add_child(bm1)
+
+    out = m._parent.render()
+
+    # We verify that the script part is correct.
+    tmpl = Template("""
+                var {{this.get_name()}} = L.boatMarker(
+                    [{{this.location[0]}},{{this.location[1]}}],
+                    {{this.kwargs}}).addTo({{this._parent.get_name()}});
+                {{this.get_name()}}.setHeading({{this.heading}});
+    """)  # noqa
+
+    assert tmpl.render(this=bm1) in out
