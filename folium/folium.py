@@ -53,6 +53,15 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
+
+    _template = Template(
+        '<script>'
+        'L_PREFER_CANVAS={% if this.prefer_canvas %}true{% else %}false{% endif %}; '
+        'L_NO_TOUCH={% if this.no_touch %}true{% else %}false{% endif %}; '
+        'L_DISABLE_3D={% if this.disable_3d %}true{% else %}false{% endif %};'
+        '</script>'
+    )
+
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
@@ -60,14 +69,6 @@ class GlobalSwitches(Element):
         self.prefer_canvas = prefer_canvas
         self.no_touch = no_touch
         self.disable_3d = disable_3d
-
-        self._template = Template(
-            '<script>'
-            'L_PREFER_CANVAS = {% if this.prefer_canvas %}true{% else %}false{% endif %}; '
-            'L_NO_TOUCH = {% if this.no_touch %}true{% else %}false{% endif %}; '
-            'L_DISABLE_3D = {% if this.disable_3d %}true{% else %}false{% endif %};'
-            '</script>'
-        )
 
 
 class Map(MacroElement):
@@ -165,6 +166,53 @@ class Map(MacroElement):
     ...)
 
     """
+    _template = Template(u"""
+{% macro header(this, kwargs) %}
+    <style>#{{this.get_name()}} {
+        position: {{this.position}};
+        width: {{this.width[0]}}{{this.width[1]}};
+        height: {{this.height[0]}}{{this.height[1]}};
+        left: {{this.left[0]}}{{this.left[1]}};
+        top: {{this.top[0]}}{{this.top[1]}};
+        }
+    </style>
+{% endmacro %}
+{% macro html(this, kwargs) %}
+    <div class="folium-map" id="{{this.get_name()}}" ></div>
+{% endmacro %}
+
+{% macro script(this, kwargs) %}
+    {% if this.max_bounds %}
+        var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
+        var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
+        var bounds = L.latLngBounds(southWest, northEast);
+    {% else %}
+        var bounds = null;
+    {% endif %}
+
+    var {{this.get_name()}} = L.map(
+        '{{this.get_name()}}', {
+        center: [{{this.location[0]}}, {{this.location[1]}}],
+        zoom: {{this.zoom_start}},
+        maxBounds: bounds,
+        layers: [],
+        worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
+        crs: L.CRS.{{this.crs}}
+        });
+{% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+    
+    {% if this.objects_to_stay_in_front %}
+    function objects_in_front() {
+        {% for obj in this.objects_to_stay_in_front %}    
+            {{ obj.get_name() }}.bringToFront();
+        {% endfor %}
+    };
+
+{{ this.get_name() }}.on("overlayadd", objects_in_front);
+$(document).ready(objects_in_front);
+{% endif %}
+{% endmacro %}
+""")  # noqa
 
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',
@@ -216,6 +264,8 @@ class Map(MacroElement):
             disable_3d
         )
 
+        self.objects_to_stay_in_front = []
+
         if tiles:
             self.add_tile_layer(
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
@@ -223,44 +273,6 @@ class Map(MacroElement):
                 API_key=API_key, detect_retina=detect_retina,
                 subdomains=subdomains
             )
-
-        self._template = Template(u"""
-        {% macro header(this, kwargs) %}
-            <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
-                }
-            </style>
-        {% endmacro %}
-        {% macro html(this, kwargs) %}
-            <div class="folium-map" id="{{this.get_name()}}" ></div>
-        {% endmacro %}
-
-        {% macro script(this, kwargs) %}
-
-            {% if this.max_bounds %}
-                var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-                var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-                var bounds = L.latLngBounds(southWest, northEast);
-            {% else %}
-                var bounds = null;
-            {% endif %}
-
-            var {{this.get_name()}} = L.map(
-                                  '{{this.get_name()}}',
-                                  {center: [{{this.location[0]}},{{this.location[1]}}],
-                                  zoom: {{this.zoom_start}},
-                                  maxBounds: bounds,
-                                  layers: [],
-                                  worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-                                  crs: L.CRS.{{this.crs}}
-                                 });
-            {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
-        {% endmacro %}
-        """)  # noqa
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -437,14 +449,15 @@ class Map(MacroElement):
         Parameters
         ----------
         geo_data: string/object
-            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON geometries
+            URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+            geometries
         data: Pandas DataFrame or Series, default None
             Data to bind to the GeoJSON.
         columns: dict or tuple, default None
             If the data is a Pandas DataFrame, the columns of data to be bound.
             Must pass column 1 as the key, and column 2 the values.
         key_on: string, default None
-            Variable in the GeoJSON file to bind the data to. Must always
+            Variable in the `geo_data` GeoJSON file to bind the data to. Must
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
         threshold_scale: list, default None
@@ -501,8 +514,9 @@ class Map(MacroElement):
         ...              highlight=True)
 
         """
-        if threshold_scale and len(threshold_scale) > 6:
-            raise ValueError
+        if threshold_scale is not None and len(threshold_scale) > 6:
+            raise ValueError('The length of threshold_scale is {}, but it may '
+                             'not be longer than 6.'.format(len(threshold_scale)))  # noqa
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
@@ -520,7 +534,7 @@ class Map(MacroElement):
             color_data = None
 
         # Compute color_domain
-        if threshold_scale:
+        if threshold_scale is not None:
             color_domain = list(threshold_scale)
         elif color_data:
             # To avoid explicit pandas dependency ; changed default behavior.
@@ -539,7 +553,7 @@ class Map(MacroElement):
         else:
             color_domain = None
 
-        if color_domain and key_on:
+        if color_domain and key_on is not None:
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
             color_range = color_brewer(fill_color, n=len(color_domain))
 
@@ -549,10 +563,14 @@ class Map(MacroElement):
                                    '.'.join(key.split('.')[1:])))
 
             def color_scale_fun(x):
-                return color_range[len(
-                    [u for u in color_domain if
-                     get_by_key(x, key_on) in color_data and
-                     u <= color_data[get_by_key(x, key_on)]])]
+                idx = len(
+                    [
+                        u for u in color_domain if
+                        get_by_key(x, key_on) in color_data and
+                        u <= color_data[get_by_key(x, key_on)]
+                    ]
+                )
+                return color_range[idx-1]
         else:
             def color_scale_fun(x):
                 return fill_color
@@ -600,3 +618,17 @@ class Map(MacroElement):
                 caption=legend_name,
                 )
             self.add_child(color_scale)
+
+    def keep_in_front(self, *args):
+        """Pass one or multiples object that must stay in front.
+
+        The ordering matters, the last one is put on top.
+
+        Parameters
+        ----------
+        *args :
+            Variable length argument list. Any folium object that counts as an
+            overlay. For example FeatureGroup or a vector object such as Marker.
+        """
+        for obj in args:
+            self.objects_to_stay_in_front.append(obj)

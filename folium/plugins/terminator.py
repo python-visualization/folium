@@ -13,15 +13,15 @@ class Terminator(MacroElement):
     overlay day and night regions on maps.
 
     """
-    def __init__(self):
-        super(Terminator, self).__init__()
-        self._name = 'Terminator'
-
-        self._template = Template(u"""
+    _template = Template(u"""
             {% macro script(this, kwargs) %}
                 L.terminator().addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
+    def __init__(self):
+        super(Terminator, self).__init__()
+        self._name = 'Terminator'
 
     def render(self, **kwargs):
         super(Terminator, self).render(**kwargs)
