@@ -41,10 +41,10 @@ class FastMarkerCluster(MarkerCluster):
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
-            
+
             var {{ this.get_name() }} = (function(){
                 {{this._callback}}
-                
+
                 var data = {{ this._data }};
                 var cluster = L.markerClusterGroup();
 
@@ -53,7 +53,7 @@ class FastMarkerCluster(MarkerCluster):
                     var marker = callback(row);
                     marker.addTo(cluster);
                 }
-                
+
                 cluster.addTo({{ this._parent.get_name() }});
                 return cluster;
             })();
