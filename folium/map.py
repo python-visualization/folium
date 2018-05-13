@@ -297,6 +297,7 @@ class Popup(Element):
                 {{element.render()}}
             {% endfor %}
         """)  # noqa
+
     
     def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
         super(Popup, self).__init__()
