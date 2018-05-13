@@ -291,14 +291,12 @@ class Popup(Element):
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
-            {% if this.show %}.openPopup(){% endif %};
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
             {% endfor %}
         """)  # noqa
-
     
     def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
         super(Popup, self).__init__()
