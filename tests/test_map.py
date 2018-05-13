@@ -80,7 +80,7 @@ def test_popup_sticky():
 
     assert rendered == expected
 
-    
+
 def test_popup_show():
 
     m = Map()
