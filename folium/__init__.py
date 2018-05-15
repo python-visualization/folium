@@ -23,6 +23,11 @@ from folium.map import (
 
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle  # noqa
 
+import branca
+if tuple(int(x) for x in branca.__version__.split('.')) < (0, 3, 0):
+    raise ImportError('branca version 0.3.0 or higher is required. '
+                      'Update branca with e.g. `pip install branca --upgrade`.')
+
 __version__ = get_versions()['version']
 del get_versions
 
