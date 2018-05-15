@@ -86,7 +86,7 @@ def test_popup_show():
     var {popup_name} = L.popup({{maxWidth: \'300\' , autoClose: false}});
     var {html_name} = $(\'<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>\')[0];
     {popup_name}.setContent({html_name});
-    {map_name}.bindPopup({popup_name});
+    {map_name}.bindPopup({popup_name}).openPopup();
     """.format(popup_name=popup.get_name(),
                html_name=list(popup.html._children.keys())[0],
                map_name=m.get_name())
