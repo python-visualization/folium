@@ -276,23 +276,30 @@ class Popup(Element):
         True if the popup is a template that needs to the rendered first.
     max_width: int, default 300
         The maximal width of the popup.
+    show: bool, default False
+        True renders the popup open on page load.
+    sticky: bool, default False
+        True prevents map and other popup clicks from closing.
     """
     _template = Template(u"""
-            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
+            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
+            {% if this.show or this.sticky %}, autoClose: false{% endif %}
+            {% if this.sticky %}, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}});
+            {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
+            {% if this.show %}.openPopup(){% endif %};
 
             {% for name, element in this.script._children.items() %}
                 {{element.render()}}
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -311,6 +318,8 @@ class Popup(Element):
             self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
+        self.show = show
+        self.sticky = sticky
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
