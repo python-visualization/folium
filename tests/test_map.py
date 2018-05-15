@@ -19,6 +19,9 @@ tmpl = u"""
 """.format
 
 
+def _normalize(rendered):
+    return ''.join(rendered.split())
+
 def test_popup_ascii():
     popup = Popup('Some text.')
     _id = list(popup.html._children.keys())[0]
@@ -62,23 +65,15 @@ def test_popup_sticky():
     rendered = popup._template.render(this=popup, kwargs={})
 
     expected = """
-            var {0} = L.popup({{maxWidth: \'300\'
-            , autoClose: false
-            , closeOnClick: false}});
+    var {popup_name} = L.popup({{maxWidth: \'300\', autoClose: false, closeOnClick: false}});
+    var {html_name} = $(\'<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>\')[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
 
-            
-                var {1} = $(\'<div id="{1}" style="width: 100.0%; height: 100.0%;">Some text.</div>\')[0];
-                {0}.setContent({1});
-            
-
-            {2}.bindPopup({0});
-
-            
-        """.format(popup.get_name(),
-           list(popup.html._children.items())[0][0],
-           m.get_name())
-
-    assert rendered == expected
+    assert _normalize(rendered) == _normalize(expected)
 
 
 def test_popup_show():
@@ -88,20 +83,12 @@ def test_popup_show():
     rendered = popup._template.render(this=popup, kwargs={})
 
     expected = """
-            var {0} = L.popup({{maxWidth: \'300\'
-            , autoClose: false
-            }});
+    var {popup_name} = L.popup({{maxWidth: \'300\' , autoClose: false}});
+    var {html_name} = $(\'<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>\')[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
 
-            
-                var {1} = $(\'<div id="{1}" style="width: 100.0%; height: 100.0%;">Some text.</div>\')[0];
-                {0}.setContent({1});
-            
-
-            {2}.bindPopup({0});
-
-            
-        """.format(popup.get_name(),
-           list(popup.html._children.items())[0][0],
-           m.get_name())
-
-    assert rendered == expected
+    assert _normalize(rendered) == _normalize(expected)

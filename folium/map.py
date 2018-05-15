@@ -298,7 +298,6 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    
     def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
@@ -320,7 +319,6 @@ class Popup(Element):
         self.max_width = max_width
         self.show = show
         self.sticky = sticky
-
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
