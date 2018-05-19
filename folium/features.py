@@ -325,6 +325,20 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: default None
+       Add a tooltip dictionary from the columns of your GeoDataFrame or
+       the 'properties' section of your GeoJson object. Takes
+       two dictionary objects with the keys:
+        'fields':
+            in the form of {columnname:alias}, which will map to the values in
+            the column, and the will display the alias as the description of the
+            value. All dictionary values will be converted to string for
+            representation, and separated by a <br> html tag to display on separate lines.
+        'properties'
+            is a style dictionary - only one record implemented right now. Pass 'sticky'
+            as True or False. If the value's .__str__().lower() method does not evaluate
+            to 'false', will default to True, if there are valid values in the 'fields' key.
+
 
     Examples
     --------
@@ -377,7 +391,20 @@ class GeoJson(Layer):
                         }
                     {% endif %}
                     )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    {% if this.tooltip['fields'] %}
+                            .bindTooltip(function(layer)
+                        {
+                         var tip = {{ this.tooltip['fields'] }};
+                         return String(Object.keys(tip).map(columnname=>`<strong>${tip[columnname]}</strong>: ${layer.feature.properties[columnname]}`).join('<br>'))
+                        },
+                            {sticky:
+                                {% if this.tooltip['properties'] %}
+                                    `{{ this.tooltip['properties']['sticky'].__str__().lower() }}` 
+                                {% else %}
+                                    `{{ True.__str__().lower() }}`
+                                {% endif %}
+                            != 'false'})
+                    {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
