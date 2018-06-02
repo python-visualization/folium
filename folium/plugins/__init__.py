@@ -14,6 +14,7 @@ from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
 from folium.plugins.draw import Draw
 from folium.plugins.fast_marker_cluster import FastMarkerCluster
+from folium.plugins.feature_group_sub_group import FeatureGroupSubGroup
 from folium.plugins.float_image import FloatImage
 from folium.plugins.fullscreen import Fullscreen
 from folium.plugins.heat_map import HeatMap
@@ -33,6 +34,7 @@ __all__ = [
     'BoatMarker',
     'Draw',
     'FastMarkerCluster',
+    'FeatureGroupSubGroup',
     'FloatImage',
     'Fullscreen',
     'HeatMap',
