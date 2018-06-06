@@ -12,7 +12,7 @@ import json
 from branca.element import Element, Figure
 
 from folium.map import Layer
-from folium.utilities import _parse_wms, image_to_url, mercator_transform
+from folium.utilities import image_to_url, mercator_transform
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -151,9 +151,7 @@ class WmsTileLayer(Layer):
         for setting extra tileLayer.wms parameters or as extra parameters in
         the WMS request.
 
-
     http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
-
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -165,15 +163,19 @@ class WmsTileLayer(Layer):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, url, name=None, attr='', overlay=True, control=True,
-                 show=True, **kwargs):
+    def __init__(self, url, name=None, layers='', styles='',
+                 fmt='image/jpg', transparent=False, version='1.1.1',
+                 attr='', overlay=True, control=True, show=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
                                            name=name, show=show)
         self.url = url
-        # Options.
-        options = _parse_wms(**kwargs)
-        options.update({'attribution': attr})
-
+        options = {'layers': layers,
+                   'styles': styles,
+                   'format': fmt,
+                   'transparent': transparent,
+                   'version': version,
+                   'attribution': attr}
+        options.update(kwargs)
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
 
