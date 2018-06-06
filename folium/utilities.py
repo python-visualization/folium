@@ -70,23 +70,6 @@ def _isnan(values):
     return any(math.isnan(value) for value in _flatten(values))
 
 
-def _parse_wms(**kw):
-    """
-    Parse leaflet TileLayer.WMS options.
-    http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
-
-    """
-    return {
-        'layers': kw.pop('layers', ''),
-        'styles': kw.pop('styles', ''),
-        'format': kw.pop('fmt', 'image/jpeg'),
-        'transparent': kw.pop('transparent', False),
-        'version': kw.pop('version', '1.1.1'),
-        'crs': kw.pop('crs', None),
-        'uppercase': kw.pop('uppercase', False),
-    }
-
-
 def image_to_url(image, colormap=None, origin='upper'):
     """
     Infers the type of an image argument and transforms it into a URL.
