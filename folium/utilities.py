@@ -156,8 +156,8 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = arr.shape
 
     if nblayers not in [1, 3, 4]:
-            raise ValueError('Data must be NxM (mono), '
-                             'NxMx3 (RGB), or NxMx4 (RGBA)')
+        raise ValueError('Data must be NxM (mono), '
+                         'NxMx3 (RGB), or NxMx4 (RGBA)')
     assert arr.shape == (height, width, nblayers)
 
     if nblayers == 1:
@@ -191,10 +191,10 @@ def write_png(data, origin='upper', colormap=None):
                          for i in range(height)])
 
     def png_pack(png_tag, data):
-            chunk_head = png_tag + data
-            return (struct.pack('!I', len(data)) +
-                    chunk_head +
-                    struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
+        chunk_head = png_tag + data
+        return (struct.pack('!I', len(data)) +
+                chunk_head +
+                struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
 
     return b''.join([
         b'\x89PNG\r\n\x1a\n',
