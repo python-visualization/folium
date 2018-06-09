@@ -403,17 +403,11 @@ class GeoJson(Layer):
             else:  # This is a filename
                 with open(data) as f:
                     self.data = json.loads(f.read())
-        elif data.__class__.__name__ in ['GeoDataFrame', 'GeoSeries']:
+        elif hasattr(data, '__geo_interface__'):
             self.embed = True
-            if hasattr(data, '__geo_interface__'):
-                # We have a GeoPandas 0.2 object.
-                self.data = json.loads(json.dumps(data.to_crs(epsg='4326').__geo_interface__))  # noqa
-            elif hasattr(data, 'columns'):
-                # We have a GeoDataFrame 0.1
-                self.data = json.loads(data.to_crs(epsg='4326').to_json())
-            else:
-                msg = 'Unable to transform this object to a GeoJSON.'
-                raise ValueError(msg)
+            if hasattr(data, 'to_crs'):
+                data = data.to_crs(epsg='4326')
+            self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
