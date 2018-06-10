@@ -38,16 +38,6 @@ def test_feature_group_sub_group():
     tmpl = Template("""
         var {{this.get_name()}} = L.featureGroup.subGroup({{this._group.get_name()}});
         {{this.get_name()}}.addTo({{this._parent.get_name()}});
-
-        {% for marker in this._children.values() %}
-            var {{marker.get_name()}} = L.marker(
-                [{{marker.location[0]}},{{marker.location[1]}}],
-                {
-                    icon: new L.Icon.Default()
-                    }
-                )
-                .addTo({{this.get_name()}});
-        {% endfor %}
     """)
     assert ''.join(tmpl.render(this=g1).split()) in ''.join(out.split())
     assert ''.join(tmpl.render(this=g2).split()) in ''.join(out.split())
