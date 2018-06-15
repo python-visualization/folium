@@ -436,10 +436,10 @@ class GeoJson(Layer):
         if self.tooltip:
             if self.tooltip.fields:
                 for value in self.tooltip.fields:
-                    assert value in tuple(self.data['features'][0]['properties'].keys()),(
-                        f"The value {value} is not in the available properties.\n"+
+                    assert value in tuple(self.data['features'][0]['properties'].keys()), (
+                        f"The value {value} is not in the available properties.\n" + 
                     	f"For your review, they are {tuple(self.data['features'][0]['properties'].keys())}"
-					)
+                        )
 
         self.smooth_factor = smooth_factor
 
