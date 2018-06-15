@@ -672,6 +672,7 @@ class DivIcon(MacroElement):
         self.html = html
         self.className = class_name
 
+        
 class Tooltip:
     """
 Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript function
@@ -682,7 +683,7 @@ Parameters
     fields: list or tuple.
         list or tuple of labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns you'd like to display.
     aliases: list or tuple
-        list or tuple of optional 'aliases' you'd like to display the each field name as, to describe the data in 
+        list or tuple of optional 'aliases' you'd like to display the each field name as, to describe the data in
         the tooltip.
         *Must consist of strings, and be of the same length as fields.
     text: str
@@ -718,7 +719,7 @@ Examples
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or tuple to Fields."
         if bool(fields) & bool(aliases):
-            assert isinstance(aliases, (list,tuple))
+            assert isinstance(aliases, (list, tuple))
             assert len(fields) == len(aliases), "Fields and Aliases must have the same length."
         assert isinstance(labels, bool), "This field requires a boolean True or False value."
         assert isinstance(sticky, bool), "This field requires a boolean True or False value."
