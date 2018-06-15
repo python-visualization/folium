@@ -431,14 +431,15 @@ class GeoJson(Layer):
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
-        
+
         self.tooltip = tooltip
         if self.tooltip:
             if self.tooltip.fields:
                 for value in self.tooltip.fields:
-                    assert value in tuple(self.data['features'][0]['properties'].keys()), f"The value {value} is not in the available properties. For your review, they are {tuple(self.data['features'][0]['properties'].keys())}"
+                    assert value in tuple(self.data['features'][0]['properties'].keys()),
+                    (f"The value {value} is not in the available properties."+
+                    f"For your review, they are {tuple(self.data['features'][0]['properties'].keys())}")
 
-        
         self.smooth_factor = smooth_factor
 
     def style_data(self):
@@ -673,36 +674,43 @@ class DivIcon(MacroElement):
         self.html = html
         self.className = class_name
 
-
 class Tooltip:
     """
-Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript function when hovering the cursor over each feature.
+Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript function
+when hovering the cursor over each feature.
 
 Parameters
 ----------
     fields: list or tuple.
         list or tuple of labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns you'd like to display.
-    aliases: list or tuple 
-        list or tuple of optional 'aliases' you'd like to display the each field name as, to describe the data in the tooltip.
+    aliases: list or tuple
+        list or tuple of optional 'aliases' you'd like to display the each field name as, to describe the data in 
+        the tooltip.
         *Must consist of strings, and be of the same length as fields.
     text: str
         Pass the same string as a tooltip for every value in the GeoJson object, I.e. "Click for more info."
         *May not be passed if fields is not None
     labels: boolean True or False
-        True or False value indicating if you'd like the the field names or aliases to display to the left of the value, in bold.
+        True or False value indicating if you'd like the the field names or aliases to display to the left of the
+        value in bold.
         *Defaults to True.
     sticky: boolean True or False
         True or False value indicating if you'd like the tooltip to 'sticky' with the mouse cursor as it moves.
         *If False, the tooltip will place statically in the centroid of the feature.
         *Defaults to True
     toLocaleString: boolean True or False
-        This will use JavaScript's .toLocaleString() to format 'clean' values as strings for the user's location; i.e. 1,000,000.00 comma separators, float truncation for the US, etc.
+        This will use JavaScript's .toLocaleString() to format 'clean' values as strings for the user's location;
+        i.e. 1,000,000.00 comma separators, float truncation for the US, etc.
         *Available for most of JavaScript's primitive types (any data you'll serve into the template)
 
 Examples
 --------
 # Provide fields and aliases
->>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'], aliases=['County','2015 Census Population','2015 Median Income'], labels=True, sticky=False, toLocaleString=True)
+>>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
+            aliases=['County','2015 Census Population','2015 Median Income'],
+            labels=True,
+            sticky=False,
+            toLocaleString=True)
 # Provide fields, with labels off, and sticky True.
 >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
 # Provide only text.
@@ -712,24 +720,23 @@ Examples
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or tuple to Fields."
         if bool(fields) & bool(aliases):
-            assert isinstance(aliases,(list,tuple))
+            assert isinstance(aliases, (list,tuple))
             assert len(fields)==len(aliases), "Fields and Aliases must have the same length."
-        assert isinstance(labels,bool), "This field requires a boolean True or False value."
-        assert isinstance(sticky,bool), "This field requires a boolean True or False value."
-        assert not all((fields,text)), "Please choose either fields or text."
-        assert any((fields,text)), "Please choose either fields or text."
-        assert isinstance(toLocaleString,bool), "toLocaleString must be either True or False"
-        self.fields=fields
+        assert isinstance(labels, bool), "This field requires a boolean True or False value."
+        assert isinstance(sticky, bool), "This field requires a boolean True or False value."
+        assert not all((fields, text)), "Please choose either fields or text."
+        assert any((fields, text)), "Please choose either fields or text."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be either True or False"
+        self.fields = fields
         self.aliases = aliases
         self.text = text
-        self.labels=labels
-        self.sticky=sticky
-        self.toLocaleString=toLocaleString
+        self.labels = labels
+        self.sticky = sticky
+        self.toLocaleString = toLocaleString
         if self.fields:
             self.result = self.fields
         else:
             self.result = self.text
-        
 
 class LatLngPopup(MacroElement):
     """
