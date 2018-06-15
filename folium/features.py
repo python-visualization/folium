@@ -436,10 +436,7 @@ class GeoJson(Layer):
         if self.tooltip:
             if self.tooltip.fields:
                 for value in self.tooltip.fields:
-                    assert value in tuple(self.data['features'][0]['properties'].keys()), (
-                        f"The value {value} is not in the available properties.\n" + 
-                    	f"For your review, they are {tuple(self.data['features'][0]['properties'].keys())}"
-                        )
+                    assert value in tuple(self.data['features'][0]['properties'].keys()), f"The value {value} is not in the available properties.\nFor your review, they are {tuple(self.data['features'][0]['properties'].keys())}"
 
         self.smooth_factor = smooth_factor
 
@@ -722,7 +719,7 @@ Examples
             assert isinstance(fields, (list, tuple)), "Please pass a list or tuple to Fields."
         if bool(fields) & bool(aliases):
             assert isinstance(aliases, (list,tuple))
-            assert len(fields)==len(aliases), "Fields and Aliases must have the same length."
+            assert len(fields) == len(aliases), "Fields and Aliases must have the same length."
         assert isinstance(labels, bool), "This field requires a boolean True or False value."
         assert isinstance(sticky, bool), "This field requires a boolean True or False value."
         assert not all((fields, text)), "Please choose either fields or text."
