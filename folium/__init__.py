@@ -25,6 +25,7 @@ from folium.features import (
     DivIcon,
     GeoJson,
     GeoJsonTooltip,
+    GeoJsonPopup,
     LatLngPopup,
     RegularPolygonMarker,
     TopoJson,
