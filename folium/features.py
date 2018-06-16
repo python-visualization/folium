@@ -164,7 +164,7 @@ class Vega(Element):
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
         self._parent.script.add_child(Element(Template("""
-            vega_parse({{this.json}},{{this.get_name()}});
+            vega_parse({{this.json}},{{this.get_name()}
             """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
@@ -437,7 +437,7 @@ class GeoJson(Layer):
             if self.tooltip.fields:
                 keys = tuple(self.data['features'][0]['properties'].keys())
                 for value in self.tooltip.fields:
-                    assert value in keys, (f"{value} is not available in {keys}")
+                    assert value in keys, f"{value} is not available in {keys}"
 
         self.smooth_factor = smooth_factor
 
