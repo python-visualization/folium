@@ -672,7 +672,7 @@ class DivIcon(MacroElement):
         self.html = html
         self.className = class_name
 
-        
+
 class Tooltip:
     """
 Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript function
