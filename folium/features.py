@@ -379,19 +379,28 @@ class GeoJson(Layer):
                     )
                     {% if this.tooltip %}
                     .bindTooltip(function(layer){
-                        {% if this.tooltip.fields %}let fields = {{ this.tooltip.fields }};
-                        {% if this.tooltip.aliases %}let aliases = {{ this.tooltip.aliases }};{% endif %}
-                        return String(fields.map(columnname=>`{% if this.tooltip.labels %}<strong>{% if this.tooltip.aliases %}${aliases[fields.indexOf(columnname)]{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}{% else %}${columnname{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}{% endif %}</strong>: 
-                                                        {% endif %}
-                                                        ${layer.feature.properties[columnname]{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}`
-
-                                                    ).join('<br>'))
+                        {% if this.tooltip.fields %}
+                        let fields = {{ this.tooltip.fields }};
+                            {% if this.tooltip.aliases %}
+                        let aliases = {{ this.tooltip.aliases }};
+                            {% endif %}
+                        return String(
+                            fields.map(
+                            columnname=>
+                                `{% if this.tooltip.labels %}
+                                <strong>{% if this.tooltip.aliases %}${aliases[fields.indexOf(columnname)]
+                                    {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
+                                {% else %}
+                                ${ columnname{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
+                                {% endif %}</strong>:
+                                {% endif %}
+                                ${ layer.feature.properties[columnname]
+                                {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %} }`
+                            ).join('<br>'))
                         {% else %}
                             return String(`{{ this.tooltip.text.__str__() }}`)
                         {% endif %}
-                    }
-                    ,
-                    {sticky: {{ this.tooltip.sticky.__str__().lower() }}})
+                        },{sticky: {{ this.tooltip.sticky.__str__().lower() }}})
                     {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
