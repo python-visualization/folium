@@ -684,7 +684,7 @@ class DivIcon(MacroElement):
 
 class Tooltip:
     """
-    Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript 
+    Creates a Tooltip object for adding to features to display text as a property a Map by executing a javascript
     function when hovering the cursor over each feature.
 
     Parameters
@@ -698,7 +698,7 @@ class Tooltip:
             Pass the same string as a tooltip for every value in the GeoJson object, I.e. "Click for more info."
             *May not be passed if fields is not None
         labels: boolean True or False
-            True or False value indicating if you'd like the the field names or aliases to display to the left of 
+            True or False value indicating if you'd like the the field names or aliases to display to the left of
             the value in bold.
             *Defaults to True.
         sticky: boolean True or False
