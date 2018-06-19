@@ -405,7 +405,6 @@ class GeoJson(Layer):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        self.tooltip = tooltip
         if isinstance(data, dict):
             self.embed = True
             self.data = data
