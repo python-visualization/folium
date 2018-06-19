@@ -160,7 +160,7 @@ class HeatMapWithTime(Layer):
 
         figure.header.add_child(
             JavascriptLink(
-                'https://cdnjs.cloudflare.com/ajax/libs/heatmap.js/2.0.2/heatmap.min.js'),
+                'https://rawgit.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),  # noqa
             name='heatmap.min.js')
 
         figure.header.add_child(
