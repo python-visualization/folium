@@ -164,7 +164,7 @@ class Vega(Element):
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
         self._parent.script.add_child(Element(Template("""
-            vega_parse({{this.json}},{{this.get_name()}
+            vega_parse({{this.json}},{{this.get_name()}});
             """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
