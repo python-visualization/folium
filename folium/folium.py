@@ -299,22 +299,24 @@ $(document).ready(objects_in_front);
         if self._png_image is None:
             import selenium.webdriver
 
-            with tempfile.NamedTemporaryFile(suffix='.html') as f:
-                fname = f.name
-                self.save(fname, close_file=False)
-                driver = selenium.webdriver.PhantomJS(
-                    service_log_path=os.path.devnull
-                )
-                driver.get('file://{}'.format(fname))
-                driver.maximize_window()
-                # Ignore user map size.
-                driver.execute_script("document.body.style.width = '100%';")  # noqa
-                # We should probably monitor if some element is present,
-                # but this is OK for now.
-                time.sleep(delay)
-                png = driver.get_screenshot_as_png()
-                driver.quit()
-                self._png_image = png
+            driver = selenium.webdriver.PhantomJS(
+                service_log_path=os.path.devnull
+            )
+            driver.get('about:blank')
+            html = self.get_root().render()
+            html = html.replace('\'', '"').replace('"', '\\"')
+            html = html.replace('\n', '')
+            driver.execute_script('document.write(\"{}\")'.format(html))
+            driver.maximize_window()
+            # Ignore user map size.
+            # todo: fix this
+            # driver.execute_script("document.body.style.width = '100%';")  # noqa
+            # We should probably monitor if some element is present,
+            # but this is OK for now.
+            time.sleep(delay)
+            png = driver.get_screenshot_as_png()
+            driver.quit()
+            self._png_image = png
         return self._png_image
 
     def _repr_png_(self):

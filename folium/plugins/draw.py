@@ -11,10 +11,15 @@ class Draw(MacroElement):
     """
     Vector drawing and editing plugin for Leaflet.
 
+    Parameters
+    ----------
+    export : bool, default False
+        Add a small button that exports the drawn shapes as a geojson file.
+
     Examples
     --------
     >>> m = folium.Map()
-    >>> Draw().draw.add_to(m)
+    >>> Draw(export=True).add_to(m)
 
     For more info please check
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
@@ -65,26 +70,26 @@ class Draw(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdn.rawgit.com/Leaflet/Leaflet.draw/v0.4.12/dist/leaflet.draw.js'))  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'))  # noqa
 
         figure.header.add_child(
-            CssLink('https://cdn.rawgit.com/Leaflet/Leaflet.draw/v0.4.12/dist/leaflet.draw.css'))  # noqa
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'))  # noqa
 
         export_style = """<style>
         #export {
-        position: absolute;
-        top: 5px;
-        right: 10px;
-        z-index: 999;
-        background: white;
-        color: black;
-        padding: 6px;
-        border-radius: 4px;
-        font-family: 'Helvetica Neue';
-        cursor: pointer;
-        font-size: 12px;
-        text-decoration: none;
-        top: 90px;
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            z-index: 999;
+            background: white;
+            color: black;
+            padding: 6px;
+            border-radius: 4px;
+            font-family: 'Helvetica Neue';
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            top: 90px;
         }
         </style>"""
         export_button = """<a href='#' id='export'>Export</a>"""
