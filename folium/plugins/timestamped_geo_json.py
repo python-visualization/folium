@@ -41,6 +41,10 @@ class TimestampedGeoJson(MacroElement):
         Used to construct the array of available times starting
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and'PT1M' -> 1/minute
+    duration: str, default None
+        Period of time which the features will be shown on the map after their time
+        has passed. If null, all previous times will be shown. Format: ISO8601 Duration
+        ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and'PT1M' -> 1/minute
 
     Examples
     --------
@@ -110,14 +114,14 @@ class TimestampedGeoJson(MacroElement):
                 })
 
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
-                {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}}}
+                         {updateTimeDimension: true,addlastPoint: {{'true' if this.add_last_point else 'false'}},duration: {{"\""+this.duration+"\"" if this.duration else 'undefined'}}}
                 ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
 
     def __init__(self, data, transition_time=200, loop=True, auto_play=True, add_last_point=True,
                  period='P1D', min_speed=0.1, max_speed=10, loop_button=False,
-                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False):
+                 date_options='YYYY/MM/DD hh:mm:ss', time_slider_drag_update=False, duration=None):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
@@ -133,6 +137,7 @@ class TimestampedGeoJson(MacroElement):
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
+        self.duration = duration
 
         options = {
             'position': 'bottomleft',
