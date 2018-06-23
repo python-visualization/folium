@@ -1,0 +1,79 @@
+language: python
+
+sudo: false
+
+env:
+  global:
+    - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
+
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=notebooks
+  - python: 3.6
+    env: TEST_TARGET=latest_branca
+  - python: 3.6
+    env: TEST_TARGET=docs
+  allow_failures:
+  - python: 2.7
+    env: TEST_TARGET=latest_branca
+  - python: 3.6
+    env: TEST_TARGET=latest_branca
+
+before_install:
+  - wget http://bit.ly/miniconda -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+  - conda update conda
+  - conda config --add channels conda-forge --force
+  - conda create --name TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
+  - source activate TEST
+
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      conda install mock ;
+    fi
+
+# Test source distribution.
+install:
+  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
+
+script:
+  - if [[ $TEST_TARGET != 'docs' ]]; then
+      cp -r tests/ examples/ /tmp && cd /tmp ;
+    fi
+
+  - if [[ $TEST_TARGET == 'default' ]]; then
+      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+    fi
+
+  - if [[ $TEST_TARGET == 'latest_branca' ]]; then
+      conda uninstall branca ;
+      pip install git+https://github.com/python-visualization/branca.git ;
+      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+    fi
+
+  - if [[ $TEST_TARGET == 'notebooks' ]]; then
+      for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
+      py.test -vv tests/notebooks/test_notebooks.py ;
+    fi
+
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
+      pushd docs ;
+      make clean html linkcheck ;
+      popd ;
+      python -m doctr deploy --sync .;
+      python -m doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH" ;
+    fi
+
+doctr:
+  require-master: true
+  sync: False

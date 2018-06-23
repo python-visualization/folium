@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;</script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.2.0/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+
+    <style>#{{ map_id }} {
+        position: relative;
+        {{ width }}
+        {{ height }}
+        left: 0.0%;
+        top: 0.0%;
+      }
+    </style>
+</head>
+<body>
+  <div class="folium-map" id="{{ map_id }}" ></div>
+</body>
+<script>
+  var southWest = L.latLng({{ min_lat }}, {{ min_lon }});
+  var northEast = L.latLng({{ max_lat }}, {{ max_lon }});
+  var bounds = L.latLngBounds(southWest, northEast);
+
+  var {{ map_id }} = L.map(
+      '{{ map_id }}', {
+      center: [{{ lat }}, {{ lon }}],
+      zoom: {{ zoom_level }},
+      maxBounds: bounds,
+      layers: [],
+      worldCopyJump: {{ world_copy_jump.__str__().lower() }},
+      crs: L.CRS.{{crs}}
+      });
+
+  {% for tile in tile_layers -%}
+   var {{tile['id']}} = L.tileLayer(
+       '{{tile['address']}}',
+        {
+        "attribution": "{{tile['attr']}}",
+        "detectRetina": {{tile['detect_retina'].__str__().lower()}},
+        "maxNativeZoom": {{tile['max_zoom']}},
+        "maxZoom": {{tile['max_zoom']}},
+        "minZoom": {{tile['min_zoom']}},
+        "noWrap": {{tile['no_wrap'].__str__().lower()}},
+        "subdomains": "{{tile['subdomains']}}"
+}).addTo({{ map_id }});
+  {%- endfor %}
+</script>
