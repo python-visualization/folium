@@ -64,18 +64,23 @@ class MarkerCluster(Layer):
 
         if locations is not None:
             if popups is None:
-                popups = [None]*len(locations)
+                popups = [None] * len(locations)
             if icons is None:
-                icons = [None]*len(locations)
+                icons = [None] * len(locations)
             for location, popup, icon in zip(locations, popups, icons):
-                p = popup if popup is None or isinstance(popup, Popup) else Popup(popup)  # noqa
-                i = icon if icon is None or isinstance(icon, Icon) else Icon(icon)  # noqa
+                p = popup if self._validate(popup, Popup) else Popup(popup)
+                i = icon if self._validate(icon, Icon) else Icon(icon)
                 self.add_child(Marker(location, popup=p, icon=i))
 
         options = {} if options is None else options
         if icon_create_function is not None:
             options['iconCreateFunction'] = icon_create_function.strip()
         self.options = json.dumps(options, sort_keys=True, indent=2)
+
+    @staticmethod
+    def _validate(obj, cls):
+        """Check whether the given object is from the given class or is None."""
+        return True if obj is None or isinstance(obj, cls) else False
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)
