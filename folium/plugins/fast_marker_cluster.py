@@ -38,7 +38,7 @@ class FastMarkerCluster(MarkerCluster):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     options : dict, default None
-        A dictionary with options for Leaflet.markercluster. See 
+        A dictionary with options for Leaflet.markercluster. See
         https://github.com/Leaflet/Leaflet.markercluster for options.
 
     """

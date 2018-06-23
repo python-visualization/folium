@@ -34,7 +34,7 @@ class MarkerCluster(Layer):
         Override the default behaviour, making possible to customize
         markers colors and sizes.
     options : dict, default None
-        A dictionary with options for Leaflet.markercluster. See 
+        A dictionary with options for Leaflet.markercluster. See
         https://github.com/Leaflet/Leaflet.markercluster for options.
 
     Example
