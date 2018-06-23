@@ -70,23 +70,6 @@ def _isnan(values):
     return any(math.isnan(value) for value in _flatten(values))
 
 
-def _parse_wms(**kw):
-    """
-    Parse leaflet TileLayer.WMS options.
-    http://leafletjs.com/reference-1.2.0.html#tilelayer-wms
-
-    """
-    return {
-        'layers': kw.pop('layers', ''),
-        'styles': kw.pop('styles', ''),
-        'format': kw.pop('fmt', 'image/jpeg'),
-        'transparent': kw.pop('transparent', False),
-        'version': kw.pop('version', '1.1.1'),
-        'crs': kw.pop('crs', None),
-        'uppercase': kw.pop('uppercase', False),
-    }
-
-
 def image_to_url(image, colormap=None, origin='upper'):
     """
     Infers the type of an image argument and transforms it into a URL.
@@ -173,8 +156,8 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = arr.shape
 
     if nblayers not in [1, 3, 4]:
-            raise ValueError('Data must be NxM (mono), '
-                             'NxMx3 (RGB), or NxMx4 (RGBA)')
+        raise ValueError('Data must be NxM (mono), '
+                         'NxMx3 (RGB), or NxMx4 (RGBA)')
     assert arr.shape == (height, width, nblayers)
 
     if nblayers == 1:
@@ -208,10 +191,10 @@ def write_png(data, origin='upper', colormap=None):
                          for i in range(height)])
 
     def png_pack(png_tag, data):
-            chunk_head = png_tag + data
-            return (struct.pack('!I', len(data)) +
-                    chunk_head +
-                    struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
+        chunk_head = png_tag + data
+        return (struct.pack('!I', len(data)) +
+                chunk_head +
+                struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
 
     return b''.join([
         b'\x89PNG\r\n\x1a\n',

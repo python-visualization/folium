@@ -37,16 +37,19 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    options : dict, default None
+        A dictionary with options for Leaflet.markercluster. See
+        https://github.com/Leaflet/Leaflet.markercluster for options.
 
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
-            {{this._callback}}
 
-            (function(){
-                var data = {{this._data}};
-                var map = {{this._parent.get_name()}};
-                var cluster = L.markerClusterGroup();
+            var {{ this.get_name() }} = (function(){
+                {{this._callback}}
+
+                var data = {{ this._data }};
+                var cluster = L.markerClusterGroup({{ this.options }});
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -54,27 +57,26 @@ class FastMarkerCluster(MarkerCluster):
                     marker.addTo(cluster);
                 }
 
-                cluster.addTo(map);
+                cluster.addTo({{ this._parent.get_name() }});
+                return cluster;
             })();
             {% endmacro %}""")
 
-    def __init__(self, data, callback=None,
+    def __init__(self, data, callback=None, options=None,
                  name=None, overlay=True, control=True, show=True):
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
-                                                control=control, show=show)
+                                                control=control, show=show,
+                                                options=options)
         self._name = 'FastMarkerCluster'
         self._data = _validate_coordinates(data)
 
         if callback is None:
-            self._callback = ('var callback;\n' +
-                              'callback = function (row) {\n' +
-                              '\tvar icon, marker;\n' +
-                              '\t// Returns a L.marker object\n' +
-                              '\ticon = L.AwesomeMarkers.icon();\n' +
-                              '\tmarker = L.marker(new L.LatLng(row[0], ' +
-                              'row[1]));\n' +
-                              '\tmarker.setIcon(icon);\n' +
-                              '\treturn marker;\n' +
-                              '};')
+            self._callback = """
+                var callback = function (row) {
+                    var icon = L.AwesomeMarkers.icon();
+                    var marker = L.marker(new L.LatLng(row[0], row[1]));
+                    marker.setIcon(icon);
+                    return marker;
+                };"""
         else:
             self._callback = 'var callback = {};'.format(callback)
