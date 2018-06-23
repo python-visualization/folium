@@ -37,6 +37,9 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    options : dict, default None
+        A dictionary with options for Leaflet.markercluster. See
+        https://github.com/Leaflet/Leaflet.markercluster for options.
 
     """
     _template = Template(u"""
@@ -46,7 +49,7 @@ class FastMarkerCluster(MarkerCluster):
                 {{this._callback}}
 
                 var data = {{ this._data }};
-                var cluster = L.markerClusterGroup();
+                var cluster = L.markerClusterGroup({{ this.options }});
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -59,10 +62,11 @@ class FastMarkerCluster(MarkerCluster):
             })();
             {% endmacro %}""")
 
-    def __init__(self, data, callback=None,
+    def __init__(self, data, callback=None, options=None,
                  name=None, overlay=True, control=True, show=True):
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
-                                                control=control, show=show)
+                                                control=control, show=show,
+                                                options=options)
         self._name = 'FastMarkerCluster'
         self._data = _validate_coordinates(data)
 
