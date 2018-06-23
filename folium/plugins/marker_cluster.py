@@ -16,6 +16,12 @@ class MarkerCluster(Layer):
 
     Parameters
     ----------
+    locations: list of list or array of shape (n, 2).
+        Data points of the form [[lat, lng]].
+    popups: list of length n, default None
+        Popup for each marker, either a Popup object or a string or None.
+    icons: list of length n, default None
+        Icon for each marker, either an Icon object or a string or None.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -28,23 +34,18 @@ class MarkerCluster(Layer):
         Override the default behaviour, making possible to customize
         markers colors and sizes.
     options : dict, default None
-        A dictionary with options for Leaflet.markercluster.
-
-    locations: list of list or array of shape (n, 2).
-        Data points of the form [[lat, lng]].
-    popups: list of length n.
-        Popup for each marker.
-    icons: list of length n.
-        Icon for each marker.
+        A dictionary with options for Leaflet.markercluster. See 
+        https://github.com/Leaflet/Leaflet.markercluster for options.
 
     Example
     -------
     >>> icon_create_function = '''
-    ...    function(cluster) {
-    ...    return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>',
-    ...                      className: 'marker-cluster marker-cluster-small',
-    ...                      iconSize: new L.Point(20, 20)});
-    }'''
+    ...     function(cluster) {
+    ...     return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>',
+    ...                       className: 'marker-cluster marker-cluster-small',
+    ...                       iconSize: new L.Point(20, 20)});
+    ...     }
+    ... '''
 
     """
     _template = Template(u"""
