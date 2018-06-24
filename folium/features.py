@@ -379,7 +379,6 @@ class GeoJson(Layer):
                     )
                     {% if this.tooltip %}
                     .bindTooltip(function(layer){
-
                     {% if this.tooltip.fields %}
                     let fields = {{ this.tooltip.fields }};
                         {% if this.tooltip.aliases %}
