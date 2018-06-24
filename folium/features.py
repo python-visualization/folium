@@ -685,7 +685,7 @@ class DivIcon(MacroElement):
         self.className = class_name
 
 
-class Tooltip():
+class Tooltip(object):
     """
     Creates a Tooltip object for adding to features to display text as a
     property by executing a javascript function when hovering the cursor over
