@@ -16,23 +16,23 @@ class TimestampedGeoJson(MacroElement):
     into a map with Map.add_child.
 
     A geo-json is timestamped if:
-    * it contains only features of types LineString, MultiPoint, MultiLineString 
+    * it contains only features of types LineString, MultiPoint, MultiLineString
       and MultiPolygon.
-    * each feature has a 'times' property with the same length as the 
+    * each feature has a 'times' property with the same length as the
       coordinates array.
-    * each element of each 'times' property is a timestamp in ms since epoch, 
+    * each element of each 'times' property is a timestamp in ms since epoch,
       or in ISO string.
 
-    Eventually, you may have Point features with a 'times' property being an 
+    Eventually, you may have Point features with a 'times' property being an
     array of length 1.
 
     Parameters
     ----------
     data: file, dict or str.
         The timestamped geo-json data you want to plot.
-        * If file, then data will be read in the file and fully embedded in 
+        * If file, then data will be read in the file and fully embedded in
           Leaflet's javascript.
-        * If dict, then data will be converted to json and embedded in the 
+        * If dict, then data will be converted to json and embedded in the
           javascript.
         * If str, then data will be passed to the javascript as-is.
     transition_time: int, default 200.
@@ -48,8 +48,8 @@ class TimestampedGeoJson(MacroElement):
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' 1/month, 'P1D' 1/day, 'PT1H' 1/hour, and 'PT1M' 1/minute
     duration: str, default None
-        Period of time which the features will be shown on the map after their 
-        time has passed. If None, all previous times will be shown. 
+        Period of time which the features will be shown on the map after their
+        time has passed. If None, all previous times will be shown.
         Format: ISO8601 Duration
         ex: 'P1M' 1/month, 'P1D' 1/day, 'PT1H' 1/hour, and 'PT1M' 1/minute
 
