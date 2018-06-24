@@ -377,7 +377,32 @@ class GeoJson(Layer):
                         }
                     {% endif %}
                     )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                    {% if this.tooltip %}
+                    .bindTooltip(function(layer){
+
+                    {% if this.tooltip.fields %}
+                    let fields = {{ this.tooltip.fields }};
+                        {% if this.tooltip.aliases %}
+                    let aliases = {{ this.tooltip.aliases }};
+                        {% endif %}
+                    return String(
+                        fields.map(
+                        columnname=>
+                            `{% if this.tooltip.labels %}
+                            <strong>{% if this.tooltip.aliases %}${aliases[fields.indexOf(columnname)]
+                                {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
+                            {% else %}
+                            ${ columnname{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
+                            {% endif %}</strong>:
+                            {% endif %}
+                            ${ layer.feature.properties[columnname]
+                            {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %} }`
+                        ).join('<br>'))
+                    {% else %}
+                        return String(`{{ this.tooltip.text.__str__() }}`)
+                    {% endif %}
+                    },{sticky: {{ this.tooltip.sticky.__str__().lower() }}})
+                    {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -390,7 +415,6 @@ class GeoJson(Layer):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        self.tooltip = tooltip
         if isinstance(data, dict):
             self.embed = True
             self.data = data
@@ -416,6 +440,15 @@ class GeoJson(Layer):
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
+
+        self.tooltip = tooltip
+
+        if bool(self.tooltip) & bool(self.tooltip.fields):
+            keys = self.data['features'][0]['properties'].keys()
+            for value in list(self.tooltip.fields):
+                assert value in keys, "The value "+value.__str__() + \
+                                       " is not available in " + \
+                                        "the values " + keys.__str__()
 
         self.smooth_factor = smooth_factor
 
@@ -651,6 +684,79 @@ class DivIcon(MacroElement):
         self.html = html
         self.className = class_name
 
+
+class Tooltip():
+    """
+    Creates a Tooltip object for adding to features to display text as a
+    property by executing a javascript function when hovering the cursor over
+    each feature.
+
+    Parameters
+    ----------
+    fields: list or tuple.
+        Labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns
+         you'd like to display.
+    aliases: list or tuple of strings, the same legnth as fields.
+        Optional 'aliases' you'd like to display the each field name as, to
+        describe the data in the tooltip.
+    text: str, may not be passed if fields is not None.
+        Pass the same string as a tooltip for every value in the GeoJson
+        object, I.e. "Click for more info."
+    labels: boolean, defaults True.
+        Boolean value indicating if you'd like the the field names or
+        aliases to display to the left of the value in bold.
+    sticky: boolean, defaults True.
+        Boolean value indicating if you'd like the tooltip to 'sticky' with
+        the mouse cursor as it moves.
+        *If False, the tooltip will place statically at the centroid of the
+        feature.
+    toLocaleString: boolean, defaults False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation for the US, etc.
+        *Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+
+    Examples
+    --------
+    # Provide fields and aliases
+    >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
+                aliases=['County','2015 Census Population',
+                        '2015 Median Income'],
+                labels=True,
+                sticky=False,
+                toLocaleString=True)
+    # Provide fields, with labels off, and sticky True.
+    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
+    # Provide only text.
+    >>> Tooltip(text="Click for more info.", sticky=True)
+    """
+
+    def __init__(self, fields=None, text=None, aliases=None, labels=True,
+                 sticky=True, toLocaleString=False):
+        if fields:
+            assert isinstance(fields, (list, tuple)), "Please pass a list or " \
+                                                      "tuple to Fields."
+        if bool(fields) & bool(aliases):
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), "Fields and Aliases must have" \
+                                                " the same length."
+        assert isinstance(labels, bool), "This field requires a boolean value."
+        assert isinstance(sticky, bool), "This field requires a boolean value."
+        assert not all((fields, text)), "Please choose either fields or text."
+        assert any((fields, text)), "Please choose either fields or text."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
+                                                 "boolean."
+        self.fields = fields
+        self.aliases = aliases
+        self.text = text
+        self.labels = labels
+        self.sticky = sticky
+        self.toLocaleString = toLocaleString
+        if self.fields:
+            self.result = self.fields
+        else:
+            self.result = self.text
 
 class LatLngPopup(MacroElement):
     """
