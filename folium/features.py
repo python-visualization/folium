@@ -379,7 +379,6 @@ class GeoJson(Layer):
                     )
                     {% if this.tooltip %}
                     .bindTooltip(function(layer){
-
                     {% if this.tooltip.fields %}
                     let fields = {{ this.tooltip.fields }};
                         {% if this.tooltip.aliases %}
@@ -443,12 +442,13 @@ class GeoJson(Layer):
 
         self.tooltip = tooltip
 
-        if bool(self.tooltip) & bool(self.tooltip.fields):
-            keys = self.data['features'][0]['properties'].keys()
-            for value in list(self.tooltip.fields):
-                assert value in keys, "The value "+value.__str__() + \
-                                       " is not available in " + \
-                                        "the values " + keys.__str__()
+        if self.tooltip:
+            if self.tooltip.fields:
+                keys = self.data['features'][0]['properties'].keys()
+                for value in list(self.tooltip.fields):
+                    assert value in keys, "The value " + value.__str__() + \
+                                          " is not available in the values " + \
+                                          keys.__str__()
 
         self.smooth_factor = smooth_factor
 
