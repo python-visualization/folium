@@ -414,7 +414,6 @@ class GeoJson(Layer):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        self.tooltip = tooltip
         if isinstance(data, dict):
             self.embed = True
             self.data = data
@@ -442,6 +441,7 @@ class GeoJson(Layer):
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.tooltip = tooltip
+
         if self.tooltip:
             if self.tooltip.fields:
                 keys = self.data['features'][0]['properties'].keys()
@@ -731,6 +731,7 @@ class Tooltip(object):
     # Provide only text.
     >>> Tooltip(text="Click for more info.", sticky=True)
     """
+
     def __init__(self, fields=None, text=None, aliases=None, labels=True,
                  sticky=True, toLocaleString=False):
         if fields:
@@ -756,7 +757,6 @@ class Tooltip(object):
             self.result = self.fields
         else:
             self.result = self.text
-
 
 class LatLngPopup(MacroElement):
     """
