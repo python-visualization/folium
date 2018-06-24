@@ -758,6 +758,7 @@ class Tooltip(object):
         else:
             self.result = self.text
 
+
 class LatLngPopup(MacroElement):
     """
     When one clicks on a Map that contains a LatLngPopup,
