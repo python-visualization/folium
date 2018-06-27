@@ -15,7 +15,7 @@ from branca.colormap import StepColormap
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from branca.utilities import _parse_size, color_brewer
 
-from folium.features import GeoJson, TopoJson
+from folium.features import GeoJson, TopoJson, Tooltip
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import _validate_location
