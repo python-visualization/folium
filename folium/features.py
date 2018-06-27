@@ -397,10 +397,12 @@ class GeoJson(Layer):
                             ${ layer.feature.properties[columnname]
                             {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %} }`
                         ).join('<br>'))
-                    {% else %}
+                    {% elif this.tooltip.text %}
                         return String(`{{ this.tooltip.text.__str__() }}`)
+                    {% else %}
+                        return String(`{{ this.tooltip.__str__() }}`)
                     {% endif %}
-                    },{sticky: {{ this.tooltip.sticky.__str__().lower() }}})
+                    },{sticky: {% if this.tooltip.result %}{{ this.tooltip.sticky.__str__().lower() }}{%else %}true{%endif%}})
                     {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
@@ -442,7 +444,7 @@ class GeoJson(Layer):
 
         self.tooltip = tooltip
 
-        if self.tooltip:
+        if isinstance(self.tooltip,Tooltip):
             if self.tooltip.fields:
                 keys = self.data['features'][0]['properties'].keys()
                 for value in list(self.tooltip.fields):
@@ -732,7 +734,7 @@ class Tooltip(object):
     >>> Tooltip(text="Click for more info.", sticky=True)
     """
 
-    def __init__(self, fields=None, text=None, aliases=None, labels=True,
+    def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  sticky=True, toLocaleString=False):
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or " \
