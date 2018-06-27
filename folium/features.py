@@ -444,7 +444,7 @@ class GeoJson(Layer):
 
         self.tooltip = tooltip
 
-        if isinstance(self.tooltip,Tooltip):
+        if isinstance(self.tooltip, Tooltip):
             if self.tooltip.fields:
                 keys = self.data['features'][0]['properties'].keys()
                 for value in list(self.tooltip.fields):
