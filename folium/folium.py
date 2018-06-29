@@ -145,6 +145,8 @@ class Map(MacroElement):
         Forces Leaflet to not use hardware-accelerated CSS 3D
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
+    zoom_control : bool, default True
+        Display zoom controls on the map.
 
     Returns
     -------
@@ -197,7 +199,8 @@ class Map(MacroElement):
         maxBounds: bounds,
         layers: [],
         worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-        crs: L.CRS.{{this.crs}}
+        crs: L.CRS.{{this.crs}},
+        zoomControl: {{this.zoom_control.__str__().lower()}}
         });
 {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
     
@@ -222,7 +225,7 @@ $(document).ready(objects_in_front);
                  min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False):
+                 subdomains='abc', png_enabled=False, zoom_control=True):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -257,6 +260,7 @@ $(document).ready(objects_in_front);
 
         self.crs = crs
         self.control_scale = control_scale
+        self.zoom_control = zoom_control
 
         self.global_switches = GlobalSwitches(
             prefer_canvas,
