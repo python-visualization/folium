@@ -200,7 +200,7 @@ class Map(MacroElement):
         layers: [],
         worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
         crs: L.CRS.{{this.crs}},
-        zoomControl: {{this.zoom_control.__str__().lower()}}
+        zoomControl: {{this.zoom_control.__str__().lower()}},
         });
 {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
     
