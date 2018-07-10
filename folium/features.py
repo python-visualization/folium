@@ -377,33 +377,6 @@ class GeoJson(Layer):
                         }
                     {% endif %}
                     )
-                    {% if this.tooltip %}
-                    .bindTooltip(function(layer){
-                    {% if this.tooltip.fields %}
-                    let fields = {{ this.tooltip.fields }};
-                        {% if this.tooltip.aliases %}
-                    let aliases = {{ this.tooltip.aliases }};
-                        {% endif %}
-                    return String(
-                        fields.map(
-                        columnname=>
-                            `{% if this.tooltip.labels %}
-                            <strong>{% if this.tooltip.aliases %}${aliases[fields.indexOf(columnname)]
-                                {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
-                            {% else %}
-                            ${ columnname{% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %}}
-                            {% endif %}</strong>:
-                            {% endif %}
-                            ${ layer.feature.properties[columnname]
-                            {% if this.tooltip.toLocaleString %}.toLocaleString(){% endif %} }`
-                        ).join('<br>'))
-                    {% elif this.tooltip.text %}
-                        return String(`{{ this.tooltip.text.__str__() }}`)
-                    {% else %}
-                        return String(`{{ this.tooltip.__str__() }}`)
-                    {% endif %}
-                    },{sticky: {% if this.tooltip.result %}{{ this.tooltip.sticky.__str__().lower() }}{%else %}true{%endif%}})
-                    {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -443,10 +416,10 @@ class GeoJson(Layer):
 
         self.add_child(tooltip)
 
-        if isinstance(self.tooltip, Tooltip):
-            if self.tooltip.fields:
+        if isinstance(tooltip, Tooltip):
+            if tooltip.fields:
                 keys = self.data['features'][0]['properties'].keys()
-                for value in list(self.tooltip.fields):
+                for value in list(tooltip.fields):
                     assert value in keys, "The value " + value.__str__() + \
                                           " is not available in the values " + \
                                           keys.__str__()

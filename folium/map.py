@@ -334,7 +334,7 @@ class Popup(Element):
             name=self.get_name())
 
 
-class Tooltip(object):
+class Tooltip(Element):
     """
     Creates a Tooltip object for adding to features to display text as a
     property by executing a JavaScript function when hovering the cursor over
@@ -407,9 +407,8 @@ class Tooltip(object):
                     {% else %}
                         return String(`{{ this.__str__() }}`)
                     {% endif %}
-                    }
-                )
-            {{ this._parent.get_name() }}.bindTooltip({{ this.get_name() }})
+                    });
+            {{ this._parent.get_name() }}.bindTooltip({{ this.get_name() }});
         """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
@@ -423,16 +422,16 @@ class Tooltip(object):
             assert len(fields) == len(aliases), "Fields and Aliases must have" \
                                                 " the same length."
         assert isinstance(labels, bool), "This field requires a boolean value."
-        assert isinstance(sticky, bool), "This field requires a boolean value."
+        # assert isinstance(sticky, bool), "This field requires a boolean value."
         assert not all((fields, text)), "Please choose either fields or text."
         assert any((fields, text)), "Please choose either fields or text."
         assert isinstance(toLocaleString, bool), "toLocaleString must be " \
                                                  "boolean."
-        allowed_keys = ("pane", "offset", "direction", "permanent", "sticky",
-                             "interactive", "opacity")
+        self.allowed_keys = ("pane", "offset", "direction", "permanent",
+                             "sticky", "interactive", "opacity")
         for key in kwargs.keys():
             assert key in self.allowed_keys, "The key " + key + 'was not in ' \
-                                    'the allowed keys'+ allowed_keys.__str__()
+                                'the allowed keys'+ self.allowed_keys.__str__()
         # Handle boolean conversion in Jinja template
         self.kwargs = {key:str(kwargs[key]).lower() for key in kwargs}
         self.fields = fields
