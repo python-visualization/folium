@@ -381,39 +381,44 @@ class Tooltip(Element):
     >>> Tooltip(text="Click for more info.", sticky=True)
     """
     _template = Template(u"""
-            var {{this.get_name()}} = new L.tooltip({{ this.kwargs }})
-                .setContent(
-                    function(layer){
-                    {% if this.fields %}
-                    let fields = {{ this.fields }};
-                    {% if this.aliases %}
-                    let aliases = {{ this.aliases }};
-                    {% endif %}
-                    return String(
-                        fields.map(
-                        columnname=>
-                            `{% if this.labels %}
-                            <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
-                                {% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                            {% else %}
-                            ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                            {% endif %}</strong>:
-                            {% endif %}
-                            ${ layer.feature.properties[columnname]
-                            {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
-                        ).join('<br>'))
-                    {% elif this.text %}
-                        return String(`{{ this.text.__str__() }}`)
-                    {% else %}
-                        return String(`{{ this.__str__() }}`)
-                    {% endif %}
-                    });
+            var {{this.get_name()}} = L.tooltip({{ this.kwargs }})
+            .setContent(
+                function(layer){
+                {% if this.fields %}
+                let fields = {{ this.fields }};
+                {% if this.aliases %}
+                let aliases = {{ this.aliases }};
+                {% endif %}
+                return String(
+                    fields.map(
+                    columnname=>
+                        `{% if this.labels %}
+                        <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                            {% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                        {% else %}
+                        ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                        {% endif %}</strong>:
+                        {% endif %}
+                        ${ layer.feature.properties[columnname]
+                        {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
+                    ).join('<br>'))
+                {% elif this.text %}
+                    return String(`{{ this.text.__str__() }}`)
+                {% else %}
+                    return String(`{{ this.__str__() }}`)
+                {% endif %}
+                });
             {{ this._parent.get_name() }}.bindTooltip({{ this.get_name() }});
         """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  toLocaleString=False, **kwargs):
         super(Tooltip, self).__init__()
+        self._name = "Tooltip"
+        self.header = Element()
+        self.html = Element()
+        self.script = Element()
+
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or " \
                                                       "tuple to Fields."
@@ -431,9 +436,8 @@ class Tooltip(Element):
                              "sticky", "interactive", "opacity")
         for key in kwargs.keys():
             assert key in self.allowed_keys, "The key " + key + 'was not in ' \
-                                'the allowed keys'+ self.allowed_keys.__str__()
-        # Handle boolean conversion in Jinja template
-        self.kwargs = {key:str(kwargs[key]).lower() for key in kwargs}
+                                'the allowed keys: '+ self.allowed_keys.__str__()
+        self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases
         self.text = text
