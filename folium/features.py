@@ -13,7 +13,7 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker
+from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
@@ -435,14 +435,13 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
-
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
 
-        self.tooltip = tooltip
+        self.add_child(tooltip)
 
         if isinstance(self.tooltip, Tooltip):
             if self.tooltip.fields:
@@ -685,80 +684,6 @@ class DivIcon(MacroElement):
         self.popup_anchor = popup_anchor
         self.html = html
         self.className = class_name
-
-
-class Tooltip(object):
-    """
-    Creates a Tooltip object for adding to features to display text as a
-    property by executing a javascript function when hovering the cursor over
-    each feature.
-
-    Parameters
-    ----------
-    fields: list or tuple.
-        Labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns
-         you'd like to display.
-    aliases: list or tuple of strings, the same legnth as fields.
-        Optional 'aliases' you'd like to display the each field name as, to
-        describe the data in the tooltip.
-    text: str, may not be passed if fields is not None.
-        Pass the same string as a tooltip for every value in the GeoJson
-        object, I.e. "Click for more info."
-    labels: boolean, defaults True.
-        Boolean value indicating if you'd like the the field names or
-        aliases to display to the left of the value in bold.
-    sticky: boolean, defaults True.
-        Boolean value indicating if you'd like the tooltip to 'sticky' with
-        the mouse cursor as it moves.
-        *If False, the tooltip will place statically at the centroid of the
-        feature.
-    toLocaleString: boolean, defaults False.
-        This will use JavaScript's .toLocaleString() to format 'clean' values
-        as strings for the user's location; i.e. 1,000,000.00 comma separators,
-        float truncation for the US, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
-        serve into the template).
-
-    Examples
-    --------
-    # Provide fields and aliases
-    >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
-                aliases=['County','2015 Census Population',
-                        '2015 Median Income'],
-                labels=True,
-                sticky=False,
-                toLocaleString=True)
-    # Provide fields, with labels off, and sticky True.
-    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
-    # Provide only text.
-    >>> Tooltip(text="Click for more info.", sticky=True)
-    """
-
-    def __init__(self, text=None, fields=None, aliases=None, labels=True,
-                 sticky=True, toLocaleString=False):
-        if fields:
-            assert isinstance(fields, (list, tuple)), "Please pass a list or " \
-                                                      "tuple to Fields."
-        if bool(fields) & bool(aliases):
-            assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), "Fields and Aliases must have" \
-                                                " the same length."
-        assert isinstance(labels, bool), "This field requires a boolean value."
-        assert isinstance(sticky, bool), "This field requires a boolean value."
-        assert not all((fields, text)), "Please choose either fields or text."
-        assert any((fields, text)), "Please choose either fields or text."
-        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
-                                                 "boolean."
-        self.fields = fields
-        self.aliases = aliases
-        self.text = text
-        self.labels = labels
-        self.sticky = sticky
-        self.toLocaleString = toLocaleString
-        if self.fields:
-            self.result = self.fields
-        else:
-            self.result = self.text
 
 
 class LatLngPopup(MacroElement):

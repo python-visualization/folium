@@ -228,7 +228,7 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
     # If the popup label has characters that need to be escaped in HTML
     >>> Marker(location=[45.5, -122.3],
-               popoup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
+               popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -255,7 +255,6 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
@@ -333,6 +332,118 @@ class Popup(Element):
         figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
+
+
+class Tooltip(object):
+    """
+    Creates a Tooltip object for adding to features to display text as a
+    property by executing a JavaScript function when hovering the cursor over
+    each feature.
+
+    Parameters
+    ----------
+    fields: list or tuple.
+        Labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns
+         you'd like to display.
+    aliases: list or tuple of strings, the same length as fields.
+        Optional 'aliases' you'd like to display the each field name as, to
+        describe the data in the tooltip.
+    text: str, may not be passed if fields is not None.
+        Pass the same string as a tooltip for every value in the GeoJson
+        object, I.e. "Click for more info."
+    labels: boolean, defaults True.
+        Boolean value indicating if you'd like the the field names or
+        aliases to display to the left of the value in bold.
+    sticky: boolean, defaults True.
+        Boolean value indicating if you'd like the tooltip to 'sticky' with
+        the mouse cursor as it moves.
+        *If False, the tooltip will place statically at the centroid of the
+        feature.
+    toLocaleString: boolean, defaults False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation, etc.
+        *Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+
+    Examples
+    --------
+    # Provide fields and aliases
+    >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
+                aliases=['County','2015 Census Population',
+                        '2015 Median Income'],
+                labels=True,
+                sticky=False,
+                toLocaleString=True)
+    # Provide fields, with labels off, and sticky True.
+    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
+    # Provide only text.
+    >>> Tooltip(text="Click for more info.", sticky=True)
+    """
+    _template = Template(u"""
+            var {{this.get_name()}} = new L.tooltip({{ this.kwargs }})
+                .setContent(
+                    function(layer){
+                    {% if this.fields %}
+                    let fields = {{ this.fields }};
+                    {% if this.aliases %}
+                    let aliases = {{ this.aliases }};
+                    {% endif %}
+                    return String(
+                        fields.map(
+                        columnname=>
+                            `{% if this.labels %}
+                            <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                                {% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                            {% else %}
+                            ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                            {% endif %}</strong>:
+                            {% endif %}
+                            ${ layer.feature.properties[columnname]
+                            {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
+                        ).join('<br>'))
+                    {% elif this.text %}
+                        return String(`{{ this.text.__str__() }}`)
+                    {% else %}
+                        return String(`{{ this.__str__() }}`)
+                    {% endif %}
+                    }
+                )
+            {{ this._parent.get_name() }}.bindTooltip({{ this.get_name() }})
+        """)
+
+    def __init__(self, text=None, fields=None, aliases=None, labels=True,
+                 toLocaleString=False, **kwargs):
+        super(Tooltip, self).__init__()
+        if fields:
+            assert isinstance(fields, (list, tuple)), "Please pass a list or " \
+                                                      "tuple to Fields."
+        if bool(fields) & bool(aliases):
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), "Fields and Aliases must have" \
+                                                " the same length."
+        assert isinstance(labels, bool), "This field requires a boolean value."
+        assert isinstance(sticky, bool), "This field requires a boolean value."
+        assert not all((fields, text)), "Please choose either fields or text."
+        assert any((fields, text)), "Please choose either fields or text."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
+                                                 "boolean."
+        allowed_keys = ("pane", "offset", "direction", "permanent", "sticky",
+                             "interactive", "opacity")
+        for key in kwargs.keys():
+            assert key in self.allowed_keys, "The key " + key + 'was not in ' \
+                                    'the allowed keys'+ allowed_keys.__str__()
+        # Handle boolean conversion in Jinja template
+        self.kwargs = {key:str(kwargs[key]).lower() for key in kwargs}
+        self.fields = fields
+        self.aliases = aliases
+        self.text = text
+        self.labels = labels
+        self.toLocaleString = toLocaleString
+        if self.fields:
+            self.result = self.fields
+        else:
+            self.result = self.text
 
 
 class FitBounds(MacroElement):
