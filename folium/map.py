@@ -239,7 +239,7 @@ class Marker(MacroElement):
                     icon: new L.Icon.Default()
                     }
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                {% if this.tooltip %}.bindTooltip("{{this.tooltip }}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
@@ -255,6 +255,20 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
+
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                                                                "may be " \
+                                                                "passed to a " \
+                                                                "Marker " \
+                                                                "Tooltip."
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
