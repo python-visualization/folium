@@ -413,8 +413,9 @@ class GeoJson(Layer):
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
-
-        self.add_child(tooltip, name=tooltip._name)
+        
+        if tooltip:
+            self.add_child(tooltip, name=tooltip._name)
 
         if isinstance(tooltip, Tooltip):
             if tooltip.fields:

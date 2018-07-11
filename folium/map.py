@@ -334,7 +334,7 @@ class Popup(Element):
             name=self.get_name())
 
 
-class Tooltip(Element):
+class Tooltip(MacroElement):
     """
     Creates a Tooltip object for adding to features to display text as a
     property by executing a JavaScript function when hovering the cursor over
@@ -342,29 +342,27 @@ class Tooltip(Element):
 
     Parameters
     ----------
+    text: str, may not be passed if fields is not None.
+        Pass the same string as a tooltip for every value in the GeoJson
+        object, I.e. "Click for more info."
     fields: list or tuple.
         Labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns
          you'd like to display.
     aliases: list or tuple of strings, the same length as fields.
         Optional 'aliases' you'd like to display the each field name as, to
         describe the data in the tooltip.
-    text: str, may not be passed if fields is not None.
-        Pass the same string as a tooltip for every value in the GeoJson
-        object, I.e. "Click for more info."
     labels: boolean, defaults True.
         Boolean value indicating if you'd like the the field names or
         aliases to display to the left of the value in bold.
-    sticky: boolean, defaults True.
-        Boolean value indicating if you'd like the tooltip to 'sticky' with
-        the mouse cursor as it moves.
-        *If False, the tooltip will place statically at the centroid of the
-        feature.
     toLocaleString: boolean, defaults False.
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
         *Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
+    **kwargs: Assorted.
+        These values will map directly to the Leaflet Options. More info
+        available here: https://leafletjs.com/reference-1.0.0.html#tooltip
 
     Examples
     --------
@@ -381,8 +379,8 @@ class Tooltip(Element):
     >>> Tooltip(text="Click for more info.", sticky=True)
     """
     _template = Template(u"""
-            var {{this.get_name()}} = L.tooltip({{ this.kwargs }})
-            .setContent(
+            {% macro script(this, kwargs) %}
+            {{ this._parent.get_name() }}.bindTooltip(
                 function(layer){
                 {% if this.fields %}
                 let fields = {{ this.fields }};
@@ -407,17 +405,14 @@ class Tooltip(Element):
                 {% else %}
                     return String(`{{ this.__str__() }}`)
                 {% endif %}
-                });
-            {{ this._parent.get_name() }}.bindTooltip({{ this.get_name() }});
+                }{{ this.kwargs }});
+            {% endmacro %}
         """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  toLocaleString=False, **kwargs):
         super(Tooltip, self).__init__()
         self._name = "Tooltip"
-        self.header = Element()
-        self.html = Element()
-        self.script = Element()
 
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or " \
@@ -427,7 +422,6 @@ class Tooltip(Element):
             assert len(fields) == len(aliases), "Fields and Aliases must have" \
                                                 " the same length."
         assert isinstance(labels, bool), "This field requires a boolean value."
-        # assert isinstance(sticky, bool), "This field requires a boolean value."
         assert not all((fields, text)), "Please choose either fields or text."
         assert any((fields, text)), "Please choose either fields or text."
         assert isinstance(toLocaleString, bool), "toLocaleString must be " \
