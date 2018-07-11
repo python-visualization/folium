@@ -405,7 +405,7 @@ class Tooltip(MacroElement):
                 {% else %}
                     return String(`{{ this.__str__() }}`)
                 {% endif %}
-                }{{ this.kwargs }});
+                }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
             {% endmacro %}
         """)
 
