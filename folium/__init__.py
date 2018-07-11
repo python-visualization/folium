@@ -18,7 +18,7 @@ from folium.raster_layers import TileLayer, WmsTileLayer
 from folium.folium import Map
 
 from folium.map import (
-    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup
+    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup, Tooltip
 )
 
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle  # noqa
