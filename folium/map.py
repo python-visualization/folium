@@ -401,7 +401,7 @@ class Tooltip(MacroElement):
                         {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
                     ).join('<br>'))
                 {% elif this.text %}
-                    return String(`{{ this.text.__str__() }}`)
+                    return String(`{{ this.text }}`)
                 {% else %}
                     return String(`{{ this.__str__() }}`)
                 {% endif %}
@@ -416,25 +416,34 @@ class Tooltip(MacroElement):
 
         if fields:
             assert isinstance(fields, (list, tuple)), "Please pass a list or " \
-                                                      "tuple to Fields."
-        if bool(fields) & bool(aliases):
+                                                      "tuple to fields."
+        if all((fields, aliases)):
             assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), "Fields and Aliases must have" \
+            assert len(fields) == len(aliases), "fields and aliases must have" \
                                                 " the same length."
-        assert isinstance(labels, bool), "This field requires a boolean value."
+        assert isinstance(labels, bool), "labels requires a boolean value."
         assert not all((fields, text)), "Please choose either fields or text."
         assert any((fields, text)), "Please choose either fields or text."
         assert isinstance(toLocaleString, bool), "toLocaleString must be " \
                                                  "boolean."
-        self.allowed_keys = ("pane", "offset", "direction", "permanent",
-                             "sticky", "interactive", "opacity")
-        for key in kwargs.keys():
-            assert key in self.allowed_keys, "The key " + key + 'was not in ' \
-                                'the allowed keys: '+ self.allowed_keys.__str__()
-        self.kwargs = json.dumps(kwargs)
+        self.valid_kwargs = {"pane": (str,),
+                             "offset": (tuple,),
+                             "direction": (str,),
+                             "permanent": (bool,),
+                             "sticky": (bool,),
+                             "interactive": (bool,),
+                             "opacity": (float, int)}
+        if kwargs:
+            for key in kwargs.keys():
+                assert key in self.valid_kwargs.keys(), "The key {0} was not" \
+                  + " in the allowed keys: {1}".format(key, self.valid_kwargs)
+                assert isinstance(kwargs[key], self.valid_kwargs[key]), \
+                    "{0} must be of the following types: {1}".format(key,
+                                                         self.valid_kwargs[key])
+            self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases
-        self.text = text
+        self.text = text.__str__()
         self.labels = labels
         self.toLocaleString = toLocaleString
         if self.fields:

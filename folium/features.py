@@ -413,17 +413,16 @@ class GeoJson(Layer):
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
-        
-        if tooltip:
-            self.add_child(tooltip, name=tooltip._name)
 
-        if isinstance(tooltip, Tooltip):
-            if tooltip.fields:
-                keys = self.data['features'][0]['properties'].keys()
-                for value in list(tooltip.fields):
-                    assert value in keys, "The value " + value.__str__() + \
-                                          " is not available in the values " + \
-                                          keys.__str__()
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                if tooltip.fields:
+                    keys = self.data['features'][0]['properties'].keys()
+                    for value in list(tooltip.fields):
+                        assert value in keys, "The value " + value.__str__() + \
+                                              " is not available in the values " + \
+                                              keys.__str__()
+            self.add_child(tooltip, name=tooltip._name)
 
         self.smooth_factor = smooth_factor
 
