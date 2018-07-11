@@ -173,7 +173,7 @@ class PolyLine(Marker):
                                                                 "may be " \
                                                                 "passed to a " \
                                                                 "Polyline " \
-                                                                "Tooltip"
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
@@ -221,10 +221,11 @@ class Polygon(Marker):
         self._name = 'Polygon'
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
                                                                 "may be " \
                                                                 "passed to a " \
-                                                                "Marker Tooltip"
+                                                                "Marker " \
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
@@ -273,11 +274,11 @@ class Rectangle(Marker):
         self._name = 'rectangle'
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
                                                                 "may be " \
                                                                 "passed to a " \
                                                                 "Rectangle " \
-                                                                "Tooltip"
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
@@ -331,10 +332,11 @@ class Circle(Marker):
         self._name = 'circle'
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
                                                                 "may be " \
                                                                 "passed to a " \
-                                                                "Marker Tooltip"
+                                                                "Marker " \
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
@@ -382,10 +384,11 @@ class CircleMarker(Marker):
         self._name = 'CircleMarker'
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
                                                                 "may be " \
                                                                 "passed to a " \
-                                                                "Marker Tooltip"
+                                                                "Marker " \
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()

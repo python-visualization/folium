@@ -255,21 +255,20 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
+
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['features'][0]['properties'].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value " + value.__str__() + \
-                                              " is not available in the values " + \
-                                              keys.__str__()
+                assert not all((tooltip.text, tooltip.fields)), "Only text" \
+                                                                "may be " \
+                                                                "passed to a " \
+                                                                "Marker " \
+                                                                "Tooltip."
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
             else:
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
-
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
