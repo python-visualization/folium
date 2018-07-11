@@ -72,14 +72,17 @@ class RegularPolygonMarker(Marker):
                     rotation: {{this.rotation}},
                     radius: {{this.radius}}
                     }
-                )
+                ){% if this.tooltip %}
+                .bindTooltip('{{ this.tooltip }})
+                {% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, location, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15, popup=None):
+                 number_of_sides=4, rotation=0, radius=15, popup=None,
+                 tooltip=None):
         super(RegularPolygonMarker, self).__init__(
             _locations_tolist(location),
             popup=popup
@@ -93,6 +96,19 @@ class RegularPolygonMarker(Marker):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
+                                                                "may be " \
+                                                                "passed to a " \
+                                                                "Rectangle " \
+                                                                "Tooltip."
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -717,7 +733,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup=None):
+    def __init__(self, popup=None, tooltip=None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -725,6 +741,20 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
+                                                                "may be " \
+                                                                "passed to a " \
+                                                                "Marker " \
+                                                                "Tooltip."
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
 
 
 class CustomIcon(Icon):
