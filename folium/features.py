@@ -377,6 +377,9 @@ class GeoJson(Layer):
                         }
                     {% endif %}
                     )
+                    {% if this.tooltip %}
+                    .bindTooltip({{ this.tooltip }})
+                    {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -422,8 +425,12 @@ class GeoJson(Layer):
                         assert value in keys, "The value " + value.__str__() + \
                                               " is not available in the values " + \
                                               keys.__str__()
-            self.add_child(tooltip, name=tooltip._name)
-
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
 
     def style_data(self):
