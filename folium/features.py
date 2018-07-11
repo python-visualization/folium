@@ -378,7 +378,7 @@ class GeoJson(Layer):
                     {% endif %}
                     )
                     {% if this.tooltip %}
-                    .bindTooltip({{ this.tooltip }})
+                    .bindTooltip('{{ this.tooltip }}')
                     {% endif %}
                     .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
