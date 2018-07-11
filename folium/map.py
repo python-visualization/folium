@@ -362,7 +362,7 @@ class Tooltip(MacroElement):
         serve into the template).
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.0.0.html#tooltip
+        available here: https://leafletjs.com/reference-1.3.0.html#tooltip
 
     Examples
     --------
