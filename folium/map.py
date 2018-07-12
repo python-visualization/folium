@@ -357,12 +357,13 @@ class Tooltip(MacroElement):
     Parameters
     ----------
     text: str, may not be passed if fields is not None.
-        Pass the same string as a tooltip for every value in the GeoJson
+        Pass a string as a tooltip to display on the object.
         object, I.e. "Click for more info."
-    fields: list or tuple.
-        Labels of the GeoJson 'properties' or GeoPandas GeodataFrame columns
-         you'd like to display.
-    aliases: list or tuple of strings, the same length as fields.
+    fields: list or tuple. For GeoJson/TopoJson objects only.
+        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
+        columns you'd like to display.
+    aliases: list/tuple of strings, same length/urder as fields. For
+    GeoJson/TopoJson objects only.
         Optional 'aliases' you'd like to display the each field name as, to
         describe the data in the tooltip.
     labels: boolean, defaults True.
