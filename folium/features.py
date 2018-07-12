@@ -438,9 +438,8 @@ class GeoJson(Layer):
                 if tooltip.fields:
                     keys = self.data['features'][0]['properties'].keys()
                     for value in list(tooltip.fields):
-                        assert value in keys, "The value " + value.__str__() + \
-                                              " is not available in the values " + \
-                                              keys.__str__()
+                        assert value in keys, "The value {0} is not available" \
+                                              " in {1}".format(value, keys)
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
                 self.tooltip = tooltip.__str__()
@@ -535,7 +534,7 @@ class TopoJson(Layer):
                             , {smoothFactor: {{this.smooth_factor}}}
                         {% endif %}
                         )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
+                        {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
                         .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -548,7 +547,19 @@ class TopoJson(Layer):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control, show=show)
         self._name = 'TopoJson'
-        self.tooltip = tooltip
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                if tooltip.fields:
+                    keys = self.data['objects'][object_path]['geometries'][0].keys()
+                    for value in list(tooltip.fields):
+                        assert value in keys, "The value {0} is not available" \
+                                              " in {1}".format(value, keys)
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
         if 'read' in dir(data):
             self.embed = True
             self.data = json.load(data)
