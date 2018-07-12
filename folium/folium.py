@@ -147,6 +147,8 @@ class Map(MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    name : str, default None
+        Set a custom name when creating a map via tiles.
 
     Returns
     -------
@@ -225,7 +227,8 @@ $(document).ready(objects_in_front);
                  min_lon=-180, max_lon=180, max_bounds=False,
                  detect_retina=False, crs='EPSG3857', control_scale=False,
                  prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False, zoom_control=True):
+                 subdomains='abc', png_enabled=False, zoom_control=True,
+                 name=None):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -275,7 +278,7 @@ $(document).ready(objects_in_front);
                 tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
                 max_native_zoom=max_native_zoom, no_wrap=no_wrap, attr=attr,
                 API_key=API_key, detect_retina=detect_retina,
-                subdomains=subdomains
+                subdomains=subdomains, name=name
             )
 
     def _repr_html_(self, **kwargs):
