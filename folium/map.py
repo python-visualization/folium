@@ -422,7 +422,7 @@ class Tooltip(MacroElement):
                         {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
                     ).join('<br>'))+'</div>'
                 {% elif this.text %}
-                    return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' 
+                    return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
                     + '{{ this.text }}'+'</div>'
                 {% else %}
                     return '<div{%if this.style%} style="{{this.style}}"{%endif%}>'+'{{ this.__str__() }}'+'</div>'
@@ -472,8 +472,8 @@ class Tooltip(MacroElement):
         self.toLocaleString = toLocaleString
         if style:
             assert isinstance(style, str), \
-                "Pass a valid inline HTML style property string to style." #noqa
-            #  outside of type checking.
+                "Pass a valid inline HTML style property string to style."
+            # noqa outside of type checking.
             self.style = style
         if self.fields:
             self.result = self.fields
