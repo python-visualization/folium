@@ -547,19 +547,7 @@ class TopoJson(Layer):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control, show=show)
         self._name = 'TopoJson'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['objects'][object_path]['geometries'][0].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value {0} is not available" \
-                                              " in {1}".format(value, keys)
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+
         if 'read' in dir(data):
             self.embed = True
             self.data = json.load(data)
@@ -578,6 +566,21 @@ class TopoJson(Layer):
         self.style_function = style_function
 
         self.smooth_factor = smooth_factor
+
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                if tooltip.fields:
+                    keys = self.data['objects'][object_path.split('.')[-1]][
+                        'geometries'][0]['properties'].keys()
+                    for value in list(tooltip.fields):
+                        assert value in keys, "The value {0} is not ".format(
+                            value) + "available in {0}".format(keys)
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
 
     def style_data(self):
         """

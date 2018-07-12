@@ -449,11 +449,13 @@ class Tooltip(MacroElement):
                              "opacity": (float, int)}
         if kwargs:
             for key in kwargs.keys():
-                assert key in self.valid_kwargs.keys(), "The key {0} was not" \
-                  + " in the allowed keys: {1}".format(key, self.valid_kwargs)
+                assert key in self.valid_kwargs.keys(), "The key {0} was not " \
+                                                        "available in the " \
+                                                        "keys: {1}".format(
+                    key, ', '.join(self.valid_kwargs.keys()))
                 assert isinstance(kwargs[key], self.valid_kwargs[key]), \
-                    "{0} must be of the following types: {1}".format(key,
-                                                         self.valid_kwargs[key])
+                    "{0} must be of the following " \
+                    "types: {1}".format(key, self.valid_kwargs[key])
             self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases
