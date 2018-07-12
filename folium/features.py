@@ -73,7 +73,7 @@ class RegularPolygonMarker(Marker):
                     radius: {{this.radius}}
                     }
                 ){% if this.tooltip %}
-                .bindTooltip('{{ this.tooltip }})
+                .bindTooltip('{{ this.tooltip }}')
                 {% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
