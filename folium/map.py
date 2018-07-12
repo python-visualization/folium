@@ -374,19 +374,25 @@ class Tooltip(MacroElement):
         float truncation, etc.
         *Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
+    style: str. Default None.
+        A string with HTML inline style properties that will be used to style
+        properties like font and colors in a div element in the tooltip.
+        https://www.w3schools.com/html/html_css.asp
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
         available here: https://leafletjs.com/reference-1.3.0.html#tooltip
 
     Examples
     --------
-    # Provide fields and aliases
+    # Provide fields and aliases, with Style.
     >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
                 aliases=['County','2015 Census Population',
                         '2015 Median Income'],
                 labels=True,
-                sticky=False,
-                toLocaleString=True)
+                sticky=True,
+                toLocaleString=True,
+                style='background-color: grey; color: white; font-family:
+                courier new; font-size: 24px; padding: 10px;')
     # Provide fields, with labels off, and sticky True.
     >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
     # Provide only text.
@@ -401,7 +407,8 @@ class Tooltip(MacroElement):
                 {% if this.aliases %}
                 let aliases = {{ this.aliases }};
                 {% endif %}
-                return String(
+                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' +
+                String(
                     fields.map(
                     columnname=>
                         `{% if this.labels %}
@@ -409,22 +416,23 @@ class Tooltip(MacroElement):
                             {% if this.toLocaleString %}.toLocaleString(){% endif %}}
                         {% else %}
                         ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                        {% endif %}</strong>:
+                        {% endif %}:</strong>
                         {% endif %}
                         ${ layer.feature.properties[columnname]
                         {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
-                    ).join('<br>'))
+                    ).join('<br>'))+'</div>'
                 {% elif this.text %}
-                    return String(`{{ this.text }}`)
+                    return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' 
+                    + '{{ this.text }}'+'</div>'
                 {% else %}
-                    return String(`{{ this.__str__() }}`)
+                    return '<div{%if this.style%} style="{{this.style}}"{%endif%}>'+'{{ this.__str__() }}'+'</div>'
                 {% endif %}
                 }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
             {% endmacro %}
         """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
-                 toLocaleString=False, **kwargs):
+                 toLocaleString=False, style=None, **kwargs):
         super(Tooltip, self).__init__()
         self._name = "Tooltip"
 
@@ -449,17 +457,24 @@ class Tooltip(MacroElement):
                              "opacity": (float, int)}
         if kwargs:
             for key in kwargs.keys():
-                assert key in self.valid_kwargs.keys(), "The key {0} was not" \
-                  + " in the allowed keys: {1}".format(key, self.valid_kwargs)
+                assert key in self.valid_kwargs.keys(), "The key {0} was not " \
+                                                        "available in the " \
+                                                        "keys: {1}".format(
+                    key, ', '.join(self.valid_kwargs.keys()))
                 assert isinstance(kwargs[key], self.valid_kwargs[key]), \
-                    "{0} must be of the following types: {1}".format(key,
-                                                         self.valid_kwargs[key])
+                    "{0} must be of the following " \
+                    "types: {1}".format(key, self.valid_kwargs[key])
             self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases
         self.text = text.__str__()
         self.labels = labels
         self.toLocaleString = toLocaleString
+        if style:
+            assert isinstance(style, str), \
+                "Pass a valid inline HTML style property string to style." #noqa
+            #  outside of type checking.
+            self.style = style
         if self.fields:
             self.result = self.fields
         else:
