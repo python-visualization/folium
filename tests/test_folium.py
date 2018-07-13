@@ -358,12 +358,11 @@ def test_deprecation_warning():
 
     This test may catch warnings on importing other libraries.
     """
-    with warnings.catch_warnings(record=True) as caught_warnings:
-        warnings.simplefilter("always")
+    with pytest.warns(None) as caught_warnings:
         importlib.reload(folium)
-        expected_warning_count = 1 if sys.version_info < (3, 0) else 0
-        assert(len(caught_warnings) == expected_warning_count)
-        if expected_warning_count == 1:
-            w = caught_warnings[0]
-            assert issubclass(w.category, PendingDeprecationWarning)
-            assert str(w.message).startswith('folium will stop working with')
+    expected_warning_count = 1 if sys.version_info < (3, 0) else 0
+    assert(len(caught_warnings) == expected_warning_count)
+    if expected_warning_count == 1:
+        w = caught_warnings[0]
+        assert issubclass(w.category, PendingDeprecationWarning)
+        assert str(w.message).startswith('folium will stop working with')
