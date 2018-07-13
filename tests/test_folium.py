@@ -12,10 +12,6 @@ import json
 import os
 import warnings
 import sys
-try:
-    import importlib
-except ImportError:
-    import imp as importlib
 
 import branca.element
 
@@ -35,6 +31,10 @@ try:
     from unittest import mock
 except ImportError:
     import mock
+
+import importlib
+if not hasattr(importlib, 'reload'):
+    import imp as importlib
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
