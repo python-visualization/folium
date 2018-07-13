@@ -10,8 +10,6 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 import os
-import warnings
-import sys
 
 import branca.element
 
@@ -31,10 +29,6 @@ try:
     from unittest import mock
 except ImportError:
     import mock
-
-import importlib
-if not hasattr(importlib, 'reload'):
-    import imp as importlib
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -351,18 +345,3 @@ class TestFolium(object):
         self.m._parent.render()
         bounds = self.m.get_bounds()
         assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds  # noqa
-
-
-def test_deprecation_warning():
-    """Test whether the deprecation warning in the folium __init__ is working.
-
-    This test may catch warnings on importing other libraries.
-    """
-    with pytest.warns(None) as caught_warnings:
-        importlib.reload(folium)
-    expected_warning_count = 1 if sys.version_info < (3, 0) else 0
-    assert(len(caught_warnings) == expected_warning_count)
-    if expected_warning_count == 1:
-        w = caught_warnings[0]
-        assert issubclass(w.category, PendingDeprecationWarning)
-        assert str(w.message).startswith('folium will stop working with')
