@@ -362,7 +362,7 @@ class Tooltip(MacroElement):
     fields: list or tuple. For GeoJson/TopoJson objects only.
         Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
         columns you'd like to display.
-    aliases: list/tuple of strings, same length/urder as fields. For
+    aliases: list/tuple of strings, same length/order as fields. For
     GeoJson/TopoJson objects only.
         Optional 'aliases' you'd like to display the each field name as, to
         describe the data in the tooltip.
