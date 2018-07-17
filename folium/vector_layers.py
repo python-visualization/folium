@@ -165,7 +165,7 @@ class PolyLine(Marker):
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(PolyLine, self).__init__(location=locations, popup=popup)
-        self._name = 'PolyLine'
+        self._name = 'polyline'
         Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
         self.options = _parse_options(line=True, **kwargs)
 
@@ -204,7 +204,7 @@ class Polygon(Marker):
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(Polygon, self).__init__(locations, popup=popup)
-        self._name = 'Polygon'
+        self._name = 'polygon'
         Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=True, **kwargs)
@@ -328,7 +328,7 @@ class CircleMarker(Marker):
 
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
         super(CircleMarker, self).__init__(location=location, popup=popup)
-        self._name = 'CircleMarker'
+        self._name = 'circleMarker'
         Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=False, radius=radius, **kwargs)

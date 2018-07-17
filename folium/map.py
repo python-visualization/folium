@@ -245,7 +245,7 @@ class Marker(MacroElement):
     def validate_tooltip(self, tooltip, name):
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert tooltip.text, "Only text may be passed to a {0} " \
+                assert not tooltip.fields, "Only text may be passed to a {0} " \
                                      "Tooltip.".format(name)
                 self.add_child(tooltip)
             elif isinstance(tooltip, str):
