@@ -10,8 +10,10 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.colormap import LinearColormap
-from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
-from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
+from branca.element import (CssLink, Element, Figure, JavascriptLink,
+                            MacroElement)  # noqa
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
+                              iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
 from folium.utilities import get_bounds
@@ -97,14 +99,14 @@ class RegularPolygonMarker(Marker):
         self.rotation = rotation
         self.radius = radius
         self.options = json.dumps({
-                "color": color,
-                "opacity": opacity,
-                "weight": weight,
-                "fillColor": fill_color,
-                "fillOpacity": fill_opacity,
-                "numberOfSides": number_of_sides,
-                "rotation": rotation,
-                "radius": radius})
+            "color": color,
+            "opacity": opacity,
+            "weight": weight,
+            "fillColor": fill_color,
+            "fillOpacity": fill_opacity,
+            "numberOfSides": number_of_sides,
+            "rotation": rotation,
+            "radius": radius})
         Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
     def render(self, **kwargs):
@@ -116,7 +118,9 @@ class RegularPolygonMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+            # noqa
             name='dvf_js')
 
 
@@ -195,11 +199,15 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+            # noqa
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+            # noqa
             name='vega')
 
         figure.header.add_child(
@@ -208,7 +216,8 @@ class Vega(Element):
 
         figure.script.add_child(
             Template("""function vega_parse(spec, div) {
-            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
+            # noqa
             name='vega_parse')
 
 
@@ -297,15 +306,21 @@ class VegaLite(Element):
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),
+            # noqa
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),
+            # noqa
             name='vega-lite')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),
+            # noqa
             name='vega-embed')
 
 
@@ -468,14 +483,18 @@ class GeoJson(Layer):
         """
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
+            if not (isinstance(self.data,
+                               dict) and 'geometry' in self.data.keys()):  # noqa
                 # Catch case when GeoJSON is just a geometry.
                 self.data = {'type': 'Feature', 'geometry': self.data}
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('style', {}).update(
+                self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight',
+                                                            {}).update(
+                self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
@@ -599,14 +618,18 @@ class TopoJson(Layer):
         a corresponding JSON output.
 
         """
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
-        geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
+
+        geometries = recursive_get(self.data, self.object_path.split('.'))[
+            'geometries']  # noqa
         for feature in geometries:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('style', {}).update(
+                self.style_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
@@ -618,7 +641,9 @@ class TopoJson(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),
+            # noqa
             name='topojson')
 
     def get_bounds(self):
@@ -643,12 +668,16 @@ class TopoJson(Layer):
                 ymax = none_max(y, ymax)
         return [
             [
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,  # noqa
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin  # noqa
+                self.data['transform']['translate'][1] +
+                self.data['transform']['scale'][1] * ymin,  # noqa
+                self.data['transform']['translate'][0] +
+                self.data['transform']['scale'][0] * xmin  # noqa
             ],
             [
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
+                self.data['transform']['translate'][1] +
+                self.data['transform']['scale'][1] * ymax,  # noqa
+                self.data['transform']['translate'][0] +
+                self.data['transform']['scale'][0] * xmax  # noqa
             ]
 
         ]
@@ -706,12 +735,12 @@ class DivIcon(MacroElement):
         self.html = html
         self.className = class_name
         self.options = {
-            'iconSize':list(icon_size) if icon_size else None,
-            'iconAnchor':list(icon_anchor) if icon_anchor else None,
-            'popupAnchor':list(popup_anchor) if popup_anchor else None,
-            'className':class_name,
-            'html':html,
-            'icon_name':self._name
+            'iconSize': list(icon_size) if icon_size else None,
+            'iconAnchor': list(icon_anchor) if icon_anchor else None,
+            'popupAnchor': list(popup_anchor) if popup_anchor else None,
+            'className': class_name,
+            'html': html,
+            'icon_name': self._name
         }
 
 
@@ -886,6 +915,7 @@ class ColorLine(FeatureGroup):
     A ColorLine object that you can `add_to` a Map.
 
     """
+
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)
@@ -906,7 +936,10 @@ class ColorLine(FeatureGroup):
         else:
             cm = colormap
         out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1],
+                                                     positions[1:],
+                                                     colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))  # noqa
+            self.add_child(PolyLine(val, color=key, weight=weight,
+                                    opacity=opacity))  # noqa

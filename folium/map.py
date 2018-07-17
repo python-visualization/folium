@@ -11,7 +11,8 @@ import json
 
 from collections import OrderedDict
 
-from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, \
+    MacroElement  # noqa
 
 from folium.utilities import _validate_coordinates, get_bounds
 
@@ -36,6 +37,7 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -139,7 +141,7 @@ class LayerControl(MacroElement):
         self.layers_untoggle = [
             val.get_name() for val in
             self._parent._children.values() if isinstance(val, Layer)
-            and val.overlay and val.control and not val.show]
+                                               and val.overlay and val.control and not val.show]
         for additional_base_layer in list(self.base_layers.values())[1:]:
             self.layers_untoggle.append(additional_base_layer)
         super(LayerControl, self).render()
@@ -202,13 +204,13 @@ class Icon(MacroElement):
         self.icon_color = icon_color
         self.angle = angle
         self.prefix = prefix
-        self.spin=spin
-        self.options = {'icon':icon,
-                       'iconColor':icon_color,
-                       'markerColor':color,
-                       'prefix':prefix,
-                       'extraClasses':'fa-rotate'+angle.__str__(),
-                       'spin':spin}
+        self.spin = spin
+        self.options = {'icon': icon,
+                        'iconColor': icon_color,
+                        'markerColor': color,
+                        'prefix': prefix,
+                        'extraClasses': 'fa-rotate' + angle.__str__(),
+                        'spin': spin}
 
 
 class Marker(MacroElement):
@@ -250,11 +252,12 @@ class Marker(MacroElement):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
     def validate_tooltip(self, tooltip, name):
         if tooltip:
             if isinstance(tooltip, Tooltip):
                 assert not tooltip.fields, "Only text may be passed to a {0} " \
-                                     "Tooltip.".format(name)
+                                           "Tooltip.".format(name)
                 self.add_child(tooltip)
             elif isinstance(tooltip, str):
                 self.add_child(Tooltip(tooltip, sticky=True))
@@ -323,7 +326,8 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+                 sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
