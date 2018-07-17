@@ -242,6 +242,7 @@ class Marker(MacroElement):
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
+
     def validate_tooltip(self, tooltip, name):
         if tooltip:
             if isinstance(tooltip, Tooltip):
@@ -360,7 +361,7 @@ class Tooltip(MacroElement):
         Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
         columns you'd like to display.
     aliases: list/tuple of strings, same length/urder as fields. For
-    GeoJson/TopoJson objects only.
+        GeoJson/TopoJson objects only.
         Optional 'aliases' you'd like to display the each field name as, to
         describe the data in the tooltip.
     labels: boolean, defaults True.
@@ -425,7 +426,7 @@ class Tooltip(MacroElement):
             {% endif %}
             }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
         {% endmacro %}
-        """)
+    """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  toLocaleString=False, style=None, **kwargs):
