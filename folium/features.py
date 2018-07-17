@@ -79,7 +79,7 @@ class RegularPolygonMarker(Marker):
             {% endmacro %}
             """)
 
-    def __init__(self, location, color='black', opacity=1, weight=2,
+    def __init__(self, location=None, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
                  number_of_sides=4, rotation=0, radius=15, popup=None,
                  tooltip=None):
@@ -96,19 +96,16 @@ class RegularPolygonMarker(Marker):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Rectangle " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        self.options = json.dumps({
+                "color": color,
+                "opacity": opacity,
+                "weight": weight,
+                "fillColor": fill_color,
+                "fillOpacity": fill_opacity,
+                "numberOfSides": number_of_sides,
+                "rotation": rotation,
+                "radius": radius})
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -378,7 +375,7 @@ class GeoJson(Layer):
 
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
+                    {% if this.smooth_factor is not none or this.highlight or this.marker %}
                         , {
                         {% if this.smooth_factor is not none  %}
                             smoothFactor:{{this.smooth_factor}}
@@ -388,23 +385,29 @@ class GeoJson(Layer):
                             {% if this.smooth_factor is not none  %}
                             ,
                             {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
+                            onEachFeature: {{this.get_name()}}_onEachFeature,
+                        {% endif %}
+                        {% if this.marker %}
+                        pointToLayer: function (feature, latlng) {
+                            var opts = {{this.marker.options}};
+                            {% if this.marker._name =='marker' and this.marker.icon_type %}
+                            opts.icon=L.{{this.marker.icon_type}}(opts.icon){% endif %}
+                            return L.{{this.marker._name}}(latlng, opts)
+                        }
                         {% endif %}
                         }
                     {% endif %}
                     )
-                    {% if this.tooltip %}
-                    .bindTooltip('{{ this.tooltip }}')
-                    {% endif %}
                     .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;})
 
             {% endmacro %}
             """)  # noqa
 
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, show=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
+                 smooth_factor=None, highlight_function=None, tooltip=None,
+                 marker=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
@@ -429,9 +432,13 @@ class GeoJson(Layer):
             raise ValueError('Unhandled object {!r}.'.format(data))
         self.style_function = style_function or (lambda x: {})
 
+        self.style_check = style_function
+
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
+
+        self.marker = marker
 
         if tooltip:
             if isinstance(tooltip, Tooltip):
@@ -447,6 +454,15 @@ class GeoJson(Layer):
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
+
+        self.convert_markers = """function (feature, latlng) {
+                            var opts = {{this.marker.options}};
+                            {% if this.marker._name =='marker' and 
+                            this.marker.icon_type %}
+                            opts.icon=L.{{this.marker.icon_type}}(opts.icon)
+                            {% endif %}
+                            return L.{{this.marker._name}}(latlng, opts)
+                        }""".strip('\n')
 
     def style_data(self):
         """
@@ -534,7 +550,6 @@ class TopoJson(Layer):
                             , {smoothFactor: {{this.smooth_factor}}}
                         {% endif %}
                         )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
                         .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -577,7 +592,7 @@ class TopoJson(Layer):
                             value) + "available in {0}".format(keys)
                 self.add_child(tooltip, name=tooltip._name)
             elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
+                self.add_child(Tooltip(tooltip, sticky=True))
             else:
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
@@ -688,12 +703,20 @@ class DivIcon(MacroElement):
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
         super(DivIcon, self).__init__()
-        self._name = 'DivIcon'
+        self._name = 'divIcon'
         self.icon_size = icon_size
         self.icon_anchor = icon_anchor
         self.popup_anchor = popup_anchor
         self.html = html
         self.className = class_name
+        self.options = {
+            'iconSize':list(icon_size) if icon_size else None,
+            'iconAnchor':list(icon_anchor) if icon_anchor else None,
+            'popupAnchor':list(popup_anchor) if popup_anchor else None,
+            'className':class_name,
+            'html':html,
+            'icon_name':self._name
+        }
 
 
 class LatLngPopup(MacroElement):
