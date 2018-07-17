@@ -223,6 +223,7 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
+    tooltip: folium.Tooltip object or string to display on hover for marker.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -273,11 +274,11 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-        self.validate_tooltip(tooltip, self._name)
+        self.validate_tooltip(tooltip=tooltip, name=self._name)
         if icon:
             kwargs.update(icon=icon.options)
             self.icon_type = icon._name
-        self.options = json.dumps(kwargs)
+        self.options = kwargs
 
     def _get_self_bounds(self):
         """

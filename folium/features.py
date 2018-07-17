@@ -338,6 +338,11 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: string or folium.Tooltip, default None
+        Input text or visualization for object displayed when hovering.
+    marker: Marker or Vector layer object to represent points.
+        Declare a Marker object to represent a point on the map, either a folium
+        Marker object or one of the vector layers such as CircleMarker.
 
     Examples
     --------
@@ -454,15 +459,6 @@ class GeoJson(Layer):
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
-
-        self.convert_markers = """function (feature, latlng) {
-                            var opts = {{this.marker.options}};
-                            {% if this.marker._name =='marker' and 
-                            this.marker.icon_type %}
-                            opts.icon=L.{{this.marker.icon_type}}(opts.icon)
-                            {% endif %}
-                            return L.{{this.marker._name}}(latlng, opts)
-                        }""".strip('\n')
 
     def style_data(self):
         """
