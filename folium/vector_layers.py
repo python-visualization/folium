@@ -159,7 +159,6 @@ class PolyLine(Marker):
                     {{this.location}},
                     {{ this.options }}
                     )
-                    {% if this.tooltip %}.bindTooltip("{{ this.tooltip }}"){% endif %}
                     .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)  # noqa
@@ -167,19 +166,7 @@ class PolyLine(Marker):
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(PolyLine, self).__init__(location=locations, popup=popup)
         self._name = 'PolyLine'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Polyline " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -211,7 +198,6 @@ class Polygon(Marker):
                 {{this.location}},
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip }}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
@@ -219,19 +205,7 @@ class Polygon(Marker):
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(Polygon, self).__init__(locations, popup=popup)
         self._name = 'Polygon'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=True, **kwargs)
 
@@ -264,7 +238,6 @@ class Rectangle(Marker):
                 {{this.location}},
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
@@ -272,19 +245,7 @@ class Rectangle(Marker):
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
         super(Rectangle, self).__init__(location=bounds, popup=popup)
         self._name = 'rectangle'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Rectangle " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=True, **kwargs)
 
@@ -322,7 +283,6 @@ class Circle(Marker):
                 [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
@@ -330,19 +290,7 @@ class Circle(Marker):
     def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
         super(Circle, self).__init__(location=location, popup=popup)
         self._name = 'circle'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=False, radius=radius, **kwargs)
 
@@ -374,7 +322,6 @@ class CircleMarker(Marker):
                 [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
@@ -382,18 +329,6 @@ class CircleMarker(Marker):
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
         super(CircleMarker, self).__init__(location=location, popup=popup)
         self._name = 'CircleMarker'
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
         self.options = _parse_options(line=False, radius=radius, **kwargs)

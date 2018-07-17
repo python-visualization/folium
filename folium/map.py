@@ -239,15 +239,25 @@ class Marker(MacroElement):
                     icon: new L.Icon.Default()
                     }
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip }}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
+    def validate_tooltip(self, tooltip, name):
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert tooltip.text, "Only text may be passed to a {0} " \
+                                     "Tooltip.".format(name)
+                self.add_child(tooltip)
+            elif isinstance(tooltip, str):
+                self.add_child(Tooltip(tooltip, sticky=True))
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
+
     def __init__(self, location, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.tooltip = tooltip
         self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
@@ -255,20 +265,8 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
+        self.validate_tooltip(tooltip, self._name)
 
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text" \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
@@ -362,8 +360,8 @@ class Tooltip(MacroElement):
     fields: list or tuple. For GeoJson/TopoJson objects only.
         Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
         columns you'd like to display.
-    aliases: list/tuple of strings, same length/order as fields. For
-    GeoJson/TopoJson objects only.
+    aliases: list/tuple of strings, same length/urder as fields. For
+        GeoJson/TopoJson objects only.
         Optional 'aliases' you'd like to display the each field name as, to
         describe the data in the tooltip.
     labels: boolean, defaults True.
@@ -400,37 +398,35 @@ class Tooltip(MacroElement):
     >>> Tooltip(text="Click for more info.", sticky=True)
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            {{ this._parent.get_name() }}.bindTooltip(
-                function(layer){
-                {% if this.fields %}
-                let fields = {{ this.fields }};
-                {% if this.aliases %}
-                let aliases = {{ this.aliases }};
-                {% endif %}
-                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' +
-                String(
-                    fields.map(
-                    columnname=>
-                        `{% if this.labels %}
-                        <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
-                            {% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                        {% else %}
-                        ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                        {% endif %}:</strong>
-                        {% endif %}
-                        ${ layer.feature.properties[columnname]
-                        {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
-                    ).join('<br>'))+'</div>'
-                {% elif this.text %}
-                    return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
-                    + '{{ this.text }}'+'</div>'
-                {% else %}
-                    return '<div{%if this.style%} style="{{this.style}}"{%endif%}>'+'{{ this.__str__() }}'+'</div>'
-                {% endif %}
-                }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
-            {% endmacro %}
-        """)
+        {% macro script(this, kwargs) %}
+        {{ this._parent.get_name() }}.bindTooltip(
+            function(layer){
+            {% if this.fields %}
+            let fields = {{ this.fields }};
+            {% if this.aliases %}
+            let aliases = {{ this.aliases }};
+            {% endif %}
+            return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' +
+            String(
+                fields.map(
+                columnname=>
+                    `{% if this.labels %}
+                    <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                        {% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% else %}
+                    ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% endif %}:</strong>
+                    {% endif %}
+                    ${ layer.feature.properties[columnname]
+                    {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
+                ).join('<br>'))+'</div>'
+            {% elif this.text %}
+                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
+                + '{{ this.text }}'+'</div>'
+            {% endif %}
+            }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
+        {% endmacro %}
+    """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  toLocaleString=False, style=None, **kwargs):
@@ -476,10 +472,6 @@ class Tooltip(MacroElement):
                 "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
-        if self.fields:
-            self.result = self.fields
-        else:
-            self.result = self.text
 
 
 class FitBounds(MacroElement):
