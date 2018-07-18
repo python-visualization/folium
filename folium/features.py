@@ -10,10 +10,8 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.colormap import LinearColormap
-from branca.element import (CssLink, Element, Figure, JavascriptLink,
-                            MacroElement)  # noqa
-from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
-                              iter_points, none_max, none_min)  # noqa
+from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
 from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
 from folium.utilities import get_bounds

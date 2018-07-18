@@ -141,7 +141,7 @@ class LayerControl(MacroElement):
         self.layers_untoggle = [
             val.get_name() for val in
             self._parent._children.values() if isinstance(val, Layer)
-                                               and val.overlay and val.control and not val.show]
+            and val.overlay and val.control and not val.show]
         for additional_base_layer in list(self.base_layers.values())[1:]:
             self.layers_untoggle.append(additional_base_layer)
         super(LayerControl, self).render()
