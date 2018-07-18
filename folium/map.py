@@ -36,6 +36,7 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -186,21 +187,29 @@ class Icon(MacroElement):
                     iconColor: '{{this.icon_color}}',
                     markerColor: '{{this.color}}',
                     prefix: '{{this.prefix}}',
-                    extraClasses: 'fa-rotate-{{this.angle}}'
+                    extraClasses: 'fa-rotate-{{this.angle}}',
+                    spin: {{this.spin}}
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon'):
+                 angle=0, prefix='glyphicon', spin=False):
         super(Icon, self).__init__()
-        self._name = 'Icon'
+        self._name = 'AwesomeMarkers.icon'
         self.color = color
         self.icon = icon
         self.icon_color = icon_color
         self.angle = angle
         self.prefix = prefix
+        self.spin = spin
+        self.options = {'icon': icon,
+                        'iconColor': icon_color,
+                        'markerColor': color,
+                        'prefix': prefix,
+                        'extraClasses': 'fa-rotate' + angle.__str__(),
+                        'spin': spin}
 
 
 class Marker(MacroElement):
@@ -215,6 +224,7 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
+    tooltip: folium.Tooltip object or string to display on hover for marker.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -235,9 +245,8 @@ class Marker(MacroElement):
 
             var {{this.get_name()}} = L.marker(
                 [{{this.location[0]}}, {{this.location[1]}}],
-                {
-                    icon: new L.Icon.Default()
-                    }
+                {icon: new L.Icon.Default(),
+                    {{this.options}})
                 )
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
@@ -246,8 +255,8 @@ class Marker(MacroElement):
     def validate_tooltip(self, tooltip, name):
         if tooltip:
             if isinstance(tooltip, Tooltip):
-                assert tooltip.text, "Only text may be passed to a {0} " \
-                                     "Tooltip.".format(name)
+                assert not tooltip.fields, "Only text may be passed to a {0} " \
+                                           "Tooltip.".format(name)
                 self.add_child(tooltip)
             elif isinstance(tooltip, str):
                 self.add_child(Tooltip(tooltip, sticky=True))
@@ -255,17 +264,23 @@ class Marker(MacroElement):
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None):
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
+                 **kwargs):
         super(Marker, self).__init__()
-        self._name = 'Marker'
-        self.location = _validate_coordinates(location)
+        self._name = 'marker'
+        if location:
+            self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-        self.validate_tooltip(tooltip, self._name)
+        self.validate_tooltip(tooltip=tooltip, name=self._name)
+        if icon:
+            kwargs.update(icon=icon.options)
+            self.icon_type = icon._name
+        self.options = kwargs
 
     def _get_self_bounds(self):
         """
@@ -310,7 +325,8 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+                 sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -406,27 +422,28 @@ class Tooltip(MacroElement):
             {% if this.aliases %}
             let aliases = {{ this.aliases }};
             {% endif %}
-            return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' +
+            return '<table{% if this.style %} style="{{this.style}}"{% endif%}>' +
             String(
                 fields.map(
                 columnname=>
                     `{% if this.labels %}
-                    <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                    <tr><th style="padding: 5px; text-align: left; padding-right: 15px;">{% if this.aliases %}${aliases[fields.indexOf(columnname)]
                         {% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% else %}
                     ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                    {% endif %}:</strong>
+                    {% endif %}</th>
                     {% endif %}
-                    ${ layer.feature.properties[columnname]
-                    {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
-                ).join('<br>'))+'</div>'
+                    <td style="padding: 5px; text-align: left;">${ layer.feature.properties[columnname]
+                    {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
+                ).join(''))
+                +'</table>'
             {% elif this.text %}
                 return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
                 + '{{ this.text }}'+'</div>'
             {% endif %}
             }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
         {% endmacro %}
-    """)
+        """)
 
     def __init__(self, text=None, fields=None, aliases=None, labels=True,
                  toLocaleString=False, style=None, **kwargs):
