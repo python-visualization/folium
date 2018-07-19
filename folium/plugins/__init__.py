@@ -42,7 +42,7 @@ __all__ = [
     'HeatMapWithTime',
     'MarkerCluster',
     'MeasureControl',
-     'MousePosition',
+    'MousePosition',
     'PolyLineTextPath',
     'ScrollZoomToggler',
     'Terminator',
