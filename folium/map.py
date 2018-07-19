@@ -426,14 +426,14 @@ class Tooltip(MacroElement):
             String(
                 fields.map(
                 columnname=>
-                    `{% if this.labels %}
-                    <tr><th style="padding: 5px; text-align: left; padding-right: 15px;">{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                    `<tr style="text-align: left;">{% if this.labels %}
+                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}${aliases[fields.indexOf(columnname)]
                         {% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% else %}
                     ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% endif %}</th>
                     {% endif %}
-                    <td style="padding: 5px; text-align: left;">${ layer.feature.properties[columnname]
+                    <td style="padding: 4px;">${ layer.feature.properties[columnname]
                     {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
                 ).join(''))
                 +'</table>'
