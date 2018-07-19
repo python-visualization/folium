@@ -427,7 +427,8 @@ class Tooltip(MacroElement):
                 fields.map(
                 columnname=>
                     `<tr style="text-align: left;">{% if this.labels %}
-                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
+                        ${aliases[fields.indexOf(columnname)]
                         {% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% else %}
                     ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
