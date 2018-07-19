@@ -130,7 +130,7 @@ class TimestampedGeoJson(MacroElement):
 
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
-                 loop_button=False, date_options='YYYY/MM/DD hh:mm:ss',
+                 loop_button=False, date_options='YYYY/MM/DD HH:mm:ss',
                  time_slider_drag_update=False, duration=None):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
