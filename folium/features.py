@@ -13,7 +13,8 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip,
+                        create_tooltip)
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
@@ -323,6 +324,9 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object. Can utilize the data,
+        see folium.Tooltip for info on how to do that.
 
     Examples
     --------
@@ -408,20 +412,11 @@ class GeoJson(Layer):
 
         self.highlight_function = highlight_function or (lambda x: {})
 
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['features'][0]['properties'].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value {0} is not available" \
-                                              " in {1}".format(value, keys)
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
+
+        if tooltip is not None:
+            keys = tuple(self.data['features'][0]['properties'].keys())
+            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
 
     def style_data(self):
         """
@@ -480,6 +475,9 @@ class TopoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object. Can utilize the data,
+        see folium.Tooltip for info on how to do that.
 
     Examples
     --------
@@ -539,20 +537,10 @@ class TopoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['objects'][object_path.split('.')[-1]][
-                        'geometries'][0]['properties'].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value {0} is not ".format(
-                            value) + "available in {0}".format(keys)
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        if tooltip is not None:
+            keys = tuple(self.data['objects'][object_path.split('.')[-1]][
+                'geometries'][0]['properties'].keys())
+            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
 
     def style_data(self):
         """
@@ -611,8 +599,28 @@ class TopoJson(Layer):
                 self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
                 self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
             ]
-
         ]
+
+
+def create_geojson_topojson_tooltip(tooltip, keys):
+    """
+    Return a valid Tooltip from unknown input for a GeoJson or TopoJson object.
+    
+    Parameters
+    ----------
+    tooltip : str or folium.Tooltip
+        Input used to create a Tooltip object.
+    keys : tuple
+        The field names available in the geojson or topojson object.    
+    """
+    if isinstance(tooltip, Tooltip):
+        if tooltip.fields:
+            for value in tooltip.fields:
+                assert value in keys, ("The value {} is not available in {}"
+                                       .format(value, keys))
+        return tooltip
+    else:
+        return create_tooltip(tooltip)
 
 
 class DivIcon(MacroElement):
