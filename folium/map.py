@@ -242,16 +242,15 @@ class Marker(MacroElement):
                popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-            var {{this.get_name()}} = L.marker(
-                [{{this.location[0]}}, {{this.location[1]}}],
-                {icon: new L.Icon.Default(),
-                    {{this.options}})
-                )
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+        var {{this.get_name()}} = L.marker(
+            [{{this.location[0]}}, {{this.location[1]}}],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def validate_tooltip(self, tooltip, name):
         if tooltip:
@@ -265,8 +264,7 @@ class Marker(MacroElement):
                 raise ValueError('Please pass a folium Tooltip object or'
                                  ' a string to the tooltip argument')
 
-    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
-                 **kwargs):
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'marker'
         if location:
@@ -278,10 +276,6 @@ class Marker(MacroElement):
         elif popup is not None:
             self.add_child(popup)
         self.validate_tooltip(tooltip=tooltip, name=self._name)
-        if icon:
-            kwargs.update(icon=icon.options)
-            self.icon_type = icon._name
-        self.options = kwargs
 
     def _get_self_bounds(self):
         """
