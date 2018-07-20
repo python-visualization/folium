@@ -52,6 +52,7 @@ __all__ = [
     'LayerControl',
     'Marker',
     'Popup',
+    'Tooltip',
     'TileLayer',
     'ClickForMarker',
     'CustomIcon',

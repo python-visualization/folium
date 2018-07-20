@@ -605,13 +605,13 @@ class TopoJson(Layer):
 def create_geojson_topojson_tooltip(tooltip, keys):
     """
     Return a valid Tooltip from unknown input for a GeoJson or TopoJson object.
-    
+
     Parameters
     ----------
     tooltip : str or folium.Tooltip
         Input used to create a Tooltip object.
     keys : tuple
-        The field names available in the geojson or topojson object.    
+        The field names available in the geojson or topojson object.
     """
     if isinstance(tooltip, Tooltip):
         if tooltip.fields:
