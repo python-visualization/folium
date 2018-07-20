@@ -49,8 +49,9 @@ class RegularPolygonMarker(Marker):
     radius: int, default 15
         Marker radius, in pixels
     popup: string or folium.Popup, default None
-
         Input text or visualization for object displayed when clicking.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
     https://humangeo.github.io/leaflet-dvf/
 
@@ -70,10 +71,7 @@ class RegularPolygonMarker(Marker):
                     rotation: {{this.rotation}},
                     radius: {{this.radius}}
                     }
-                ){% if this.tooltip %}
-                .bindTooltip('{{ this.tooltip }}')
-                {% endif %}
-                .addTo({{this._parent.get_name()}});
+                ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
@@ -82,7 +80,7 @@ class RegularPolygonMarker(Marker):
                  rotation=0, radius=15, popup=None, tooltip=None):
         super(RegularPolygonMarker, self).__init__(
             _locations_tolist(location),
-            popup=popup
+            popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
         self.color = color
@@ -93,7 +91,6 @@ class RegularPolygonMarker(Marker):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""

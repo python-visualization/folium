@@ -12,7 +12,7 @@ import json
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import Marker, Tooltip
+from folium.map import Marker
 
 from jinja2 import Template
 
@@ -164,9 +164,9 @@ class PolyLine(Marker):
             """)  # noqa
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(location=locations, popup=popup)
+        super(PolyLine, self).__init__(location=locations, popup=popup,
+                                       tooltip=tooltip)
         self._name = 'PolyLine'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -203,10 +203,8 @@ class Polygon(Marker):
             """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(Polygon, self).__init__(locations, popup=popup)
+        super(Polygon, self).__init__(locations, popup=popup, tooltip=tooltip)
         self._name = 'Polygon'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -243,10 +241,9 @@ class Rectangle(Marker):
             """)
 
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(location=bounds, popup=popup)
+        super(Rectangle, self).__init__(location=bounds, popup=popup,
+                                        tooltip=tooltip)
         self._name = 'rectangle'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -288,10 +285,9 @@ class Circle(Marker):
             """)
 
     def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location=location, popup=popup)
+        super(Circle, self).__init__(location=location, popup=popup,
+                                     tooltip=tooltip)
         self._name = 'circle'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)
 
 
@@ -327,8 +323,7 @@ class CircleMarker(Marker):
             """)
 
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location=location, popup=popup)
+        super(CircleMarker, self).__init__(location=location, popup=popup,
+                                           tooltip=tooltip)
         self._name = 'CircleMarker'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)
