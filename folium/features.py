@@ -343,46 +343,39 @@ class GeoJson(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
+        {% macro script(this, kwargs) %}
+        {% if this.highlight %}
+            {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                layer.on({
+                    mouseout: function(e) {
+                        e.target.setStyle(e.target.feature.properties.style);},
+                    mouseover: function(e) {
+                        e.target.setStyle(e.target.feature.properties.highlight);},
+                    click: function(e) {
+                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                    });
+            };
+        {% endif %}
+        var {{this.get_name()}} = L.geoJson(
+            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
+            {% if this.smooth_factor is not none or this.highlight %}
+                , {
+                {% if this.smooth_factor is not none  %}
+                    smoothFactor:{{this.smooth_factor}}
+                {% endif %}
 
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                            e.target.setStyle(e.target.feature.properties.style);},
-                        mouseover: function(e) {
-                            e.target.setStyle(e.target.feature.properties.highlight);},
-                        click: function(e) {
-                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                        });
-                };
+                {% if this.highlight %}
+                    {% if this.smooth_factor is not none  %}
+                    ,
+                    {% endif %}
+                    onEachFeature: {{this.get_name()}}_onEachFeature
+                {% endif %}
+                }
             {% endif %}
-
-                var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
-                        , {
-                        {% if this.smooth_factor is not none  %}
-                            smoothFactor:{{this.smooth_factor}}
-                        {% endif %}
-
-                        {% if this.highlight %}
-                            {% if this.smooth_factor is not none  %}
-                            ,
-                            {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
-                        {% endif %}
-                        }
-                    {% endif %}
-                    )
-                    {% if this.tooltip %}
-                    .bindTooltip('{{ this.tooltip }}')
-                    {% endif %}
-                    .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
+            ).addTo({{this._parent.get_name()}});
+        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, show=True,
@@ -507,21 +500,18 @@ class TopoJson(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}}_data = {{this.style_data()}};
-                var {{this.get_name()}} = L.geoJson(topojson.feature(
-                    {{this.get_name()}}_data,
-                    {{this.get_name()}}_data.{{this.object_path}})
-                        {% if this.smooth_factor is not none %}
-                            , {smoothFactor: {{this.smooth_factor}}}
-                        {% endif %}
-                        )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
-                        .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+        var {{this.get_name()}}_data = {{this.style_data()}};
+        var {{this.get_name()}} = L.geoJson(topojson.feature(
+            {{this.get_name()}}_data,
+            {{this.get_name()}}_data.{{this.object_path}})
+                {% if this.smooth_factor is not none %}
+                    , {smoothFactor: {{this.smooth_factor}}}
+                {% endif %}
+                ).addTo({{this._parent.get_name()}});
+        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, show=True,
