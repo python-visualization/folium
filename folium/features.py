@@ -727,7 +727,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup=None, tooltip=None):
+    def __init__(self, popup=None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -735,20 +735,6 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
-
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
 
 
 class CustomIcon(Icon):
