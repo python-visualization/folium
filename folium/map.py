@@ -252,18 +252,6 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
-    def validate_tooltip(self, tooltip, name):
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not tooltip.fields, "Only text may be passed to a {0} " \
-                                           "Tooltip.".format(name)
-                self.add_child(tooltip)
-            elif isinstance(tooltip, str):
-                self.add_child(Tooltip(tooltip, sticky=True))
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
-
     def __init__(self, location=None, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'marker'
@@ -275,7 +263,8 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-        self.validate_tooltip(tooltip=tooltip, name=self._name)
+        if tooltip is not None:
+            self.add_child(create_tooltip(tooltip))
 
     def _get_self_bounds(self):
         """
@@ -484,6 +473,19 @@ class Tooltip(MacroElement):
                 "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
+
+
+def create_tooltip(tooltip):
+    """Create a Tooltip object from an unknown input type."""
+    if isinstance(tooltip, Tooltip):
+        return tooltip
+    elif isinstance(tooltip, str):
+        return Tooltip(tooltip)
+    elif isinstance(tooltip, (float, int)):
+        return Tooltip(str(tooltip))
+    else:
+        raise ValueError('Please pass a folium Tooltip object or'
+                         ' a string to the tooltip argument')
 
 
 class FitBounds(MacroElement):
