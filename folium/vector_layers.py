@@ -140,8 +140,8 @@ class PolyLine(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: str, default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     smooth_factor: float, default 1.0
         How much to simplify the polyline on each zoom level.
         More means better performance and smoother look,
@@ -184,8 +184,8 @@ class Polygon(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#polygon
@@ -224,8 +224,8 @@ class Rectangle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#rectangle
@@ -267,8 +267,8 @@ class Circle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float
         Radius of the circle, in meters.
 
@@ -307,8 +307,8 @@ class CircleMarker(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float, default 10
         Radius of the circle marker, in pixels.
 

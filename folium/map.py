@@ -224,7 +224,8 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
-    tooltip: folium.Tooltip object or string to display on hover for marker.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -439,8 +440,8 @@ class Tooltip(MacroElement):
                 ).join(''))
                 +'</table>'
             {% elif this.text %}
-                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
-                + '{{ this.text }}'+'</div>'
+                return '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
+                + '{{ this.text }}' + '</div>'
             {% endif %}
             }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
         {% endmacro %}
@@ -472,13 +473,12 @@ class Tooltip(MacroElement):
                              "opacity": (float, int)}
         if kwargs:
             for key in kwargs.keys():
-                assert key in self.valid_kwargs.keys(), "The key {0} was not " \
-                                                        "available in the " \
-                                                        "keys: {1}".format(
-                    key, ', '.join(self.valid_kwargs.keys()))
+                assert key in self.valid_kwargs.keys(), \
+                    "The key {} was not available in the keys: {}".format(
+                        key, ', '.join(self.valid_kwargs.keys()))
                 assert isinstance(kwargs[key], self.valid_kwargs[key]), \
-                    "{0} must be of the following " \
-                    "types: {1}".format(key, self.valid_kwargs[key])
+                    "{} must be of the following types: {}".format(
+                        key, self.valid_kwargs[key])
             self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases

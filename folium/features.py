@@ -49,10 +49,8 @@ class RegularPolygonMarker(Marker):
     radius: int, default 15
         Marker radius, in pixels
     popup: string or folium.Popup, default None
-        Input text or visualization for object. Can pass either text,
-        or a folium.Popup object.
-        If None, no popup will be displayed.
 
+        Input text or visualization for object displayed when clicking.
 
     https://humangeo.github.io/leaflet-dvf/
 
@@ -80,9 +78,8 @@ class RegularPolygonMarker(Marker):
             """)
 
     def __init__(self, location, color='black', opacity=1, weight=2,
-                 fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15, popup=None,
-                 tooltip=None):
+                 fill_color='blue', fill_opacity=1, number_of_sides=4,
+                 rotation=0, radius=15, popup=None, tooltip=None):
         super(RegularPolygonMarker, self).__init__(
             _locations_tolist(location),
             popup=popup
