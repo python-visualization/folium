@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
+import json
 
 from branca.element import CssLink, Figure, JavascriptLink
 
@@ -15,6 +16,12 @@ class MarkerCluster(Layer):
 
     Parameters
     ----------
+    locations: list of list or array of shape (n, 2).
+        Data points of the form [[lat, lng]].
+    popups: list of length n, default None
+        Popup for each marker, either a Popup object or a string or None.
+    icons: list of length n, default None
+        Icon for each marker, either an Icon object or a string or None.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -26,53 +33,54 @@ class MarkerCluster(Layer):
     icon_create_function : string, default None
         Override the default behaviour, making possible to customize
         markers colors and sizes.
-
-    locations: list of list or array of shape (n, 2).
-        Data points of the form [[lat, lng]].
-    popups: list of length n.
-        Popup for each marker.
-    icons: list of length n.
-        Icon for each marker.
+    options : dict, default None
+        A dictionary with options for Leaflet.markercluster. See
+        https://github.com/Leaflet/Leaflet.markercluster for options.
 
     Example
     -------
     >>> icon_create_function = '''
-    ...    function(cluster) {
-    ...    return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>',
-    ...                      className: 'marker-cluster marker-cluster-small',
-    ...                      iconSize: new L.Point(20, 20)});
-    }'''
+    ...     function(cluster) {
+    ...     return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>',
+    ...                       className: 'marker-cluster marker-cluster-small',
+    ...                       iconSize: new L.Point(20, 20)});
+    ...     }
+    ... '''
 
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({
-                {% if this._icon_create_function %}
-                   iconCreateFunction: {{this._icon_create_function}}
-                {% endif %}
-            });
+            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
-                 icon_create_function=None):
+                 icon_create_function=None, options=None):
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control, show=show)
+        self._name = 'MarkerCluster'
 
         if locations is not None:
             if popups is None:
-                popups = [None]*len(locations)
+                popups = [None] * len(locations)
             if icons is None:
-                icons = [None]*len(locations)
+                icons = [None] * len(locations)
             for location, popup, icon in zip(locations, popups, icons):
-                p = popup if popup is None or isinstance(popup, Popup) else Popup(popup)  # noqa
-                i = icon if icon is None or isinstance(icon, Icon) else Icon(icon)  # noqa
+                p = popup if self._validate(popup, Popup) else Popup(popup)
+                i = icon if self._validate(icon, Icon) else Icon(icon)
                 self.add_child(Marker(location, popup=p, icon=i))
 
-        self._name = 'MarkerCluster'
-        self._icon_create_function = icon_create_function.strip() if icon_create_function else ''  # noqa
+        options = {} if options is None else options
+        if icon_create_function is not None:
+            options['iconCreateFunction'] = icon_create_function.strip()
+        self.options = json.dumps(options, sort_keys=True, indent=2)
+
+    @staticmethod
+    def _validate(obj, cls):
+        """Check whether the given object is from the given class or is None."""
+        return True if obj is None or isinstance(obj, cls) else False
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)
