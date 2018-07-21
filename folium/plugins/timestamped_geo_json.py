@@ -16,7 +16,7 @@ class TimestampedGeoJson(MacroElement):
     into a map with Map.add_child.
 
     A geo-json is timestamped if:
-    * it contains only features of types LineString, MultiPoint, MultiLineString and Polygon.
+    * it contains only features of types LineString, MultiPoint, MultiLineString, MultiPolygon and Polygon.
     * each feature has a 'times' property with the same length as the coordinates array.
     * each element of each 'times' property is a timestamp in ms since epoch, or in ISO string.
 
