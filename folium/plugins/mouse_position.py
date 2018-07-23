@@ -32,6 +32,7 @@ from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
+
 class MousePosition(MacroElement):
     """
 
