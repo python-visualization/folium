@@ -40,8 +40,9 @@ class MousePosition(MacroElement):
     ----------
     position : str, default 'bottomright'
         Location of the widget.
-        
+    
     """
+
     _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = new L.Control.MousePosition(
@@ -51,9 +52,9 @@ class MousePosition(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, position='bottomright', separator=' : ', 
-                 emptyString='Unavailable', lngFirst=False, 
-                 numDigits=5, lngFormatter=None, latFormatter=None, 
+    def __init__(self, position='bottomright', separator=' : ',
+                 emptyString='Unavailable', lngFirst=False,
+                 numDigits=5, lngFormatter=None, latFormatter=None,
                  prefix=""):
         
         super(MousePosition, self).__init__()
