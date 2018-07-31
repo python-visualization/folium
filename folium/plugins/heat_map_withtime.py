@@ -29,6 +29,9 @@ class HeatMapWithTime(Layer):
         The maximum opacity for the heatmap.
     scale_radius: default False
         Scale the radius of the points based on the zoom level.
+    gradient: dict, default None
+        Pass a gradient dictionary matching point density values to a hex code
+        or rgb color value.
     use_local_extrema: default False
         Defines whether the heatmap uses a global extrema set found from the input data
         OR a local extrema (the maximum and minimum of the currently displayed view).
@@ -92,7 +95,8 @@ class HeatMapWithTime(Layer):
                         maxOpacity: {{this.max_opacity}},
                         scaleRadius: {{this.scale_radius}},
                         useLocalExtrema: {{this.use_local_extrema}},
-                        defaultWeight: 1 ,
+                        defaultWeight: 1,
+                        {% if this.gradient %}gradient: {{ this.gradient }}{% endif %}
                     }
                 })
                 .addTo({{this._parent.get_name()}});
@@ -101,10 +105,12 @@ class HeatMapWithTime(Layer):
         """)
 
     def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
-                 max_opacity=0.6, scale_radius=False, use_local_extrema=False,
-                 auto_play=False, display_index=True, index_steps=1,
-                 min_speed=0.1, max_speed=10, speed_step=0.1,
-                 position='bottomleft', overlay=True, control=True, show=True):
+                 max_opacity=0.6, scale_radius=False, gradient=None,
+                 use_local_extrema=False, auto_play=False,
+                 display_index=True, index_steps=1, min_speed=0.1,
+                 max_speed=10, speed_step=0.1, position='bottomleft',
+                 overlay=True, control=True,
+                 show=True):
         super(HeatMapWithTime, self).__init__(name=name, overlay=overlay,
                                               control=control, show=show)
         self._name = 'HeatMap'
@@ -124,6 +130,7 @@ class HeatMapWithTime(Layer):
         self.max_opacity = max_opacity
         self.scale_radius = 'true' if scale_radius else 'false'
         self.use_local_extrema = 'true' if use_local_extrema else 'false'
+        self.gradient = gradient
 
         # Time dimension settings.
         self.auto_play = 'true' if auto_play else 'false'
