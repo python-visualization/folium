@@ -10,11 +10,11 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.colormap import LinearColormap
-from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
-from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
+from branca.element import (Element, Figure, JavascriptLink, MacroElement)
+from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
+                              none_max, none_min)
 
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip,
-                        create_tooltip)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
@@ -324,9 +324,9 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
-    tooltip: str or folium.Tooltip, default None
+    tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
-        see folium.Tooltip for info on how to do that.
+        see folium.GeoJsonTooltip for info on how to do that.
 
     Examples
     --------
@@ -414,9 +414,10 @@ class GeoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
-        if tooltip is not None:
-            keys = tuple(self.data['features'][0]['properties'].keys())
-            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
+        if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
+            self.add_child(tooltip)
+        elif tooltip is not None:
+            self.add_child(Tooltip(tooltip))
 
     def style_data(self):
         """
@@ -475,9 +476,9 @@ class TopoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
-    tooltip: str or folium.Tooltip, default None
+    tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
-        see folium.Tooltip for info on how to do that.
+        see folium.GeoJsonTooltip for info on how to do that.
 
     Examples
     --------
@@ -537,10 +538,10 @@ class TopoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
-        if tooltip is not None:
-            keys = tuple(self.data['objects'][object_path.split('.')[-1]][
-                'geometries'][0]['properties'].keys())
-            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
+        if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
+            self.add_child(tooltip)
+        elif tooltip is not None:
+            self.add_child(Tooltip(tooltip))
 
     def style_data(self):
         """
@@ -600,27 +601,6 @@ class TopoJson(Layer):
                 self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
             ]
         ]
-
-
-def create_geojson_topojson_tooltip(tooltip, keys):
-    """
-    Return a valid Tooltip from unknown input for a GeoJson or TopoJson object.
-
-    Parameters
-    ----------
-    tooltip : str or folium.Tooltip
-        Input used to create a Tooltip object.
-    keys : tuple
-        The field names available in the geojson or topojson object.
-    """
-    if isinstance(tooltip, Tooltip):
-        if tooltip.fields:
-            for value in tooltip.fields:
-                assert value in keys, ("The value {} is not available in {}"
-                                       .format(value, keys))
-        return tooltip
-    else:
-        return create_tooltip(tooltip)
 
 
 class GeoJsonTooltip(Tooltip):
@@ -721,6 +701,25 @@ class GeoJsonTooltip(Tooltip):
                 "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        if not isinstance(self._parent, (GeoJson, TopoJson)):
+            raise TypeError('You cannot add a GeoJsonTooltip to anything else'
+                            ' then a GeoJson or TopoJson object.')
+        if isinstance(self._parent, GeoJson):
+            keys = tuple(self._parent.data['features'][0]['properties'].keys())
+        elif isinstance(self._parent, TopoJson):
+            obj_name = self._parent.object_path.split('.')[-1]
+            keys = tuple(self._parent.data['objects'][obj_name][
+                             'geometries'][0]['properties'].keys())
+        for value in self.fields:
+            assert value in keys, ("The value {} is not available in {}."
+                                   .format(value, keys))
+
+        super(GeoJsonTooltip, self).render(**kwargs)
+
+
 
 
 class DivIcon(MacroElement):

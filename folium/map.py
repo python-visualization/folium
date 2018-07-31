@@ -263,8 +263,10 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-        if tooltip is not None:
-            self.add_child(create_tooltip(tooltip))
+        if isinstance(tooltip, Tooltip):
+            self.add_child(tooltip)
+        elif tooltip is not None:
+            self.add_child(Tooltip(tooltip))
 
     def _get_self_bounds(self):
         """
@@ -348,22 +350,21 @@ class Popup(Element):
 
 class Tooltip(MacroElement):
     """
-    Creates a Tooltip object for adding to features to display text as a
-    property by executing a JavaScript function when hovering the cursor over
-    each feature.
+    Create a tooltip that shows text when hovering over its parent object.
 
     Parameters
     ----------
     text: str
-        Pass a string to display as a tooltip on the object.
+        String to display as a tooltip on the object. If the argument is of a
+        different type it will be converted to str.
     style: str, default None.
-        A string with HTML inline style properties that will be used to style
-        properties like font and colors in a div element in the tooltip.
+        HTML inline style properties like font and colors. Will be applied to
+        a div with the text in it.
     sticky: bool, default True
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.3.0.html#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     Examples
     --------
@@ -383,10 +384,11 @@ class Tooltip(MacroElement):
         super(Tooltip, self).__init__()
         self._name = "Tooltip"
 
+        self.text = str(text)
+
         kwargs.update({'sticky': sticky})
         self.options = self.parse_kwargs(kwargs)
 
-        self.text = text.__str__()
         if style:
             assert isinstance(style, str), \
                 "Pass a valid inline HTML style property string to style."
@@ -411,20 +413,6 @@ class Tooltip(MacroElement):
                 "{} must be of the following types: {}".format(
                     key, valid_kwargs[key])
         return json.dumps(kwargs)
-
-
-def create_tooltip(tooltip):
-    """Create a Tooltip object from an unknown input type."""
-    if isinstance(tooltip, Tooltip):
-        assert tooltip.text
-        return tooltip
-    elif isinstance(tooltip, str):
-        return Tooltip(tooltip)
-    elif isinstance(tooltip, (float, int)):
-        return Tooltip(str(tooltip))
-    else:
-        raise ValueError('Please pass a folium Tooltip object or'
-                         ' a string to the tooltip argument')
 
 
 class FitBounds(MacroElement):
