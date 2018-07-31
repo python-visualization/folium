@@ -224,7 +224,8 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
-    tooltip: folium.Tooltip object or string to display on hover for marker.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -241,31 +242,17 @@ class Marker(MacroElement):
                popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
+        {% macro script(this, kwargs) %}
+        var {{this.get_name()}} = L.marker(
+            [{{this.location[0]}}, {{this.location[1]}}],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
-            var {{this.get_name()}} = L.marker(
-                [{{this.location[0]}}, {{this.location[1]}}],
-                {icon: new L.Icon.Default(),
-                    {{this.options}})
-                )
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
-
-    def validate_tooltip(self, tooltip, name):
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not tooltip.fields, "Only text may be passed to a {0} " \
-                                           "Tooltip.".format(name)
-                self.add_child(tooltip)
-            elif isinstance(tooltip, str):
-                self.add_child(Tooltip(tooltip, sticky=True))
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
-
-    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
-                 **kwargs):
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
         self._name = 'marker'
         if location:
@@ -276,11 +263,8 @@ class Marker(MacroElement):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
-        self.validate_tooltip(tooltip=tooltip, name=self._name)
-        if icon:
-            kwargs.update(icon=icon.options)
-            self.icon_type = icon._name
-        self.options = kwargs
+        if tooltip is not None:
+            self.add_child(create_tooltip(tooltip))
 
     def _get_self_bounds(self):
         """
@@ -439,8 +423,8 @@ class Tooltip(MacroElement):
                 ).join(''))
                 +'</table>'
             {% elif this.text %}
-                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
-                + '{{ this.text }}'+'</div>'
+                return '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
+                + '{{ this.text }}' + '</div>'
             {% endif %}
             }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
         {% endmacro %}
@@ -472,13 +456,12 @@ class Tooltip(MacroElement):
                              "opacity": (float, int)}
         if kwargs:
             for key in kwargs.keys():
-                assert key in self.valid_kwargs.keys(), "The key {0} was not " \
-                                                        "available in the " \
-                                                        "keys: {1}".format(
-                    key, ', '.join(self.valid_kwargs.keys()))
+                assert key in self.valid_kwargs.keys(), \
+                    "The key {} was not available in the keys: {}".format(
+                        key, ', '.join(self.valid_kwargs.keys()))
                 assert isinstance(kwargs[key], self.valid_kwargs[key]), \
-                    "{0} must be of the following " \
-                    "types: {1}".format(key, self.valid_kwargs[key])
+                    "{} must be of the following types: {}".format(
+                        key, self.valid_kwargs[key])
             self.kwargs = json.dumps(kwargs)
         self.fields = fields
         self.aliases = aliases
@@ -490,6 +473,19 @@ class Tooltip(MacroElement):
                 "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
+
+
+def create_tooltip(tooltip):
+    """Create a Tooltip object from an unknown input type."""
+    if isinstance(tooltip, Tooltip):
+        return tooltip
+    elif isinstance(tooltip, str):
+        return Tooltip(tooltip)
+    elif isinstance(tooltip, (float, int)):
+        return Tooltip(str(tooltip))
+    else:
+        raise ValueError('Please pass a folium Tooltip object or'
+                         ' a string to the tooltip argument')
 
 
 class FitBounds(MacroElement):

@@ -13,7 +13,8 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip,
+                        create_tooltip)
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
@@ -49,10 +50,9 @@ class RegularPolygonMarker(Marker):
     radius: int, default 15
         Marker radius, in pixels
     popup: string or folium.Popup, default None
-        Input text or visualization for object. Can pass either text,
-        or a folium.Popup object.
-        If None, no popup will be displayed.
-
+        Input text or visualization for object displayed when clicking.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
     https://humangeo.github.io/leaflet-dvf/
 
@@ -72,20 +72,16 @@ class RegularPolygonMarker(Marker):
                     rotation: {{this.rotation}},
                     radius: {{this.radius}}
                     }
-                ){% if this.tooltip %}
-                .bindTooltip('{{ this.tooltip }}')
-                {% endif %}
-                .addTo({{this._parent.get_name()}});
+                ).addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, location, color='black', opacity=1, weight=2,
-                 fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15, popup=None,
-                 tooltip=None):
+                 fill_color='blue', fill_opacity=1, number_of_sides=4,
+                 rotation=0, radius=15, popup=None, tooltip=None):
         super(RegularPolygonMarker, self).__init__(
             _locations_tolist(location),
-            popup=popup
+            popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
         self.color = color
@@ -96,7 +92,6 @@ class RegularPolygonMarker(Marker):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -329,6 +324,9 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object. Can utilize the data,
+        see folium.Tooltip for info on how to do that.
 
     Examples
     --------
@@ -349,46 +347,39 @@ class GeoJson(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
+        {% macro script(this, kwargs) %}
+        {% if this.highlight %}
+            {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+                layer.on({
+                    mouseout: function(e) {
+                        e.target.setStyle(e.target.feature.properties.style);},
+                    mouseover: function(e) {
+                        e.target.setStyle(e.target.feature.properties.highlight);},
+                    click: function(e) {
+                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
+                    });
+            };
+        {% endif %}
+        var {{this.get_name()}} = L.geoJson(
+            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
+            {% if this.smooth_factor is not none or this.highlight %}
+                , {
+                {% if this.smooth_factor is not none  %}
+                    smoothFactor:{{this.smooth_factor}}
+                {% endif %}
 
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                            e.target.setStyle(e.target.feature.properties.style);},
-                        mouseover: function(e) {
-                            e.target.setStyle(e.target.feature.properties.highlight);},
-                        click: function(e) {
-                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                        });
-                };
+                {% if this.highlight %}
+                    {% if this.smooth_factor is not none  %}
+                    ,
+                    {% endif %}
+                    onEachFeature: {{this.get_name()}}_onEachFeature
+                {% endif %}
+                }
             {% endif %}
-
-                var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
-                        , {
-                        {% if this.smooth_factor is not none  %}
-                            smoothFactor:{{this.smooth_factor}}
-                        {% endif %}
-
-                        {% if this.highlight %}
-                            {% if this.smooth_factor is not none  %}
-                            ,
-                            {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
-                        {% endif %}
-                        }
-                    {% endif %}
-                    )
-                    {% if this.tooltip %}
-                    .bindTooltip('{{ this.tooltip }}')
-                    {% endif %}
-                    .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
+            ).addTo({{this._parent.get_name()}});
+        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, show=True,
@@ -421,20 +412,11 @@ class GeoJson(Layer):
 
         self.highlight_function = highlight_function or (lambda x: {})
 
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['features'][0]['properties'].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value {0} is not available" \
-                                              " in {1}".format(value, keys)
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
+
+        if tooltip is not None:
+            keys = tuple(self.data['features'][0]['properties'].keys())
+            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
 
     def style_data(self):
         """
@@ -493,6 +475,9 @@ class TopoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object. Can utilize the data,
+        see folium.Tooltip for info on how to do that.
 
     Examples
     --------
@@ -513,21 +498,18 @@ class TopoJson(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}}_data = {{this.style_data()}};
-                var {{this.get_name()}} = L.geoJson(topojson.feature(
-                    {{this.get_name()}}_data,
-                    {{this.get_name()}}_data.{{this.object_path}})
-                        {% if this.smooth_factor is not none %}
-                            , {smoothFactor: {{this.smooth_factor}}}
-                        {% endif %}
-                        )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip}}"){% endif %}
-                        .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
-
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+        var {{this.get_name()}}_data = {{this.style_data()}};
+        var {{this.get_name()}} = L.geoJson(topojson.feature(
+            {{this.get_name()}}_data,
+            {{this.get_name()}}_data.{{this.object_path}})
+                {% if this.smooth_factor is not none %}
+                    , {smoothFactor: {{this.smooth_factor}}}
+                {% endif %}
+                ).addTo({{this._parent.get_name()}});
+        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, show=True,
@@ -555,20 +537,10 @@ class TopoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                if tooltip.fields:
-                    keys = self.data['objects'][object_path.split('.')[-1]][
-                        'geometries'][0]['properties'].keys()
-                    for value in list(tooltip.fields):
-                        assert value in keys, "The value {0} is not ".format(
-                            value) + "available in {0}".format(keys)
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
+        if tooltip is not None:
+            keys = tuple(self.data['objects'][object_path.split('.')[-1]][
+                'geometries'][0]['properties'].keys())
+            self.add_child(create_geojson_topojson_tooltip(tooltip, keys))
 
     def style_data(self):
         """
@@ -627,8 +599,28 @@ class TopoJson(Layer):
                 self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
                 self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
             ]
-
         ]
+
+
+def create_geojson_topojson_tooltip(tooltip, keys):
+    """
+    Return a valid Tooltip from unknown input for a GeoJson or TopoJson object.
+
+    Parameters
+    ----------
+    tooltip : str or folium.Tooltip
+        Input used to create a Tooltip object.
+    keys : tuple
+        The field names available in the geojson or topojson object.
+    """
+    if isinstance(tooltip, Tooltip):
+        if tooltip.fields:
+            for value in tooltip.fields:
+                assert value in keys, ("The value {} is not available in {}"
+                                       .format(value, keys))
+        return tooltip
+    else:
+        return create_tooltip(tooltip)
 
 
 class DivIcon(MacroElement):
@@ -735,7 +727,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup=None, tooltip=None):
+    def __init__(self, popup=None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -743,20 +735,6 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
-
-        if tooltip:
-            if isinstance(tooltip, Tooltip):
-                assert not all((tooltip.text, tooltip.fields)), "Only text " \
-                                                                "may be " \
-                                                                "passed to a " \
-                                                                "Marker " \
-                                                                "Tooltip."
-                self.add_child(tooltip, name=tooltip._name)
-            elif isinstance(tooltip, str):
-                self.tooltip = tooltip.__str__()
-            else:
-                raise ValueError('Please pass a folium Tooltip object or'
-                                 ' a string to the tooltip argument')
 
 
 class CustomIcon(Icon):

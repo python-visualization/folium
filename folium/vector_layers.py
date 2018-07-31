@@ -12,7 +12,7 @@ import json
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import Marker, Tooltip
+from folium.map import Marker
 
 from jinja2 import Template
 
@@ -140,8 +140,8 @@ class PolyLine(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: str, default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     smooth_factor: float, default 1.0
         How much to simplify the polyline on each zoom level.
         More means better performance and smoother look,
@@ -164,9 +164,9 @@ class PolyLine(Marker):
             """)  # noqa
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(location=locations, popup=popup)
+        super(PolyLine, self).__init__(location=locations, popup=popup,
+                                       tooltip=tooltip)
         self._name = 'PolyLine'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -184,8 +184,8 @@ class Polygon(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#polygon
@@ -203,10 +203,8 @@ class Polygon(Marker):
             """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(Polygon, self).__init__(locations, popup=popup)
+        super(Polygon, self).__init__(locations, popup=popup, tooltip=tooltip)
         self._name = 'Polygon'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -224,8 +222,8 @@ class Rectangle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#rectangle
@@ -243,10 +241,9 @@ class Rectangle(Marker):
             """)
 
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(location=bounds, popup=popup)
+        super(Rectangle, self).__init__(location=bounds, popup=popup,
+                                        tooltip=tooltip)
         self._name = 'rectangle'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -267,8 +264,8 @@ class Circle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float
         Radius of the circle, in meters.
 
@@ -288,10 +285,9 @@ class Circle(Marker):
             """)
 
     def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location=location, popup=popup)
+        super(Circle, self).__init__(location=location, popup=popup,
+                                     tooltip=tooltip)
         self._name = 'circle'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)
 
 
@@ -307,8 +303,8 @@ class CircleMarker(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float, default 10
         Radius of the circle marker, in pixels.
 
@@ -327,8 +323,7 @@ class CircleMarker(Marker):
             """)
 
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location=location, popup=popup)
+        super(CircleMarker, self).__init__(location=location, popup=popup,
+                                           tooltip=tooltip)
         self._name = 'CircleMarker'
-        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)
