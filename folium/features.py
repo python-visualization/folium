@@ -623,6 +623,106 @@ def create_geojson_topojson_tooltip(tooltip, keys):
         return create_tooltip(tooltip)
 
 
+class GeoJsonTooltip(Tooltip):
+    """
+    Create a tooltip that uses data from either geojson or topojson.
+
+    Parameters
+    ----------
+    fields: list or tuple.
+        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
+        columns you'd like to display.
+    aliases: list/tuple of strings, same length/urder as fields.
+        Optional 'aliases' you'd like to display the each field name as, to
+        describe the data in the tooltip.
+    labels: bool, default True.
+        Boolean value indicating if you'd like the the field names or
+        aliases to display to the left of the value in bold.
+    toLocaleString: bool, defaults False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation, etc.
+        *Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+    style: str, default None.
+        A string with HTML inline style properties that will be used to style
+        properties like font and colors in a div element in the tooltip.
+    sticky: bool, default True
+        Whether the tooltip should follow the mouse.
+    **kwargs: Assorted.
+        These values will map directly to the Leaflet Options. More info
+        available here: https://leafletjs.com/reference-1.3.0.html#tooltip
+
+    Examples
+    --------
+    # Provide fields and aliases, with Style.
+    >>> Tooltip(
+    >>>     fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
+    >>>     aliases=['County','2015 Census Population', '2015 Median Income'],
+    >>>     labels=True,
+    >>>     toLocaleString=True,
+    >>>     style=('background-color: grey; color: white; font-family:'
+    >>>            'courier new; font-size: 24px; padding: 10px;')
+    >>> )
+    # Provide fields, with labels off, and sticky True.
+    >>> Tooltip(fields=('CNTY_NM',), labels=False)
+    """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+        {{ this._parent.get_name() }}.bindTooltip(
+            function(layer){
+            let fields = {{ this.fields }};
+            {% if this.aliases %}
+            let aliases = {{ this.aliases }};
+            {% endif %}
+            return '<table{% if this.style %} style="{{this.style}}"{% endif%}>' +
+            String(
+                fields.map(
+                columnname=>
+                    `<tr style="text-align: left;">{% if this.labels %}
+                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
+                        ${aliases[fields.indexOf(columnname)]
+                        {% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% else %}
+                    ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% endif %}</th>
+                    {% endif %}
+                    <td style="padding: 4px;">${ layer.feature.properties[columnname]
+                    {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
+                ).join(''))
+                +'</table>'
+            }, {{ this.kwargs }});
+        {% endmacro %}
+        """)
+
+    def __init__(self, fields, aliases=None, labels=True,
+                 toLocaleString=False, style=None, sticky=True, **kwargs):
+        super(GeoJsonTooltip, self).__init__(
+            text='', style=style, sticky=sticky, **kwargs
+        )
+        self._name = "Tooltip"
+
+        assert isinstance(fields, (list, tuple)), "Please pass a list or " \
+                                                  "tuple to fields."
+        if aliases is not None:
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), "fields and aliases must have" \
+                                                " the same length."
+        assert isinstance(labels, bool), "labels requires a boolean value."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
+                                                 "boolean."
+
+        self.fields = fields
+        self.aliases = aliases
+        self.labels = labels
+        self.toLocaleString = toLocaleString
+        if style:
+            assert isinstance(style, str), \
+                "Pass a valid inline HTML style property string to style."
+            # noqa outside of type checking.
+            self.style = style
+
+
 class DivIcon(MacroElement):
     """
     Represents a lightweight icon for markers that uses a simple `div`

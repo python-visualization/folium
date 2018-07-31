@@ -354,130 +354,69 @@ class Tooltip(MacroElement):
 
     Parameters
     ----------
-    text: str, may not be passed if fields is not None.
-        Pass a string as a tooltip to display on the object.
-        object, I.e. "Click for more info."
-    fields: list or tuple. For GeoJson/TopoJson objects only.
-        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
-        columns you'd like to display.
-    aliases: list/tuple of strings, same length/urder as fields. For
-        GeoJson/TopoJson objects only.
-        Optional 'aliases' you'd like to display the each field name as, to
-        describe the data in the tooltip.
-    labels: boolean, defaults True.
-        Boolean value indicating if you'd like the the field names or
-        aliases to display to the left of the value in bold.
-    toLocaleString: boolean, defaults False.
-        This will use JavaScript's .toLocaleString() to format 'clean' values
-        as strings for the user's location; i.e. 1,000,000.00 comma separators,
-        float truncation, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
-        serve into the template).
-    style: str. Default None.
+    text: str
+        Pass a string to display as a tooltip on the object.
+    style: str, default None.
         A string with HTML inline style properties that will be used to style
         properties like font and colors in a div element in the tooltip.
-        https://www.w3schools.com/html/html_css.asp
+    sticky: bool, default True
+        Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
         available here: https://leafletjs.com/reference-1.3.0.html#tooltip
 
     Examples
     --------
-    # Provide fields and aliases, with Style.
-    >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
-                aliases=['County','2015 Census Population',
-                        '2015 Median Income'],
-                labels=True,
-                sticky=True,
-                toLocaleString=True,
-                style='background-color: grey; color: white; font-family:
-                courier new; font-size: 24px; padding: 10px;')
-    # Provide fields, with labels off, and sticky True.
-    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
-    # Provide only text.
-    >>> Tooltip(text="Click for more info.", sticky=True)
+    >>> Tooltip("Click for more info.")
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
         {{ this._parent.get_name() }}.bindTooltip(
-            function(layer){
-            {% if this.fields %}
-            let fields = {{ this.fields }};
-            {% if this.aliases %}
-            let aliases = {{ this.aliases }};
-            {% endif %}
-            return '<table{% if this.style %} style="{{this.style}}"{% endif%}>' +
-            String(
-                fields.map(
-                columnname=>
-                    `<tr style="text-align: left;">{% if this.labels %}
-                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
-                        ${aliases[fields.indexOf(columnname)]
-                        {% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                    {% else %}
-                    ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
-                    {% endif %}</th>
-                    {% endif %}
-                    <td style="padding: 4px;">${ layer.feature.properties[columnname]
-                    {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
-                ).join(''))
-                +'</table>'
-            {% elif this.text %}
-                return '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
-                + '{{ this.text }}' + '</div>'
-            {% endif %}
-            }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
+            '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
+            + '{{ this.text }}' + '</div>',
+            {{ this.options }}
+        );
         {% endmacro %}
         """)
 
-    def __init__(self, text=None, fields=None, aliases=None, labels=True,
-                 toLocaleString=False, style=None, **kwargs):
+    def __init__(self, text, style=None, sticky=True, **kwargs):
         super(Tooltip, self).__init__()
         self._name = "Tooltip"
 
-        if fields:
-            assert isinstance(fields, (list, tuple)), "Please pass a list or " \
-                                                      "tuple to fields."
-        if all((fields, aliases)):
-            assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), "fields and aliases must have" \
-                                                " the same length."
-        assert isinstance(labels, bool), "labels requires a boolean value."
-        assert not all((fields, text)), "Please choose either fields or text."
-        assert any((fields, text)), "Please choose either fields or text."
-        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
-                                                 "boolean."
-        self.valid_kwargs = {"pane": (str,),
-                             "offset": (tuple,),
-                             "direction": (str,),
-                             "permanent": (bool,),
-                             "sticky": (bool,),
-                             "interactive": (bool,),
-                             "opacity": (float, int)}
-        if kwargs:
-            for key in kwargs.keys():
-                assert key in self.valid_kwargs.keys(), \
-                    "The key {} was not available in the keys: {}".format(
-                        key, ', '.join(self.valid_kwargs.keys()))
-                assert isinstance(kwargs[key], self.valid_kwargs[key]), \
-                    "{} must be of the following types: {}".format(
-                        key, self.valid_kwargs[key])
-            self.kwargs = json.dumps(kwargs)
-        self.fields = fields
-        self.aliases = aliases
+        kwargs.update({'sticky': sticky})
+        self.options = self.parse_kwargs(kwargs)
+
         self.text = text.__str__()
-        self.labels = labels
-        self.toLocaleString = toLocaleString
         if style:
             assert isinstance(style, str), \
                 "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
 
+    @staticmethod
+    def parse_kwargs(kwargs):
+        """Validate the provided kwargs and return options as json string."""
+        valid_kwargs = {"pane": (str,),
+                        "offset": (tuple,),
+                        "direction": (str,),
+                        "permanent": (bool,),
+                        "sticky": (bool,),
+                        "interactive": (bool,),
+                        "opacity": (float, int)}
+        for key in kwargs.keys():
+            assert key in valid_kwargs.keys(), \
+                "The key {} was not available in the keys: {}".format(
+                    key, ', '.join(valid_kwargs.keys()))
+            assert isinstance(kwargs[key], valid_kwargs[key]), \
+                "{} must be of the following types: {}".format(
+                    key, valid_kwargs[key])
+        return json.dumps(kwargs)
+
 
 def create_tooltip(tooltip):
     """Create a Tooltip object from an unknown input type."""
     if isinstance(tooltip, Tooltip):
+        assert tooltip.text
         return tooltip
     elif isinstance(tooltip, str):
         return Tooltip(tooltip)
