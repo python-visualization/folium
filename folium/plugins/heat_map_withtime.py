@@ -30,8 +30,8 @@ class HeatMapWithTime(Layer):
     scale_radius: default False
         Scale the radius of the points based on the zoom level.
     gradient: dict, default None
-        Pass a gradient dictionary matching point density values to a hex code
-        or rgb color value.
+        Match point density values to colors. Color can be a name ('red'),
+        RGB values ('rgb(255,0,0)') or a hex number ('#FF0000').
     use_local_extrema: default False
         Defines whether the heatmap uses a global extrema set found from the input data
         OR a local extrema (the maximum and minimum of the currently displayed view).
