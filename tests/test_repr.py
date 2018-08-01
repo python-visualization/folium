@@ -8,6 +8,7 @@ Folium _repr_*_ Tests
 
 from __future__ import (absolute_import, division, print_function)
 
+import sys
 import io
 
 import PIL.Image
@@ -50,6 +51,8 @@ def test__repr_png_is_bytes():
     assert isinstance(png, bytes)
 
 
+@pytest.mark.skipif(sys.version_info < (3, 0),
+                    reason="Doesn't work on Python 2.7.")
 def test_valid_png():
     png = make_map(png_enabled=True)._repr_png_()
     img = PIL.Image.open(io.BytesIO(png))
