@@ -46,11 +46,11 @@ def test_heat_map_with_time():
     # We verify that the script part is correct.
     tmpl = Template("""
         var times = {{this.times}};
-    
+
         {{this._parent.get_name()}}.timeDimension = L.timeDimension(
             {times : times, currentTime: new Date(1)}
         );
-    
+
         var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
             autoPlay: {{this.auto_play}},
             backwardButton: {{this.backward_button}},
@@ -72,7 +72,7 @@ def test_heat_map_with_time():
             timeSteps: {{this.index_steps}}
             })
             .addTo({{this._parent.get_name()}});
-    
+
             var {{this.get_name()}} = new TDHeatmap({{this.data}},
             {heatmapOptions: {
                     radius: {{this.radius}},
