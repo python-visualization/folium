@@ -109,8 +109,7 @@ class HeatMapWithTime(Layer):
                  use_local_extrema=False, auto_play=False,
                  display_index=True, index_steps=1, min_speed=0.1,
                  max_speed=10, speed_step=0.1, position='bottomleft',
-                 overlay=True, control=True,
-                 show=True):
+                 overlay=True, control=True, show=True):
         super(HeatMapWithTime, self).__init__(name=name, overlay=overlay,
                                               control=control, show=show)
         self._name = 'HeatMap'
