@@ -13,7 +13,7 @@ from branca.colormap import LinearColormap
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import FeatureGroup, Icon, Layer, Marker
+from folium.map import FeatureGroup, Icon, Layer, Marker, Tooltip
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
@@ -72,14 +72,17 @@ class RegularPolygonMarker(Marker):
                     rotation: {{this.rotation}},
                     radius: {{this.radius}}
                     }
-                )
+                ){% if this.tooltip %}
+                .bindTooltip('{{ this.tooltip }}')
+                {% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
-    def __init__(self, location, color='black', opacity=1, weight=2,
+    def __init__(self, location=None, color='black', opacity=1, weight=2,
                  fill_color='blue', fill_opacity=1,
-                 number_of_sides=4, rotation=0, radius=15, popup=None):
+                 number_of_sides=4, rotation=0, radius=15, popup=None,
+                 tooltip=None):
         super(RegularPolygonMarker, self).__init__(
             _locations_tolist(location),
             popup=popup
@@ -93,6 +96,16 @@ class RegularPolygonMarker(Marker):
         self.number_of_sides = number_of_sides
         self.rotation = rotation
         self.radius = radius
+        self.options = json.dumps({
+            "color": color,
+            "opacity": opacity,
+            "weight": weight,
+            "fillColor": fill_color,
+            "fillOpacity": fill_opacity,
+            "numberOfSides": number_of_sides,
+            "rotation": rotation,
+            "radius": radius})
+        Marker.validate_tooltip(self, tooltip=tooltip, name=self._name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -103,7 +116,9 @@ class RegularPolygonMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+            # noqa
             name='dvf_js')
 
 
@@ -182,11 +197,15 @@ class Vega(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+            # noqa
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+            # noqa
             name='vega')
 
         figure.header.add_child(
@@ -195,7 +214,8 @@ class Vega(Element):
 
         figure.script.add_child(
             Template("""function vega_parse(spec, div) {
-            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),  # noqa
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}"""),
+            # noqa
             name='vega_parse')
 
 
@@ -284,15 +304,21 @@ class VegaLite(Element):
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),
+            # noqa
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),
+            # noqa
             name='vega-lite')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),
+            # noqa
             name='vega-embed')
 
 
@@ -325,6 +351,11 @@ class GeoJson(Layer):
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
         representation. Leaflet defaults to 1.0.
+    tooltip: string or folium.Tooltip, default None
+        Input text or visualization for object displayed when hovering.
+    marker: Marker or Vector layer object to represent points.
+        Declare a Marker object to represent a point on the map, either a folium
+        Marker object or one of the vector layers such as CircleMarker.
 
     Examples
     --------
@@ -362,7 +393,7 @@ class GeoJson(Layer):
 
                 var {{this.get_name()}} = L.geoJson(
                     {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
+                    {% if this.smooth_factor is not none or this.highlight or this.marker %}
                         , {
                         {% if this.smooth_factor is not none  %}
                             smoothFactor:{{this.smooth_factor}}
@@ -372,25 +403,32 @@ class GeoJson(Layer):
                             {% if this.smooth_factor is not none  %}
                             ,
                             {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
+                            onEachFeature: {{this.get_name()}}_onEachFeature,
+                        {% endif %}
+                        {% if this.marker %}
+                        pointToLayer: function (feature, latlng) {
+                            var opts = {{this.marker.options}};
+                            {% if this.marker._name =='marker' and this.marker.icon_type %}
+                            opts.icon=L.{{this.marker.icon_type}}(opts.icon){% endif %}
+                            return L.{{this.marker._name}}(latlng, opts)
+                        }
                         {% endif %}
                         }
                     {% endif %}
                     )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                     .addTo({{this._parent.get_name()}});
-                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+                {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;})
 
             {% endmacro %}
             """)  # noqa
 
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, show=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
+                 smooth_factor=None, highlight_function=None, tooltip=None,
+                 marker=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        self.tooltip = tooltip
         if isinstance(data, dict):
             self.embed = True
             self.data = data
@@ -410,13 +448,29 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
-
         self.style_function = style_function or (lambda x: {})
+
+        self.style_check = style_function
 
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
 
+        self.marker = marker
+
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                if tooltip.fields:
+                    keys = self.data['features'][0]['properties'].keys()
+                    for value in list(tooltip.fields):
+                        assert value in keys, "The value {0} is not available" \
+                                              " in {1}".format(value, keys)
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
         self.smooth_factor = smooth_factor
 
     def style_data(self):
@@ -427,14 +481,18 @@ class GeoJson(Layer):
         """
         if 'features' not in self.data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
+            if not (isinstance(self.data,
+                               dict) and 'geometry' in self.data.keys()):  # noqa
                 # Catch case when GeoJSON is just a geometry.
                 self.data = {'type': 'Feature', 'geometry': self.data}
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('style', {}).update(
+                self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight',
+                                                            {}).update(
+                self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
@@ -505,7 +563,6 @@ class TopoJson(Layer):
                             , {smoothFactor: {{this.smooth_factor}}}
                         {% endif %}
                         )
-                        {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                         .addTo({{this._parent.get_name()}});
                 {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
 
@@ -518,7 +575,7 @@ class TopoJson(Layer):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control, show=show)
         self._name = 'TopoJson'
-        self.tooltip = tooltip
+
         if 'read' in dir(data):
             self.embed = True
             self.data = json.load(data)
@@ -538,20 +595,39 @@ class TopoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                if tooltip.fields:
+                    keys = self.data['objects'][object_path.split('.')[-1]][
+                        'geometries'][0]['properties'].keys()
+                    for value in list(tooltip.fields):
+                        assert value in keys, "The value {0} is not ".format(
+                            value) + "available in {0}".format(keys)
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.add_child(Tooltip(tooltip, sticky=True))
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
+
     def style_data(self):
         """
         Applies self.style_function to each feature of self.data and returns
         a corresponding JSON output.
 
         """
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
-        geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
+
+        geometries = recursive_get(self.data, self.object_path.split('.'))[
+            'geometries']  # noqa
         for feature in geometries:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('style', {}).update(
+                self.style_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
@@ -563,7 +639,9 @@ class TopoJson(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
+            JavascriptLink(
+                'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),
+            # noqa
             name='topojson')
 
     def get_bounds(self):
@@ -588,12 +666,16 @@ class TopoJson(Layer):
                 ymax = none_max(y, ymax)
         return [
             [
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymin,  # noqa
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmin  # noqa
+                self.data['transform']['translate'][1] +
+                self.data['transform']['scale'][1] * ymin,  # noqa
+                self.data['transform']['translate'][0] +
+                self.data['transform']['scale'][0] * xmin  # noqa
             ],
             [
-                self.data['transform']['translate'][1] + self.data['transform']['scale'][1] * ymax,  # noqa
-                self.data['transform']['translate'][0] + self.data['transform']['scale'][0] * xmax  # noqa
+                self.data['transform']['translate'][1] +
+                self.data['transform']['scale'][1] * ymax,  # noqa
+                self.data['transform']['translate'][0] +
+                self.data['transform']['scale'][0] * xmax  # noqa
             ]
 
         ]
@@ -644,12 +726,20 @@ class DivIcon(MacroElement):
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
         super(DivIcon, self).__init__()
-        self._name = 'DivIcon'
+        self._name = 'divIcon'
         self.icon_size = icon_size
         self.icon_anchor = icon_anchor
         self.popup_anchor = popup_anchor
         self.html = html
         self.className = class_name
+        self.options = {
+            'iconSize': list(icon_size) if icon_size else None,
+            'iconAnchor': list(icon_anchor) if icon_anchor else None,
+            'popupAnchor': list(popup_anchor) if popup_anchor else None,
+            'className': class_name,
+            'html': html,
+            'icon_name': self._name
+        }
 
 
 class LatLngPopup(MacroElement):
@@ -703,7 +793,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup=None):
+    def __init__(self, popup=None, tooltip=None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -711,6 +801,20 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert not all((tooltip.text, tooltip.fields)), "Only text " \
+                                                                "may be " \
+                                                                "passed to a " \
+                                                                "Marker " \
+                                                                "Tooltip."
+                self.add_child(tooltip, name=tooltip._name)
+            elif isinstance(tooltip, str):
+                self.tooltip = tooltip.__str__()
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
 
 
 class CustomIcon(Icon):
@@ -809,6 +913,7 @@ class ColorLine(FeatureGroup):
     A ColorLine object that you can `add_to` a Map.
 
     """
+
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)
@@ -829,7 +934,10 @@ class ColorLine(FeatureGroup):
         else:
             cm = colormap
         out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
+        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1],
+                                                     positions[1:],
+                                                     colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
-            self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))  # noqa
+            self.add_child(PolyLine(val, color=key, weight=weight,
+                                    opacity=opacity))  # noqa

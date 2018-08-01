@@ -11,7 +11,8 @@ import json
 
 from collections import OrderedDict
 
-from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
+from branca.element import CssLink, Element, Figure, Html, JavascriptLink, \
+    MacroElement  # noqa
 
 from folium.utilities import _validate_coordinates, get_bounds
 
@@ -36,6 +37,7 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -186,21 +188,29 @@ class Icon(MacroElement):
                     iconColor: '{{this.icon_color}}',
                     markerColor: '{{this.color}}',
                     prefix: '{{this.prefix}}',
-                    extraClasses: 'fa-rotate-{{this.angle}}'
+                    extraClasses: 'fa-rotate-{{this.angle}}',
+                    spin: {{this.spin}}
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon'):
+                 angle=0, prefix='glyphicon', spin=False):
         super(Icon, self).__init__()
-        self._name = 'Icon'
+        self._name = 'AwesomeMarkers.icon'
         self.color = color
         self.icon = icon
         self.icon_color = icon_color
         self.angle = angle
         self.prefix = prefix
+        self.spin = spin
+        self.options = {'icon': icon,
+                        'iconColor': icon_color,
+                        'markerColor': color,
+                        'prefix': prefix,
+                        'extraClasses': 'fa-rotate' + angle.__str__(),
+                        'spin': spin}
 
 
 class Marker(MacroElement):
@@ -215,6 +225,7 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
+    tooltip: folium.Tooltip object or string to display on hover for marker.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -228,33 +239,49 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
     # If the popup label has characters that need to be escaped in HTML
     >>> Marker(location=[45.5, -122.3],
-               popoup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
+               popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
             var {{this.get_name()}} = L.marker(
                 [{{this.location[0]}}, {{this.location[1]}}],
-                {
-                    icon: new L.Icon.Default()
-                    }
+                {icon: new L.Icon.Default(),
+                    {{this.options}})
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None):
+    def validate_tooltip(self, tooltip, name):
+        if tooltip:
+            if isinstance(tooltip, Tooltip):
+                assert not tooltip.fields, "Only text may be passed to a {0} " \
+                                           "Tooltip.".format(name)
+                self.add_child(tooltip)
+            elif isinstance(tooltip, str):
+                self.add_child(Tooltip(tooltip, sticky=True))
+            else:
+                raise ValueError('Please pass a folium Tooltip object or'
+                                 ' a string to the tooltip argument')
+
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
+                 **kwargs):
         super(Marker, self).__init__()
-        self._name = 'Marker'
-        self.tooltip = tooltip
-        self.location = _validate_coordinates(location)
+        self._name = 'marker'
+        if location:
+            self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
+        self.validate_tooltip(tooltip=tooltip, name=self._name)
+        if icon:
+            kwargs.update(icon=icon.options)
+            self.icon_type = icon._name
+        self.options = kwargs
 
     def _get_self_bounds(self):
         """
@@ -299,7 +326,8 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+                 sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -333,6 +361,134 @@ class Popup(Element):
         figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
+
+
+class Tooltip(MacroElement):
+    """
+    Creates a Tooltip object for adding to features to display text as a
+    property by executing a JavaScript function when hovering the cursor over
+    each feature.
+
+    Parameters
+    ----------
+    text: str, may not be passed if fields is not None.
+        Pass a string as a tooltip to display on the object.
+        object, I.e. "Click for more info."
+    fields: list or tuple. For GeoJson/TopoJson objects only.
+        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
+        columns you'd like to display.
+    aliases: list/tuple of strings, same length/urder as fields. For
+    GeoJson/TopoJson objects only.
+        Optional 'aliases' you'd like to display the each field name as, to
+        describe the data in the tooltip.
+    labels: boolean, defaults True.
+        Boolean value indicating if you'd like the the field names or
+        aliases to display to the left of the value in bold.
+    toLocaleString: boolean, defaults False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation, etc.
+        *Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+    style: str. Default None.
+        A string with HTML inline style properties that will be used to style
+        properties like font and colors in a div element in the tooltip.
+        https://www.w3schools.com/html/html_css.asp
+    **kwargs: Assorted.
+        These values will map directly to the Leaflet Options. More info
+        available here: https://leafletjs.com/reference-1.3.0.html#tooltip
+
+    Examples
+    --------
+    # Provide fields and aliases, with Style.
+    >>> Tooltip(fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
+                aliases=['County','2015 Census Population',
+                        '2015 Median Income'],
+                labels=True,
+                sticky=True,
+                toLocaleString=True,
+                style='background-color: grey; color: white; font-family:
+                courier new; font-size: 24px; padding: 10px;')
+    # Provide fields, with labels off, and sticky True.
+    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=True)
+    # Provide only text.
+    >>> Tooltip(text="Click for more info.", sticky=True)
+    """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+        {{ this._parent.get_name() }}.bindTooltip(
+            function(layer){
+            {% if this.fields %}
+            let fields = {{ this.fields }};
+            {% if this.aliases %}
+            let aliases = {{ this.aliases }};
+            {% endif %}
+            return '<div{% if this.style %} style="{{this.style}}"{% endif%}>' +
+            String(
+                fields.map(
+                columnname=>
+                    `{% if this.labels %}
+                    <strong>{% if this.aliases %}${aliases[fields.indexOf(columnname)]
+                        {% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% else %}
+                    ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
+                    {% endif %}:</strong>
+                    {% endif %}
+                    ${ layer.feature.properties[columnname]
+                    {% if this.toLocaleString %}.toLocaleString(){% endif %} }`
+                ).join('<br>'))+'</div>'
+            {% elif this.text %}
+                return '<div{% if this.style %} style="{{this.style}}"{% endif%}>'
+                + '{{ this.text }}'+'</div>'
+            {% endif %}
+            }{% if this.kwargs %}, {{ this.kwargs }}{% endif %});
+        {% endmacro %}
+        """)
+
+    def __init__(self, text=None, fields=None, aliases=None, labels=True,
+                 toLocaleString=False, style=None, **kwargs):
+        super(Tooltip, self).__init__()
+        self._name = "Tooltip"
+
+        if fields:
+            assert isinstance(fields, (list, tuple)), "Please pass a list or " \
+                                                      "tuple to fields."
+        if all((fields, aliases)):
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), "fields and aliases must have" \
+                                                " the same length."
+        assert isinstance(labels, bool), "labels requires a boolean value."
+        assert not all((fields, text)), "Please choose either fields or text."
+        assert any((fields, text)), "Please choose either fields or text."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
+                                                 "boolean."
+        self.valid_kwargs = {"pane": (str,),
+                             "offset": (tuple,),
+                             "direction": (str,),
+                             "permanent": (bool,),
+                             "sticky": (bool,),
+                             "interactive": (bool,),
+                             "opacity": (float, int)}
+        if kwargs:
+            for key in kwargs.keys():
+                assert key in self.valid_kwargs.keys(), "The key {0} was not " \
+                                                        "available in the " \
+                                                        "keys: {1}".format(
+                    key, ', '.join(self.valid_kwargs.keys()))
+                assert isinstance(kwargs[key], self.valid_kwargs[key]), \
+                    "{0} must be of the following " \
+                    "types: {1}".format(key, self.valid_kwargs[key])
+            self.kwargs = json.dumps(kwargs)
+        self.fields = fields
+        self.aliases = aliases
+        self.text = text.__str__()
+        self.labels = labels
+        self.toLocaleString = toLocaleString
+        if style:
+            assert isinstance(style, str), \
+                "Pass a valid inline HTML style property string to style."
+            # noqa outside of type checking.
+            self.style = style
 
 
 class FitBounds(MacroElement):
