@@ -704,15 +704,15 @@ class GeoJsonTooltip(Tooltip):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        if not isinstance(self._parent, (GeoJson, TopoJson)):
-            raise TypeError('You cannot add a GeoJsonTooltip to anything else'
-                            ' then a GeoJson or TopoJson object.')
         if isinstance(self._parent, GeoJson):
             keys = tuple(self._parent.data['features'][0]['properties'].keys())
         elif isinstance(self._parent, TopoJson):
             obj_name = self._parent.object_path.split('.')[-1]
             keys = tuple(self._parent.data['objects'][obj_name][
                              'geometries'][0]['properties'].keys())
+        else:
+            raise TypeError('You cannot add a GeoJsonTooltip to anything else'
+                            ' then a GeoJson or TopoJson object.')
         for value in self.fields:
             assert value in keys, ("The value {} is not available in {}."
                                    .format(value, keys))
