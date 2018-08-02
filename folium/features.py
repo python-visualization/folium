@@ -689,10 +689,9 @@ class GeoJsonTooltip(Tooltip):
             assert len(fields) == len(aliases), "fields and aliases must have" \
                                                 " the same length."
         assert isinstance(labels, bool), "labels requires a boolean value."
-        assert isinstance(toLocaleString, bool), "toLocaleString must be " \
-                                                 "boolean."
-        assert 'permanent' not in kwargs, \
-            "The `permanent` option does not work with GeoJsonTooltip."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be bool."
+        assert 'permanent' not in kwargs,  "The `permanent` option does not " \
+                                           "work with GeoJsonTooltip."
 
         self.fields = fields
         self.aliases = aliases
@@ -717,12 +716,9 @@ class GeoJsonTooltip(Tooltip):
                             ' then a GeoJson or TopoJson object.')
         keys = tuple(x for x in keys if x not in ('style', 'highlight'))
         for value in self.fields:
-            assert value in keys, ("The value {} is not available in {}."
-                                   .format(value, keys))
-
+            assert value in keys, ("The field {} is not available in the data. "
+                                   "Choose from: {}.".format(value, keys))
         super(GeoJsonTooltip, self).render(**kwargs)
-
-
 
 
 class DivIcon(MacroElement):
