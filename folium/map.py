@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 
-from folium.utilities import _validate_coordinates, get_bounds
+from folium.utilities import _validate_coordinates, get_bounds, camelize
 
 from jinja2 import Template
 
@@ -379,6 +379,17 @@ class Tooltip(MacroElement):
         );
         {% endmacro %}
         """)
+    valid_options = {
+        "pane": (str, ),
+        "offset": (tuple, ),
+        "direction": (str, ),
+        "permanent": (bool, ),
+        "sticky": (bool, ),
+        "interactive": (bool, ),
+        "opacity": (float, int),
+        "attribution": (str, ),
+        "className": (str, ),
+    }
 
     def __init__(self, text, style=None, sticky=True, **kwargs):
         super(Tooltip, self).__init__()
@@ -395,23 +406,18 @@ class Tooltip(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    @staticmethod
-    def parse_kwargs(kwargs):
+    def parse_kwargs(self, kwargs):
         """Validate the provided kwargs and return options as json string."""
-        valid_kwargs = {"pane": (str,),
-                        "offset": (tuple,),
-                        "direction": (str,),
-                        "permanent": (bool,),
-                        "sticky": (bool,),
-                        "interactive": (bool,),
-                        "opacity": (float, int)}
+        kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
-            assert key in valid_kwargs.keys(), \
-                "The key {} was not available in the keys: {}".format(
-                    key, ', '.join(valid_kwargs.keys()))
-            assert isinstance(kwargs[key], valid_kwargs[key]), \
-                "{} must be of the following types: {}".format(
-                    key, valid_kwargs[key])
+            assert key in self.valid_options, (
+                "The option {} is not in the available options: {}."
+                .format(key, ', '.join(self.valid_options))
+            )
+            assert isinstance(kwargs[key], self.valid_options[key]), (
+                "The option {} must be one of the following types: {}."
+                .format(key, self.valid_options[key])
+            )
         return json.dumps(kwargs)
 
 
