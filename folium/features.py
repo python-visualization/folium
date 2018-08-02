@@ -651,6 +651,7 @@ class GeoJsonTooltip(Tooltip):
         {% macro script(this, kwargs) %}
         {{ this._parent.get_name() }}.bindTooltip(
             function(layer){
+            var handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
             let fields = {{ this.fields }};
             {% if this.aliases %}
             let aliases = {{ this.aliases }};
@@ -667,7 +668,7 @@ class GeoJsonTooltip(Tooltip):
                     ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% endif %}</th>
                     {% endif %}
-                    <td style="padding: 4px;">${ layer.feature.properties[columnname]
+                    <td style="padding: 4px;">${handleObject(layer.feature.properties[columnname])
                     {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
                 ).join(''))
                 +'</table>'
@@ -678,7 +679,7 @@ class GeoJsonTooltip(Tooltip):
     def __init__(self, fields, aliases=None, labels=True,
                  toLocaleString=False, style=None, sticky=True, **kwargs):
         super(GeoJsonTooltip, self).__init__(
-            text='', style=style, sticky=sticky, **kwargs
+            self, style=style, sticky=sticky, **kwargs
         )
         self._name = "Tooltip"
 
