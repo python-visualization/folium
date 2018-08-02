@@ -651,7 +651,8 @@ class GeoJsonTooltip(Tooltip):
         {% macro script(this, kwargs) %}
         {{ this._parent.get_name() }}.bindTooltip(
             function(layer){
-            var handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+            // Convert non-primitive to String.
+            let handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
             let fields = {{ this.fields }};
             {% if this.aliases %}
             let aliases = {{ this.aliases }};
