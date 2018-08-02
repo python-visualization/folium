@@ -366,9 +366,6 @@ class Tooltip(MacroElement):
         These values will map directly to the Leaflet Options. More info
         available here: https://leafletjs.com/reference.html#tooltip
 
-    Examples
-    --------
-    >>> Tooltip("Click for more info.")
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
