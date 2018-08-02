@@ -691,6 +691,8 @@ class GeoJsonTooltip(Tooltip):
         assert isinstance(labels, bool), "labels requires a boolean value."
         assert isinstance(toLocaleString, bool), "toLocaleString must be " \
                                                  "boolean."
+        assert 'permanent' not in kwargs, \
+            "The `permanent` option does not work with GeoJsonTooltip."
 
         self.fields = fields
         self.aliases = aliases
