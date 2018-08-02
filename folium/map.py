@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 
-from folium.utilities import _validate_coordinates, get_bounds
+from folium.utilities import _validate_coordinates, get_bounds, camelize
 
 from jinja2 import Template
 
@@ -36,6 +36,7 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -186,21 +187,29 @@ class Icon(MacroElement):
                     iconColor: '{{this.icon_color}}',
                     markerColor: '{{this.color}}',
                     prefix: '{{this.prefix}}',
-                    extraClasses: 'fa-rotate-{{this.angle}}'
+                    extraClasses: 'fa-rotate-{{this.angle}}',
+                    spin: {{this.spin}}
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon'):
+                 angle=0, prefix='glyphicon', spin=False):
         super(Icon, self).__init__()
-        self._name = 'Icon'
+        self._name = 'AwesomeMarkers.icon'
         self.color = color
         self.icon = icon
         self.icon_color = icon_color
         self.angle = angle
         self.prefix = prefix
+        self.spin = spin
+        self.options = {'icon': icon,
+                        'iconColor': icon_color,
+                        'markerColor': color,
+                        'prefix': prefix,
+                        'extraClasses': 'fa-rotate' + angle.__str__(),
+                        'spin': spin}
 
 
 class Marker(MacroElement):
@@ -215,6 +224,8 @@ class Marker(MacroElement):
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
         folium.Popup or a folium.Popup instance.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
 
@@ -228,33 +239,34 @@ class Marker(MacroElement):
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
     # If the popup label has characters that need to be escaped in HTML
     >>> Marker(location=[45.5, -122.3],
-               popoup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
+               popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
+        {% macro script(this, kwargs) %}
+        var {{this.get_name()}} = L.marker(
+            [{{this.location[0]}}, {{this.location[1]}}],
+            {
+                icon: new L.Icon.Default()
+                }
+            ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
-            var {{this.get_name()}} = L.marker(
-                [{{this.location[0]}}, {{this.location[1]}}],
-                {
-                    icon: new L.Icon.Default()
-                    }
-                )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
-
-    def __init__(self, location, popup=None, tooltip=None, icon=None):
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
-        self._name = 'Marker'
-        self.tooltip = tooltip
-        self.location = _validate_coordinates(location)
+        self._name = 'marker'
+        if location:
+            self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
             self.add_child(Popup(popup))
         elif popup is not None:
             self.add_child(popup)
+        if isinstance(tooltip, Tooltip):
+            self.add_child(tooltip)
+        elif tooltip is not None:
+            self.add_child(Tooltip(tooltip))
 
     def _get_self_bounds(self):
         """
@@ -299,7 +311,8 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False, sticky=False):
+    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+                 sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -333,6 +346,76 @@ class Popup(Element):
         figure.script.add_child(Element(
             self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name())
+
+
+class Tooltip(MacroElement):
+    """
+    Create a tooltip that shows text when hovering over its parent object.
+
+    Parameters
+    ----------
+    text: str
+        String to display as a tooltip on the object. If the argument is of a
+        different type it will be converted to str.
+    style: str, default None.
+        HTML inline style properties like font and colors. Will be applied to
+        a div with the text in it.
+    sticky: bool, default True
+        Whether the tooltip should follow the mouse.
+    **kwargs: Assorted.
+        These values will map directly to the Leaflet Options. More info
+        available here: https://leafletjs.com/reference.html#tooltip
+
+    """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+        {{ this._parent.get_name() }}.bindTooltip(
+            '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
+            + '{{ this.text }}' + '</div>',
+            {{ this.options }}
+        );
+        {% endmacro %}
+        """)
+    valid_options = {
+        "pane": (str, ),
+        "offset": (tuple, ),
+        "direction": (str, ),
+        "permanent": (bool, ),
+        "sticky": (bool, ),
+        "interactive": (bool, ),
+        "opacity": (float, int),
+        "attribution": (str, ),
+        "className": (str, ),
+    }
+
+    def __init__(self, text, style=None, sticky=True, **kwargs):
+        super(Tooltip, self).__init__()
+        self._name = "Tooltip"
+
+        self.text = str(text)
+
+        kwargs.update({'sticky': sticky})
+        self.options = self.parse_kwargs(kwargs)
+
+        if style:
+            assert isinstance(style, str), \
+                "Pass a valid inline HTML style property string to style."
+            # noqa outside of type checking.
+            self.style = style
+
+    def parse_kwargs(self, kwargs):
+        """Validate the provided kwargs and return options as json string."""
+        kwargs = {camelize(key): value for key, value in kwargs.items()}
+        for key in kwargs.keys():
+            assert key in self.valid_options, (
+                "The option {} is not in the available options: {}."
+                .format(key, ', '.join(self.valid_options))
+            )
+            assert isinstance(kwargs[key], self.valid_options[key]), (
+                "The option {} must be one of the following types: {}."
+                .format(key, self.valid_options[key])
+            )
+        return json.dumps(kwargs)
 
 
 class FitBounds(MacroElement):
