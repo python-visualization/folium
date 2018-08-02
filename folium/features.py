@@ -618,7 +618,7 @@ class GeoJsonTooltip(Tooltip):
     labels: bool, default True.
         Boolean value indicating if you'd like the the field names or
         aliases to display to the left of the value in bold.
-    localize: bool, defaults False.
+    toLocaleString: bool, defaults False.
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
@@ -663,13 +663,13 @@ class GeoJsonTooltip(Tooltip):
                     `<tr style="text-align: left;">{% if this.labels %}
                     <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
                         ${aliases[fields.indexOf(columnname)]
-                        {% if this.localize %}.toLocaleString(){% endif %}}
+                        {% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% else %}
-                    ${ columnname{% if this.localize %}.toLocaleString(){% endif %}}
+                    ${ columnname{% if this.toLocaleString %}.toLocaleString(){% endif %}}
                     {% endif %}</th>
                     {% endif %}
                     <td style="padding: 4px;">${handleObject(layer.feature.properties[columnname])
-                    {% if this.localize %}.toLocaleString(){% endif %}}</td></tr>`
+                    {% if this.toLocaleString %}.toLocaleString(){% endif %}}</td></tr>`
                 ).join(''))
                 +'</table>'
             }, {{ this.kwargs }});
@@ -677,7 +677,7 @@ class GeoJsonTooltip(Tooltip):
         """)
 
     def __init__(self, fields, aliases=None, labels=True,
-                 localize=False, style=None, sticky=True, **kwargs):
+                 toLocaleString=False, style=None, sticky=True, **kwargs):
         super(GeoJsonTooltip, self).__init__(
             self, style=style, sticky=sticky, **kwargs
         )
@@ -690,14 +690,14 @@ class GeoJsonTooltip(Tooltip):
             assert len(fields) == len(aliases), "fields and aliases must have" \
                                                 " the same length."
         assert isinstance(labels, bool), "labels requires a boolean value."
-        assert isinstance(localize, bool), "localize must be bool."
+        assert isinstance(toLocaleString, bool), "toLocaleString must be bool."
         assert 'permanent' not in kwargs,  "The `permanent` option does not " \
                                            "work with GeoJsonTooltip."
 
         self.fields = fields
         self.aliases = aliases
         self.labels = labels
-        self.localize = localize
+        self.toLocaleString = toLocaleString
         if style:
             assert isinstance(style, str), \
                 "Pass a valid inline HTML style property string to style."
