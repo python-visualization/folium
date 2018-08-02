@@ -672,14 +672,14 @@ class GeoJsonTooltip(Tooltip):
                     {% if this.localize %}.toLocaleString(){% endif %}}</td></tr>`
                 ).join(''))
                 +'</table>'
-            }, {{ this.kwargs }});
+            }, {{ this.options }});
         {% endmacro %}
         """)
 
     def __init__(self, fields, aliases=None, labels=True,
                  localize=False, style=None, sticky=True, **kwargs):
         super(GeoJsonTooltip, self).__init__(
-            self, style=style, sticky=sticky, **kwargs
+            text='', style=style, sticky=sticky, **kwargs
         )
         self._name = "Tooltip"
 
