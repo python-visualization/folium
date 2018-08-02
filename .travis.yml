@@ -49,18 +49,18 @@ script:
     fi
 
   - if [[ $TEST_TARGET == 'default' ]]; then
-      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'latest_branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'notebooks' ]]; then
       for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
-      py.test -vv tests/notebooks/test_notebooks.py ;
+      pytest -vv tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
