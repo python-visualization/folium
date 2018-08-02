@@ -226,7 +226,8 @@ class TestFolium(object):
                 'max_lon': 180,
                 'tile_layers': tile_layers,
                 'crs': 'EPSG3857',
-                'world_copy_jump': False
+                'world_copy_jump': False,
+                'zoom_control': True
                 }
         HTML = html_templ.render(tmpl, plugins={})
         expected = [line.strip() for line in HTML.splitlines() if line.strip()]
