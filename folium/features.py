@@ -713,6 +713,7 @@ class GeoJsonTooltip(Tooltip):
         else:
             raise TypeError('You cannot add a GeoJsonTooltip to anything else'
                             ' then a GeoJson or TopoJson object.')
+        keys = tuple(x for x in keys if x not in ('style', 'highlight'))
         for value in self.fields:
             assert value in keys, ("The value {} is not available in {}."
                                    .format(value, keys))
