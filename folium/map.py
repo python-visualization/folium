@@ -36,7 +36,6 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
-
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -187,29 +186,21 @@ class Icon(MacroElement):
                     iconColor: '{{this.icon_color}}',
                     markerColor: '{{this.color}}',
                     prefix: '{{this.prefix}}',
-                    extraClasses: 'fa-rotate-{{this.angle}}',
-                    spin: {{this.spin}}
+                    extraClasses: 'fa-rotate-{{this.angle}}'
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon', spin=False):
+                 angle=0, prefix='glyphicon'):
         super(Icon, self).__init__()
-        self._name = 'AwesomeMarkers.icon'
+        self._name = 'Icon'
         self.color = color
         self.icon = icon
         self.icon_color = icon_color
         self.angle = angle
         self.prefix = prefix
-        self.spin = spin
-        self.options = {'icon': icon,
-                        'iconColor': icon_color,
-                        'markerColor': color,
-                        'prefix': prefix,
-                        'extraClasses': 'fa-rotate' + angle.__str__(),
-                        'spin': spin}
 
 
 class Marker(MacroElement):
@@ -252,11 +243,11 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location=None, popup=None, tooltip=None, icon=None):
+    def __init__(self, location, popup=None, tooltip=None, icon=None):
         super(Marker, self).__init__()
-        self._name = 'marker'
-        if location:
-            self.location = _validate_coordinates(location)
+        self._name = 'Marker'
+        self.tooltip = tooltip
+        self.location = _validate_coordinates(location)
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
@@ -266,7 +257,7 @@ class Marker(MacroElement):
         if isinstance(tooltip, Tooltip):
             self.add_child(tooltip)
         elif tooltip is not None:
-            self.add_child(Tooltip(tooltip))
+            self.add_child(Tooltip(tooltip.__str__()))
 
     def _get_self_bounds(self):
         """
