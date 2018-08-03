@@ -15,6 +15,7 @@ from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
                               none_max, none_min)
 
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
