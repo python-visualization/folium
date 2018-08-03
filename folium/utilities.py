@@ -342,3 +342,17 @@ def get_bounds(locations, lonlat=False):
     if lonlat:
         bounds = _locations_mirror(bounds)
     return bounds
+
+
+def camelize(key):
+    """Convert a python_style_variable_name to lowerCamelCase.
+
+    Examples
+    --------
+    >>> camelize('variable_name')
+    'variableName'
+    >>> camelize('variableName')
+    'variableName'
+    """
+    return ''.join(x.capitalize() if i > 0 else x
+                   for i, x in enumerate(key.split('_')))

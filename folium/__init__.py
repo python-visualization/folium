@@ -11,6 +11,7 @@ from folium._version import get_versions
 from folium.features import (
     ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
+    GeoJsonTooltip,
 )
 
 from folium.raster_layers import TileLayer, WmsTileLayer
