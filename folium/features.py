@@ -613,40 +613,38 @@ class GeoJsonTooltip(Tooltip):
     fields: list or tuple.
         Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
         columns you'd like to display.
-    aliases: list/tuple of strings, same length/urder as fields.
-        Optional 'aliases' you'd like to display the each field name as, to
-        describe the data in the tooltip.
+    aliases: list/tuple of strings, same length/order as fields, default None.
+        Optional aliases you'd like to display in the tooltip as field name
+        instead of the keys of `fields`.
     labels: bool, default True.
-        Boolean value indicating if you'd like the the field names or
-        aliases to display to the left of the value in bold.
-    localize: bool, defaults False.
+        Set to False to disable displaying the field names or aliases.
+    localize: bool, default False.
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
         *Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
-        A string with HTML inline style properties that will be used to style
-        properties like font and colors in a div element in the tooltip.
+        HTML inline style properties like font and colors. Will be applied to
+        a div with the text in it.
     sticky: bool, default True
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.3.0.html#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     Examples
     --------
     # Provide fields and aliases, with Style.
     >>> Tooltip(
-    >>>     fields=['CNTY_NM','census-pop-2015','census-md-income-2015'],
-    >>>     aliases=['County','2015 Census Population', '2015 Median Income'],
-    >>>     labels=True,
+    >>>     fields=['CNTY_NM', 'census-pop-2015', 'census-md-income-2015'],
+    >>>     aliases=['County', '2015 Census Population', '2015 Median Income'],
     >>>     localize=True,
     >>>     style=('background-color: grey; color: white; font-family:'
     >>>            'courier new; font-size: 24px; padding: 10px;')
     >>> )
-    # Provide fields, with labels off, and sticky True.
-    >>> Tooltip(fields=('CNTY_NM',), labels=False)
+    # Provide fields, with labels off and fixed tooltip positions.
+    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=False)
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -715,8 +713,8 @@ class GeoJsonTooltip(Tooltip):
             keys = tuple(self._parent.data['objects'][obj_name][
                              'geometries'][0]['properties'].keys())
         else:
-            raise TypeError('You cannot add a GeoJsonTooltip to anything else'
-                            ' then a GeoJson or TopoJson object.')
+            raise TypeError('You cannot add a GeoJsonTooltip to anything else '
+                            'than a GeoJson or TopoJson object.')
         keys = tuple(x for x in keys if x not in ('style', 'highlight'))
         for value in self.fields:
             assert value in keys, ("The field {} is not available in the data. "
