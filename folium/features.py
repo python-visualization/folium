@@ -683,7 +683,7 @@ class GeoJsonTooltip(Tooltip):
         super(GeoJsonTooltip, self).__init__(
             text='', style=style, sticky=sticky, **kwargs
         )
-        self._name = "Tooltip"
+        self._name = "GeoJsonTooltip"
 
         assert isinstance(fields, (list, tuple)), "Please pass a list or " \
                                                   "tuple to fields."
