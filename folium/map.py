@@ -386,7 +386,7 @@ class Tooltip(MacroElement):
         self.text = str(text)
 
         kwargs.update({'sticky': sticky})
-        self.options = self.parse_kwargs(kwargs)
+        self.options = self.parse_options(kwargs)
 
         if style:
             assert isinstance(style, str), \
@@ -394,7 +394,7 @@ class Tooltip(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    def parse_kwargs(self, kwargs):
+    def parse_options(self, kwargs):
         """Validate the provided kwargs and return options as json string."""
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
