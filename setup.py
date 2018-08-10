@@ -25,16 +25,23 @@ def walk_subpkg(name):
     return data_files
 
 
-pkg_data = {'': ['*.js',
-                 'plugins/*.js',
-                 'plugins/*.html',
-                 'plugins/*.css',
-                 'plugins/*.tpl',
-                 'templates/*.html',
-                 'templates/*.js',
-                 'templates/*.txt'] + walk_subpkg('templates/tiles')}
-pkgs = ['folium',
-        'folium.plugins']
+package_data = {
+    '': [
+        '*.js',
+        'plugins/*.js',
+        'plugins/*.html',
+        'plugins/*.css',
+        'plugins/*.tpl',
+        'templates/*.html',
+        'templates/*.js',
+        'templates/*.txt'
+    ] + walk_subpkg('templates/tiles')
+}
+
+packages = [
+    'folium',
+    'folium.plugins'
+]
 
 LICENSE = read('LICENSE.txt')
 long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
@@ -44,8 +51,7 @@ with open('requirements.txt') as f:
     tests_require = f.readlines()
 install_requires = [t.strip() for t in tests_require]
 
-
-config = dict(
+setup(
     name='folium',
     version=versioneer.get_version(),
     description='Make beautiful maps with Leaflet.js & Python',
@@ -63,14 +69,11 @@ config = dict(
         'Topic :: Scientific/Engineering :: Visualization',
         'License :: OSI Approved :: MIT License',
         'Development Status :: 5 - Production/Stable'],
-    packages=pkgs,
-    package_data=pkg_data,
+    packages=packages,
+    package_data=package_data,
     tests_require=['pytest'],
     license=LICENSE,
     install_requires=install_requires,
     zip_safe=False,
     cmdclass=versioneer.get_cmdclass(),
 )
-
-
-setup(**config)
