@@ -77,3 +77,18 @@ script:
 doctr:
   require-master: true
   sync: False
+
+deploy:
+  skip_cleanup: true
+  provider: pypi
+  user: ocefpaf
+  password:
+    secure: "BdJc76Z+DnmmamZSX+QCGZDnf+FW/JQOnVZ2t59r2r2RM4860Wf6GSL/Ncw6v8G3sOghWQcMzFdY5e6aNzAW0Ddm2YKHAsfxgurbEsnlzwsNPBWv2280ca7TtlFk2JkqhtYQOkoBFbA8+e/lC8ZC6aAVffQAT1NE4lEs0/Jd+TA="
+  distributions: sdist bdist_wheel
+  upload_docs: no
+  on:
+    repo: python-visualization/folium
+    tags: true
+    python: 3.6
+    all_branches: master
+    condition: '$TEST_TARGET == "default"'
