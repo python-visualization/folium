@@ -16,8 +16,8 @@ class TimestampedGeoJson(MacroElement):
     into a map with Map.add_child.
 
     A geo-json is timestamped if:
-    * it contains only features of types LineString, MultiPoint, MultiLineString
-      and MultiPolygon.
+    * it contains only features of types LineString, MultiPoint, MultiLineString,
+      Polygon and MultiPolygon.
     * each feature has a 'times' property with the same length as the
       coordinates array.
     * each element of each 'times' property is a timestamp in ms since epoch,
@@ -130,7 +130,7 @@ class TimestampedGeoJson(MacroElement):
 
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
-                 loop_button=False, date_options='YYYY/MM/DD hh:mm:ss',
+                 loop_button=False, date_options='YYYY-MM-DD HH:mm:ss',
                  time_slider_drag_update=False, duration=None):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
