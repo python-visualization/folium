@@ -68,7 +68,9 @@ class DualMap(MacroElement):
 
     def add_child(self, child, name=None, index=None):
         self.m1.add_child(child, name, index)
-        self.children_for_m2.append((child, len(self.m2._children)))
+        if index is None:
+            index = len(self.m2._children)
+        self.children_for_m2.append((child, name, index))
 
     def _copy_item(self, item_original):
         """Return a recursive deep-copy of item where each copy has a new ID."""
@@ -93,8 +95,8 @@ class DualMap(MacroElement):
 
         super(DualMap, self).render(**kwargs)
 
-        for child, index in self.children_for_m2:
+        for child, name, index in self.children_for_m2:
             child_copy = self._copy_item(child)
-            self.m2.add_child(child_copy, index=index)
+            self.m2.add_child(child_copy, name, index)
             # m2 has already been rendered, so render the child here.
             child_copy.render()
