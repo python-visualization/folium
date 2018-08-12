@@ -11,11 +11,10 @@ from folium.folium import Map
 class DualMap(MacroElement):
     """Create two maps in the same window.
 
-    Adding children to this objects adds them to both maps. If you want to add
-    something to a specific map,
+    Adding children to this objects adds them to both maps. You can access
+    the individual maps with `DualMap.m1` and `DualMap.m2`.
 
-    Uses the Leaflet plugin Leaflet.Sync. More info here:
-    https://github.com/jieter/Leaflet.Sync
+    Uses the Leaflet plugin Sync: https://github.com/jieter/Leaflet.Sync
 
     Parameters
     ----------
@@ -29,10 +28,8 @@ class DualMap(MacroElement):
     >>> m = DualMap(location=(0, 0), tiles='cartodbpositron',  zoom_start=5)
     >>> # Add the same marker to both maps:
     >>> Marker((0, 0)).add_to(m)
-    >>> # Add a marker to map 1:
+    >>> # The individual maps are attributes called `m1` and `m2`:
     >>> Marker((0, 1)).add_to(m.m1)
-    >>> # Other way to add a marker to a single map:
-    >>> m.add_child_to_map2(Marker((1, 0))
     >>> LayerControl().add_to(m)
     >>> m.save('map.html')
 
@@ -41,7 +38,6 @@ class DualMap(MacroElement):
         {% macro script(this, kwargs) %}
         {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
         {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
-
         {% endmacro %}
     """)
 
@@ -73,12 +69,6 @@ class DualMap(MacroElement):
     def add_child(self, child, name=None, index=None):
         self.m1.add_child(child, name, index)
         self.children_for_m2.append(child)
-
-    def add_child_to_map1(self, child, name=None, index=None):
-        self.m1.add_child(child, name, index)
-
-    def add_child_to_map2(self, child, name=None, index=None):
-        self.m2.add_child(child, name, index)
 
     def _copy_item(self, item_original):
         """Return a recursive deep-copy of item where each copy has a new ID."""
