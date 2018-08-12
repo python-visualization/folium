@@ -9,9 +9,32 @@ from folium.folium import Map
 
 
 class DualMap(MacroElement):
-    """
+    """Create two maps in the same window.
 
+    Adding children to this objects adds them to both maps. If you want to add
+    something to a specific map,
+
+    Uses the Leaflet plugin Leaflet.Sync. More info here:
     https://github.com/jieter/Leaflet.Sync
+
+    Parameters
+    ----------
+    layout : {'horizontal', 'vertical'}
+        Select how the two maps should be positioned. Either horizontal (left
+        and right) or vertical (top and bottom).
+
+    Examples
+    --------
+    >>> # DualMap accepts the same arguments as Map:
+    >>> m = DualMap(location=(0, 0), tiles='cartodbpositron',  zoom_start=5)
+    >>> # Add the same marker to both maps:
+    >>> Marker((0, 0)).add_to(m)
+    >>> # Add a marker to map 1:
+    >>> Marker((0, 1)).add_to(m.m1)
+    >>> # Other way to add a marker to a single map:
+    >>> m.add_child_to_map2(Marker((1, 0))
+    >>> LayerControl().add_to(m)
+    >>> m.save('map.html')
 
     """
     _template = Template("""
@@ -22,37 +45,53 @@ class DualMap(MacroElement):
         {% endmacro %}
     """)
 
-    def __init__(self, location=None, **kwargs):
+    def __init__(self, location=None, layout='horizontal', **kwargs):
         super(DualMap, self).__init__()
-        self.m1 = Map(location=location, width='50%', height='100%',
-                      left='0%', top='0%', position='relative', **kwargs)
-        self.m2 = Map(location=location, width='50%', height='100%',
-                      left='50%', top='0%', position='absolute', **kwargs)
+        for key in ('width', 'height', 'left', 'top', 'position'):
+            assert key not in kwargs, ('Argument {} cannot be used with '
+                                       'DualMap.'.format(key))
+        if layout not in ('horizontal', 'vertical'):
+            raise ValueError('Undefined option for argument `layout`: {}. '
+                             'Use either \'horizontal\' or \'vertical\'.'
+                             .format(layout))
+        width = '50%' if layout == 'horizontal' else '100%'
+        height = '100%' if layout == 'horizontal' else '50%'
+        self.m1 = Map(location=location, width=width, height=height,
+                      left='0%', top='0%',
+                      position='absolute', **kwargs)
+        self.m2 = Map(location=location, width=width, height=height,
+                      left='50%' if layout == 'horizontal' else '0%',
+                      top='0%' if layout == 'horizontal' else '50%',
+                      position='absolute', **kwargs)
         figure = Figure()
         figure.add_child(self.m1)
         figure.add_child(self.m2)
+        # Important: add self to Figure last.
         figure.add_child(self)
-        self.children_unofficial = []
+        self.children_for_m2 = []
 
     def add_child(self, child, name=None, index=None):
         self.m1.add_child(child, name, index)
-        self.children_unofficial.append(child)
+        self.children_for_m2.append(child)
 
-    def _copy_item(self, item):
-        item = copy(item)
+    def add_child_to_map1(self, child, name=None, index=None):
+        self.m1.add_child(child, name, index)
+
+    def add_child_to_map2(self, child, name=None, index=None):
+        self.m2.add_child(child, name, index)
+
+    def _copy_item(self, item_original):
+        """Return a recursive deep-copy of item where each copy has a new ID."""
+        item = copy(item_original)
         item._id = uuid4().hex
-        children_new = OrderedDict()
         if hasattr(item, '_children') and len(item._children) > 0:
-            for subitem in item._children.values():
-                subitem_copy = self._copy_item(subitem)
-                subitem_copy._parent = item
-                children_new[subitem_copy.get_name()] = subitem_copy
-        item._children = children_new
+            children_new = OrderedDict()
+            for subitem_original in item._children.values():
+                subitem = self._copy_item(subitem_original)
+                subitem._parent = item
+                children_new[subitem.get_name()] = subitem
+            item._children = children_new
         return item
-
-    def prerender(self):
-        for child in self.children_unofficial:
-            self.m2.add_child(self._copy_item(child))
 
     def render(self, **kwargs):
         figure = self.get_root()
@@ -63,3 +102,9 @@ class DualMap(MacroElement):
                                 name='Leaflet.Sync')
 
         super(DualMap, self).render(**kwargs)
+
+        for child in self.children_for_m2:
+            child_copy = self._copy_item(child)
+            self.m2.add_child(child_copy)
+            # m2 has already been rendered, so render the child here.
+            child_copy.render()
