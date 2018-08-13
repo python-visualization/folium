@@ -100,3 +100,15 @@ class DualMap(MacroElement):
             self.m2.add_child(child_copy, name, index)
             # m2 has already been rendered, so render the child here.
             child_copy.render()
+
+    def fit_bounds(self, *args, **kwargs):
+        for m in (self.m1, self.m2):
+            m.fit_bounds(*args, **kwargs)
+
+    def choropleth(self, *args, **kwargs):
+        for m in (self.m1, self.m2):
+            m.choropleth(*args, **kwargs)
+
+    def keep_in_front(self, *args):
+        for m in (self.m1, self.m2):
+            m.keep_in_front(*args)
