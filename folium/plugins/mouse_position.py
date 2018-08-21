@@ -40,9 +40,30 @@ class MousePosition(MacroElement):
     ----------
     position : str, default 'bottomright'
         Location of the widget.
-    
-    """
 
+    separator : str, default ' : '
+        Character used to separate latitude and longitude values.
+
+    empty_string : str, default 'Unavailable'
+       String to display when a value cannot be returned.
+
+    lng_first : bool, default 'False'
+        Set as True to display longitude before latitude.
+
+    num_digits : int, default '5'
+        Number of decimal places included in the displayed
+        longitude and latitude decimal degree values.
+
+    lng_formatter : str, default 'None'
+        Set the format for the longitude values.
+
+    lat_formatter : str, default 'None'
+       Set the format for the latitude values.
+
+    prefix : str, default ''
+        String to display before the latitude and longitude values.
+
+    """
     _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = new L.Control.MousePosition(
@@ -53,8 +74,8 @@ class MousePosition(MacroElement):
         """)  # noqa
 
     def __init__(self, position='bottomright', separator=' : ',
-                 emptyString='Unavailable', lngFirst=False,
-                 numDigits=5, lngFormatter=None, latFormatter=None,
+                 empty_string='Unavailable', lng_first=False,
+                 num_digits=5, lng_formatter=None, lat_formatter=None,
                  prefix=""):
         
         super(MousePosition, self).__init__()
@@ -63,11 +84,11 @@ class MousePosition(MacroElement):
         options = {
             'position': position,
             'separator': separator,
-            'emptyString': emptyString,
-            'lngFirst': lngFirst,
-            'numDigits': numDigits,
-            'lngFormatter': lngFormatter,
-            'latFormatter': latFormatter,
+            'empty_string': empty_string,
+            'lng_first': lng_first,
+            'num_digits': num_digits,
+            'lng_formatter': lng_formatter,
+            'lat_formatter': lat_formatter,
             'prefix': prefix,
         }
         self.options = json.dumps(options)
