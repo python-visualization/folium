@@ -39,15 +39,16 @@ class MousePosition(MacroElement):
     Parameters
     ----------
     position : str, default 'bottomright'
-        Location of the widget.
+        The standard Control position parameter for the widget.
 
     separator : str, default ' : '
         Character used to separate latitude and longitude values.
 
     empty_string : str, default 'Unavailable'
-       String to display when a value cannot be returned.
+       Initial text to display.
 
     lng_first : bool, default 'False'
+        Weather to put the longitude first or not.
         Set as True to display longitude before latitude.
 
     num_digits : int, default '5'
@@ -55,13 +56,13 @@ class MousePosition(MacroElement):
         longitude and latitude decimal degree values.
 
     lng_formatter : str, default 'None'
-        Set the format for the longitude values.
+        Custom function to format the longitude value.
 
     lat_formatter : str, default 'None'
-       Set the format for the latitude values.
+       Custom function to format the latitude value.
 
     prefix : str, default ''
-        String to display before the latitude and longitude values.
+        A string to be prepended to the coordinates.
 
     """
     _template = Template("""
@@ -84,11 +85,11 @@ class MousePosition(MacroElement):
         options = {
             'position': position,
             'separator': separator,
-            'empty_string': empty_string,
-            'lng_first': lng_first,
-            'num_digits': num_digits,
-            'lng_formatter': lng_formatter,
-            'lat_formatter': lat_formatter,
+            'emptyString': empty_string,
+            'lngFirst': lng_first,
+            'numDigits': num_digits,
+            'lngFormatter': lng_formatter,
+            'latFormatter': lat_formatter,
             'prefix': prefix,
         }
         self.options = json.dumps(options)
