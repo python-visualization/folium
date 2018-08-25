@@ -11,18 +11,18 @@ matrix:
   include:
   - python: 2.7
     env: TEST_TARGET=default
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=default
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=notebooks
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=latest_branca
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=docs
   allow_failures:
   - python: 2.7
     env: TEST_TARGET=latest_branca
-  - python: 3.6
+  - python: 3.7
     env: TEST_TARGET=latest_branca
 
 before_install:
@@ -31,6 +31,7 @@ before_install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
   - conda update conda
+  - conda config --remove channels defaults --force
   - conda config --add channels conda-forge --force
   - conda create --name TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
   - source activate TEST
@@ -89,6 +90,6 @@ deploy:
   on:
     repo: python-visualization/folium
     tags: true
-    python: 3.6
+    python: 3.7
     all_branches: master
     condition: '$TEST_TARGET == "default"'
