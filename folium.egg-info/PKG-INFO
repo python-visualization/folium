@@ -1,0 +1,335 @@
+Metadata-Version: 1.1
+Name: folium
+Version: 0.6.0+11.g71ab988.dirty
+Summary: Make beautiful maps with Leaflet.js & Python
+Home-page: https://github.com/python-visualization/folium
+Author: Rob Story
+Author-email: wrobstory@gmail.com
+License: Copyright (C) 2013, Rob Story
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+Description: .. image:: https://badge.fury.io/py/folium.png
+           :target: http://badge.fury.io/py/folium
+        .. image:: https://api.travis-ci.org/python-visualization/folium.png?branch=master
+           :target: https://travis-ci.org/python-visualization/folium
+        .. image:: https://badges.gitter.im/Join%20Chat.svg
+           :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+        .. image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
+           :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
+        
+        folium
+        ======
+        
+        |folium|
+        
+        Python Data, Leaflet.js Maps
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        `folium` builds on the data wrangling strengths of the Python ecosystem and the
+        mapping strengths of the Leaflet.js library. Manipulate your data in Python, 
+        then visualize it in a Leaflet map via `folium`.
+        
+        Installation
+        ------------
+        
+        .. code:: bash
+        
+            $ pip install folium
+        
+        or
+        
+        .. code:: bash
+        
+            $ conda install -c conda-forge folium
+        
+        Documentation
+        -------------
+        
+        http://python-visualization.github.io/folium/docs-v0.5.0/
+        
+        The documentation for the development version can be found here:
+        http://python-visualization.github.io/folium/docs-master/
+        
+        Note that the documentation on Read the Docs is for the deprecated version
+        0.2.0.
+        
+        Gallery
+        -------
+        
+        There are two galleries of Jupyter notebooks with examples, which you can see
+        using Jupyter's nbviewer:
+        
+        http://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/examples/
+        
+        https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
+        
+        
+        .. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+        
+        0.7.0
+        ~~~~~
+        
+        - Update leaflet to 1.3.4 (ocefpaf #939)
+        
+        
+        0.6.0
+        ~~~~~
+        
+        - `Popup` accepts new arguments `show` (render open on page load) and `sticky` (popups
+          only close when explicitly clicked) (jwhendy #778)
+        - Added leaflet-search plugin (ghandic #759)
+        - Improved Vector Layers docs, notebooks, and optional arguments (ocefpaf #731)
+        - Implemented `export=False/True` option to the Draw plugin layer for saving
+          GeoJSON files (ocefpaf #727)
+        - Internal re-factor to reflect leaflet's organization (ocefpaf #725)
+        - Added `tooltip` support to `Marker`s (ocefpaf #724)
+        - Added `tooltip` support to all vector layers (ocefpaf #722)
+        - Added `TimeSliderChoropleth` plugin (halfdanrump #736)
+        - Added `show` parameter to choose which overlays to show on opening (conengmo #772)
+        - Added BeautifyIcon Plugin (arthuralvim and jeremybyu #819)
+        - Explicit WMSTileLayer options, accept all **kwargs (conengmo #838)
+        - Updated links to Draw plugin (conengmo #868)
+        - Ingest any object that __geo_interface__ (ocefpaf #880)
+        - Added `FeatureGroupSubGroup` plugin (shtrom #875)
+        - Added `duration` option to `TimestampedGeoJson` (andy23512 #894)
+        - Added `zoom_control` to `Map` to toggle zoom controls as per enhancement (#795) (okomarov #899)
+        - Change default `date_options` in TimestampedGeoJson (andy23512 #914)
+        - Added gradient argument to HeatMapWithTime (jtbaker #925)
+        - Added `Tooltip` and `GeoJsonTooltip` classes (jtbaker #883)
+        
+        API changes
+        
+        - Refactor `ImageOverlay`, `VideoOverlay`, `WmsTileLayer`, and `TileLayer` to a
+          new `raster_layers.py` module (ocefpaf #729)
+        - `Rectangle` and `Polygon` were renamed and set to leaflet's defaults.
+          Both now accepted all `Path`'s optional arguments (ocefpaf #722)
+        
+        Bug Fixes
+        
+        - Fixed numpy array bug (#749) in _flatten
+        - Unify `get_bounds` routine to avoid wrong responses
+        - If Path option `fill_color` is present it will override `fill=False`
+        - Fix disappearing layer control when using FastMarkerCluster (conengmo #866)
+        - Host heatmap.js to circumvent adblockers (conengmo #886)
+        - Fix permission error in Map._to_png() due to tempfile (conengmo #887)
+        - Replace strftime use in TimesliderChoropleth example (conengmo #919)
+        
+        0.5.0
+        ~~~~~
+        
+        - Added `Draw` plugin (ocefpaf #720)
+        - Better handling of URL input (ocefpaf #717)
+        - Versioned docs! Visit http://python-visualization.github.io/folium/docs-v{{version}}
+          or simply http://python-visualization.github.io/folium/ for the latest version.
+        
+        Bug Fixes
+        
+        - Fix `VideoOverlay` import (ocefpaf #719)
+        - Fix `choropleth` docstring (lsetiawan #713)
+        - Fix `choropleth` name in `LayerControl` (ocefpaf #493)
+        
+        0.4.0
+        ~~~~~
+        - Optional `iconCreateFunction` for `MarkerCluster` to customize the icons (odovad #701)
+        - Added `HeatMapWithTime` (Padarn #567)
+        - Added `MeasureControl` (ocefpaf #669)
+        - Added `VideoOverlay` plugin (ocefpaf #665)
+        - Added `TimestampedWmsTileLayers` plugin (acrosby #644 and #660)
+        - Vega-Lite features support via altair (njwilson23 #643)
+        - Experimental support for a static png output (ocefpaf #634)
+        - Added support for subdomains options in TileLayer (damselem #623)
+        - Updated to leaflet 1.2.0 (ocefpaf #693)
+        - Added `FastMarkerCluster` (James Gardiner #585 (proposed by ruoyu0088))
+        - Use the GIS standard "pixelated" css image-rendering in
+          image overlays by default (dirkvdb #684 and ocefpaf #686)
+        
+        API changes
+        
+        - Removed features `MarkerCluster` in lieu of the plugin version (ocefpaf #704)
+        - `choropleth` now takes a single `geo_data` instad of `geo_path`/`geo_str`
+          leaving the parsing to `GeoJSON`, remove the unused `data_out` option,
+          add geopandas support (ocefpaf #702)
+        - All popups are considered HTML text by default (ocefpaf #689)
+          If a popup requires rendering use the `kwarg` `parse_html=True`.
+        - `PolyLine`, `Circle` and `CircleMarker` are set to leaflet's defaults and
+          accepted all `Path`'s optional arguments (ocefpaf #683 and #697)
+        - `WmsTileLayer` and `ImageOverlay` are set to leaflet's defaults and accepted
+          all `TileLayer.WMS` and `ImageOverlay` optional arguments respectively (ocefpaf #695 and #697)
+        - Changed default `max_bounds` to `False` to reflect leaflet's default value (rdd9999 #641)
+        - Modified `Fullscreen` plugin `kwargs` to be more "pythonic"
+        - All `.format` properties are now `.fmt` for consistency
+        - Removed the `kwarg` `continuous_world` that is no longer in leaflet's API (ocefpaf #695)
+        
+        Bug Fixes
+        
+        - `subdomain` option in `TileLayer` should be a list and `WmsTileLayer`
+          `overlay` default is `True` (ocefpaf #707)
+        - Checking if the lat, lon locations are floats to avoid empty maps
+          (radumas #626)
+        
+        
+        0.3.0
+        ~~~~~
+        
+        - Added `FastMarkerCluster` (James Gardiner #585 (proposed by ruoyu0088))
+        - Added style option to 'Timestamped geojson' plugin (soymsk #627)
+        - Switched to `leaflet 1.0.1` (juoceano #531 and ocefpaf #535)
+        - Added `continuous_world`, `world_copy_jump`, and `no_wrap` options
+          (ocefpaf #508)
+        - Update font-awesome to 4.6.3 (ocefpaf #478)
+        - Added text path (talespaiva #451 and ocefpaf #474)
+        - More options added to `LayerControl` (qingkaikong #473)
+        - More options added to `fullscreen` plugin (qingkaikong #468)
+        - Added `ColorLine` object (bibmartin #449)
+        - Added highlight function to `GeoJSON`, and `Chrorpleth` (JoshuaCano #341)
+        - Added `fullscreen` plugin (sanga #437)
+        - Added `smooth_factor `option to `GeoJSON`, `TopoJSON` and `Choropleth`
+          (JamesGardiner #428)
+        - `Map` object now accepts Leaflet global switches (sgvandijk #424)
+        - Added weight option to CircleMarker (palewire #581)
+        - Added requests support to enable http(s) and ftp for geo_path parameter
+          (jreades #602)
+        
+        Bug Fixes
+        
+        - Fixed image order (juoceano #536)
+        - Fixed Icon rotation (juoceano #530 and sseemayer #527)
+        - Fixed MIME type (text/plain) is not executable (talespaiva #440)
+        - Update Travis-CI testing to incorporate branca and fix notebook tests
+          (ocefpaf #436)
+        - Removed MultiPolyLine and MultiPolygon, both are handled by PolyLine and
+          PolyLine in leaflet 1.0.* (ocefpaf #554)
+        - Removed deprecated MapQuest tiles (HashCode55 #562)
+        
+        0.2.1
+        ~~~~~
+        Bugfix release
+        
+        - TopoJson.get_bounds() returns [lon,lat] instead of [lat,lon] (eddies #383)
+        - HeatMap was not passing "name" argument (eddies #380)
+        - Fix heatmap.fit_bounds (same bug as #383) (BibMartin #384)
+        - Fix WMS rendering (ocefpaf #404)
+        - Change Leaflet.awesome-markers URL (BibMartin #393)
+        
+        0.2.0
+        ~~~~~
+        Major changes to the API with the new plugin system,
+        and several new features in this version. For more information check the docs:
+        http://python-visualization.github.io/folium/
+        
+        - Added control_scale (BibMartin and jelmelk #355)
+        - WMS styles (ocefpaf #348)
+        - Docs! (BibMartin #344, #337, #329)
+        - No tile option (ocefpaf #330)
+        - GeoJSON and TopoJSON `style_function` (BibMartin #317 and #266)
+        - Colormaps (BibMartin # 300)
+        - Map CRS (BibMartin #297)
+        - GeoPandas drawing (BibMartin #296)
+        - Div Icons (BibMartin #250)
+        - CustomIcon (BibMartin #230)
+        - HeatMap (BibMartin #213)
+        
+        And many bug fixes.
+        See https://github.com/python-visualization/folium/issues?&q=milestone:v0.2.0+is:closed+label:bug
+        
+        0.1.6
+        ~~~~~
+        - Added Image Overlay. (andrewgiessel b625613)
+        - All popups can take a `popup_width` keyword to adjust the width in
+          text/HTML (ocefpaf #157).
+        - CAVEAT! Backwards incompatibly change: the keyword `width` in popups is now
+          `popup_width` to avoid confusion with map `width`.
+        
+        
+        0.1.5
+        ~~~~~
+        - Popups on lines. (themiurgo #122)
+        - Map auto bounds. (themiurgo #134)
+        - GeoJSON popup. (ocefpaf 7aad5e0)
+        - Added cartodb positron and dark_matter tiles (ocefpaf d4daee7)
+        - Forcing HTTPS when available. (ocefpaf c69ac89)
+        - Added Stamen Watercolor tiles. (ocefpaf 8c1f837)
+        - Added non-pixel width and height. (ocefpaf a87a449)
+        - Default map size is defined as non-pixel and equal to 100% of the window.
+          (ocefpaf dcaf575)
+        
+        Bug Fixes
+        
+        - Draw GeoJSON first. (ocefpaf d92bdbe)
+        - Removed keyword unnecessary `popup_on`. (themiurgo 204d722)
+        - Fixed MapQuest Open Aerial URL. (ocefpaf 5e787fa)
+        
+        
+        0.1.4
+        ~~~~~
+        - Popups allow unicode. (Anand Patil 545315a)
+        - Loading javascript over https. (Anand Patil ac9a4d6)
+        - Added `width` keyword to simple_popup. (ocefpaf 95325c4)
+        - Support multi_polyline. (Younggun Kim efbd1db)
+        - Added max and min zoom keywords. (ocefpaf 4ca4c92)
+        
+        Bug Fixes
+        
+        - Remove margins from leaflet-tiles. (Lennart Fricke 3c11433)
+        - Fix #50 template not found on Windows OSes. (ocefpaf 101daee)
+        - Fixed `add_wms_layer` py3k bug. (ocefpaf 154f0a5)
+        
+        
+        0.1.3
+        ~~~~~
+        - Bootstrap glyphicon marker icons.  birdage
+        - Cluster marker group, and simple markers . (birdage 801d91c)
+        - WMS tile. (birdage 26f9668)
+        - Expanded color support to 253 with colorbrewer. (Adam Pah 3ba39ae)
+        - Port to python 3. (Pavel Tysliatski 5093e1b)
+        - Update geojson_template to Leaflet.js 0.7. (Justin Duke a917551)
+        - Update fol_template to Leaflet.js 0.7. (Justin Duke b328cec)
+        - Add support for lines. (Jacob Wasserman e3be077)
+        - Allow rendering w/ custom template. (Samat K Jain 1a85841)
+        - MapQuest Open tilesets. (Samat K Jain d536949)
+        
+        Bug Fixes
+        
+        - Vincent popups take padding into account. (Kyle Corbitt 26556fe)
+        - Simple popups correctly escape internal quotes. (Kyle Corbitt 20c979f)
+        - Add encoding specification.  jmduke
+        - Reverted change to mathchColor. (Roy Keyes 70d7f5c)
+        - Changed no-data fill to null/no-fill, rather than #fff. (Rob Story 6ff80a6)
+        - Fixed issue with counties TopoJSON. (Rob Story cddaab3)
+        
+        
+        0.1.2
+        ~~~~~
+        - TopoJSON functionality. (Rob Story 5566b71)
+        - Vincent/Vega charts as popups. (Rob Story 4b7e402)
+        - GeoJSON overlays added. (Rob Story b5d9081)
+        - Click to add markers, popover Lat/Lng functionality. (Rob Story 9c809f9)
+        - Simple and Circle markers added. (Rob Story 181ac51)
+        - Initial commit. (Rob Story 6a43874)
+        
+Keywords: data visualization
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Scientific/Engineering :: GIS
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Development Status :: 5 - Production/Stable
