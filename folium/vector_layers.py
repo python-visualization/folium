@@ -12,9 +12,10 @@ import json
 from branca.element import (CssLink, Element, Figure, JavascriptLink, MacroElement)  # noqa
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter_points, none_max, none_min)  # noqa
 
-from folium.map import Marker
+from folium.map import Marker, Layer
 
-from jinja2 import Template
+from jinja2 import Environment, PackageLoader, Template
+ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
 def path_options(**kwargs):
@@ -327,3 +328,21 @@ class CircleMarker(Marker):
                                            tooltip=tooltip)
         self._name = 'CircleMarker'
         self.options = _parse_options(line=False, radius=radius, **kwargs)
+
+class VectorGrid(Layer):
+    
+    _template = Template(u"""
+{% macro script(this, kwargs) -%}
+    var {{this.get_name()}} = L.vectorGrid.protobuf(
+        '{{this.tiles}}',
+        {{ this.options }}).addTo({{this._parent.get_name()}});
+{%- endmacro %}
+""")  # noqa
+
+    def __init__(self, tiles, name):
+        self.tile_name = (name if name is not None else
+                          ''.join(tiles.lower().strip().split()))
+        super(VectorGrid, self).__init__(name=self.tile_name)
+        self.tiles = tiles
+        self._name = 'VectorGrid'
+        self._env = ENV

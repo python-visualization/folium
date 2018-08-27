@@ -19,6 +19,7 @@ from folium.features import GeoJson, TopoJson
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import _validate_location
+from folium.vector_layers import VectorGrid
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -34,6 +35,7 @@ _default_js = [
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
+    ('VectorGrid','https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js'),
     ]
 
 _default_css = [
@@ -638,3 +640,7 @@ $(document).ready(objects_in_front);
         """
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
+
+    def add_vector_grid(self,tiles,name=None):
+        vectorGrid = VectorGrid(tiles=tiles,name=name)
+        self.add_child(vectorGrid,name=name)
