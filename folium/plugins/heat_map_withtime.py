@@ -16,7 +16,8 @@ class HeatMapWithTime(Layer):
     ----------
     data: list of list of points of the form [lat, lng] or [lat, lng, weight]
         The points you want to plot. The outer list corresponds to the various time
-        steps in sequential order. (weight defaults to 1 if not specified for a point)
+        steps in sequential order. (weight is in (0, 1] range and defaults to 1 if
+        not specified for a point)
     index: Index giving the label (or timestamp) of the elements of data. Should have
         the same length as data, or is replaced by a simple count if not specified.
     name : string, default None
