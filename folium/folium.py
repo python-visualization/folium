@@ -657,8 +657,6 @@ $(document).ready(objects_in_front);
         See examples/VectorGrid.ipynb
 
         """
-
-        #adding the VectorGrid plugin javascript
         _default_js.append(
             ('vectorGrid','https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js'))
         vectorGrid = VectorGrid(tiles=tiles,name=name,options=options)

@@ -15,7 +15,6 @@ from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter
 from folium.map import Marker, Layer
 
 from jinja2 import Environment, PackageLoader, Template
-ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 
 def path_options(**kwargs):
@@ -361,6 +360,5 @@ class VectorGrid(Layer):
         super(VectorGrid, self).__init__(name=self.tile_name)
         self.tiles = tiles
         self._name = 'VectorGrid'
-        self._env = ENV
         if(options):
             self.options = options
