@@ -14,7 +14,7 @@ from branca.utilities import (_locations_tolist, _parse_size, image_to_url, iter
 
 from folium.map import Marker, Layer
 
-from jinja2 import Environment, PackageLoader, Template
+from jinja2 import Template
 
 
 def path_options(**kwargs):

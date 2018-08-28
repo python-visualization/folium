@@ -640,7 +640,7 @@ $(document).ready(objects_in_front);
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
 
-    def add_vector_grid_protobuf(self,tiles,name=None,options=None):
+    def add_vector_grid_protobuf(self, tiles, name=None, options=None):
         """
         An implementation of VectorGrid.protobuf plugin to display gridded vector data as a tile-layer
         src:    https://github.com/Leaflet/Leaflet.VectorGrid
@@ -658,8 +658,6 @@ $(document).ready(objects_in_front);
 
         """
         _default_js.append(
-            ('vectorGrid','https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js'))
-        vectorGrid = VectorGrid(tiles=tiles,name=name,options=options)
-        self.add_child(vectorGrid,name=name)
-
-
+            ('vectorGrid', 'https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js'))
+        vectorGrid = VectorGrid(tiles=tiles, name=name, options=options)
+        self.add_child(vectorGrid, name=name)
