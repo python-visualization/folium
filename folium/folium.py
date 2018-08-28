@@ -35,7 +35,6 @@ _default_js = [
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
-    ('VectorGrid','https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js'),
     ]
 
 _default_css = [
@@ -641,6 +640,28 @@ $(document).ready(objects_in_front);
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
 
-    def add_vector_grid(self,tiles,name=None):
-        vectorGrid = VectorGrid(tiles=tiles,name=name)
+    def add_vector_grid_protobuf(self,tiles,name=None,options=None):
+        """
+        An implementation of VectorGrid.protobuf plugin to display gridded vector data as a tile-layer
+        src:    https://github.com/Leaflet/Leaflet.VectorGrid
+        docs:   http://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html
+
+        Parameters
+        ----------
+        tiles: location of the tiles (i.e. url)
+        name: name of the layer
+        options: options to pass to VectorGrid protobuf (i.e. styles)
+
+        Usage
+        -----
+        See examples/VectorGrid.ipynb
+
+        """
+
+        #adding the VectorGrid plugin javascript
+        _default_js.append(
+            ('vectorGrid','https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js'))
+        vectorGrid = VectorGrid(tiles=tiles,name=name,options=options)
         self.add_child(vectorGrid,name=name)
+
+

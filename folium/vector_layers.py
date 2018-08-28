@@ -329,20 +329,38 @@ class CircleMarker(Marker):
         self._name = 'CircleMarker'
         self.options = _parse_options(line=False, radius=radius, **kwargs)
 
-class VectorGrid(Layer):
-    
-    _template = Template(u"""
-{% macro script(this, kwargs) -%}
-    var {{this.get_name()}} = L.vectorGrid.protobuf(
-        '{{this.tiles}}',
-        {{ this.options }}).addTo({{this._parent.get_name()}});
-{%- endmacro %}
-""")  # noqa
 
-    def __init__(self, tiles, name):
+class VectorGrid(Layer):
+    """
+    An implementation of VectorGrid.protobuf plugin to display gridded vector data as a layer
+    src:    https://github.com/Leaflet/Leaflet.VectorGrid
+    docs:   http://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html
+
+    Parameters
+    ----------
+    tiles: location of the tiles (i.e. url)
+    name: name of the layer
+    options: options to pass to VectorGrid protobuf (i.e. styles)
+
+    Usage
+    -----
+    See examples/VectorGrid.ipynb
+
+    """
+    _template = Template(u"""
+            {% macro script(this, kwargs) -%}
+            var {{this.get_name()}} = L.vectorGrid.protobuf(
+                '{{this.tiles}}',
+                {{ this.options }}).addTo({{this._parent.get_name()}});
+            {%- endmacro %}
+            """)  # noqa
+
+    def __init__(self, tiles, name, options):
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(VectorGrid, self).__init__(name=self.tile_name)
         self.tiles = tiles
         self._name = 'VectorGrid'
         self._env = ENV
+        if(options):
+            self.options = options
