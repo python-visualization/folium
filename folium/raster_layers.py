@@ -68,7 +68,8 @@ class TileLayer(Layer):
     tms: bool, default False
         If true, inverses Y axis numbering for tiles (turn this on for TMS
         services).
-
+    opacity: float, default 1
+        Sets the opacity for the layer.
     """
     _template = Template(u"""
 {% macro script(this, kwargs) -%}
@@ -82,7 +83,7 @@ class TileLayer(Layer):
                  max_native_zoom=None, attr=None, API_key=None,
                  detect_retina=False, name=None, overlay=False,
                  control=True, show=True, no_wrap=False, subdomains='abc',
-                 tms=False):
+                 tms=False, opacity=1):
 
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -98,7 +99,8 @@ class TileLayer(Layer):
                    'attribution': attr,
                    'subdomains': subdomains,
                    'detectRetina': detect_retina,
-                   'tms': tms}
+                   'tms': tms,
+                   'opacity': opacity}
         self.options = json.dumps(options, sort_keys=True, indent=8)
 
         tiles_flat = ''.join(tiles.lower().strip().split())
