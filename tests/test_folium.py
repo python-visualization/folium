@@ -212,8 +212,8 @@ class TestFolium(object):
              'min_zoom': 0,
              'detect_retina': False,
              'no_wrap': False,
-             'subdomains': 'abc',
-             'tms': False
+             'tms': False,
+             'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
                 'lat': 45.5236, 'lon': -122.675,
