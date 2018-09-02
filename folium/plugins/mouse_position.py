@@ -40,27 +40,20 @@ class MousePosition(MacroElement):
     ----------
     position : str, default 'bottomright'
         The standard Control position parameter for the widget.
-
     separator : str, default ' : '
         Character used to separate latitude and longitude values.
-
     empty_string : str, default 'Unavailable'
        Initial text to display.
-
-    lng_first : bool, default 'False'
-        Weather to put the longitude first or not.
+    lng_first : bool, default False
+        Whether to put the longitude first or not.
         Set as True to display longitude before latitude.
-
     num_digits : int, default '5'
         Number of decimal places included in the displayed
         longitude and latitude decimal degree values.
-
-    lng_formatter : str, default 'None'
-        Custom function to format the longitude value.
-
-    lat_formatter : str, default 'None'
-       Custom function to format the latitude value.
-
+    lng_formatter : str, default None
+        Custom Javascript function to format the longitude value.
+    lat_formatter : str, default None
+        Custom Javascript function to format the latitude value.
     prefix : str, default ''
         A string to be prepended to the coordinates.
 
@@ -77,8 +70,8 @@ class MousePosition(MacroElement):
     def __init__(self, position='bottomright', separator=' : ',
                  empty_string='Unavailable', lng_first=False,
                  num_digits=5, lng_formatter=None, lat_formatter=None,
-                 prefix=""):
-        
+                 prefix=''):
+
         super(MousePosition, self).__init__()
         self._name = 'MousePosition'
 
@@ -92,7 +85,7 @@ class MousePosition(MacroElement):
             'latFormatter': lat_formatter,
             'prefix': prefix,
         }
-        self.options = json.dumps(options)
+        self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
         super(MousePosition, self).render()
