@@ -52,17 +52,36 @@ class MousePosition(MacroElement):
         longitude and latitude decimal degree values.
     lng_formatter : str, default None
         Custom Javascript function to format the longitude value.
+        May not work in Jupyter.
     lat_formatter : str, default None
         Custom Javascript function to format the latitude value.
+        May not work in Jupyter.
     prefix : str, default ''
         A string to be prepended to the coordinates.
+
+    Examples
+    --------
+    >>> fmtr = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
+    >>> MousePosition(position='topright', separator=' | ', prefix="Mouse:",
+    ...               lat_formatter=fmtr, lng_formatter=fmtr)
 
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.Control.MousePosition(
-            {{ this.options }});
-            {{this._parent.get_name()}}.addControl({{this.get_name()}});
+
+        var {{this.get_name()}} = new L.Control.MousePosition(
+            (function () {
+                var options = {{ this.options }};
+                {% for key, formatter in (('lat', this.lat_formatter),
+                                          ('lng', this.lng_formatter)) %}
+                {% if formatter %}
+                    var {{ key }}Func = {{ formatter }};
+                    options['{{ key }}Formatter'] = {{ key }}Func;
+                {% endif %}{% endfor %}
+                return options;
+            })()
+        );
+        {{this._parent.get_name()}}.addControl({{this.get_name()}});
 
         {% endmacro %}
         """)  # noqa
@@ -81,11 +100,11 @@ class MousePosition(MacroElement):
             'emptyString': empty_string,
             'lngFirst': lng_first,
             'numDigits': num_digits,
-            'lngFormatter': lng_formatter,
-            'latFormatter': lat_formatter,
             'prefix': prefix,
         }
         self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.lat_formatter = lat_formatter
+        self.lng_formatter = lng_formatter
 
     def render(self, **kwargs):
         super(MousePosition, self).render()
