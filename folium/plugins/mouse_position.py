@@ -49,17 +49,9 @@ class MousePosition(MacroElement):
         {% macro script(this, kwargs) %}
 
         var {{this.get_name()}} = new L.Control.MousePosition(
-            (function () {
-                var options = {{ this.options }};
-                {% for key, formatter in (('lat', this.lat_formatter),
-                                          ('lng', this.lng_formatter)) %}
-                {% if formatter %}
-                    var {{ key }}Func = {{ formatter }};
-                    options['{{ key }}Formatter'] = {{ key }}Func;
-                {% endif %}{% endfor %}
-                return options;
-            })()
-        );
+             {{ this.options }});
+        {{this.get_name()}}.options["latFormatter"] = {{ this.lat_formatter }};
+        {{this.get_name()}}.options["lngFormatter"] = {{ this.lng_formatter }};
         {{this._parent.get_name()}}.addControl({{this.get_name()}});
 
         {% endmacro %}
