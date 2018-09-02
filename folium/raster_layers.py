@@ -70,6 +70,9 @@ class TileLayer(Layer):
         services).
     opacity: float, default 1
         Sets the opacity for the layer.
+    **kwargs : additional keyword arguments
+        Other keyword arguments are passed as options to the Leaflet tileLayer
+        object.
     """
     _template = Template(u"""
 {% macro script(this, kwargs) -%}
@@ -83,7 +86,7 @@ class TileLayer(Layer):
                  max_native_zoom=None, attr=None, API_key=None,
                  detect_retina=False, name=None, overlay=False,
                  control=True, show=True, no_wrap=False, subdomains='abc',
-                 tms=False, opacity=1):
+                 tms=False, opacity=1, **kwargs):
 
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -101,6 +104,7 @@ class TileLayer(Layer):
                    'detectRetina': detect_retina,
                    'tms': tms,
                    'opacity': opacity}
+        options.update(kwargs)
         self.options = json.dumps(options, sort_keys=True, indent=8)
 
         tiles_flat = ''.join(tiles.lower().strip().split())
