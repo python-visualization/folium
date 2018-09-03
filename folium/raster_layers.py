@@ -176,7 +176,7 @@ class WmsTileLayer(Layer):
         """)  # noqa
 
     def __init__(self, url, name=None, layers='', styles='',
-                 fmt='image/jpg', transparent=False, version='1.1.1',
+                 fmt='image/jpeg', transparent=False, version='1.1.1',
                  attr='', overlay=True, control=True, show=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
                                            name=name, show=show)
