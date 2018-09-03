@@ -53,7 +53,9 @@
         "maxZoom": {{tile['max_zoom']}},
         "minZoom": {{tile['min_zoom']}},
         "noWrap": {{tile['no_wrap'].__str__().lower()}},
-        "subdomains": "{{tile['subdomains']}}"
+        "opacity": {{tile['opacity']}},
+        "subdomains": "{{tile['subdomains']}}",
+        "tms": {{tile['tms'].__str__().lower()}}
 }).addTo({{ map_id }});
   {%- endfor %}
 </script>
