@@ -21,6 +21,7 @@ from folium.plugins.heat_map import HeatMap
 from folium.plugins.heat_map_withtime import HeatMapWithTime
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
+from folium.plugins.mouse_position import MousePosition
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.terminator import Terminator
@@ -41,6 +42,7 @@ __all__ = [
     'HeatMapWithTime',
     'MarkerCluster',
     'MeasureControl',
+    'MousePosition',
     'PolyLineTextPath',
     'ScrollZoomToggler',
     'Terminator',
