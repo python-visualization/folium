@@ -29,14 +29,12 @@ class MousePosition(MacroElement):
     num_digits : int, default '5'
         Number of decimal places included in the displayed
         longitude and latitude decimal degree values.
-    lng_formatter : str, default None
-        Custom Javascript function to format the longitude value.
-        May not work in Jupyter.
-    lat_formatter : str, default None
-        Custom Javascript function to format the latitude value.
-        May not work in Jupyter.
     prefix : str, default ''
         A string to be prepended to the coordinates.
+    lat_formatter : str, default None
+        Custom Javascript function to format the latitude value.
+    lng_formatter : str, default None
+        Custom Javascript function to format the longitude value.
 
     Examples
     --------
@@ -48,19 +46,18 @@ class MousePosition(MacroElement):
     _template = Template("""
         {% macro script(this, kwargs) %}
 
-        var {{this.get_name()}} = new L.Control.MousePosition(
-             {{ this.options }});
-        {{this.get_name()}}.options["latFormatter"] = {{ this.lat_formatter }};
-        {{this.get_name()}}.options["lngFormatter"] = {{ this.lng_formatter }};
-        {{this._parent.get_name()}}.addControl({{this.get_name()}});
+        var {{ this.get_name() }} = new L.Control.MousePosition(
+            {{ this.options }});
+        {{ this.get_name() }}.options["latFormatter"] = {{ this.lat_formatter }};
+        {{ this.get_name() }}.options["lngFormatter"] = {{ this.lng_formatter }};
+        {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
 
         {% endmacro %}
-        """)  # noqa
+    """)  # noqa
 
     def __init__(self, position='bottomright', separator=' : ',
-                 empty_string='Unavailable', lng_first=False,
-                 num_digits=5, lng_formatter=None, lat_formatter=None,
-                 prefix=''):
+                 empty_string='Unavailable', lng_first=False, num_digits=5,
+                 prefix='', lat_formatter=None, lng_formatter=None):
 
         super(MousePosition, self).__init__()
         self._name = 'MousePosition'
