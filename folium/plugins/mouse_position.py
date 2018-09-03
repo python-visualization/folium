@@ -74,8 +74,8 @@ class MousePosition(MacroElement):
             'prefix': prefix,
         }
         self.options = json.dumps(options, sort_keys=True, indent=2)
-        self.lat_formatter = lat_formatter
-        self.lng_formatter = lng_formatter
+        self.lat_formatter = lat_formatter or 'undefined'
+        self.lng_formatter = lng_formatter or 'undefined'
 
     def render(self, **kwargs):
         super(MousePosition, self).render()
