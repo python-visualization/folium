@@ -10,6 +10,7 @@ from __future__ import (absolute_import, division, print_function)
 import os
 import tempfile
 import time
+import sys
 
 from branca.colormap import StepColormap
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
@@ -19,6 +20,7 @@ from folium.features import GeoJson, TopoJson
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import _validate_location
+from folium._server import TemporaryHTTPServer
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -386,6 +388,25 @@ $(document).ready(objects_in_front);
             '</style>'), name='map_style')
 
         super(Map, self).render(**kwargs)
+
+    def show_in_browser(self, host='127.0.0.1', port=7000):
+        """
+        Displays the Map in the default web browser.
+
+        Parameters
+        ----------
+        host: str
+            Local address on which the Map will be hosted, default is '127.0.0.1'
+        port: int
+            Corresponding port, default 7000
+
+        """
+
+        if sys.version_info[0] < 3:
+            raise NotImplementedError('show_in_browser only works with python 3!')
+
+        srvr = TemporaryHTTPServer(host, port)
+        srvr.open_html_in_browser(self._repr_html_())
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):
