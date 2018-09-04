@@ -52,7 +52,7 @@ class MarkerCluster(Layer):
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
             {%- if this.icon_create_function is not none %}
-            {{ this.get_name() }}.options.iconCreateFunction = 
+            {{ this.get_name() }}.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};
             {%- endif %}
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
