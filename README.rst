@@ -55,3 +55,9 @@ https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/mas
 
 
 .. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+
+Contributing
+------------
+
+see `.github/CONTRIBUTING.md`
+
