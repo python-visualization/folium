@@ -58,13 +58,18 @@ First of all, thanks for your interest in contributing!
     git checkout -b name-of-your-branch
     ```
   4. Make change to your local copy of the folium repository
-  5. Commit those changes
+  5. Make sure the tests pass:
+    * in the repository folder do `pip install -e .`  (needed for notebook tests)
+    * along with all the dependencies install `phantomjs` via `npm install -g phantomjs`
+    * run `python -m pytest tests`
+    * resolve all errors
+  6. Commit those changes
     ```
     git add file1 file2 file3
     git commit -m 'a descriptive commit message'
     ```
-  6. Push your updated branch to your fork
+  7. Push your updated branch to your fork
     ```
     git push origin name-of-your-branch
     ```
-  7. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
+  8. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
