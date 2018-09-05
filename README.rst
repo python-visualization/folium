@@ -59,5 +59,8 @@ https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/mas
 Contributing
 ------------
 
-see `.github/CONTRIBUTING.md`
+We love contributions!  folium is open source, built on open source,
+and we'd love to have you hang out in our community.
+
+For a complete contributor's guide see `.github/CONTRIBUTING.md`
 
