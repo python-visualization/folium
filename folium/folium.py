@@ -401,10 +401,6 @@ $(document).ready(objects_in_front);
             Corresponding port, default 7000
 
         """
-
-        if sys.version_info[0] < 3:
-            raise NotImplementedError('show_in_browser only works with python 3!')
-
         srvr = TemporaryHTTPServer(host, port)
         srvr.open_html_in_browser(self._repr_html_())
 

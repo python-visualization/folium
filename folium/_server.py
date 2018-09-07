@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Simple HTTP server so we are able to show Maps in browser. Only works with python 3!.
+Simple HTTP server so we are able to show Maps in browser.
 
 """
 
 import sys
-if sys.version_info[0] < 3:
-    raise NotImplementedError('Only works with python 3!')
+if sys.version_info[0] >= 3:
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+else:
+    from SimpleHTTPServer import SimpleHTTPRequestHandler as BaseHTTPRequestHandler
+    from SocketServer import TCPServer as HTTPServer
 
 import webbrowser
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from textwrap import dedent
 
 
@@ -53,12 +55,14 @@ class TemporaryHTTPServer:
                 self.send_response(200)
 
                 # set up headers for pages
-                # content_type = 'text/{0}'.format(page_content_type)
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
 
                 # writing data on a page
-                self.wfile.write(bytes(html_data, encoding='utf'))
+                if sys.version_info[0] >= 3:
+                    self.wfile.write(bytes(html_data, encoding='utf'))
+                else:
+                    self.wfile.write(bytes(html_data))
 
                 return
 
