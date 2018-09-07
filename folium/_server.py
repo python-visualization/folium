@@ -2,7 +2,6 @@
 
 """
 Simple HTTP server so we are able to show Maps in browser.
-
 """
 
 import sys
@@ -39,26 +38,15 @@ class TemporaryHTTPServer:
         """
         Serve html content in a suitable for us manner: allow to gracefully exit using ctrl+c and re-serve some other
         content on the same host:port
-
         """
 
         # we need a request handler with a method `do_GET` which somehow is not provided in the baseline
         class HTTPServerRequestHandler(BaseHTTPRequestHandler):
-            """
-            An handler of requests for the server, hosting HTML-pages.
-            """
 
             def do_GET(self):
-                """Handle GET requests"""
-
-                # response from page
                 self.send_response(200)
-
-                # set up headers for pages
                 self.send_header('Content-type', 'text/html')
                 self.end_headers()
-
-                # writing data on a page
                 if sys.version_info[0] >= 3:
                     self.wfile.write(bytes(html_data, encoding='utf'))
                 else:
@@ -66,11 +54,10 @@ class TemporaryHTTPServer:
 
                 return
 
-        # create a temporary server
+        # run a temporary server
         HTTPServer.allow_reuse_address = True
         httpd = HTTPServer((self.host, self.port), HTTPServerRequestHandler)
 
-        # run the temporary http server with graceful exit option
         try:
             httpd.serve_forever()
         except KeyboardInterrupt:
