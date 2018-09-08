@@ -65,7 +65,14 @@ class TileLayer(Layer):
         Whether the layer will be shown on opening (only for overlays).
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
-
+    tms: bool, default False
+        If true, inverses Y axis numbering for tiles (turn this on for TMS
+        services).
+    opacity: float, default 1
+        Sets the opacity for the layer.
+    **kwargs : additional keyword arguments
+        Other keyword arguments are passed as options to the Leaflet tileLayer
+        object.
     """
     _template = Template(u"""
 {% macro script(this, kwargs) -%}
@@ -78,7 +85,9 @@ class TileLayer(Layer):
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
                  max_native_zoom=None, attr=None, API_key=None,
                  detect_retina=False, name=None, overlay=False,
-                 control=True, show=True, no_wrap=False, subdomains='abc'):
+                 control=True, show=True, no_wrap=False, subdomains='abc',
+                 tms=False, opacity=1, **kwargs):
+
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
         super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
@@ -92,7 +101,10 @@ class TileLayer(Layer):
                    'noWrap': no_wrap,
                    'attribution': attr,
                    'subdomains': subdomains,
-                   'detectRetina': detect_retina}
+                   'detectRetina': detect_retina,
+                   'tms': tms,
+                   'opacity': opacity}
+        options.update(kwargs)
         self.options = json.dumps(options, sort_keys=True, indent=8)
 
         tiles_flat = ''.join(tiles.lower().strip().split())
@@ -164,7 +176,7 @@ class WmsTileLayer(Layer):
         """)  # noqa
 
     def __init__(self, url, name=None, layers='', styles='',
-                 fmt='image/jpg', transparent=False, version='1.1.1',
+                 fmt='image/jpeg', transparent=False, version='1.1.1',
                  attr='', overlay=True, control=True, show=True, **kwargs):
         super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
                                            name=name, show=show)

@@ -11,6 +11,7 @@ from folium._version import get_versions
 from folium.features import (
     ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
+    GeoJsonTooltip,
 )
 
 from folium.raster_layers import TileLayer, WmsTileLayer
@@ -18,7 +19,7 @@ from folium.raster_layers import TileLayer, WmsTileLayer
 from folium.folium import Map
 
 from folium.map import (
-    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup
+    FeatureGroup, FitBounds, Icon, LayerControl, Marker, Popup, Tooltip
 )
 
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle  # noqa
@@ -52,6 +53,7 @@ __all__ = [
     'LayerControl',
     'Marker',
     'Popup',
+    'Tooltip',
     'TileLayer',
     'ClickForMarker',
     'CustomIcon',
