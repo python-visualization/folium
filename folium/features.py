@@ -232,7 +232,7 @@ class VegaLite(Element):
 
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
-        super(VegaLite, self).__init__()
+        super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
@@ -256,13 +256,10 @@ class VegaLite(Element):
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
 
         self._parent.script.add_child(Element(Template("""
-            var embedSpec = {
-                mode: "vega-lite",
-                spec: {{this.json}}
-            };
-            vg.embed(
-                {{this.get_name()}}, embedSpec, function(error, result) {}
-            );
+            const spec = {{this.json}};
+            vegaEmbed({{this.get_name()}}, spec)
+                .then(function(result) {})
+                .catch(console.error);
         """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
@@ -280,19 +277,19 @@ class VegaLite(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         figure.header.add_child(
-            JavascriptLink('https://d3js.org/d3.v3.min.js'),
+            JavascriptLink('https://d3js.org/d3.v5.min.js'),
             name='d3')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'),
             name='vega')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'),
             name='vega-lite')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
             name='vega-embed')
 
 
