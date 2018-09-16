@@ -361,8 +361,8 @@ class Tooltip(MacroElement):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
         {{ this._parent.get_name() }}.bindTooltip(
-            '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
-            + '{{ this.text }}' + '</div>',
+            `<div{% if this.style %} style="{{ this.style }}"{% endif %}>`
+            + `{{ this.text }}` + `</div>`,
             {{ this.options }}
         );
         {% endmacro %}
