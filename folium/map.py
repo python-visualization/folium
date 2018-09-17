@@ -290,7 +290,7 @@ class Popup(Element):
             {% if this.sticky %}, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
-                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
+                var {{ name }} = `{{ element.render(**kwargs).replace('\\n', ' ') }}`;
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
