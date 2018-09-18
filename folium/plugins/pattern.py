@@ -2,7 +2,7 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
@@ -40,7 +40,6 @@ class StripePattern(MacroElement):
     See https://github.com/teastman/Leaflet.pattern for more information.
 
     """
-
 
     _template = Template(u"""
             {% macro script(this, kwargs) %}
@@ -122,7 +121,6 @@ class CirclePattern(MacroElement):
     See https://github.com/teastman/Leaflet.pattern for more information.
     """
 
-
     _template = Template(u"""
             {% macro script(this, kwargs) %}
             var shape = new L.PatternCircle({
@@ -136,11 +134,11 @@ class CirclePattern(MacroElement):
                 fillOpacity: {{this.fill_opacity}},
                 fill: true
             });
-            
+
             var {{this.get_name()}} = new L.Pattern({width:{{this.width}}, height:{{this.height}}});
             {{this.get_name()}}.addShape(shape);
-            {{this.get_name()}}.addTo({{this._parent.get_name()}}); 
-        
+            {{this.get_name()}}.addTo({{this._parent.get_name()}});
+
             {% endmacro %}
             """)
 

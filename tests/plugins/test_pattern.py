@@ -25,7 +25,7 @@ def test_pattern():
 
     def style_function(feature):
         default_style = {
-            'opacity':1.0,
+            'opacity': 1.0,
             'fillColor': '#ffff00',
             'color': 'black',
             'weight': 2

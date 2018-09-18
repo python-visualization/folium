@@ -446,7 +446,7 @@ class GeoJson(Layer):
             feature.setdefault('properties', {}).setdefault('style', {}).update(new_style)  # noqa
             feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
 
-        #TODO Avoid having to manually remove the quotes from from around the placeholders
+        # TODO Avoid having to manually remove the quotes from from around the placeholders
         return json.dumps(self.data, sort_keys=True).replace('"{{', "{{").replace('}}"', "}}")
 
     def _get_self_bounds(self):
