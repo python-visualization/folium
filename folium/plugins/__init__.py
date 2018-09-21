@@ -29,6 +29,7 @@ from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 from folium.plugins.search import Search
+from folium.plugins.minimap import MiniMap
 
 __all__ = [
     'BeautifyIcon',
@@ -50,4 +51,5 @@ __all__ = [
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
     'Search',
+    'MiniMap'
     ]
