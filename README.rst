@@ -50,14 +50,13 @@ https://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/exam
 
 https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
 
-
-.. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
-
 Contributing
 ------------
 
 We love contributions!  folium is open source, built on open source,
 and we'd love to have you hang out in our community.
 
-See [our complete contributor's guide](https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md) for more info.
+See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md>`_ for more info.
 
+
+.. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
