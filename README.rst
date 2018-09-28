@@ -40,14 +40,13 @@ http://python-visualization.github.io/folium/docs-v0.6.0/
 The documentation for the development version can be found here:
 http://python-visualization.github.io/folium/docs-master/
 
-
 Gallery
 -------
 
 There are two galleries of Jupyter notebooks with examples, which you can see
 using Jupyter's nbviewer:
 
-http://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/examples/
+https://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/examples/
 
 https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
 

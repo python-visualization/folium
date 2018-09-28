@@ -105,7 +105,7 @@ def test_timestamped_geo_json():
     assert '<script src="https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js"></script>' in out
     assert '<script src="https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"></script>' in out  # noqa
     assert '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"/>' in out  # noqa
-    assert '<link rel="stylesheet" href="http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"/>' in out  # noqa
+    assert '<link rel="stylesheet" href="https://cdn.rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"/>' in out  # noqa
     assert '<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>' in out
 
     # Verify that the script is okay.
