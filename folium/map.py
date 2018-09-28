@@ -319,11 +319,34 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, text_type) or isinstance(html, binary_type):
+            if script:
+                self.validate_html(html)
             self.html.add_child(Html(text_type(html), script=script))
 
         self.max_width = max_width
         self.show = show
         self.sticky = sticky
+
+    def validate_html(self, html):
+        """Raise an error when the html seems invalid based on heuristics."""
+        counts = {'"': 0, "'": 0, '<': 0, '>': 0}
+        for char in counts:
+            ind = 0
+            while True:
+                res = html.find(char, ind)
+                if res == -1:
+                    break
+                counts[char] += 1
+                ind = res + 1
+        tmpl = ('Your popup string has {}. This indicates invalid html. '
+                'Consider using Popup with parse_html=True.')
+        if counts["'"] % 2 != 0:
+            raise ValueError(tmpl.format('uneven number of apostrophes'))
+        if counts['"'] % 2 != 0:
+            raise ValueError(tmpl.format('uneven number of double quotes'))
+        if counts['<'] != counts['>']:
+            raise ValueError(
+                tmpl.format('an unequal number of < and > characters'))
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
