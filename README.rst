@@ -35,10 +35,10 @@ or
 Documentation
 -------------
 
-http://python-visualization.github.io/folium/docs-v0.6.0/
+https://python-visualization.github.io/folium/docs-v0.6.0/
 
 The documentation for the development version can be found here:
-http://python-visualization.github.io/folium/docs-master/
+https://python-visualization.github.io/folium/docs-master/
 
 Gallery
 -------
