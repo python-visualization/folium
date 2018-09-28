@@ -35,13 +35,11 @@ or
 Documentation
 -------------
 
-http://python-visualization.github.io/folium/docs-v0.5.0/
+http://python-visualization.github.io/folium/docs-v0.6.0/
 
 The documentation for the development version can be found here:
 http://python-visualization.github.io/folium/docs-master/
 
-Note that the documentation on Read the Docs is for the deprecated version
-0.2.0.
 
 Gallery
 -------
@@ -62,5 +60,5 @@ Contributing
 We love contributions!  folium is open source, built on open source,
 and we'd love to have you hang out in our community.
 
-For a complete contributor's guide see `.github/CONTRIBUTING.md`
+See [our complete contributor's guide](https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md) for more info.
 
