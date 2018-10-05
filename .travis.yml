@@ -9,21 +9,19 @@ env:
 matrix:
   fast_finish: true
   include:
-  - python: 2.7
-    env: TEST_TARGET=default
-  - python: 3.7
-    env: TEST_TARGET=default
-  - python: 3.7
-    env: TEST_TARGET=notebooks
-  - python: 3.7
-    env: TEST_TARGET=latest_branca
-  - python: 3.7
-    env: TEST_TARGET=docs
+  - name: default-python2
+    env: TEST_TARGET=default PY=2.7
+  - name: default
+    env: TEST_TARGET=default PY=3.7
+  - name: notebooks
+    env: TEST_TARGET=notebooks PY=3.7
+  - name: latest_branca
+    env: TEST_TARGET=latest_branca PY=3.7
+  - name: docs
+    env: TEST_TARGET=docs PY=3.7
   allow_failures:
-  - python: 2.7
-    env: TEST_TARGET=latest_branca
-  - python: 3.7
-    env: TEST_TARGET=latest_branca
+  - name: latest_branca
+    env: TEST_TARGET=latest_branca PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
@@ -33,10 +31,10 @@ before_install:
   - conda update conda
   - conda config --remove channels defaults --force
   - conda config --add channels conda-forge --force
-  - conda create --name TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
+  - conda create --name TEST python=$PY phantomjs --file requirements.txt --file requirements-dev.txt
   - source activate TEST
 
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+  - if [[ "$PY" == "2.7" ]]; then
       conda install mock ;
     fi
 
@@ -90,6 +88,5 @@ deploy:
   on:
     repo: python-visualization/folium
     tags: true
-    python: 3.7
     all_branches: master
     condition: '$TEST_TARGET == "default"'
