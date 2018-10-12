@@ -51,5 +51,5 @@ __all__ = [
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
     'Search',
-    'MiniMap'
+    'MiniMap',
     ]
