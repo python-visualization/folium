@@ -7,7 +7,7 @@ Leaflet GeoJson and miscellaneous features.
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
+import json, warnings
 
 from branca.colormap import LinearColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -708,6 +708,13 @@ class GeoJsonTooltip(Tooltip):
         """Renders the HTML representation of the element."""
         if isinstance(self._parent, GeoJson):
             keys = tuple(self._parent.data['features'][0]['properties'].keys())
+            geom_collections = [feature['id'] for feature in self._parent.data['features'] if feature['geometry'][
+                'type'] == 'GeometryCollection']
+            if any(geom_collections):
+                warnings.warn(" ".join("""GeoJsonTooltip is not configured to render tooltips for GeoJson 
+                GeometryCollection geometries. Please consider reworking feature IDs {} to MultiPolygon for full 
+                functionality. \
+                https://tools.ietf.org/html/rfc7946#page-9""".format(geom_collections).split()),UserWarning)
         elif isinstance(self._parent, TopoJson):
             obj_name = self._parent.object_path.split('.')[-1]
             keys = tuple(self._parent.data['objects'][obj_name][
