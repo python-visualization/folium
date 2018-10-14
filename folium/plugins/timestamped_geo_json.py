@@ -192,7 +192,7 @@ class TimestampedGeoJson(MacroElement):
             name='highlight.js_css')
 
         figure.header.add_child(
-            CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
+            CssLink("https://cdn.rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
 
         figure.header.add_child(
