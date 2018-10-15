@@ -18,51 +18,44 @@ class MiniMap(MacroElement):
 
     Parameters
     ----------
-    tile_layer: folium TileLayer object or str, default =
+    tile_layer : folium TileLayer object or str, default None
         Provide a folium TileLayer object or the wanted tiles as string.
-        If not provided it will use the default of 'TileLayer', currently OpenStreetMap.
-
+        If not provided it will use the default of 'TileLayer', currently
+        OpenStreetMap.
     position : str, default 'bottomright'
         The standard Control position parameter for the widget.
-
-    width: int, default 150
+    width : int, default 150
         The width of the minimap in pixels.
-
-    height: int, default 150
+    height : int, default 150
         The height of the minimap in pixels.
-
-    collapsed_width: int, default 25
-        The width of the toggle marker and the minimap when collapsed, in pixels.
-
-    collapsed_height: int, default 25
+    collapsed_width : int, default 25
+        The width of the toggle marker and the minimap when collapsed in pixels.
+    collapsed_height : int, default 25
         The height of the toggle marker and the minimap when collapsed
-
-    zoom_level_offset: int, defalaut -5
-        The offset applied to the zoom in the minimap compared to the zoom of the main map. Can be positive or negative.
-
-    zoom_level_fixed: int, default None
-        Overrides the offset to apply a fixed zoom level to the minimap regardless of the main map zoom.
-        Set it to any valid zoom level, if unset zoomLevelOffset is used instead.
-
-    center_fixed: bool, default False
-        Applies a fixed position to the minimap regardless of the main map's view / position.
-        Prevents panning the minimap, but does allow zooming (both in the minimap and the main map).
-        If the minimap is zoomed, it will always zoom around the centerFixed point.
-        You can pass in a LatLng-equivalent object.
-
-    zoom_animation: bool, default False
+    zoom_level_offset : int, default -5
+        The offset applied to the zoom in the minimap compared to the zoom of
+        the main map. Can be positive or negative.
+    zoom_level_fixed : int, default None
+        Overrides the offset to apply a fixed zoom level to the minimap
+        regardless of the main map zoom.
+        Set it to any valid zoom level, if unset zoom_level_offset is used
+        instead.
+    center_fixed : bool, default False
+        Applies a fixed position to the minimap regardless of the main map's
+        view / position. Prevents panning the minimap, but does allow zooming
+        (both in the minimap and the main map).
+        If the minimap is zoomed, it will always zoom around the centerFixed
+        point. You can pass in a LatLng-equivalent object.
+    zoom_animation : bool, default False
         Sets whether the minimap should have an animated zoom.
         (Will cause it to lag a bit after the movement of the main map.)
-
-    toggle_display: bool, default False
+    toggle_display : bool, default False
         Sets whether the minimap should have a button to minimise it.
-
-    auto_toggle_display: bool, default False
+    auto_toggle_display : bool, default False
         Sets whether the minimap should hide automatically
         if the parent map bounds does not fit within the minimap bounds.
         Especially useful when 'zoomLevelFixed' is set.
-
-    minimized: bool, default False
+    minimized : bool, default False
         Sets whether the minimap should start in a minimized position.
 
     Examples
