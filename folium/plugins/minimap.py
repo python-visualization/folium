@@ -18,9 +18,9 @@ class MiniMap(MacroElement):
 
     Parameters
     ----------
-    tile_layer: folium TileLayer object or str, optional
+    tile_layer: folium TileLayer object or str, default =
         Provide a folium TileLayer object or the wanted tiles as string.
-        If not provided it will use the default of `TileLayer`.
+        If not provided it will use the default of 'TileLayer', currently OpenStreetMap.
 
     position : str, default 'bottomright'
         The standard Control position parameter for the widget.
@@ -86,7 +86,6 @@ class MiniMap(MacroElement):
 
     def __init__(self, tile_layer=None, position='bottomright', width=150,
                  height=150, collapsed_width=25, collapsed_height=25,
-
                  zoom_level_offset=-5, zoom_level_fixed=None,
                  center_fixed=False, zoom_animation=False,
                  toggle_display=False, auto_toggle_display=False,
@@ -127,4 +126,3 @@ class MiniMap(MacroElement):
         figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js'))  # noqa
 
         figure.header.add_child(CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'))  # noqa
-        figure.add_child(self.tile_layer)
