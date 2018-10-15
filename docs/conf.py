@@ -11,7 +11,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys, os, os.path
+import sys
+import os
+import os.path
 
 # Use the currently checked out folium of this folder
 sys.path.insert(0, os.path.join(os.pardir))
