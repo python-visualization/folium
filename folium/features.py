@@ -709,13 +709,15 @@ class GeoJsonTooltip(Tooltip):
         """Renders the HTML representation of the element."""
         if isinstance(self._parent, GeoJson):
             keys = tuple(self._parent.data['features'][0]['properties'].keys())
-            geom_collections = [feature['id'] for feature in self._parent.data['features'] if feature['geometry'][
-                'type'] == 'GeometryCollection']
+            geom_collections = [
+                feature['id'] for feature in self._parent.data['features']
+                if feature['geometry']['type'] == 'GeometryCollection'
+            ]
             if any(geom_collections):
-                warnings.warn(" ".join("""GeoJsonTooltip is not configured to render tooltips for GeoJson
-                GeometryCollection geometries. Please consider reworking feature IDs {} to MultiPolygon for full
-                functionality. \
-                https://tools.ietf.org/html/rfc7946#page-9""".format(geom_collections).split()), UserWarning)
+                warnings.warn(
+                    "GeoJsonTooltip is not configured to render tooltips for GeoJson GeometryCollection geometries. "
+                    "Please consider reworking feature IDs {} to MultiPolygon for full functionality.\n"
+                    "https://tools.ietf.org/html/rfc7946#page-9""".format(geom_collections), UserWarning)
         elif isinstance(self._parent, TopoJson):
             obj_name = self._parent.object_path.split('.')[-1]
             keys = tuple(self._parent.data['objects'][obj_name][
