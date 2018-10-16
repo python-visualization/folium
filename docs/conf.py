@@ -13,10 +13,9 @@
 
 import sys
 import os
-import os.path
 
 # Use the currently checked out folium of this folder
-sys.path.insert(0, os.path.join(os.pardir))
+sys.path.insert(0, os.pardir)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
