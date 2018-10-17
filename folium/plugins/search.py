@@ -80,11 +80,14 @@ class Search(MacroElement):
 
     def __init__(self, search_label='name', search_zoom=None, geom_type='Point', position='topleft', **kwargs):
         super(Search, self).__init__()
-        self.position = position
-        self.data = data
         self.search_label = search_label
-        self.search_zoom = search_zoom
+        self.search_zoom = json.dumps(search_zoom)
         self.geom_type = geom_type
+        self.position = position
+        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()})
+
+    def test_keys(self, keys):
+        assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
 
     def render(self, **kwargs):
         super(Search, self).render()
