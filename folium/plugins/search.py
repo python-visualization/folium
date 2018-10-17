@@ -97,6 +97,8 @@ class Search(MacroElement):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
+        parent = self._parent
+        assert isinstance(parent, GeoJson), ("Search can only be added to GeoJson objects.")
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'),  # noqa
