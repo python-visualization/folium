@@ -13,18 +13,21 @@ class Search(MacroElement):
 
     Parameters
     ----------
-    data: str/JSON
-        GeoJSON strings
-    search_zoom: int
-        zoom level when searching features, default 12
     search_label: str
         label to index the search, default 'name'
+    search_zoom: int
+        optional zoom level to set the map to on match, default None.
+        if None, will zoom to Polygon bounds and points on their
+        natural extent.
     geom_type: str
         geometry type, default 'Point'
     position: str
         Change the position of the search bar, can be:
         'topleft', 'topright', 'bottomright' or 'bottomleft',
         default 'topleft'
+    **kwargs.
+        Assorted style options to change feature styling on match.
+        Use the same way as vector layer arguments.
 
     See https://github.com/stefanocudini/leaflet-search for more information.
 
@@ -32,12 +35,12 @@ class Search(MacroElement):
     _template = Template("""
         {% macro script(this, kwargs) %}
 
-            var {{this.get_name()}} = new L.GeoJSON({{this.data}});
+            //var {{this.get_name()}} = new L.GeoJSON({{this.data}});
 
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
+            //{{this._parent.get_name()}}.addLayer({{this.get_name()}});
 
             var searchControl = new L.Control.Search({
-                layer: {{this.get_name()}},
+                layer: {{this._parent.get_name()}},
                 propertyName: '{{this.search_label}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
