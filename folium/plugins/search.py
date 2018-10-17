@@ -59,15 +59,18 @@ class Search(MacroElement):
             {% endif %}
                 });
                 searchControl.on('search:locationfound', function(e) {
-
-                    e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+                    {{this._parent.get_name()}}.setStyle(function(feature){
+                        return feature.properties.style
+                    })
+                    {% if this.options %}
+                    e.layer.setStyle({{ this.options }});
+                    {% endif %}
                     if(e.layer._popup)
                         e.layer.openPopup();
-
-                }).on('search:collapsed', function(e) {
-
-                    {{this.get_name()}}.eachLayer(function(layer) {   //restore feature color
-                        {{this.get_name()}}.resetStyle(layer);
+                })
+                .on('search:collapsed', function(e) {
+                        {{this._parent.get_name()}}.setStyle(function(feature){
+                            return feature.properties.style
                     });
                 });
             {{this._parent.get_name()}}.addControl( searchControl );
