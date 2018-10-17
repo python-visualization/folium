@@ -73,7 +73,7 @@ class Search(MacroElement):
                             return feature.properties.style
                     });
                 });
-            {{this._parent.get_name()}}.addControl( searchControl );
+            {{this._parent._parent.get_name()}}.addControl( searchControl );
 
         {% endmacro %}
         """)  # noqa
