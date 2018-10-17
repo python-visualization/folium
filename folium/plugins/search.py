@@ -90,6 +90,8 @@ class Search(MacroElement):
         assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
 
     def render(self, **kwargs):
+        keys = list(self._parent.data['features'][0]['properties'].keys())
+        self.test_keys(keys=keys)
         super(Search, self).render()
 
         figure = self.get_root()
