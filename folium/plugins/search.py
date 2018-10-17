@@ -2,10 +2,15 @@
 
 from __future__ import (absolute_import, division, print_function)
 
+import json
+
+from ..utilities import camelize
+
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
+from folium.features import GeoJson
 
 class Search(MacroElement):
     """
