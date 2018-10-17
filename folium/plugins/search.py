@@ -39,25 +39,22 @@ class Search(MacroElement):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-
-            //var {{this.get_name()}} = new L.GeoJSON({{this.data}});
-
-            //{{this._parent.get_name()}}.addLayer({{this.get_name()}});
-
+            let searchZoom = {{this.search_zoom}};
+            
             var searchControl = new L.Control.Search({
                 layer: {{this._parent.get_name()}},
                 propertyName: '{{this.search_label}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
-                zoom: {{this.search_zoom}},
+                zoom: searchZoom?searchZoom:{{this._parent._parent.get_name()}}.getZoom(),
                 position:'{{this.position}}',
                 hideMarkerOnCollapse: true
             {% endif %}
             {% if this.geom_type == 'Polygon' %}
                 marker: false,
                 moveToLocation: function(latlng, title, map) {
-                var zoom = {{this._parent.get_name()}}.getBoundsZoom(latlng.layer.getBounds());
-                    {{this._parent.get_name()}}.setView(latlng, zoom); // access the zoom
+                var zoom = searchZoom?searchZoom:map.getBoundsZoom(latlng.layer.getBounds())
+                    map.setView(latlng, zoom); // access the zoom
                 }
             {% endif %}
                 });
@@ -78,7 +75,7 @@ class Search(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, search_zoom=12, search_label='name', geom_type='Point', position='topleft'):
+    def __init__(self, search_label='name', search_zoom=None, geom_type='Point', position='topleft', **kwargs):
         super(Search, self).__init__()
         self.position = position
         self.data = data
