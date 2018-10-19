@@ -11,7 +11,6 @@ from folium.utilities import _validate_location
 
 from jinja2 import Template
 
-
 class SemiCircle(Marker):
     """
     Creates a Semicircle plugin to append into a map with
