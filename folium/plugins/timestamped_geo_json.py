@@ -180,7 +180,7 @@ class TimestampedGeoJson(MacroElement):
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
