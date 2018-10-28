@@ -47,7 +47,7 @@ _default_css = [
     ('awesome_markers_css',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
-     'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
 

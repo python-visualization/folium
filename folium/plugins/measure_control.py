@@ -60,7 +60,7 @@ class MeasureControl(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdn.rawgit.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js'))  # noqa
+            JavascriptLink('https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js'))  # noqa
 
         figure.header.add_child(
-            CssLink('https://cdn.rawgit.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css'))  # noqa
+            CssLink('https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css'))  # noqa

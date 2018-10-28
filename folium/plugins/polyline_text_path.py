@@ -79,5 +79,5 @@ class PolyLineTextPath(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://rawgit.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"),  # noqa
+            JavascriptLink("https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"),  # noqa
             name='polylinetextpath')
