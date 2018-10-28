@@ -10,6 +10,8 @@ from __future__ import (absolute_import, division, print_function)
 import os
 import time
 
+import numpy as np
+
 from branca.colormap import StepColormap
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from branca.utilities import _parse_size, color_brewer
@@ -421,10 +423,11 @@ $(document).ready(objects_in_front);
                        )
 
     def choropleth(self, geo_data, data=None, columns=None, key_on=None,
-                   threshold_scale=None, fill_color='blue', fill_opacity=0.6,
-                   line_color='black', line_weight=1, line_opacity=1, name=None,
-                   legend_name='', topojson=None, reset=False, smooth_factor=None,
-                   highlight=None):
+                   threshold_scale=None, fill_color='blue',
+                   nan_fill_color='black', fill_opacity=0.6,
+                   line_color='black', line_weight=1, line_opacity=1,
+                   name=None, legend_name='', topojson=None,
+                   reset=False, smooth_factor=None, highlight=None):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -466,14 +469,17 @@ $(document).ready(objects_in_front);
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
         threshold_scale: list, default None
-            Data range for D3 threshold scale. Defaults to the following range
-            of quantiles: [0, 0.5, 0.75, 0.85, 0.9], rounded to the nearest
-            order-of-magnitude integer. Ex: 270 rounds to 200, 5600 to 6000.
+            Data range for D3 threshold scale. Defaults to a linear scale of
+            6 bins going from min(values) to max(values).
+            Values are expected to be sorted.
         fill_color: string, default 'blue'
             Area fill color. Can pass a hex code, color name, or if you are
             binding data, one of the following color brewer palettes:
             'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
             'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
+        nan_fill_color: string, default 'black'
+            Area fill color for nan or missing values.
+            Can pass a hex code, color name.
         fill_opacity: float, default 0.6
             Area fill opacity, range 0-1.
         line_color: string, default 'black'
@@ -519,9 +525,6 @@ $(document).ready(objects_in_front);
         ...              highlight=True)
 
         """
-        if threshold_scale is not None and len(threshold_scale) > 6:
-            raise ValueError('The length of threshold_scale is {}, but it may '
-                             'not be longer than 6.'.format(len(threshold_scale)))  # noqa
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
@@ -550,17 +553,15 @@ $(document).ready(objects_in_front);
                             if data_min > 0 else -1)
                 data_max = (data_max if data_max > 0 else 0
                             if data_max < 0 else 1)
-            data_min, data_max = (1.01*data_min-0.01*data_max,
-                                  1.01*data_max-0.01*data_min)
-            nb_class = 6
-            color_domain = [data_min+i*(data_max-data_min)*1./nb_class
-                            for i in range(1+nb_class)]
+            nb_bins = 6
+            color_domain = list(np.linspace(data_min, data_max, nb_bins + 1))
         else:
             color_domain = None
 
         if color_domain and key_on is not None:
+            nb_bins = len(color_domain) - 1
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
-            color_range = color_brewer(fill_color, n=len(color_domain))
+            color_range = color_brewer(fill_color, n=nb_bins)
 
             def get_by_key(obj, key):
                 return (obj.get(key, None) if len(key.split('.')) <= 1 else
@@ -568,14 +569,23 @@ $(document).ready(objects_in_front);
                                    '.'.join(key.split('.')[1:])))
 
             def color_scale_fun(x):
-                idx = len(
-                    [
-                        u for u in color_domain if
-                        get_by_key(x, key_on) in color_data and
-                        u <= color_data[get_by_key(x, key_on)]
-                    ]
-                )
-                return color_range[idx-1]
+                key_of_x = get_by_key(x, key_on)
+                if key_of_x in color_data.keys():
+                    value_of_x = color_data[key_of_x]
+                else:
+                    # The value is missing
+                    value_of_x = None
+
+                if value_of_x is None or np.isnan(value_of_x):
+                    # The value is missing or is deliberately nan
+                    return nan_fill_color
+                else:
+                    color_idx = int(np.digitize(value_of_x, color_domain)) - 1
+                    # we consider that values outside the color domain
+                    # should be affected to the first (or last) color bin.
+                    color_idx = max(0, color_idx)
+                    color_idx = min(nb_bins-1, color_idx)
+                    return color_range[color_idx]
         else:
             def color_scale_fun(x):
                 return fill_color
@@ -614,9 +624,10 @@ $(document).ready(objects_in_front);
 
         # Create ColorMap.
         if color_domain:
-            brewed = color_brewer(fill_color, n=len(color_domain))
+            nb_bins = len(color_domain) - 1
+            brewed = color_brewer(fill_color, n=nb_bins)
             color_scale = StepColormap(
-                brewed[1:len(color_domain)],
+                brewed,
                 index=color_domain,
                 vmin=color_domain[0],
                 vmax=color_domain[-1],
