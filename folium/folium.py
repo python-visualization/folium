@@ -169,6 +169,8 @@ class Map(MacroElement):
     """
     _template = Template(u"""
 {% macro header(this, kwargs) %}
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>#{{this.get_name()}} {
         position: {{this.position}};
         width: {{this.width[0]}}{{this.width[1]}};
