@@ -708,13 +708,14 @@ class GeoJsonTooltip(Tooltip):
     def warn_for_geometry_collections(self):
         """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
         geom_collections = [
-            feature['id'] for feature in self._parent.data['features']
+            feature.get('properties') if feature.get('properties') is not None else key
+            for key, feature in enumerate(self._parent.data['features'])
             if feature['geometry']['type'] == 'GeometryCollection'
         ]
         if any(geom_collections):
             warnings.warn(
                 "GeoJsonTooltip is not configured to render tooltips for GeoJson GeometryCollection geometries. "
-                "Please consider reworking feature IDs {} to MultiPolygon for full functionality.\n"
+                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
                 "https://tools.ietf.org/html/rfc7946#page-9".format(geom_collections), UserWarning)
 
     def render(self, **kwargs):
