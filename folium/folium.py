@@ -423,11 +423,11 @@ $(document).ready(objects_in_front);
                        )
 
     def choropleth(self, geo_data, data=None, columns=None, key_on=None,
-                   threshold_scale=None, fill_color='blue',
-                   nan_fill_color='black', fill_opacity=0.6,
-                   line_color='black', line_weight=1, line_opacity=1,
-                   name=None, legend_name='', topojson=None,
-                   reset=False, smooth_factor=None, highlight=None):
+                   bins=6, fill_color='blue', nan_fill_color='#000000b4',
+                   fill_opacity=0.6, line_color='black', line_weight=1,
+                   line_opacity=1, name=None, legend_name='', topojson=None,
+                   reset=False, smooth_factor=None, highlight=None,
+                   **kwargs):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -443,10 +443,9 @@ $(document).ready(objects_in_front);
         passed for a Pandas series.
 
         Colors are generated from color brewer (http://colorbrewer2.org/)
-        sequential palettes on a D3 threshold scale. The scale defaults to the
-        following quantiles: [0, 0.5, 0.75, 0.85, 0.9]. A custom scale can be
-        passed to `threshold_scale` of length <=6, in order to match the
-        color brewer range.
+        sequential palettes. By default, linear binning is used between
+        the min and the max of the values. Custom binning can be achieved
+        with the `bins` parameter.
 
         TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
         also be passed with the reference to the topojson objects to convert.
@@ -468,12 +467,16 @@ $(document).ready(objects_in_front);
             Variable in the `geo_data` GeoJSON file to bind the data to. Must
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
-        threshold_scale: list, default None
-            Defaults to a linear scale of 6 bins going from min(values)
-            to max(values). Values that are outside of the threshold_scale
-            domain will be mapped to the closest color bin
-            (i.e. the first or last bin of the scale)
-            The list is expected to be sorted.
+        bins: int or sequence of scalars or str, optional
+            If `bins` is an int, it defines the number of equal-width
+            bins between the min and the max of the values (6, by default).
+            If `bins` is a sequence, it defines the bin edges,
+            including the rightmost edge, allowing for non-uniform bin widths.
+            For more information on this parameter, please have a look at
+            numpy.histogram function.
+            Warning: if any (non-nan) values is outside of the inclusive
+            domain defined by `bins`, a ValueError is raised as such value
+            cannot be mapped to a bin/color.
         fill_color: string, default 'blue'
             Area fill color. Can pass a hex code, color name, or if you are
             binding data, one of the following color brewer palettes:
@@ -482,6 +485,9 @@ $(document).ready(objects_in_front);
         nan_fill_color: string, default 'black'
             Area fill color for nan or missing values.
             Can pass a hex code, color name.
+            Ex: if you want a different color opacity than 1, you can use
+            an 8 value HEX code, for example `nan_fill_color='#000000b4'`
+            (which is black '#000000' at ~0.71 opacity 'b4').
         fill_opacity: float, default 0.6
             Area fill opacity, range 0-1.
         line_color: string, default 'black'
@@ -516,20 +522,27 @@ $(document).ready(objects_in_front);
         ...              columns=['Data 1', 'Data 2'],
         ...              key_on='feature.properties.myvalue',
         ...              fill_color='PuBu',
-        ...              threshold_scale=[0, 20, 30, 40, 50, 60])
+        ...              bins=[0, 20, 30, 40, 50, 60])
         >>> m.choropleth(geo_data='countries.json',
         ...              topojson='objects.countries')
         >>> m.choropleth(geo_data='geo.json', data=df,
         ...              columns=['Data 1', 'Data 2'],
         ...              key_on='feature.properties.myvalue',
         ...              fill_color='PuBu',
-        ...              threshold_scale=[0, 20, 30, 40, 50, 60],
+        ...              bins=[0, 20, 30, 40, 50, 60],
         ...              highlight=True)
 
         """
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
+
+        if 'threshold_scale' in kwargs:
+            if kwargs['threshold_scale'] is not None:
+                bins = kwargs['threshold_scale']
+            raise DeprecationWarning('''
+                choropleth `threshold_scale` parameter is now depreciated
+                in favor of the `bins` parameter.''')
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
@@ -543,26 +556,30 @@ $(document).ready(objects_in_front);
         else:
             color_data = None
 
-        # Compute color_domain
-        if threshold_scale is not None:
-            color_domain = list(threshold_scale)
-        elif color_data:
-            # To avoid explicit pandas dependency ; changed default behavior.
-            data_min = min(color_data.values())
-            data_max = max(color_data.values())
-            if data_min == data_max:
-                data_min = (data_min if data_min < 0 else 0
-                            if data_min > 0 else -1)
-                data_max = (data_max if data_max > 0 else 0
-                            if data_max < 0 else 1)
-            nb_bins = 6
-            color_domain = list(np.linspace(data_min, data_max, nb_bins + 1))
-        else:
-            color_domain = None
+        if color_data is not None and key_on is not None:
+            # numpy histogram_bin_edges is only available in the most
+            # recent numpy version, so we will use numpy histogram
+            real_values = np.array(list(color_data.values()))
+            real_values = real_values[~np.isnan(real_values)]
+            _, bins = np.histogram(real_values, bins=bins)
 
-        if color_domain and key_on is not None:
-            nb_bins = len(color_domain) - 1
+            bins_min, bins_max = min(bins), max(bins)
+            if np.any((real_values < bins_min) | (real_values > bins_max)):
+                raise ValueError('''
+                All values are expected to fall into one of the provided bins
+                (or to be Nan). Please check the `bins` parameter
+                and/or your data.''')
+
+            # then we 'correct' the last edge for numpy digitize
+            # (we add a very small amount to fake an inclusive right interval)
+            increasing = bins[0] <= bins[-1]
+            bins[-1] = np.nextafter(
+                bins[-1],
+                (1 if increasing else -1) * np.inf)
+
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
+
+            nb_bins = len(bins) - 1
             color_range = color_brewer(fill_color, n=nb_bins)
 
             def get_by_key(obj, key):
@@ -574,30 +591,38 @@ $(document).ready(objects_in_front);
                 key_of_x = get_by_key(x, key_on)
 
                 if key_of_x not in color_data.keys():
-                    return nan_fill_color
+                    # 1: opacity is handled within nan_fill_color
+                    return nan_fill_color, 1
 
                 value_of_x = color_data[key_of_x]
                 if np.isnan(value_of_x):
-                    return nan_fill_color
+                    # 1: opacity is handled within nan_fill_color
+                    return nan_fill_color, 1
 
-                color_idx = int(np.digitize(value_of_x, color_domain)) - 1
-                # we consider that values outside of the color domain
-                # should be mapped to the first (or last) color bin.
-                color_idx = max(0, color_idx)
-                color_idx = min(nb_bins-1, color_idx)
-                return color_range[color_idx]
+                color_idx = int(np.digitize(value_of_x, bins, right=False)) - 1
+                return color_range[color_idx], fill_opacity
+
+            # We add the colorscale
+            color_scale = StepColormap(
+                color_range,
+                index=bins,
+                vmin=bins[0],
+                vmax=bins[-1],
+                caption=legend_name)
+            self.add_child(color_scale)
 
         else:
             def color_scale_fun(x):
-                return fill_color
+                return fill_color, fill_opacity
 
         def style_function(x):
+            color, opacity = color_scale_fun(x)
             return {
                 'weight': line_weight,
                 'opacity': line_opacity,
                 'color': line_color,
-                'fillOpacity': fill_opacity,
-                'fillColor': color_scale_fun(x)
+                'fillOpacity': opacity,
+                'fillColor': color
             }
 
         def highlight_function(x):
@@ -622,19 +647,6 @@ $(document).ready(objects_in_front);
                 highlight_function=highlight_function if highlight else None)
 
         self.add_child(geo_json)
-
-        # Create ColorMap.
-        if color_domain:
-            nb_bins = len(color_domain) - 1
-            brewed = color_brewer(fill_color, n=nb_bins)
-            color_scale = StepColormap(
-                brewed,
-                index=color_domain,
-                vmin=color_domain[0],
-                vmax=color_domain[-1],
-                caption=legend_name,
-                )
-            self.add_child(color_scale)
 
     def keep_in_front(self, *args):
         """Pass one or multiples object that must stay in front.
