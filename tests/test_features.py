@@ -10,6 +10,8 @@ from __future__ import (absolute_import, division, print_function)
 
 import os
 
+import warnings
+
 from branca.element import Element
 from branca.six import text_type
 
@@ -104,3 +106,14 @@ def test_color_line():
         opacity=1)
     m.add_child(color_line)
     m._repr_html_()
+
+def test_geojson_tooltip():
+    m = folium.Map([30.5, -97.5], zoom_start=10)
+    geojson = folium.GeoJson("./kuntarajat.geojson",
+                             tooltip=folium.GeoJsonTooltip(
+                                 fields=['code','name']
+                             )).add_to(m)
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
+        m._repr_html_()
+        assert isinstance(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
