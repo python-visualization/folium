@@ -112,7 +112,7 @@ def test_color_line():
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
     folium.GeoJson("./kuntarajat.geojson",
-                    tooltip=folium.GeoJsonTooltip(fields=['code','name'])
+                   tooltip=folium.GeoJsonTooltip(fields=['code','name'])
                    ).add_to(m)
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter('always')
