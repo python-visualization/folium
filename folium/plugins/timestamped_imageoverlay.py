@@ -235,4 +235,3 @@ class TimestampedImageOverlay(MacroElement):
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
         """
         return self.bounds
-
