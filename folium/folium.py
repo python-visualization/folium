@@ -469,9 +469,11 @@ $(document).ready(objects_in_front);
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
         threshold_scale: list, default None
-            Data range for D3 threshold scale. Defaults to a linear scale of
-            6 bins going from min(values) to max(values).
-            Values are expected to be sorted.
+            Defaults to a linear scale of 6 bins going from min(values)
+            to max(values). Values that are outside of the threshold_scale
+            domain will be mapped to the closest color bin
+            (i.e. the first or last bin of the scale)
+            The list is expected to be sorted.
         fill_color: string, default 'blue'
             Area fill color. Can pass a hex code, color name, or if you are
             binding data, one of the following color brewer palettes:
@@ -570,22 +572,21 @@ $(document).ready(objects_in_front);
 
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
-                if key_of_x in color_data.keys():
-                    value_of_x = color_data[key_of_x]
-                else:
-                    # The value is missing
-                    value_of_x = None
 
-                if value_of_x is None or np.isnan(value_of_x):
-                    # The value is missing or is deliberately nan
+                if key_of_x not in color_data.keys():
                     return nan_fill_color
-                else:
-                    color_idx = int(np.digitize(value_of_x, color_domain)) - 1
-                    # we consider that values outside the color domain
-                    # should be affected to the first (or last) color bin.
-                    color_idx = max(0, color_idx)
-                    color_idx = min(nb_bins-1, color_idx)
-                    return color_range[color_idx]
+
+                value_of_x = color_data[key_of_x]
+                if np.isnan(value_of_x):
+                    return nan_fill_color
+
+                color_idx = int(np.digitize(value_of_x, color_domain)) - 1
+                # we consider that values outside of the color domain
+                # should be mapped to the first (or last) color bin.
+                color_idx = max(0, color_idx)
+                color_idx = min(nb_bins-1, color_idx)
+                return color_range[color_idx]
+
         else:
             def color_scale_fun(x):
                 return fill_color
