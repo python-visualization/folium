@@ -107,6 +107,8 @@ def test_color_line():
     m.add_child(color_line)
     m._repr_html_()
 
+
+# GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
     folium.GeoJson("./kuntarajat.geojson",
