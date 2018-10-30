@@ -12,6 +12,8 @@ import numpy as np
 
 from six import binary_type, text_type
 
+from folium import Map
+
 
 try:
     from urllib.parse import uses_relative, uses_netloc, uses_params, urlparse
@@ -206,7 +208,7 @@ def write_png(data, origin='upper', colormap=None):
 def get_parent_map(element):
     assert hasattr(element, '_parent'), ValueError("This is not a valid folium child object.")
     parent = element._parent
-    if 'map' in parent.get_name():
+    if type(parent) is Map:
         return parent.get_name()
     else:
         return get_parent_map(parent)
