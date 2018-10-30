@@ -9,6 +9,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import os
 import time
+import warnings
 
 import numpy as np
 
@@ -467,16 +468,12 @@ $(document).ready(objects_in_front);
             Variable in the `geo_data` GeoJSON file to bind the data to. Must
             start with 'feature' and be in JavaScript objection notation.
             Ex: 'feature.id' or 'feature.properties.statename'.
-        bins: int or sequence of scalars or str, optional
+        bins: int or sequence of scalars or str, default 6
             If `bins` is an int, it defines the number of equal-width
-            bins between the min and the max of the values (6, by default).
-            If `bins` is a sequence, it defines the bin edges,
-            including the rightmost edge, allowing for non-uniform bin widths.
-            For more information on this parameter, please have a look at
+            bins between the min and the max of the values.
+            If `bins` is a sequence, it directly defines the bin edges.
+            For more information on this parameter, have a look at
             numpy.histogram function.
-            Warning: if any (non-nan) values is outside of the inclusive
-            domain defined by `bins`, a ValueError is raised as such value
-            cannot be mapped to a bin/color.
         fill_color: string, default 'blue'
             Area fill color. Can pass a hex code, color name, or if you are
             binding data, one of the following color brewer palettes:
@@ -540,9 +537,9 @@ $(document).ready(objects_in_front);
         if 'threshold_scale' in kwargs:
             if kwargs['threshold_scale'] is not None:
                 bins = kwargs['threshold_scale']
-            raise DeprecationWarning('''
-                choropleth `threshold_scale` parameter is now depreciated
-                in favor of the `bins` parameter.''')
+            warnings.warn(
+                'choropleth `threshold_scale` parameter is now depreciated '
+                'in favor of the `bins` parameter.', DeprecationWarning)
 
         # Create color_data dict
         if hasattr(data, 'set_index'):
@@ -557,30 +554,36 @@ $(document).ready(objects_in_front);
             color_data = None
 
         if color_data is not None and key_on is not None:
-            # numpy histogram_bin_edges is only available in the most
-            # recent numpy version, so we will use numpy histogram
             real_values = np.array(list(color_data.values()))
             real_values = real_values[~np.isnan(real_values)]
-            _, bins = np.histogram(real_values, bins=bins)
+            _, bin_edges = np.histogram(real_values, bins=bins)
 
-            bins_min, bins_max = min(bins), max(bins)
+            bins_min, bins_max = min(bin_edges), max(bin_edges)
             if np.any((real_values < bins_min) | (real_values > bins_max)):
-                raise ValueError('''
-                All values are expected to fall into one of the provided bins
-                (or to be Nan). Please check the `bins` parameter
-                and/or your data.''')
+                raise ValueError(
+                    'All values are expected to fall into one of the provided '
+                    'bins (or to be Nan). Please check the `bins` parameter '
+                    'and/or your data.')
+
+            # We add the colorscale
+            nb_bins = len(bin_edges) - 1
+            color_range = color_brewer(fill_color, n=nb_bins)
+            color_scale = StepColormap(
+                color_range,
+                index=bin_edges,
+                vmin=bins_min,
+                vmax=bins_max,
+                caption=legend_name)
+            self.add_child(color_scale)
 
             # then we 'correct' the last edge for numpy digitize
             # (we add a very small amount to fake an inclusive right interval)
-            increasing = bins[0] <= bins[-1]
-            bins[-1] = np.nextafter(
-                bins[-1],
+            increasing = bin_edges[0] <= bin_edges[-1]
+            bin_edges[-1] = np.nextafter(
+                bin_edges[-1],
                 (1 if increasing else -1) * np.inf)
 
             key_on = key_on[8:] if key_on.startswith('feature.') else key_on
-
-            nb_bins = len(bins) - 1
-            color_range = color_brewer(fill_color, n=nb_bins)
 
             def get_by_key(obj, key):
                 return (obj.get(key, None) if len(key.split('.')) <= 1 else
@@ -599,17 +602,8 @@ $(document).ready(objects_in_front);
                     # 1: opacity is handled within nan_fill_color
                     return nan_fill_color, 1
 
-                color_idx = int(np.digitize(value_of_x, bins, right=False)) - 1
+                color_idx = np.digitize(value_of_x, bin_edges, right=False) - 1
                 return color_range[color_idx], fill_opacity
-
-            # We add the colorscale
-            color_scale = StepColormap(
-                color_range,
-                index=bins,
-                vmin=bins[0],
-                vmax=bins[-1],
-                caption=legend_name)
-            self.add_child(color_scale)
 
         else:
             def color_scale_fun(x):
