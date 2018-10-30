@@ -424,11 +424,11 @@ $(document).ready(objects_in_front);
                        )
 
     def choropleth(self, geo_data, data=None, columns=None, key_on=None,
-                   bins=6, fill_color='blue', nan_fill_color='#000000b4',
-                   fill_opacity=0.6, line_color='black', line_weight=1,
-                   line_opacity=1, name=None, legend_name='', topojson=None,
-                   reset=False, smooth_factor=None, highlight=None,
-                   **kwargs):
+                   bins=6, fill_color='blue', nan_fill_color='black',
+                   fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
+                   line_weight=1, line_opacity=1, name=None, legend_name='',
+                   topojson=None, reset=False, smooth_factor=None,
+                   highlight=None, **kwargs):
         """
         Apply a GeoJSON overlay to the map.
 
@@ -482,11 +482,10 @@ $(document).ready(objects_in_front);
         nan_fill_color: string, default 'black'
             Area fill color for nan or missing values.
             Can pass a hex code, color name.
-            Ex: if you want a different color opacity than 1, you can use
-            an 8 value HEX code, for example `nan_fill_color='#000000b4'`
-            (which is black '#000000' at ~0.71 opacity 'b4').
         fill_opacity: float, default 0.6
             Area fill opacity, range 0-1.
+        nan_fill_opacity: float, default fill_opacity
+            Area fill opacity for nan or missing values, range 0-1.
         line_color: string, default 'black'
             GeoJSON geopath line color.
         line_weight: int, default 1
@@ -533,6 +532,9 @@ $(document).ready(objects_in_front);
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
                              'fill_local. See docstring for valid codes.')
+
+        if nan_fill_opacity is None:
+            nan_fill_opacity = fill_opacity
 
         if 'threshold_scale' in kwargs:
             if kwargs['threshold_scale'] is not None:
@@ -594,13 +596,11 @@ $(document).ready(objects_in_front);
                 key_of_x = get_by_key(x, key_on)
 
                 if key_of_x not in color_data.keys():
-                    # 1: opacity is handled within nan_fill_color
-                    return nan_fill_color, 1
+                    return nan_fill_color, nan_fill_opacity
 
                 value_of_x = color_data[key_of_x]
                 if np.isnan(value_of_x):
-                    # 1: opacity is handled within nan_fill_color
-                    return nan_fill_color, 1
+                    return nan_fill_color, nan_fill_opacity
 
                 color_idx = np.digitize(value_of_x, bin_edges, right=False) - 1
                 return color_range[color_idx], fill_opacity
