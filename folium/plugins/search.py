@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 
-from ..utilities import camelize
+from ..utilities import camelize, get_parent_map
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
@@ -73,7 +73,7 @@ class Search(MacroElement):
                             return feature.properties.style
                     });
                 });
-            {{this._parent._parent.get_name()}}.addControl( searchControl );
+            {{this.parent_map_name}}.addControl( searchControl );
 
         {% endmacro %}
         """)  # noqa
@@ -86,19 +86,19 @@ class Search(MacroElement):
         self.position = position
         self.options = json.dumps({camelize(key): value for key, value in kwargs.items()})
 
-    def test_keys(self, keys):
+    def test_params(self, keys, parent):
         assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
+        assert isinstance(parent, GeoJson), "Search can only be added to GeoJson objects."
 
     def render(self, **kwargs):
         keys = list(self._parent.data['features'][0]['properties'].keys())
-        self.test_keys(keys=keys)
+        self.test_params(keys=keys, parent=self._parent)
+        self.parent_map_name = get_parent_map(self)
         super(Search, self).render()
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-        parent = self._parent
-        assert isinstance(parent, GeoJson), ("Search can only be added to GeoJson objects.")
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'),  # noqa
