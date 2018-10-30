@@ -49,8 +49,7 @@ class Search(MacroElement):
                 zoom: searchZoom?searchZoom:{{this._parent._parent.get_name()}}.getZoom(),
                 position:'{{this.position}}',
                 hideMarkerOnCollapse: true
-            {% endif %}
-            {% if this.geom_type == 'Polygon' %}
+            {% else %}
                 marker: false,
                 moveToLocation: function(latlng, title, map) {
                 var zoom = searchZoom?searchZoom:map.getBoundsZoom(latlng.layer.getBounds())
