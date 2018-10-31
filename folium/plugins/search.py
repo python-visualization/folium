@@ -20,10 +20,10 @@ class Search(MacroElement):
     ----------
     search_label: str
         label to index the search, default 'name'
-    search_zoom: int
-        optional zoom level to set the map to on match, default None.
-        if None, will zoom to Polygon bounds and points on their
-        natural extent.
+    search_zoom: int, optional
+        Zoom level to set the map to on match.
+        By default zooms to Polygon/Line bounds and points
+        on their natural extent.
     geom_type: str
         geometry type, default 'Point'
     position: str
