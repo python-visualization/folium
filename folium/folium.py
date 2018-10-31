@@ -50,7 +50,7 @@ _default_css = [
     ('awesome_markers_css',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
-     'https://rawgit.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
     ]
 
 
@@ -172,6 +172,8 @@ class Map(MacroElement):
     """
     _template = Template(u"""
 {% macro header(this, kwargs) %}
+    <meta name="viewport" content="width=device-width,
+        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <style>#{{this.get_name()}} {
         position: {{this.position}};
         width: {{this.width[0]}}{{this.width[1]}};
