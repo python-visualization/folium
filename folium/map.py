@@ -83,6 +83,9 @@ class LayerControl(MacroElement):
     """
     Creates a LayerControl object to be added on a folium map.
 
+    This object should be added to a Map object. Only Layer children
+    of Map are included in the layer control.
+
     Parameters
     ----------
     position : str
