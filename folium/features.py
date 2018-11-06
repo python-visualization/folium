@@ -792,8 +792,6 @@ class Choropleth(FeatureGroup):
     topojson: string, default None
         If using a TopoJSON, passing "objects.yourfeature" to the topojson
         keyword argument will enable conversion to GeoJSON.
-    reset: boolean, default False
-        Remove all current geoJSON layers, start with new layer
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -837,8 +835,8 @@ class Choropleth(FeatureGroup):
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
-                 topojson=None, reset=False, smooth_factor=None,
-                 highlight=None, **kwargs):
+                 topojson=None, smooth_factor=None, highlight=None,
+                 **kwargs):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
