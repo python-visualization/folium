@@ -800,6 +800,14 @@ class Choropleth(FeatureGroup):
         representation. Leaflet defaults to 1.0.
     highlight: boolean, default False
         Enable highlight functionality when hovering over a GeoJSON area.
+    name : string, optional
+        The name of the layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
 
     Returns
     -------
@@ -828,9 +836,11 @@ class Choropleth(FeatureGroup):
                  bins=6, fill_color='blue', nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
+                 overlay=True, control=True, show=True,
                  topojson=None, reset=False, smooth_factor=None,
                  highlight=None, **kwargs):
-        super(Choropleth, self).__init__(name=name)
+        super(Choropleth, self).__init__(name=name, overlay=overlay,
+                                         control=control, show=show)
         self._name = 'Choropleth'
 
         if data is not None and not color_brewer(fill_color):
