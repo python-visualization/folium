@@ -830,7 +830,7 @@ class Choropleth(FeatureGroup):
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  topojson=None, reset=False, smooth_factor=None,
                  highlight=None, **kwargs):
-        super(Choropleth, self).__init__()
+        super(Choropleth, self).__init__(name=name)
         self._name = 'Choropleth'
 
         if data is not None and not color_brewer(fill_color):
@@ -934,13 +934,11 @@ class Choropleth(FeatureGroup):
             self.geojson = TopoJson(
                 geo_data,
                 topojson,
-                name=name,
                 style_function=style_function,
                 smooth_factor=smooth_factor)
         else:
             self.geojson = GeoJson(
                 geo_data,
-                name=name,
                 style_function=style_function,
                 smooth_factor=smooth_factor,
                 highlight_function=highlight_function if highlight else None)
