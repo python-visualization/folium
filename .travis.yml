@@ -1,4 +1,4 @@
-language: python
+language: minimal
 
 sudo: false
 
@@ -9,21 +9,19 @@ env:
 matrix:
   fast_finish: true
   include:
-  - python: 2.7
-    env: TEST_TARGET=default
-  - python: 3.6
-    env: TEST_TARGET=default
-  - python: 3.6
-    env: TEST_TARGET=notebooks
-  - python: 3.6
-    env: TEST_TARGET=latest_branca
-  - python: 3.6
-    env: TEST_TARGET=docs
+  - name: default-python2
+    env: TEST_TARGET=default PY=2.7
+  - name: default
+    env: TEST_TARGET=default PY=3.7
+  - name: notebooks
+    env: TEST_TARGET=notebooks PY=3.7
+  - name: latest_branca
+    env: TEST_TARGET=latest_branca PY=3.7
+  - name: docs
+    env: TEST_TARGET=docs PY=3.7
   allow_failures:
-  - python: 2.7
-    env: TEST_TARGET=latest_branca
-  - python: 3.6
-    env: TEST_TARGET=latest_branca
+  - name: latest_branca
+    env: TEST_TARGET=latest_branca PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
@@ -31,11 +29,12 @@ before_install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
   - conda update conda
+  - conda config --remove channels defaults --force
   - conda config --add channels conda-forge --force
-  - conda create --name TEST python=$TRAVIS_PYTHON_VERSION phantomjs --file requirements.txt --file requirements-dev.txt
+  - conda create --name TEST python=$PY phantomjs --file requirements.txt --file requirements-dev.txt
   - source activate TEST
 
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+  - if [[ "$PY" == "2.7" ]]; then
       conda install mock ;
     fi
 
@@ -49,18 +48,18 @@ script:
     fi
 
   - if [[ $TEST_TARGET == 'default' ]]; then
-      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'latest_branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      py.test -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'notebooks' ]]; then
       for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
-      py.test -vv tests/notebooks/test_notebooks.py ;
+      pytest -vv tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
@@ -77,3 +76,17 @@ script:
 doctr:
   require-master: true
   sync: False
+
+deploy:
+  skip_cleanup: true
+  provider: pypi
+  user: ocefpaf
+  password:
+    secure: "BdJc76Z+DnmmamZSX+QCGZDnf+FW/JQOnVZ2t59r2r2RM4860Wf6GSL/Ncw6v8G3sOghWQcMzFdY5e6aNzAW0Ddm2YKHAsfxgurbEsnlzwsNPBWv2280ca7TtlFk2JkqhtYQOkoBFbA8+e/lC8ZC6aAVffQAT1NE4lEs0/Jd+TA="
+  distributions: sdist bdist_wheel
+  upload_docs: no
+  on:
+    repo: python-visualization/folium
+    tags: true
+    all_branches: master
+    condition: '$TEST_TARGET == "default"'

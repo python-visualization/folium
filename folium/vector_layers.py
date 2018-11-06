@@ -140,8 +140,8 @@ class PolyLine(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: str, default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     smooth_factor: float, default 1.0
         How much to simplify the polyline on each zoom level.
         More means better performance and smoother look,
@@ -159,16 +159,14 @@ class PolyLine(Marker):
                     {{this.location}},
                     {{ this.options }}
                     )
-                    {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                     .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)  # noqa
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(location=locations, popup=popup)
+        super(PolyLine, self).__init__(location=locations, popup=popup,
+                                       tooltip=tooltip)
         self._name = 'PolyLine'
-        self.tooltip = tooltip
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -186,8 +184,8 @@ class Polygon(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#polygon
@@ -200,16 +198,13 @@ class Polygon(Marker):
                 {{this.location}},
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(Polygon, self).__init__(locations, popup=popup)
+        super(Polygon, self).__init__(locations, popup=popup, tooltip=tooltip)
         self._name = 'Polygon'
-        self.tooltip = tooltip
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -227,8 +222,8 @@ class Rectangle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
 
 
     http://leafletjs.com/reference-1.2.0.html#rectangle
@@ -241,16 +236,14 @@ class Rectangle(Marker):
                 {{this.location}},
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(location=bounds, popup=popup)
+        super(Rectangle, self).__init__(location=bounds, popup=popup,
+                                        tooltip=tooltip)
         self._name = 'rectangle'
-        self.tooltip = tooltip
-
         self.options = _parse_options(line=True, **kwargs)
 
 
@@ -271,8 +264,8 @@ class Circle(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float
         Radius of the circle, in meters.
 
@@ -287,16 +280,14 @@ class Circle(Marker):
                 [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location=location, popup=popup)
+        super(Circle, self).__init__(location=location, popup=popup,
+                                     tooltip=tooltip)
         self._name = 'circle'
-        self.tooltip = tooltip
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)
 
 
@@ -312,8 +303,8 @@ class CircleMarker(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-    tooltip: string , default None
-        Input text or visualization for object displayed when hovering.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
     radius: float, default 10
         Radius of the circle marker, in pixels.
 
@@ -327,14 +318,12 @@ class CircleMarker(Marker):
                 [{{this.location[0]}}, {{this.location[1]}}],
                 {{ this.options }}
                 )
-                {% if this.tooltip %}.bindTooltip("{{this.tooltip.__str__()}}"){% endif %}
                 .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)
 
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location=location, popup=popup)
+        super(CircleMarker, self).__init__(location=location, popup=popup,
+                                           tooltip=tooltip)
         self._name = 'CircleMarker'
-        self.tooltip = tooltip
-
         self.options = _parse_options(line=False, radius=radius, **kwargs)

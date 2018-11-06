@@ -51,6 +51,10 @@ class MarkerCluster(Layer):
     _template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
+            {%- if this.icon_create_function is not none %}
+            {{ this.get_name() }}.options.iconCreateFunction =
+                {{ this.icon_create_function.strip() }};
+            {%- endif %}
             {{this._parent.get_name()}}.addLayer({{this.get_name()}});
             {% endmacro %}
             """)
@@ -73,9 +77,10 @@ class MarkerCluster(Layer):
                 self.add_child(Marker(location, popup=p, icon=i))
 
         options = {} if options is None else options
-        if icon_create_function is not None:
-            options['iconCreateFunction'] = icon_create_function.strip()
         self.options = json.dumps(options, sort_keys=True, indent=2)
+        if icon_create_function is not None:
+            assert isinstance(icon_create_function, str)
+        self.icon_create_function = icon_create_function
 
     @staticmethod
     def _validate(obj, cls):
