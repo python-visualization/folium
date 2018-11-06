@@ -724,7 +724,7 @@ class GeoJsonTooltip(Tooltip):
         super(GeoJsonTooltip, self).render(**kwargs)
 
 
-class Choropleth(Element):
+class Choropleth(FeatureGroup):
     """Apply a GeoJSON overlay to the map.
 
     Plot a GeoJSON overlay on the base map. There is no requirement
@@ -859,6 +859,8 @@ class Choropleth(Element):
         else:
             color_data = None
 
+        self.color_scale = None
+
         if color_data is not None and key_on is not None:
             real_values = np.array(list(color_data.values()))
             real_values = real_values[~np.isnan(real_values)]
@@ -909,8 +911,6 @@ class Choropleth(Element):
                 return color_range[color_idx], fill_opacity
 
         else:
-            self.color_scale = None
-
             def color_scale_fun(x):
                 return fill_color, fill_opacity
 
@@ -945,13 +945,17 @@ class Choropleth(Element):
                 smooth_factor=smooth_factor,
                 highlight_function=highlight_function if highlight else None)
 
-    def render(self, **kwargs):
-        """Render the GeoJson/TopoJson object with Map as parent."""
-        self.geojson._parent = self._parent
-        self.geojson.render(**kwargs)
+        self.add_child(self.geojson)
         if self.color_scale:
+            self.add_child(self.color_scale)
+
+    def render(self, **kwargs):
+        """Render the GeoJson/TopoJson and color scale objects."""
+        if self.color_scale:
+            # ColorMap needs Map as its parent
             self.color_scale._parent = self._parent
-            self.color_scale.render(**kwargs)
+
+        super(Choropleth, self).render(**kwargs)
 
 
 class DivIcon(MacroElement):
