@@ -837,7 +837,7 @@ class Choropleth(FeatureGroup):
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
                  topojson=None, smooth_factor=None, highlight=None,
-                 **kwargs):
+                 **kwargs):  # noqa
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'

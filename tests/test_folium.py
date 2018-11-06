@@ -14,7 +14,7 @@ import os
 import branca.element
 
 import folium
-from folium.features import TopoJson, GeoJson, Choropleth
+from folium.features import GeoJson, Choropleth
 
 import jinja2
 from jinja2 import Environment, PackageLoader
