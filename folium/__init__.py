@@ -11,7 +11,7 @@ from folium._version import get_versions
 from folium.features import (
     ClickForMarker, ColorLine, CustomIcon, DivIcon, GeoJson,
     LatLngPopup, RegularPolygonMarker, TopoJson, Vega, VegaLite,
-    GeoJsonTooltip,
+    GeoJsonTooltip, Choropleth
 )
 
 from folium.raster_layers import TileLayer, WmsTileLayer
@@ -67,6 +67,7 @@ __all__ = [
     'RegularPolygonMarker',
     'TopoJson',
     'WmsTileLayer',
+    'Choropleth',
     # vector_layers
     'Circle',
     'CircleMarker',
