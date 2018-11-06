@@ -18,6 +18,7 @@ from branca.element import (Element, Figure, JavascriptLink, MacroElement)
 from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
                               none_max, none_min, color_brewer)
 
+from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 
 from folium.utilities import get_bounds
@@ -959,6 +960,8 @@ class Choropleth(FeatureGroup):
         """Render the GeoJson/TopoJson and color scale objects."""
         if self.color_scale:
             # ColorMap needs Map as its parent
+            assert isinstance(self._parent, Map), ('Choropleth must be added'
+                                                   ' to a Map object.')
             self.color_scale._parent = self._parent
 
         super(Choropleth, self).render(**kwargs)
