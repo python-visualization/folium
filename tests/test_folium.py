@@ -212,6 +212,8 @@ class TestFolium(object):
              'min_zoom': 0,
              'detect_retina': False,
              'no_wrap': False,
+             'tms': False,
+             'opacity': 1,
              'subdomains': 'abc'
              }]
         tmpl = {'map_id': 'map_' + '0' * 32,
@@ -233,6 +235,44 @@ class TestFolium(object):
         expected = [line.strip() for line in HTML.splitlines() if line.strip()]
 
         assert rendered == expected
+
+    def test_choropleth_features(self):
+        """Test to make sure that choropleth function doesn't allow
+        values outside of the domain defined by bins.
+
+        It also tests that all parameters work as expected regarding
+        nan and missing values.
+        """
+        self.setup()
+
+        with open(os.path.join(rootpath, 'us-counties.json')) as f:
+            geo_data = json.load(f)
+        data = {'1001': -1}
+        fill_color = 'BuPu'
+        key_on = 'id'
+
+        with pytest.raises(ValueError):
+            self.m.choropleth(
+                geo_data=geo_data,
+                data=data,
+                key_on=key_on,
+                fill_color=fill_color,
+                bins=[0, 1, 2, 3])
+            self.m._parent.render()
+
+        self.m.choropleth(
+            geo_data=geo_data,
+            data={'1001': 1, '1003': float('nan')},
+            key_on=key_on,
+            fill_color=fill_color,
+            fill_opacity=0.543212345,
+            nan_fill_color='a_random_color',
+            nan_fill_opacity=0.123454321)
+
+        out = self.m._parent.render()
+        out_str = ''.join(out.split())
+        assert '"fillColor":"a_random_color","fillOpacity":0.123454321' in out_str
+        assert '"fillOpacity":0.543212345' in out_str
 
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode

@@ -290,7 +290,7 @@ class Popup(Element):
             {% if this.sticky %}, closeOnClick: false{% endif %}});
 
             {% for name, element in this.html._children.items() %}
-                var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
+                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
                 {{this.get_name()}}.setContent({{name}});
             {% endfor %}
 
@@ -361,8 +361,8 @@ class Tooltip(MacroElement):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
         {{ this._parent.get_name() }}.bindTooltip(
-            '<div{% if this.style %} style="{{ this.style }}"{% endif %}>'
-            + '{{ this.text }}' + '</div>',
+            `<div{% if this.style %} style="{{ this.style }}"{% endif %}>`
+            + `{{ this.text }}` + `</div>`,
             {{ this.options }}
         );
         {% endmacro %}

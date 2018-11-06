@@ -135,11 +135,11 @@ class TimestampedWmsTileLayers(Layer):
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
