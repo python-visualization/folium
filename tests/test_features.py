@@ -11,7 +11,7 @@ from __future__ import (absolute_import, division, print_function)
 import os
 
 from branca.element import Element
-from branca.six import text_type
+from six import text_type
 
 from folium import Map, Popup
 import folium
