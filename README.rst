@@ -1,7 +1,7 @@
 |PyPI| |Travis| |Gitter| |DOI|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
-    :target: https://pypi.python.org/pypi/folium/
+    :target: https://pypi.org/project/folium
     :alt: PyPI Package
 
 .. |Travis| image:: https://travis-ci.org/python-visualization/folium.svg?branch=master
