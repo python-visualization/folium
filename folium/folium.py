@@ -9,6 +9,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import os
 import time
+import warnings
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from branca.utilities import _parse_size
@@ -419,6 +420,20 @@ $(document).ready(objects_in_front);
                                  max_zoom=max_zoom,
                                  )
                        )
+
+    def choropleth(self, *args, **kwargs):
+        """Call the Choropleth class with the same arguments.
+
+        This method may be deleted after a year from now (Nov 2018).
+        """
+        warnings.warn(
+            'The choropleth  method has been deprecated. Instead use the new '
+            'Choropleth class, which has the same arguments. See the example '
+            'notebook \'GeoJSON_and_choropleth\' for how to do this.',
+            FutureWarning
+        )
+        from folium.features import Choropleth
+        self.add_child(Choropleth(*args, **kwargs))
 
     def keep_in_front(self, *args):
         """Pass one or multiples object that must stay in front.
