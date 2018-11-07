@@ -60,7 +60,6 @@ First of all, thanks for your interest in contributing!
   4. Make change to your local copy of the folium repository
   5. Make sure the tests pass:
     * in the repository folder do `pip install -e .`  (needed for notebook tests)
-    * along with all the dependencies install `phantomjs` via `npm install -g phantomjs` or by downloading it from [here](http://phantomjs.org/download.html) and installing manually
     * run `python -m pytest tests`
     * resolve all errors
   6. Commit those changes

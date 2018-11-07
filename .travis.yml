@@ -3,6 +3,12 @@ language: minimal
 sudo: false
 
 env:
+  - MOZ_HEADLESS=1
+
+addons:
+  firefox: latest
+
+env:
   global:
     - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
 
@@ -31,8 +37,13 @@ before_install:
   - conda update conda
   - conda config --remove channels defaults --force
   - conda config --add channels conda-forge --force
-  - conda create --name TEST python=$PY phantomjs --file requirements.txt --file requirements-dev.txt
+  - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
   - source activate TEST
+  # firefox headless driver
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
+  - mkdir geckodriver
+  - tar -xzf geckodriver.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 
   - if [[ "$PY" == "2.7" ]]; then
       conda install mock ;
