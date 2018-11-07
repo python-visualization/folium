@@ -831,13 +831,13 @@ class Choropleth(FeatureGroup):
     ...            highlight=True)
     """
 
-    def __init__(self, geo_data, data=None, columns=None, key_on=None,
+    def __init__(self, geo_data, data=None, columns=None, key_on=None,    # noqa
                  bins=6, fill_color='blue', nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
                  topojson=None, smooth_factor=None, highlight=None,
-                 **kwargs):  # noqa
+                 **kwargs):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
