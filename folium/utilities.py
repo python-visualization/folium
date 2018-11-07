@@ -7,6 +7,8 @@ import math
 import os
 import struct
 import zlib
+from contextlib import contextmanager
+from tempfile import NamedTemporaryFile
 
 import numpy as np
 
@@ -394,3 +396,15 @@ def iter_points(x):
             return [x]
     else:
         return []
+
+@contextmanager
+def _tmp_html(data):
+    tmp = None
+    try:
+        tmp = NamedTemporaryFile(suffix='.html', prefix='folium_')
+        tmp.write(data.encode('utf8'))
+        tmp.flush()
+        yield tmp
+    finally:
+        if tmp is not None:
+            tmp.close()
