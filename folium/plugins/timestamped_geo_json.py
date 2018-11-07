@@ -180,11 +180,11 @@ class TimestampedGeoJson(MacroElement):
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
@@ -192,7 +192,7 @@ class TimestampedGeoJson(MacroElement):
             name='highlight.js_css')
 
         figure.header.add_child(
-            CssLink("http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"),  # noqa
+            CssLink("https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
 
         figure.header.add_child(
