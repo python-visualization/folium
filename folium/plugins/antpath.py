@@ -31,11 +31,11 @@ class AntPath(Marker):
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.polyline.antPath(
-                    {{this.location}},
-                    {{ this.options }}
-                    )
-                    .addTo({{this._parent.get_name()}});
+                {{this.get_name()}} = L.polyline.antPath(
+                  {{this.location}},
+                  {{ this.options }}
+                )
+                .addTo({{this._parent.get_name()}});
             {% endmacro %}
             """)  # noqa
 
