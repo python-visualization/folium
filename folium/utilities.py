@@ -385,3 +385,15 @@ def iter_points(x):
             return [x]
     else:
         return []
+
+def compare_rendered(obj1, obj2):
+    """
+    Return True/False if the normalized rendered version of
+    two folium map objects are the equal or not.
+
+    """
+    return _normalize(obj1) == _normalize(obj2)
+
+
+def _normalize(rendered):
+    return [line.strip() for line in rendered.splitlines() if line.strip()]
