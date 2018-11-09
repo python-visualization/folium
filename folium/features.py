@@ -12,18 +12,18 @@ import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
-from branca.utilities import (
+from branca.utilities import color_brewer
+
+from folium.folium import Map
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+from folium.utilities import (
     _iter_tolist,
     _parse_size,
-    color_brewer,
+    get_bounds,
     image_to_url,
     none_max,
     none_min,
 )
-
-from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
-from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
 from jinja2 import Template
