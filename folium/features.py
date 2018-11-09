@@ -10,21 +10,27 @@ from __future__ import (absolute_import, division, print_function)
 import json
 import warnings
 
-import requests
-import numpy as np
-
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
-from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
-                              none_max, none_min, color_brewer)
+from branca.utilities import (
+    _iter_tolist,
+    _parse_size,
+    color_brewer,
+    image_to_url,
+    none_max,
+    none_min,
+)
 
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
-
 from folium.utilities import get_bounds
 from folium.vector_layers import PolyLine
 
 from jinja2 import Template
+
+import numpy as np
+
+import requests
 
 from six import binary_type, text_type
 
@@ -84,7 +90,7 @@ class RegularPolygonMarker(Marker):
                  fill_color='blue', fill_opacity=1, number_of_sides=4,
                  rotation=0, radius=15, popup=None, tooltip=None):
         super(RegularPolygonMarker, self).__init__(
-            _locations_tolist(location),
+            _iter_tolist(location),
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
@@ -684,18 +690,18 @@ class GeoJsonTooltip(Tooltip):
         super(GeoJsonTooltip, self).__init__(
             text='', style=style, sticky=sticky, **kwargs
         )
-        self._name = "GeoJsonTooltip"
+        self._name = 'GeoJsonTooltip'
 
-        assert isinstance(fields, (list, tuple)), "Please pass a list or " \
-                                                  "tuple to fields."
+        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
+                                                  'tuple to fields.'
         if aliases is not None:
             assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), "fields and aliases must have" \
-                                                " the same length."
-        assert isinstance(labels, bool), "labels requires a boolean value."
-        assert isinstance(localize, bool), "localize must be bool."
-        assert 'permanent' not in kwargs,  "The `permanent` option does not " \
-                                           "work with GeoJsonTooltip."
+            assert len(fields) == len(aliases), 'fields and aliases must have' \
+                                                ' the same length.'
+        assert isinstance(labels, bool), 'labels requires a boolean value.'
+        assert isinstance(localize, bool), 'localize must be bool.'
+        assert 'permanent' not in kwargs,  'The `permanent` option does not ' \
+                                           'work with GeoJsonTooltip.'
 
         self.fields = fields
         self.aliases = aliases
@@ -703,7 +709,7 @@ class GeoJsonTooltip(Tooltip):
         self.localize = localize
         if style:
             assert isinstance(style, str), \
-                "Pass a valid inline HTML style property string to style."
+                'Pass a valid inline HTML style property string to style.'
             # noqa outside of type checking.
             self.style = style
 
@@ -720,8 +726,8 @@ class GeoJsonTooltip(Tooltip):
                             'than a GeoJson or TopoJson object.')
         keys = tuple(x for x in keys if x not in ('style', 'highlight'))
         for value in self.fields:
-            assert value in keys, ("The field {} is not available in the data. "
-                                   "Choose from: {}.".format(value, keys))
+            assert value in keys, ('The field {} is not available in the data. '
+                                   'Choose from: {}.'.format(value, keys))
         super(GeoJsonTooltip, self).render(**kwargs)
 
 

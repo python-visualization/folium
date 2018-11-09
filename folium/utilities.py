@@ -35,7 +35,7 @@ def _validate_location(location):
     if len(location) != 2:
         raise ValueError('Expected two values for location [lat, lon], '
                          'got {}'.format(len(location)))
-    location = _locations_tolist(location)
+    location = _iter_tolist(location)
     return location
 
 
@@ -44,14 +44,14 @@ def _validate_coordinates(coordinates):
     if _isnan(coordinates):
         raise ValueError('Location values cannot contain NaNs, '
                          'got:\n{!r}'.format(coordinates))
-    coordinates = _locations_tolist(coordinates)
+    coordinates = _iter_tolist(coordinates)
     return coordinates
 
 
-def _locations_tolist(x):
+def _iter_tolist(x):
     """Transforms recursively a list of iterables into a list of list."""
     if hasattr(x, '__iter__'):
-        return list(map(_locations_tolist, x))
+        return list(map(_iter_tolist, x))
     else:
         return x
 
@@ -112,7 +112,7 @@ def _is_url(url):
     """Check to see if `url` has a valid protocol."""
     try:
         return urlparse(url).scheme in _VALID_URLS
-    except:
+    except Exception:
         return False
 
 
