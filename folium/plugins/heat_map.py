@@ -5,10 +5,9 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.element import Figure, JavascriptLink
-from branca.utilities import none_max, none_min
 
 from folium.map import Layer
-from folium.utilities import _isnan, _iter_tolist
+from folium.utilities import _isnan, _iter_tolist, none_max, none_min
 
 from jinja2 import Template
 
