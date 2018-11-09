@@ -12,11 +12,10 @@ import time
 import warnings
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
-from branca.utilities import _parse_size
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _validate_location
+from folium.utilities import _parse_size, _validate_location
 
 from jinja2 import Environment, PackageLoader, Template
 
