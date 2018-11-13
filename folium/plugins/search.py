@@ -10,7 +10,7 @@ from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
-from folium.features import GeoJson
+import folium
 
 class Search(MacroElement):
     """
@@ -42,7 +42,7 @@ class Search(MacroElement):
             let searchZoom = {{this.search_zoom}};
             
             var searchControl = new L.Control.Search({
-                layer: {{this._parent.get_name()}},
+                layer: {{this.layer.get_name()}},
                 propertyName: '{{this.search_label}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
@@ -58,7 +58,7 @@ class Search(MacroElement):
             {% endif %}
                 });
                 searchControl.on('search:locationfound', function(e) {
-                    {{this._parent.get_name()}}.setStyle(function(feature){
+                    {{this.layer.get_name()}}.setStyle(function(feature){
                         return feature.properties.style
                     })
                     {% if this.options %}
@@ -68,7 +68,7 @@ class Search(MacroElement):
                         e.layer.openPopup();
                 })
                 .on('search:collapsed', function(e) {
-                        {{this._parent.get_name()}}.setStyle(function(feature){
+                        {{this.layer.get_name()}}.setStyle(function(feature){
                             return feature.properties.style
                     });
                 });
@@ -77,8 +77,11 @@ class Search(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, search_label='name', search_zoom=None, geom_type='Point', position='topleft', **kwargs):
+    def __init__(self, layer=None, search_label='name', search_zoom=None, geom_type='Point', position='topleft',
+                 **kwargs):
         super(Search, self).__init__()
+        assert isinstance(layer, folium.GeoJson), "Search can only be added to GeoJson objects."
+        self.layer = layer
         self.search_label = search_label
         self.search_zoom = json.dumps(search_zoom)
         self.geom_type = geom_type
@@ -87,10 +90,10 @@ class Search(MacroElement):
 
     def test_params(self, keys, parent):
         assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
-        assert isinstance(parent, GeoJson), "Search can only be added to GeoJson objects."
+        assert isinstance(self._parent, folium.Map), "Search can only be added to folium Map objects."
 
     def render(self, **kwargs):
-        keys = list(self._parent.data['features'][0]['properties'].keys())
+        keys = list(self.layer.data['features'][0]['properties'].keys())
         self.test_params(keys=keys, parent=self._parent)
         self.parent_map_name = get_parent_map(self)
         super(Search, self).render()
