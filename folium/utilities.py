@@ -206,9 +206,10 @@ def write_png(data, origin='upper', colormap=None):
 
 
 def get_parent_map(element):
-    assert hasattr(element, '_parent'), ValueError("This is not a valid folium child object.")
+    if not hasattr(element, '_parent'):
+        raise ValueError("This object does not have a parent folium Map.")
     parent = element._parent
-    if type(parent) is folium.Map:
+    if isinstance(parent, folium.Map):
         return parent.get_name()
     else:
         return get_parent_map(parent)
