@@ -39,25 +39,27 @@ class Search(MacroElement):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            let searchZoom = {{this.search_zoom}};
+            let {{this.layer.get_name()}}searchZoom = {{this.search_zoom}};
             
-            var searchControl = new L.Control.Search({
+            var {{this.layer.get_name()}}searchControl = new L.Control.Search({
                 layer: {{this.layer.get_name()}},
                 propertyName: '{{this.search_label}}',
+                collapsed: {{this.collapsed}},
+                textPlaceholder: '{{this.placeholder}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
-                zoom: searchZoom?searchZoom:{{this._parent._parent.get_name()}}.getZoom(),
+                zoom: {{this.layer.get_name()}}searchZoom?{{this.layer.get_name()}}searchZoom:{{this.parent_map_name}}.getZoom(),
                 position:'{{this.position}}',
                 hideMarkerOnCollapse: true
             {% else %}
                 marker: false,
                 moveToLocation: function(latlng, title, map) {
-                var zoom = searchZoom?searchZoom:map.getBoundsZoom(latlng.layer.getBounds())
+                var zoom = {{this.layer.get_name()}}searchZoom?{{this.layer.get_name()}}searchZoom:map.getBoundsZoom(latlng.layer.getBounds())
                     map.setView(latlng, zoom); // access the zoom
                 }
             {% endif %}
                 });
-                searchControl.on('search:locationfound', function(e) {
+                {{this.layer.get_name()}}searchControl.on('search:locationfound', function(e) {
                     {{this.layer.get_name()}}.setStyle(function(feature){
                         return feature.properties.style
                     })
@@ -67,18 +69,18 @@ class Search(MacroElement):
                     if(e.layer._popup)
                         e.layer.openPopup();
                 })
-                .on('search:collapsed', function(e) {
+                {{this.layer.get_name()}}searchControl.on('search:collapsed', function(e) {
                         {{this.layer.get_name()}}.setStyle(function(feature){
                             return feature.properties.style
                     });
                 });
-            {{this.parent_map_name}}.addControl( searchControl );
+            {{this.parent_map_name}}.addControl( {{this.layer.get_name()}}searchControl );
 
         {% endmacro %}
         """)  # noqa
 
     def __init__(self, layer=None, search_label='name', search_zoom=None, geom_type='Point', position='topleft',
-                 **kwargs):
+                 placeholder='Search', collapsed=True, **kwargs):
         super(Search, self).__init__()
         assert isinstance(layer, folium.GeoJson), "Search can only be added to GeoJson objects."
         self.layer = layer
@@ -86,7 +88,10 @@ class Search(MacroElement):
         self.search_zoom = json.dumps(search_zoom)
         self.geom_type = geom_type
         self.position = position
-        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()})
+        self.placeholder = placeholder
+        self.collapsed = json.dumps(collapsed)
+        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items())>0 \
+            else None
 
     def test_params(self, keys, parent):
         assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
