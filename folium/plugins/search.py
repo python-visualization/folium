@@ -90,7 +90,7 @@ class Search(MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = json.dumps(collapsed)
-        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items())>0 \
+        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items()) > 0 \
             else None
 
     def test_params(self, keys, parent):
