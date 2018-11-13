@@ -355,7 +355,7 @@ def camelize(key):
 
 def _parse_size(value):
     try:
-        if isinstance(value, int) or isinstance(value, float):
+        if isinstance(value, (int, float)):
             value_type = 'px'
             value = float(value)
             assert value > 0
