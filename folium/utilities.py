@@ -206,6 +206,7 @@ def write_png(data, origin='upper', colormap=None):
 
 
 def get_parent_map(element):
+    """Return the first `Map` object found in the line of parents of the element."""
     if not hasattr(element, '_parent'):
         raise ValueError("This object does not have a parent folium Map.")
     parent = element._parent
