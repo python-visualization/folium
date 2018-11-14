@@ -21,15 +21,15 @@ from folium.plugins.heat_map import HeatMap
 from folium.plugins.heat_map_withtime import HeatMapWithTime
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
+from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
+from folium.plugins.search import Search
 from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
-from folium.plugins.search import Search
-from folium.plugins.minimap import MiniMap
 
 __all__ = [
     'BeautifyIcon',
@@ -43,13 +43,13 @@ __all__ = [
     'HeatMapWithTime',
     'MarkerCluster',
     'MeasureControl',
+    'MiniMap',
     'MousePosition',
     'PolyLineTextPath',
     'ScrollZoomToggler',
+    'Search',
     'Terminator',
     'TimeSliderChoropleth',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
-    'Search',
-    'MiniMap',
     ]

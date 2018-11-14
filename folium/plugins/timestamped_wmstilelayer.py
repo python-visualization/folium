@@ -4,8 +4,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink
 
-from folium.raster_layers import WmsTileLayer
 from folium.map import Layer
+from folium.raster_layers import WmsTileLayer
 
 from jinja2 import Template
 
