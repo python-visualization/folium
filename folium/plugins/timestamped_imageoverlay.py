@@ -84,9 +84,9 @@ class TimestampedImageOverlay(MacroElement):
     """
     _template = Template("""
             {% macro script(this, kwargs) %}
-            
+
             L.TimeDimension.Layer.ImageOverlay = L.TimeDimension.Layer.extend({
-    
+
                 initialize: function(layer, options) {
                     L.TimeDimension.Layer.prototype.initialize.call(this, layer, options);
                     this._layers = {};
@@ -94,7 +94,7 @@ class TimestampedImageOverlay(MacroElement):
                     this._timeCacheBackward = this.options.cacheBackward || this.options.cache || 0;
                     this._timeCacheForward = this.options.cacheForward || this.options.cache || 0;
                     this._getUrlFunction = this.options.getUrlFunction;
-            
+
                     this._baseLayer.on('load', (function() {
                         this._baseLayer.setLoaded(true);
                         this.fire('timeload', {
@@ -102,7 +102,7 @@ class TimestampedImageOverlay(MacroElement):
                         });
                     }).bind(this));
                 },
-            
+
                 eachLayer: function(method, context) {
                     for (var prop in this._layers) {
                         if (this._layers.hasOwnProperty(prop)) {
@@ -111,23 +111,23 @@ class TimestampedImageOverlay(MacroElement):
                     }
                     return L.TimeDimension.Layer.prototype.eachLayer.call(this, method, context);
                 },
-            
+
                 _onNewTimeLoading: function(ev) {
                     var layer = this._getLayerForTime(ev.time);
                     if (!this._map.hasLayer(layer)) {
                         this._map.addLayer(layer);
                     }
                 },
-            
+
                 isReady: function(time) {
                     var layer = this._getLayerForTime(time);
                     return layer.isLoaded();
                 },
-            
+
                 _update: function() {
                     if (!this._map)
                         return;
-                    var time = map.timeDimension.getCurrentTime();
+                    var time = {{this._parent.get_name()}}.timeDimension.getCurrentTime();
                     var layer = this._getLayerForTime(time);
                     if (this._currentLayer == null) {
                         this._currentLayer = layer;
@@ -138,7 +138,7 @@ class TimestampedImageOverlay(MacroElement):
                         this._showLayer(layer, time);
                     }
                 },
-            
+
                 _showLayer: function(layer, time) {
                     if (this._currentLayer && this._currentLayer !== layer) {
                         this._currentLayer.hide();
@@ -171,7 +171,7 @@ class TimestampedImageOverlay(MacroElement):
                         }
                     }
                 },
-            
+
                 _getLayerForTime: function(time) {
                     if (time == 0 || time == this._defaultTime) {
                         return this._baseLayer;
@@ -181,19 +181,19 @@ class TimestampedImageOverlay(MacroElement):
                     }
                     var url = this._getUrlFunction(this._baseLayer.getURL(), time);
                     imageBounds = this._baseLayer._bounds;
-            
+
                     var newLayer = L.imageOverlay(url, imageBounds, this._baseLayer.options);
                     this._layers[time] = newLayer;
                     newLayer.on('load', (function(layer, time) {
                         layer.setLoaded(true);
-                        if (map.timeDimension && time == map.timeDimension.getCurrentTime() && !map.timeDimension.isLoading()) {
+                        if ({{this._parent.get_name()}}.timeDimension && time == {{this._parent.get_name()}}.timeDimension.getCurrentTime() && !{{this._parent.get_name()}}.timeDimension.isLoading()) {
                             this._showLayer(layer, time);
                         }
                         this.fire('timeload', {
                             time: time
                         });
                     }).bind(this, newLayer, time));
-            
+
                     // Hack to hide the layer when added to the map.
                     // It will be shown when timeload event is fired from the map (after all layers are loaded)
                     newLayer.onAdd = (function(map) {
@@ -202,7 +202,7 @@ class TimestampedImageOverlay(MacroElement):
                     }).bind(newLayer);
                     return newLayer;
                 },
-            
+
                 _getLoadedTimes: function() {
                     var result = [];
                     for (var prop in this._layers) {
@@ -212,98 +212,93 @@ class TimestampedImageOverlay(MacroElement):
                     }
                     return result.sort();
                 },
-            
+
                 _removeLayers: function(times) {
                     for (var i = 0, l = times.length; i < l; i++) {
                         this._map.removeLayer(this._layers[times[i]]);
                         delete this._layers[times[i]];
                     }
                 },
-            
+
             });
-            
+
             L.timeDimension.layer.imageOverlay = function(layer, options) {
             return new L.TimeDimension.Layer.ImageOverlay(layer, options);
             };
-            
+
             L.ImageOverlay.include({
                 _visible: true,
                 _loaded: false,
-                
+
                 _originalUpdate: L.imageOverlay.prototype._update,
-                
+
                 _update: function() {
                     if (!this._visible && this._loaded) {
                         return;
                     }
                     this._originalUpdate();
             },
-            
+
                 setLoaded: function(loaded) {
                     this._loaded = loaded;
             },
-            
+
                 isLoaded: function() {
                     return this._loaded;
             },
-            
+
                 hide: function() {
                     this._visible = false;
                     if (this._image && this._image.style)
                         this._image.style.display = 'none';
             },
-            
+
                 show: function() {
                     this._visible = true;
                     if (this._image && this._image.style)
                         this._image.style.display = 'block';
             },
-            
+
                 getURL: function() {
                     return this._url;
             },
-            
+
             });
-            
-            var map = L.map('map', {
-            timeDimension: true,
-            timeDimensionOptions: {
+
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension({
                 timeInterval: "{{ this.time_interval }}",
                 period: "{{ this.period }}",
-                validTimeRange: "{{ this.valid_time_range }}",
-            },
-            timeDimensionControl: false,
-            timeDimensionControlOptions: {
-                position: 'bottomleft',
-                autoPlay: {{'true' if this.auto_play else 'false'}}
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}}},
+                currentTime: Date.parse("{{ this.current_time }}")
             });
-            
-            var {{this._parent.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
+
+            {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension(
+                {{this.time_control_options}}
+            );
+
+            {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+
+            var imageLayer = L.imageOverlay(
+                    '',
                     {{ this.bounds }},
                     {{ this.options }}
             );
-            
-        
-            
+
             var getRadarImageUrl = function(baseUrl, time) {
                 var beginUrl = "/home/d.lassahn/projects/ewb-projects/src/radar/data/";
-                beginUrl = beginUrl + new Date(time).format('YYYY/MM/DD');
+                var new_time = new Date(time)
+                beginUrl = beginUrl + new_time.getUTCFullYear() +"/"+ ("00" + (String(parseInt(new_time.getUTCMonth())+1))).slice(-2) + "/"+ ("00" + new_time.getUTCDate()).slice(-2);
                 var filePostfix = ".png";
                 var centerUrl = "/radar_de_";
-                centerUrl = centerUrl + new Date(time).format('HHmm');
+                centerUrl = centerUrl + ("00" + new_time.getUTCHours()).slice(-2) + ("00" + new_time.getUTCMinutes()).slice(-2);
                 url = beginUrl + centerUrl + filePostfix;
                 return url;
             };
-            
-            var testImageTimeLayer = L.timeDimension.layer.imageOverlay({{this._parent.get_name()}}, {
+
+            var testImageTimeLayer = L.timeDimension.layer.imageOverlay(imageLayer, {
                 getUrlFunction: getRadarImageUrl
             });
 
-            testImageTimeLayer.addTo(map);
+            testImageTimeLayer.addTo({{this._parent.get_name()}});
 
         {% endmacro %}
         """)  # noqa
@@ -311,10 +306,11 @@ class TimestampedImageOverlay(MacroElement):
     def __init__(self, data, time_interval, bounds, origin='upper',
                  colormap=None,
                  mercator_project=False, pixelated=True,
-                 transition_time=200, loop=True, valid_time_range='00:00/23:59',
+                 transition_time=250, loop=False,
                  auto_play=True, add_last_point=True, period='PT5M',
-                 min_speed=0.1, max_speed=10, loop_button=False,
+                 min_speed=0.1, max_speed=10, loop_button=True,
                  date_options='YYYY-MM-DD HH:mm:ss',
+                 current_time="2018-10-28T14:55:00Z",
                  time_slider_drag_update=False, duration=None,
                  **kwargs):
         super(TimestampedImageOverlay, self).__init__()
@@ -322,6 +318,9 @@ class TimestampedImageOverlay(MacroElement):
         self._name = 'ImageOverlay'
         self.pixelated = pixelated
         self.time_interval = time_interval
+        self.transition_time = transition_time
+        self.current_time = current_time
+
         if mercator_project:
             images = [mercator_transform(
                 image,
@@ -335,13 +334,12 @@ class TimestampedImageOverlay(MacroElement):
                      in images]
 
         self.bounds = json.loads(json.dumps(bounds))
-        self.valid_time_range = valid_time_range
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
         self.duration = 'undefined' if duration is None else "\"" + duration + "\""
 
-        options = {
+        time_control_options = {
             'position': 'bottomleft',
             'minSpeed': min_speed,
             'maxSpeed': max_speed,
@@ -351,9 +349,9 @@ class TimestampedImageOverlay(MacroElement):
             'playerOptions': {
                 'transitionTime': int(transition_time),
                 'loop': loop,
-                'startOver': True
-
-            },
+                'startOver': False
+            }}
+        options = {
             'opacity': kwargs.pop('opacity', 1.),
             'alt': kwargs.pop('alt', ''),
             'interactive': kwargs.pop('interactive', False),
@@ -363,6 +361,8 @@ class TimestampedImageOverlay(MacroElement):
             'className': kwargs.pop('class_name', ''),
 
         }
+        self.time_control_options = json.dumps(time_control_options,
+                                               sort_keys=True, indent=2)
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
