@@ -14,7 +14,7 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _validate_location
+from folium.utilities import _parse_size, _tmp_html, _validate_location
 
 from jinja2 import Environment, PackageLoader, Template
 

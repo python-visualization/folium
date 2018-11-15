@@ -397,6 +397,7 @@ def iter_points(x):
     else:
         return []
 
+
 @contextmanager
 def _tmp_html(data):
     tmp = None
