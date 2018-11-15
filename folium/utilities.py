@@ -386,6 +386,7 @@ def iter_points(x):
     else:
         return []
 
+
 def compare_rendered(obj1, obj2):
     """
     Return True/False if the normalized rendered version of
