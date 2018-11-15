@@ -11,14 +11,7 @@ import zlib
 import numpy as np
 
 from six import binary_type, text_type
-
-import folium
-
-
-try:
-    from urllib.parse import uses_relative, uses_netloc, uses_params, urlparse
-except ImportError:
-    from urlparse import uses_relative, uses_netloc, uses_params, urlparse
+from six.moves.urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
@@ -37,7 +30,7 @@ def _validate_location(location):
     if len(location) != 2:
         raise ValueError('Expected two values for location [lat, lon], '
                          'got {}'.format(len(location)))
-    location = _locations_tolist(location)
+    location = _iter_tolist(location)
     return location
 
 
@@ -46,14 +39,14 @@ def _validate_coordinates(coordinates):
     if _isnan(coordinates):
         raise ValueError('Location values cannot contain NaNs, '
                          'got:\n{!r}'.format(coordinates))
-    coordinates = _locations_tolist(coordinates)
+    coordinates = _iter_tolist(coordinates)
     return coordinates
 
 
-def _locations_tolist(x):
+def _iter_tolist(x):
     """Transforms recursively a list of iterables into a list of list."""
     if hasattr(x, '__iter__'):
-        return list(map(_locations_tolist, x))
+        return list(map(_iter_tolist, x))
     else:
         return x
 
@@ -114,7 +107,7 @@ def _is_url(url):
     """Check to see if `url` has a valid protocol."""
     try:
         return urlparse(url).scheme in _VALID_URLS
-    except:
+    except Exception:
         return False
 
 
@@ -369,3 +362,37 @@ def camelize(key):
     """
     return ''.join(x.capitalize() if i > 0 else x
                    for i, x in enumerate(key.split('_')))
+
+
+def _parse_size(value):
+    try:
+        if isinstance(value, (int, float)):
+            value_type = 'px'
+            value = float(value)
+            assert value > 0
+        else:
+            value_type = '%'
+            value = float(value.strip('%'))
+            assert 0 <= value <= 100
+    except Exception:
+        msg = 'Cannot parse value {!r} as {!r}'.format
+        raise ValueError(msg(value, value_type))
+    return value, value_type
+
+
+def iter_points(x):
+    """Iterates over a list representing a feature, and returns a list of points,
+    whatever the shape of the array (Point, MultiPolyline, etc).
+    """
+    if not isinstance(x, (list, tuple)):
+        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
+    if len(x):
+        if isinstance(x[0], (list, tuple)):
+            out = []
+            for y in x:
+                out += iter_points(y)
+            return out
+        else:
+            return [x]
+    else:
+        return []

@@ -5,7 +5,8 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
-from branca.utilities import iter_points, none_max, none_min
+
+from folium.utilities import iter_points, none_max, none_min
 
 from jinja2 import Template
 
@@ -147,7 +148,7 @@ class TimestampedGeoJson(MacroElement):
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
-        self.duration = 'undefined' if duration is None else "\""+duration+"\""
+        self.duration = 'undefined' if duration is None else '"' + duration + '"'
 
         options = {
             'position': 'bottomleft',
@@ -180,11 +181,11 @@ class TimestampedGeoJson(MacroElement):
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
@@ -192,7 +193,7 @@ class TimestampedGeoJson(MacroElement):
             name='highlight.js_css')
 
         figure.header.add_child(
-            CssLink("https://cdn.rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"),  # noqa
+            CssLink("https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"),  # noqa
             name='leaflet.timedimension_css')
 
         figure.header.add_child(

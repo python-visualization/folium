@@ -4,11 +4,11 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 
-from branca.element import Figure, JavascriptLink, CssLink, MacroElement
-
-from six import iteritems
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
+
+from six import iteritems
 
 
 class BeautifyIcon(MacroElement):
@@ -86,9 +86,9 @@ class BeautifyIcon(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
         figure.header.add_child(
-            CssLink('https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'),  # noqa
+            CssLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'),  # noqa
             name='beautify_icon_css')
 
         figure.header.add_child(
-            JavascriptLink('https://cdn.rawgit.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'),  # noqa
             name='beautify_icon_js')

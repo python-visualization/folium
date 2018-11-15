@@ -160,7 +160,6 @@ class TimeSliderChoropleth(GeoJson):
         self.timestamps = json.dumps(timestamps)
         self.styledict = json.dumps(styledict, sort_keys=True, indent=2)
 
-
     def render(self, **kwargs):
         super(TimeSliderChoropleth, self).render(**kwargs)
         figure = self.get_root()
