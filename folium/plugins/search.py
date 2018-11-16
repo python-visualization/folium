@@ -110,13 +110,19 @@ class Search(MacroElement):
             else None
 
     def test_params(self, keys, parent):
-        assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
+        if keys is not None:
+            assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
         assert isinstance(self._parent, Map), "Search can only be added to folium Map objects."
 
     def render(self, **kwargs):
-        keys = list(self.layer.data['features'][0]['properties'].keys())
+        if isinstance(self.layer, GeoJson):
+            keys = tuple(self.layer.data['features'][0]['properties'].keys())
+        elif isinstance(self.layer, TopoJson):
+            obj_name = self.layer.object_path.split('.')[-1]
+            keys = tuple(self.layer.data['objects'][obj_name]['geometries'][0]['properties'].keys())
+        else:
+            keys = None
         self.test_params(keys=keys, parent=self._parent)
-        self.parent_map_name = get_parent_map(self)
         super(Search, self).render()
 
         figure = self.get_root()
