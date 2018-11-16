@@ -198,17 +198,6 @@ def write_png(data, origin='upper', colormap=None):
         png_pack(b'IEND', b'')])
 
 
-def get_parent_map(element):
-    """Return the first `Map` object found in the line of parents of the element."""
-    if not hasattr(element, '_parent'):
-        raise ValueError("This object does not have a parent folium Map.")
-    parent = element._parent
-    if isinstance(parent, folium.Map):
-        return parent.get_name()
-    else:
-        return get_parent_map(parent)
-
-
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     """
     Transforms an image computed in (longitude,latitude) coordinates into
