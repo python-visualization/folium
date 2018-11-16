@@ -8,6 +8,7 @@ Leaflet GeoJson and miscellaneous features.
 from __future__ import (absolute_import, division, print_function)
 
 import json
+import os
 import warnings
 
 from branca.colormap import LinearColormap, StepColormap
@@ -112,7 +113,8 @@ class RegularPolygonMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+            # noqa
             name='dvf_js')
 
 
@@ -208,6 +210,10 @@ class Vega(Element):
             name='vega_parse')
 
 
+def get_vega_versions(spec):
+    pass
+
+
 class VegaLite(Element):
     """
     Creates a Vega-Lite chart element.
@@ -260,16 +266,11 @@ class VegaLite(Element):
         """Renders the HTML representation of the element."""
         self.json = json.dumps(self.data)
 
+        vegalite_major_version = self._get_vegalite_major_versions(self.data)
+
         self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
-
-        self._parent.script.add_child(Element(Template("""
-            const spec = {{this.json}};
-            vegaEmbed({{this.get_name()}}, spec)
-                .then(function(result) {})
-                .catch(console.error);
-        """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
@@ -285,9 +286,48 @@ class VegaLite(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
+        if vegalite_major_version == '1':
+            self._embed_vegalite_v1(figure)
+        elif vegalite_major_version == '2':
+            self._embed_vegalite_v2(figure)
+        elif vegalite_major_version == '3':
+            self._embed_vegalite_v3(figure)
+        else:
+            self._embed_vegalite_v2(figure)
+
+    def _get_vegalite_major_versions(self, spec):
+        schema = spec['$schema']
+        version = os.path.splitext(os.path.split(schema)[1])[0].lstrip('v')
+        major_version = version.split('.')[0]
+        return major_version
+
+    def _embed_vegalite_v3(self, figure):
+        self._parent.script.add_child(Element(Template("""
+                    const spec = {{this.json}};
+                    vegaEmbed({{this.get_name()}}, spec)
+                        .then(function(result) {})
+                        .catch(console.error);
+                """).render(this=self)), name=self.get_name())
+
         figure.header.add_child(
-            JavascriptLink('https://d3js.org/d3.v5.min.js'),
-            name='d3')
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'),
+            name='vega')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'),
+            name='vega-lite')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
+            name='vega-embed')
+
+    def _embed_vegalite_v2(self, figure):
+        self._parent.script.add_child(Element(Template("""
+                    const spec = {{this.json}};
+                    vegaEmbed({{this.get_name()}}, spec)
+                        .then(function(result) {})
+                        .catch(console.error);
+                """).render(this=self)), name=self.get_name())
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'),
@@ -299,6 +339,33 @@ class VegaLite(Element):
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
+            name='vega-embed')
+
+    def _embed_vegalite_v1(self, figure):
+        self._parent.script.add_child(Element(Template("""
+                    var embedSpec = {
+                        mode: "vega-lite",
+                        spec: {{this.json}}
+                    };
+                    vg.embed(
+                        {{this.get_name()}}, embedSpec, function(error, result) {}
+                    );
+                """).render(this=self)), name=self.get_name())
+
+        figure.header.add_child(
+            JavascriptLink('https://d3js.org/d3.v3.min.js'),
+            name='d3')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'),  # noqa
+            name='vega')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'),  # noqa
+            name='vega-lite')
+
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'),  # noqa
             name='vega-embed')
 
 
@@ -441,7 +508,8 @@ class GeoJson(Layer):
 
         for feature in self.data['features']:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
+                self.highlight_function(feature))  # noqa
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
@@ -556,11 +624,13 @@ class TopoJson(Layer):
         a corresponding JSON output.
 
         """
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
+
         geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
@@ -697,8 +767,8 @@ class GeoJsonTooltip(Tooltip):
                                                 ' the same length.'
         assert isinstance(labels, bool), 'labels requires a boolean value.'
         assert isinstance(localize, bool), 'localize must be bool.'
-        assert 'permanent' not in kwargs,  'The `permanent` option does not ' \
-                                           'work with GeoJsonTooltip.'
+        assert 'permanent' not in kwargs, 'The `permanent` option does not ' \
+                                          'work with GeoJsonTooltip.'
 
         self.fields = fields
         self.aliases = aliases
@@ -834,7 +904,7 @@ class Choropleth(FeatureGroup):
     ...            highlight=True)
     """
 
-    def __init__(self, geo_data, data=None, columns=None, key_on=None,    # noqa
+    def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
                  bins=6, fill_color='blue', nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
@@ -1180,6 +1250,7 @@ class ColorLine(FeatureGroup):
     A ColorLine object that you can `add_to` a Map.
 
     """
+
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)
