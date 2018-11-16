@@ -306,9 +306,9 @@ $(document).ready(objects_in_front);
             driver = webdriver.Firefox(options=options)
 
             html = self.get_root().render()
-            with _tmp_html(html) as tmp:
+            with _tmp_html(html) as fname:
                 # We need the tempfile to avoid JS security issues.
-                driver.get('file:///{path}'.format(path=tmp.name))
+                driver.get('file:///{path}'.format(path=fname))
                 driver.maximize_window()
                 time.sleep(delay)
                 png = driver.get_screenshot_as_png()
