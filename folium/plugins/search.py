@@ -92,23 +92,26 @@ class Search(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, layer=None, search_label='name', search_zoom=None, geom_type='Point', position='topleft',
+    def __init__(self, layer, search_label=None, search_zoom=None, geom_type='Point', position='topleft',
                  placeholder='Search', collapsed=True, **kwargs):
         super(Search, self).__init__()
-        assert isinstance(layer, folium.GeoJson), "Search can only be added to GeoJson objects."
+        assert isinstance(layer,
+                          (GeoJson, MarkerCluster, FeatureGroup, TopoJson)
+                          ), "Search can only index FeatureGroup, MarkerCluster, GeoJson, and TopoJson layers at " \
+                             "this time."
         self.layer = layer
         self.search_label = search_label
-        self.search_zoom = json.dumps(search_zoom)
+        self.search_zoom = search_zoom
         self.geom_type = geom_type
         self.position = position
         self.placeholder = placeholder
-        self.collapsed = json.dumps(collapsed)
+        self.collapsed = collapsed
         self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items()) > 0 \
             else None
 
     def test_params(self, keys, parent):
         assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
-        assert isinstance(self._parent, folium.Map), "Search can only be added to folium Map objects."
+        assert isinstance(self._parent, Map), "Search can only be added to folium Map objects."
 
     def render(self, **kwargs):
         keys = list(self.layer.data['features'][0]['properties'].keys())
