@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 
-from ..utilities import camelize, get_parent_map
+from ..utilities import camelize
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
