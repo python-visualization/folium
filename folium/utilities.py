@@ -6,9 +6,9 @@ import json
 import math
 import os
 import struct
+import tempfile
 import zlib
 from contextlib import contextmanager
-from tempfile import NamedTemporaryFile
 
 import numpy as np
 
@@ -400,12 +400,13 @@ def iter_points(x):
 
 @contextmanager
 def _tmp_html(data):
-    tmp = None
+    """Yields the path of a temporary HTML file containing data."""
+    filepath = ''
     try:
-        tmp = NamedTemporaryFile(suffix='.html', prefix='folium_')
-        tmp.write(data.encode('utf8'))
-        tmp.flush()
-        yield tmp
+        fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
+        os.write(fid, data.encode('utf8'))
+        os.close(fid)
+        yield filepath
     finally:
-        if tmp is not None:
-            tmp.close()
+        if os.path.isfile(filepath):
+            os.remove(filepath)
