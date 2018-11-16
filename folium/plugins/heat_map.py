@@ -5,10 +5,9 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.element import Figure, JavascriptLink
-from branca.utilities import none_max, none_min
 
 from folium.map import Layer
-from folium.utilities import _isnan
+from folium.utilities import _isnan, _iter_tolist, none_max, none_min
 
 from jinja2 import Template
 
@@ -65,6 +64,7 @@ class HeatMap(Layer):
                  overlay=True, control=True, show=True):
         super(HeatMap, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
+        data = _iter_tolist(data)
         if _isnan(data):
             raise ValueError('data cannot contain NaNs, '
                              'got:\n{!r}'.format(data))

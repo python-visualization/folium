@@ -1,11 +1,20 @@
-.. image:: https://badge.fury.io/py/folium.png
-   :target: http://badge.fury.io/py/folium
-.. image:: https://api.travis-ci.org/python-visualization/folium.png?branch=master
-   :target: https://travis-ci.org/python-visualization/folium
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-.. image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
+|PyPI| |Travis| |Gitter| |DOI|
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
+    :target: https://pypi.org/project/folium
+    :alt: PyPI Package
+
+.. |Travis| image:: https://travis-ci.org/python-visualization/folium.svg?branch=master
+    :target: https://travis-ci.org/python-visualization/folium
+    :alt: Travis Build Status
+
+.. |Gitter| image:: https://badges.gitter.im/python-visualization/folium.svg
+    :target: https://gitter.im/python-visualization/folium
+    :alt: Gitter
+
+.. |DOI| image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
    :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
+   :alt: DOI
 
 folium
 ======
@@ -49,6 +58,14 @@ using Jupyter's nbviewer:
 https://nbviewer.jupyter.org/github/python-visualization/folium/tree/master/examples/
 
 https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
+
+Contributing
+------------
+
+We love contributions!  folium is open source, built on open source,
+and we'd love to have you hang out in our community.
+
+See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md>`_ for more info.
 
 
 .. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
