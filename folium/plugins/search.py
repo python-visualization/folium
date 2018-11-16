@@ -23,18 +23,24 @@ class Search(MacroElement):
 
     Parameters
     ----------
-    search_label: str
-        label to index the search, default 'name'
-    search_zoom: int, optional
+    layer: GeoJson, TopoJson, FeatureGroup, MarkerCluster class object.
+        The map layer to index in the Search view.
+    search_label: str, default None.
+        'properties' key in layer to index Search, if layer is GeoJson/TopoJson.
+    search_zoom: int, optional. Default None.
         Zoom level to set the map to on match.
         By default zooms to Polygon/Line bounds and points
         on their natural extent.
-    geom_type: str
-        geometry type, default 'Point'
+    geom_type: str, default "Point"
+        Feature geometry type. "Point","Line" or "Polygon"
     position: str
         Change the position of the search bar, can be:
         'topleft', 'topright', 'bottomright' or 'bottomleft',
         default 'topleft'
+    placeholder: str, default "Search"
+        Placeholder text inside the Search box if nothing is entered.
+    collapsed: boolean, default False.
+        Whether the Seach box should be collapsed or not.
     **kwargs.
         Assorted style options to change feature styling on match.
         Use the same way as vector layer arguments.
