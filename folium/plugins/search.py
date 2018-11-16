@@ -10,7 +10,12 @@ from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
-import folium
+from folium import Map
+
+from folium.features import FeatureGroup, GeoJson, TopoJson
+
+from folium.plugins import MarkerCluster
+
 
 class Search(MacroElement):
     """
