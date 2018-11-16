@@ -50,23 +50,25 @@ class Search(MacroElement):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            let {{this.layer.get_name()}}searchZoom = {{this.search_zoom}};
-            
             var {{this.layer.get_name()}}searchControl = new L.Control.Search({
                 layer: {{this.layer.get_name()}},
+                {% if this.search_label %}
                 propertyName: '{{this.search_label}}',
-                collapsed: {{this.collapsed}},
+                {% endif %}
+                collapsed: {{this.collapsed|tojson|safe}},
                 textPlaceholder: '{{this.placeholder}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
-                zoom: {{this.layer.get_name()}}searchZoom?{{this.layer.get_name()}}searchZoom:{{this.parent_map_name}}.getZoom(),
+            {% if this.search_zoom %}
+                zoom: {{this.search_zoom}},
+            {% endif %}
                 position:'{{this.position}}',
                 hideMarkerOnCollapse: true
             {% else %}
                 marker: false,
                 moveToLocation: function(latlng, title, map) {
-                var zoom = {{this.layer.get_name()}}searchZoom?{{this.layer.get_name()}}searchZoom:map.getBoundsZoom(latlng.layer.getBounds())
-                    map.setView(latlng, zoom); // access the zoom
+                var zoom = {% if this.search_zoom %} {{ this.search_zoom }} {% else %} map.getBoundsZoom(latlng.layer.getBounds()) {% endif %}
+                    map.flyTo(latlng, zoom); // access the zoom
                 }
             {% endif %}
                 });
@@ -85,7 +87,7 @@ class Search(MacroElement):
                             return feature.properties.style
                     });
                 });
-            {{this.parent_map_name}}.addControl( {{this.layer.get_name()}}searchControl );
+            {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
 
         {% endmacro %}
         """)  # noqa
