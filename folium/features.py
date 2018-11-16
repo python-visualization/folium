@@ -296,18 +296,17 @@ class VegaLite(Element):
             self._embed_vegalite_v2(figure)
 
     def _get_vegalite_major_versions(self, spec):
-        schema = spec['$schema']
-        version = os.path.splitext(os.path.split(schema)[1])[0].lstrip('v')
-        major_version = version.split('.')[0]
+        try:
+            schema = spec['$schema']
+            version = os.path.splitext(os.path.split(schema)[1])[0].lstrip('v')
+            major_version = version.split('.')[0]
+        except KeyError:
+            major_version = None
+
         return major_version
 
     def _embed_vegalite_v3(self, figure):
-        self._parent.script.add_child(Element(Template("""
-                    const spec = {{this.json}};
-                    vegaEmbed({{this.get_name()}}, spec)
-                        .then(function(result) {})
-                        .catch(console.error);
-                """).render(this=self)), name=self.get_name())
+        self.vega_embed()
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'),
@@ -322,12 +321,7 @@ class VegaLite(Element):
             name='vega-embed')
 
     def _embed_vegalite_v2(self, figure):
-        self._parent.script.add_child(Element(Template("""
-                    const spec = {{this.json}};
-                    vegaEmbed({{this.get_name()}}, spec)
-                        .then(function(result) {})
-                        .catch(console.error);
-                """).render(this=self)), name=self.get_name())
+        self.vega_embed()
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'),
@@ -340,6 +334,14 @@ class VegaLite(Element):
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
             name='vega-embed')
+
+    def vega_embed(self):
+        self._parent.script.add_child(Element(Template("""
+                    const spec = {{this.json}};
+                    vegaEmbed({{this.get_name()}}, spec)
+                        .then(function(result) {})
+                        .catch(console.error);
+                """).render(this=self)), name=self.get_name())
 
     def _embed_vegalite_v1(self, figure):
         self._parent.script.add_child(Element(Template("""
