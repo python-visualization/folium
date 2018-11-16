@@ -8,8 +8,8 @@ Folium _repr_*_ Tests
 
 from __future__ import (absolute_import, division, print_function)
 
-import sys
 import io
+import sys
 
 import PIL.Image
 
@@ -26,6 +26,7 @@ def m():
 @pytest.fixture
 def m_png():
     yield folium.Map(png_enabled=True)
+
 
 def test__repr_html_is_str(m):
     html = m._repr_html_()
