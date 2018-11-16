@@ -12,8 +12,6 @@ import numpy as np
 
 from six import binary_type, text_type
 
-import folium
-
 
 try:
     from urllib.parse import uses_relative, uses_netloc, uses_params, urlparse
@@ -203,17 +201,6 @@ def write_png(data, origin='upper', colormap=None):
         png_pack(b'IHDR', struct.pack('!2I5B', width, height, 8, 6, 0, 0, 0)),
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
-
-
-def get_parent_map(element):
-    """Return the first `Map` object found in the line of parents of the element."""
-    if not hasattr(element, '_parent'):
-        raise ValueError("This object does not have a parent folium Map.")
-    parent = element._parent
-    if isinstance(parent, folium.Map):
-        return parent.get_name()
-    else:
-        return get_parent_map(parent)
 
 
 def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
