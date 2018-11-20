@@ -121,4 +121,4 @@ def test_geojson_tooltip():
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter('always')
         m._repr_html_()
-        assert isinstance(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
+        assert issubclass(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
