@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from branca.element import CssLink, Element, Figure, JavascriptLink
-from branca.utilities import none_max, none_min
 
 from folium.map import Layer
+from folium.utilities import none_max, none_min
 
 from jinja2 import Template
 
@@ -162,16 +162,16 @@ class HeatMapWithTime(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension.min.js')
 
         figure.header.add_child(
             JavascriptLink(
-                'https://rawgit.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),  # noqa
+                'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),  # noqa
             name='heatmap.min.js')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js'),  # noqa
             name='leaflet-heatmap.js')
 
         figure.header.add_child(

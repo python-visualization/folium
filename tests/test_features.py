@@ -6,17 +6,16 @@ Folium Features Tests
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
-
 import warnings
 
 from branca.element import Element
-from branca.six import text_type
 
-from folium import Map, Popup
 import folium
+from folium import Map, Popup
+
+from six import text_type
+
 
 tmpl = """
 <!DOCTYPE html>

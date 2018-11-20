@@ -4,8 +4,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink
 
-from folium.raster_layers import WmsTileLayer
 from folium.map import Layer
+from folium.raster_layers import WmsTileLayer
 
 from jinja2 import Template
 
@@ -135,11 +135,11 @@ class TimestampedWmsTileLayers(Layer):
             name='jqueryui1.10.2')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
             name='iso8601')
 
         figure.header.add_child(
-            JavascriptLink('https://rawgit.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension')
 
         figure.header.add_child(
