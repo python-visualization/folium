@@ -8,8 +8,10 @@ Folium map Tests
 
 from __future__ import (absolute_import, division, print_function)
 
+import pytest
+
 from folium import Map
-from folium.map import Popup
+from folium.map import Popup, Icon
 
 
 tmpl = u"""
@@ -87,3 +89,17 @@ def test_popup_show():
                html_name=list(popup.html._children.keys())[0],
                map_name=m.get_name())
     assert _normalize(rendered) == _normalize(expected)
+
+
+def test_icon_valid_marker_colors():
+    with pytest.warns(None) as record:
+        for color in Icon.color_options:
+            Icon(color=color)
+    assert len(record) == 0
+
+
+@pytest.mark.filterwarnings('ignore::UserWarning')
+def test_icon_invalid_marker_colors():
+    pytest.warns(UserWarning, Icon, color='lila')
+    pytest.warns(UserWarning, Icon, color=42)
+    pytest.warns(UserWarning, Icon, color=None)
