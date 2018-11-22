@@ -416,6 +416,12 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
+
+        for caller in (style_function, highlight_function):
+            if caller is not None:
+                assert callable(caller) and isinstance(caller(self.data['features'][0]), dict), \
+                    "Pass a function returning a dictionary to `{}`.".format(caller)
+
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
