@@ -417,10 +417,13 @@ class GeoJson(Layer):
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
-        for caller in (style_function, highlight_function):
+        callers = {'style_function': style_function, 'highlight_function': highlight_function}
+
+        for caller_key in callers:
+            caller = callers[caller_key]
             if caller is not None:
-                assert callable(caller) and isinstance(caller(self.data['features'][0]), dict), \
-                    "Pass a function returning a dictionary to `{}`.".format(caller)
+                assert callable(caller) and isinstance(caller(self.data['features'][0]), dict),\
+                    "Pass a function returning a dictionary to `{}`.".format(caller_key)
 
         self.style_function = style_function or (lambda x: {})
 
