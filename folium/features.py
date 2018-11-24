@@ -419,11 +419,10 @@ class GeoJson(Layer):
 
         callers = {'style_function': style_function, 'highlight_function': highlight_function}
 
-        for caller_key in callers:
-            caller = callers[caller_key]
+        for key, caller in callers.items():
             if caller is not None:
-                assert callable(caller) and isinstance(caller(self.data['features'][0]), dict),\
-                    "Pass a function returning a dictionary to `{}`.".format(caller_key)
+                if not callable(caller) or not isinstance(caller(self.data['features'][0]), dict):
+                    raise ValueError('Pass a function returning a dictionary to `{}`.'.format(key))
 
         self.style_function = style_function or (lambda x: {})
 
