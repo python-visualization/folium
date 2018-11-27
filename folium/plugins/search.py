@@ -91,13 +91,15 @@ class Search(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, layer, search_label=None, search_zoom=None, geom_type='Point', position='topleft',
-                 placeholder='Search', collapsed=False, **kwargs):
+    def __init__(self, layer, search_label=None, search_zoom=None,
+                 geom_type='Point', position='topleft', placeholder='Search',
+                 collapsed=False, **kwargs):
         super(Search, self).__init__()
         assert isinstance(layer,
                           (GeoJson, MarkerCluster, FeatureGroup, TopoJson)
-                          ), "Search can only index FeatureGroup, MarkerCluster, GeoJson, and TopoJson layers at " \
-                             "this time."
+                          ), 'Search can only index FeatureGroup, ' \
+                             'MarkerCluster, GeoJson, and TopoJson layers at ' \
+                             'this time.'
         self.layer = layer
         self.search_label = search_label
         self.search_zoom = search_zoom
@@ -105,8 +107,10 @@ class Search(MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = collapsed
-        self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items()) > 0 \
-            else None
+        self.options = None
+        if len(kwargs.items()) > 0:
+            self.options = json.dumps({camelize(key): value
+                                       for key, value in kwargs.items()})
 
     def test_params(self, keys):
         if keys is not None:
