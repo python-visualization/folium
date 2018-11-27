@@ -645,7 +645,7 @@ class GeoJsonTooltip(Tooltip):
     Examples
     --------
     # Provide fields and aliases, with Style.
-    >>> Tooltip(
+    >>> GeoJsonTooltip(
     >>>     fields=['CNTY_NM', 'census-pop-2015', 'census-md-income-2015'],
     >>>     aliases=['County', '2015 Census Population', '2015 Median Income'],
     >>>     localize=True,
@@ -653,7 +653,7 @@ class GeoJsonTooltip(Tooltip):
     >>>            'courier new; font-size: 24px; padding: 10px;')
     >>> )
     # Provide fields, with labels off and fixed tooltip positions.
-    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=False)
+    >>> GeoJsonTooltip(fields=('CNTY_NM',), labels=False, sticky=False)
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
