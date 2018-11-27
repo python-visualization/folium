@@ -59,7 +59,7 @@ class Search(MacroElement):
             {% if this.geom_type == 'Point' %}
                 initial: false,
                 {% if this.search_zoom %}
-                    zoom: {{this.search_zoom}},
+                zoom: {{this.search_zoom}},
                 {% endif %}
                 position:'{{this.position}}',
                 hideMarkerOnCollapse: true
