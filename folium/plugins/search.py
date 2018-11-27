@@ -109,7 +109,7 @@ class Search(MacroElement):
         self.options = json.dumps({camelize(key): value for key, value in kwargs.items()}) if len(kwargs.items()) > 0 \
             else None
 
-    def test_params(self, keys, parent):
+    def test_params(self, keys):
         if keys is not None:
             assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
         assert isinstance(self._parent, Map), "Search can only be added to folium Map objects."
@@ -122,7 +122,7 @@ class Search(MacroElement):
             keys = tuple(self.layer.data['objects'][obj_name]['geometries'][0]['properties'].keys())
         else:
             keys = None
-        self.test_params(keys=keys, parent=self._parent)
+        self.test_params(keys=keys)
         super(Search, self).render()
 
         figure = self.get_root()
