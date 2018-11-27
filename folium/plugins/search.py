@@ -114,8 +114,11 @@ class Search(MacroElement):
 
     def test_params(self, keys):
         if keys is not None:
-            assert self.search_label in keys, "The label '{}' was not available in {}".format(self.search_label, keys)
-        assert isinstance(self._parent, Map), "Search can only be added to folium Map objects."
+            assert self.search_label in keys, "The label '{}' was not " \
+                                              "available in {}" \
+                                              "".format(self.search_label, keys)
+        assert isinstance(self._parent, Map), "Search can only be added to " \
+                                              "folium Map objects."
 
     def render(self, **kwargs):
         if isinstance(self.layer, GeoJson):
