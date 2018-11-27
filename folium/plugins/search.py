@@ -38,7 +38,7 @@ class Search(MacroElement):
         'topleft', 'topright', 'bottomright' or 'bottomleft',
     placeholder: str, default 'Search'
         Placeholder text inside the Search box if nothing is entered.
-    collapsed: boolean, default True
+    collapsed: boolean, default False
         Whether the Search box should be collapsed or not.
     **kwargs.
         Assorted style options to change feature styling on match.
@@ -92,7 +92,7 @@ class Search(MacroElement):
         """)  # noqa
 
     def __init__(self, layer, search_label=None, search_zoom=None, geom_type='Point', position='topleft',
-                 placeholder='Search', collapsed=True, **kwargs):
+                 placeholder='Search', collapsed=False, **kwargs):
         super(Search, self).__init__()
         assert isinstance(layer,
                           (GeoJson, MarkerCluster, FeatureGroup, TopoJson)
