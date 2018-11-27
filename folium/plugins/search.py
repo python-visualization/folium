@@ -125,7 +125,7 @@ class Search(MacroElement):
             keys = tuple(self.layer.data['features'][0]['properties'].keys())
         elif isinstance(self.layer, TopoJson):
             obj_name = self.layer.object_path.split('.')[-1]
-            keys = tuple(self.layer.data['objects'][obj_name]['geometries'][0]['properties'].keys())
+            keys = tuple(self.layer.data['objects'][obj_name]['geometries'][0]['properties'].keys())  # noqa
         else:
             keys = None
         self.test_params(keys=keys)
