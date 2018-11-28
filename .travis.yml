@@ -19,15 +19,17 @@ matrix:
     env: TEST_TARGET=default PY=2.7
   - name: default
     env: TEST_TARGET=default PY=3.7
-  - name: notebooks
-    env: TEST_TARGET=notebooks PY=3.7
+  - name: notebooks-conding-standard
+    env: PY=3.7
+  - name: notebooks-code
+    env: PY=3.7
   - name: latest_branca
-    env: TEST_TARGET=latest_branca PY=3.7
+    env: PY=3.7
   - name: docs
-    env: TEST_TARGET=docs PY=3.7
+    env: PY=3.7
   allow_failures:
   - name: latest_branca
-    env: TEST_TARGET=latest_branca PY=3.7
+    env: PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
@@ -54,23 +56,28 @@ install:
   - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
 
 script:
-  - if [[ $TEST_TARGET != 'docs' ]]; then
-      cp -r tests/ examples/ /tmp && cd /tmp ;
+  - if [[ $TRAVIS_JOB_NAME != 'docs' ]]; then
+      cp -r tests/ examples/ /tmp ;
     fi
 
   - if [[ $TEST_TARGET == 'default' ]]; then
-      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
-  - if [[ $TEST_TARGET == 'latest_branca' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'latest_branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      pytest -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
-  - if [[ $TEST_TARGET == 'notebooks' ]]; then
-      for file in $(find . -type f -name "*.ipynb"); do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python $file | grep -v '^get_ipython' | flake8 - --ignore=W391,E226,E402,I100 --max-line-length=100 --show-source ; done ;
-      pytest -vv tests/notebooks/test_notebooks.py ;
+  - if [[ $TRAVIS_JOB_NAME == 'notebooks-conding-standard' ]]; then
+      for NB in $(find . -type f -name "*.ipynb");
+      do jupyter nbconvert --template=tests/strip_markdown.tpl --stdout --to python "${NB}" | flake8 - --ignore=W391,E226,E402,,W504,I100,I201,I202 --max-line-length=120 --show-source ;
+      done ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'notebooks-code' ]]; then
+      pytest --nbval-lax -p no:python /tmp/examples ;
     fi
 
   - if [[ $TEST_TARGET == 'docs' ]]; then
@@ -100,4 +107,4 @@ deploy:
     repo: python-visualization/folium
     tags: true
     all_branches: master
-    condition: '$TEST_TARGET == "default"'
+    condition: '$TRAVIS_JOB_NAME == "default"'
