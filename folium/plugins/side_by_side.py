@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
-import json
 
 from branca.element import Figure, JavascriptLink, MacroElement
 from jinja2 import Template
 from folium.raster_layers import TileLayer, WmsTileLayer
+
 
 class SideBySide(MacroElement):
     """Add a side-by-side control to an existing map.
@@ -16,29 +16,40 @@ class SideBySide(MacroElement):
     Parameters
     ----------
     left_layer : folium TileLayer or WMSTileLayer
-        A layer to show on the left side of the map. Any layer added to the map 
+        A layer to show on the left side of the map. Any layer added to the map
         that is here will be shown on the left.
     right_layer : folium TileLayer or WMSTileLayer
-        A layer to show on the right side of the map. Any layer added to the 
-        map that is here will be shown on the right. This should not be the 
+        A layer to show on the right side of the map. Any layer added to the
+        map that is here will be shown on the right. This should not be the
         same as any layer in `left_layers`.
     version : str, default None
-        The version of the javascript library to use. Default value will use 
-        the development version. Valid values are None, 'gh-pages', 'v2.0.0', 
+        The version of the javascript library to use. Default value will use
+        the development version. Valid values are None, 'gh-pages', 'v2.0.0',
         'v1.1.1', 'v1.1.0', 'v1.0.2' or 'v1.0.1'.
 
     Examples
     --------
-    >>> m = folium.Map(location=[40, 0], zoom_start=12, tiles='Stamen Terrain')
-    >>> left_layer = folium.CircleMarker(
-    ...     location=[40, -1], 
-    ...     radius=500
+    >>> m = folium.Map(location=[40, -100], zoom_start=4)
+    >>> left_layer = folium.raster_layers.TileLayer(
+    ...     tiles='http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+    ...     attr='google',
+    ...     name='google street view',
+    ...     max_zoom=20,
+    ...     subdomains=['mt0', 'mt1', 'mt2', 'mt3'],
+    ...     overlay=False,
+    ...     control=True,
     ... ).add_to(m)
-    >>> right_layer = folium.CircleMarker(
-    ...     location=[40, 1], 
-    ...     radius=500
+    >>> right_layer = folium.raster_layers.WmsTileLayer(
+    ...     url='http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi',
+    ...     name='test',
+    ...     fmt='image/png',
+    ...     layers='nexrad-n0r-900913',
+    ...     attr=u'Weather data © 2012 IEM Nexrad',
+    ...     transparent=True,
+    ...     overlay=True,
+    ...     control=True,
     ... ).add_to(m)
-    >>> sbs = SideBySide(left_layer, right_layer)
+    >>> sbs = folium.plugin.SideBySide(left_layer, right_layer)
     >>> m.add_child(sbs)
     """
 
@@ -66,7 +77,7 @@ class SideBySide(MacroElement):
         self.left_layer = left_layer
         self.right_layer = right_layer
         # Manage version
-        versions = ('gh-pages', 'v2.0.0', 'v1.1.1', 
+        versions = ('gh-pages', 'v2.0.0', 'v1.1.1',
                     'v1.1.0', 'v1.0.2', 'v1.0.1')
         if not version:
             version = versions[0]
@@ -76,7 +87,6 @@ class SideBySide(MacroElement):
                             'leaflet-side-by-side.js').format(version)
         else:
             raise ValueError('"version" is not a valid value.')
-        
 
     def render(self, **kwargs):
         figure = self.get_root()
