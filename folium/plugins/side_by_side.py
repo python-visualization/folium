@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
-import json
 
 from branca.element import Figure, JavascriptLink, MacroElement
 from jinja2 import Template
