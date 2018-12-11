@@ -1,9 +1,6 @@
-# Remove markdown cells.
 {% extends 'python.tpl'%}
+{% block header -%}
+{% endblock header %}
+{% block codecell %}{{super().replace('get_ipython', '# get_ipython') if "get_ipython" in super() else super()}}{% endblock codecell %}
 {% block markdowncell -%}
 {% endblock markdowncell %}
-
-# Change the appearance of execution count.
-{% block in_prompt %}
-# This was input cell with execution count: {{ cell.execution_count if cell.execution_count else ' ' }}
-{%- endblock in_prompt %}
