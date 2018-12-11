@@ -409,11 +409,13 @@ class GeoJson(Layer):
             else:  # This is a filename
                 with open(data) as f:
                     self.data = json.loads(f.read())
-        elif hasattr(data, '__geo_interface__'):
+        elif hasattr(data, 'geometry'):
+            if any(data['geometry'].isnull()):
+                raise ValueError('Cannot render objects with missing geometries.')
             self.embed = True
             if hasattr(data, 'to_crs'):
                 data = data.to_crs(epsg='4326')
-            self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
+            self.data = json.loads(json.dumps(data.to_json()))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
         self.style_function = style_function or (lambda x: {})
