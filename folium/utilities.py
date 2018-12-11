@@ -6,7 +6,9 @@ import json
 import math
 import os
 import struct
+import tempfile
 import zlib
+from contextlib import contextmanager
 
 import numpy as np
 
@@ -398,3 +400,17 @@ def compare_rendered(obj1, obj2):
 
 def _normalize(rendered):
     return [line.strip() for line in rendered.splitlines() if line.strip()]
+
+
+@contextmanager
+def _tmp_html(data):
+    """Yields the path of a temporary HTML file containing data."""
+    filepath = ''
+    try:
+        fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
+        os.write(fid, data.encode('utf8'))
+        os.close(fid)
+        yield filepath
+    finally:
+        if os.path.isfile(filepath):
+            os.remove(filepath)

@@ -7,7 +7,6 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 from __future__ import (absolute_import, division, print_function)
 
-import os
 import time
 import warnings
 
@@ -15,7 +14,7 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _validate_location
+from folium.utilities import _parse_size, _tmp_html, _validate_location
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -202,10 +201,10 @@ class Map(MacroElement):
         zoomControl: {{this.zoom_control.__str__().lower()}},
         });
 {% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
-    
+
     {% if this.objects_to_stay_in_front %}
     function objects_in_front() {
-        {% for obj in this.objects_to_stay_in_front %}    
+        {% for obj in this.objects_to_stay_in_front %}
             {{ obj.get_name() }}.bringToFront();
         {% endfor %}
     };
@@ -290,35 +289,30 @@ $(document).ready(objects_in_front);
     def _to_png(self, delay=3):
         """Export the HTML to byte representation of a PNG image.
 
-        Uses Phantom JS to render the HTML and record a PNG. You may need to
+        Uses selenium to render the HTML and record a PNG. You may need to
         adjust the `delay` time keyword argument if maps render without data or tiles.
 
         Examples
         --------
         >>> map._to_png()
         >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+
         """
-
         if self._png_image is None:
-            import selenium.webdriver
+            from selenium import webdriver
 
-            driver = selenium.webdriver.PhantomJS(
-                service_log_path=os.path.devnull
-            )
-            driver.get('about:blank')
+            options = webdriver.firefox.options.Options()
+            options.add_argument('--headless')
+            driver = webdriver.Firefox(options=options)
+
             html = self.get_root().render()
-            html = html.replace('\'', '"').replace('"', '\\"')
-            html = html.replace('\n', '')
-            driver.execute_script('document.write(\"{}\")'.format(html))
-            driver.maximize_window()
-            # Ignore user map size.
-            # todo: fix this
-            # driver.execute_script("document.body.style.width = '100%';")  # noqa
-            # We should probably monitor if some element is present,
-            # but this is OK for now.
-            time.sleep(delay)
-            png = driver.get_screenshot_as_png()
-            driver.quit()
+            with _tmp_html(html) as fname:
+                # We need the tempfile to avoid JS security issues.
+                driver.get('file:///{path}'.format(path=fname))
+                driver.maximize_window()
+                time.sleep(delay)
+                png = driver.get_screenshot_as_png()
+                driver.quit()
             self._png_image = png
         return self._png_image
 

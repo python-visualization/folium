@@ -8,8 +8,8 @@ Folium _repr_*_ Tests
 
 from __future__ import (absolute_import, division, print_function)
 
-import sys
 import io
+import sys
 
 import PIL.Image
 
@@ -19,18 +19,22 @@ import pytest
 
 
 @pytest.fixture
-def make_map(png_enabled=False):
-    m = folium.Map(png_enabled=png_enabled)
-    return m
+def m():
+    yield folium.Map(png_enabled=False)
 
 
-def test__repr_html_is_str():
-    html = make_map()._repr_html_()
+@pytest.fixture
+def m_png():
+    yield folium.Map(png_enabled=True)
+
+
+def test__repr_html_is_str(m):
+    html = m._repr_html_()
     assert isinstance(html, str)
 
 
-def test_valid_html():
-    html = make_map()._repr_html_()
+def test_valid_html(m):
+    html = m._repr_html_()
     parts = html.split('><')
     assert len(parts) == 6
     assert parts[0].lstrip('<div ') == 'style="width:100%;"'
@@ -41,19 +45,19 @@ def test_valid_html():
     assert parts[5] == '/div>'
 
 
-def test__repr_png_no_image():
-    png = make_map(png_enabled=False)._repr_png_()
+def test__repr_png_no_image(m):
+    png = m._repr_png_()
     assert png is None
 
 
-def test__repr_png_is_bytes():
-    png = make_map(png_enabled=True)._repr_png_()
+def test__repr_png_is_bytes(m_png):
+    png = m_png._repr_png_()
     assert isinstance(png, bytes)
 
 
 @pytest.mark.skipif(sys.version_info < (3, 0),
                     reason="Doesn't work on Python 2.7.")
-def test_valid_png():
-    png = make_map(png_enabled=True)._repr_png_()
+def test_valid_png(m_png):
+    png = m_png._repr_png_()
     img = PIL.Image.open(io.BytesIO(png))
     isinstance(img, PIL.PngImagePlugin.PngImageFile)
