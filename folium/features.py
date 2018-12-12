@@ -8,7 +8,6 @@ Leaflet GeoJson and miscellaneous features.
 from __future__ import (absolute_import, division, print_function)
 
 import json
-import os
 import warnings
 
 from branca.colormap import LinearColormap, StepColormap
@@ -295,10 +294,10 @@ class VegaLite(Element):
     def _get_vegalite_major_versions(self, spec):
         try:
             schema = spec['$schema']
-            version = os.path.splitext(os.path.split(schema)[1])[0].lstrip('v')
-            major_version = version.split('.')[0]
         except KeyError:
             major_version = None
+        else:
+            major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
 
         return major_version
 
