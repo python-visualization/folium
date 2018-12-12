@@ -210,10 +210,6 @@ class Vega(Element):
             name='vega_parse')
 
 
-def get_vega_versions(spec):
-    pass
-
-
 class VegaLite(Element):
     """
     Creates a Vega-Lite chart element.
@@ -253,6 +249,8 @@ class VegaLite(Element):
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
 
+        self.json = json.dumps(self.data)
+
         # Size Parameters.
         self.width = _parse_size(self.data.get('width', '100%') if
                                  width is None else width)
@@ -264,8 +262,6 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self.json = json.dumps(self.data)
-
         vegalite_major_version = self._get_vegalite_major_versions(self.data)
 
         self._parent.html.add_child(Element(Template("""
@@ -293,6 +289,7 @@ class VegaLite(Element):
         elif vegalite_major_version == '3':
             self._embed_vegalite_v3(figure)
         else:
+            # Version 2 is assumed as the default, if no version is given in the schema.
             self._embed_vegalite_v2(figure)
 
     def _get_vegalite_major_versions(self, spec):
@@ -306,36 +303,20 @@ class VegaLite(Element):
         return major_version
 
     def _embed_vegalite_v3(self, figure):
-        self.vega_embed()
+        self._vega_embed()
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'),
-            name='vega')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'),
-            name='vega-lite')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
-            name='vega-embed')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
 
     def _embed_vegalite_v2(self, figure):
-        self.vega_embed()
+        self._vega_embed()
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'),
-            name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'),
-            name='vega-lite')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'),
-            name='vega-embed')
-
-    def vega_embed(self):
+    def _vega_embed(self):
         self._parent.script.add_child(Element(Template("""
                     const spec = {{this.json}};
                     vegaEmbed({{this.get_name()}}, spec)
@@ -354,21 +335,10 @@ class VegaLite(Element):
                     );
                 """).render(this=self)), name=self.get_name())
 
-        figure.header.add_child(
-            JavascriptLink('https://d3js.org/d3.v3.min.js'),
-            name='d3')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'),  # noqa
-            name='vega')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'),  # noqa
-            name='vega-lite')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'),  # noqa
-            name='vega-embed')
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v3.min.js'), name='d3')
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'), name='vega')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'), name='vega-lite')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'), name='vega-embed')  # noqa
 
 
 class GeoJson(Layer):
