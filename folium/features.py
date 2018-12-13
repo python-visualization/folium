@@ -317,8 +317,7 @@ class VegaLite(Element):
 
     def _vega_embed(self):
         self._parent.script.add_child(Element(Template("""
-                    const spec = {{this.json}};
-                    vegaEmbed({{this.get_name()}}, spec)
+                    vegaEmbed({{this.get_name()}}, {{this.json}})
                         .then(function(result) {})
                         .catch(console.error);
                 """).render(this=self)), name=self.get_name())
