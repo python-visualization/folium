@@ -6,16 +6,16 @@ Folium Features Tests
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
-
-from six import text_type
+import warnings
 
 from branca.element import Element
 
-from folium import Map, Popup
 import folium
+from folium import Map, Popup
+
+from six import text_type
+
 
 tmpl = """
 <!DOCTYPE html>
@@ -27,6 +27,10 @@ tmpl = """
 <script>
 </script>
 """  # noqa
+
+
+# Root path variable
+rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
 # Figure
@@ -105,3 +109,15 @@ def test_color_line():
         opacity=1)
     m.add_child(color_line)
     m._repr_html_()
+
+
+# GeoJsonTooltip GeometryCollection
+def test_geojson_tooltip():
+    m = folium.Map([30.5, -97.5], zoom_start=10)
+    folium.GeoJson(os.path.join(rootpath, "kuntarajat.geojson"),
+                   tooltip=folium.GeoJsonTooltip(fields=['code', 'name'])
+                   ).add_to(m)
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
+        m._repr_html_()
+        assert issubclass(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
