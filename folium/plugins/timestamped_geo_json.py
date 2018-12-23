@@ -6,6 +6,7 @@ import json
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
+from folium.folium import Map
 from folium.utilities import iter_points, none_max, none_min
 
 from jinja2 import Template
@@ -166,6 +167,9 @@ class TimestampedGeoJson(MacroElement):
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
+        assert isinstance(self._parent, Map), (
+            'TimestampedGeoJson can only be added to a Map object.'
+        )
         super(TimestampedGeoJson, self).render()
 
         figure = self.get_root()
