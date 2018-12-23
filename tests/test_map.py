@@ -64,7 +64,7 @@ def test_popup_sticky():
     popup = Popup('Some text.', sticky=True).add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{maxWidth: \'300\', autoClose: false, closeOnClick: false}});
+    var {popup_name} = L.popup({{maxWidth: \'100%\', autoClose: false, closeOnClick: false}});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name});
@@ -79,7 +79,7 @@ def test_popup_show():
     popup = Popup('Some text.', show=True).add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{maxWidth: \'300\' , autoClose: false}});
+    var {popup_name} = L.popup({{maxWidth: \'100%\' , autoClose: false}});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name}).openPopup();
