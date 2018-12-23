@@ -450,6 +450,7 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
+
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
@@ -458,10 +459,24 @@ class GeoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
+        self._validate_function(self.style_function, 'style_function')
+        self._validate_function(self.highlight_function, 'highlight_function')
+
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+
+    def _validate_function(self, func, name):
+        """
+        Tests `self.style_function` and `self.highlight_function` to ensure
+        they are functions returning dictionaries.
+        """
+        test_feature = self.data if self.data.get('features') is None else self.data['features'][0]  # noqa
+        if not callable(func) or not isinstance(func(test_feature), dict):
+            raise ValueError('{} should be a function that accepts items from '
+                             'data[\'features\'] and returns a dictionary.'
+                             .format(name))
 
     def style_data(self):
         """
