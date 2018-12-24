@@ -400,7 +400,7 @@ def compare_rendered(obj1, obj2):
 
 def _normalize(rendered):
     """Return the input string as a list of stripped lines."""
-     return [line.strip() for line in rendered.splitlines() if line.strip()]
+    return [line.strip() for line in rendered.splitlines() if line.strip()]
 
 
 @contextmanager
