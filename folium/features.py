@@ -421,7 +421,7 @@ class GeoJson(Layer):
                 }
             {% endif %}
             ).addTo({{this._parent.get_name()}});
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {% if not this.style_map %}{{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});{% endif %}
         {% endmacro %}
         """)  # noqa
 
@@ -451,15 +451,20 @@ class GeoJson(Layer):
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
 
-        self.style_function = style_function or (lambda x: {})
-
         self.highlight = highlight_function is not None
 
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
 
-        self._validate_function(self.style_function, 'style_function')
+        if isinstance(style_function, GeoJsonStyleMap):
+            self.add_child(style_function)
+            self.style_map = True
+        else:
+            self.style_map = False
+            self.style_function = style_function or (lambda x: {})
+            self._validate_function(self.style_function, 'style_function')
+
         self._validate_function(self.highlight_function, 'highlight_function')
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
@@ -491,10 +496,12 @@ class GeoJson(Layer):
                 self.data = {'type': 'Feature', 'geometry': self.data}
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-        for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
-                self.highlight_function(feature))  # noqa
+        if not self.style_map:
+            for feature in self.data['features']:
+                feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
+                feature.setdefault('properties', {}).setdefault('highlight', {}).update(
+                    self.highlight_function(feature))  # noqa
+
         return json.dumps(self.data, sort_keys=True)
 
     def _get_self_bounds(self):
@@ -609,7 +616,6 @@ class TopoJson(Layer):
         a corresponding JSON output.
 
         """
-
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
@@ -795,6 +801,27 @@ class GeoJsonTooltip(Tooltip):
             assert value in keys, ('The field {} is not available in the data. '
                                    'Choose from: {}.'.format(value, keys))
         super(GeoJsonTooltip, self).render(**kwargs)
+
+
+class GeoJsonStyleMap(MacroElement):
+    _template = Template(u"""
+                {% macro script(this, kwargs) %}
+                    {{ this._parent.get_name() }}.setStyle(function(feature) {
+                        var val = {% if this.property_name is not none %}feature.properties.{{this.property_name}}{% else %}feature['id']{% endif %};
+                        {% for key in this.style_map %}
+                        if (val == {{key}}) { return {{this.style_map[key]}}; }
+                        {% endfor %}
+                        return {{this.default}};
+                    });
+                {% endmacro %}
+                """)  # noqa
+
+    def __init__(self, style_map, property_name=None, default=None):
+        super(GeoJsonStyleMap, self).__init__()
+        self._name = "GeoJsonStyleMap"
+        self.property_name = property_name
+        self.style_map = {json.dumps(k): json.dumps(style_map[k]) for k in style_map}
+        self.default = json.dumps(default) if default is not None else '{}'
 
 
 class Choropleth(FeatureGroup):
