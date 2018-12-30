@@ -393,7 +393,7 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {% if this.highlight %}
+        {%- if this.highlight %}
             {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
                 layer.on({
                     mouseout: function(e) {
@@ -401,27 +401,21 @@ class GeoJson(Layer):
                     mouseover: function(e) {
                         e.target.setStyle(e.target.feature.properties.highlight);},
                     click: function(e) {
-                    });
                         {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
+                });
             };
-        {% endif %}
+        {%- endif %}
         var {{this.get_name()}} = L.geoJson(
-            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-            {% if this.smooth_factor is not none or this.highlight %}
-                , {
-                {% if this.smooth_factor is not none  %}
-                    smoothFactor:{{this.smooth_factor}}
-                {% endif %}
-
-                {% if this.highlight %}
-                    {% if this.smooth_factor is not none  %}
-                    ,
-                    {% endif %}
-                    onEachFeature: {{this.get_name()}}_onEachFeature
-                {% endif %}
-                }
-            {% endif %}
-            ).addTo({{this._parent.get_name()}});
+            {{ this.json }},
+            {
+            {%- if this.smooth_factor is not none  %}
+                smoothFactor: {{ this.smooth_factor }},
+            {%- endif %}
+            {%- if this.highlight %}
+                onEachFeature: {{ this.get_name() }}_onEachFeature,
+            {%- endif %}
+            }
+        ).addTo({{ this._parent.get_name()}} );
         {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
         {% endmacro %}
         """)  # noqa
@@ -469,6 +463,8 @@ class GeoJson(Layer):
             self.add_child(Tooltip(tooltip))
 
         self.parent_map = None
+        self.json = None
+
     def _validate_function(self, func, name):
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
@@ -507,8 +503,9 @@ class GeoJson(Layer):
             feature.setdefault('properties', {}).setdefault('highlight', {}).update(
                 self.highlight_function(feature))  # noqa
 
-        # TODO Avoid having to manually remove the quotes from from around the placeholders
-        return json.dumps(self.data, sort_keys=True).replace('"{{', "{{").replace('}}"', "}}")
+        data_json = json.dumps(self.data, sort_keys=True)
+        # Remove quotes around Jinja2 template expressions:
+        return data_json.replace('"{{', '{{').replace('}}"', '}}')
 
     def _get_self_bounds(self):
         """
@@ -520,7 +517,9 @@ class GeoJson(Layer):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.json = self.style_data() if self.embed else json.dumps(self.data)
         super(GeoJson, self).render()
+
 
 class TopoJson(Layer):
     """
