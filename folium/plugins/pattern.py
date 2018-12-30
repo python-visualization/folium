@@ -49,7 +49,7 @@ class StripePattern(MacroElement):
 
     def __init__(self, angle=.5, weight=4, space_weight=4,
                  color="#000000", space_color="#ffffff",
-                 opacity=0.75, space_opacity=0.0, **kwargs):
+                 opacity=0.75, space_opacity=0.0):
         super(StripePattern, self).__init__()
         self._name = 'StripePattern'
         self.angle = angle
@@ -129,7 +129,7 @@ class CirclePattern(MacroElement):
     def __init__(self, width=20, height=20, radius=12,
                  weight=2,
                  color="#3388ff", fill_color="#3388ff",
-                 opacity=0.75, fill_opacity=0.5, **kwargs):
+                 opacity=0.75, fill_opacity=0.5):
         super(CirclePattern, self).__init__()
         self._name = 'CirclePattern'
         self.width = width
