@@ -389,6 +389,20 @@ def iter_points(x):
         return []
 
 
+def compare_rendered(obj1, obj2):
+    """
+    Return True/False if the normalized rendered version of
+    two folium map objects are the equal or not.
+
+    """
+    return _normalize(obj1) == _normalize(obj2)
+
+
+def _normalize(rendered):
+    """Return the input string as a list of stripped lines."""
+    return [line.strip() for line in rendered.splitlines() if line.strip()]
+
+
 @contextmanager
 def _tmp_html(data):
     """Yields the path of a temporary HTML file containing data."""
