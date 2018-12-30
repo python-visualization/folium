@@ -807,11 +807,12 @@ class GeoJsonStyleMap(MacroElement):
     _template = Template(u"""
                 {% macro script(this, kwargs) %}
                     {{ this._parent.get_name() }}.setStyle(function(feature) {
+                        var style = {{this.default}}
                         var val = {% if this.property_name is not none %}feature.properties.{{this.property_name}}{% else %}feature['id']{% endif %};
                         {% for key in this.style_map %}
-                        if (val == {{key}}) { return {{this.style_map[key]}}; }
+                        if (val == {{key}}) { return Object.assign(style, {{this.style_map[key]}}); }
                         {% endfor %}
-                        return {{this.default}};
+                        return style;
                     });
                 {% endmacro %}
                 """)  # noqa
