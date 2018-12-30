@@ -71,7 +71,8 @@ class StripePattern(MacroElement):
 
         figure.header.add_child(
             JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern')
+            name='pattern'
+        )
 
 
 class CirclePattern(MacroElement):
@@ -146,4 +147,5 @@ class CirclePattern(MacroElement):
 
         figure.header.add_child(
             JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern')
+            name='pattern'
+        )

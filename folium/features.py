@@ -449,7 +449,6 @@ class GeoJson(Layer):
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
-
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
@@ -470,7 +469,8 @@ class GeoJson(Layer):
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
         """
-        test_feature = self.data if self.data.get('features') is None else self.data['features'][0]  # noqa
+        test_feature = self.data if self.data.get('features') is None \
+            else self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
                              'data[\'features\'] and returns a dictionary.'
