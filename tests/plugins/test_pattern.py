@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """
-Test BoatMarker
+Test pattern
 ---------------
 
 """
 
 from __future__ import (absolute_import, division, print_function)
+import os
 
 import folium
 
@@ -16,12 +17,11 @@ from folium import plugins
 def test_pattern():
     m = folium.Map([40., -105.], zoom_start=6)
 
-    remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json'
     stripes = plugins.pattern.StripePattern(angle=-45)
     stripes.add_to(m)
-
-    circles = plugins.pattern.CirclePattern(width=20, height=20, radius=5, fill_opacity=0.5, opacity=1)
     circles.add_to(m)
+    circles = plugins.pattern.CirclePattern(width=20, height=20, radius=5,
+                                            fill_opacity=0.5, opacity=1)
 
     def style_function(feature):
         default_style = {
@@ -41,8 +41,8 @@ def test_pattern():
 
         return default_style
 
-    # Adding remote GeoJSON as additional layer.
-    folium.GeoJson(remote_url, smooth_factor=0.5, style_function=style_function).add_to(m)
+    data = os.path.join(os.path.dirname(__file__), os.pardir, 'us-states.json')
+    folium.GeoJson(data, style_function=style_function).add_to(m)
 
     out = m._parent.render()
 
