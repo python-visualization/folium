@@ -421,7 +421,6 @@ class GeoJson(Layer):
                 }
             {% endif %}
             ).addTo({{this._parent.get_name()}});
-        {% if not this.style_map %}{{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});{% endif %}
         {% endmacro %}
         """)  # noqa
 
@@ -457,13 +456,14 @@ class GeoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
-        if isinstance(style_function, GeoJsonStyleMap):
+        if isinstance(style_function, GeoJsonStyleFunction):
             self.add_child(style_function)
-            self.style_map = True
+            self.should_style_data = False
         else:
-            self.style_map = False
             self.style_function = style_function or (lambda x: {})
             self._validate_function(self.style_function, 'style_function')
+            self.add_child(GeoJsonStylePropertyFunction())
+            self.should_style_data = True
 
         self._validate_function(self.highlight_function, 'highlight_function')
 
@@ -496,7 +496,7 @@ class GeoJson(Layer):
                 self.data = {'type': 'Feature', 'geometry': self.data}
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-        if not self.style_map:
+        if self.should_style_data:
             for feature in self.data['features']:
                 feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
                 feature.setdefault('properties', {}).setdefault('highlight', {}).update(
@@ -803,18 +803,39 @@ class GeoJsonTooltip(Tooltip):
         super(GeoJsonTooltip, self).render(**kwargs)
 
 
-class GeoJsonStyleMap(MacroElement):
+class GeoJsonStyleFunction(MacroElement):
     _template = Template(u"""
                 {% macro script(this, kwargs) %}
-                    {{ this._parent.get_name() }}.setStyle(function(feature) {
-                        var style = {{this.default}}
-                        var val = feature.properties.{{this.property_name}};
-                        {% for key in this.style_map %}
-                        if (val == {{key}}) { return Object.assign(style, {{this.style_map[key]}}); }
-                        {% endfor %}
-                        return style;
-                    });
+                    {{ this._parent.get_name() }}.setStyle({{ this._function_template.render(this=this, kwargs=kwargs) }});
                 {% endmacro %}
+                """)  # noqa
+
+
+class GeoJsonStylePropertyFunction(GeoJsonStyleFunction):
+    _function_template = Template(u"""
+                function(feature) { 
+                    var style = {{this.default}};
+                    return Object.assign(style, feature.properties.{{this.property_name}});
+                }
+                """)  # noqa
+
+    def __init__(self, property_name='style', default=None):
+        super(GeoJsonStylePropertyFunction, self).__init__()
+        self._name = "GeoJsonStylePropertyFunction"
+        self.property_name = property_name
+        self.default = json.dumps(default) if default is not None else '{}'
+
+
+class GeoJsonStyleMap(GeoJsonStyleFunction):
+    _function_template = Template(u"""
+                function(feature) {
+                    var style = {{this.default}}
+                    var val = feature.properties.{{this.property_name}};
+                    {% for key in this.style_map %}
+                    if (val == {{key}}) { return Object.assign(style, {{this.style_map[key]}}); }
+                    {% endfor %}
+                    return style;
+                }
                 """)  # noqa
 
     def __init__(self, property_name, style_map, default=None):
