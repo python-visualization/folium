@@ -808,7 +808,7 @@ class GeoJsonStyleMap(MacroElement):
                 {% macro script(this, kwargs) %}
                     {{ this._parent.get_name() }}.setStyle(function(feature) {
                         var style = {{this.default}}
-                        var val = {% if this.property_name is not none %}feature.properties.{{this.property_name}}{% else %}feature['id']{% endif %};
+                        var val = feature.properties.{{this.property_name}};
                         {% for key in this.style_map %}
                         if (val == {{key}}) { return Object.assign(style, {{this.style_map[key]}}); }
                         {% endfor %}
@@ -817,7 +817,7 @@ class GeoJsonStyleMap(MacroElement):
                 {% endmacro %}
                 """)  # noqa
 
-    def __init__(self, style_map, property_name=None, default=None):
+    def __init__(self, property_name, style_map, default=None):
         super(GeoJsonStyleMap, self).__init__()
         self._name = "GeoJsonStyleMap"
         self.property_name = property_name
