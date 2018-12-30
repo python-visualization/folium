@@ -19,7 +19,6 @@ def test_pattern():
 
     stripes = plugins.pattern.StripePattern(angle=-45)
     stripes.add_to(m)
-    circles.add_to(m)
     circles = plugins.pattern.CirclePattern(width=20, height=20, radius=5,
                                             fill_opacity=0.5, opacity=1)
 
