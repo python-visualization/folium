@@ -492,6 +492,11 @@ class GeoJson(Layer):
         for feature in self.data['features']:
             feature_style = self.style_function(feature)
             for key, value in feature_style.items():
+                if isinstance(value, MacroElement):
+                    # Make sure objects are rendered:
+                    if value._parent is None:
+                        value._parent = self
+                        value.render()
                     # Replace objects with their Javascript var names:
                     feature_style[key] = "{{'" + value.get_name() + "'}}"
 
