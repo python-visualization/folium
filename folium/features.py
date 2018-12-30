@@ -23,6 +23,7 @@ from folium.utilities import (
     image_to_url,
     none_max,
     none_min,
+    get_obj_in_upper_tree
 )
 from folium.vector_layers import PolyLine
 
@@ -400,8 +401,8 @@ class GeoJson(Layer):
                     mouseover: function(e) {
                         e.target.setStyle(e.target.feature.properties.highlight);},
                     click: function(e) {
-                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
                     });
+                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
             };
         {% endif %}
         var {{this.get_name()}} = L.geoJson(
@@ -467,6 +468,7 @@ class GeoJson(Layer):
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
 
+        self.parent_map = None
     def _validate_function(self, func, name):
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
@@ -516,6 +518,9 @@ class GeoJson(Layer):
         """
         return get_bounds(self.data, lonlat=True)
 
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        super(GeoJson, self).render()
 
 class TopoJson(Layer):
     """
