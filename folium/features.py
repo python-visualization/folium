@@ -490,18 +490,15 @@ class GeoJson(Layer):
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-
             feature_style = self.style_function(feature)
-            new_style = {}
-            for item in feature_style:
-                if isinstance(feature_style[item], MacroElement):
-                    new_style[item] = "{{'" + feature_style[item].get_name() + "'}}"
-                else:
-                    new_style[item] = feature_style[item]
+            for key, value in feature_style.items():
+                    # Replace objects with their Javascript var names:
+                    feature_style[key] = "{{'" + value.get_name() + "'}}"
 
-            feature.setdefault('properties', {}).setdefault('style', {}).update(new_style)  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
-                self.highlight_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('style', {}) \
+                .update(feature_style)
+            feature.setdefault('properties', {}).setdefault('highlight', {}) \
+                .update(self.highlight_function(feature))
 
         data_json = json.dumps(self.data, sort_keys=True)
         # Remove quotes around Jinja2 template expressions:
