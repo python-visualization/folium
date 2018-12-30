@@ -5,6 +5,9 @@ import json
 
 from branca.element import Figure, JavascriptLink, MacroElement
 
+from folium.folium import Map
+from folium.utilities import get_obj_in_upper_tree
+
 from jinja2 import Template
 
 
@@ -34,11 +37,11 @@ class StripePattern(MacroElement):
     """
 
     _template = Template(u"""
-            {{this.get_name()}}.addTo({{this._parent.get_name()}});
         {% macro script(this, kwargs) %}
         var {{ this.get_name() }} = new L.StripePattern(
             {{ this.options }}
         );
+        {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
         {% endmacro %}
     """)
 
@@ -56,8 +59,10 @@ class StripePattern(MacroElement):
             'opacity': opacity,
             'spaceOpacity': space_opacity
         })
+        self.parent_map = None
 
     def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
         super(StripePattern, self).render(**kwargs)
 
         figure = self.get_root()
@@ -97,7 +102,6 @@ class CirclePattern(MacroElement):
     """
 
     _template = Template(u"""
-            {{this.get_name()}}.addTo({{this._parent.get_name()}});
         {% macro script(this, kwargs) %}
         var shape = new L.PatternCircle(
             {{ this.options_pattern_circle }}
@@ -106,6 +110,7 @@ class CirclePattern(MacroElement):
             {{ this.options_pattern }}
         );
         {{ this.get_name() }}.addShape(shape);
+        {{ this.get_name() }}.addTo({{ this.parent_map }});
         {% endmacro %}
     """)
 
@@ -129,8 +134,10 @@ class CirclePattern(MacroElement):
             'width': width,
             'height': height,
         })
+        self.parent_map = None
 
     def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map).get_name()
         super(CirclePattern, self).render(**kwargs)
 
         figure = self.get_root()

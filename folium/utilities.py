@@ -415,3 +415,11 @@ def _tmp_html(data):
     finally:
         if os.path.isfile(filepath):
             os.remove(filepath)
+
+
+def get_obj_in_upper_tree(element, cls):
+    """Return the first object in the parent tree of class `cls`."""
+    parent = element._parent
+    if not isinstance(parent, cls):
+        return get_obj_in_upper_tree(parent, cls)
+    return parent
