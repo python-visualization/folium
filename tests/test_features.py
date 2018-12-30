@@ -6,16 +6,16 @@ Folium Features Tests
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import os
-
-from six import text_type
+import warnings
 
 from branca.element import Element
 
-from folium import Map, Popup
 import folium
+from folium import Map, Popup
+
+from six import text_type
+
 
 tmpl = """
 <!DOCTYPE html>
@@ -27,6 +27,10 @@ tmpl = """
 <script>
 </script>
 """  # noqa
+
+
+# Root path variable
+rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
 # Figure
@@ -105,3 +109,98 @@ def test_color_line():
         opacity=1)
     m.add_child(color_line)
     m._repr_html_()
+
+
+def test_get_vegalite_major_version():
+    spec_v2 = {'$schema': 'https://vega.github.io/schema/vega-lite/v2.6.0.json',
+               'config': {'view': {'height': 300, 'width': 400}},
+               'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
+               'datasets': {'data-aac17e868e23f98b5e0830d45504be45': [{'folium usage': 0,
+                                                                       'happiness': 1.0},
+                                                                      {'folium usage': 1,
+                                                                       'happiness': 2.718281828459045},
+                                                                      {'folium usage': 2,
+                                                                       'happiness': 7.38905609893065},
+                                                                      {'folium usage': 3,
+                                                                       'happiness': 20.085536923187668},
+                                                                      {'folium usage': 4,
+                                                                       'happiness': 54.598150033144236},
+                                                                      {'folium usage': 5,
+                                                                       'happiness': 148.4131591025766},
+                                                                      {'folium usage': 6,
+                                                                       'happiness': 403.4287934927351},
+                                                                      {'folium usage': 7,
+                                                                       'happiness': 1096.6331584284585},
+                                                                      {'folium usage': 8,
+                                                                       'happiness': 2980.9579870417283},
+                                                                      {'folium usage': 9,
+                                                                       'happiness': 8103.083927575384}]},
+               'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
+                            'y': {'field': 'happiness', 'type': 'quantitative'}},
+               'mark': 'point'}
+
+    vegalite_v2 = folium.features.VegaLite(spec_v2)
+
+    assert vegalite_v2._get_vegalite_major_versions(spec_v2) == '2'
+
+    spec_v1 = {'$schema': 'https://vega.github.io/schema/vega-lite/v1.3.1.json',
+               'data': {'values': [{'folium usage': 0, 'happiness': 1.0},
+                                   {'folium usage': 1, 'happiness': 2.718281828459045},
+                                   {'folium usage': 2, 'happiness': 7.38905609893065},
+                                   {'folium usage': 3, 'happiness': 20.085536923187668},
+                                   {'folium usage': 4, 'happiness': 54.598150033144236},
+                                   {'folium usage': 5, 'happiness': 148.4131591025766},
+                                   {'folium usage': 6, 'happiness': 403.4287934927351},
+                                   {'folium usage': 7, 'happiness': 1096.6331584284585},
+                                   {'folium usage': 8, 'happiness': 2980.9579870417283},
+                                   {'folium usage': 9, 'happiness': 8103.083927575384}]},
+               'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
+                            'y': {'field': 'happiness', 'type': 'quantitative'}},
+               'height': 300,
+               'mark': 'point',
+               'width': 400}
+
+    vegalite_v1 = folium.features.VegaLite(spec_v1)
+
+    assert vegalite_v1._get_vegalite_major_versions(spec_v1) == '1'
+
+    spec_no_version = {'config': {'view': {'height': 300, 'width': 400}},
+                       'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
+                       'datasets': {'data-aac17e868e23f98b5e0830d45504be45': [{'folium usage': 0,
+                                                                               'happiness': 1.0},
+                                                                              {'folium usage': 1,
+                                                                               'happiness': 2.718281828459045},
+                                                                              {'folium usage': 2,
+                                                                               'happiness': 7.38905609893065},
+                                                                              {'folium usage': 3,
+                                                                               'happiness': 20.085536923187668},
+                                                                              {'folium usage': 4,
+                                                                               'happiness': 54.598150033144236},
+                                                                              {'folium usage': 5,
+                                                                               'happiness': 148.4131591025766},
+                                                                              {'folium usage': 6,
+                                                                               'happiness': 403.4287934927351},
+                                                                              {'folium usage': 7,
+                                                                               'happiness': 1096.6331584284585},
+                                                                              {'folium usage': 8,
+                                                                               'happiness': 2980.9579870417283},
+                                                                              {'folium usage': 9,
+                                                                               'happiness': 8103.083927575384}]},
+                       'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
+                                    'y': {'field': 'happiness', 'type': 'quantitative'}},
+                       'mark': 'point'}
+
+    vegalite_no_version = folium.features.VegaLite(spec_no_version)
+
+    assert vegalite_no_version._get_vegalite_major_versions(spec_no_version) is None
+
+# GeoJsonTooltip GeometryCollection
+def test_geojson_tooltip():
+    m = folium.Map([30.5, -97.5], zoom_start=10)
+    folium.GeoJson(os.path.join(rootpath, "kuntarajat.geojson"),
+                   tooltip=folium.GeoJsonTooltip(fields=['code', 'name'])
+                   ).add_to(m)
+    with warnings.catch_warnings(record=True) as w:
+        warnings.simplefilter('always')
+        m._repr_html_()
+        assert issubclass(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."

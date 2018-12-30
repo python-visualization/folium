@@ -8,18 +8,27 @@ Leaflet GeoJson and miscellaneous features.
 from __future__ import (absolute_import, division, print_function)
 
 import json
+import warnings
 
-from branca.colormap import LinearColormap
+from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
-from branca.utilities import (_locations_tolist, _parse_size, image_to_url,
-                              none_max, none_min)
+from branca.utilities import color_brewer
 
+from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
-
-from folium.utilities import get_bounds
+from folium.utilities import (
+    _iter_tolist,
+    _parse_size,
+    get_bounds,
+    image_to_url,
+    none_max,
+    none_min,
+)
 from folium.vector_layers import PolyLine
 
 from jinja2 import Template
+
+import numpy as np
 
 import requests
 
@@ -81,7 +90,7 @@ class RegularPolygonMarker(Marker):
                  fill_color='blue', fill_opacity=1, number_of_sides=4,
                  rotation=0, radius=15, popup=None, tooltip=None):
         super(RegularPolygonMarker, self).__init__(
-            _locations_tolist(location),
+            _iter_tolist(location),
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
@@ -103,7 +112,8 @@ class RegularPolygonMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+            # noqa
             name='dvf_js')
 
 
@@ -232,11 +242,13 @@ class VegaLite(Element):
 
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
-        super(VegaLite, self).__init__()
+        super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
+
+        self.json = json.dumps(self.data)
 
         # Size Parameters.
         self.width = _parse_size(self.data.get('width', '100%') if
@@ -249,21 +261,11 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self.json = json.dumps(self.data)
+        vegalite_major_version = self._get_vegalite_major_versions(self.data)
 
         self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
-
-        self._parent.script.add_child(Element(Template("""
-            var embedSpec = {
-                mode: "vega-lite",
-                spec: {{this.json}}
-            };
-            vg.embed(
-                {{this.get_name()}}, embedSpec, function(error, result) {}
-            );
-        """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
@@ -279,21 +281,62 @@ class VegaLite(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
-        figure.header.add_child(
-            JavascriptLink('https://d3js.org/d3.v3.min.js'),
-            name='d3')
+        if vegalite_major_version == '1':
+            self._embed_vegalite_v1(figure)
+        elif vegalite_major_version == '2':
+            self._embed_vegalite_v2(figure)
+        elif vegalite_major_version == '3':
+            self._embed_vegalite_v3(figure)
+        else:
+            # Version 2 is assumed as the default, if no version is given in the schema.
+            self._embed_vegalite_v2(figure)
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
-            name='vega')
+    def _get_vegalite_major_versions(self, spec):
+        try:
+            schema = spec['$schema']
+        except KeyError:
+            major_version = None
+        else:
+            major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
-            name='vega-lite')
+        return major_version
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
-            name='vega-embed')
+    def _embed_vegalite_v3(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
+
+    def _embed_vegalite_v2(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
+
+    def _vega_embed(self):
+        self._parent.script.add_child(Element(Template("""
+                    vegaEmbed({{this.get_name()}}, {{this.json}})
+                        .then(function(result) {})
+                        .catch(console.error);
+                """).render(this=self)), name=self.get_name())
+
+    def _embed_vegalite_v1(self, figure):
+        self._parent.script.add_child(Element(Template("""
+                    var embedSpec = {
+                        mode: "vega-lite",
+                        spec: {{this.json}}
+                    };
+                    vg.embed(
+                        {{this.get_name()}}, embedSpec, function(error, result) {}
+                    );
+                """).render(this=self)), name=self.get_name())
+
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v3.min.js'), name='d3')
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'), name='vega')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'), name='vega-lite')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'), name='vega-embed')  # noqa
 
 
 class GeoJson(Layer):
@@ -407,6 +450,7 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Unhandled object {!r}.'.format(data))
+
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
@@ -415,10 +459,24 @@ class GeoJson(Layer):
 
         self.smooth_factor = smooth_factor
 
+        self._validate_function(self.style_function, 'style_function')
+        self._validate_function(self.highlight_function, 'highlight_function')
+
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+
+    def _validate_function(self, func, name):
+        """
+        Tests `self.style_function` and `self.highlight_function` to ensure
+        they are functions returning dictionaries.
+        """
+        test_feature = self.data if self.data.get('features') is None else self.data['features'][0]  # noqa
+        if not callable(func) or not isinstance(func(test_feature), dict):
+            raise ValueError('{} should be a function that accepts items from '
+                             'data[\'features\'] and returns a dictionary.'
+                             .format(name))
 
     def style_data(self):
         """
@@ -444,7 +502,8 @@ class GeoJson(Layer):
                     new_style[item] = feature_style[item]
 
             feature.setdefault('properties', {}).setdefault('style', {}).update(new_style)  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
+            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
+                self.highlight_function(feature))  # noqa
 
         # TODO Avoid having to manually remove the quotes from from around the placeholders
         return json.dumps(self.data, sort_keys=True).replace('"{{', "{{").replace('}}"', "}}")
@@ -561,11 +620,13 @@ class TopoJson(Layer):
         a corresponding JSON output.
 
         """
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
+
         geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
@@ -647,7 +708,7 @@ class GeoJsonTooltip(Tooltip):
     Examples
     --------
     # Provide fields and aliases, with Style.
-    >>> Tooltip(
+    >>> GeoJsonTooltip(
     >>>     fields=['CNTY_NM', 'census-pop-2015', 'census-md-income-2015'],
     >>>     aliases=['County', '2015 Census Population', '2015 Median Income'],
     >>>     localize=True,
@@ -655,7 +716,7 @@ class GeoJsonTooltip(Tooltip):
     >>>            'courier new; font-size: 24px; padding: 10px;')
     >>> )
     # Provide fields, with labels off and fixed tooltip positions.
-    >>> Tooltip(fields=('CNTY_NM',), labels=False, sticky=False)
+    >>> GeoJsonTooltip(fields=('CNTY_NM',), labels=False, sticky=False)
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -692,18 +753,18 @@ class GeoJsonTooltip(Tooltip):
         super(GeoJsonTooltip, self).__init__(
             text='', style=style, sticky=sticky, **kwargs
         )
-        self._name = "GeoJsonTooltip"
+        self._name = 'GeoJsonTooltip'
 
-        assert isinstance(fields, (list, tuple)), "Please pass a list or " \
-                                                  "tuple to fields."
+        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
+                                                  'tuple to fields.'
         if aliases is not None:
             assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), "fields and aliases must have" \
-                                                " the same length."
-        assert isinstance(labels, bool), "labels requires a boolean value."
-        assert isinstance(localize, bool), "localize must be bool."
-        assert 'permanent' not in kwargs,  "The `permanent` option does not " \
-                                           "work with GeoJsonTooltip."
+            assert len(fields) == len(aliases), 'fields and aliases must have' \
+                                                ' the same length.'
+        assert isinstance(labels, bool), 'labels requires a boolean value.'
+        assert isinstance(localize, bool), 'localize must be bool.'
+        assert 'permanent' not in kwargs, 'The `permanent` option does not ' \
+                                          'work with GeoJsonTooltip.'
 
         self.fields = fields
         self.aliases = aliases
@@ -711,14 +772,28 @@ class GeoJsonTooltip(Tooltip):
         self.localize = localize
         if style:
             assert isinstance(style, str), \
-                "Pass a valid inline HTML style property string to style."
+                'Pass a valid inline HTML style property string to style.'
             # noqa outside of type checking.
             self.style = style
+
+    def warn_for_geometry_collections(self):
+        """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
+        geom_collections = [
+            feature.get('properties') if feature.get('properties') is not None else key
+            for key, feature in enumerate(self._parent.data['features'])
+            if feature['geometry']['type'] == 'GeometryCollection'
+        ]
+        if any(geom_collections):
+            warnings.warn(
+                "GeoJsonTooltip is not configured to render tooltips for GeoJson GeometryCollection geometries. "
+                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
+                "https://tools.ietf.org/html/rfc7946#page-9".format(geom_collections), UserWarning)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         if isinstance(self._parent, GeoJson):
             keys = tuple(self._parent.data['features'][0]['properties'].keys())
+            self.warn_for_geometry_collections()
         elif isinstance(self._parent, TopoJson):
             obj_name = self._parent.object_path.split('.')[-1]
             keys = tuple(self._parent.data['objects'][obj_name][
@@ -728,9 +803,251 @@ class GeoJsonTooltip(Tooltip):
                             'than a GeoJson or TopoJson object.')
         keys = tuple(x for x in keys if x not in ('style', 'highlight'))
         for value in self.fields:
-            assert value in keys, ("The field {} is not available in the data. "
-                                   "Choose from: {}.".format(value, keys))
+            assert value in keys, ('The field {} is not available in the data. '
+                                   'Choose from: {}.'.format(value, keys))
         super(GeoJsonTooltip, self).render(**kwargs)
+
+
+class Choropleth(FeatureGroup):
+    """Apply a GeoJSON overlay to the map.
+
+    Plot a GeoJSON overlay on the base map. There is no requirement
+    to bind data (passing just a GeoJSON plots a single-color overlay),
+    but there is a data binding option to map your columnar data to
+    different feature objects with a color scale.
+
+    If data is passed as a Pandas DataFrame, the "columns" and "key-on"
+    keywords must be included, the first to indicate which DataFrame
+    columns to use, the second to indicate the layer in the GeoJSON
+    on which to key the data. The 'columns' keyword does not need to be
+    passed for a Pandas series.
+
+    Colors are generated from color brewer (http://colorbrewer2.org/)
+    sequential palettes. By default, linear binning is used between
+    the min and the max of the values. Custom binning can be achieved
+    with the `bins` parameter.
+
+    TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
+    also be passed with the reference to the topojson objects to convert.
+    See the topojson.feature method in the TopoJSON API reference:
+    https://github.com/topojson/topojson/wiki/API-Reference
+
+
+    Parameters
+    ----------
+    geo_data: string/object
+        URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+        geometries
+    data: Pandas DataFrame or Series, default None
+        Data to bind to the GeoJSON.
+    columns: dict or tuple, default None
+        If the data is a Pandas DataFrame, the columns of data to be bound.
+        Must pass column 1 as the key, and column 2 the values.
+    key_on: string, default None
+        Variable in the `geo_data` GeoJSON file to bind the data to. Must
+        start with 'feature' and be in JavaScript objection notation.
+        Ex: 'feature.id' or 'feature.properties.statename'.
+    bins: int or sequence of scalars or str, default 6
+        If `bins` is an int, it defines the number of equal-width
+        bins between the min and the max of the values.
+        If `bins` is a sequence, it directly defines the bin edges.
+        For more information on this parameter, have a look at
+        numpy.histogram function.
+    fill_color: string, default 'blue'
+        Area fill color. Can pass a hex code, color name, or if you are
+        binding data, one of the following color brewer palettes:
+        'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
+        'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
+    nan_fill_color: string, default 'black'
+        Area fill color for nan or missing values.
+        Can pass a hex code, color name.
+    fill_opacity: float, default 0.6
+        Area fill opacity, range 0-1.
+    nan_fill_opacity: float, default fill_opacity
+        Area fill opacity for nan or missing values, range 0-1.
+    line_color: string, default 'black'
+        GeoJSON geopath line color.
+    line_weight: int, default 1
+        GeoJSON geopath line weight.
+    line_opacity: float, default 1
+        GeoJSON geopath line opacity, range 0-1.
+    legend_name: string, default empty string
+        Title for data legend.
+    topojson: string, default None
+        If using a TopoJSON, passing "objects.yourfeature" to the topojson
+        keyword argument will enable conversion to GeoJSON.
+    smooth_factor: float, default None
+        How much to simplify the polyline on each zoom level. More means
+        better performance and smoother look, and less means more accurate
+        representation. Leaflet defaults to 1.0.
+    highlight: boolean, default False
+        Enable highlight functionality when hovering over a GeoJSON area.
+    name : string, optional
+        The name of the layer, as it will appear in LayerControls
+    overlay : bool, default False
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening (only for overlays).
+
+    Returns
+    -------
+    GeoJSON data layer in obj.template_vars
+
+    Examples
+    --------
+    >>> Choropleth(geo_data='us-states.json', line_color='blue',
+    ...            line_weight=3)
+    >>> Choropleth(geo_data='geo.json', data=df,
+    ...            columns=['Data 1', 'Data 2'],
+    ...            key_on='feature.properties.myvalue',
+    ...            fill_color='PuBu',
+    ...            bins=[0, 20, 30, 40, 50, 60])
+    >>> Choropleth(geo_data='countries.json',
+    ...            topojson='objects.countries')
+    >>> Choropleth(geo_data='geo.json', data=df,
+    ...            columns=['Data 1', 'Data 2'],
+    ...            key_on='feature.properties.myvalue',
+    ...            fill_color='PuBu',
+    ...            bins=[0, 20, 30, 40, 50, 60],
+    ...            highlight=True)
+    """
+
+    def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
+                 bins=6, fill_color='blue', nan_fill_color='black',
+                 fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
+                 line_weight=1, line_opacity=1, name=None, legend_name='',
+                 overlay=True, control=True, show=True,
+                 topojson=None, smooth_factor=None, highlight=None,
+                 **kwargs):
+        super(Choropleth, self).__init__(name=name, overlay=overlay,
+                                         control=control, show=show)
+        self._name = 'Choropleth'
+
+        if data is not None and not color_brewer(fill_color):
+            raise ValueError('Please pass a valid color brewer code to '
+                             'fill_local. See docstring for valid codes.')
+
+        if nan_fill_opacity is None:
+            nan_fill_opacity = fill_opacity
+
+        if 'threshold_scale' in kwargs:
+            if kwargs['threshold_scale'] is not None:
+                bins = kwargs['threshold_scale']
+            warnings.warn(
+                'choropleth `threshold_scale` parameter is now depreciated '
+                'in favor of the `bins` parameter.', DeprecationWarning)
+
+        # Create color_data dict
+        if hasattr(data, 'set_index'):
+            # This is a pd.DataFrame
+            color_data = data.set_index(columns[0])[columns[1]].to_dict()
+        elif hasattr(data, 'to_dict'):
+            # This is a pd.Series
+            color_data = data.to_dict()
+        elif data:
+            color_data = dict(data)
+        else:
+            color_data = None
+
+        self.color_scale = None
+
+        if color_data is not None and key_on is not None:
+            real_values = np.array(list(color_data.values()))
+            real_values = real_values[~np.isnan(real_values)]
+            _, bin_edges = np.histogram(real_values, bins=bins)
+
+            bins_min, bins_max = min(bin_edges), max(bin_edges)
+            if np.any((real_values < bins_min) | (real_values > bins_max)):
+                raise ValueError(
+                    'All values are expected to fall into one of the provided '
+                    'bins (or to be Nan). Please check the `bins` parameter '
+                    'and/or your data.')
+
+            # We add the colorscale
+            nb_bins = len(bin_edges) - 1
+            color_range = color_brewer(fill_color, n=nb_bins)
+            self.color_scale = StepColormap(
+                color_range,
+                index=bin_edges,
+                vmin=bins_min,
+                vmax=bins_max,
+                caption=legend_name)
+
+            # then we 'correct' the last edge for numpy digitize
+            # (we add a very small amount to fake an inclusive right interval)
+            increasing = bin_edges[0] <= bin_edges[-1]
+            bin_edges[-1] = np.nextafter(
+                bin_edges[-1],
+                (1 if increasing else -1) * np.inf)
+
+            key_on = key_on[8:] if key_on.startswith('feature.') else key_on
+
+            def get_by_key(obj, key):
+                return (obj.get(key, None) if len(key.split('.')) <= 1 else
+                        get_by_key(obj.get(key.split('.')[0], None),
+                                   '.'.join(key.split('.')[1:])))
+
+            def color_scale_fun(x):
+                key_of_x = get_by_key(x, key_on)
+
+                if key_of_x not in color_data.keys():
+                    return nan_fill_color, nan_fill_opacity
+
+                value_of_x = color_data[key_of_x]
+                if np.isnan(value_of_x):
+                    return nan_fill_color, nan_fill_opacity
+
+                color_idx = np.digitize(value_of_x, bin_edges, right=False) - 1
+                return color_range[color_idx], fill_opacity
+
+        else:
+            def color_scale_fun(x):
+                return fill_color, fill_opacity
+
+        def style_function(x):
+            color, opacity = color_scale_fun(x)
+            return {
+                'weight': line_weight,
+                'opacity': line_opacity,
+                'color': line_color,
+                'fillOpacity': opacity,
+                'fillColor': color
+            }
+
+        def highlight_function(x):
+            return {
+                'weight': line_weight + 2,
+                'fillOpacity': fill_opacity + .2
+            }
+
+        if topojson:
+            self.geojson = TopoJson(
+                geo_data,
+                topojson,
+                style_function=style_function,
+                smooth_factor=smooth_factor)
+        else:
+            self.geojson = GeoJson(
+                geo_data,
+                style_function=style_function,
+                smooth_factor=smooth_factor,
+                highlight_function=highlight_function if highlight else None)
+
+        self.add_child(self.geojson)
+        if self.color_scale:
+            self.add_child(self.color_scale)
+
+    def render(self, **kwargs):
+        """Render the GeoJson/TopoJson and color scale objects."""
+        if self.color_scale:
+            # ColorMap needs Map as its parent
+            assert isinstance(self._parent, Map), ('Choropleth must be added'
+                                                   ' to a Map object.')
+            self.color_scale._parent = self._parent
+
+        super(Choropleth, self).render(**kwargs)
 
 
 class DivIcon(MacroElement):
@@ -943,6 +1260,7 @@ class ColorLine(FeatureGroup):
     A ColorLine object that you can `add_to` a Map.
 
     """
+
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)

@@ -5,7 +5,9 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
-from branca.utilities import iter_points, none_max, none_min
+
+from folium.folium import Map
+from folium.utilities import iter_points, none_max, none_min
 
 from jinja2 import Template
 
@@ -147,7 +149,7 @@ class TimestampedGeoJson(MacroElement):
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
-        self.duration = 'undefined' if duration is None else "\""+duration+"\""
+        self.duration = 'undefined' if duration is None else '"' + duration + '"'
 
         options = {
             'position': 'bottomleft',
@@ -165,6 +167,9 @@ class TimestampedGeoJson(MacroElement):
         self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
+        assert isinstance(self._parent, Map), (
+            'TimestampedGeoJson can only be added to a Map object.'
+        )
         super(TimestampedGeoJson, self).render()
 
         figure = self.get_root()

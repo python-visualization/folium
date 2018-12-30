@@ -8,12 +8,11 @@ Classes for drawing maps.
 from __future__ import (absolute_import, division, print_function)
 
 import json
-
 from collections import OrderedDict
 
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 
-from folium.utilities import _validate_coordinates, get_bounds, camelize
+from folium.utilities import _validate_coordinates, camelize, get_bounds
 
 from jinja2 import Template
 
@@ -82,6 +81,9 @@ class FeatureGroup(Layer):
 class LayerControl(MacroElement):
     """
     Creates a LayerControl object to be added on a folium map.
+
+    This object should be added to a Map object. Only Layer children
+    of Map are included in the layer control.
 
     Parameters
     ----------
@@ -277,7 +279,7 @@ class Popup(Element):
         Content of the Popup.
     parse_html: bool, default False
         True if the popup is a template that needs to the rendered first.
-    max_width: int, default 300
+    max_width: int for pixels or text for percentages, default '100%'
         The maximal width of the popup.
     show: bool, default False
         True renders the popup open on page load.
@@ -302,7 +304,7 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+    def __init__(self, html=None, parse_html=False, max_width='100%', show=False,
                  sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
@@ -368,20 +370,20 @@ class Tooltip(MacroElement):
         {% endmacro %}
         """)
     valid_options = {
-        "pane": (str, ),
-        "offset": (tuple, ),
-        "direction": (str, ),
-        "permanent": (bool, ),
-        "sticky": (bool, ),
-        "interactive": (bool, ),
-        "opacity": (float, int),
-        "attribution": (str, ),
-        "className": (str, ),
+        'pane': (str, ),
+        'offset': (tuple, ),
+        'direction': (str, ),
+        'permanent': (bool, ),
+        'sticky': (bool, ),
+        'interactive': (bool, ),
+        'opacity': (float, int),
+        'attribution': (str, ),
+        'className': (str, ),
     }
 
     def __init__(self, text, style=None, sticky=True, **kwargs):
         super(Tooltip, self).__init__()
-        self._name = "Tooltip"
+        self._name = 'Tooltip'
 
         self.text = str(text)
 
@@ -390,7 +392,7 @@ class Tooltip(MacroElement):
 
         if style:
             assert isinstance(style, str), \
-                "Pass a valid inline HTML style property string to style."
+                'Pass a valid inline HTML style property string to style.'
             # noqa outside of type checking.
             self.style = style
 
@@ -399,11 +401,11 @@ class Tooltip(MacroElement):
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
             assert key in self.valid_options, (
-                "The option {} is not in the available options: {}."
+                'The option {} is not in the available options: {}.'
                 .format(key, ', '.join(self.valid_options))
             )
             assert isinstance(kwargs[key], self.valid_options[key]), (
-                "The option {} must be one of the following types: {}."
+                'The option {} must be one of the following types: {}.'
                 .format(key, self.valid_options[key])
             )
         return json.dumps(kwargs)

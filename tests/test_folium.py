@@ -14,7 +14,7 @@ import os
 import branca.element
 
 import folium
-from folium.features import TopoJson
+from folium.features import GeoJson, Choropleth
 
 import jinja2
 from jinja2 import Environment, PackageLoader
@@ -182,15 +182,13 @@ class TestFolium(object):
 
         # Adding TopoJSON as additional layer.
         with open(os.path.join(rootpath, 'or_counties_topo.json')) as f:
-            self.m.choropleth(f,
-                              topojson='objects.or_counties_geo',
-                              smooth_factor=0.5)
+            choropleth = Choropleth(f, topojson='objects.or_counties_geo',
+                                    smooth_factor=0.5).add_to(self.m)
 
         out = self.m._parent.render()
 
         # Verify TopoJson
-        topo_json = [val for key, val in self.m._children.items()
-                     if isinstance(val, TopoJson)][0]
+        topo_json = choropleth.geojson
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
 
@@ -237,7 +235,7 @@ class TestFolium(object):
         assert rendered == expected
 
     def test_choropleth_features(self):
-        """Test to make sure that choropleth function doesn't allow
+        """Test to make sure that Choropleth function doesn't allow
         values outside of the domain defined by bins.
 
         It also tests that all parameters work as expected regarding
@@ -252,27 +250,37 @@ class TestFolium(object):
         key_on = 'id'
 
         with pytest.raises(ValueError):
-            self.m.choropleth(
+            Choropleth(
                 geo_data=geo_data,
                 data=data,
                 key_on=key_on,
                 fill_color=fill_color,
-                bins=[0, 1, 2, 3])
+                bins=[0, 1, 2, 3]).add_to(self.m)
             self.m._parent.render()
 
-        self.m.choropleth(
+        Choropleth(
             geo_data=geo_data,
             data={'1001': 1, '1003': float('nan')},
             key_on=key_on,
             fill_color=fill_color,
             fill_opacity=0.543212345,
             nan_fill_color='a_random_color',
-            nan_fill_opacity=0.123454321)
+            nan_fill_opacity=0.123454321).add_to(self.m)
 
         out = self.m._parent.render()
         out_str = ''.join(out.split())
         assert '"fillColor":"a_random_color","fillOpacity":0.123454321' in out_str
         assert '"fillOpacity":0.543212345' in out_str
+
+    def test_choropleth_warning(self):
+        """Test that the Map.choropleth method works and raises a warning."""
+        self.setup()
+        with open(os.path.join(rootpath, 'us-counties.json')) as f:
+            geo_data = json.load(f)
+        with pytest.warns(FutureWarning):
+            self.m.choropleth(geo_data)
+        assert any([isinstance(child, Choropleth)
+                    for child in self.m._children.values()])
 
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode
@@ -381,7 +389,7 @@ class TestFolium(object):
         self.m = folium.Map(zoom_start=4)
 
         # Adding remote GeoJSON as additional layer.
-        self.m.choropleth(remote_url, smooth_factor=0.5)
+        GeoJson(remote_url, smooth_factor=0.5).add_to(self.m)
 
         self.m._parent.render()
         bounds = self.m.get_bounds()
