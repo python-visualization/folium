@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
+import json
 
 from branca.element import Figure, JavascriptLink, MacroElement
 
@@ -33,42 +34,31 @@ class StripePattern(MacroElement):
     """
 
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.StripePattern({
-                                                            angle: {{this.angle}},
-                                                            weight: {{this.weight}},
-                                                            spaceWeight: {{this.space_weight}},
-                                                            color: "{{this.color}}",
-                                                            spaceColor: "{{this.space_color}}",
-                                                            opacity: {{this.opacity}},
-                                                            spaceOpacity: {{this.space_opacity}}
-                                                          });
             {{this.get_name()}}.addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+        var {{ this.get_name() }} = new L.StripePattern(
+            {{ this.options }}
+        );
+        {% endmacro %}
+    """)
 
     def __init__(self, angle=.5, weight=4, space_weight=4,
                  color="#000000", space_color="#ffffff",
                  opacity=0.75, space_opacity=0.0):
         super(StripePattern, self).__init__()
         self._name = 'StripePattern'
-        self.angle = angle
-        self.weight = weight
-        self.space_weight = space_weight
-        self.color = color
-        self.space_color = space_color
-        self.opacity = opacity
-        self.space_opacity = space_opacity
+        self.options = json.dumps({
+            'angle': angle,
+            'weight': weight,
+            'spaceWeight': space_weight,
+            'color': color,
+            'spaceColor': space_color,
+            'opacity': opacity,
+            'spaceOpacity': space_opacity
+        })
 
     def render(self, **kwargs):
-        super(StripePattern, self).render(angle=self.angle,
-                                          weight=self.weight,
-                                          space_weight=self.space_weight,
-                                          color=self.color,
-                                          space_color=self.space_color,
-                                          opacity=self.opacity,
-                                          space_opacity=self.space_opacity,
-                                          **kwargs)
+        super(StripePattern, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
@@ -107,50 +97,41 @@ class CirclePattern(MacroElement):
     """
 
     _template = Template(u"""
-            var shape = new L.PatternCircle({
-                x: {{this.radius + 2 * this.weight}},
-                y: {{this.radius + 2 * this.weight}},
-                weight: {{this.weight}},
-                radius: {{this.radius}},
-                color: "{{this.color}}",
-                fillColor: "{{this.fill_color}}",
-                opacity: {{this.opacity}},
-                fillOpacity: {{this.fill_opacity}},
-                fill: true
-            });
-
-            var {{this.get_name()}} = new L.Pattern({width:{{this.width}}, height:{{this.height}}});
-            {{this.get_name()}}.addShape(shape);
             {{this.get_name()}}.addTo({{this._parent.get_name()}});
+        {% macro script(this, kwargs) %}
+        var shape = new L.PatternCircle(
+            {{ this.options_pattern_circle }}
+        );
+        var {{this.get_name()}} = new L.Pattern(
+            {{ this.options_pattern }}
+        );
+        {{ this.get_name() }}.addShape(shape);
+        {% endmacro %}
+    """)
 
-            {% endmacro %}
-            """)
-
-    def __init__(self, width=20, height=20, radius=12,
-                 weight=2,
+    def __init__(self, width=20, height=20, radius=12, weight=2.0,
                  color="#3388ff", fill_color="#3388ff",
                  opacity=0.75, fill_opacity=0.5):
         super(CirclePattern, self).__init__()
         self._name = 'CirclePattern'
-        self.width = width
-        self.height = height
-        self.radius = radius
-        self.weight = weight
-        self.color = color
-        self.fill_color = fill_color
-        self.opacity = opacity
-        self.fill_opacity = fill_opacity
+        self.options_pattern_circle = json.dumps({
+            'x': radius + 2 * weight,
+            'y': radius + 2 * weight,
+            'weight': weight,
+            'radius': radius,
+            'color': color,
+            'fillColor': fill_color,
+            'opacity': opacity,
+            'fillOpacity': fill_opacity,
+            'fill': True,
+        })
+        self.options_pattern = json.dumps({
+            'width': width,
+            'height': height,
+        })
 
     def render(self, **kwargs):
-        super(CirclePattern, self).render(radius=self.radius,
-                                          width=self.width,
-                                          height=self.height,
-                                          weight=self.weight,
-                                          color=self.color,
-                                          fill_color=self.fill_color,
-                                          opacity=self.opacity,
-                                          fill_opacity=self.fill_opacity,
-                                          **kwargs)
+        super(CirclePattern, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
