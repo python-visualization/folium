@@ -8,37 +8,28 @@ from jinja2 import Template
 
 
 class StripePattern(MacroElement):
-    """
-    Fill Pattern for polygon composed of alternating lines
+    """Fill Pattern for polygon composed of alternating lines.
+
+    Add these to the 'fillPattern' field in GeoJson style functions.
 
     Parameters
     ----------
-    angle: int -360-360
-        angle of the line pattern (degrees).
-
-    weight: float
-        width of the main lines (pixels).
-
+    angle: float, default 0.5
+        Angle of the line pattern (degrees). Should be between -360 and 360.
+    weight: float, default 4
+        Width of the main lines (pixels).
     space_weight: float
-        width of the alternate lines (pixels).
-
-    width: int
-        Horizontal distance between circles (pixels).
-
+        Width of the alternate lines (pixels).
     color: string with hexadecimal, RGB, or named color, default "#000000"
-        color of the main lines.
-
+        Color of the main lines.
     space_color: string with hexadecimal, RGB, or named color, default "#ffffff"
-        color of the alternate lines.
-
-    opacity: float 0.0-1.0, default 0.75
-        opacity of the main lines.
-
-    space_opacity: float 0.0-1.0, default 0.0
-        opacity of the alternate lines.
+        Color of the alternate lines.
+    opacity: float, default 0.75
+        Opacity of the main lines. Should be between 0 and 1.
+    space_opacity: float, default 0.0
+        Opacity of the alternate lines. Should be between 0 and 1.
 
     See https://github.com/teastman/Leaflet.pattern for more information.
-
     """
 
     _template = Template(u"""
@@ -89,40 +80,33 @@ class StripePattern(MacroElement):
 
 
 class CirclePattern(MacroElement):
-    """
-    Fill Pattern for polygon composed of repeating circles
+    """Fill Pattern for polygon composed of repeating circles.
+
+    Add these to the 'fillPattern' field in GeoJson style functions.
 
     Parameters
     ----------
-    weight: float
-        width of outline around each circle (pixels).
-
-    radius: int
-        radius of each circle (pixels).
-
-    width: int
+    width: int, default 20
         Horizontal distance between circles (pixels).
-
-    height: int
+    height: int, default 20
         Vertical distance between circles (pixels).
-
+    radius: int, default 12
+        Radius of each circle (pixels).
+    weight: float, default 2.0
+        Width of outline around each circle (pixels).
     color: string with hexadecimal, RGB, or named color, default "#3388ff"
-        color of the circle outline.
-
+        Color of the circle outline.
     fill_color: string with hexadecimal, RGB, or named color, default "#3388ff"
-        color of the circle interior.
-
-    opacity: float 0.0-1.0, default 0.75
-        opacity of the circle outline.
-
-    fill_opacity: float 0.0-1.0, default 0.5
-        opacity of the circle interior.
+        Color of the circle interior.
+    opacity: float, default 0.75
+        Opacity of the circle outline. Should be between 0 and 1.
+    fill_opacity: float, default 0.5
+        Opacity of the circle interior. Should be between 0 and 1.
 
     See https://github.com/teastman/Leaflet.pattern for more information.
     """
 
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
             var shape = new L.PatternCircle({
                 x: {{this.radius + 2 * this.weight}},
                 y: {{this.radius + 2 * this.weight}},
