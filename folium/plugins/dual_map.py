@@ -77,7 +77,7 @@ class DualMap(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink('https://rawgit.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
+        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
                                 name='Leaflet.Sync')
 
         super(DualMap, self).render(**kwargs)
