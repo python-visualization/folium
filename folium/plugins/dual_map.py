@@ -19,6 +19,8 @@ class DualMap(MacroElement):
     layout : {'horizontal', 'vertical'}
         Select how the two maps should be positioned. Either horizontal (left
         and right) or vertical (top and bottom).
+    **kwargs
+        Keyword arguments are passed to the two Map objects.
 
     Examples
     --------
