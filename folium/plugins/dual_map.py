@@ -64,6 +64,7 @@ class DualMap(MacroElement):
         # Important: add self to Figure last.
         figure.add_child(self)
         self.children_for_m2 = []
+        self.children_for_m2_copied = []  # list with ids
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -93,10 +94,14 @@ class DualMap(MacroElement):
         super(DualMap, self).render(**kwargs)
 
         for child, name, index in self.children_for_m2:
+            if child._id in self.children_for_m2_copied:
+                # This map has been rendered before, child was copied already.
+                continue
             child_copy = deep_copy(child)
             self.m2.add_child(child_copy, name, index)
-            # m2 has already been rendered, so render the child here.
+            # m2 has already been rendered, so render the child here:
             child_copy.render()
+            self.children_for_m2_copied.append(child._id)
 
     def fit_bounds(self, *args, **kwargs):
         for m in (self.m1, self.m2):
