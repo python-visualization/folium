@@ -3,6 +3,7 @@ from jinja2 import Template
 from branca.element import MacroElement, Figure, JavascriptLink
 
 from folium.folium import Map
+from folium.utilities import deep_copy
 
 
 class DualMap(MacroElement):
@@ -22,7 +23,7 @@ class DualMap(MacroElement):
     Examples
     --------
     >>> # DualMap accepts the same arguments as Map:
-    >>> m = DualMap(location=(0, 0), tiles='cartodbpositron',  zoom_start=5)
+    >>> m = DualMap(location=(0, 0), tiles='cartodbpositron', zoom_start=5)
     >>> # Add the same marker to both maps:
     >>> Marker((0, 0)).add_to(m)
     >>> # The individual maps are attributes called `m1` and `m2`:
@@ -31,6 +32,7 @@ class DualMap(MacroElement):
     >>> m.save('map.html')
 
     """
+
     _template = Template("""
         {% macro script(this, kwargs) %}
         {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
@@ -64,12 +66,11 @@ class DualMap(MacroElement):
         self.children_for_m2 = []
 
     def add_child(self, child, name=None, index=None):
+        """Add object `child` to the first map and store it for the second."""
         self.m1.add_child(child, name, index)
         if index is None:
             index = len(self.m2._children)
         self.children_for_m2.append((child, name, index))
-
-
 
     def render(self, **kwargs):
         figure = self.get_root()
@@ -82,7 +83,7 @@ class DualMap(MacroElement):
         super(DualMap, self).render(**kwargs)
 
         for child, name, index in self.children_for_m2:
-            child_copy = self._copy_item(child)
+            child_copy = deep_copy(child)
             self.m2.add_child(child_copy, name, index)
             # m2 has already been rendered, so render the child here.
             child_copy.render()
@@ -90,10 +91,6 @@ class DualMap(MacroElement):
     def fit_bounds(self, *args, **kwargs):
         for m in (self.m1, self.m2):
             m.fit_bounds(*args, **kwargs)
-
-    def choropleth(self, *args, **kwargs):
-        for m in (self.m1, self.m2):
-            m.choropleth(*args, **kwargs)
 
     def keep_in_front(self, *args):
         for m in (self.m1, self.m2):
