@@ -1,7 +1,4 @@
-from copy import copy
-from uuid import uuid4
 from jinja2 import Template
-from collections import OrderedDict
 
 from branca.element import MacroElement, Figure, JavascriptLink
 
@@ -72,18 +69,7 @@ class DualMap(MacroElement):
             index = len(self.m2._children)
         self.children_for_m2.append((child, name, index))
 
-    def _copy_item(self, item_original):
-        """Return a recursive deep-copy of item where each copy has a new ID."""
-        item = copy(item_original)
-        item._id = uuid4().hex
-        if hasattr(item, '_children') and len(item._children) > 0:
-            children_new = OrderedDict()
-            for subitem_original in item._children.values():
-                subitem = self._copy_item(subitem_original)
-                subitem._parent = item
-                children_new[subitem.get_name()] = subitem
-            item._children = children_new
-        return item
+
 
     def render(self, **kwargs):
         figure = self.get_root()
