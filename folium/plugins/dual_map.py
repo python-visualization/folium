@@ -65,6 +65,16 @@ class DualMap(MacroElement):
         figure.add_child(self)
         self.children_for_m2 = []
 
+    def _repr_html_(self, **kwargs):
+        """Displays the HTML Map in a Jupyter notebook."""
+        if self._parent is None:
+            self.add_to(Figure())
+            out = self._parent._repr_html_(**kwargs)
+            self._parent = None
+        else:
+            out = self._parent._repr_html_(**kwargs)
+        return out
+
     def add_child(self, child, name=None, index=None):
         """Add object `child` to the first map and store it for the second."""
         self.m1.add_child(child, name, index)
