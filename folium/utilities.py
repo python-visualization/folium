@@ -419,6 +419,9 @@ def _tmp_html(data):
 
 def get_obj_in_upper_tree(element, cls):
     """Return the first object in the parent tree of class `cls`."""
+    if not hasattr(element, '_parent'):
+        raise ValueError('The top of the tree was reached without finding a {}'
+                         .format(cls))
     parent = element._parent
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
