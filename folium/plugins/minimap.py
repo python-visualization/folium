@@ -5,6 +5,7 @@ from __future__ import (absolute_import, division, print_function)
 import json
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
 from folium.raster_layers import TileLayer
 
 from jinja2 import Template

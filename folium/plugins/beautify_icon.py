@@ -4,11 +4,11 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 
-from branca.element import Figure, JavascriptLink, CssLink, MacroElement
-
-from six import iteritems
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
+
+from six import iteritems
 
 
 class BeautifyIcon(MacroElement):
