@@ -414,10 +414,8 @@ class GeoJson(Layer):
             if hasattr(data, 'to_crs'):
                 data = data.to_crs(epsg='4326')
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
-        elif hasattr(data, 'geometry') and any(data['geometry'].isnull()):  # for GeoDataFrames with missing geometries
-            raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
         else:
-            raise ValueError('Cannot find valid geometries in object {!r}.'.format(data))
+            raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
