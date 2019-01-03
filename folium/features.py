@@ -1063,10 +1063,10 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-
-    http://leafletjs.com/reference-1.2.0.html#divicon
+    See https://leafletjs.com/reference-1.4.0.html#divicon
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
