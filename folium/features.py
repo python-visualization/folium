@@ -352,7 +352,7 @@ class GeoJson(Layer):
         * If dict, then data will be converted to JSON and embedded
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
-    style_function: function, default None
+    style_function: GeoJsonStyleFunction or function, default None
         Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
         Function mapping a GeoJson Feature to a style dict for mouse events.
@@ -804,6 +804,17 @@ class GeoJsonTooltip(Tooltip):
 
 
 class GeoJsonStyleFunction(MacroElement):
+    """
+    Base class for style functions that generate JS functions
+
+    This class should not be used directly. A class extending this one should provide an attribute named
+    `_function_template`, which should be a Template object with source of the form:
+
+        function(feature) {
+            ...
+        }
+    """
+
     _template = Template(u"""
                 {% macro script(this, kwargs) %}
                     {{ this._parent.get_name() }}.setStyle({{ this._function_template.render(this=this, kwargs=kwargs) }});
@@ -820,6 +831,35 @@ class GeoJsonStylePropertyFunction(GeoJsonStyleFunction):
                 """)  # noqa
 
     def __init__(self, property_name='style', default=None):
+        """
+        Style function that retrieves the style dictionary from a property in the GeoJson data
+
+        This class can be used if the styling is embedded in the GeoJson data directly, for instance (using the default
+        property name 'style'):
+
+            {
+              "type": "FeatureCollection",
+              "features": [{
+                "type": "Feature",
+                "properties": {
+                  "style": { "color": "#ff0000" }
+                },
+                "geometry": {
+                  "type": "LineString",
+                  "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
+                }
+              }]
+            }
+
+
+        Parameters
+        ----------
+        property_name: str, default 'style'
+            The name of the feature property that the style is stored in
+        default: dict, default None
+            If provided, use this style as the base, and extend/override style elements with those stored in the
+            feature attribute
+        """
         super(GeoJsonStylePropertyFunction, self).__init__()
         self._name = "GeoJsonStylePropertyFunction"
         self.property_name = property_name
@@ -839,6 +879,25 @@ class GeoJsonStyleMap(GeoJsonStyleFunction):
                 """)  # noqa
 
     def __init__(self, property_name, style_map, default=None):
+        """
+        Style function that maps feature property values to a style
+
+        This class is most useful if the styling should be determined based on the value of a single property that
+        has a limited number of unique values, or where only for a small number of values a special style should be used
+        and a default style can be used for all other values. When the property can have many different values, with the
+        worst case being that each feature has a unique value, this class has little to no benfiti, and you should
+        consider using a plain style function instead.
+
+        Parameters
+        ----------
+        property_name: str
+            The property whose values are used as keys in the style map
+        style_map: dict
+            Dictionary that should map values of the feature property to style dictionaries
+        default: dict, default None
+            If provided, use this style as the base, and extend/override style elements with those stored in the
+            feature attribute
+        """
         super(GeoJsonStyleMap, self).__init__()
         self._name = "GeoJsonStyleMap"
         self.property_name = property_name
