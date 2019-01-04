@@ -194,6 +194,7 @@ def test_get_vegalite_major_version():
 
     assert vegalite_no_version._get_vegalite_major_versions(spec_no_version) is None
 
+
 # GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
@@ -204,3 +205,26 @@ def test_geojson_tooltip():
         warnings.simplefilter('always')
         m._repr_html_()
         assert issubclass(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
+
+
+# GeoJsonStylePropertyFunction
+def test_geojson_style_property_function():
+    m = folium.Map([30.5, -97.5], zoom_start=10)
+    folium.GeoJson(os.path.join(rootpath, "kuntarajat.geojson"),
+                   style_function=folium.GeoJsonStylePropertyFunction(
+                       property_name='foo',
+                       default={'color': '#ff0000'})
+                   ).add_to(m)
+    m._repr_html_()
+
+
+# GeoJsonStyleMap
+def test_geojson_style_map():
+    m = folium.Map([30.5, -97.5], zoom_start=10)
+    folium.GeoJson(os.path.join(rootpath, "kuntarajat.geojson"),
+                   style_function=folium.GeoJsonStyleMap(
+                       property_name='code',
+                       style_map={'area005': {'color': '#00ff00'}},
+                       default={'color': '#ff0000'})
+                   ).add_to(m)
+    m._repr_html_()
