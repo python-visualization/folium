@@ -189,6 +189,107 @@ class Polygon(Marker):
         self.options = _parse_options(line=True, **kwargs)
 
 
+class Envelope_Polygon_from_Points(Marker):
+    """
+    Class for drawing polygon overlays that envelope a given list of points on a map.
+
+    Extends :func:`folium.vector_layers.Polygon`.
+
+    See :func:`folium.vector_layers.path_options` for the `Path` options.
+
+    Parameters
+    ----------
+    locations: list of points (latitude, longitude)
+        Latitude and Longitude of line (Northing, Easting)
+    popup: string or folium.Popup, default None
+        Input text or visualization for object displayed when clicking.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
+
+    """
+
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var {{this.get_name()}} = L.polygon(
+                {{this.location}},
+                {{ this.options }}
+                )
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+        
+        #The location list has to contain at least 2 points
+        if len(locations) > 1 and not locations == None:
+        
+            from operator import itemgetter
+        
+            Points = sorted(locations,key=itemgetter(0))
+            X_Min = Points[0]
+            X_Max = Points[len(Points)-1]
+        
+            Points = sorted(Points,key=itemgetter(1))
+            Y_Min = Points[0]
+            Y_Max = Points[len(Points)-1]
+        
+            Upper_Left = (X_Min[0], Y_Max[1])
+            Upper_Right = (X_Max[0], Y_Max[1])
+            Lower_Right = (X_Max[0], Y_Min[1])
+            Lower_Left = (X_Min[0], Y_Min[1])
+        
+            locations = [Upper_Left, Upper_Right, Lower_Right, Lower_Left]
+
+        super(Envelope_Polygon_from_Points, self).__init__(locations, popup=popup, tooltip=tooltip)
+        self._name = 'Envelope_Polygon_from_Points'
+        self.options = _parse_options(line=True, **kwargs)
+
+
+class ConvexHull_Polygon_from_Points(Marker):
+    """
+    Class for drawing polygon overlays that ensemble a ConvexHull around a given list of points on a map.
+
+    Extends :func:`folium.vector_layers.Polygon`.
+
+    See :func:`folium.vector_layers.path_options` for the `Path` options.
+
+    Parameters
+    ----------
+    locations: list of points (latitude, longitude)
+        Latitude and Longitude of line (Northing, Easting)
+    popup: string or folium.Popup, default None
+        Input text or visualization for object displayed when clicking.
+    tooltip: str or folium.Tooltip, default None
+        Display a text when hovering over the object.
+
+    Based on https://stackoverflow.com/questions/39996028/draw-a-closed-and-filled-contour, accessed: 29.12.2018
+    
+    """
+
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+
+            var {{this.get_name()}} = L.polygon(
+                {{this.location}},
+                {{ this.options }}
+                )
+                .addTo({{this._parent.get_name()}});
+            {% endmacro %}
+            """)
+
+    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+        
+        #The location list has to contain at least 3 points
+        if len(locations) > 2 and not locations == None:
+            from scipy.spatial import ConvexHull
+            locations = [locations[i] for i in ConvexHull(locations).vertices]
+
+        super(ConvexHull_Polygon_from_Points, self).__init__(locations, popup=popup, tooltip=tooltip)
+        self._name = 'ConvexHull_Polygon_from_Points'
+        self.options = _parse_options(line=True, **kwargs)
+
+
 class Rectangle(Marker):
     """
     Class for drawing rectangle overlays on a map.

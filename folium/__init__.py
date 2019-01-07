@@ -45,7 +45,7 @@ from folium.map import (
     Tooltip,
 )
 from folium.raster_layers import TileLayer, WmsTileLayer
-from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
+from folium.vector_layers import Circle, CircleMarker, ConvexHull_Polygon_from_Points, Envelope_Polygon_from_Points, PolyLine, Polygon, Rectangle
 
 if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
     raise ImportError('branca version 0.3.0 or higher is required. '
@@ -100,7 +100,9 @@ __all__ = [
     # vector_layers
     'Circle',
     'CircleMarker',
+    'ConvexHull_Polygon_from_Points',    
+    'Envelope_Polygon_from_Points',
     'PolyLine',
     'Polygon',
-    'Rectangle',
+    'Rectangle'
 ]
