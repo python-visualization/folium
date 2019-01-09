@@ -28,6 +28,7 @@ from folium.plugins.mouse_position import MousePosition
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.search import Search
+from folium.plugins.semicircle import SemiCircle
 from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
@@ -52,6 +53,7 @@ __all__ = [
     'PolyLineTextPath',
     'ScrollZoomToggler',
     'Search',
+    'SemiCircle',
     'Terminator',
     'TimeSliderChoropleth',
     'TimestampedGeoJson',
