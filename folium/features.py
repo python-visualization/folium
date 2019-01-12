@@ -444,7 +444,7 @@ class GeoJson(Layer):
                 data = data.to_crs(epsg='4326')
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
-            raise ValueError('Unhandled object {!r}.'.format(data))
+            raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
 
         self.style_function = style_function or (lambda x: {})
 
