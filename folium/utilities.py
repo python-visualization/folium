@@ -9,6 +9,9 @@ import struct
 import tempfile
 import zlib
 from contextlib import contextmanager
+import copy
+import uuid
+import collections
 
 import numpy as np
 
@@ -415,6 +418,20 @@ def _tmp_html(data):
     finally:
         if os.path.isfile(filepath):
             os.remove(filepath)
+
+
+def deep_copy(item_original):
+    """Return a recursive deep-copy of item where each copy has a new ID."""
+    item = copy.copy(item_original)
+    item._id = uuid.uuid4().hex
+    if hasattr(item, '_children') and len(item._children) > 0:
+        children_new = collections.OrderedDict()
+        for subitem_original in item._children.values():
+            subitem = deep_copy(subitem_original)
+            subitem._parent = item
+            children_new[subitem.get_name()] = subitem
+        item._children = children_new
+    return item
 
 
 def get_obj_in_upper_tree(element, cls):

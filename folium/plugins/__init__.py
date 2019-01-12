@@ -14,6 +14,7 @@ from folium.plugins.antpath import AntPath
 from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
 from folium.plugins.draw import Draw
+from folium.plugins.dual_map import DualMap
 from folium.plugins.fast_marker_cluster import FastMarkerCluster
 from folium.plugins.feature_group_sub_group import FeatureGroupSubGroup
 from folium.plugins.float_image import FloatImage
@@ -39,6 +40,7 @@ __all__ = [
     'BoatMarker',
     'CirclePattern',
     'Draw',
+    'DualMap',
     'FastMarkerCluster',
     'FeatureGroupSubGroup',
     'FloatImage',

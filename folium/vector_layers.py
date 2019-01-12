@@ -62,8 +62,7 @@ def path_options(line=False, radius=False, **kwargs):
 
     Note that the presence of `fill_color` will override `fill=False`.
 
-
-    http://leafletjs.com/reference-1.2.0.html#path
+    See https://leafletjs.com/reference-1.4.0.html#path
 
     """
 
@@ -130,9 +129,10 @@ class PolyLine(Marker):
         Disable polyline clipping.
 
 
-    http://leafletjs.com/reference-1.2.0.html#polyline
+    See https://leafletjs.com/reference-1.4.0.html#polyline
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.polyline(
@@ -168,9 +168,10 @@ class Polygon(Marker):
         Display a text when hovering over the object.
 
 
-    http://leafletjs.com/reference-1.2.0.html#polygon
+    See https://leafletjs.com/reference-1.4.0.html#polygon
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -206,9 +207,10 @@ class Rectangle(Marker):
         Display a text when hovering over the object.
 
 
-    http://leafletjs.com/reference-1.2.0.html#rectangle
+    See https://leafletjs.com/reference-1.4.0.html#rectangle
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -250,9 +252,10 @@ class Circle(Marker):
         Radius of the circle, in meters.
 
 
-    http://leafletjs.com/reference-1.2.0.html#circle
+    See https://leafletjs.com/reference-1.4.0.html#circle
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -289,9 +292,10 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
 
 
-    http://leafletjs.com/reference-1.2.0.html#circlemarker
+    See https://leafletjs.com/reference-1.4.0.html#circlemarker
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.circleMarker(
