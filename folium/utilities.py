@@ -9,6 +9,9 @@ import struct
 import tempfile
 import zlib
 from contextlib import contextmanager
+import copy
+import uuid
+import collections
 
 import numpy as np
 
@@ -389,6 +392,20 @@ def iter_points(x):
         return []
 
 
+def compare_rendered(obj1, obj2):
+    """
+    Return True/False if the normalized rendered version of
+    two folium map objects are the equal or not.
+
+    """
+    return _normalize(obj1) == _normalize(obj2)
+
+
+def _normalize(rendered):
+    """Return the input string as a list of stripped lines."""
+    return [line.strip() for line in rendered.splitlines() if line.strip()]
+
+
 @contextmanager
 def _tmp_html(data):
     """Yields the path of a temporary HTML file containing data."""
@@ -401,3 +418,28 @@ def _tmp_html(data):
     finally:
         if os.path.isfile(filepath):
             os.remove(filepath)
+
+
+def deep_copy(item_original):
+    """Return a recursive deep-copy of item where each copy has a new ID."""
+    item = copy.copy(item_original)
+    item._id = uuid.uuid4().hex
+    if hasattr(item, '_children') and len(item._children) > 0:
+        children_new = collections.OrderedDict()
+        for subitem_original in item._children.values():
+            subitem = deep_copy(subitem_original)
+            subitem._parent = item
+            children_new[subitem.get_name()] = subitem
+        item._children = children_new
+    return item
+
+
+def get_obj_in_upper_tree(element, cls):
+    """Return the first object in the parent tree of class `cls`."""
+    if not hasattr(element, '_parent'):
+        raise ValueError('The top of the tree was reached without finding a {}'
+                         .format(cls))
+    parent = element._parent
+    if not isinstance(parent, cls):
+        return get_obj_in_upper_tree(parent, cls)
+    return parent

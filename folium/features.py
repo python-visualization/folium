@@ -23,6 +23,7 @@ from folium.utilities import (
     image_to_url,
     none_max,
     none_min,
+    get_obj_in_upper_tree
 )
 from folium.vector_layers import PolyLine
 
@@ -112,7 +113,8 @@ class RegularPolygonMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+            # noqa
             name='dvf_js')
 
 
@@ -241,11 +243,13 @@ class VegaLite(Element):
 
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
-        super(VegaLite, self).__init__()
+        super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
         if isinstance(self.data, text_type) or isinstance(data, binary_type):
             self.data = json.loads(self.data)
+
+        self.json = json.dumps(self.data)
 
         # Size Parameters.
         self.width = _parse_size(self.data.get('width', '100%') if
@@ -258,21 +262,11 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self.json = json.dumps(self.data)
+        vegalite_major_version = self._get_vegalite_major_versions(self.data)
 
         self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
-
-        self._parent.script.add_child(Element(Template("""
-            var embedSpec = {
-                mode: "vega-lite",
-                spec: {{this.json}}
-            };
-            vg.embed(
-                {{this.get_name()}}, embedSpec, function(error, result) {}
-            );
-        """).render(this=self)), name=self.get_name())
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
@@ -288,21 +282,62 @@ class VegaLite(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
-        figure.header.add_child(
-            JavascriptLink('https://d3js.org/d3.v3.min.js'),
-            name='d3')
+        if vegalite_major_version == '1':
+            self._embed_vegalite_v1(figure)
+        elif vegalite_major_version == '2':
+            self._embed_vegalite_v2(figure)
+        elif vegalite_major_version == '3':
+            self._embed_vegalite_v3(figure)
+        else:
+            # Version 2 is assumed as the default, if no version is given in the schema.
+            self._embed_vegalite_v2(figure)
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.min.js'),  # noqa
-            name='vega')
+    def _get_vegalite_major_versions(self, spec):
+        try:
+            schema = spec['$schema']
+        except KeyError:
+            major_version = None
+        else:
+            major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.min.js'),  # noqa
-            name='vega-lite')
+        return major_version
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.min.js'),  # noqa
-            name='vega-embed')
+    def _embed_vegalite_v3(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
+
+    def _embed_vegalite_v2(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
+
+    def _vega_embed(self):
+        self._parent.script.add_child(Element(Template("""
+                    vegaEmbed({{this.get_name()}}, {{this.json}})
+                        .then(function(result) {})
+                        .catch(console.error);
+                """).render(this=self)), name=self.get_name())
+
+    def _embed_vegalite_v1(self, figure):
+        self._parent.script.add_child(Element(Template("""
+                    var embedSpec = {
+                        mode: "vega-lite",
+                        spec: {{this.json}}
+                    };
+                    vg.embed(
+                        {{this.get_name()}}, embedSpec, function(error, result) {}
+                    );
+                """).render(this=self)), name=self.get_name())
+
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v3.min.js'), name='d3')
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'), name='vega')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'), name='vega-lite')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'), name='vega-embed')  # noqa
 
 
 class GeoJson(Layer):
@@ -358,7 +393,7 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {% if this.highlight %}
+        {%- if this.highlight %}
             {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
                 layer.on({
                     mouseout: function(e) {
@@ -366,27 +401,21 @@ class GeoJson(Layer):
                     mouseover: function(e) {
                         e.target.setStyle(e.target.feature.properties.highlight);},
                     click: function(e) {
-                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                    });
+                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
+                });
             };
-        {% endif %}
+        {%- endif %}
         var {{this.get_name()}} = L.geoJson(
-            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-            {% if this.smooth_factor is not none or this.highlight %}
-                , {
-                {% if this.smooth_factor is not none  %}
-                    smoothFactor:{{this.smooth_factor}}
-                {% endif %}
-
-                {% if this.highlight %}
-                    {% if this.smooth_factor is not none  %}
-                    ,
-                    {% endif %}
-                    onEachFeature: {{this.get_name()}}_onEachFeature
-                {% endif %}
-                }
-            {% endif %}
-            ).addTo({{this._parent.get_name()}});
+            {{ this.json }},
+            {
+            {%- if this.smooth_factor is not none  %}
+                smoothFactor: {{ this.smooth_factor }},
+            {%- endif %}
+            {%- if this.highlight %}
+                onEachFeature: {{ this.get_name() }}_onEachFeature,
+            {%- endif %}
+            }
+        ).addTo({{ this._parent.get_name()}} );
         {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
         {% endmacro %}
         """)  # noqa
@@ -416,18 +445,36 @@ class GeoJson(Layer):
             self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
         else:
             raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
+
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
-
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
+
+        self._validate_function(self.style_function, 'style_function')
+        self._validate_function(self.highlight_function, 'highlight_function')
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+
+        self.parent_map = None
+        self.json = None
+
+    def _validate_function(self, func, name):
+        """
+        Tests `self.style_function` and `self.highlight_function` to ensure
+        they are functions returning dictionaries.
+        """
+        test_feature = self.data if self.data.get('features') is None \
+            else self.data['features'][0]
+        if not callable(func) or not isinstance(func(test_feature), dict):
+            raise ValueError('{} should be a function that accepts items from '
+                             'data[\'features\'] and returns a dictionary.'
+                             .format(name))
 
     def style_data(self):
         """
@@ -443,9 +490,24 @@ class GeoJson(Layer):
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(self.highlight_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
+            feature_style = self.style_function(feature)
+            for key, value in feature_style.items():
+                if isinstance(value, MacroElement):
+                    # Make sure objects are rendered:
+                    if value._parent is None:
+                        value._parent = self
+                        value.render()
+                    # Replace objects with their Javascript var names:
+                    feature_style[key] = "{{'" + value.get_name() + "'}}"
+
+            feature.setdefault('properties', {}).setdefault('style', {}) \
+                .update(feature_style)
+            feature.setdefault('properties', {}).setdefault('highlight', {}) \
+                .update(self.highlight_function(feature))
+
+        data_json = json.dumps(self.data, sort_keys=True)
+        # Remove quotes around Jinja2 template expressions:
+        return data_json.replace('"{{', '{{').replace('}}"', '}}')
 
     def _get_self_bounds(self):
         """
@@ -454,6 +516,11 @@ class GeoJson(Layer):
 
         """
         return get_bounds(self.data, lonlat=True)
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.json = self.style_data() if self.embed else json.dumps(self.data)
+        super(GeoJson, self).render()
 
 
 class TopoJson(Layer):
@@ -559,11 +626,13 @@ class TopoJson(Layer):
         a corresponding JSON output.
 
         """
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
+
         geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
@@ -700,8 +769,8 @@ class GeoJsonTooltip(Tooltip):
                                                 ' the same length.'
         assert isinstance(labels, bool), 'labels requires a boolean value.'
         assert isinstance(localize, bool), 'localize must be bool.'
-        assert 'permanent' not in kwargs,  'The `permanent` option does not ' \
-                                           'work with GeoJsonTooltip.'
+        assert 'permanent' not in kwargs, 'The `permanent` option does not ' \
+                                          'work with GeoJsonTooltip.'
 
         self.fields = fields
         self.aliases = aliases
@@ -851,7 +920,7 @@ class Choropleth(FeatureGroup):
     ...            highlight=True)
     """
 
-    def __init__(self, geo_data, data=None, columns=None, key_on=None,    # noqa
+    def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
                  bins=6, fill_color='blue', nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
@@ -1011,10 +1080,10 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-
-    http://leafletjs.com/reference-1.2.0.html#divicon
+    See https://leafletjs.com/reference-1.4.0.html#divicon
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -1197,6 +1266,7 @@ class ColorLine(FeatureGroup):
     A ColorLine object that you can `add_to` a Map.
 
     """
+
     def __init__(self, positions, colors, colormap=None, nb_steps=12,
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)

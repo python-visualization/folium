@@ -16,7 +16,7 @@ from folium.map import Marker
 from jinja2 import Template
 
 
-def path_options(**kwargs):
+def path_options(line=False, radius=False, **kwargs):
     """
     Contains options and constants shared between vector overlays
     (Polygon, Polyline, Circle, CircleMarker, and Rectangle).
@@ -62,31 +62,18 @@ def path_options(**kwargs):
 
     Note that the presence of `fill_color` will override `fill=False`.
 
-
-    http://leafletjs.com/reference-1.2.0.html#path
+    See https://leafletjs.com/reference-1.4.0.html#path
 
     """
-    valid_options = (
-        'bubbling_mouse_events',
-        'color',
-        'dash_array',
-        'dash_offset',
-        'fill',
-        'fill_color',
-        'fill_opacity',
-        'fill_rule',
-        'line_cap',
-        'line_join',
-        'opacity',
-        'stroke',
-        'weight',
-    )
-    non_valid = [key for key in kwargs.keys() if key not in valid_options]
-    if non_valid:
-        raise ValueError(
-            '{non_valid} are not valid options, '
-            'expected {valid_options}'.format(non_valid=non_valid, valid_options=valid_options)
-        )
+
+    extra_options = {}
+    if line:
+        extra_options = {
+            'smoothFactor': kwargs.pop('smooth_factor', 1.0),
+            'noClip': kwargs.pop('no_clip', False),
+        }
+    if radius:
+        extra_options.update({'radius': radius})
 
     color = kwargs.pop('color', '#3388ff')
     fill_color = kwargs.pop('fill_color', False)
@@ -96,7 +83,7 @@ def path_options(**kwargs):
         fill_color = color
         fill = kwargs.pop('fill', False)
 
-    return {
+    default = {
         'stroke': kwargs.pop('stroke', True),
         'color': color,
         'weight': kwargs.pop('weight', 3),
@@ -111,19 +98,12 @@ def path_options(**kwargs):
         'fillRule': kwargs.pop('fill_rule', 'evenodd'),
         'bubblingMouseEvents': kwargs.pop('bubbling_mouse_events', True),
     }
+    default.update(extra_options)
+    return default
 
 
 def _parse_options(line=False, radius=False, **kwargs):
-    extra_options = {}
-    if line:
-        extra_options = {
-            'smoothFactor': kwargs.pop('smooth_factor', 1.0),
-            'noClip': kwargs.pop('no_clip', False),
-        }
-    if radius:
-        extra_options.update({'radius': radius})
-    options = path_options(**kwargs)
-    options.update(extra_options)
+    options = path_options(line=line, radius=radius, **kwargs)
     return json.dumps(options, sort_keys=True, indent=2)
 
 
@@ -149,9 +129,10 @@ class PolyLine(Marker):
         Disable polyline clipping.
 
 
-    http://leafletjs.com/reference-1.2.0.html#polyline
+    See https://leafletjs.com/reference-1.4.0.html#polyline
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.polyline(
@@ -187,9 +168,10 @@ class Polygon(Marker):
         Display a text when hovering over the object.
 
 
-    http://leafletjs.com/reference-1.2.0.html#polygon
+    See https://leafletjs.com/reference-1.4.0.html#polygon
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -225,9 +207,10 @@ class Rectangle(Marker):
         Display a text when hovering over the object.
 
 
-    http://leafletjs.com/reference-1.2.0.html#rectangle
+    See https://leafletjs.com/reference-1.4.0.html#rectangle
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -269,9 +252,10 @@ class Circle(Marker):
         Radius of the circle, in meters.
 
 
-    http://leafletjs.com/reference-1.2.0.html#circle
+    See https://leafletjs.com/reference-1.4.0.html#circle
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
 
@@ -308,9 +292,10 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
 
 
-    http://leafletjs.com/reference-1.2.0.html#circlemarker
+    See https://leafletjs.com/reference-1.4.0.html#circlemarker
 
     """
+
     _template = Template(u"""
             {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.circleMarker(

@@ -279,7 +279,7 @@ class Popup(Element):
         Content of the Popup.
     parse_html: bool, default False
         True if the popup is a template that needs to the rendered first.
-    max_width: int, default 300
+    max_width: int for pixels or text for percentages, default '100%'
         The maximal width of the popup.
     show: bool, default False
         True renders the popup open on page load.
@@ -304,7 +304,7 @@ class Popup(Element):
             {% endfor %}
         """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width=300, show=False,
+    def __init__(self, html=None, parse_html=False, max_width='100%', show=False,
                  sticky=False):
         super(Popup, self).__init__()
         self._name = 'Popup'
