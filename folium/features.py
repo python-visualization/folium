@@ -23,6 +23,7 @@ from folium.utilities import (
     image_to_url,
     none_max,
     none_min,
+    get_obj_in_upper_tree
 )
 from folium.vector_layers import PolyLine
 
@@ -392,7 +393,7 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {% if this.highlight %}
+        {%- if this.highlight %}
             {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
                 layer.on({
                     mouseout: function(e) {
@@ -400,27 +401,21 @@ class GeoJson(Layer):
                     mouseover: function(e) {
                         e.target.setStyle(e.target.feature.properties.highlight);},
                     click: function(e) {
-                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                    });
+                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
+                });
             };
-        {% endif %}
+        {%- endif %}
         var {{this.get_name()}} = L.geoJson(
-            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-            {% if this.smooth_factor is not none or this.highlight %}
-                , {
-                {% if this.smooth_factor is not none  %}
-                    smoothFactor:{{this.smooth_factor}}
-                {% endif %}
-
-                {% if this.highlight %}
-                    {% if this.smooth_factor is not none  %}
-                    ,
-                    {% endif %}
-                    onEachFeature: {{this.get_name()}}_onEachFeature
-                {% endif %}
-                }
-            {% endif %}
-            ).addTo({{this._parent.get_name()}});
+            {{ this.json }},
+            {
+            {%- if this.smooth_factor is not none  %}
+                smoothFactor: {{ this.smooth_factor }},
+            {%- endif %}
+            {%- if this.highlight %}
+                onEachFeature: {{ this.get_name() }}_onEachFeature,
+            {%- endif %}
+            }
+        ).addTo({{ this._parent.get_name()}} );
         {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
         {% endmacro %}
         """)  # noqa
@@ -454,7 +449,6 @@ class GeoJson(Layer):
         self.style_function = style_function or (lambda x: {})
 
         self.highlight = highlight_function is not None
-
         self.highlight_function = highlight_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
@@ -467,12 +461,16 @@ class GeoJson(Layer):
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
 
+        self.parent_map = None
+        self.json = None
+
     def _validate_function(self, func, name):
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
         """
-        test_feature = self.data if self.data.get('features') is None else self.data['features'][0]  # noqa
+        test_feature = self.data if self.data.get('features') is None \
+            else self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
                              'data[\'features\'] and returns a dictionary.'
@@ -492,10 +490,24 @@ class GeoJson(Layer):
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
         for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
-                self.highlight_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
+            feature_style = self.style_function(feature)
+            for key, value in feature_style.items():
+                if isinstance(value, MacroElement):
+                    # Make sure objects are rendered:
+                    if value._parent is None:
+                        value._parent = self
+                        value.render()
+                    # Replace objects with their Javascript var names:
+                    feature_style[key] = "{{'" + value.get_name() + "'}}"
+
+            feature.setdefault('properties', {}).setdefault('style', {}) \
+                .update(feature_style)
+            feature.setdefault('properties', {}).setdefault('highlight', {}) \
+                .update(self.highlight_function(feature))
+
+        data_json = json.dumps(self.data, sort_keys=True)
+        # Remove quotes around Jinja2 template expressions:
+        return data_json.replace('"{{', '{{').replace('}}"', '}}')
 
     def _get_self_bounds(self):
         """
@@ -504,6 +516,11 @@ class GeoJson(Layer):
 
         """
         return get_bounds(self.data, lonlat=True)
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.json = self.style_data() if self.embed else json.dumps(self.data)
+        super(GeoJson, self).render()
 
 
 class TopoJson(Layer):

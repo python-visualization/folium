@@ -25,6 +25,7 @@ from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
+from folium.plugins.pattern import CirclePattern, StripePattern
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.search import Search
@@ -37,6 +38,7 @@ __all__ = [
     'AntPath',
     'BeautifyIcon',
     'BoatMarker',
+    'CirclePattern',
     'Draw',
     'DualMap',
     'FastMarkerCluster',
@@ -52,6 +54,7 @@ __all__ = [
     'PolyLineTextPath',
     'ScrollZoomToggler',
     'Search',
+    'StripePattern',
     'Terminator',
     'TimeSliderChoropleth',
     'TimestampedGeoJson',

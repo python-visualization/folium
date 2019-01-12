@@ -432,3 +432,14 @@ def deep_copy(item_original):
             children_new[subitem.get_name()] = subitem
         item._children = children_new
     return item
+
+
+def get_obj_in_upper_tree(element, cls):
+    """Return the first object in the parent tree of class `cls`."""
+    if not hasattr(element, '_parent'):
+        raise ValueError('The top of the tree was reached without finding a {}'
+                         .format(cls))
+    parent = element._parent
+    if not isinstance(parent, cls):
+        return get_obj_in_upper_tree(parent, cls)
+    return parent
