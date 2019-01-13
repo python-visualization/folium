@@ -255,7 +255,6 @@ class Marker(MacroElement):
                  draggable=False):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.tooltip = tooltip
         self.location = _validate_coordinates(location)
         self.draggable = draggable
         if icon is not None:
