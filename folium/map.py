@@ -221,6 +221,8 @@ class Marker(MacroElement):
         Display a text when hovering over the object.
     icon: Icon plugin
         the Icon plugin to use to render the marker.
+    draggable: bool, default False
+        Set to True to be able to drag the marker around the map.
 
     Returns
     -------
@@ -239,17 +241,23 @@ class Marker(MacroElement):
         var {{this.get_name()}} = L.marker(
             [{{this.location[0]}}, {{this.location[1]}}],
             {
-                icon: new L.Icon.Default()
+                icon: new L.Icon.Default(),
+                {%- if this.draggable %}
+                draggable: true,
+                autoPan: true,
+                {%- endif %}
                 }
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None):
+    def __init__(self, location, popup=None, tooltip=None, icon=None,
+                 draggable=False):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.tooltip = tooltip
         self.location = _validate_coordinates(location)
+        self.draggable = draggable
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
