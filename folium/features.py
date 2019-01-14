@@ -1092,7 +1092,7 @@ class DivIcon(MacroElement):
                     {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
                     {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
                     {% if this.className %}className: '{{this.className}}',{% endif %}
-                    {% if this.html %}html: '{{this.html}}',{% endif %}
+                    {% if this.html %}html: `{{this.html}}`,{% endif %}
                     });
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
