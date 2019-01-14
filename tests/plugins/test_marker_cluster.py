@@ -49,7 +49,7 @@ def test_marker_cluster():
             var {{marker.get_name()}} = L.marker(
                 [{{marker.location[0]}},{{marker.location[1]}}],
                 {
-                    icon: new L.Icon.Default()
+                    icon: new L.Icon.Default(),
                     }
                 )
                 .addTo({{this.get_name()}});
