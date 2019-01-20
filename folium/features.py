@@ -9,6 +9,8 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 import warnings
+import functools
+import operator
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -393,17 +395,37 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
+        let {{ this.get_name() }}_style_function = function (feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.style_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.style_map['default'] }};
+            }
+        }
         {%- if this.highlight %}
-            {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                layer.on({
-                    mouseout: function(e) {
-                        e.target.setStyle(e.target.feature.properties.style);},
-                    mouseover: function(e) {
-                        e.target.setStyle(e.target.feature.properties.highlight);},
-                    click: function(e) {
-                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
-                });
-            };
+        let {{ this.get_name() }}_highlight_function = function (feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.highlight_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.highlight_map['default'] }};
+            }
+        }
+        {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    e.target.setStyle({{ this.get_name() }}_style_function(e.target.feature));},
+                mouseover: function(e) {
+                    e.target.setStyle({{ this.get_name() }}_highlight_function(e.target.feature));},
+                click: function(e) {
+                    {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
+            });
+        };
         {%- endif %}
         var {{this.get_name()}} = L.geoJson(
             {{ this.json }},
@@ -416,7 +438,7 @@ class GeoJson(Layer):
             {%- endif %}
             }
         ).addTo({{ this._parent.get_name()}} );
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {{ this.get_name() }}.setStyle({{ this.get_name() }}_style_function);
         {% endmacro %}
         """)  # noqa
 
@@ -446,12 +468,16 @@ class GeoJson(Layer):
         else:
             raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
 
-        self.style_function = style_function or (lambda x: {})
+        self.convert_to_feature_collection()
 
+        self.style_function = style_function or (lambda x: {})
         self.highlight = highlight_function is not None
         self.highlight_function = highlight_function or (lambda x: {})
-
         self.smooth_factor = smooth_factor
+
+        self.feature_identifier = self.find_identifier(self.data['features'][0])
+        self.style_map = {}
+        self.highlight_map = {}
 
         self._validate_function(self.style_function, 'style_function')
         self._validate_function(self.highlight_function, 'highlight_function')
@@ -463,6 +489,15 @@ class GeoJson(Layer):
 
         self.parent_map = None
         self.json = None
+
+    def convert_to_feature_collection(self):
+        """Convert data into a FeatureCollection if it is not already."""
+        if 'features' not in self.data.keys():
+            # Catch case when GeoJSON is just a single Feature or a geometry.
+            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
+                # Catch case when GeoJSON is just a geometry.
+                self.data = {'type': 'Feature', 'geometry': self.data}
+            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
     def _validate_function(self, func, name):
         """
@@ -476,20 +511,25 @@ class GeoJson(Layer):
                              'data[\'features\'] and returns a dictionary.'
                              .format(name))
 
+    def find_identifier(self, feature):
+        if 'id' in feature:
+            return 'feature.id'
+        elif 'properties' in feature and 'name' in feature['properties']:
+            return 'feature.properties.name'
+        else:
+            raise ValueError(
+                'Could not determine a unique identifier for each feature.')
+
     def style_data(self):
         """
         Applies `self.style_function` to each feature of `self.data` and
         returns a corresponding JSON output.
 
         """
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
         for feature in self.data['features']:
+            name = functools.reduce(operator.getitem,
+                                    self.feature_identifier.split('.')[1:],
+                                    feature)
             feature_style = self.style_function(feature)
             for key, value in feature_style.items():
                 if isinstance(value, MacroElement):
@@ -499,11 +539,18 @@ class GeoJson(Layer):
                         value.render()
                     # Replace objects with their Javascript var names:
                     feature_style[key] = "{{'" + value.get_name() + "'}}"
+            key = json.dumps(feature_style, sort_keys=True)
+            self.style_map.setdefault(key, []).append(name)
 
-            feature.setdefault('properties', {}).setdefault('style', {}) \
-                .update(feature_style)
-            feature.setdefault('properties', {}).setdefault('highlight', {}) \
-                .update(self.highlight_function(feature))
+            feature_highlight = self.highlight_function(feature)
+            key = json.dumps(feature_highlight, sort_keys=True)
+            self.highlight_map.setdefault(key, []).append(name)
+
+        for mapping in (self.style_map, self.highlight_map):
+            key_longest = sorted([(len(v), k) for k, v in mapping.items()],
+                                 reverse=True)[0][1]
+            mapping['default'] = key_longest
+            del(mapping[key_longest])
 
         data_json = json.dumps(self.data, sort_keys=True)
         # Remove quotes around Jinja2 template expressions:
