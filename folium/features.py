@@ -427,8 +427,17 @@ class GeoJson(Layer):
             });
         };
         {%- endif %}
-        var {{this.get_name()}} = L.geoJson(
-            {{ this.json }},
+        {%- if this.embed %}
+        let {{ this.get_name() }}_data = {{ this.json }};
+        {%- else %}
+        let {{ this.get_name() }}_data;
+        $.ajax({url: "{{ this.embed_link }}", dataType: 'json', async: false,
+            success: function(data) {
+                {{ this.get_name() }}_data = data;
+        }});
+        {%- endif %}
+        var {{ this.get_name() }} = L.geoJson(
+            {{ this.get_name() }}_data,
             {
             {%- if this.smooth_factor is not none  %}
                 smoothFactor: {{ this.smooth_factor }},
@@ -436,30 +445,38 @@ class GeoJson(Layer):
             {%- if this.highlight %}
                 onEachFeature: {{ this.get_name() }}_onEachFeature,
             {%- endif %}
+                style: {{ this.get_name() }}_style_function,
             }
         ).addTo({{ this._parent.get_name()}} );
-        {{ this.get_name() }}.setStyle({{ this.get_name() }}_style_function);
         {% endmacro %}
         """)  # noqa
 
     def __init__(self, data, style_function=None, name=None,
                  overlay=True, control=True, show=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
+                 smooth_factor=None, highlight_function=None, tooltip=None,
+                 embed=True):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
+        self.embed = embed
+        self.embed_link = None
+        self.json = None
         if isinstance(data, dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
-            self.embed = True
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 self.data = requests.get(data).json()
+                if not self.embed:
+                    self.embed_link = data
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
+                self.embed = True
                 self.data = json.loads(data)
             else:  # This is a filename
                 with open(data) as f:
                     self.data = json.loads(f.read())
+                if not self.embed:
+                    self.embed_link = data
         elif hasattr(data, '__geo_interface__'):
             self.embed = True
             if hasattr(data, 'to_crs'):
@@ -488,7 +505,6 @@ class GeoJson(Layer):
             self.add_child(Tooltip(tooltip))
 
         self.parent_map = None
-        self.json = None
 
     def convert_to_feature_collection(self):
         """Convert data into a FeatureCollection if it is not already."""
@@ -498,6 +514,8 @@ class GeoJson(Layer):
                 # Catch case when GeoJSON is just a geometry.
                 self.data = {'type': 'Feature', 'geometry': self.data}
             self.data = {'type': 'FeatureCollection', 'features': [self.data]}
+            if not self.embed:
+                raise ValueError('Data is not a FeatureCollection.')
 
     def _validate_function(self, func, name):
         """
@@ -526,6 +544,9 @@ class GeoJson(Layer):
         returns a corresponding JSON output.
 
         """
+        def to_key(d):
+            return json.dumps(d, sort_keys=True).replace('"{{', '{{').replace('}}"', '}}')
+
         for feature in self.data['features']:
             name = functools.reduce(operator.getitem,
                                     self.feature_identifier.split('.')[1:],
@@ -539,22 +560,16 @@ class GeoJson(Layer):
                         value.render()
                     # Replace objects with their Javascript var names:
                     feature_style[key] = "{{'" + value.get_name() + "'}}"
-            key = json.dumps(feature_style, sort_keys=True)
-            self.style_map.setdefault(key, []).append(name)
+            self.style_map.setdefault(to_key(feature_style), []).append(name)
 
             feature_highlight = self.highlight_function(feature)
-            key = json.dumps(feature_highlight, sort_keys=True)
-            self.highlight_map.setdefault(key, []).append(name)
+            self.highlight_map.setdefault(to_key(feature_highlight), []).append(name)
 
         for mapping in (self.style_map, self.highlight_map):
             key_longest = sorted([(len(v), k) for k, v in mapping.items()],
                                  reverse=True)[0][1]
             mapping['default'] = key_longest
             del(mapping[key_longest])
-
-        data_json = json.dumps(self.data, sort_keys=True)
-        # Remove quotes around Jinja2 template expressions:
-        return data_json.replace('"{{', '{{').replace('}}"', '}}')
 
     def _get_self_bounds(self):
         """
@@ -566,7 +581,9 @@ class GeoJson(Layer):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
-        self.json = self.style_data() if self.embed else json.dumps(self.data)
+        self.style_data()
+        if self.embed:
+            self.json = json.dumps(self.data, sort_keys=True)
         super(GeoJson, self).render()
 
 
