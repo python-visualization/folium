@@ -467,35 +467,37 @@ class GeoJson(Layer):
         self.embed_link = None
         self.json = None
         self.parent_map = None
+        self.smooth_factor = smooth_factor
+        self.style = style_function is not None
+        self.highlight = highlight_function is not None
 
         if isinstance(data, dict):
             self.embed = True
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
-                self.data = requests.get(data).json()
+                if self.embed or self.style or self.highlight:
+                    self.data = requests.get(data).json()
                 if not self.embed:
                     self.embed_link = data
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.embed = True
                 self.data = json.loads(data)
             else:  # This is a filename
-                with open(data) as f:
-                    self.data = json.loads(f.read())
+                if self.embed or self.style or self.highlight:
+                    with open(data) as f:
+                        self.data = json.loads(f.read())
                 if not self.embed:
                     self.embed_link = data
         elif hasattr(data, '__geo_interface__'):
             self.embed = True
             if hasattr(data, 'to_crs'):
                 data = data.to_crs(epsg='4326')
-            self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
+            self.data = json.loads(json.dumps(data.__geo_interface__))
         else:
             raise ValueError('Cannot render objects with any missing geometries'
                              ': {!r}'.format(data))
 
-        self.smooth_factor = smooth_factor
-        self.style = style_function is not None
-        self.highlight = highlight_function is not None
         if self.style or self.highlight:
             self.convert_to_feature_collection()
             self.feature_identifier = self.find_identifier()
@@ -570,7 +572,8 @@ class GeoJson(Layer):
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         if self.style or self.highlight:
-            mapper = GeoJsonMapper(self.data, self.feature_identifier)
+            mapper = GeoJsonMapper(self.data, self.feature_identifier,
+                                   self)
             if self.style:
                 self.style_map = mapper.get_style_map(self.style_function)
             if self.highlight:
@@ -586,9 +589,10 @@ class GeoJsonMapper:
     Used in the GeoJson class. Users don't have to call this class directly.
     """
 
-    def __init__(self, data, feature_identifier):
+    def __init__(self, data, feature_identifier, geojson_obj):
         self.data = data
         self.feature_identifier = feature_identifier
+        self.geojson_obj = geojson_obj
 
     def get_style_map(self, style_function):
         """Return a dict that maps style parameters to features."""
@@ -608,7 +612,7 @@ class GeoJsonMapper:
                     if isinstance(value, MacroElement):
                         # Make sure objects are rendered:
                         if value._parent is None:
-                            value._parent = self
+                            value._parent = self.geojson_obj
                             value.render()
                         # Replace objects with their Javascript var names:
                         content[key] = "{{'" + value.get_name() + "'}}"
