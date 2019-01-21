@@ -500,7 +500,6 @@ class GeoJson(Layer):
 
         if self.style or self.highlight:
             self.convert_to_feature_collection()
-            self.feature_identifier = self.find_identifier()
             if self.style:
                 self._validate_function(style_function, 'style_function')
                 self.style_function = style_function
@@ -530,6 +529,17 @@ class GeoJson(Layer):
             self.data = {'type': 'Feature', 'geometry': self.data}
         self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
+    def _validate_function(self, func, name):
+        """
+        Tests `self.style_function` and `self.highlight_function` to ensure
+        they are functions returning dictionaries.
+        """
+        test_feature = self.data['features'][0]
+        if not callable(func) or not isinstance(func(test_feature), dict):
+            raise ValueError('{} should be a function that accepts items from '
+                             'data[\'features\'] and returns a dictionary.'
+                             .format(name))
+
     def find_identifier(self):
         """Find a unique identifier for each feature, create it if needed."""
         features = self.data['features']
@@ -550,17 +560,6 @@ class GeoJson(Layer):
             'field or set `embed=True`. '
         )
 
-    def _validate_function(self, func, name):
-        """
-        Tests `self.style_function` and `self.highlight_function` to ensure
-        they are functions returning dictionaries.
-        """
-        test_feature = self.data['features'][0]
-        if not callable(func) or not isinstance(func(test_feature), dict):
-            raise ValueError('{} should be a function that accepts items from '
-                             'data[\'features\'] and returns a dictionary.'
-                             .format(name))
-
     def _get_self_bounds(self):
         """
         Computes the bounds of the object itself (not including it's children)
@@ -572,18 +571,19 @@ class GeoJson(Layer):
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         if self.style or self.highlight:
-            mapper = GeoJsonMapper(self.data, self.feature_identifier,
-                                   self)
+            mapper = GeoJsonStyleMapper(self.data, self.find_identifier(),
+                                        self)
             if self.style:
                 self.style_map = mapper.get_style_map(self.style_function)
             if self.highlight:
-                self.highlight_map = mapper.get_highlight_map(self.highlight_function)  # noqa
+                self.highlight_map = mapper.get_highlight_map(
+                    self.highlight_function)
         if self.embed:
             self.json = json.dumps(self.data, sort_keys=True)
         super(GeoJson, self).render()
 
 
-class GeoJsonMapper:
+class GeoJsonStyleMapper:
     """Create dicts that map styling to GeoJson features.
 
     Used in the GeoJson class. Users don't have to call this class directly.
