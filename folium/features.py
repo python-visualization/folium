@@ -457,7 +457,7 @@ class GeoJson(Layer):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, style_function=None, highlight_function=None,
+    def __init__(self, data, style_function=None, highlight_function=None,  # noqa
                  name=None, overlay=True, control=True, show=True,
                  smooth_factor=None, tooltip=None, embed=True):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
