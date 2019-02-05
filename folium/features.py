@@ -896,6 +896,9 @@ class Choropleth(FeatureGroup):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    tooltip: GeoJsonTooltip, Tooltip or str, default None
+        Display text when hovering over the GeoJSON object. Can utilize the data,
+        see folium.GeoJsonTooltip for info on how to do that.
 
     Returns
     -------
@@ -924,7 +927,7 @@ class Choropleth(FeatureGroup):
                  bins=6, fill_color='blue', nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
-                 overlay=True, control=True, show=True,
+                 overlay=True, control=True, show=True, tooltip=None,
                  topojson=None, smooth_factor=None, highlight=None,
                  **kwargs):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
@@ -1033,13 +1036,15 @@ class Choropleth(FeatureGroup):
                 geo_data,
                 topojson,
                 style_function=style_function,
-                smooth_factor=smooth_factor)
+                smooth_factor=smooth_factor,
+                tooltip=tooltip)
         else:
             self.geojson = GeoJson(
                 geo_data,
                 style_function=style_function,
                 smooth_factor=smooth_factor,
-                highlight_function=highlight_function if highlight else None)
+                highlight_function=highlight_function if highlight else None,
+                tooltip=tooltip)
 
         self.add_child(self.geojson)
         if self.color_scale:
