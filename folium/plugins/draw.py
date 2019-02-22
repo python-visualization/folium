@@ -13,31 +13,37 @@ from jinja2 import Template
 class Draw(MacroElement):
     """
     Vector drawing and editing plugin for Leaflet.
+
     Parameters
     ----------
     export : bool, default False
         Add a small button that exports the drawn shapes as a geojson file.
-    filename : string, default data.geojson
+    filename : string, default 'data.geojson'
         Name of geojson file
     position : string, default 'topleft'
         Position of control. It can be one of 'topleft', 'toprigth', 'bottomleft', 'bottomright'
-    draw : dict, default None
+        See https://leafletjs.com/reference-1.4.0.html#control
+    draw : dict, optional
         The options used to configure the draw toolbar
-    edit : dict, default None
+        See http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions
+    edit : dict, optional
         The options used to configure the edit toolbar
+        See https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#editpolyoptions
     Examples
     --------
     >>> m = folium.Map()
     >>> Draw(export=True).add_to(m)
+
     For more info please check
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
+
     """
     _template = Template(u"""
             {% macro script(this, kwargs) %}
             var options = {
-              position: "{{kwargs.get('position', 'topleft')}}",
-              draw: {{kwargs.get('draw', {})}},
-              edit: {{kwargs.get('edit', {})}}
+              position: "{{this.position}}",
+              draw: {{this.draw_options}},
+              edit: {{this.edit_options}}
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo({{this._parent.get_name()}});
@@ -63,39 +69,33 @@ class Draw(MacroElement):
               document.getElementById('export').setAttribute('href', 'data:' + convertedData);
               document.getElementById('export').setAttribute(
                 'download',
-                "{{kwargs.get('filename', 'data.geojson')}}"
+                "{{this.filename}}"
               );
             }
             {% endmacro %}
             """)
 
-    js_url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'
-    css_url = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'
-
     def __init__(self, export=False, filename='data.geojson',
-                 position='topleft', draw=None, edit=None):
+                 position='topleft', draw_options=None, edit_options=None):
         super(Draw, self).__init__()
         self._name = 'DrawControl'
         self.export = export
         self.filename = filename
         self.position = position
-        self.draw = draw or {}
-        self.edit = edit or {}
+        self.draw_options = json.dumps(draw_options or {})
+        self.edit_options = json.dumps(edit_options or {})
 
     def render(self, **kwargs):
-        super(Draw, self).render(
-            position=self.position,
-            draw=json.dumps(self.draw),
-            edit=json.dumps(self.edit),
-            filename=self.filename
-        )
+        super(Draw, self).render(**kwargs)
 
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink(self.js_url))
-        figure.header.add_child(CssLink(self.css_url))
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'))  # noqa
+        figure.header.add_child(
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'))  # noqa
 
         export_style = """<style>
         #export {
