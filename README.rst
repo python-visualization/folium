@@ -72,7 +72,7 @@ See `our complete contributor's guide <https://github.com/python-visualization/f
 
 
 
-Contributing
-------------
+Changelog
+---------
 
 Check the `changelog <https://raw.githubusercontent.com/python-visualization/folium/master/CHANGES.txt>`_ for a detailed list of the latest changes.
