@@ -518,10 +518,11 @@ class GeoJson(Layer):
         if self.data['type'] == 'FeatureCollection':
             return
         if not self.embed:
-            raise ValueError('Data is not a FeatureCollection, but it should be'
-                             ' to apply style or highlight. Because `embed='
-                             'False` it cannot be converted into one.\n'
-                             'Either set `embed=True` or disable styling.')
+            raise ValueError(
+                'Data is not a FeatureCollection, but it should be to apply '
+                'style or highlight. Because `embed=False` it cannot be '
+                'converted into one.\nEither change your geojson data to a '
+                'FeatureCollection, set `embed=True` or disable styling.')
         # Catch case when GeoJSON is just a single Feature or a geometry.
         if 'geometry' not in self.data.keys():
             # Catch case when GeoJSON is just a geometry.
@@ -556,7 +557,7 @@ class GeoJson(Layer):
         raise ValueError(
             'There is no unique identifier for each feature and because '
             '`embed=False` it cannot be added. Consider adding an `id` '
-            'field or set `embed=True`. '
+            'field to your geojson data or set `embed=True`. '
         )
 
     def _get_self_bounds(self):
