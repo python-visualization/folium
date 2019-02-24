@@ -508,6 +508,7 @@ class GeoJson(Layer):
                 self._validate_function(highlight_function, 'highlight_function')
                 self.highlight_function = highlight_function
                 self.highlight_map = {}
+            self.feature_identifier = self.find_identifier()
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
@@ -571,7 +572,7 @@ class GeoJson(Layer):
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         if self.style or self.highlight:
-            mapper = GeoJsonStyleMapper(self.data, self.find_identifier(),
+            mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
                                         self)
             if self.style:
                 self.style_map = mapper.get_style_map(self.style_function)
