@@ -476,17 +476,15 @@ class GeoJson(Layer):
             self.data = data
         elif isinstance(data, text_type) or isinstance(data, binary_type):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
-                if self.embed or self.style or self.highlight:
-                    self.data = requests.get(data).json()
+                self.data = requests.get(data).json()
                 if not self.embed:
                     self.embed_link = data
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.embed = True
                 self.data = json.loads(data)
             else:  # This is a filename
-                if self.embed or self.style or self.highlight:
-                    with open(data) as f:
-                        self.data = json.loads(f.read())
+                with open(data) as f:
+                    self.data = json.loads(f.read())
                 if not self.embed:
                     self.embed_link = data
         elif hasattr(data, '__geo_interface__'):
