@@ -44,10 +44,8 @@ or
 Documentation
 -------------
 
-https://python-visualization.github.io/folium/docs-v0.6.0/
+https://python-visualization.github.io/folium/
 
-The documentation for the development version can be found here:
-https://python-visualization.github.io/folium/docs-master/
 
 Gallery
 -------
