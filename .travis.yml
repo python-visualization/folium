@@ -37,8 +37,10 @@ before_install:
   - export PATH="$HOME/miniconda/bin:$PATH"
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
   - conda update conda
-  - conda config --remove channels defaults --force
   - conda config --add channels conda-forge --force
+  - conda install pycryptosat
+  - conda config --set safety_checks disabled
+  - conda config --set channel_priority strict
   - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
   - source activate TEST
   # firefox headless driver
@@ -47,9 +49,6 @@ before_install:
   - tar -xzf geckodriver.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
 
-  - if [[ "$PY" == "2.7" ]]; then
-      conda install mock ;
-    fi
 
 # Test source distribution.
 install:
@@ -65,6 +64,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'legacy-python' ]]; then
+      conda install mock ;
       pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
@@ -98,7 +98,7 @@ script:
       pushd docs ;
       make clean html linkcheck ;
       popd ;
-      python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/_build/html/ $DEPLOY_DIR
+      python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/_build/html/ $DEPLOY_DIR ;
     fi
 
 doctr:
