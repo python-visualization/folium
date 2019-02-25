@@ -69,3 +69,10 @@ See `our complete contributor's guide <https://github.com/python-visualization/f
 
 
 .. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+
+
+
+Changelog
+---------
+
+Check the `changelog <https://raw.githubusercontent.com/python-visualization/folium/master/CHANGES.txt>`_ for a detailed list of the latest changes.

@@ -43,9 +43,6 @@ packages = [
     'folium.plugins'
 ]
 
-LICENSE = read('LICENSE.txt')
-long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
-
 # Dependencies.
 with open('requirements.txt') as f:
     tests_require = f.readlines()
@@ -55,7 +52,9 @@ setup(
     name='folium',
     version=versioneer.get_version(),
     description='Make beautiful maps with Leaflet.js & Python',
-    long_description=long_description,
+    license="MIT",
+    long_description='{}'.format(read("README.rst")),
+    long_description_content_type="text/x-rst",
     author='Rob Story',
     author_email='wrobstory@gmail.com',
     url='https://github.com/python-visualization/folium',
@@ -69,11 +68,12 @@ setup(
         'Topic :: Scientific/Engineering :: GIS',
         'Topic :: Scientific/Engineering :: Visualization',
         'License :: OSI Approved :: MIT License',
-        'Development Status :: 5 - Production/Stable'],
+        'Development Status :: 5 - Production/Stable'
+    ],
+    platforms="any",
     packages=packages,
     package_data=package_data,
-    tests_require=['pytest'],
-    license=LICENSE,
+    extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
     cmdclass=versioneer.get_cmdclass(),
