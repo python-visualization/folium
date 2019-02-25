@@ -16,7 +16,7 @@ class TimestampedGeoJson(MacroElement):
     """
     Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
     into a map with Map.add_child.
-    
+
     A geo-json is timestamped if:
 
     * it contains only features of types LineString, MultiPoint, MultiLineString,
