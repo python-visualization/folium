@@ -32,22 +32,25 @@ matrix:
     env: PY=3.7
 
 before_install:
-  - wget http://bit.ly/miniconda -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  - conda update conda
-  - conda config --add channels conda-forge --force
-  - conda install pycryptosat
-  - conda config --set safety_checks disabled
-  - conda config --set channel_priority strict
-  - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
-  - source activate TEST
-  # firefox headless driver
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
-  - mkdir geckodriver
-  - tar -xzf geckodriver.tar.gz -C geckodriver
-  - export PATH=$PATH:$PWD/geckodriver
+  # Install miniconda and create TEST env.
+  - |
+    wget http://bit.ly/miniconda -O miniconda.sh
+    bash miniconda.sh -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+    conda update conda
+    conda config --add channels conda-forge --force
+    conda install pycryptosat
+    conda config --set safety_checks disabled
+    conda config --set channel_priority strict
+    conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
+    source activate TEST
+  # Install firefox headless driver.
+  - |
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
+    mkdir geckodriver
+    tar -xzf geckodriver.tar.gz -C geckodriver
+    export PATH=$PATH:$PWD/geckodriver
 
 
 # Test source distribution.
