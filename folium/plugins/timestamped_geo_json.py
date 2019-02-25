@@ -16,8 +16,9 @@ class TimestampedGeoJson(MacroElement):
     """
     Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
     into a map with Map.add_child.
-
+    
     A geo-json is timestamped if:
+
     * it contains only features of types LineString, MultiPoint, MultiLineString,
       Polygon and MultiPolygon.
     * each feature has a 'times' property with the same length as the
@@ -32,6 +33,7 @@ class TimestampedGeoJson(MacroElement):
     ----------
     data: file, dict or str.
         The timestamped geo-json data you want to plot.
+
         * If file, then data will be read in the file and fully embedded in
           Leaflet's javascript.
         * If dict, then data will be converted to json and embedded in the

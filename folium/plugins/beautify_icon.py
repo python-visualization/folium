@@ -40,12 +40,13 @@ class BeautifyIcon(MacroElement):
     --------
     Plugin Website: https://github.com/marslan390/BeautifyMarker
     >>> BeautifyIcon(text_color='#000', border_color='transparent',
-                     background_color='#FFF').add_to(marker)
+    ...              background_color='#FFF').add_to(marker)
     >>> number_icon = BeautifyIcon(text_color='#000', border_color='transparent',
-                                    background_color='#FFF', number=10,
-                                    inner_icon_style='font-size:12px;padding-top:-5px;')
+    ...                            background_color='#FFF', number=10,
+    ...                            inner_icon_style='font-size:12px;padding-top:-5px;')
     >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'), icon=number_icon)
     >>> BeautifyIcon(icon='arrow-down', icon_shape='marker').add_to(marker)
+
     """
     ICON_SHAPE_TYPES = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot',
                         'marker', None]

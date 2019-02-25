@@ -24,7 +24,7 @@ class AntPath(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-     tooltip: str or folium.Tooltip, optional
+    tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
     **kwargs:
         Polyline and AntPath options. See their Github page for the
