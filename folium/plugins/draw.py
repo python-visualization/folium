@@ -23,10 +23,10 @@ class Draw(MacroElement):
     position : string, default 'topleft'
         Position of control. It can be one of 'topleft', 'toprigth', 'bottomleft', 'bottomright'
         See https://leafletjs.com/reference-1.4.0.html#control
-    draw : dict, optional
+    draw_options : dict, optional
         The options used to configure the draw toolbar
         See http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions
-    edit : dict, optional
+    edit_options : dict, optional
         The options used to configure the edit toolbar
         See https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#editpolyoptions
     Examples
