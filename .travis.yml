@@ -53,7 +53,7 @@ before_install:
 
 # Test source distribution.
 install:
-  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
+  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall folium-${version}.tar.gz && popd
 
 script:
   - if [[ $TRAVIS_JOB_NAME != 'docs' ]]; then
