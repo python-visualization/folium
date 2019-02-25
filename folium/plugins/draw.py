@@ -32,7 +32,13 @@ class Draw(MacroElement):
     Examples
     --------
     >>> m = folium.Map()
-    >>> Draw(export=True).add_to(m)
+    >>> Draw(
+    ...     export=True,
+    ...     filename='my_data.geojson',
+    ...     position='topleft',
+    ...     draw_options={'polyline': {'allowIntersection': False}},
+    ...     edit_options={'poly': {'allowIntersection': False}}
+    ... ).add_to(m)
 
     For more info please check
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
