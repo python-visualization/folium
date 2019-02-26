@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>plugins &#8212; Folium 0.8.2 documentation</title>
+    <link rel="stylesheet" href="_static/f6.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="folium" href="modules.html" />
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="folium"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">plugins</span></code></a><ul>
+<li><a class="reference internal" href="#folium-plugins">Folium plugins</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter"><code class="docutils literal notranslate"><span class="pre">folium</span></code></a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/plugins.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-folium.plugins">
+<span id="plugins"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugins</span></code><a class="headerlink" href="#module-folium.plugins" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="folium-plugins">
+<h2>Folium plugins<a class="headerlink" href="#folium-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Wrap some of the most popular leaflet external plugins.</p>
+<dl class="class">
+<dt id="folium.plugins.AntPath">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">AntPath</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.AntPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<p>Class for drawing AntPath polyline overlays on a map.</p>
+<p>See <a class="reference internal" href="modules.html#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
+<li><strong>popup</strong> (<em>str</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
+<li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>optional</em>) – Display a text when hovering over the object.</li>
+<li><strong>**kwargs</strong> – Polyline and AntPath options. See their Github page for the
+available parameters.</li>
+<li><strong>https</strong> (<em>//github.com/rubenspgcavalcante/leaflet-ant-path/</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.AntPath.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.AntPath.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.BeautifyIcon">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">BeautifyIcon</code><span class="sig-paren">(</span><em>icon=None</em>, <em>icon_shape=None</em>, <em>border_width=3</em>, <em>border_color='#000'</em>, <em>text_color='#000'</em>, <em>background_color='#FFF'</em>, <em>inner_icon_style=''</em>, <em>spin=False</em>, <em>number=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BeautifyIcon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Create a BeautifyIcon that can be added to a Marker</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>icon</strong> (<em>string</em><em>, </em><em>default None</em>) – the Font-Awesome icon name to use to render the marker.</li>
+<li><strong>icon_shape</strong> (<em>string</em><em>, </em><em>default None</em>) – the icon shape</li>
+<li><strong>border_width</strong> (<em>integer</em><em>, </em><em>default 3</em>) – the border width of the icon</li>
+<li><strong>border_color</strong> (<em>string with hexadecimal RGB</em><em>, </em><em>default '#000'</em>) – the border color of the icon</li>
+<li><strong>text_color</strong> (<em>string with hexadecimal RGB</em><em>, </em><em>default '#000'</em>) – the text color of the icon</li>
+<li><strong>background_color</strong> (<em>string with hexadecimal RGB</em><em>, </em><em>default '#FFF'</em>) – the background color of the icon</li>
+<li><strong>inner_icon_style</strong> (<em>string with css styles for the icon</em><em>, </em><em>default ''</em>) – the css styles of the icon</li>
+<li><strong>spin</strong> (<em>boolean</em><em>, </em><em>default False</em>) – allow the icon to be spinning.</li>
+<li><strong>number</strong> (<em>integer</em><em>, </em><em>default None</em>) – the number of the icon.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Plugin Website: <a class="reference external" href="https://github.com/marslan390/BeautifyMarker">https://github.com/marslan390/BeautifyMarker</a>
+&gt;&gt;&gt; BeautifyIcon(text_color=’#000’, border_color=’transparent’,
+…              background_color=’#FFF’).add_to(marker)
+&gt;&gt;&gt; number_icon = BeautifyIcon(text_color=’#000’, border_color=’transparent’,
+…                            background_color=’#FFF’, number=10,
+…                            inner_icon_style=’font-size:12px;padding-top:-5px;’)
+&gt;&gt;&gt; Marker(location=[45.5, -122.3], popup=folium.Popup(‘Portland, OR’), icon=number_icon)
+&gt;&gt;&gt; BeautifyIcon(icon=’arrow-down’, icon_shape=’marker’).add_to(marker)</p>
+<dl class="attribute">
+<dt id="folium.plugins.BeautifyIcon.ICON_SHAPE_TYPES">
+<code class="descname">ICON_SHAPE_TYPES</code><em class="property"> = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot', 'marker', None]</em><a class="headerlink" href="#folium.plugins.BeautifyIcon.ICON_SHAPE_TYPES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="folium.plugins.BeautifyIcon.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BeautifyIcon.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.BoatMarker">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">BoatMarker</code><span class="sig-paren">(</span><em>location</em>, <em>popup=None</em>, <em>icon=None</em>, <em>heading=0</em>, <em>wind_heading=None</em>, <em>wind_speed=0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BoatMarker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<p>Creates a BoatMarker plugin to append into a map with
+Map.add_plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>location</strong> (<em>tuple of length 2</em><em>, </em><em>default None</em>) – The latitude and longitude of the marker.
+If None, then the middle of the map is used.</li>
+<li><strong>heading</strong> (<em>int</em><em>, </em><em>default 0</em>) – Heading of the boat to an angle value between 0 and 360 degrees</li>
+<li><strong>wind_heading</strong> (<em>int</em><em>, </em><em>default None</em>) – Heading of the wind to an angle value between 0 and 360 degrees
+If None, then no wind is represented.</li>
+<li><strong>wind_speed</strong> (<em>int</em><em>, </em><em>default 0</em>) – Speed of the wind in knots.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.BoatMarker.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BoatMarker.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.CirclePattern">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">CirclePattern</code><span class="sig-paren">(</span><em>width=20</em>, <em>height=20</em>, <em>radius=12</em>, <em>weight=2.0</em>, <em>color='#3388ff'</em>, <em>fill_color='#3388ff'</em>, <em>opacity=0.75</em>, <em>fill_opacity=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.CirclePattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Fill Pattern for polygon composed of repeating circles.</p>
+<p>Add these to the ‘fillPattern’ field in GeoJson style functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> (<em>int</em><em>, </em><em>default 20</em>) – Horizontal distance between circles (pixels).</li>
+<li><strong>height</strong> (<em>int</em><em>, </em><em>default 20</em>) – Vertical distance between circles (pixels).</li>
+<li><strong>radius</strong> (<em>int</em><em>, </em><em>default 12</em>) – Radius of each circle (pixels).</li>
+<li><strong>weight</strong> (<em>float</em><em>, </em><em>default 2.0</em>) – Width of outline around each circle (pixels).</li>
+<li><strong>color</strong> (<em>string with hexadecimal</em><em>, </em><em>RGB</em><em>, or </em><em>named color</em><em>, </em><em>default &quot;#3388ff&quot;</em>) – Color of the circle outline.</li>
+<li><strong>fill_color</strong> (<em>string with hexadecimal</em><em>, </em><em>RGB</em><em>, or </em><em>named color</em><em>, </em><em>default &quot;#3388ff&quot;</em>) – Color of the circle interior.</li>
+<li><strong>opacity</strong> (<em>float</em><em>, </em><em>default 0.75</em>) – Opacity of the circle outline. Should be between 0 and 1.</li>
+<li><strong>fill_opacity</strong> (<em>float</em><em>, </em><em>default 0.5</em>) – Opacity of the circle interior. Should be between 0 and 1.</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.CirclePattern.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.CirclePattern.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.Draw">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">Draw</code><span class="sig-paren">(</span><em>export=False</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Vector drawing and editing plugin for Leaflet.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>export</strong> (<em>bool</em><em>, </em><em>default False</em>) – Add a small button that exports the drawn shapes as a geojson file.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Draw</span><span class="p">(</span><span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more info please check
+<a class="reference external" href="https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html">https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html</a></p>
+<dl class="method">
+<dt id="folium.plugins.Draw.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.DualMap">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">DualMap</code><span class="sig-paren">(</span><em>location=None</em>, <em>layout='horizontal'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Create two maps in the same window.</p>
+<p>Adding children to this objects adds them to both maps. You can access
+the individual maps with <cite>DualMap.m1</cite> and <cite>DualMap.m2</cite>.</p>
+<p>Uses the Leaflet plugin Sync: <a class="reference external" href="https://github.com/jieter/Leaflet.Sync">https://github.com/jieter/Leaflet.Sync</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>layout</strong> (<em>{'horizontal'</em><em>, </em><em>'vertical'}</em>) – Select how the two maps should be positioned. Either horizontal (left
+and right) or vertical (top and bottom).</li>
+<li><strong>**kwargs</strong> – Keyword arguments are passed to the two Map objects.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># DualMap accepts the same arguments as Map:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">DualMap</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;cartodbpositron&#39;</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add the same marker to both maps:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># The individual maps are attributes called `m1` and `m2`:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">m1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;map.html&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="folium.plugins.DualMap.add_child">
+<code class="descname">add_child</code><span class="sig-paren">(</span><em>child</em>, <em>name=None</em>, <em>index=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap.add_child" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add object <cite>child</cite> to the first map and store it for the second.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="folium.plugins.DualMap.fit_bounds">
+<code class="descname">fit_bounds</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap.fit_bounds" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="folium.plugins.DualMap.keep_in_front">
+<code class="descname">keep_in_front</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap.keep_in_front" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="folium.plugins.DualMap.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.FastMarkerCluster">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">FastMarkerCluster</code><span class="sig-paren">(</span><em>data</em>, <em>callback=None</em>, <em>options=None</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FastMarkerCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.plugins.marker_cluster.MarkerCluster</span></code></p>
+<p>Add marker clusters to a map using in-browser rendering.
+Using FastMarkerCluster it is possible to render 000’s of
+points far quicker than the MarkerCluster class.</p>
+<p>Be aware that the FastMarkerCluster class passes an empty
+list to the parent class’ __init__ method during initialisation.
+This means that the add_child method is never called, and
+no reference to any marker data are retained. Methods such
+as get_bounds() are therefore not available when using it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>list</em>) – List of list of shape [[], []]. Data points should be of
+the form [[lat, lng]].</li>
+<li><strong>callback</strong> (<em>string</em><em>, </em><em>default None</em>) – A string representation of a valid Javascript function
+that will be passed a lat, lon coordinate pair. See the
+FasterMarkerCluster for an example of a custom callback.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+<li><strong>options</strong> (<em>dict</em><em>, </em><em>default None</em>) – A dictionary with options for Leaflet.markercluster. See
+<a class="reference external" href="https://github.com/Leaflet/Leaflet.markercluster">https://github.com/Leaflet/Leaflet.markercluster</a> for options.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.FeatureGroupSubGroup">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">FeatureGroupSubGroup</code><span class="sig-paren">(</span><em>group</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FeatureGroupSubGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Creates a Feature Group that adds its child layers into a parent group when
+added to a map (e.g. through LayerControl). Useful to create nested groups,
+or cluster markers from multiple overlays. From [0].</p>
+<p>[0] <a class="reference external" href="https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup">https://github.com/ghybs/Leaflet.FeatureGroup.SubGroup</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>group</strong> (<a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><em>Layer</em></a>) – The MarkerCluster or FeatureGroup containing this subgroup.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">FeatureGroup</span><span class="p">()</span>                          <span class="c1"># Main group</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s1">&#39;g1&#39;</span><span class="p">)</span>  <span class="c1"># First subgroup of fg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s1">&#39;g2&#39;</span><span class="p">)</span>  <span class="c1"># Second subgroup of fg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">fg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mcg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">MarkerCluster</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># Marker Cluster, hidden in controls</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s1">&#39;g1&#39;</span><span class="p">)</span> <span class="c1"># First group, in mcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s1">&#39;g2&#39;</span><span class="p">)</span> <span class="c1"># Second group, in mcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">mcg</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="folium.plugins.FeatureGroupSubGroup.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FeatureGroupSubGroup.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.FloatImage">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">FloatImage</code><span class="sig-paren">(</span><em>image</em>, <em>bottom=75</em>, <em>left=75</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FloatImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Adds a floating image in HTML canvas on top of the map.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.Fullscreen">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">Fullscreen</code><span class="sig-paren">(</span><em>position='topleft'</em>, <em>title='Full Screen'</em>, <em>title_cancel='Exit Full Screen'</em>, <em>force_separate_button=False</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Fullscreen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Adds a fullscreen button to your map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>position</strong> (<em>str</em>) – change the position of the button can be:
+‘topleft’, ‘topright’, ‘bottomright’ or ‘bottomleft’
+default: ‘topleft’</li>
+<li><strong>title</strong> (<em>str</em>) – change the title of the button,
+default: ‘Full Screen’</li>
+<li><strong>title_cancel</strong> (<em>str</em>) – change the title of the button when fullscreen is on,
+default: ‘Exit Full Screen’</li>
+<li><strong>force_separate_button</strong> (<em>boolean</em>) – force seperate button to detach from zoom buttons,
+default: False</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.Fullscreen.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Fullscreen.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.HeatMap">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">HeatMap</code><span class="sig-paren">(</span><em>data</em>, <em>name=None</em>, <em>min_opacity=0.5</em>, <em>max_zoom=18</em>, <em>max_val=1.0</em>, <em>radius=25</em>, <em>blur=15</em>, <em>gradient=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Create a Heatmap layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>list of points of the form</em><em> [</em><em>lat</em><em>, </em><em>lng</em><em>] or </em><em>[</em><em>lat</em><em>, </em><em>lng</em><em>, </em><em>weight</em><em>]</em>) – The points you want to plot.
+You can also provide a numpy.array of shape (n,2) or (n,3).</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</li>
+<li><strong>min_opacity</strong> (<em>default 1.</em>) – The minimum opacity the heat will start at.</li>
+<li><strong>max_zoom</strong> (<em>default 18</em>) – Zoom level where the points reach maximum intensity (as intensity
+scales with zoom), equals maxZoom of the map by default</li>
+<li><strong>max_val</strong> (<em>float</em><em>, </em><em>default 1.</em>) – Maximum point intensity</li>
+<li><strong>radius</strong> (<em>int</em><em>, </em><em>default 25</em>) – Radius of each “point” of the heatmap</li>
+<li><strong>blur</strong> (<em>int</em><em>, </em><em>default 15</em>) – Amount of blur</li>
+<li><strong>gradient</strong> (<em>dict</em><em>, </em><em>default None</em>) – Color gradient config. e.g. {0.4: ‘blue’, 0.65: ‘lime’, 1: ‘red’}</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.HeatMap.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.HeatMapWithTime">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">HeatMapWithTime</code><span class="sig-paren">(</span><em>data</em>, <em>index=None</em>, <em>name=None</em>, <em>radius=15</em>, <em>min_opacity=0</em>, <em>max_opacity=0.6</em>, <em>scale_radius=False</em>, <em>gradient=None</em>, <em>use_local_extrema=False</em>, <em>auto_play=False</em>, <em>display_index=True</em>, <em>index_steps=1</em>, <em>min_speed=0.1</em>, <em>max_speed=10</em>, <em>speed_step=0.1</em>, <em>position='bottomleft'</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Create a HeatMapWithTime layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>list of list of points of the form</em><em> [</em><em>lat</em><em>, </em><em>lng</em><em>] or </em><em>[</em><em>lat</em><em>, </em><em>lng</em><em>, </em><em>weight</em><em>]</em>) – The points you want to plot. The outer list corresponds to the various time
+steps in sequential order. (weight is in (0, 1] range and defaults to 1 if
+not specified for a point)</li>
+<li><strong>index</strong> (<em>Index giving the label</em><em> (or </em><em>timestamp</em><em>) </em><em>of the elements of data. Should have</em>) – the same length as data, or is replaced by a simple count if not specified.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</li>
+<li><strong>radius</strong> (<em>default 15.</em>) – The radius used around points for the heatmap.</li>
+<li><strong>min_opacity</strong> (<em>default 0</em>) – The minimum opacity for the heatmap.</li>
+<li><strong>max_opacity</strong> (<em>default 0.6</em>) – The maximum opacity for the heatmap.</li>
+<li><strong>scale_radius</strong> (<em>default False</em>) – Scale the radius of the points based on the zoom level.</li>
+<li><strong>gradient</strong> (<em>dict</em><em>, </em><em>default None</em>) – Match point density values to colors. Color can be a name (‘red’),
+RGB values (‘rgb(255,0,0)’) or a hex number (‘#FF0000’).</li>
+<li><strong>use_local_extrema</strong> (<em>default False</em>) – Defines whether the heatmap uses a global extrema set found from the input data
+OR a local extrema (the maximum and minimum of the currently displayed view).</li>
+<li><strong>auto_play</strong> (<em>default False</em>) – Automatically play the animation across time.</li>
+<li><strong>display_index</strong> (<em>default True</em>) – Display the index (usually time) in the time control.</li>
+<li><strong>index_steps</strong> (<em>default 1</em>) – Steps to take in the index dimension between aimation steps.</li>
+<li><strong>min_speed</strong> (<em>default 0.1</em>) – Minimum fps speed for animation.</li>
+<li><strong>max_speed</strong> (<em>default 10</em>) – Maximum fps speed for animation.</li>
+<li><strong>speed_step</strong> (<em>default 0.1</em>) – Step between different fps speeds on the speed slider.</li>
+<li><strong>position</strong> (<em>default 'bottomleft'</em>) – Position string for the time slider. Format: ‘bottom/top’+’left/right’.</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.HeatMapWithTime.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.MarkerCluster">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">MarkerCluster</code><span class="sig-paren">(</span><em>locations=None</em>, <em>popups=None</em>, <em>icons=None</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em>, <em>icon_create_function=None</em>, <em>options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MarkerCluster" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Provides Beautiful Animated Marker Clustering functionality for maps.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>locations</strong> (<em>list of list</em><em> or </em><em>array of shape</em><em> (</em><em>n</em><em>, </em><em>2</em><em>)</em><em></em>) – Data points of the form [[lat, lng]].</li>
+<li><strong>popups</strong> (<em>list of length n</em><em>, </em><em>default None</em>) – Popup for each marker, either a Popup object or a string or None.</li>
+<li><strong>icons</strong> (<em>list of length n</em><em>, </em><em>default None</em>) – Icon for each marker, either an Icon object or a string or None.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+<li><strong>icon_create_function</strong> (<em>string</em><em>, </em><em>default None</em>) – Override the default behaviour, making possible to customize
+markers colors and sizes.</li>
+<li><strong>options</strong> (<em>dict</em><em>, </em><em>default None</em>) – A dictionary with options for Leaflet.markercluster. See
+<a class="reference external" href="https://github.com/Leaflet/Leaflet.markercluster">https://github.com/Leaflet/Leaflet.markercluster</a> for options.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">icon_create_function</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">    function(cluster) {</span>
+<span class="gp">... </span><span class="s1">    return L.divIcon({html: &#39;&lt;b&gt;&#39; + cluster.getChildCount() + &#39;&lt;/b&gt;&#39;,</span>
+<span class="gp">... </span><span class="s1">                      className: &#39;marker-cluster marker-cluster-small&#39;,</span>
+<span class="gp">... </span><span class="s1">                      iconSize: new L.Point(20, 20)});</span>
+<span class="gp">... </span><span class="s1">    }</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="folium.plugins.MarkerCluster.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MarkerCluster.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.MeasureControl">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">MeasureControl</code><span class="sig-paren">(</span><em>position='topright'</em>, <em>primary_length_unit='meters'</em>, <em>secondary_length_unit='miles'</em>, <em>primary_area_unit='sqmeters'</em>, <em>secondary_area_unit='acres'</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MeasureControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Adds a measurem widget on the map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>position</strong> (<em>location of the widget</em>) – default is ‘topright’.</li>
+<li><strong>and secondary_length_unit</strong> (<em>primary_length_unit</em>) – defaults are ‘meters’ and ‘miles’ respectively.</li>
+<li><strong>and secondary_area_unit</strong> (<em>primary_area_unit</em>) – defaults are ‘sqmeters’ and ‘acres’ respectively.</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.MeasureControl.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MeasureControl.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.MiniMap">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">MiniMap</code><span class="sig-paren">(</span><em>tile_layer=None</em>, <em>position='bottomright'</em>, <em>width=150</em>, <em>height=150</em>, <em>collapsed_width=25</em>, <em>collapsed_height=25</em>, <em>zoom_level_offset=-5</em>, <em>zoom_level_fixed=None</em>, <em>center_fixed=False</em>, <em>zoom_animation=False</em>, <em>toggle_display=False</em>, <em>auto_toggle_display=False</em>, <em>minimized=False</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MiniMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Add a minimap (locator) to an existing map.</p>
+<p>Uses the Leaflet plugin by Norkart under BSD 2-Clause “Simplified” License.
+<a class="reference external" href="https://github.com/Norkart/Leaflet-MiniMap">https://github.com/Norkart/Leaflet-MiniMap</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>tile_layer</strong> (<em>folium TileLayer object</em><em> or </em><em>str</em><em>, </em><em>default None</em>) – Provide a folium TileLayer object or the wanted tiles as string.
+If not provided it will use the default of ‘TileLayer’, currently
+OpenStreetMap.</li>
+<li><strong>position</strong> (<em>str</em><em>, </em><em>default 'bottomright'</em>) – The standard Control position parameter for the widget.</li>
+<li><strong>width</strong> (<em>int</em><em>, </em><em>default 150</em>) – The width of the minimap in pixels.</li>
+<li><strong>height</strong> (<em>int</em><em>, </em><em>default 150</em>) – The height of the minimap in pixels.</li>
+<li><strong>collapsed_width</strong> (<em>int</em><em>, </em><em>default 25</em>) – The width of the toggle marker and the minimap when collapsed in pixels.</li>
+<li><strong>collapsed_height</strong> (<em>int</em><em>, </em><em>default 25</em>) – The height of the toggle marker and the minimap when collapsed</li>
+<li><strong>zoom_level_offset</strong> (<em>int</em><em>, </em><em>default -5</em>) – The offset applied to the zoom in the minimap compared to the zoom of
+the main map. Can be positive or negative.</li>
+<li><strong>zoom_level_fixed</strong> (<em>int</em><em>, </em><em>default None</em>) – Overrides the offset to apply a fixed zoom level to the minimap
+regardless of the main map zoom.
+Set it to any valid zoom level, if unset zoom_level_offset is used
+instead.</li>
+<li><strong>center_fixed</strong> (<em>bool</em><em>, </em><em>default False</em>) – Applies a fixed position to the minimap regardless of the main map’s
+view / position. Prevents panning the minimap, but does allow zooming
+(both in the minimap and the main map).
+If the minimap is zoomed, it will always zoom around the centerFixed
+point. You can pass in a LatLng-equivalent object.</li>
+<li><strong>zoom_animation</strong> (<em>bool</em><em>, </em><em>default False</em>) – Sets whether the minimap should have an animated zoom.
+(Will cause it to lag a bit after the movement of the main map.)</li>
+<li><strong>toggle_display</strong> (<em>bool</em><em>, </em><em>default False</em>) – Sets whether the minimap should have a button to minimise it.</li>
+<li><strong>auto_toggle_display</strong> (<em>bool</em><em>, </em><em>default False</em>) – Sets whether the minimap should hide automatically
+if the parent map bounds does not fit within the minimap bounds.
+Especially useful when ‘zoomLevelFixed’ is set.</li>
+<li><strong>minimized</strong> (<em>bool</em><em>, </em><em>default False</em>) – Sets whether the minimap should start in a minimized position.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MiniMap</span><span class="p">(</span><span class="n">tile_layer</span><span class="o">=</span><span class="s1">&#39;Stamen WaterColor&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;bottomleft&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="folium.plugins.MiniMap.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MiniMap.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.MousePosition">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">MousePosition</code><span class="sig-paren">(</span><em>position='bottomright'</em>, <em>separator=' : '</em>, <em>empty_string='Unavailable'</em>, <em>lng_first=False</em>, <em>num_digits=5</em>, <em>prefix=''</em>, <em>lat_formatter=None</em>, <em>lng_formatter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MousePosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Add a field that shows the coordinates of the mouse position.</p>
+<p>Uses the Leaflet plugin by Ardhi Lukianto under MIT license.
+<a class="reference external" href="https://github.com/ardhi/Leaflet.MousePosition">https://github.com/ardhi/Leaflet.MousePosition</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>position</strong> (<em>str</em><em>, </em><em>default 'bottomright'</em>) – The standard Control position parameter for the widget.</li>
+<li><strong>separator</strong> (<em>str</em><em>, </em><em>default ' : '</em>) – Character used to separate latitude and longitude values.</li>
+<li><strong>empty_string</strong> (<em>str</em><em>, </em><em>default 'Unavailable'</em>) – Initial text to display.</li>
+<li><strong>lng_first</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether to put the longitude first or not.
+Set as True to display longitude before latitude.</li>
+<li><strong>num_digits</strong> (<em>int</em><em>, </em><em>default '5'</em>) – Number of decimal places included in the displayed
+longitude and latitude decimal degree values.</li>
+<li><strong>prefix</strong> (<em>str</em><em>, </em><em>default ''</em>) – A string to be prepended to the coordinates.</li>
+<li><strong>lat_formatter</strong> (<em>str</em><em>, </em><em>default None</em>) – Custom Javascript function to format the latitude value.</li>
+<li><strong>lng_formatter</strong> (<em>str</em><em>, </em><em>default None</em>) – Custom Javascript function to format the longitude value.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fmtr</span> <span class="o">=</span> <span class="s2">&quot;function(num) {return L.Util.formatNum(num, 3) + &#39; º &#39;;};&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MousePosition</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39; | &#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;Mouse:&quot;</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">lat_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">,</span> <span class="n">lng_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="folium.plugins.MousePosition.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MousePosition.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.PolyLineTextPath">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">PolyLineTextPath</code><span class="sig-paren">(</span><em>polyline</em>, <em>text</em>, <em>repeat=False</em>, <em>center=False</em>, <em>below=False</em>, <em>offset=0</em>, <em>orientation=0</em>, <em>attributes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineTextPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Shows a text along a PolyLine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>polyline</strong> (<em>folium.features.PolyLine object</em>) – The folium.features.PolyLine object to attach the text to.</li>
+<li><strong>text</strong> (<em>string</em>) – The string to be attached to the polyline.</li>
+<li><strong>repeat</strong> (<em>bool</em><em>, </em><em>default False</em>) – Specifies if the text should be repeated along the polyline.</li>
+<li><strong>center</strong> (<em>bool</em><em>, </em><em>default False</em>) – Centers the text according to the polyline’s bounding box</li>
+<li><strong>below</strong> (<em>bool</em><em>, </em><em>default False</em>) – Show text below the path</li>
+<li><strong>offset</strong> (<em>int</em><em>, </em><em>default 0</em>) – Set an offset to position text relative to the polyline.</li>
+<li><strong>orientation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotate text to a specified angle.</li>
+<li><strong>attributes</strong> (<em>dict</em>) – Object containing the attributes applied to the text tag.
+Check valid attributes here:
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes">https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes</a>
+Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size’: ‘24’}</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.PolyLineTextPath.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineTextPath.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.ScrollZoomToggler">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">ScrollZoomToggler</code><a class="headerlink" href="#folium.plugins.ScrollZoomToggler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Creates a button for enabling/disabling scroll on the Map.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.Search">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">Search</code><span class="sig-paren">(</span><em>layer</em>, <em>search_label=None</em>, <em>search_zoom=None</em>, <em>geom_type='Point'</em>, <em>position='topleft'</em>, <em>placeholder='Search'</em>, <em>collapsed=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Adds a search tool to your map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>layer</strong> (<a class="reference internal" href="modules.html#folium.features.GeoJson" title="folium.features.GeoJson"><em>GeoJson</em></a><em>, </em><a class="reference internal" href="modules.html#folium.features.TopoJson" title="folium.features.TopoJson"><em>TopoJson</em></a><em>, </em><a class="reference internal" href="modules.html#folium.map.FeatureGroup" title="folium.map.FeatureGroup"><em>FeatureGroup</em></a><em>, </em><em>MarkerCluster class object.</em>) – The map layer to index in the Search view.</li>
+<li><strong>search_label</strong> (<em>str</em><em>, </em><em>optional</em>) – ‘properties’ key in layer to index Search, if layer is GeoJson/TopoJson.</li>
+<li><strong>search_zoom</strong> (<em>int</em><em>, </em><em>optional</em>) – Zoom level to set the map to on match.
+By default zooms to Polygon/Line bounds and points
+on their natural extent.</li>
+<li><strong>geom_type</strong> (<em>str</em><em>, </em><em>default 'Point'</em>) – Feature geometry type. “Point”,”Line” or “Polygon”</li>
+<li><strong>position</strong> (<em>str</em><em>, </em><em>default 'topleft'</em>) – Change the position of the search bar, can be:
+‘topleft’, ‘topright’, ‘bottomright’ or ‘bottomleft’,</li>
+<li><strong>placeholder</strong> (<em>str</em><em>, </em><em>default 'Search'</em>) – Placeholder text inside the Search box if nothing is entered.</li>
+<li><strong>collapsed</strong> (<em>boolean</em><em>, </em><em>default False</em>) – Whether the Search box should be collapsed or not.</li>
+<li><strong>**kwargs.</strong> – Assorted style options to change feature styling on match.
+Use the same way as vector layer arguments.</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.Search.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Search.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="folium.plugins.Search.test_params">
+<code class="descname">test_params</code><span class="sig-paren">(</span><em>keys</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Search.test_params" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.StripePattern">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">StripePattern</code><span class="sig-paren">(</span><em>angle=0.5</em>, <em>weight=4</em>, <em>space_weight=4</em>, <em>color='#000000'</em>, <em>space_color='#ffffff'</em>, <em>opacity=0.75</em>, <em>space_opacity=0.0</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.StripePattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Fill Pattern for polygon composed of alternating lines.</p>
+<p>Add these to the ‘fillPattern’ field in GeoJson style functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>angle</strong> (<em>float</em><em>, </em><em>default 0.5</em>) – Angle of the line pattern (degrees). Should be between -360 and 360.</li>
+<li><strong>weight</strong> (<em>float</em><em>, </em><em>default 4</em>) – Width of the main lines (pixels).</li>
+<li><strong>space_weight</strong> (<em>float</em>) – Width of the alternate lines (pixels).</li>
+<li><strong>color</strong> (<em>string with hexadecimal</em><em>, </em><em>RGB</em><em>, or </em><em>named color</em><em>, </em><em>default &quot;#000000&quot;</em>) – Color of the main lines.</li>
+<li><strong>space_color</strong> (<em>string with hexadecimal</em><em>, </em><em>RGB</em><em>, or </em><em>named color</em><em>, </em><em>default &quot;#ffffff&quot;</em>) – Color of the alternate lines.</li>
+<li><strong>opacity</strong> (<em>float</em><em>, </em><em>default 0.75</em>) – Opacity of the main lines. Should be between 0 and 1.</li>
+<li><strong>space_opacity</strong> (<em>float</em><em>, </em><em>default 0.0</em>) – Opacity of the alternate lines. Should be between 0 and 1.</li>
+<li><strong>https</strong> (<em>See</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.StripePattern.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.StripePattern.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.Terminator">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">Terminator</code><a class="headerlink" href="#folium.plugins.Terminator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Leaflet.Terminator is a simple plug-in to the Leaflet library to
+overlay day and night regions on maps.</p>
+<dl class="method">
+<dt id="folium.plugins.Terminator.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Terminator.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.TimeSliderChoropleth">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">TimeSliderChoropleth</code><span class="sig-paren">(</span><em>data</em>, <em>styledict</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.features.GeoJson" title="folium.features.GeoJson"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.features.GeoJson</span></code></a></p>
+<p>Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>str</em>) – geojson string</li>
+<li><strong>styledict</strong> (<em>dict</em>) – A dictionary where the keys are the geojson feature ids and the values are
+dicts of <cite>{time: style_options_dict}</cite></li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default False</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="folium.plugins.TimeSliderChoropleth.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.TimestampedGeoJson">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">TimestampedGeoJson</code><span class="sig-paren">(</span><em>data</em>, <em>transition_time=200</em>, <em>loop=True</em>, <em>auto_play=True</em>, <em>add_last_point=True</em>, <em>period='P1D'</em>, <em>min_speed=0.1</em>, <em>max_speed=10</em>, <em>loop_button=False</em>, <em>date_options='YYYY-MM-DD HH:mm:ss'</em>, <em>time_slider_drag_update=False</em>, <em>duration=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
+into a map with Map.add_child.</p>
+<p>A geo-json is timestamped if:</p>
+<ul class="simple">
+<li>it contains only features of types LineString, MultiPoint, MultiLineString,
+Polygon and MultiPolygon.</li>
+<li>each feature has a ‘times’ property with the same length as the
+coordinates array.</li>
+<li>each element of each ‘times’ property is a timestamp in ms since epoch,
+or in ISO string.</li>
+</ul>
+<p>Eventually, you may have Point features with a ‘times’ property being an
+array of length 1.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>file</em><em>, </em><em>dict</em><em> or </em><em>str.</em>) – <p>The timestamped geo-json data you want to plot.</p>
+<ul>
+<li>If file, then data will be read in the file and fully embedded in
+Leaflet’s javascript.</li>
+<li>If dict, then data will be converted to json and embedded in the
+javascript.</li>
+<li>If str, then data will be passed to the javascript as-is.</li>
+</ul>
+</li>
+<li><strong>transition_time</strong> (<em>int</em><em>, </em><em>default 200.</em>) – The duration in ms of a transition from between timestamps.</li>
+<li><strong>loop</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the animation shall loop.</li>
+<li><strong>auto_play</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the animation shall start automatically at startup.</li>
+<li><strong>add_last_point</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether a point is added at the last valid coordinate of a LineString.</li>
+<li><strong>period</strong> (<em>str</em><em>, </em><em>default &quot;P1D&quot;</em>) – Used to construct the array of available times starting
+from the first available time. Format: ISO8601 Duration
+ex: ‘P1M’ 1/month, ‘P1D’ 1/day, ‘PT1H’ 1/hour, and ‘PT1M’ 1/minute</li>
+<li><strong>duration</strong> (<em>str</em><em>, </em><em>default None</em>) – Period of time which the features will be shown on the map after their
+time has passed. If None, all previous times will be shown.
+Format: ISO8601 Duration
+ex: ‘P1M’ 1/month, ‘P1D’ 1/day, ‘PT1H’ 1/hour, and ‘PT1M’ 1/minute</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TimestampedGeoJson</span><span class="p">({</span>
+<span class="gp">... </span>    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;FeatureCollection&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>      <span class="p">{</span>
+<span class="gp">... </span>        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Feature&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>          <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="o">-</span><span class="mi">25</span><span class="p">],[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="mi">35</span><span class="p">],[</span><span class="mi">70</span><span class="p">,</span><span class="mi">35</span><span class="p">]],</span>
+<span class="gp">... </span>          <span class="p">},</span>
+<span class="gp">... </span>        <span class="s1">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>          <span class="s1">&#39;times&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1435708800000</span><span class="p">,</span> <span class="mi">1435795200000</span><span class="p">,</span> <span class="mi">1435881600000</span><span class="p">]</span>
+<span class="gp">... </span>          <span class="p">}</span>
+<span class="gp">... </span>        <span class="p">}</span>
+<span class="gp">... </span>      <span class="p">]</span>
+<span class="gp">... </span>    <span class="p">})</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://github.com/socib/Leaflet.TimeDimension">https://github.com/socib/Leaflet.TimeDimension</a> for more information.</p>
+<dl class="method">
+<dt id="folium.plugins.TimestampedGeoJson.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="folium.plugins.TimestampedWmsTileLayers">
+<em class="property">class </em><code class="descclassname">folium.plugins.</code><code class="descname">TimestampedWmsTileLayers</code><span class="sig-paren">(</span><em>data</em>, <em>transition_time=200</em>, <em>loop=False</em>, <em>auto_play=False</em>, <em>period='P1D'</em>, <em>time_interval=False</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
+control with the Leaflet.TimeDimension plugin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> (<em>WmsTileLayer.</em>) – The WmsTileLayer that you want to add time support to.
+Must  be created like a typical WmsTileLayer and added to the map
+before being passed to this class.</li>
+<li><strong>transition_time</strong> (<em>int</em><em>, </em><em>default 200.</em>) – The duration in ms of a transition from between timestamps.</li>
+<li><strong>loop</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether the animation shall loop, default is to reduce load on WMS
+services.</li>
+<li><strong>auto_play</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether the animation shall start automatically at startup, default
+is to reduce load on WMS services.</li>
+<li><strong>period</strong> (<em>str</em><em>, </em><em>default 'P1D'</em>) – Used to construct the array of available times starting
+from the first available time. Format: ISO8601 Duration
+ex: ‘P1M’ -&gt; 1/month, ‘P1D’ -&gt; 1/day, ‘PT1H’ -&gt; 1/hour, and ‘PT1M’ -&gt; 1/minute
+Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</li>
+<li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
+<li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
+<li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w0</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">WmsTileLayer</span><span class="p">(</span>
+<span class="gp">... </span>         <span class="s1">&#39;http://this.wms.server/ncWMS/wms&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Test WMS Data&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">styles</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;image/png&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">layers</span><span class="o">=</span><span class="s1">&#39;test_data&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s1">&#39;0,10&#39;</span><span class="p">,</span>
+<span class="go">...)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w0</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w1</span> <span class="o">=</span> <span class="n">features</span><span class="o">.</span><span class="n">WmsTileLayer</span><span class="p">(</span>
+<span class="gp">... </span>         <span class="s1">&#39;http://this.wms.server/ncWMS/wms&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Test WMS Data&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">styles</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;image/png&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">layers</span><span class="o">=</span><span class="s1">&#39;test_data_2&#39;</span><span class="p">,</span>
+<span class="gp">... </span>         <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s1">&#39;0,5&#39;</span><span class="p">,</span>
+<span class="go">...)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">w1</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add WmsTileLayers to time control.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">TimestampedWmsTileLayers</span><span class="p">([</span><span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">time</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://github.com/socib/Leaflet.TimeDimension">https://github.com/socib/Leaflet.TimeDimension</a> for more information.</p>
+<dl class="method">
+<dt id="folium.plugins.TimestampedWmsTileLayers.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="folium"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Rob Story.
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.8.4.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    </div>
+  </body>
+</html>
