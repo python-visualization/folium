@@ -41,7 +41,6 @@ before_install:
     conda update conda --quiet
     conda config --add channels conda-forge --force
     conda install pycryptosat
-    conda config --set safety_checks disabled
     conda config --set channel_priority strict
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
@@ -88,21 +87,22 @@ script:
     fi
 
 # Docs
-  - if [[ -z "$TRAVIS_TAG" ]]; then 
-      DEPLOY_DIR=dev ;
-    else
-      DEPLOY_DIR="version-$TRAVIS_TAG" ;
+  - |
+    if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
+      set -e
+      conda install doctr
+      cp examples/Quickstart.ipynb docs/quickstart.ipynb
+      pushd docs
+      make clean html linkcheck
+      popd
+      if [[ -z "$TRAVIS_TAG" ]]; then 
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ dev
+      else
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ "version-$TRAVIS_TAG"
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ .
+      fi
     fi
 
-  - if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
-      set -e ;
-      conda install doctr ;
-      cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
-      pushd docs ;
-      make clean html linkcheck ;
-      popd ;
-      python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ $DEPLOY_DIR ;
-    fi
 
 deploy:
   skip_cleanup: true
