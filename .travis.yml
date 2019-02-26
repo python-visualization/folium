@@ -15,56 +15,63 @@ env:
 matrix:
   fast_finish: true
   include:
-  - name: default-python2
-    env: TEST_TARGET=default PY=2.7
+  - name: legacy-python
+    env: PY=2.7
   - name: default
-    env: TEST_TARGET=default PY=3.7
+    env: PY=3.7
   - name: notebooks-conding-standard
     env: PY=3.7
   - name: notebooks-code
     env: PY=3.7
-  - name: latest_branca
+  - name: latest-branca
     env: PY=3.7
   - name: docs
     env: PY=3.7
   allow_failures:
-  - name: latest_branca
+  - name: latest-branca
     env: PY=3.7
 
 before_install:
-  - wget http://bit.ly/miniconda -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  - conda update conda
-  - conda config --remove channels defaults --force
-  - conda config --add channels conda-forge --force
-  - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
-  - source activate TEST
-  # firefox headless driver
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
-  - mkdir geckodriver
-  - tar -xzf geckodriver.tar.gz -C geckodriver
-  - export PATH=$PATH:$PWD/geckodriver
+  # Install miniconda and create TEST env.
+  - |
+    wget http://bit.ly/miniconda -O miniconda.sh
+    bash miniconda.sh -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+    conda update conda --quiet
+    conda config --add channels conda-forge --force
+    conda install pycryptosat
+    conda config --set safety_checks disabled
+    conda config --set channel_priority strict
+    conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
+    source activate TEST
+  # Install firefox headless driver.
+  - |
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
+    mkdir geckodriver
+    tar -xzf geckodriver.tar.gz -C geckodriver
+    export PATH=$PATH:$PWD/geckodriver
 
-  - if [[ "$PY" == "2.7" ]]; then
-      conda install mock ;
-    fi
 
 # Test source distribution.
 install:
-  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
+  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall folium-${version}.tar.gz && popd
 
 script:
   - if [[ $TRAVIS_JOB_NAME != 'docs' ]]; then
       cp -r tests/ examples/ /tmp ;
     fi
 
-  - if [[ $TEST_TARGET == 'default' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
       pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
-  - if [[ $TRAVIS_JOB_NAME == 'latest_branca' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'legacy-python' ]]; then
+      conda install mock ;
+      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
       pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
@@ -80,15 +87,21 @@ script:
       pytest --nbval-lax -p no:python /tmp/examples ;
     fi
 
-  - if [[ $TEST_TARGET == 'docs' ]]; then
+# Docs
+  - if [[ -z "$TRAVIS_TAG" ]]; then 
+      DEPLOY_DIR=dev ;
+    else
+      DEPLOY_DIR="version-$TRAVIS_TAG" ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
       set -e ;
       conda install doctr ;
       cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
       pushd docs ;
       make clean html linkcheck ;
       popd ;
-      python -m doctr deploy --sync .;
-      python -m doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH" ;
+      python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/_build/html/ $DEPLOY_DIR ;
     fi
 
 doctr:

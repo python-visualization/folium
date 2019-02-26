@@ -700,7 +700,7 @@ class GeoJsonTooltip(Tooltip):
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
+        \*Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
