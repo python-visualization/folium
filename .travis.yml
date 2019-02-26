@@ -10,7 +10,7 @@ addons:
 
 env:
   global:
-    - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
+    - secure: "MTRxGE7N7I60vOk3f32NZjL2BLmP1H0W11HqfcbDO9IEN9Pb47mXQW6rNF0ZqOTt78kWtcHsR2non+nrLIjkglAb4psjUWOdQVh73y3JU4OrXqGCLssgIq9m6fMGOeFWvdektKG4v0TlnYwLhd6Lzes6eTrc+Z2UMHf4dZtuOPs="
 
 matrix:
   fast_finish: true
@@ -101,12 +101,8 @@ script:
       pushd docs ;
       make clean html linkcheck ;
       popd ;
-      python -m doctr deploy --build-tags --key-path github_deploy_key.enc --built-docs docs/_build/html/ $DEPLOY_DIR ;
+      python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ $DEPLOY_DIR ;
     fi
-
-doctr:
-  require-master: true
-  sync: False
 
 deploy:
   skip_cleanup: true
