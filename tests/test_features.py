@@ -16,17 +16,21 @@ from folium import Map, Popup
 
 from six import text_type
 
+import pytest
 
-tmpl = """
-<!DOCTYPE html>
-<head>
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-</head>
-<body>
-</body>
-<script>
-</script>
-"""  # noqa
+
+@pytest.fixture
+def tmpl():
+    yield ("""
+    <!DOCTYPE html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+    </body>
+    <script>
+    </script>
+    """)  # noqa
 
 
 # Root path variable
@@ -51,11 +55,12 @@ def test_figure_rendering():
     assert bounds == [[None, None], [None, None]], bounds
 
 
-def test_figure_html():
+def test_figure_html(tmpl):
     f = folium.Figure()
     out = f.render()
     out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
-    assert out.strip() == tmpl.strip(), '\n' + out.strip() + '\n' + '-' * 80 + '\n' + tmpl.strip()  # noqa
+    tmpl = os.linesep.join([s.strip() for s in tmpl.splitlines() if s.strip()])
+    assert out == tmpl, '\n' + out + '\n' + '-' * 80 + '\n' + tmpl
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
@@ -164,43 +169,49 @@ def test_get_vegalite_major_version():
 
     assert vegalite_v1._get_vegalite_major_versions(spec_v1) == '1'
 
-    spec_no_version = {'config': {'view': {'height': 300, 'width': 400}},
-                       'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
-                       'datasets': {'data-aac17e868e23f98b5e0830d45504be45': [{'folium usage': 0,
-                                                                               'happiness': 1.0},
-                                                                              {'folium usage': 1,
-                                                                               'happiness': 2.718281828459045},
-                                                                              {'folium usage': 2,
-                                                                               'happiness': 7.38905609893065},
-                                                                              {'folium usage': 3,
-                                                                               'happiness': 20.085536923187668},
-                                                                              {'folium usage': 4,
-                                                                               'happiness': 54.598150033144236},
-                                                                              {'folium usage': 5,
-                                                                               'happiness': 148.4131591025766},
-                                                                              {'folium usage': 6,
-                                                                               'happiness': 403.4287934927351},
-                                                                              {'folium usage': 7,
-                                                                               'happiness': 1096.6331584284585},
-                                                                              {'folium usage': 8,
-                                                                               'happiness': 2980.9579870417283},
-                                                                              {'folium usage': 9,
-                                                                               'happiness': 8103.083927575384}]},
-                       'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
-                                    'y': {'field': 'happiness', 'type': 'quantitative'}},
-                       'mark': 'point'}
+    spec_no_version = {
+        'config': {
+            'view': {'height': 300, 'width': 400}},
+        'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
+        'datasets': {
+            'data-aac17e868e23f98b5e0830d45504be45': [
+                {'folium usage': 0,
+                 'happiness': 1.0},
+                {'folium usage': 1,
+                 'happiness': 2.718281828459045},
+                {'folium usage': 2,
+                 'happiness': 7.38905609893065},
+                {'folium usage': 3,
+                 'happiness': 20.085536923187668},
+                {'folium usage': 4,
+                 'happiness': 54.598150033144236},
+                {'folium usage': 5,
+                 'happiness': 148.4131591025766},
+                {'folium usage': 6,
+                 'happiness': 403.4287934927351},
+                {'folium usage': 7,
+                 'happiness': 1096.6331584284585},
+                {'folium usage': 8,
+                 'happiness': 2980.9579870417283},
+                {'folium usage': 9,
+                 'happiness': 8103.083927575384}]},
+        'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
+                     'y': {'field': 'happiness', 'type': 'quantitative'}},
+        'mark': 'point'
+    }
 
     vegalite_no_version = folium.features.VegaLite(spec_no_version)
 
     assert vegalite_no_version._get_vegalite_major_versions(spec_no_version) is None
 
+
 # GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
-    folium.GeoJson(os.path.join(rootpath, "kuntarajat.geojson"),
+    folium.GeoJson(os.path.join(rootpath, 'kuntarajat.geojson'),
                    tooltip=folium.GeoJsonTooltip(fields=['code', 'name'])
                    ).add_to(m)
     with warnings.catch_warnings(record=True) as w:
         warnings.simplefilter('always')
         m._repr_html_()
-        assert issubclass(w[-1].category, UserWarning), "GeoJsonTooltip GeometryCollection test failed."
+        assert issubclass(w[-1].category, UserWarning), 'GeoJsonTooltip GeometryCollection test failed.'
