@@ -28,8 +28,8 @@ def _validate_location(location):
     if _isnan(location):
         raise ValueError('Location values cannot contain NaNs, '
                          'got {!r}'.format(location))
-    if type(location) not in [list, tuple]:
-        raise TypeError('Expected tuple/list for location, got '
+    if isinstance(type(location), collections.abc.Iterable):
+        raise TypeError('Expected Iterable object for location, got '
                         '{!r}'.format(location))
 
     if len(location) != 2:
