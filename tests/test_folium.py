@@ -19,6 +19,7 @@ from folium.features import GeoJson, Choropleth
 import jinja2
 from jinja2 import Environment, PackageLoader
 
+import numpy as np
 import pandas as pd
 
 import pytest
@@ -60,6 +61,17 @@ def test_get_templates():
 
     env = branca.utilities.get_templates()
     assert isinstance(env, jinja2.environment.Environment)
+
+
+def test_location_args():
+    """Test some data types for a location arg."""
+    location = np.array([45.5236, -122.6750])
+    m = folium.Map(location)
+    assert m.location == [45.5236, -122.6750]
+
+    df = pd.DataFrame({"location": [45.5236, -122.6750]})
+    m = folium.Map(df["location"])
+    assert m.location == [45.5236, -122.6750]
 
 
 class TestFolium(object):
@@ -108,9 +120,9 @@ class TestFolium(object):
                     'name': 'TileLayer',
                     'id': '00000000000000000000000000000000',
                     'children': {}
-                    }
                 }
             }
+        }
 
     def test_cloudmade(self):
         """Test cloudmade tiles and the API key."""
@@ -197,7 +209,8 @@ class TestFolium(object):
 
         # Standard map.
         self.setup()
-        rendered = [line.strip() for line in self.m._parent.render().splitlines() if line.strip()]
+        rendered = [line.strip()
+                    for line in self.m._parent.render().splitlines() if line.strip()]
 
         html_templ = self.env.get_template('fol_template.html')
         attr = 'http://openstreetmap.org'
@@ -332,7 +345,7 @@ class TestFolium(object):
                                               'padding': (3, 3), },
                                              sort_keys=True),
             'this': fitbounds,
-            })
+        })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
