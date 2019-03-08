@@ -12,6 +12,10 @@ from contextlib import contextmanager
 import copy
 import uuid
 import collections
+try:
+    from collections import abc
+except ImportError:
+    import collections as abc
 
 import numpy as np
 
@@ -23,9 +27,14 @@ _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
 
 
+def _is_sized_iterable(arg):
+    """Validates the arg is Sized & Iterable"""
+    return isinstance(arg, abc.Sized) & isinstance(arg, abc.Iterable)
+
+
 def _validate_location(location):
     """Validates and formats location values before setting."""
-    if not isinstance(location, collections.abc.Collection):
+    if not _is_sized_iterable(location):
         raise TypeError('Expected a collection object for location, got '
                         '{!r}'.format(location))
     if len(location) != 2:
@@ -58,7 +67,7 @@ def _iter_tolist(x):
 
 def _flatten(container):
     for i in container:
-        if isinstance(i, collections.abc.Collection):
+        if _is_sized_iterable(i):
             for j in _flatten(i):
                 yield j
         else:
