@@ -25,16 +25,16 @@ _VALID_URLS.discard('')
 
 def _validate_location(location):
     """Validates and formats location values before setting."""
-    if _isnan(location):
-        raise ValueError('Location values cannot contain NaNs, '
-                         'got {!r}'.format(location))
-    if isinstance(type(location), collections.abc.Iterable):
-        raise TypeError('Expected Iterable object for location, got '
+    if not isinstance(location, collections.abc.Collection):
+        raise TypeError('Expected a collection object for location, got '
                         '{!r}'.format(location))
-
     if len(location) != 2:
         raise ValueError('Expected two values for location [lat, lon], '
                          'got {}'.format(len(location)))
+    if _isnan(location):
+        raise ValueError('Location values cannot contain NaNs, '
+                         'got {!r}'.format(location))
+
     location = _iter_tolist(location)
     return location
 
@@ -58,7 +58,7 @@ def _iter_tolist(x):
 
 def _flatten(container):
     for i in container:
-        if isinstance(i, (list, tuple, np.ndarray)):
+        if isinstance(i, collections.abc.Collection):
             for j in _flatten(i):
                 yield j
         else:
