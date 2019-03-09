@@ -66,7 +66,7 @@ and we'd love to have you hang out in our community.
 See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md>`_ for more info.
 
 
-.. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+.. |folium| image:: http://python-visualization.github.io/folium/_images/folium_logo.jpg
 
 
 
