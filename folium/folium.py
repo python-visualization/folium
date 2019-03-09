@@ -231,7 +231,7 @@ $(document).ready(objects_in_front);
         self._png_image = None
         self.png_enabled = png_enabled
 
-        if not location:
+        if location is None:
             # If location is not passed we center and zoom out.
             self.location = [0, 0]
             self.zoom_start = 1
