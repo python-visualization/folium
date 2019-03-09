@@ -7,11 +7,12 @@ import json
 from branca.element import Figure, JavascriptLink
 
 from folium.features import GeoJson
+from folium.map import Layer
 
 from jinja2 import Template
 
 
-class TimeSliderChoropleth(GeoJson):
+class TimeSliderChoropleth(Layer):
     """
     Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.
 
@@ -106,21 +107,7 @@ class TimeSliderChoropleth(GeoJson):
                 {% endif %}
 
                 var {{this.get_name()}} = L.geoJson(
-                    {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-                    {% if this.smooth_factor is not none or this.highlight %}
-                        , {
-                        {% if this.smooth_factor is not none  %}
-                            smoothFactor:{{this.smooth_factor}}
-                        {% endif %}
-
-                        {% if this.highlight %}
-                            {% if this.smooth_factor is not none  %}
-                            ,
-                            {% endif %}
-                            onEachFeature: {{this.get_name()}}_onEachFeature
-                        {% endif %}
-                        }
-                    {% endif %}
+                        {{this.data}}
                     ).addTo({{this._parent.get_name()}}
                 );
 
@@ -142,9 +129,10 @@ class TimeSliderChoropleth(GeoJson):
 
     def __init__(self, data, styledict, name=None, overlay=True, control=True,
                  show=True):
-        super(TimeSliderChoropleth, self).__init__(data, name=name,
-                                                   overlay=overlay,
+        super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
                                                    control=control, show=show)
+        self.data = json.dumps(GeoJson.process_data(GeoJson({}), data))
+
         if not isinstance(styledict, dict):
             raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))  # noqa
         for val in styledict.values():
