@@ -25,7 +25,7 @@ _default_js = [
     ('leaflet',
      'https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js'),
     ('jquery',
-     'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
+     'https://code.jquery.com/jquery-1.12.4.min.js'),
     ('bootstrap',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
