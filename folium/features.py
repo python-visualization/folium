@@ -471,30 +471,7 @@ class GeoJson(Layer):
         self.style = style_function is not None
         self.highlight = highlight_function is not None
 
-        if isinstance(data, dict):
-            self.embed = True
-            self.data = data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
-            if data.lower().startswith(('http:', 'ftp:', 'https:')):
-                self.data = requests.get(data).json()
-                if not self.embed:
-                    self.embed_link = data
-            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.embed = True
-                self.data = json.loads(data)
-            else:  # This is a filename
-                with open(data) as f:
-                    self.data = json.loads(f.read())
-                if not self.embed:
-                    self.embed_link = data
-        elif hasattr(data, '__geo_interface__'):
-            self.embed = True
-            if hasattr(data, 'to_crs'):
-                data = data.to_crs(epsg='4326')
-            self.data = json.loads(json.dumps(data.__geo_interface__))
-        else:
-            raise ValueError('Cannot render objects with any missing geometries'
-                             ': {!r}'.format(data))
+        self.data = self.process_data(data)
 
         if self.style or self.highlight:
             self.convert_to_feature_collection()
@@ -512,6 +489,33 @@ class GeoJson(Layer):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+
+    def process_data(self, data):
+        """Convert an unknown data input into a geojson dictionary."""
+        if isinstance(data, dict):
+            self.embed = True
+            return data
+        elif isinstance(data, text_type) or isinstance(data, binary_type):
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                if not self.embed:
+                    self.embed_link = data
+                return requests.get(data).json()
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
+                self.embed = True
+                return json.loads(data)
+            else:  # This is a filename
+                if not self.embed:
+                    self.embed_link = data
+                with open(data) as f:
+                    return json.loads(f.read())
+        elif hasattr(data, '__geo_interface__'):
+            self.embed = True
+            if hasattr(data, 'to_crs'):
+                data = data.to_crs(epsg='4326')
+            return json.loads(json.dumps(data.__geo_interface__))
+        else:
+            raise ValueError('Cannot render objects with any missing geometries'
+                             ': {!r}'.format(data))
 
     def convert_to_feature_collection(self):
         """Convert data into a FeatureCollection if it is not already."""
