@@ -53,10 +53,10 @@ if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
 
 if sys.version_info < (3, 0):
     warnings.warn(
-        ('folium will stop working with Python 2.7 starting Jan. 1, 2019.'
-         ' Please transition to Python 3 before this time.'
+        ('This version of folium is the last to support Python 2.'
+         ' Transition to Python 3 to be able to receive updates and fixes.'
          ' Check out https://python3statement.org/ for more info.'),
-        PendingDeprecationWarning
+        UserWarning
     )
 
 __version__ = get_versions()['version']
