@@ -11,6 +11,7 @@ Wrap some of the most popular leaflet external plugins.
 from __future__ import (absolute_import, division, print_function)
 
 from folium.plugins.antpath import AntPath
+from folium.plugins.polyline_offset import PolyLineOffset
 from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
 from folium.plugins.draw import Draw
@@ -52,6 +53,7 @@ __all__ = [
     'MiniMap',
     'MousePosition',
     'PolyLineTextPath',
+    'PolyLineOffset',
     'ScrollZoomToggler',
     'Search',
     'StripePattern',
