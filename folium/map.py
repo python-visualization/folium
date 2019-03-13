@@ -465,3 +465,28 @@ class FitBounds(MacroElement):
         self.fit_bounds_options = json.dumps({key: val for key, val in
                                               options.items() if val},
                                              sort_keys=True)
+
+
+class CustomPane(MacroElement):
+    """
+    Creates a custom pane to hold map elements.
+
+    """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            {{this._parent.get_name()}}.createPane('{{this.pane_name}}');
+            {{this._parent.get_name()}}.getPane(
+                '{{this.pane_name}}').style.zIndex = {{this.z_index}};
+            {% if not this.pointer_events %}
+                {{this._parent.get_name()}}.getPane(
+                    '{{this.pane_name}}').style.pointerEvents = 'none';
+            {% endif %}
+        {% endmacro %}
+        """)
+
+    def __init__(self, name, z_index=625, pointer_events=False):
+        super(CustomPane, self).__init__()
+        self._name = 'Pane'
+        self.pane_name = name
+        self.z_index = str(z_index)
+        self.pointer_events = pointer_events
