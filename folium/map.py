@@ -474,12 +474,12 @@ class CustomPane(MacroElement):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.createPane('{{this.pane_name}}');
+            {{this._parent.get_name()}}.createPane('{{this.get_name()}}');
             {{this._parent.get_name()}}.getPane(
-                '{{this.pane_name}}').style.zIndex = {{this.z_index}};
+                '{{this.get_name()}}').style.zIndex = {{this.z_index}};
             {% if not this.pointer_events %}
                 {{this._parent.get_name()}}.getPane(
-                    '{{this.pane_name}}').style.pointerEvents = 'none';
+                    '{{this.get_name()}}').style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
         """)
@@ -487,6 +487,13 @@ class CustomPane(MacroElement):
     def __init__(self, name, z_index=625, pointer_events=False):
         super(CustomPane, self).__init__()
         self._name = 'Pane'
-        self.pane_name = name
         self.z_index = str(z_index)
         self.pointer_events = pointer_events
+
+    def render(self, **kwargs):
+        for name, element in self._children.items():
+            options = json.loads(element.options)
+            options.update({'pane': self.get_name()})
+            element.options = json.dumps(options, sort_keys=True, indent=8)
+            element._parent = self._parent
+        super(CustomPane, self).render()
