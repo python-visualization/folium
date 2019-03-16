@@ -2,13 +2,11 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
-from jinja2 import Template
+from folium.utilities import parse_options
 
-from six import iteritems
+from jinja2 import Template
 
 
 class BeautifyIcon(MacroElement):
@@ -48,37 +46,37 @@ class BeautifyIcon(MacroElement):
     >>> BeautifyIcon(icon='arrow-down', icon_shape='marker').add_to(marker)
 
     """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = new L.BeautifyIcon.icon(
+                {{ this.options|tojson }}
+            )
+            {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
+        {% endmacro %}
+        """)
     ICON_SHAPE_TYPES = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot',
                         'marker', None]
 
-    def __init__(self, icon=None, icon_shape=None, border_width=3, border_color='#000', text_color='#000',
+    def __init__(self, icon=None, icon_shape=None, border_width=3,
+                 border_color='#000', text_color='#000',
                  background_color='#FFF', inner_icon_style='', spin=False,
-                 number=None):
+                 number=None, **kwargs):
         super(BeautifyIcon, self).__init__()
         self._name = 'BeautifyIcon'
 
-        options = {
-            'icon': icon,
-            'iconShape': icon_shape,
-            'borderWidth': border_width,
-            'borderColor': border_color,
-            'textColor': text_color,
-            'backgroundColor': background_color,
-            'innerIconStyle': inner_icon_style,
-            'spin': spin,
-            'isAlphaNumericIcon': number is not None,
-            'text': number
-        }
-        # Must remove key/values where the value is None/undefined
-        options = {k: v for k, v in iteritems(options) if v is not None}
-        self.options = json.dumps(options, sort_keys=True, indent=2)
-
-        self._template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options }})
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)
+        self.options = parse_options(
+            icon=icon,
+            icon_shape=icon_shape,
+            border_width=border_width,
+            border_color=border_color,
+            text_color=text_color,
+            background_color=background_color,
+            inner_icon_style=inner_icon_style,
+            spin=spin,
+            isAlphaNumericIcon=number is not None,
+            text=number,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         super(BeautifyIcon, self).render(**kwargs)

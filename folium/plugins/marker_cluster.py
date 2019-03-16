@@ -2,11 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink
 
 from folium.map import Icon, Layer, Marker, Popup
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
@@ -50,19 +49,23 @@ class MarkerCluster(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.markerClusterGroup(
+                {{ this.options|tojson }}
+            );
             {%- if this.icon_create_function is not none %}
             {{ this.get_name() }}.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};
             {%- endif %}
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
+            {{ this._parent.get_name() }}.addLayer({{ this.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
-                 icon_create_function=None, options=None):
+                 icon_create_function=None, options=None, **kwargs):
+        if options is not None:
+            kwargs.update(options)  # options argument is legacy
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control, show=show)
         self._name = 'MarkerCluster'
@@ -77,8 +80,7 @@ class MarkerCluster(Layer):
                 i = icon if self._validate(icon, Icon) else Icon(icon)
                 self.add_child(Marker(location, popup=p, icon=i))
 
-        options = {} if options is None else options
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.options = parse_options(**kwargs)
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function

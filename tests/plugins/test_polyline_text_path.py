@@ -8,8 +8,8 @@ Test PolyLineTextPath
 from __future__ import (absolute_import, division, print_function)
 
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -44,9 +44,8 @@ def test_polyline_text_path():
 
     m.add_child(wind_line)
     m.add_child(wind_textpath)
-    m._repr_html_()
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script import is present.
     script = '<script src="https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"></script>'  # noqa
@@ -54,14 +53,11 @@ def test_polyline_text_path():
 
     # We verify that the script part is correct.
     tmpl = Template("""
-                {{this.polyline.get_name()}}.setText("{{this.text}}", {
-                    repeat: {{'true' if this.repeat else 'false'}},
-                    center: {{'true' if this.center else 'false'}},
-                    below: {{'true' if this.below else 'false'}},
-                    offset: {{this.offset}},
-                    orientation: {{this.orientation}},
-                    attributes: {{this.attributes}}
-                });
-        """)  # noqa
+        {{ this.polyline.get_name() }}.setText(
+            "{{this.text}}",
+            {{ this.options|tojson }}
+        );
+        """)
 
-    assert tmpl.render(this=wind_textpath) in out
+    expected = normalize(tmpl.render(this=wind_textpath))
+    assert expected in out

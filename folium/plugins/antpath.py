@@ -2,8 +2,6 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
 from branca.element import Figure, JavascriptLink
 
 from folium import Marker
@@ -34,14 +32,13 @@ class AntPath(Marker):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {{this.get_name()}} = L.polyline.antPath(
-                  {{this.location}},
-                  {{ this.options }}
-                )
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+            {{ this.get_name() }} = L.polyline.antPath(
+              {{ this.location|tojson }},
+              {{ this.options|tojson }}
+        ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(AntPath, self).__init__(
@@ -52,8 +49,8 @@ class AntPath(Marker):
 
         self._name = 'AntPath'
         # Polyline + AntPath defaults.
-        options = path_options(line=True, **kwargs)
-        options.update({
+        self.options = path_options(line=True, **kwargs)
+        self.options.update({
             'paused': kwargs.pop('paused', False),
             'reverse': kwargs.pop('reverse', False),
             'hardwareAcceleration': kwargs.pop('hardware_acceleration', False),
@@ -64,7 +61,6 @@ class AntPath(Marker):
             'color': kwargs.pop('color', '#0000FF'),
             'pulseColor': kwargs.pop('pulse_color', '#FFFFFF'),
         })
-        self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
         super(AntPath, self).render()

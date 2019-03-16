@@ -2,19 +2,14 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
-from ..utilities import camelize
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
 from folium import Map
-
 from folium.features import FeatureGroup, GeoJson, TopoJson
-
 from folium.plugins import MarkerCluster
+from folium.utilities import parse_options
 
 
 class Search(MacroElement):
@@ -32,7 +27,7 @@ class Search(MacroElement):
         By default zooms to Polygon/Line bounds and points
         on their natural extent.
     geom_type: str, default 'Point'
-        Feature geometry type. "Point","Line" or "Polygon"
+        Feature geometry type. "Point", "Line" or "Polygon"
     position: str, default 'topleft'
         Change the position of the search bar, can be:
         'topleft', 'topright', 'bottomright' or 'bottomleft',
@@ -76,7 +71,7 @@ class Search(MacroElement):
                         return feature.properties.style
                     })
                     {% if this.options %}
-                    e.layer.setStyle({{ this.options }});
+                    e.layer.setStyle({{ this.options|tojson }});
                     {% endif %}
                     if(e.layer._popup)
                         e.layer.openPopup();
@@ -107,13 +102,10 @@ class Search(MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = collapsed
-        self.options = None
-        if len(kwargs.items()) > 0:
-            self.options = json.dumps({camelize(key): value
-                                       for key, value in kwargs.items()})
+        self.options = parse_options(**kwargs)
 
     def test_params(self, keys):
-        if keys is not None:
+        if keys is not None and self.search_label is not None:
             assert self.search_label in keys, "The label '{}' was not " \
                                               "available in {}" \
                                               "".format(self.search_label, keys)

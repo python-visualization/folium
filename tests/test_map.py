@@ -12,6 +12,7 @@ import pytest
 
 from folium import Map
 from folium.map import Popup, Icon
+from folium.utilities import normalize
 
 
 tmpl = u"""
@@ -19,10 +20,6 @@ tmpl = u"""
                 style="width: {width}; height: {height};">
                 {text}</div>
 """.format
-
-
-def _normalize(rendered):
-    return ''.join(rendered.split())
 
 
 def test_popup_ascii():
@@ -66,14 +63,16 @@ def test_popup_sticky():
     popup = Popup('Some text.', sticky=True).add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{maxWidth: \'100%\', autoClose: false, closeOnClick: false}});
+    var {popup_name} = L.popup({{
+        "autoClose": false, "closeOnClick": false, "maxWidth": "100%"
+    }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name});
     """.format(popup_name=popup.get_name(),
                html_name=list(popup.html._children.keys())[0],
                map_name=m.get_name())
-    assert _normalize(rendered) == _normalize(expected)
+    assert normalize(rendered) == normalize(expected)
 
 
 def test_popup_show():
@@ -81,14 +80,17 @@ def test_popup_show():
     popup = Popup('Some text.', show=True).add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{maxWidth: \'100%\' , autoClose: false}});
+    var {popup_name} = L.popup({{
+        "autoClose": false, "maxWidth": "100%"
+    }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name}).openPopup();
     """.format(popup_name=popup.get_name(),
                html_name=list(popup.html._children.keys())[0],
                map_name=m.get_name())
-    assert _normalize(rendered) == _normalize(expected)
+    # assert compare_rendered(rendered, expected)
+    assert normalize(rendered) == normalize(expected)
 
 
 def test_icon_valid_marker_colors():

@@ -9,6 +9,7 @@ Test raster_layers
 from __future__ import (absolute_import, division, print_function)
 
 import folium
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -114,13 +115,13 @@ def test_image_overlay():
 
     # Verify the script part is okay.
     tmpl = Template("""
-                var {{this.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
+        var {{this.get_name()}} = L.imageOverlay(
+            "{{ this.url }}",
+            {{ this.bounds }},
+            {{ this.options }}
+            ).addTo({{this._parent.get_name()}});
     """)
-    assert tmpl.render(this=io) in out
+    assert normalize(tmpl.render(this=io)) in normalize(out)
 
     bounds = m.get_bounds()
     assert bounds == [[0, -180], [90, 180]], bounds

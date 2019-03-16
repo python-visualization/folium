@@ -50,18 +50,17 @@ _default_css = [
 
 class GlobalSwitches(Element):
 
-    _template = Template(
-        '<script>'
-        'L_PREFER_CANVAS={% if this.prefer_canvas %}true{% else %}false{% endif %}; '
-        'L_NO_TOUCH={% if this.no_touch %}true{% else %}false{% endif %}; '
-        'L_DISABLE_3D={% if this.disable_3d %}true{% else %}false{% endif %};'
-        '</script>'
-    )
+    _template = Template("""
+        <script>
+            L_PREFER_CANVAS = {{ this.prefer_canvas|tojson }};
+            L_NO_TOUCH = {{ this.no_touch |tojson}};
+            L_DISABLE_3D = {{ this.disable_3d|tojson }};
+        </script>
+    """)
 
     def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
-
         self.prefer_canvas = prefer_canvas
         self.no_touch = no_touch
         self.disable_3d = disable_3d
@@ -165,55 +164,63 @@ class Map(MacroElement):
 
     """
     _template = Template(u"""
-{% macro header(this, kwargs) %}
-    <meta name="viewport" content="width=device-width,
-        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>#{{this.get_name()}} {
-        position: {{this.position}};
-        width: {{this.width[0]}}{{this.width[1]}};
-        height: {{this.height[0]}}{{this.height[1]}};
-        left: {{this.left[0]}}{{this.left[1]}};
-        top: {{this.top[0]}}{{this.top[1]}};
-        }
-    </style>
-{% endmacro %}
-{% macro html(this, kwargs) %}
-    <div class="folium-map" id="{{this.get_name()}}" ></div>
-{% endmacro %}
+        {% macro header(this, kwargs) %}
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #{{ this.get_name() }} {
+                    position: {{this.position}};
+                    width: {{this.width[0]}}{{this.width[1]}};
+                    height: {{this.height[0]}}{{this.height[1]}};
+                    left: {{this.left[0]}}{{this.left[1]}};
+                    top: {{this.top[0]}}{{this.top[1]}};
+                }
+            </style>
+        {% endmacro %}
 
-{% macro script(this, kwargs) %}
-    {% if this.max_bounds %}
-        var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-        var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-        var bounds = L.latLngBounds(southWest, northEast);
-    {% else %}
-        var bounds = null;
-    {% endif %}
+        {% macro html(this, kwargs) %}
+            <div class="folium-map" id={{ this.get_name()|tojson }} ></div>
+        {% endmacro %}
 
-    var {{this.get_name()}} = L.map(
-        '{{this.get_name()}}', {
-        center: [{{this.location[0]}}, {{this.location[1]}}],
-        zoom: {{this.zoom_start}},
-        maxBounds: bounds,
-        layers: [],
-        worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-        crs: L.CRS.{{this.crs}},
-        zoomControl: {{this.zoom_control.__str__().lower()}},
-        });
-{% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+        {% macro script(this, kwargs) %}
+            {%- if this.max_bounds %}
+                var bounds = L.latLngBounds(
+                    [{{ this.min_lat }}, {{ this.min_lon }}],
+                    [{{ this.max_lat }}, {{ this.max_lon }}]
+                );
+            {%- else %}
+                var bounds = null;
+            {%- endif %}
 
-    {% if this.objects_to_stay_in_front %}
-    function objects_in_front() {
-        {% for obj in this.objects_to_stay_in_front %}
-            {{ obj.get_name() }}.bringToFront();
-        {% endfor %}
-    };
+            var {{ this.get_name() }} = L.map(
+                {{ this.get_name()|tojson }},
+                {
+                    center: {{ this.location|tojson }},
+                    zoom: {{ this.zoom_start|tojson }},
+                    maxBounds: bounds,
+                    layers: [],
+                    worldCopyJump: {{ this.world_copy_jump|tojson }},
+                    crs: L.CRS.{{ this.crs }},
+                    zoomControl: {{ this.zoom_control|tojson }},
+                }
+            );
 
-{{ this.get_name() }}.on("overlayadd", objects_in_front);
-$(document).ready(objects_in_front);
-{% endif %}
-{% endmacro %}
-""")  # noqa
+            {%- if this.control_scale %}
+            L.control.scale().addTo({{ this.get_name() }});
+            {%- endif %}
+
+            {% if this.objects_to_stay_in_front %}
+            function objects_in_front() {
+                {%- for obj in this.objects_to_stay_in_front %}
+                    {{ obj.get_name() }}.bringToFront();
+                {%- endfor %}
+            };
+            {{ this.get_name() }}.on("overlayadd", objects_in_front);
+            $(document).ready(objects_in_front);
+            {%- endif %}
+
+        {% endmacro %}
+        """)
 
     def __init__(self, location=None, width='100%', height='100%',
                  left='0%', top='0%', position='relative',

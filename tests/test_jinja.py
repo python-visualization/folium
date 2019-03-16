@@ -19,6 +19,7 @@ import pytest
     ([[0, 0], [1, 1]], '[[0, 0], [1, 1]]'),
     ([(0, 0), (1, 1)], '[[0, 0], [1, 1]]'),
     ({'hi': 'there'}, '{"hi": "there"}'),
+    ({'hi': {'there': 1, 'whats': 'up'}}, '{"hi": {"there": 1, "whats": "up"}}'),
 ])
 def test_jinja2_tojson(obj, expected):
     res = jinja2.Template('{{ obj|tojson }}').render(obj=obj)

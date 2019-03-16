@@ -2,7 +2,12 @@ from __future__ import (absolute_import, division, print_function)
 
 import pytest
 
-from folium.utilities import camelize, deep_copy, get_obj_in_upper_tree
+from folium.utilities import (
+    camelize,
+    deep_copy,
+    get_obj_in_upper_tree,
+    parse_options,
+)
 from folium import Map, FeatureGroup, Marker, Popup
 
 
@@ -45,3 +50,10 @@ def test_get_obj_in_upper_tree():
         assert get_obj_in_upper_tree(fg, Marker)
     with pytest.raises(ValueError):
         assert get_obj_in_upper_tree(marker, Popup)
+
+
+def test_parse_options():
+    assert parse_options(thing=42) == {'thing': 42}
+    assert parse_options(thing=None) == {}
+    assert parse_options(long_thing=42) == {'longThing': 42}
+    assert parse_options(thing=42, lst=[1, 2]) == {'thing': 42, 'lst': [1, 2]}
