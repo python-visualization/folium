@@ -3,11 +3,28 @@
 from __future__ import (absolute_import, division, print_function)
 
 import os
+import sys
 from setuptools import setup
 
 import versioneer
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
+
+if sys.version_info < (3, 5):
+    error = """
+    folium 0.9+ supports Python 3.5 and above.
+    When using Python 2.7, please install folium 0.8.*.
+
+    See folium `README.rst` file for more information:
+
+    https://github.com/python-visualization/folium/blob/master/README.rst
+
+    Python {py} detected.
+
+    Try upgrading pip and retry.
+    """.format(py='.'.join([str(v) for v in sys.version_info[:3]]))
+    print(error, file=sys.stderr)
+    sys.exit(1)
 
 
 def read(*parts):
@@ -60,8 +77,6 @@ setup(
     url='https://github.com/python-visualization/folium',
     keywords='data visualization',
     classifiers=[
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -73,6 +88,7 @@ setup(
     platforms="any",
     packages=packages,
     package_data=package_data,
+    python_requires='>=3.5',
     extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
