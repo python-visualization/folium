@@ -484,7 +484,7 @@ class CustomPane(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, name, z_index=625, pointer_events=False):
+    def __init__(self, z_index=625, pointer_events=False):
         super(CustomPane, self).__init__()
         self._name = 'Pane'
         self.z_index = str(z_index)
