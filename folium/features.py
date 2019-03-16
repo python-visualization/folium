@@ -9,6 +9,8 @@ from __future__ import (absolute_import, division, print_function)
 
 import json
 import warnings
+import functools
+import operator
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -372,13 +374,16 @@ class GeoJson(Layer):
     tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
         see folium.GeoJsonTooltip for info on how to do that.
+    embed: bool, default True
+        Whether to embed the data in the html file or not. Note that disabling
+        embedding is only supported if you provide a file link or URL.
 
     Examples
     --------
-    >>> # Providing file that shall be embedded.
-    >>> GeoJson(open('foo.json'))
-    >>> # Providing filename that shall not be embedded.
+    >>> # Providing filename that shall be embedded.
     >>> GeoJson('foo.json')
+    >>> # Providing filename that shall not be embedded.
+    >>> GeoJson('foo.json', embed=False)
     >>> # Providing dict.
     >>> GeoJson(json.load(open('foo.json')))
     >>> # Providing string.
@@ -393,121 +398,171 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {%- if this.highlight %}
-            {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                layer.on({
-                    mouseout: function(e) {
-                        e.target.setStyle(e.target.feature.properties.style);},
-                    mouseover: function(e) {
-                        e.target.setStyle(e.target.feature.properties.highlight);},
-                    click: function(e) {
-                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());}
-                });
-            };
+        {%- if this.style %}
+        function {{ this.get_name() }}_styler(feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.style_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.style_map['default'] }};
+            }
+        }
         {%- endif %}
-        var {{this.get_name()}} = L.geoJson(
-            {{ this.json }},
-            {
+        {%- if this.highlight %}
+        function {{ this.get_name() }}_highlighter(feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.highlight_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.highlight_map['default'] }};
+            }
+        }
+        {%- endif %}
+        function {{this.get_name()}}_onEachFeature(feature, layer) {
+            layer.on({
+                {%- if this.highlight %}
+                mouseout: function(e) {
+                    {{ this.get_name() }}.resetStyle(e.target);
+                },
+                mouseover: function(e) {
+                    e.target.setStyle({{ this.get_name() }}_highlighter(e.target.feature));
+                },
+                {%- endif %}
+                click: function(e) {
+                    {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                }
+            });
+        };
+        var {{ this.get_name() }} = L.geoJson(null, {
             {%- if this.smooth_factor is not none  %}
                 smoothFactor: {{ this.smooth_factor }},
             {%- endif %}
-            {%- if this.highlight %}
                 onEachFeature: {{ this.get_name() }}_onEachFeature,
+            {% if this.style %}
+                style: {{ this.get_name() }}_styler,
             {%- endif %}
-            }
-        ).addTo({{ this._parent.get_name()}} );
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        }).addTo({{ this._parent.get_name() }});
+        {%- if this.embed %}
+            {{ this.get_name() }}.addData({{ this.json }});
+        {%- else %}
+            $.ajax({url: "{{ this.embed_link }}", dataType: 'json', async: true,
+                success: function(data) {
+                    {{ this.get_name() }}.addData(data);
+            }});
+        {%- endif %}
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, show=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
+    def __init__(self, data, style_function=None, highlight_function=None,  # noqa
+                 name=None, overlay=True, control=True, show=True,
+                 smooth_factor=None, tooltip=None, embed=True):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        if isinstance(data, dict):
-            self.embed = True
-            self.data = data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
-            self.embed = True
-            if data.lower().startswith(('http:', 'ftp:', 'https:')):
-                self.data = requests.get(data).json()
-            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.data = json.loads(data)
-            else:  # This is a filename
-                with open(data) as f:
-                    self.data = json.loads(f.read())
-        elif hasattr(data, '__geo_interface__'):
-            self.embed = True
-            if hasattr(data, 'to_crs'):
-                data = data.to_crs(epsg='4326')
-            self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
-        else:
-            raise ValueError('Cannot render objects with any missing geometries. {!r}'.format(data))
-
-        self.style_function = style_function or (lambda x: {})
-
-        self.highlight = highlight_function is not None
-        self.highlight_function = highlight_function or (lambda x: {})
-
+        self.embed = embed
+        self.embed_link = None
+        self.json = None
+        self.parent_map = None
         self.smooth_factor = smooth_factor
+        self.style = style_function is not None
+        self.highlight = highlight_function is not None
 
-        self._validate_function(self.style_function, 'style_function')
-        self._validate_function(self.highlight_function, 'highlight_function')
+        self.data = self.process_data(data)
+
+        if self.style or self.highlight:
+            self.convert_to_feature_collection()
+            if self.style:
+                self._validate_function(style_function, 'style_function')
+                self.style_function = style_function
+                self.style_map = {}
+            if self.highlight:
+                self._validate_function(highlight_function, 'highlight_function')
+                self.highlight_function = highlight_function
+                self.highlight_map = {}
+            self.feature_identifier = self.find_identifier()
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
 
-        self.parent_map = None
-        self.json = None
+    def process_data(self, data):
+        """Convert an unknown data input into a geojson dictionary."""
+        if isinstance(data, dict):
+            self.embed = True
+            return data
+        elif isinstance(data, text_type) or isinstance(data, binary_type):
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                if not self.embed:
+                    self.embed_link = data
+                return requests.get(data).json()
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
+                self.embed = True
+                return json.loads(data)
+            else:  # This is a filename
+                if not self.embed:
+                    self.embed_link = data
+                with open(data) as f:
+                    return json.loads(f.read())
+        elif hasattr(data, '__geo_interface__'):
+            self.embed = True
+            if hasattr(data, 'to_crs'):
+                data = data.to_crs(epsg='4326')
+            return json.loads(json.dumps(data.__geo_interface__))
+        else:
+            raise ValueError('Cannot render objects with any missing geometries'
+                             ': {!r}'.format(data))
+
+    def convert_to_feature_collection(self):
+        """Convert data into a FeatureCollection if it is not already."""
+        if self.data['type'] == 'FeatureCollection':
+            return
+        if not self.embed:
+            raise ValueError(
+                'Data is not a FeatureCollection, but it should be to apply '
+                'style or highlight. Because `embed=False` it cannot be '
+                'converted into one.\nEither change your geojson data to a '
+                'FeatureCollection, set `embed=True` or disable styling.')
+        # Catch case when GeoJSON is just a single Feature or a geometry.
+        if 'geometry' not in self.data.keys():
+            # Catch case when GeoJSON is just a geometry.
+            self.data = {'type': 'Feature', 'geometry': self.data}
+        self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
     def _validate_function(self, func, name):
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
         """
-        test_feature = self.data if self.data.get('features') is None \
-            else self.data['features'][0]
+        test_feature = self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
                              'data[\'features\'] and returns a dictionary.'
                              .format(name))
 
-    def style_data(self):
-        """
-        Applies `self.style_function` to each feature of `self.data` and
-        returns a corresponding JSON output.
-
-        """
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
-        for feature in self.data['features']:
-            feature_style = self.style_function(feature)
-            for key, value in feature_style.items():
-                if isinstance(value, MacroElement):
-                    # Make sure objects are rendered:
-                    if value._parent is None:
-                        value._parent = self
-                        value.render()
-                    # Replace objects with their Javascript var names:
-                    feature_style[key] = "{{'" + value.get_name() + "'}}"
-
-            feature.setdefault('properties', {}).setdefault('style', {}) \
-                .update(feature_style)
-            feature.setdefault('properties', {}).setdefault('highlight', {}) \
-                .update(self.highlight_function(feature))
-
-        data_json = json.dumps(self.data, sort_keys=True)
-        # Remove quotes around Jinja2 template expressions:
-        return data_json.replace('"{{', '{{').replace('}}"', '}}')
+    def find_identifier(self):
+        """Find a unique identifier for each feature, create it if needed."""
+        features = self.data['features']
+        n = len(features)
+        feature = features[0]
+        if 'id' in feature and len(set(feat['id'] for feat in features)) == n:
+            return 'feature.id'
+        for key in feature.get('properties', []):
+            if len(set(feat['properties'][key] for feat in features)) == n:
+                return 'feature.properties.{}'.format(key)
+        if self.embed:
+            for i, feature in enumerate(self.data['features']):
+                feature['id'] = str(i)
+            return 'feature.id'
+        raise ValueError(
+            'There is no unique identifier for each feature and because '
+            '`embed=False` it cannot be added. Consider adding an `id` '
+            'field to your geojson data or set `embed=True`. '
+        )
 
     def _get_self_bounds(self):
         """
@@ -519,8 +574,75 @@ class GeoJson(Layer):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
-        self.json = self.style_data() if self.embed else json.dumps(self.data)
+        if self.style or self.highlight:
+            mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
+                                        self)
+            if self.style:
+                self.style_map = mapper.get_style_map(self.style_function)
+            if self.highlight:
+                self.highlight_map = mapper.get_highlight_map(
+                    self.highlight_function)
+        if self.embed:
+            self.json = json.dumps(self.data, sort_keys=True)
         super(GeoJson, self).render()
+
+
+class GeoJsonStyleMapper:
+    """Create dicts that map styling to GeoJson features.
+
+    Used in the GeoJson class. Users don't have to call this class directly.
+    """
+
+    def __init__(self, data, feature_identifier, geojson_obj):
+        self.data = data
+        self.feature_identifier = feature_identifier
+        self.geojson_obj = geojson_obj
+
+    def get_style_map(self, style_function):
+        """Return a dict that maps style parameters to features."""
+        return self._create_mapping(style_function, 'style')
+
+    def get_highlight_map(self, highlight_function):
+        """Return a dict that maps highlight parameters to features."""
+        return self._create_mapping(highlight_function, 'highlight')
+
+    def _create_mapping(self, func, switch):
+        """Internal function to create the mapping."""
+        mapping = {}
+        for feature in self.data['features']:
+            content = func(feature)
+            if switch == 'style':
+                for key, value in content.items():
+                    if isinstance(value, MacroElement):
+                        # Make sure objects are rendered:
+                        if value._parent is None:
+                            value._parent = self.geojson_obj
+                            value.render()
+                        # Replace objects with their Javascript var names:
+                        content[key] = "{{'" + value.get_name() + "'}}"
+            key = self._to_key(content)
+            mapping.setdefault(key, []).append(self.get_feature_id(feature))
+        self._set_default_key(mapping)
+        return mapping
+
+    def get_feature_id(self, feature):
+        """Return a value identifying the feature."""
+        fields = self.feature_identifier.split('.')[1:]
+        return functools.reduce(operator.getitem, fields, feature)
+
+    @staticmethod
+    def _to_key(d):
+        """Convert dict to str and enable Jinja2 template syntax."""
+        as_str = json.dumps(d, sort_keys=True)
+        return as_str.replace('"{{', '{{').replace('}}"', '}}')
+
+    @staticmethod
+    def _set_default_key(mapping):
+        """Replace the field with the most features with a 'default' field."""
+        key_longest = sorted([(len(v), k) for k, v in mapping.items()],
+                             reverse=True)[0][1]
+        mapping['default'] = key_longest
+        del (mapping[key_longest])
 
 
 class TopoJson(Layer):
