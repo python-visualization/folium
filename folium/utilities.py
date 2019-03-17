@@ -62,7 +62,7 @@ def _iter_tolist(x):
     if hasattr(x, '__iter__'):
         return list(map(_iter_tolist, x))
     else:
-        return x
+        return float(x)
 
 
 def _flatten(container):

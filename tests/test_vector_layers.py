@@ -280,7 +280,7 @@ def test_polygon_marker():
 
 def test_polyline():
     m = Map()
-    locations = [[40, -80], [45, -80]]
+    locations = [[40.0, -80.0], [45.0, -80.0]]
     polyline = PolyLine(locations=locations, popup='I am PolyLine')
     polyline.add_to(m)
 
