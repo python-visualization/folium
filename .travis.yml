@@ -15,8 +15,6 @@ env:
 matrix:
   fast_finish: true
   include:
-  - name: legacy-python
-    env: PY=2.7
   - name: default
     env: PY=3.7
   - name: notebooks-conding-standard
@@ -63,11 +61,6 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
-    fi
-
-  - if [[ $TRAVIS_JOB_NAME == 'legacy-python' ]]; then
-      conda install mock ;
       pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
