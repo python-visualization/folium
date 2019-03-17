@@ -10,6 +10,8 @@ from __future__ import (absolute_import, division, print_function)
 import json
 from collections import OrderedDict
 
+import warnings
+
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 
 from folium.utilities import _validate_coordinates, camelize, get_bounds
@@ -193,11 +195,19 @@ class Icon(MacroElement):
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             {% endmacro %}
             """)
+    color_options = {'red', 'darkred',  'lightred', 'orange', 'beige',
+                     'green', 'darkgreen', 'lightgreen',
+                     'blue', 'darkblue', 'cadetblue', 'lightblue',
+                     'purple',  'darkpurple', 'pink',
+                     'white', 'gray', 'lightgray' 'black'}
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
                  angle=0, prefix='glyphicon'):
         super(Icon, self).__init__()
         self._name = 'Icon'
+        if color not in self.color_options:
+            warnings.warn('color argument of Icon should be one of: {}.'
+                          .format(self.color_options), stacklevel=2)
         self.color = color
         self.icon = icon
         self.icon_color = icon_color
