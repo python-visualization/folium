@@ -3,7 +3,6 @@
 from __future__ import (absolute_import, division, print_function)
 
 import sys
-import warnings
 
 import branca
 from branca.colormap import (ColorMap, LinearColormap, StepColormap)

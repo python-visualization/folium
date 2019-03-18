@@ -14,7 +14,7 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _tmp_html, _validate_location
+from folium.utilities import _parse_size, _tmp_html, validate_location
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -243,7 +243,7 @@ class Map(MacroElement):
             self.location = [0, 0]
             self.zoom_start = 1
         else:
-            self.location = _validate_location(location)
+            self.location = validate_location(location)
             self.zoom_start = zoom_start
 
         Figure().add_child(self)
