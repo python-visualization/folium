@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>folium &#8212; Folium 0.8.3+5.gb4305bd documentation</title>
+    <title>folium &#8212; Folium 0.8.3+11.g36e4118 documentation</title>
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+5.gb4305bd documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+11.g36e4118 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -251,7 +251,7 @@ overlay. For example FeatureGroup or a vector object such as Marker.</td>
 <p>Classes for drawing maps.</p>
 <dl class="class">
 <dt id="folium.map.FeatureGroup">
-<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">FeatureGroup</code><span class="sig-paren">(</span><em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.FeatureGroup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">FeatureGroup</code><span class="sig-paren">(</span><em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.FeatureGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Create a FeatureGroup layer ; you can put things in it and handle them
 as a single layer.  For example, you can add a LayerControl to
@@ -268,6 +268,8 @@ If None get_name() will be called to get the technical (ugly) name.</li>
 LayerControls) or a base layer (ticked with a radio button).</li>
 <li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be included in LayerControls.</li>
 <li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+<li><strong>**kwargs</strong> – Additional (possibly inherited) options. See
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#featuregroup">https://leafletjs.com/reference-1.4.0.html#featuregroup</a></li>
 </ul>
 </td>
 </tr>
@@ -303,7 +305,7 @@ the same value.</li>
 
 <dl class="class">
 <dt id="folium.map.Icon">
-<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Icon</code><span class="sig-paren">(</span><em>color='blue'</em>, <em>icon_color='white'</em>, <em>icon='info-sign'</em>, <em>angle=0</em>, <em>prefix='glyphicon'</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Icon" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Icon</code><span class="sig-paren">(</span><em>color='blue'</em>, <em>icon_color='white'</em>, <em>icon='info-sign'</em>, <em>angle=0</em>, <em>prefix='glyphicon'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Icon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Creates an Icon object that will be rendered
 using Leaflet.awesome-markers.</p>
@@ -331,12 +333,17 @@ the <cite>prefix</cite> as well.</li>
 <li><strong>angle</strong> (<em>int</em><em>, </em><em>default 0</em>) – The icon will be rotated by this amount of degrees.</li>
 <li><strong>prefix</strong> (<em>str</em><em>, </em><em>default 'glyphicon'</em>) – The prefix states the source of the icon. ‘fa’ for font-awesome or
 ‘glyphicon’ for bootstrap 3.</li>
+<li><strong>https</strong> (<em>//github.com/lvoogdt/Leaflet.awesome-markers</em>) – </li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p><a class="reference external" href="https://github.com/lvoogdt/Leaflet.awesome-markers">https://github.com/lvoogdt/Leaflet.awesome-markers</a></p>
+<dl class="attribute">
+<dt id="folium.map.Icon.color_options">
+<code class="descname">color_options</code><em class="property"> = {'beige', 'blue', 'cadetblue', 'darkblue', 'darkgreen', 'darkpurple', 'darkred', 'gray', 'green', 'lightblue', 'lightgrayblack', 'lightgreen', 'lightred', 'orange', 'pink', 'purple', 'red', 'white'}</em><a class="headerlink" href="#folium.map.Icon.color_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
@@ -364,7 +371,7 @@ LayerControls.</p>
 
 <dl class="class">
 <dt id="folium.map.LayerControl">
-<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">LayerControl</code><span class="sig-paren">(</span><em>position='topright'</em>, <em>collapsed=True</em>, <em>autoZIndex=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.LayerControl" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">LayerControl</code><span class="sig-paren">(</span><em>position='topright'</em>, <em>collapsed=True</em>, <em>autoZIndex=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.LayerControl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Creates a LayerControl object to be added on a folium map.</p>
 <p>This object should be added to a Map object. Only Layer children
@@ -377,12 +384,12 @@ of Map are included in the layer control.</p>
 <li><strong>position</strong> (<em>str</em>) – The position of the control (one of the map corners), can be
 ‘topleft’, ‘topright’, ‘bottomleft’ or ‘bottomright’
 default: ‘topright’</li>
-<li><strong>collapsed</strong> (<em>boolean</em>) – If true the control will be collapsed into an icon and expanded on
-mouse hover or touch.
-default: True</li>
-<li><strong>autoZIndex</strong> (<em>boolean</em>) – If true the control assigns zIndexes in increasing order to all of
-its layers so that the order is preserved when switching them on/off.
-default: True</li>
+<li><strong>collapsed</strong> (<em>bool</em><em>, </em><em>default True</em>) – If true the control will be collapsed into an icon and expanded on
+mouse hover or touch.</li>
+<li><strong>autoZIndex</strong> (<em>bool</em><em>, </em><em>default True</em>) – If true the control assigns zIndexes in increasing order to all of
+its layers so that the order is preserved when switching them on/off.</li>
+<li><strong>**kwargs</strong> – Additional (possibly inherited) options. See
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#control-layers">https://leafletjs.com/reference-1.4.0.html#control-layers</a></li>
 </ul>
 </td>
 </tr>
@@ -398,7 +405,7 @@ default: True</li>
 
 <dl class="class">
 <dt id="folium.map.Marker">
-<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Marker</code><span class="sig-paren">(</span><em>location</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>icon=None</em>, <em>draggable=False</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Marker</code><span class="sig-paren">(</span><em>location</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>icon=None</em>, <em>draggable=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Create a simple stock Leaflet marker on the map, with optional
 popup text or Vincent visualization.</p>
@@ -426,17 +433,17 @@ folium.Popup or a folium.Popup instance.</li>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s1">&#39;Portland, OR&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="s1">&#39;Portland, OR&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s1">&#39;Portland, OR&#39;</span><span class="p">))</span>
 <span class="go"># If the popup label has characters that need to be escaped in HTML</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span>
-<span class="go">           popup=folium.Popup(&#39;Mom &amp; Pop Arrow Shop &gt;&gt;&#39;, parse_html=True))</span>
+<span class="gp">... </span>       <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s1">&#39;Mom &amp; Pop Arrow Shop &gt;&gt;&#39;</span><span class="p">,</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
 </pre></div>
 </div>
 </dd></dl>
 
 <dl class="class">
 <dt id="folium.map.Popup">
-<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Popup</code><span class="sig-paren">(</span><em>html=None</em>, <em>parse_html=False</em>, <em>max_width='100%'</em>, <em>show=False</em>, <em>sticky=False</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Popup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.map.</code><code class="descname">Popup</code><span class="sig-paren">(</span><em>html=None</em>, <em>parse_html=False</em>, <em>max_width='100%'</em>, <em>show=False</em>, <em>sticky=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Popup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></p>
 <p>Create a Popup instance that can be linked to a Layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -477,8 +484,8 @@ different type it will be converted to str.</li>
 <li><strong>style</strong> (<em>str</em><em>, </em><em>default None.</em>) – HTML inline style properties like font and colors. Will be applied to
 a div with the text in it.</li>
 <li><strong>sticky</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the tooltip should follow the mouse.</li>
-<li><strong>**kwargs</strong> (<em>Assorted.</em>) – These values will map directly to the Leaflet Options. More info
-available here: <a class="reference external" href="https://leafletjs.com/reference-1.2.0#tooltip">https://leafletjs.com/reference-1.2.0#tooltip</a></li>
+<li><strong>**kwargs</strong> – These values will map directly to the Leaflet Options. More info
+available here: <a class="reference external" href="https://leafletjs.com/reference-1.4.0#tooltip">https://leafletjs.com/reference-1.4.0#tooltip</a></li>
 </ul>
 </td>
 </tr>
@@ -506,9 +513,8 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Circle</code><span class="sig-paren">(</span><em>location</em>, <em>radius</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Circle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
 <p>Class for drawing circle overlays on a map.</p>
-<p>It’s an approximation and starts to diverge from a real circle closer to poles
-(due to projection distortion).</p>
-<p>Extends <a class="reference internal" href="#folium.vector_layers.CircleMarker" title="folium.vector_layers.CircleMarker"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.CircleMarker()</span></code></a>.</p>
+<p>It’s an approximation and starts to diverge from a real circle closer to
+the poles (due to projection distortion).</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -519,12 +525,13 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
 <li><strong>radius</strong> (<em>float</em>) – Radius of the circle, in meters.</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#circle">https://leafletjs.com/reference-1.4.0.html#circle</a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#circle">https://leafletjs.com/reference-1.4.0.html#circle</a></p>
 </dd></dl>
 
 <dl class="class">
@@ -542,19 +549,20 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
 <li><strong>radius</strong> (<em>float</em><em>, </em><em>default 10</em>) – Radius of the circle marker, in pixels.</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#circlemarker">https://leafletjs.com/reference-1.4.0.html#circlemarker</a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#circlemarker">https://leafletjs.com/reference-1.4.0.html#circlemarker</a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="folium.vector_layers.PolyLine">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">PolyLine</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.PolyLine" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
-<p>Class for drawing polyline overlays on a map.</p>
+<p>Draw polyline overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -568,20 +576,20 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 More means better performance and smoother look,
 and less means more accurate representation.</li>
 <li><strong>no_clip</strong> (<em>Bool</em><em>, </em><em>default False</em>) – Disable polyline clipping.</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#polyline">https://leafletjs.com/reference-1.4.0.html#polyline</a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#polyline">https://leafletjs.com/reference-1.4.0.html#polyline</a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="folium.vector_layers.Polygon">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Polygon</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Polygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
-<p>Class for drawing polygon overlays on a map.</p>
-<p>Extends <a class="reference internal" href="#folium.vector_layers.PolyLine" title="folium.vector_layers.PolyLine"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.PolyLine()</span></code></a>.</p>
+<p>Draw polygon overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -591,20 +599,20 @@ and less means more accurate representation.</li>
 <li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#polygon">https://leafletjs.com/reference-1.4.0.html#polygon</a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#polygon">https://leafletjs.com/reference-1.4.0.html#polygon</a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="folium.vector_layers.Rectangle">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Rectangle</code><span class="sig-paren">(</span><em>bounds</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
-<p>Class for drawing rectangle overlays on a map.</p>
-<p>Extends <a class="reference internal" href="#folium.vector_layers.Polygon" title="folium.vector_layers.Polygon"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.Polygon()</span></code></a>.</p>
+<p>Draw rectangle overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -614,12 +622,13 @@ and less means more accurate representation.</li>
 <li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#rectangle">https://leafletjs.com/reference-1.4.0.html#rectangle</a></li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#rectangle">https://leafletjs.com/reference-1.4.0.html#rectangle</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -683,8 +692,11 @@ the map, implements ILayer interface.</p>
 * If string, it will be written directly in the output file.
 * If file, it’s content will be converted as embedded in the output file.
 * If array-like, it will be converted to PNG base64 string and embedded in the output.</li>
-<li><strong>bounds</strong> (<em>list</em>) – Image bounds on the map in the form [[lat_min, lon_min],
-[lat_max, lon_max]]</li>
+<li><strong>bounds</strong> (<em>list</em>) – <dl class="docutils">
+<dt>Image bounds on the map in the form</dt>
+<dd>[[lat_min, lon_min], [lat_max, lon_max]]</dd>
+</dl>
+</li>
 <li><strong>opacity</strong> (<em>float</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>1.0</em><em>)</em>) – </li>
 <li><strong>alt</strong> (<em>string</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>''</em><em>)</em>) – </li>
 <li><strong>origin</strong> (<em>[</em><em>'upper' | 'lower'</em><em>]</em><em>, </em><em>optional</em><em>, </em><em>default 'upper'</em>) – Place the [0,0] index of the array in the upper left or
@@ -695,10 +707,8 @@ It must output iterables of length 3 or 4,
 with values between 0 and 1.
 Hint: you can use colormaps from <cite>matplotlib.cm</cite>.</li>
 <li><strong>mercator_project</strong> (<em>bool</em><em>, </em><em>default False.</em>) – Used only for array-like image.  Transforms the data to
-project (longitude, latitude) coordinates to the
-Mercator projection.
-Beware that this will only work if <cite>image</cite> is an array-like
-object.</li>
+project (longitude, latitude) coordinates to the Mercator projection.
+Beware that this will only work if <cite>image</cite> is an array-like object.</li>
 <li><strong>pixelated</strong> (<em>bool</em><em>, </em><em>default True</em>) – Sharp sharp/crips (True) or aliased corners (False).</li>
 <li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</li>
 <li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
@@ -773,7 +783,7 @@ object.</li>
 
 <dl class="class">
 <dt id="folium.raster_layers.VideoOverlay">
-<em class="property">class </em><code class="descclassname">folium.raster_layers.</code><code class="descname">VideoOverlay</code><span class="sig-paren">(</span><em>video_url</em>, <em>bounds</em>, <em>opacity=1.0</em>, <em>attr=None</em>, <em>autoplay=True</em>, <em>loop=True</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.VideoOverlay" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.raster_layers.</code><code class="descname">VideoOverlay</code><span class="sig-paren">(</span><em>video_url</em>, <em>bounds</em>, <em>autoplay=True</em>, <em>loop=True</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.VideoOverlay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Used to load and display a video over the map.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -781,15 +791,20 @@ object.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>video_url</strong> (<em>URL of the video</em>) – </li>
-<li><strong>bounds</strong> (<em>list</em>) – Video bounds on the map in the form [[lat_min, lon_min],
-[lat_max, lon_max]]</li>
-<li><strong>opacity</strong> (<em>float</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>1.0</em><em>)</em>) – </li>
-<li><strong>attr</strong> (<em>string</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>''</em><em>)</em>) – </li>
+<li><strong>video_url</strong> (<em>str</em>) – URL of the video</li>
+<li><strong>bounds</strong> (<em>list</em>) – <dl class="docutils">
+<dt>Video bounds on the map in the form</dt>
+<dd>[[lat_min, lon_min], [lat_max, lon_max]]</dd>
+</dl>
+</li>
+<li><strong>autoplay</strong> (<em>bool</em><em>, </em><em>default True</em>) – </li>
+<li><strong>loop</strong> (<em>bool</em><em>, </em><em>default True</em>) – </li>
 <li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</li>
 <li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
 <li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
 <li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
+<li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#videooverlay">https://leafletjs.com/reference-1.4.0.html#videooverlay</a></li>
 </ul>
 </td>
 </tr>
@@ -799,7 +814,7 @@ object.</li>
 
 <dl class="class">
 <dt id="folium.raster_layers.WmsTileLayer">
-<em class="property">class </em><code class="descclassname">folium.raster_layers.</code><code class="descname">WmsTileLayer</code><span class="sig-paren">(</span><em>url</em>, <em>name=None</em>, <em>layers=''</em>, <em>styles=''</em>, <em>fmt='image/jpeg'</em>, <em>transparent=False</em>, <em>version='1.1.1'</em>, <em>attr=''</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.WmsTileLayer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.raster_layers.</code><code class="descname">WmsTileLayer</code><span class="sig-paren">(</span><em>url</em>, <em>layers</em>, <em>styles=''</em>, <em>fmt='image/jpeg'</em>, <em>transparent=False</em>, <em>version='1.1.1'</em>, <em>attr=''</em>, <em>name=None</em>, <em>overlay=True</em>, <em>control=True</em>, <em>show=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.WmsTileLayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a Web Map Service (WMS) layer.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -808,15 +823,14 @@ object.</li>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>url</strong> (<em>str</em>) – The url of the WMS server.</li>
-<li><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</li>
-<li><strong>layers</strong> (<em>str</em><em>, </em><em>default ''</em>) – The names of the layers to be displayed.</li>
-<li><strong>styles</strong> (<em>str</em><em>, </em><em>default ''</em>) – Comma-separated list of WMS styles.</li>
-<li><strong>fmt</strong> (<em>str</em><em>, </em><em>default 'image/jpeg'</em>) – The format of the service output.
-Ex: ‘image/png’</li>
+<li><strong>layers</strong> (<em>str</em>) – Comma-separated list of WMS layers to show.</li>
+<li><strong>styles</strong> (<em>str</em><em>, </em><em>optional</em>) – Comma-separated list of WMS styles.</li>
+<li><strong>fmt</strong> (<em>str</em><em>, </em><em>default 'image/jpeg'</em>) – The format of the service output. Ex: ‘image/png’</li>
 <li><strong>transparent</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether the layer shall allow transparency.</li>
 <li><strong>version</strong> (<em>str</em><em>, </em><em>default '1.1.1'</em>) – Version of the WMS service to use.</li>
-<li><strong>attr</strong> (<em>str</em><em>, </em><em>default None</em>) – The attribution of the service.
+<li><strong>attr</strong> (<em>str</em><em>, </em><em>default ''</em>) – The attribution of the service.
 Will be displayed in the bottom right corner.</li>
+<li><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – The name of the Layer, as it will appear in LayerControls</li>
 <li><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</li>
 <li><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</li>
 <li><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</li>
@@ -1000,17 +1014,17 @@ to that number of colors.</li>
 output file.
 * If array-like, it will be converted to PNG base64 string
 and embedded in the output.</li>
-<li><strong>icon_size</strong> (<em>tuple of 2 int</em>) – Size of the icon image in pixels.</li>
-<li><strong>icon_anchor</strong> (<em>tuple of 2 int</em>) – The coordinates of the “tip” of the icon
+<li><strong>icon_size</strong> (<em>tuple of 2 int</em><em>, </em><em>optional</em>) – Size of the icon image in pixels.</li>
+<li><strong>icon_anchor</strong> (<em>tuple of 2 int</em><em>, </em><em>optional</em>) – The coordinates of the “tip” of the icon
 (relative to its top left corner).
 The icon will be aligned so that this point is at the
 marker’s geographical location.</li>
-<li><strong>shadow_image</strong> (<em>string</em><em>, </em><em>file</em><em> or </em><em>array-like object</em>) – The data for the shadow image. If not specified,
+<li><strong>shadow_image</strong> (<em>string</em><em>, </em><em>file</em><em> or </em><em>array-like object</em><em>, </em><em>optional</em>) – The data for the shadow image. If not specified,
 no shadow image will be created.</li>
-<li><strong>shadow_size</strong> (<em>tuple of 2 int</em>) – Size of the shadow image in pixels.</li>
-<li><strong>shadow_anchor</strong> (<em>tuple of 2 int</em>) – The coordinates of the “tip” of the shadow relative to its
+<li><strong>shadow_size</strong> (<em>tuple of 2 int</em><em>, </em><em>optional</em>) – Size of the shadow image in pixels.</li>
+<li><strong>shadow_anchor</strong> (<em>tuple of 2 int</em><em>, </em><em>optional</em>) – The coordinates of the “tip” of the shadow relative to its
 top left corner (the same as icon_anchor if not specified).</li>
-<li><strong>popup_anchor</strong> (<em>tuple of 2 int</em>) – The coordinates of the point from which popups will “open”,
+<li><strong>popup_anchor</strong> (<em>tuple of 2 int</em><em>, </em><em>optional</em>) – The coordinates of the point from which popups will “open”,
 relative to the icon anchor.</li>
 </ul>
 </td>
@@ -1171,7 +1185,7 @@ instead of the keys of <cite>fields</cite>.</li>
 <li><strong>localize</strong> (<em>bool</em><em>, </em><em>default False.</em>) – This will use JavaScript’s .toLocaleString() to format ‘clean’ values
 as strings for the user’s location; i.e. 1,000,000.00 comma separators,
 float truncation, etc.
-*Available for most of JavaScript’s primitive types (any data you’ll
+Available for most of JavaScript’s primitive types (any data you’ll
 serve into the template).</li>
 <li><strong>style</strong> (<em>str</em><em>, </em><em>default None.</em>) – HTML inline style properties like font and colors. Will be applied to
 a div with the text in it.</li>
@@ -1218,7 +1232,7 @@ a popup is shown that displays the latitude and longitude of the pointer.</p>
 
 <dl class="class">
 <dt id="folium.features.RegularPolygonMarker">
-<em class="property">class </em><code class="descclassname">folium.features.</code><code class="descname">RegularPolygonMarker</code><span class="sig-paren">(</span><em>location</em>, <em>color='black'</em>, <em>opacity=1</em>, <em>weight=2</em>, <em>fill_color='blue'</em>, <em>fill_opacity=1</em>, <em>number_of_sides=4</em>, <em>rotation=0</em>, <em>radius=15</em>, <em>popup=None</em>, <em>tooltip=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.RegularPolygonMarker" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.features.</code><code class="descname">RegularPolygonMarker</code><span class="sig-paren">(</span><em>location</em>, <em>number_of_sides=4</em>, <em>rotation=0</em>, <em>radius=15</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.RegularPolygonMarker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
 <p>Custom markers using the Leaflet Data Vis Framework.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1227,16 +1241,12 @@ a popup is shown that displays the latitude and longitude of the pointer.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Marker (Northing, Easting)</li>
-<li><strong>color</strong> (<em>string</em><em>, </em><em>default 'black'</em>) – Marker line color</li>
-<li><strong>opacity</strong> (<em>float</em><em>, </em><em>default 1</em>) – Line opacity, scale 0-1</li>
-<li><strong>weight</strong> (<em>int</em><em>, </em><em>default 2</em>) – Stroke weight in pixels</li>
-<li><strong>fill_color</strong> (<em>string</em><em>, </em><em>default 'blue'</em>) – Marker fill color</li>
-<li><strong>fill_opacity</strong> (<em>float</em><em>, </em><em>default 1</em>) – Marker fill opacity</li>
 <li><strong>number_of_sides</strong> (<em>int</em><em>, </em><em>default 4</em>) – Number of polygon sides</li>
 <li><strong>rotation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotation angle in degrees</li>
 <li><strong>radius</strong> (<em>int</em><em>, </em><em>default 15</em>) – Marker radius, in pixels</li>
-<li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
-<li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
+<li><strong>popup</strong> (<em>string</em><em> or </em><a class="reference internal" href="#folium.map.Popup" title="folium.map.Popup"><em>Popup</em></a><em>, </em><em>optional</em>) – Input text or visualization for object displayed when clicking.</li>
+<li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>optional</em>) – Display a text when hovering over the object.</li>
+<li><strong>**kwargs</strong> – See vector layers path_options for additional arguments.</li>
 <li><strong>https</strong> (<em>//humangeo.github.io/leaflet-dvf/</em>) – </li>
 </ul>
 </td>
@@ -1318,8 +1328,7 @@ in the form [[lat_min, lon_min], [lat_max, lon_max]]</p>
 <dl class="method">
 <dt id="folium.features.TopoJson.style_data">
 <code class="descname">style_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.TopoJson.style_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Applies self.style_function to each feature of self.data and returns
-a corresponding JSON output.</p>
+<dd><p>Applies self.style_function to each feature of self.data.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1423,7 +1432,7 @@ Ex: ‘relative’, ‘absolute’</li>
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+5.gb4305bd documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+11.g36e4118 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer">
