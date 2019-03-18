@@ -37,19 +37,18 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
-    options : dict, default None
-        A dictionary with options for Leaflet.markercluster. See
+    **kwargs
+        Additional arguments are passed to Leaflet.markercluster. See
         https://github.com/Leaflet/Leaflet.markercluster for options.
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
+        {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = (function(){
-                {{this._callback}}
+                {{ this._callback }}
 
-                var data = {{ this._data }};
-                var cluster = L.markerClusterGroup({{ this.options }});
+                var data = {{ this._data|tojson }};
+                var cluster = L.markerClusterGroup({{ this.options|tojson }});
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -60,13 +59,15 @@ class FastMarkerCluster(MarkerCluster):
                 cluster.addTo({{ this._parent.get_name() }});
                 return cluster;
             })();
-            {% endmacro %}""")
+        {% endmacro %}""")
 
     def __init__(self, data, callback=None, options=None,
-                 name=None, overlay=True, control=True, show=True):
+                 name=None, overlay=True, control=True, show=True, **kwargs):
+        if options is not None:
+            kwargs.update(options)  # options argument is legacy
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
                                                 control=control, show=show,
-                                                options=options)
+                                                **kwargs)
         self._name = 'FastMarkerCluster'
         self._data = _validate_coordinates(data)
 

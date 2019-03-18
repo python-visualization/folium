@@ -8,8 +8,8 @@ Test FastMarkerCluster
 from __future__ import (absolute_import, division, print_function)
 
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -29,7 +29,7 @@ def test_fast_marker_cluster():
     m.add_child(mc)
     m._repr_html_()
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that imports
     assert '<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>' in out  # noqa
@@ -56,4 +56,4 @@ def test_fast_marker_cluster():
         {% endmacro %}
     """)
 
-    assert ''.join(tmpl.render(this=mc).split()) in ''.join(out.split())
+    assert normalize(tmpl.render(this=mc)) in out

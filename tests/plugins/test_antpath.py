@@ -9,6 +9,7 @@ from __future__ import (absolute_import, division, print_function)
 
 import folium
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -48,12 +49,12 @@ def test_antpath():
     # We verify that the script part is correct.
     tmpl = Template("""
           {{this.get_name()}} = L.polyline.antPath(
-                  {{this.location}},
-                  {{ this.options }}
+                  {{ this.location|tojson }},
+                  {{ this.options|tojson }}
                 )
                 .addTo({{this._parent.get_name()}});
         """)  # noqa
 
     expected_rendered = tmpl.render(this=antpath)
     rendered = antpath._template.module.script(antpath)
-    assert folium.utilities.compare_rendered(expected_rendered, rendered)
+    assert normalize(expected_rendered) == normalize(rendered)

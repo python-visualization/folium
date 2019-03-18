@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <script>L_PREFER_CANVAS=false; L_NO_TOUCH=false; L_DISABLE_3D=false;</script>
+    <script>
+        L_PREFER_CANVAS = false;
+        L_NO_TOUCH = false;
+        L_DISABLE_3D = false;
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
@@ -17,47 +21,52 @@
 
     <meta name="viewport" content="width=device-width,
         initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>#{{ map_id }} {
-        position: relative;
-        {{ width }}
-        {{ height }}
-        left: 0.0%;
-        top: 0.0%;
-      }
+    <style>
+        #{{ map_id }} {
+            position: relative;
+            {{ width }}
+            {{ height }}
+            left: 0.0%;
+            top: 0.0%;
+        }
     </style>
 </head>
 <body>
   <div class="folium-map" id="{{ map_id }}" ></div>
 </body>
 <script>
-  var southWest = L.latLng({{ min_lat }}, {{ min_lon }});
-  var northEast = L.latLng({{ max_lat }}, {{ max_lon }});
-  var bounds = L.latLngBounds(southWest, northEast);
+    var bounds = L.latLngBounds(
+        [{{ min_lat }}, {{ min_lon }}],
+        [{{ max_lat }}, {{ max_lon }}]
+    );
 
-  var {{ map_id }} = L.map(
-      '{{ map_id }}', {
-      center: [{{ lat }}, {{ lon }}],
-      zoom: {{ zoom_level }},
-      maxBounds: bounds,
-      layers: [],
-      worldCopyJump: {{ world_copy_jump.__str__().lower() }},
-      crs: L.CRS.{{crs}},
-      zoomControl: {{ zoom_control.__str__().lower() }},
-      });
-
-  {% for tile in tile_layers -%}
-   var {{tile['id']}} = L.tileLayer(
-       '{{tile['address']}}',
+    var {{ map_id }} = L.map(
+        "{{ map_id }}",
         {
-        "attribution": "{{tile['attr']}}",
-        "detectRetina": {{tile['detect_retina'].__str__().lower()}},
-        "maxNativeZoom": {{tile['max_zoom']}},
-        "maxZoom": {{tile['max_zoom']}},
-        "minZoom": {{tile['min_zoom']}},
-        "noWrap": {{tile['no_wrap'].__str__().lower()}},
-        "opacity": {{tile['opacity']}},
-        "subdomains": "{{tile['subdomains']}}",
-        "tms": {{tile['tms'].__str__().lower()}}
-}).addTo({{ map_id }});
+            center: [{{ lat }}, {{ lon }}],
+            zoom: {{ zoom_level }},
+            maxBounds: bounds,
+            layers: [],
+            worldCopyJump: {{ world_copy_jump.__str__().lower() }},
+            crs: L.CRS.{{crs}},
+            zoomControl: {{ zoom_control.__str__().lower() }},
+        }
+    );
+
+    {% for tile in tile_layers -%}
+    var {{ tile['id'] }} = L.tileLayer(
+        "{{ tile['address'] }}",
+        {
+            "attribution": "{{tile['attr']}}",
+            "detectRetina": {{tile['detect_retina'].__str__().lower()}},
+            "maxNativeZoom": {{tile['max_zoom']}},
+            "maxZoom": {{tile['max_zoom']}},
+            "minZoom": {{tile['min_zoom']}},
+            "noWrap": {{tile['no_wrap'].__str__().lower()}},
+            "opacity": {{tile['opacity']}},
+            "subdomains": "{{tile['subdomains']}}",
+            "tms": {{ tile['tms'].__str__().lower() }}
+        }
+    ).addTo({{ map_id }});
   {%- endfor %}
 </script>

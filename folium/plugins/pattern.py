@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import (absolute_import, division, print_function)
-import json
 
 from branca.element import Figure, JavascriptLink, MacroElement
 
 from folium.folium import Map
-from folium.utilities import get_obj_in_upper_tree
+from folium.utilities import get_obj_in_upper_tree, parse_options
 
 from jinja2 import Template
 
@@ -38,27 +37,28 @@ class StripePattern(MacroElement):
 
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        var {{ this.get_name() }} = new L.StripePattern(
-            {{ this.options }}
-        );
-        {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+            var {{ this.get_name() }} = new L.StripePattern(
+                {{ this.options|tojson }}
+            );
+            {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
         {% endmacro %}
     """)
 
     def __init__(self, angle=.5, weight=4, space_weight=4,
                  color="#000000", space_color="#ffffff",
-                 opacity=0.75, space_opacity=0.0):
+                 opacity=0.75, space_opacity=0.0, **kwargs):
         super(StripePattern, self).__init__()
         self._name = 'StripePattern'
-        self.options = json.dumps({
-            'angle': angle,
-            'weight': weight,
-            'spaceWeight': space_weight,
-            'color': color,
-            'spaceColor': space_color,
-            'opacity': opacity,
-            'spaceOpacity': space_opacity
-        })
+        self.options = parse_options(
+            angle=angle,
+            weight=weight,
+            space_weight=space_weight,
+            color=color,
+            space_color=space_color,
+            opacity=opacity,
+            space_opacity=space_opacity,
+            **kwargs
+        )
         self.parent_map = None
 
     def render(self, **kwargs):
@@ -104,14 +104,14 @@ class CirclePattern(MacroElement):
 
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        var shape = new L.PatternCircle(
-            {{ this.options_pattern_circle }}
-        );
-        var {{this.get_name()}} = new L.Pattern(
-            {{ this.options_pattern }}
-        );
-        {{ this.get_name() }}.addShape(shape);
-        {{ this.get_name() }}.addTo({{ this.parent_map }});
+            var {{ this.get_name() }}_shape = new L.PatternCircle(
+                {{ this.options_pattern_circle|tojson }}
+            );
+            var {{ this.get_name() }} = new L.Pattern(
+                {{ this.options_pattern|tojson }}
+            );
+            {{ this.get_name() }}.addShape({{ this.get_name() }}_shape);
+            {{ this.get_name() }}.addTo({{ this.parent_map }});
         {% endmacro %}
     """)
 
@@ -120,21 +120,21 @@ class CirclePattern(MacroElement):
                  opacity=0.75, fill_opacity=0.5):
         super(CirclePattern, self).__init__()
         self._name = 'CirclePattern'
-        self.options_pattern_circle = json.dumps({
-            'x': radius + 2 * weight,
-            'y': radius + 2 * weight,
-            'weight': weight,
-            'radius': radius,
-            'color': color,
-            'fillColor': fill_color,
-            'opacity': opacity,
-            'fillOpacity': fill_opacity,
-            'fill': True,
-        })
-        self.options_pattern = json.dumps({
-            'width': width,
-            'height': height,
-        })
+        self.options_pattern_circle = parse_options(
+            x=radius + 2 * weight,
+            y=radius + 2 * weight,
+            weight=weight,
+            radius=radius,
+            color=color,
+            fill_color=fill_color,
+            opacity=opacity,
+            fill_opacity=fill_opacity,
+            fill=True,
+        )
+        self.options_pattern = parse_options(
+            width=width,
+            height=height,
+        )
         self.parent_map = None
 
     def render(self, **kwargs):

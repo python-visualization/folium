@@ -15,6 +15,7 @@ import branca.element
 
 import folium
 from folium.features import GeoJson, Choropleth
+from folium.utilities import normalize
 
 import jinja2
 from jinja2 import Environment, PackageLoader
@@ -209,7 +210,7 @@ class TestFolium(object):
 
         # Standard map.
         self.setup()
-        rendered = [line.strip() for line in self.m._parent.render().splitlines() if line.strip()]
+        rendered = self.m._parent.render()
 
         html_templ = self.env.get_template('fol_template.html')
         attr = 'http://openstreetmap.org'
@@ -241,10 +242,9 @@ class TestFolium(object):
                 'world_copy_jump': False,
                 'zoom_control': True
                 }
-        HTML = html_templ.render(tmpl, plugins={})
-        expected = [line.strip() for line in HTML.splitlines() if line.strip()]
+        expected = html_templ.render(tmpl, plugins={})
 
-        assert rendered == expected
+        assert normalize(rendered) == normalize(expected)
 
     def test_choropleth_features(self):
         """Test to make sure that Choropleth function doesn't allow

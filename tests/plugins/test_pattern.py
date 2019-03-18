@@ -10,8 +10,8 @@ from __future__ import (absolute_import, division, print_function)
 import os
 
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 
 def test_pattern():
@@ -43,7 +43,7 @@ def test_pattern():
     data = os.path.join(os.path.dirname(__file__), os.pardir, 'us-states.json')
     folium.GeoJson(data, style_function=style_function).add_to(m)
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script import is present.
     script = '<script src="https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js"></script>'  # noqa

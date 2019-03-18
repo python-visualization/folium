@@ -7,14 +7,18 @@ Classes for drawing maps.
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
 from collections import OrderedDict
 
 import warnings
 
 from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
 
-from folium.utilities import _validate_coordinates, camelize, get_bounds
+from folium.utilities import (
+    _validate_coordinates,
+    camelize,
+    get_bounds,
+    parse_options,
+)
 
 from jinja2 import Template
 
@@ -64,20 +68,26 @@ class FeatureGroup(Layer):
         Whether the layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    **kwargs
+        Additional (possibly inherited) options. See
+        https://leafletjs.com/reference-1.4.0.html#featuregroup
+
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.featureGroup(
-                ).addTo({{this._parent.get_name()}});
+            var {{ this.get_name() }} = L.featureGroup(
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """)
 
-    def __init__(self, name=None, overlay=True, control=True, show=True):
+    def __init__(self, name=None, overlay=True, control=True, show=True,
+                 **kwargs):
         super(FeatureGroup, self).__init__(name=name, overlay=overlay,
                                            control=control, show=show)
         self._name = 'FeatureGroup'
-
         self.tile_name = name if name is not None else self.get_name()
+        self.options = parse_options(**kwargs)
 
 
 class LayerControl(MacroElement):
@@ -93,59 +103,71 @@ class LayerControl(MacroElement):
           The position of the control (one of the map corners), can be
           'topleft', 'topright', 'bottomleft' or 'bottomright'
           default: 'topright'
-    collapsed : boolean
+    collapsed : bool, default True
           If true the control will be collapsed into an icon and expanded on
           mouse hover or touch.
-          default: True
-    autoZIndex : boolean
+    autoZIndex : bool, default True
           If true the control assigns zIndexes in increasing order to all of
           its layers so that the order is preserved when switching them on/off.
-          default: True
+    **kwargs
+        Additional (possibly inherited) options. See
+        https://leafletjs.com/reference-1.4.0.html#control-layers
+
     """
     _template = Template("""
         {% macro script(this,kwargs) %}
-            var {{this.get_name()}} = {
-                base_layers : { {% for key,val in this.base_layers.items() %}"{{key}}" : {{val}},{% endfor %} },
-                overlays : { {% for key,val in this.overlays.items() %}"{{key}}" : {{val}},{% endfor %} }
-                };
+            var {{ this.get_name() }} = {
+                base_layers : {
+                    {%- for key, val in this.base_layers.items() %}
+                    {{ key|tojson }} : {{val}},
+                    {%- endfor %}
+                },
+                overlays :  {
+                    {%- for key, val in this.overlays.items() %}
+                    {{ key|tojson }} : {{val}},
+                    {%- endfor %}
+                },
+            };
             L.control.layers(
-                {{this.get_name()}}.base_layers,
-                {{this.get_name()}}.overlays,
-                {position: '{{this.position}}',
-                 collapsed: {{this.collapsed}},
-                 autoZIndex: {{this.autoZIndex}}
-                }).addTo({{this._parent.get_name()}});
-            {% for val in this.layers_untoggle %}
-                {{ val }}.remove();{% endfor %}
-        {% endmacro %}
-        """)  # noqa
+                {{ this.get_name() }}.base_layers,
+                {{ this.get_name() }}.overlays,
+                {{ this.options|tojson }}
+            ).addTo({{this._parent.get_name()}});
 
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True):
+            {%- for val in this.layers_untoggle.values() %}
+            {{ val }}.remove();
+            {%- endfor %}
+        {% endmacro %}
+        """)
+
+    def __init__(self, position='topright', collapsed=True, autoZIndex=True,
+                 **kwargs):
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
-        self.position = position
-        self.collapsed = str(collapsed).lower()
-        self.autoZIndex = str(autoZIndex).lower()
+        self.options = parse_options(
+            position=position,
+            collapsed=collapsed,
+            autoZIndex=autoZIndex,
+            **kwargs
+        )
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
-        self.layers_untoggle = []
+        self.layers_untoggle = OrderedDict()
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self.base_layers = OrderedDict(
-            [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer)
-             and not val.overlay and val.control])
-        self.overlays = OrderedDict(
-            [(val.layer_name, val.get_name()) for key, val in
-             self._parent._children.items() if isinstance(val, Layer)
-             and val.overlay and val.control])
-        self.layers_untoggle = [
-            val.get_name() for val in
-            self._parent._children.values() if isinstance(val, Layer)
-            and val.overlay and val.control and not val.show]
-        for additional_base_layer in list(self.base_layers.values())[1:]:
-            self.layers_untoggle.append(additional_base_layer)
+        for item in self._parent._children.values():
+            if not isinstance(item, Layer) or not item.control:
+                continue
+            key = item.layer_name
+            if not item.overlay:
+                self.base_layers[key] = item.get_name()
+                if len(self.base_layers) > 1:
+                    self.layers_untoggle[key] = item.get_name()
+            else:
+                self.overlays[key] = item.get_name()
+                if not item.show:
+                    self.layers_untoggle[key] = item.get_name()
         super(LayerControl, self).render()
 
 
@@ -178,23 +200,17 @@ class Icon(MacroElement):
         The prefix states the source of the icon. 'fa' for font-awesome or
         'glyphicon' for bootstrap 3.
 
-
     https://github.com/lvoogdt/Leaflet.awesome-markers
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.AwesomeMarkers.icon({
-                    icon: '{{this.icon}}',
-                    iconColor: '{{this.icon_color}}',
-                    markerColor: '{{this.color}}',
-                    prefix: '{{this.prefix}}',
-                    extraClasses: 'fa-rotate-{{this.angle}}'
-                    });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.AwesomeMarkers.icon(
+                {{ this.options|tojson }}
+            );
+            {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
+        {% endmacro %}
+        """)
     color_options = {'red', 'darkred',  'lightred', 'orange', 'beige',
                      'green', 'darkgreen', 'lightgreen',
                      'blue', 'darkblue', 'cadetblue', 'lightblue',
@@ -202,17 +218,20 @@ class Icon(MacroElement):
                      'white', 'gray', 'lightgray' 'black'}
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon'):
+                 angle=0, prefix='glyphicon', **kwargs):
         super(Icon, self).__init__()
         self._name = 'Icon'
         if color not in self.color_options:
             warnings.warn('color argument of Icon should be one of: {}.'
                           .format(self.color_options), stacklevel=2)
-        self.color = color
-        self.icon = icon
-        self.icon_color = icon_color
-        self.angle = angle
-        self.prefix = prefix
+        self.options = parse_options(
+            color=color,
+            icon_color=icon_color,
+            icon=icon,
+            prefix=prefix,
+            extra_classes='fa-rotate-{}'.format(angle),
+            **kwargs
+        )
 
 
 class Marker(MacroElement):
@@ -241,32 +260,30 @@ class Marker(MacroElement):
     Examples
     --------
     >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
-    >>> Marker(location=[45.5, -122.3], popup=folium.Popup('Portland, OR'))
+    >>> Marker(location=[45.5, -122.3], popup=Popup('Portland, OR'))
     # If the popup label has characters that need to be escaped in HTML
     >>> Marker(location=[45.5, -122.3],
-               popup=folium.Popup('Mom & Pop Arrow Shop >>', parse_html=True))
+    ...        popup=Popup('Mom & Pop Arrow Shop >>', parse_html=True))
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        var {{this.get_name()}} = L.marker(
-            [{{this.location[0]}}, {{this.location[1]}}],
-            {
-                icon: new L.Icon.Default(),
-                {%- if this.draggable %}
-                draggable: true,
-                autoPan: true,
-                {%- endif %}
-                }
-            ).addTo({{this._parent.get_name()}});
+            var {{ this.get_name() }} = L.marker(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """)
 
     def __init__(self, location, popup=None, tooltip=None, icon=None,
-                 draggable=False):
+                 draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = _validate_coordinates(location)
-        self.draggable = draggable
+        self.options = parse_options(
+            draggable=draggable or None,
+            autoPan=draggable or None,
+            **kwargs
+        )
         if icon is not None:
             self.add_child(icon)
         if isinstance(popup, text_type) or isinstance(popup, binary_type):
@@ -304,25 +321,23 @@ class Popup(Element):
         True prevents map and other popup clicks from closing.
     """
     _template = Template(u"""
-            var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'
-            {% if this.show or this.sticky %}, autoClose: false{% endif %}
-            {% if this.sticky %}, closeOnClick: false{% endif %}});
+        var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
-            {% for name, element in this.html._children.items() %}
-                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
-                {{this.get_name()}}.setContent({{name}});
-            {% endfor %}
+        {% for name, element in this.html._children.items() %}
+            var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
+            {{ this.get_name() }}.setContent({{ name }});
+        {% endfor %}
 
-            {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
-            {% if this.show %}.openPopup(){% endif %};
+        {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
+        {% if this.show %}.openPopup(){% endif %};
 
-            {% for name, element in this.script._children.items() %}
-                {{element.render()}}
-            {% endfor %}
-        """)  # noqa
+        {% for name, element in this.script._children.items() %}
+            {{element.render()}}
+        {% endfor %}
+    """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width='100%', show=False,
-                 sticky=False):
+    def __init__(self, html=None, parse_html=False, max_width='100%',
+                 show=False, sticky=False, **kwargs):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -340,9 +355,13 @@ class Popup(Element):
         elif isinstance(html, text_type) or isinstance(html, binary_type):
             self.html.add_child(Html(text_type(html), script=script))
 
-        self.max_width = max_width
         self.show = show
-        self.sticky = sticky
+        self.options = parse_options(
+            max_width=max_width,
+            autoClose=False if show or sticky else None,
+            closeOnClick=False if sticky else None,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -372,18 +391,19 @@ class Tooltip(MacroElement):
         a div with the text in it.
     sticky: bool, default True
         Whether the tooltip should follow the mouse.
-    **kwargs: Assorted.
+    **kwargs
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.2.0#tooltip
+        available here: https://leafletjs.com/reference-1.4.0#tooltip
 
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {{ this._parent.get_name() }}.bindTooltip(
-            `<div{% if this.style %} style="{{ this.style }}"{% endif %}>`
-            + `{{ this.text }}` + `</div>`,
-            {{ this.options }}
-        );
+            {{ this._parent.get_name() }}.bindTooltip(
+                `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
+                     {{ this.text }}
+                 </div>`,
+                {{ this.options|tojson }}
+            );
         {% endmacro %}
         """)
     valid_options = {
@@ -425,7 +445,7 @@ class Tooltip(MacroElement):
                 'The option {} must be one of the following types: {}.'
                 .format(key, self.valid_options[key])
             )
-        return json.dumps(kwargs)
+        return kwargs
 
 
 class FitBounds(MacroElement):
@@ -449,29 +469,22 @@ class FitBounds(MacroElement):
         Maximum zoom to be used.
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {% if this.autobounds %}
-                    var autobounds = L.featureGroup({{ this.features }}).getBounds()
-                {% endif %}
-
-                {{this._parent.get_name()}}.fitBounds(
-                    {% if this.bounds %}{{ this.bounds }}{% else %}"autobounds"{% endif %},
-                    {{ this.fit_bounds_options }}
-                    );
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+            {{ this._parent.get_name() }}.fitBounds(
+                {{ this.bounds|tojson }},
+                {{ this.options|tojson }}
+            );
+        {% endmacro %}
+        """)
 
     def __init__(self, bounds, padding_top_left=None,
                  padding_bottom_right=None, padding=None, max_zoom=None):
         super(FitBounds, self).__init__()
         self._name = 'FitBounds'
-        self.bounds = json.loads(json.dumps(bounds))
-        options = {
-            'maxZoom': max_zoom,
-            'paddingTopLeft': padding_top_left,
-            'paddingBottomRight': padding_bottom_right,
-            'padding': padding,
-        }
-        self.fit_bounds_options = json.dumps({key: val for key, val in
-                                              options.items() if val},
-                                             sort_keys=True)
+        self.bounds = bounds
+        self.options = parse_options(
+            max_zoom=max_zoom,
+            padding_top_left=padding_top_left,
+            padding_bottom_right=padding_bottom_right,
+            padding=padding,
+        )

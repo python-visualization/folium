@@ -25,9 +25,10 @@ from folium.utilities import (
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree
+    get_obj_in_upper_tree,
+    parse_options,
 )
-from folium.vector_layers import PolyLine
+from folium.vector_layers import PolyLine, path_options
 
 from jinja2 import Template
 
@@ -46,65 +47,44 @@ class RegularPolygonMarker(Marker):
     ----------
     location: tuple or list, default None
         Latitude and Longitude of Marker (Northing, Easting)
-    color: string, default 'black'
-        Marker line color
-    opacity: float, default 1
-        Line opacity, scale 0-1
-    weight: int, default 2
-        Stroke weight in pixels
-    fill_color: string, default 'blue'
-        Marker fill color
-    fill_opacity: float, default 1
-        Marker fill opacity
     number_of_sides: int, default 4
         Number of polygon sides
     rotation: int, default 0
         Rotation angle in degrees
     radius: int, default 15
         Marker radius, in pixels
-    popup: string or folium.Popup, default None
+    popup: string or Popup, optional
         Input text or visualization for object displayed when clicking.
-    tooltip: str or folium.Tooltip, default None
+    tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
+    **kwargs:
+        See vector layers path_options for additional arguments.
 
     https://humangeo.github.io/leaflet-dvf/
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.RegularPolygonMarker(
-                new L.LatLng({{this.location[0]}},{{this.location[1]}}),
-                {
-                    icon : new L.Icon.Default(),
-                    color: '{{this.color}}',
-                    opacity: {{this.opacity}},
-                    weight: {{this.weight}},
-                    fillColor: '{{this.fill_color}}',
-                    fillOpacity: {{this.fill_opacity}},
-                    numberOfSides: {{this.number_of_sides}},
-                    rotation: {{this.rotation}},
-                    radius: {{this.radius}}
-                    }
-                ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = new L.RegularPolygonMarker(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
-    def __init__(self, location, color='black', opacity=1, weight=2,
-                 fill_color='blue', fill_opacity=1, number_of_sides=4,
-                 rotation=0, radius=15, popup=None, tooltip=None):
+    def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
+                 popup=None, tooltip=None, **kwargs):
         super(RegularPolygonMarker, self).__init__(
             _iter_tolist(location),
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
-        self.color = color
-        self.opacity = opacity
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-        self.number_of_sides = number_of_sides
-        self.rotation = rotation
-        self.radius = radius
+        self.options = path_options(**kwargs)
+        self.options.update(parse_options(
+            number_of_sides=number_of_sides,
+            rotation=rotation,
+            radius=radius,
+        ))
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -402,7 +382,7 @@ class GeoJson(Layer):
         function {{ this.get_name() }}_styler(feature) {
             switch({{ this.feature_identifier }}) {
                 {%- for style, ids_list in this.style_map.items() if not style == 'default' %}
-                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                {% for id_val in ids_list %}case {{ id_val|tojson }}: {% endfor %}
                     return {{ style }};
                 {%- endfor %}
                 default:
@@ -414,7 +394,7 @@ class GeoJson(Layer):
         function {{ this.get_name() }}_highlighter(feature) {
             switch({{ this.feature_identifier }}) {
                 {%- for style, ids_list in this.highlight_map.items() if not style == 'default' %}
-                {% for id_val in ids_list %}case "{{ id_val }}": {% endfor %}
+                {% for id_val in ids_list %}case {{ id_val|tojson }}: {% endfor %}
                     return {{ style }};
                 {%- endfor %}
                 default:
@@ -439,7 +419,7 @@ class GeoJson(Layer):
         };
         var {{ this.get_name() }} = L.geoJson(null, {
             {%- if this.smooth_factor is not none  %}
-                smoothFactor: {{ this.smooth_factor }},
+                smoothFactor: {{ this.smooth_factor|tojson }},
             {%- endif %}
                 onEachFeature: {{ this.get_name() }}_onEachFeature,
             {% if this.style %}
@@ -447,9 +427,9 @@ class GeoJson(Layer):
             {%- endif %}
         }).addTo({{ this._parent.get_name() }});
         {%- if this.embed %}
-            {{ this.get_name() }}.addData({{ this.json }});
+            {{ this.get_name() }}.addData({{ this.data|tojson }});
         {%- else %}
-            $.ajax({url: "{{ this.embed_link }}", dataType: 'json', async: true,
+            $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true,
                 success: function(data) {
                     {{ this.get_name() }}.addData(data);
             }});
@@ -582,8 +562,6 @@ class GeoJson(Layer):
             if self.highlight:
                 self.highlight_map = mapper.get_highlight_map(
                     self.highlight_function)
-        if self.embed:
-            self.json = json.dumps(self.data, sort_keys=True)
         super(GeoJson, self).render()
 
 
@@ -699,15 +677,21 @@ class TopoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        var {{this.get_name()}}_data = {{this.style_data()}};
-        var {{this.get_name()}} = L.geoJson(topojson.feature(
-            {{this.get_name()}}_data,
-            {{this.get_name()}}_data.{{this.object_path}})
-                {% if this.smooth_factor is not none %}
-                    , {smoothFactor: {{this.smooth_factor}}}
-                {% endif %}
-                ).addTo({{this._parent.get_name()}});
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+            var {{ this.get_name() }}_data = {{ this.data|tojson }};
+            var {{ this.get_name() }} = L.geoJson(
+                topojson.feature(
+                    {{ this.get_name() }}_data,
+                    {{ this.get_name() }}_data.{{ this.object_path }}
+                ),
+                {
+                {%- if this.smooth_factor is not none %}
+                    smoothFactor: {{ this.smooth_factor|tojson }},
+                {%- endif %}
+                }
+            ).addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.setStyle(function(feature) {
+                return feature.properties.style;
+            });
         {% endmacro %}
         """)  # noqa
 
@@ -743,11 +727,7 @@ class TopoJson(Layer):
             self.add_child(Tooltip(tooltip))
 
     def style_data(self):
-        """
-        Applies self.style_function to each feature of self.data and returns
-        a corresponding JSON output.
-
-        """
+        """Applies self.style_function to each feature of self.data."""
 
         def recursive_get(data, keys):
             if len(keys):
@@ -758,10 +738,10 @@ class TopoJson(Layer):
         geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
+        self.style_data()
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
@@ -822,7 +802,7 @@ class GeoJsonTooltip(Tooltip):
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
-        \*Available for most of JavaScript's primitive types (any data you'll
+        Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
@@ -852,11 +832,11 @@ class GeoJsonTooltip(Tooltip):
             function(layer){
             // Convert non-primitive to String.
             let handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
-            let fields = {{ this.fields }};
-            {% if this.aliases %}
-            let aliases = {{ this.aliases }};
-            {% endif %}
-            return '<table{% if this.style %} style="{{this.style}}"{% endif%}>' +
+            let fields = {{ this.fields|tojson }};
+            {%- if this.aliases %}
+            let aliases = {{ this.aliases|tojson }};
+            {%- endif %}
+            return '<table{% if this.style %} style={{ this.style|tojson }}{% endif%}>' +
             String(
                 fields.map(
                 columnname=>
@@ -872,7 +852,7 @@ class GeoJsonTooltip(Tooltip):
                     {% if this.localize %}.toLocaleString(){% endif %}}</td></tr>`
                 ).join(''))
                 +'</table>'
-            }, {{ this.options }});
+            }, {{ this.options|tojson }});
         {% endmacro %}
         """)
 
@@ -1207,28 +1187,23 @@ class DivIcon(MacroElement):
     """
 
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.divIcon({
-                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
-                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
-                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
-                    {% if this.className %}className: '{{this.className}}',{% endif %}
-                    {% if this.html %}html: `{{this.html}}`,{% endif %}
-                    });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.divIcon({{ this.options|tojson }});
+            {{this._parent.get_name()}}.setIcon({{this.get_name()}});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-        self.popup_anchor = popup_anchor
-        self.html = html
-        self.className = class_name
+        self.options = parse_options(
+            html=html,
+            icon_size=icon_size,
+            icon_ancher=icon_anchor,
+            popup_anchor=popup_anchor,
+            class_name=class_name,
+        )
 
 
 class LatLngPopup(MacroElement):
@@ -1305,58 +1280,47 @@ class CustomIcon(Icon):
         output file.
         * If array-like, it will be converted to PNG base64 string
         and embedded in the output.
-    icon_size : tuple of 2 int
+    icon_size : tuple of 2 int, optional
         Size of the icon image in pixels.
-    icon_anchor : tuple of 2 int
+    icon_anchor : tuple of 2 int, optional
         The coordinates of the "tip" of the icon
         (relative to its top left corner).
         The icon will be aligned so that this point is at the
         marker's geographical location.
-    shadow_image :  string, file or array-like object
+    shadow_image :  string, file or array-like object, optional
         The data for the shadow image. If not specified,
         no shadow image will be created.
-    shadow_size : tuple of 2 int
+    shadow_size : tuple of 2 int, optional
         Size of the shadow image in pixels.
-    shadow_anchor : tuple of 2 int
+    shadow_anchor : tuple of 2 int, optional
         The coordinates of the "tip" of the shadow relative to its
         top left corner (the same as icon_anchor if not specified).
-    popup_anchor : tuple of 2 int
+    popup_anchor : tuple of 2 int, optional
         The coordinates of the point from which popups will "open",
         relative to the icon anchor.
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.icon({
-                    iconUrl: '{{this.icon_url}}',
-                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
-                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
-
-                    {% if this.shadow_url %}shadowUrl: '{{this.shadow_url}}',{% endif %}
-                    {% if this.shadow_size %}shadowSize: [{{this.shadow_size[0]}},{{this.shadow_size[1]}}],{% endif %}
-                    {% if this.shadow_anchor %}shadowAnchor: [{{this.shadow_anchor[0]}},{{this.shadow_anchor[1]}}],{% endif %}
-
-                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
-                    });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+        var {{ this.get_name() }} = L.icon({{ this.options|tojson }});
+        {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
                  shadow_image=None, shadow_size=None, shadow_anchor=None,
                  popup_anchor=None):
         super(Icon, self).__init__()
         self._name = 'CustomIcon'
-        self.icon_url = image_to_url(icon_image)
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-
-        self.shadow_url = (image_to_url(shadow_image)
-                           if shadow_image is not None else None)
-        self.shadow_size = shadow_size
-        self.shadow_anchor = shadow_anchor
-        self.popup_anchor = popup_anchor
+        self.options = parse_options(
+            icon_url=image_to_url(icon_image),
+            icon_size=icon_size,
+            icon_anchor=icon_anchor,
+            shadow_url=shadow_image and image_to_url(shadow_image),
+            shadow_size=shadow_size,
+            shadow_anchor=shadow_anchor,
+            popup_anchor=popup_anchor,
+        )
 
 
 class ColorLine(FeatureGroup):

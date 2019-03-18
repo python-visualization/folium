@@ -11,8 +11,8 @@ from __future__ import (absolute_import, division, print_function)
 from jinja2 import Template
 
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 
 def test_beautify_icon():
@@ -40,7 +40,7 @@ def test_beautify_icon():
     m.add_child(bm2)
     m._repr_html_()
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script import is present.
     script = '<script src="https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js"></script>'  # noqa
@@ -52,9 +52,9 @@ def test_beautify_icon():
 
     # We verify that the Beautiful Icons are rendered correctly.
     tmpl = Template(u"""
-                var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options }})
+                var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options|tojson }})
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             """)  # noqa
 
-    assert tmpl.render(this=ic1) in out
-    assert tmpl.render(this=ic2) in out
+    assert normalize(tmpl.render(this=ic1)) in out
+    assert normalize(tmpl.render(this=ic2)) in out

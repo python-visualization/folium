@@ -14,10 +14,10 @@ class Terminator(MacroElement):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                L.terminator().addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            L.terminator().addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def __init__(self):
         super(Terminator, self).__init__()

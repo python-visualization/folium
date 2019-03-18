@@ -7,7 +7,7 @@ import json
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from folium.folium import Map
-from folium.utilities import iter_points, none_max, none_min
+from folium.utilities import iter_points, none_max, none_min, parse_options
 
 from jinja2 import Template
 
@@ -87,11 +87,15 @@ class TimestampedGeoJson(MacroElement):
                     return newdate.format("{{this.date_options}}");
                 }
             });
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
+            {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+                {
+                    period: {{ this.period|tojson }},
+                }
+            );
+            var timeDimensionControl = new L.Control.TimeDimensionCustom(
+                {{ this.options|tojson }}
+            );
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
-
-            console.log("{{this.marker}}");
 
             var geoJsonLayer = L.geoJson({{this.data}}, {
                     pointToLayer: function (feature, latLng) {
@@ -124,11 +128,14 @@ class TimestampedGeoJson(MacroElement):
                     }
                 })
 
-            var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
-                {updateTimeDimension: true,
-                 addlastPoint: {{'true' if this.add_last_point else 'false'}},
-                 duration: {{ this.duration }},
-                }).addTo({{this._parent.get_name()}});
+            var {{this.get_name()}} = L.timeDimension.layer.geoJson(
+                geoJsonLayer,
+                {
+                    updateTimeDimension: true,
+                    addlastPoint: {{ this.add_last_point|tojson }},
+                    duration: {{ this.duration }},
+                }
+            ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
 
@@ -153,20 +160,19 @@ class TimestampedGeoJson(MacroElement):
         self.date_options = date_options
         self.duration = 'undefined' if duration is None else '"' + duration + '"'
 
-        options = {
-            'position': 'bottomleft',
-            'minSpeed': min_speed,
-            'maxSpeed': max_speed,
-            'autoPlay': auto_play,
-            'loopButton': loop_button,
-            'timeSliderDragUpdate': time_slider_drag_update,
-            'playerOptions': {
+        self.options = parse_options(
+            position='bottomleft',
+            min_speed=min_speed,
+            max_speed=max_speed,
+            auto_play=auto_play,
+            loop_button=loop_button,
+            time_slider_drag_update=time_slider_drag_update,
+            player_options={
                 'transitionTime': int(transition_time),
                 'loop': loop,
                 'startOver': True
-            }
-        }
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+            },
+        )
 
     def render(self, **kwargs):
         assert isinstance(self._parent, Map), (

@@ -7,12 +7,10 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
 from branca.element import Element, Figure
 
 from folium.map import Layer
-from folium.utilities import image_to_url, mercator_transform
+from folium.utilities import image_to_url, mercator_transform, parse_options
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -75,12 +73,13 @@ class TileLayer(Layer):
         object.
     """
     _template = Template(u"""
-{% macro script(this, kwargs) -%}
-    var {{this.get_name()}} = L.tileLayer(
-        '{{this.tiles}}',
-        {{ this.options }}).addTo({{this._parent.get_name()}});
-{%- endmacro %}
-""")  # noqa
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.tileLayer(
+                {{ this.tiles|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
                  max_native_zoom=None, attr=None, API_key=None,
@@ -95,18 +94,18 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
-        options = {'minZoom': min_zoom,
-                   'maxZoom': max_zoom,
-                   'maxNativeZoom': max_native_zoom or max_zoom,
-                   'noWrap': no_wrap,
-                   'attribution': attr,
-                   'subdomains': subdomains,
-                   'detectRetina': detect_retina,
-                   'tms': tms,
-                   'opacity': opacity}
-        options.update(kwargs)
-        self.options = json.dumps(options, sort_keys=True, indent=8)
-
+        self.options = parse_options(
+            min_zoom=min_zoom,
+            max_zoom=max_zoom,
+            max_native_zoom=max_native_zoom or max_zoom,
+            no_wrap=no_wrap,
+            attribution=attr,
+            subdomains=subdomains,
+            detect_retina=detect_retina,
+            tms=tms,
+            opacity=opacity,
+            **kwargs
+        )
         tiles_flat = ''.join(tiles.lower().strip().split())
         if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
             raise ValueError('You must pass an API key if using Cloudmade'
@@ -136,22 +135,21 @@ class WmsTileLayer(Layer):
     ----------
     url : str
         The url of the WMS server.
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls
-    layers : str, default ''
-        The names of the layers to be displayed.
-    styles : str, default ''
+    layers : str
+        Comma-separated list of WMS layers to show.
+    styles : str, optional
         Comma-separated list of WMS styles.
     fmt : str, default 'image/jpeg'
-        The format of the service output.
-        Ex: 'image/png'
+        The format of the service output. Ex: 'image/png'
     transparent: bool, default False
         Whether the layer shall allow transparency.
     version : str, default '1.1.1'
         Version of the WMS service to use.
-    attr : str, default None
+    attr : str, default ''
         The attribution of the service.
         Will be displayed in the bottom right corner.
+    name : string, optional
+        The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
@@ -167,28 +165,28 @@ class WmsTileLayer(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.tileLayer.wms(
-                '{{ this.url }}',
-                {{ this.options }}
-                ).addTo({{this._parent.get_name()}});
-
+            var {{ this.get_name() }} = L.tileLayer.wms(
+                {{ this.url|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, url, name=None, layers='', styles='',
-                 fmt='image/jpeg', transparent=False, version='1.1.1',
-                 attr='', overlay=True, control=True, show=True, **kwargs):
-        super(WmsTileLayer, self).__init__(overlay=overlay, control=control,
-                                           name=name, show=show)
+    def __init__(self, url, layers, styles='', fmt='image/jpeg',
+                 transparent=False, version='1.1.1', attr='',
+                 name=None, overlay=True, control=True, show=True, **kwargs):
+        super(WmsTileLayer, self).__init__(name=name, overlay=overlay,
+                                           control=control, show=show)
         self.url = url
-        options = {'layers': layers,
-                   'styles': styles,
-                   'format': fmt,
-                   'transparent': transparent,
-                   'version': version,
-                   'attribution': attr}
-        options.update(kwargs)
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        kwargs['format'] = fmt
+        self.options = parse_options(
+            layers=layers,
+            styles=styles,
+            transparent=transparent,
+            version=version,
+            attribution=attr,
+            **kwargs
+        )
 
 
 class ImageOverlay(Layer):
@@ -204,8 +202,8 @@ class ImageOverlay(Layer):
         * If file, it's content will be converted as embedded in the output file.
         * If array-like, it will be converted to PNG base64 string and embedded in the output.
     bounds: list
-        Image bounds on the map in the form [[lat_min, lon_min],
-        [lat_max, lon_max]]
+        Image bounds on the map in the form
+         [[lat_min, lon_min], [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
     alt: string, default Leaflet's default ('')
     origin: ['upper' | 'lower'], optional, default 'upper'
@@ -219,10 +217,8 @@ class ImageOverlay(Layer):
         Hint: you can use colormaps from `matplotlib.cm`.
     mercator_project: bool, default False.
         Used only for array-like image.  Transforms the data to
-        project (longitude, latitude) coordinates to the
-        Mercator projection.
-        Beware that this will only work if `image` is an array-like
-        object.
+        project (longitude, latitude) coordinates to the Mercator projection.
+        Beware that this will only work if `image` is an array-like object.
     pixelated: bool, default True
         Sharp sharp/crips (True) or aliased corners (False).
     name : string, default None
@@ -239,44 +235,32 @@ class ImageOverlay(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.imageOverlay(
+                {{ this.url|tojson }},
+                {{ this.bounds|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, image, bounds, origin='upper', colormap=None,
                  mercator_project=False, pixelated=True,
                  name=None, overlay=True, control=True, show=True, **kwargs):
         super(ImageOverlay, self).__init__(name=name, overlay=overlay,
                                            control=control, show=show)
-
-        options = {
-            'opacity': kwargs.pop('opacity', 1.),
-            'alt': kwargs.pop('alt', ''),
-            'interactive': kwargs.pop('interactive', False),
-            'crossOrigin': kwargs.pop('cross_origin', False),
-            'errorOverlayUrl': kwargs.pop('error_overlay_url', ''),
-            'zIndex': kwargs.pop('zindex', 1),
-            'className': kwargs.pop('class_name', ''),
-        }
         self._name = 'ImageOverlay'
+        self.bounds = bounds
+        self.options = parse_options(**kwargs)
         self.pixelated = pixelated
-
         if mercator_project:
             image = mercator_transform(
                 image,
-                [bounds[0][0],
-                 bounds[1][0]],
-                origin=origin)
+                [bounds[0][0], bounds[1][0]],
+                origin=origin
+            )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
-
-        self.bounds = json.loads(json.dumps(bounds))
-        self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
         super(ImageOverlay, self).render()
@@ -284,18 +268,20 @@ class ImageOverlay(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-        pixelated = """<style>
-        .leaflet-image-layer {
-        image-rendering: -webkit-optimize-contrast; /* old android/safari*/
-        image-rendering: crisp-edges; /* safari */
-        image-rendering: pixelated; /* chrome */
-        image-rendering: -moz-crisp-edges; /* firefox */
-        image-rendering: -o-crisp-edges; /* opera */
-        -ms-interpolation-mode: nearest-neighbor; /* ie */
-        }
-        </style>"""
-
         if self.pixelated:
+            pixelated = """
+                <style>
+                    .leaflet-image-layer {
+                        /* old android/safari*/
+                        image-rendering: -webkit-optimize-contrast;
+                        image-rendering: crisp-edges; /* safari */
+                        image-rendering: pixelated; /* chrome */
+                        image-rendering: -moz-crisp-edges; /* firefox */
+                        image-rendering: -o-crisp-edges; /* opera */
+                        -ms-interpolation-mode: nearest-neighbor; /* ie */
+                    }
+                </style>
+            """
             figure.header.add_child(Element(pixelated), name='leaflet-image-layer')  # noqa
 
     def _get_self_bounds(self):
@@ -313,12 +299,13 @@ class VideoOverlay(Layer):
 
     Parameters
     ----------
-    video_url: URL of the video
+    video_url: str
+        URL of the video
     bounds: list
-        Video bounds on the map in the form [[lat_min, lon_min],
-        [lat_max, lon_max]]
-    opacity: float, default Leaflet's default (1.0)
-    attr: string, default Leaflet's default ('')
+        Video bounds on the map in the form
+         [[lat_min, lon_min], [lat_max, lon_max]]
+    autoplay: bool, default True
+    loop: bool, default True
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -327,35 +314,34 @@ class VideoOverlay(Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    **kwargs:
+        Other valid (possibly inherited) options. See:
+        https://leafletjs.com/reference-1.4.0.html#videooverlay
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                var {{this.get_name()}} = L.videoOverlay(
-                    '{{ this.video_url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.videoOverlay(
+                {{ this.video_url|tojson }},
+                {{ this.bounds|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
-    def __init__(self, video_url, bounds, opacity=1., attr=None,
-                 autoplay=True, loop=True,
-                 name=None, overlay=True, control=True, show=True):
+    def __init__(self, video_url, bounds, autoplay=True, loop=True,
+                 name=None, overlay=True, control=True, show=True, **kwargs):
         super(VideoOverlay, self).__init__(name=name, overlay=overlay,
                                            control=control, show=show)
         self._name = 'VideoOverlay'
-
         self.video_url = video_url
 
-        self.bounds = json.loads(json.dumps(bounds))
-        options = {
-            'opacity': opacity,
-            'attribution': attr,
-            'loop': loop,
-            'autoplay': autoplay,
-        }
-        self.options = json.dumps(options)
+        self.bounds = bounds
+        self.options = parse_options(
+            autoplay=autoplay,
+            loop=loop,
+            **kwargs
+        )
 
     def _get_self_bounds(self):
         """

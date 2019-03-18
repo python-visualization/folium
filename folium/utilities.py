@@ -62,7 +62,7 @@ def _iter_tolist(x):
     if hasattr(x, '__iter__'):
         return list(map(_iter_tolist, x))
     else:
-        return x
+        return float(x)
 
 
 def _flatten(container):
@@ -407,12 +407,16 @@ def compare_rendered(obj1, obj2):
     two folium map objects are the equal or not.
 
     """
-    return _normalize(obj1) == _normalize(obj2)
+    return normalize(obj1) == normalize(obj2)
 
 
-def _normalize(rendered):
-    """Return the input string as a list of stripped lines."""
-    return [line.strip() for line in rendered.splitlines() if line.strip()]
+def normalize(rendered):
+    """Return the input string without non-functional spaces or newlines."""
+    out = ''.join([line.strip()
+                   for line in rendered.splitlines()
+                   if line.strip()])
+    out = out.replace(', ', ',')
+    return out
 
 
 @contextmanager
@@ -452,3 +456,10 @@ def get_obj_in_upper_tree(element, cls):
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
     return parent
+
+
+def parse_options(**kwargs):
+    """Return a dict with lower-camelcase keys and non-None values.."""
+    return {camelize(key): value
+            for key, value in kwargs.items()
+            if value is not None}

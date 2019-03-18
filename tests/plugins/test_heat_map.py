@@ -8,8 +8,8 @@ Test HeatMap
 from __future__ import (absolute_import, division, print_function)
 
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -25,7 +25,7 @@ def test_heat_map():
     m.add_child(hm)
     m._repr_html_()
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script import is present.
     script = '<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>'  # noqa
