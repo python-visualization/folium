@@ -52,8 +52,8 @@ def test_polylineoffset(offset):
     tmpl = Template(
         """
                 var {{this.get_name()}} = L.polyline(
-                    {{this.location}},
-                    {{ this.options }}
+                    {{this.location|tojson}},
+                    {{ this.options|tojson }}
                     )
                     .addTo({{this._parent.get_name()}});
             """
@@ -86,8 +86,8 @@ def test_polylineoffset_without_offset():
     tmpl = Template(
         """
                 var {{this.get_name()}} = L.polyline(
-                    {{this.location}},
-                    {{ this.options }}
+                    {{this.location|tojson}},
+                    {{ this.options|tojson }}
                     )
                     .addTo({{this._parent.get_name()}});
             """
