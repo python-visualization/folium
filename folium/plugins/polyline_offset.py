@@ -2,17 +2,14 @@
 
 from __future__ import absolute_import, division, print_function
 
-import json
-
 from branca.element import JavascriptLink
 
-from folium.vector_layers import path_options
 from folium.vector_layers import PolyLine
 
 
 class PolyLineOffset(PolyLine):
     """
-    Class adding offset capabilities to the PolyLine class.
+    Add offset capabilities to the PolyLine class.
 
     This plugin adds to folium Polylines the ability to be drawn with a
     relative pixel offset, without modifying their actual coordinates. The offset
@@ -40,31 +37,23 @@ class PolyLineOffset(PolyLine):
 
     Examples
     --------
-    >>> map = folium.Map(location=[58.0, -11.0],
-    ...                  zoom_start=4,
-    ...                  tiles="Mapbox Bright")
-    >>> ll = [ [58.44773, -28.65234], [53, -23.33496]]
-    >>> plugins.PolyLineOffset(ll, color="#f00", opacity=1, offset=-5).add_to(map)
-    >>> plugins.PolyLineOffset(ll, color="#080", opacity=1, offset=10).add_to(map)
+    >>> plugins.PolyLineOffset([[58, -28], [53, -23]], color="#f00", opacity=1, offset=-5).add_to(m)
+    >>> plugins.PolyLineOffset([[58, -28], [53, -23]], color="#080", opacity=1, offset=10).add_to(m)
 
     """
 
-    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+    def __init__(self, locations, popup=None, tooltip=None, offset=0, **kwargs):
         super(PolyLineOffset, self).__init__(
-            locations=locations, popup=popup, tooltip=tooltip
+            locations=locations, popup=popup, tooltip=tooltip, **kwargs
         )
         self._name = "PolyLineOffset"
-        # Polyline + PolyLineOffset defaults.
-        options = path_options(line=True, **kwargs)
-        options.update({"offset": kwargs.pop("offset", 0)})
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        # Add PolyLineOffset offset.
+        self.options.update({"offset": offset})
 
     def render(self, **kwargs):
         super(PolyLineOffset, self).render()
         figure = self.get_root()
         figure.header.add_child(
-            JavascriptLink(
-                "https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"
-            ),  # noqa
+            JavascriptLink("https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"),  # noqa
             name="polylineoffset",
         )

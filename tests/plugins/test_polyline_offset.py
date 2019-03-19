@@ -62,3 +62,37 @@ def test_polylineoffset(offset):
     expected_rendered = tmpl.render(this=polylineoffset)
     rendered = polylineoffset._template.module.script(polylineoffset)
     assert folium.utilities.compare_rendered(expected_rendered, rendered)
+
+
+def test_polylineoffset_without_offset():
+    m = folium.Map([20.0, 0.0], zoom_start=3)
+
+    locations = [
+        [59.355600, -31.99219],
+        [55.178870, -42.89062],
+    ]
+
+    polylineoffset = plugins.PolyLineOffset(locations=locations)
+    polylineoffset.add_to(m)
+
+    m._repr_html_()
+    out = m._parent.render()
+
+    # We verify that the script import is present.
+    script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"></script>'  # noqa
+    assert script in out
+
+    # We verify that the script part is correct.
+    tmpl = Template(
+        """
+                var {{this.get_name()}} = L.polyline(
+                    {{this.location}},
+                    {{ this.options }}
+                    )
+                    .addTo({{this._parent.get_name()}});
+            """
+    )  # noqa
+
+    expected_rendered = tmpl.render(this=polylineoffset)
+    rendered = polylineoffset._template.module.script(polylineoffset)
+    assert folium.utilities.compare_rendered(expected_rendered, rendered)
