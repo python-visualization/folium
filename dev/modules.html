@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>folium &#8212; Folium 0.8.3+13.g15a2e48 documentation</title>
+    <title>folium &#8212; Folium 0.8.3+16.g6e87811 documentation</title>
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+13.g15a2e48 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+16.g6e87811 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -414,7 +414,7 @@ popup text or Vincent visualization.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Marker (Northing, Easting)</li>
+<li><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em>) – Latitude and Longitude of Marker (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Label for the Marker; either an escaped HTML string to initialize
 folium.Popup or a folium.Popup instance.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
@@ -509,6 +509,14 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 <span id="vector-layers"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">Vector</span> <span class="pre">Layers</span></code><a class="headerlink" href="#module-folium.vector_layers" title="Permalink to this headline">¶</a></h1>
 <p>Wraps leaflet Polyline, Polygon, Rectangle, Circlem and CircleMarker</p>
 <dl class="class">
+<dt id="folium.vector_layers.BaseMultiLocation">
+<em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">BaseMultiLocation</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.BaseMultiLocation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Base class for vector classes with multiple coordinates.</p>
+<p>Not for direct consumption</p>
+</dd></dl>
+
+<dl class="class">
 <dt id="folium.vector_layers.Circle">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Circle</code><span class="sig-paren">(</span><em>location</em>, <em>radius</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Circle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
@@ -521,7 +529,7 @@ the poles (due to projection distortion).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
+<li><strong>location</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Latitude and Longitude pair (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
 <li><strong>radius</strong> (<em>float</em>) – Radius of the circle, in meters.</li>
@@ -545,7 +553,7 @@ the poles (due to projection distortion).</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
+<li><strong>location</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Latitude and Longitude pair (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
 <li><strong>radius</strong> (<em>float</em><em>, </em><em>default 10</em>) – Radius of the circle marker, in pixels.</li>
@@ -561,7 +569,7 @@ the poles (due to projection distortion).</p>
 <dl class="class">
 <dt id="folium.vector_layers.PolyLine">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">PolyLine</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.PolyLine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#folium.vector_layers.BaseMultiLocation" title="folium.vector_layers.BaseMultiLocation"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.BaseMultiLocation</span></code></a></p>
 <p>Draw polyline overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -588,7 +596,7 @@ and less means more accurate representation.</li>
 <dl class="class">
 <dt id="folium.vector_layers.Polygon">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Polygon</code><span class="sig-paren">(</span><em>locations</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#folium.vector_layers.BaseMultiLocation" title="folium.vector_layers.BaseMultiLocation"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.BaseMultiLocation</span></code></a></p>
 <p>Draw polygon overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -611,7 +619,7 @@ and less means more accurate representation.</li>
 <dl class="class">
 <dt id="folium.vector_layers.Rectangle">
 <em class="property">class </em><code class="descclassname">folium.vector_layers.</code><code class="descname">Rectangle</code><span class="sig-paren">(</span><em>bounds</em>, <em>popup=None</em>, <em>tooltip=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.vector_layers.Rectangle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#folium.vector_layers.BaseMultiLocation" title="folium.vector_layers.BaseMultiLocation"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.BaseMultiLocation</span></code></a></p>
 <p>Draw rectangle overlays on a map.</p>
 <p>See <a class="reference internal" href="#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -619,7 +627,7 @@ and less means more accurate representation.</li>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
+<li><strong>bounds</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</li>
 <li><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</li>
 <li><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</li>
 <li><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
@@ -1240,7 +1248,7 @@ a popup is shown that displays the latitude and longitude of the pointer.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Marker (Northing, Easting)</li>
+<li><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em>) – Latitude and Longitude of Marker (Northing, Easting)</li>
 <li><strong>number_of_sides</strong> (<em>int</em><em>, </em><em>default 4</em>) – Number of polygon sides</li>
 <li><strong>rotation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotation angle in degrees</li>
 <li><strong>radius</strong> (<em>int</em><em>, </em><em>default 15</em>) – Marker radius, in pixels</li>
@@ -1432,7 +1440,7 @@ Ex: ‘relative’, ‘absolute’</li>
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+13.g15a2e48 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+16.g6e87811 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer">
