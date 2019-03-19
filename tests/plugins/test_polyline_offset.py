@@ -9,8 +9,7 @@ from __future__ import absolute_import, division, print_function
 
 import folium
 from folium import plugins
-
-from jinja2 import Template
+from folium.utilities import normalize
 
 import pytest
 
@@ -49,28 +48,44 @@ def test_polylineoffset(offset):
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
-                var {{this.get_name()}} = L.polyline(
-                    {{this.location|tojson}},
-                    {{ this.options|tojson }}
-                    )
-                    .addTo({{this._parent.get_name()}});
-            """
-    )  # noqa
+    expected_rendered = """
+    var {name} = L.polyline(
+    {locations},
+    {{
+    "bubblingMouseEvents": true,
+    "color": "#3388ff",
+    "dashArray": null,
+    "dashOffset": null,
+    "fill": false,
+    "fillColor": "#3388ff",
+    "fillOpacity": 0.2,
+    "fillRule": "evenodd",
+    "lineCap": "round",
+    "lineJoin": "round",
+    "noClip": false,
+    "offset": {offset},
+    "opacity": 1.0,
+    "smoothFactor": 1.0,
+    "stroke": true,
+    "weight": 3
+    }}
+    )
+    .addTo({map});
+    """.format(
+        locations=locations,
+        name=polylineoffset.get_name(),
+        offset=offset,
+        map=m.get_name(),
+    )
 
-    expected_rendered = tmpl.render(this=polylineoffset)
     rendered = polylineoffset._template.module.script(polylineoffset)
-    assert folium.utilities.compare_rendered(expected_rendered, rendered)
+    assert normalize(expected_rendered) == normalize(rendered)
 
 
 def test_polylineoffset_without_offset():
     m = folium.Map([20.0, 0.0], zoom_start=3)
 
-    locations = [
-        [59.355600, -31.99219],
-        [55.178870, -42.89062],
-    ]
+    locations = [[59.355600, -31.99219], [55.178870, -42.89062]]
 
     polylineoffset = plugins.PolyLineOffset(locations=locations)
     polylineoffset.add_to(m)
@@ -83,16 +98,32 @@ def test_polylineoffset_without_offset():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
-                var {{this.get_name()}} = L.polyline(
-                    {{this.location|tojson}},
-                    {{ this.options|tojson }}
-                    )
-                    .addTo({{this._parent.get_name()}});
-            """
-    )  # noqa
+    expected_rendered = """
+    var {name} = L.polyline(
+    {locations},
+    {{
+    "bubblingMouseEvents": true,
+    "color": "#3388ff",
+    "dashArray": null,
+    "dashOffset": null,
+    "fill": false,
+    "fillColor": "#3388ff",
+    "fillOpacity": 0.2,
+    "fillRule": "evenodd",
+    "lineCap": "round",
+    "lineJoin": "round",
+    "noClip": false,
+    "offset": 0,
+    "opacity": 1.0,
+    "smoothFactor": 1.0,
+    "stroke": true,
+    "weight": 3
+    }}
+    )
+    .addTo({map});
+    """.format(
+        locations=locations, name=polylineoffset.get_name(), map=m.get_name()
+    )
 
-    expected_rendered = tmpl.render(this=polylineoffset)
     rendered = polylineoffset._template.module.script(polylineoffset)
-    assert folium.utilities.compare_rendered(expected_rendered, rendered)
+    assert normalize(expected_rendered) == normalize(rendered)
