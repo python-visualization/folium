@@ -12,12 +12,12 @@ from contextlib import contextmanager
 import copy
 import uuid
 import collections
-try:
-    from collections import abc
-except ImportError:
-    import collections as abc
 
 import numpy as np
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
 
 from six import binary_type, text_type
 from six.moves.urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
@@ -27,56 +27,87 @@ _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
 
 
-def _is_sized_iterable(arg):
-    """Validates the arg is Sized & Iterable"""
-    return isinstance(arg, abc.Sized) & isinstance(arg, abc.Iterable)
+def validate_location(location):  # noqa: C901
+    """Validate a single lat/lon coordinate pair and convert to a list
 
+    Validate that location:
+    * is a sized variable
+    * with size 2
+    * allows indexing (i.e. has an ordering)
+    * where both values are floats (or convertible to float)
+    * and both values are not NaN
 
-def _validate_location(location):
-    """Validates and formats location values before setting."""
-    if not _is_sized_iterable(location):
-        raise TypeError('Expected a collection object for location, got '
-                        '{!r}'.format(location))
+    Returns
+    -------
+    list[float, float]
+
+    """
+    if isinstance(location, np.ndarray) \
+            or (pd is not None and isinstance(location, pd.DataFrame)):
+        location = np.squeeze(location).tolist()
+    if not hasattr(location, '__len__'):
+        raise TypeError('Location should be a sized variable, '
+                        'for example a list or a tuple, instead got '
+                        '{!r} of type {}.'.format(location, type(location)))
     if len(location) != 2:
-        raise ValueError('Expected two values for location [lat, lon], '
-                         'got {}'.format(len(location)))
-    if _isnan(location):
-        raise ValueError('Location values cannot contain NaNs, '
-                         'got {!r}'.format(location))
+        raise ValueError('Expected two (lat, lon) values for location, '
+                         'instead got: {!r}.'.format(location))
+    try:
+        coords = (location[0], location[1])
+    except (TypeError, KeyError):
+        raise TypeError('Location should support indexing, like a list or '
+                        'a tuple does, instead got {!r} of type {}.'
+                        .format(location, type(location)))
+    for coord in coords:
+        try:
+            float(coord)
+        except (TypeError, ValueError):
+            raise ValueError('Location should consist of two numerical values, '
+                             'but {!r} of type {} is not convertible to float.'
+                             .format(coord, type(coord)))
+        if math.isnan(float(coord)):
+            raise ValueError('Location values cannot contain NaNs.')
+    return [float(x) for x in coords]
 
-    location = _iter_tolist(location)
-    return location
 
+def validate_locations(locations):
+    """Validate an iterable with multiple lat/lon coordinate pairs.
 
-def _validate_coordinates(coordinates):
-    """Validates multiple coordinates for the various markers in folium."""
-    if _isnan(coordinates):
-        raise ValueError('Location values cannot contain NaNs, '
-                         'got:\n{!r}'.format(coordinates))
-    coordinates = _iter_tolist(coordinates)
-    return coordinates
+    Returns
+    -------
+    list[list[float, float]] or list[list[list[float, float]]]
 
-
-def _iter_tolist(x):
-    """Transforms recursively a list of iterables into a list of list."""
-    if hasattr(x, '__iter__'):
-        return list(map(_iter_tolist, x))
+    """
+    locations = if_pandas_df_convert_to_numpy(locations)
+    try:
+        iter(locations)
+    except TypeError:
+        raise TypeError('Locations should be an iterable with coordinate pairs,'
+                        ' but instead got {!r}.'.format(locations))
+    try:
+        next(iter(locations))
+    except StopIteration:
+        raise ValueError('Locations is empty.')
+    try:
+        float(next(iter(next(iter(next(iter(locations)))))))
+    except (TypeError, StopIteration):
+        # locations is a list of coordinate pairs
+        return [validate_location(coord_pair) for coord_pair in locations]
     else:
-        return x
+        # locations is a list of a list of coordinate pairs, recurse
+        return [validate_locations(lst) for lst in locations]
 
 
-def _flatten(container):
-    for i in container:
-        if _is_sized_iterable(i):
-            for j in _flatten(i):
-                yield j
-        else:
-            yield i
+def if_pandas_df_convert_to_numpy(obj):
+    """Return a Numpy array from a Pandas dataframe.
 
-
-def _isnan(values):
-    """Check if there are NaNs values in the iterable."""
-    return any(math.isnan(value) for value in _flatten(values))
+    Iterating over a DataFrame has weird side effects, such as the first
+    row being the column names. Converting to Numpy is more safe.
+    """
+    if pd is not None and isinstance(obj, pd.DataFrame):
+        return obj.values
+    else:
+        return obj
 
 
 def image_to_url(image, colormap=None, origin='upper'):
@@ -407,12 +438,16 @@ def compare_rendered(obj1, obj2):
     two folium map objects are the equal or not.
 
     """
-    return _normalize(obj1) == _normalize(obj2)
+    return normalize(obj1) == normalize(obj2)
 
 
-def _normalize(rendered):
-    """Return the input string as a list of stripped lines."""
-    return [line.strip() for line in rendered.splitlines() if line.strip()]
+def normalize(rendered):
+    """Return the input string without non-functional spaces or newlines."""
+    out = ''.join([line.strip()
+                   for line in rendered.splitlines()
+                   if line.strip()])
+    out = out.replace(', ', ',')
+    return out
 
 
 @contextmanager
@@ -452,3 +487,10 @@ def get_obj_in_upper_tree(element, cls):
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
     return parent
+
+
+def parse_options(**kwargs):
+    """Return a dict with lower-camelcase keys and non-None values.."""
+    return {camelize(key): value
+            for key, value in kwargs.items()
+            if value is not None}

@@ -21,7 +21,6 @@ class FeatureGroupSubGroup(Layer):
     ----------
     group : Layer
         The MarkerCluster or FeatureGroup containing this subgroup.
-
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -59,11 +58,13 @@ class FeatureGroupSubGroup(Layer):
     >>> folium.LayerControl().add_to(m)
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.featureGroup.subGroup({{this._group.get_name()}});
-            {{this.get_name()}}.addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.featureGroup.subGroup(
+                {{ this._group.get_name() }}
+            );
+            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, group, name=None, overlay=True, control=True, show=True):
         super(FeatureGroupSubGroup, self).__init__(name=name, overlay=overlay,

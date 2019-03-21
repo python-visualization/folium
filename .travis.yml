@@ -15,8 +15,6 @@ env:
 matrix:
   fast_finish: true
   include:
-  - name: legacy-python
-    env: PY=2.7
   - name: default
     env: PY=3.7
   - name: notebooks-conding-standard
@@ -42,6 +40,7 @@ before_install:
     conda config --add channels conda-forge --force
     conda install pycryptosat
     conda config --set channel_priority strict
+    conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
   # Install firefox headless driver.
@@ -62,11 +61,6 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
-    fi
-
-  - if [[ $TRAVIS_JOB_NAME == 'legacy-python' ]]; then
-      conda install mock ;
       pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 

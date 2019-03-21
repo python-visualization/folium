@@ -4,6 +4,8 @@ from __future__ import (absolute_import, division, print_function)
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
+from folium.utilities import parse_options
+
 from jinja2 import Template
 
 
@@ -14,44 +16,41 @@ class Fullscreen(MacroElement):
     Parameters
     ----------
     position : str
-          change the position of the button can be:
-          'topleft', 'topright', 'bottomright' or 'bottomleft'
-          default: 'topleft'
+        change the position of the button can be:
+        'topleft', 'topright', 'bottomright' or 'bottomleft'
+        default: 'topleft'
     title : str
-          change the title of the button,
-          default: 'Full Screen'
+        change the title of the button,
+        default: 'Full Screen'
     title_cancel : str
-          change the title of the button when fullscreen is on,
-          default: 'Exit Full Screen'
-    force_separate_button : boolean
-          force seperate button to detach from zoom buttons,
-          default: False
+        change the title of the button when fullscreen is on,
+        default: 'Exit Full Screen'
+    force_separate_button : bool, default False
+        force seperate button to detach from zoom buttons,
+
     See https://github.com/brunob/leaflet.fullscreen for more information.
 
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            L.control.fullscreen({
-                position: '{{this.position}}',
-                title: '{{this.title}}',
-                titleCancel: '{{this.title_cancel}}',
-                forceSeparateButton: {{this.force_separate_button}},
-                }).addTo({{this._parent.get_name()}});
-            {{this._parent.get_name()}}.on('enterFullscreen', function(){
-                console.log('entered fullscreen');
-            });
-
+            L.control.fullscreen(
+                {{ this.options|tojson }}
+            ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
 
     def __init__(self, position='topleft', title='Full Screen',
-                 title_cancel='Exit Full Screen', force_separate_button=False):
+                 title_cancel='Exit Full Screen', force_separate_button=False,
+                 **kwargs):
         super(Fullscreen, self).__init__()
         self._name = 'Fullscreen'
-        self.position = position
-        self.title = title
-        self.title_cancel = title_cancel
-        self.force_separate_button = str(force_separate_button).lower()
+        self.options = parse_options(
+            position=position,
+            title=title,
+            title_cancel=title_cancel,
+            force_separate_button=force_separate_button,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         super(Fullscreen, self).render()

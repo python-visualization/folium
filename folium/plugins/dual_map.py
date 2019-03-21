@@ -16,6 +16,8 @@ class DualMap(MacroElement):
 
     Parameters
     ----------
+    location: tuple or list, optional
+        Latitude and longitude of center point of the maps.
     layout : {'horizontal', 'vertical'}
         Select how the two maps should be positioned. Either horizontal (left
         and right) or vertical (top and bottom).
@@ -37,8 +39,8 @@ class DualMap(MacroElement):
 
     _template = Template("""
         {% macro script(this, kwargs) %}
-        {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
-        {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
+            {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
+            {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
         {% endmacro %}
     """)
 

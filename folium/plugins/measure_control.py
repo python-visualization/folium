@@ -2,35 +2,32 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
 
 class MeasureControl(MacroElement):
-    """
-    Adds a measurem widget on the map.
+    """ Add a measurement widget on the map.
 
     Parameters
     ----------
-    position: location of the widget
-        default is 'topright'.
-
-    primary_length_unit and secondary_length_unit: length units
-         defaults are 'meters' and 'miles' respectively.
-
-    primary_area_unit and secondary_area_unit: ara units
-        defaults are 'sqmeters' and 'acres' respectively.
+    position: str, default 'topright'
+        Location of the widget.
+    primary_length_unit: str, default 'meters'
+    secondary_length_unit: str, default 'miles'
+    primary_area_unit: str, default 'sqmeters'
+    secondary_area_unit: str, default 'acres'
 
     See https://github.com/ljagis/leaflet-measure for more information.
 
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.Control.Measure(
-            {{ this.options }});
+            var {{ this.get_name() }} = new L.Control.Measure(
+                {{ this.options|tojson }});
             {{this._parent.get_name()}}.addControl({{this.get_name()}});
 
         {% endmacro %}
@@ -38,19 +35,19 @@ class MeasureControl(MacroElement):
 
     def __init__(self, position='topright', primary_length_unit='meters',
                  secondary_length_unit='miles', primary_area_unit='sqmeters',
-                 secondary_area_unit='acres'):
-        """Coordinate, linear, and area measure control"""
+                 secondary_area_unit='acres', **kwargs):
+
         super(MeasureControl, self).__init__()
         self._name = 'MeasureControl'
 
-        options = {
-            'position': position,
-            'primaryLengthUnit': primary_length_unit,
-            'secondaryLengthUnit': secondary_length_unit,
-            'primaryAreaUnit': primary_area_unit,
-            'secondaryAreaUnit': secondary_area_unit,
-        }
-        self.options = json.dumps(options)
+        self.options = parse_options(
+            position=position,
+            primary_length_unit=primary_length_unit,
+            secondary_length_unit=secondary_length_unit,
+            primary_area_unit=primary_area_unit,
+            secondary_area_unit=secondary_area_unit,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         super(MeasureControl, self).render()

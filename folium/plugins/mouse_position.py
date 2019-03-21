@@ -2,9 +2,9 @@
 
 from __future__ import (absolute_import, division, print_function)
 
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
@@ -45,32 +45,33 @@ class MousePosition(MacroElement):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-
-        var {{ this.get_name() }} = new L.Control.MousePosition(
-            {{ this.options }});
-        {{ this.get_name() }}.options["latFormatter"] = {{ this.lat_formatter }};
-        {{ this.get_name() }}.options["lngFormatter"] = {{ this.lng_formatter }};
-        {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
-
+            var {{ this.get_name() }} = new L.Control.MousePosition(
+                {{ this.options|tojson }}
+            );
+            {{ this.get_name() }}.options["latFormatter"] =
+                {{ this.lat_formatter }};
+            {{ this.get_name() }}.options["lngFormatter"] =
+                {{ this.lng_formatter }};
+            {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
         {% endmacro %}
-    """)  # noqa
+    """)
 
     def __init__(self, position='bottomright', separator=' : ',
                  empty_string='Unavailable', lng_first=False, num_digits=5,
-                 prefix='', lat_formatter=None, lng_formatter=None):
+                 prefix='', lat_formatter=None, lng_formatter=None, **kwargs):
 
         super(MousePosition, self).__init__()
         self._name = 'MousePosition'
 
-        options = {
-            'position': position,
-            'separator': separator,
-            'emptyString': empty_string,
-            'lngFirst': lng_first,
-            'numDigits': num_digits,
-            'prefix': prefix,
-        }
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.options = parse_options(
+            position=position,
+            separator=separator,
+            empty_string=empty_string,
+            lng_first=lng_first,
+            num_digits=num_digits,
+            prefix=prefix,
+            **kwargs
+        )
         self.lat_formatter = lat_formatter or 'undefined'
         self.lng_formatter = lng_formatter or 'undefined'
 

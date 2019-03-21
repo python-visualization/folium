@@ -2,11 +2,10 @@
 
 from __future__ import absolute_import, division, print_function
 
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink
 
-from folium.map import Icon, Layer, Marker, Popup
+from folium.map import Layer, Marker
+from folium.utilities import validate_locations, parse_options
 
 from jinja2 import Template
 
@@ -50,43 +49,38 @@ class MarkerCluster(Layer):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.markerClusterGroup({{ this.options }});
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.markerClusterGroup(
+                {{ this.options|tojson }}
+            );
             {%- if this.icon_create_function is not none %}
             {{ this.get_name() }}.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};
             {%- endif %}
-            {{this._parent.get_name()}}.addLayer({{this.get_name()}});
-            {% endmacro %}
-            """)
+            {{ this._parent.get_name() }}.addLayer({{ this.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
-                 icon_create_function=None, options=None):
+                 icon_create_function=None, options=None, **kwargs):
+        if options is not None:
+            kwargs.update(options)  # options argument is legacy
         super(MarkerCluster, self).__init__(name=name, overlay=overlay,
                                             control=control, show=show)
         self._name = 'MarkerCluster'
 
         if locations is not None:
-            if popups is None:
-                popups = [None] * len(locations)
-            if icons is None:
-                icons = [None] * len(locations)
-            for location, popup, icon in zip(locations, popups, icons):
-                p = popup if self._validate(popup, Popup) else Popup(popup)
-                i = icon if self._validate(icon, Icon) else Icon(icon)
-                self.add_child(Marker(location, popup=p, icon=i))
+            locations = validate_locations(locations)
+            for i, location in enumerate(locations):
+                self.add_child(Marker(location,
+                                      popup=popups and popups[i],
+                                      icon=icons and icons[i]))
 
-        options = {} if options is None else options
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.options = parse_options(**kwargs)
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function
-
-    @staticmethod
-    def _validate(obj, cls):
-        """Check whether the given object is from the given class or is None."""
-        return True if obj is None or isinstance(obj, cls) else False
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)

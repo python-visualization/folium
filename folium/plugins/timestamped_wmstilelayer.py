@@ -6,6 +6,7 @@ from branca.element import CssLink, Figure, JavascriptLink
 
 from folium.map import Layer
 from folium.raster_layers import WmsTileLayer
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
@@ -46,7 +47,7 @@ class TimestampedWmsTileLayers(Layer):
 
     Examples
     --------
-    >>> w0 = features.WmsTileLayer(
+    >>> w0 = WmsTileLayer(
     ...          'http://this.wms.server/ncWMS/wms',
     ...          name='Test WMS Data',
     ...          styles='',
@@ -56,7 +57,7 @@ class TimestampedWmsTileLayers(Layer):
     ...          COLORSCALERANGE='0,10',
     ...)
     >>> w0.add_to(m)
-    >>> w1 = features.WmsTileLayer(
+    >>> w1 = WmsTileLayer(
     ...          'http://this.wms.server/ncWMS/wms',
     ...          name='Test WMS Data',
     ...          styles='',
@@ -67,7 +68,7 @@ class TimestampedWmsTileLayers(Layer):
     ...)
     >>> w1.add_to(m)
     >>> # Add WmsTileLayers to time control.
-    >>> time = plugins.TimestampedWmsTileLayers([w0, w1])
+    >>> time = TimestampedWmsTileLayers([w0, w1])
     >>> time.add_to(m)
 
     See https://github.com/socib/Leaflet.TimeDimension for more information.
@@ -75,27 +76,25 @@ class TimestampedWmsTileLayers(Layer):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({
-                period:"{{this.period}}",
-                {% if this.time_interval %}
-                timeInterval: "{{ this.time_interval }}",
-                {% endif %}
-                });
-            {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
-                position: 'bottomleft',
-                autoPlay: {{'true' if this.auto_play else 'false'}},
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}}}
-                    });
-            {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+            {{ this._parent.get_name() }}.timeDimension = L.timeDimension(
+                {{ this.options|tojson }}
+            );
+            {{ this._parent.get_name() }}.timeDimensionControl =
+                L.control.timeDimension(
+                    {{ this.options_control|tojson }}
+                );
+            {{ this._parent.get_name() }}.addControl(
+                {{ this._parent.get_name() }}.timeDimensionControl
+            );
 
             {% for layer in this.layers %}
-            var {{ layer.get_name() }} = L.timeDimension.layer.wms({{ layer.get_name() }},
-                {updateTimeDimension: false,
-                 wmsVersion: '{{ layer.version }}',
+            var {{ layer.get_name() }} = L.timeDimension.layer.wms(
+                {{ layer.get_name() }},
+                {
+                    updateTimeDimension: false,
+                    wmsVersion: {{ layer.options['version']|tojson }},
                 }
-                ).addTo({{this._parent.get_name()}});
+            ).addTo({{ this._parent.get_name() }});
             {% endfor %}
         {% endmacro %}
         """)
@@ -108,12 +107,18 @@ class TimestampedWmsTileLayers(Layer):
                                                        control=control,
                                                        show=show)
         self._name = 'TimestampedWmsTileLayers'
-
-        self.transition_time = int(transition_time)
-        self.loop = bool(loop)
-        self.auto_play = bool(auto_play)
-        self.period = period
-        self.time_interval = time_interval
+        self.options = parse_options(
+            period=period,
+            time_interval=time_interval,
+        )
+        self.options_control = parse_options(
+            position='bottomleft',
+            auto_play=auto_play,
+            player_options={
+                'transitionTime': int(transition_time),
+                'loop': loop,
+            },
+        )
         if isinstance(data, WmsTileLayer):
             self.layers = [data]
         else:
