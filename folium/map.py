@@ -220,7 +220,7 @@ class Icon(MacroElement):
             warnings.warn('color argument of Icon should be one of: {}.'
                           .format(self.color_options), stacklevel=2)
         self.options = parse_options(
-            color=color,
+            marker_color=color,
             icon_color=icon_color,
             icon=icon,
             prefix=prefix,
