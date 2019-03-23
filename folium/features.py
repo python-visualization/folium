@@ -34,8 +34,6 @@ import numpy as np
 
 import requests
 
-from six import binary_type, text_type
-
 
 class RegularPolygonMarker(Marker):
     """
@@ -134,7 +132,7 @@ class Vega(Element):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         # Size Parameters.
@@ -226,7 +224,7 @@ class VegaLite(Element):
         super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         self.json = json.dumps(self.data)
@@ -473,7 +471,7 @@ class GeoJson(Layer):
         if isinstance(data, dict):
             self.embed = True
             return data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
+        elif isinstance(data, str):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 if not self.embed:
                     self.embed_link = data

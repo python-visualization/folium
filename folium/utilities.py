@@ -10,15 +10,13 @@ from contextlib import contextmanager
 import copy
 import uuid
 import collections
+from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
 try:
     import pandas as pd
 except ImportError:
     pd = None
-
-from six import binary_type, text_type
-from six.moves.urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
@@ -130,7 +128,7 @@ def image_to_url(image, colormap=None, origin='upper'):
         0. and 1.  You can use colormaps from `matplotlib.cm`.
 
     """
-    if isinstance(image, (text_type, binary_type)) and not _is_url(image):
+    if isinstance(image, str) and not _is_url(image):
         fileformat = os.path.splitext(image)[-1][1:]
         with io.open(image, 'rb') as f:
             img = f.read()

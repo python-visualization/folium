@@ -12,8 +12,6 @@ from folium.utilities import image_to_url, mercator_transform, parse_options
 
 from jinja2 import Environment, PackageLoader, Template
 
-from six import binary_type, text_type
-
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
@@ -120,8 +118,6 @@ class TileLayer(Layer):
             self.tiles = tiles
             if not attr:
                 raise ValueError('Custom tiles must have an attribution.')
-            if isinstance(attr, binary_type):
-                attr = text_type(attr, 'utf8')
             self.attr = attr
 
 

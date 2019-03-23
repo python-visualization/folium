@@ -15,8 +15,6 @@ from folium.utilities import validate_location, camelize, parse_options
 
 from jinja2 import Template
 
-from six import binary_type, text_type
-
 
 class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
@@ -342,8 +340,8 @@ class Popup(Element):
 
         if isinstance(html, Element):
             self.html.add_child(html)
-        elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_child(Html(text_type(html), script=script))
+        elif isinstance(html, str):
+            self.html.add_child(Html(html, script=script))
 
         self.show = show
         self.options = parse_options(
