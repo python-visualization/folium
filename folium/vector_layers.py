@@ -5,8 +5,6 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circlem and CircleMarker
 
 """
 
-from __future__ import absolute_import, division, print_function
-
 from branca.element import MacroElement
 
 from folium.map import Marker, Popup, Tooltip

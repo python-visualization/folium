@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.utilities import validate_location, if_pandas_df_convert_to_numpy
 

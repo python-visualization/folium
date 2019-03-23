@@ -5,8 +5,6 @@ Classes for drawing maps.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from collections import OrderedDict
 
 import warnings
