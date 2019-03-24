@@ -3,7 +3,7 @@
 from __future__ import (absolute_import, division, print_function)
 
 from folium.plugins.marker_cluster import MarkerCluster
-from folium.utilities import validate_location, if_pandas_df_convert_to_numpy
+from folium.utilities import if_pandas_df_convert_to_numpy, validate_location
 
 from jinja2 import Template
 
@@ -38,6 +38,9 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    icon_create_function : string, default None
+        Override the default behaviour, making possible to customize
+        markers colors and sizes.
     **kwargs
         Additional arguments are passed to Leaflet.markercluster options. See
         https://github.com/Leaflet/Leaflet.markercluster
@@ -50,6 +53,10 @@ class FastMarkerCluster(MarkerCluster):
 
                 var data = {{ this.data|tojson }};
                 var cluster = L.markerClusterGroup({{ this.options|tojson }});
+                {%- if this.icon_create_function is not none %}
+                cluster.options.iconCreateFunction =
+                    {{ this.icon_create_function.strip() }};
+                {%- endif %}
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -63,11 +70,12 @@ class FastMarkerCluster(MarkerCluster):
         {% endmacro %}""")
 
     def __init__(self, data, callback=None, options=None,
-                 name=None, overlay=True, control=True, show=True, **kwargs):
+                 name=None, overlay=True, control=True, show=True, icon_create_function=None, **kwargs):
         if options is not None:
             kwargs.update(options)  # options argument is legacy
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
                                                 control=control, show=show,
+                                                icon_create_function=icon_create_function,
                                                 **kwargs)
         self._name = 'FastMarkerCluster'
         data = if_pandas_df_convert_to_numpy(data)
