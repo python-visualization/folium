@@ -5,8 +5,6 @@ Classes for drawing maps.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from collections import OrderedDict
 
 import warnings
@@ -16,8 +14,6 @@ from branca.element import Element, Figure, Html, MacroElement
 from folium.utilities import validate_location, camelize, parse_options
 
 from jinja2 import Template
-
-from six import binary_type, text_type
 
 
 class Layer(MacroElement):
@@ -344,8 +340,8 @@ class Popup(Element):
 
         if isinstance(html, Element):
             self.html.add_child(html)
-        elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_child(Html(text_type(html), script=script))
+        elif isinstance(html, str):
+            self.html.add_child(Html(html, script=script))
 
         self.show = show
         self.options = parse_options(
