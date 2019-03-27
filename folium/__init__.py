@@ -67,7 +67,7 @@ if sys.version_info < (3, 0):
     
     - Install an older version of folium:
     
-     $ pip install 'folium<9.0'
+     $ pip install 'folium<0.9.0'
     
     """.format(__version__))  # noqa
 
