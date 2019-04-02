@@ -6,8 +6,6 @@ Folium Tests
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 import os
 
@@ -24,8 +22,6 @@ import numpy as np
 import pandas as pd
 
 import pytest
-
-from six import PY3
 
 try:
     from unittest import mock
@@ -295,20 +291,7 @@ class TestFolium(object):
                     for child in self.m._children.values()])
 
     def test_tile_attr_unicode(self):
-        """Test tile attribution unicode
-
-        Test does not cover b'юникод'
-        because for python 3 bytes can only contain ASCII literal characters.
-        """
-
-        if not PY3:
-            m = folium.Map(location=[45.5236, -122.6750],
-                           tiles='test', attr=b'unicode')
-            m._parent.render()
-        else:
-            m = folium.Map(location=[45.5236, -122.6750],
-                           tiles='test', attr=u'юникод')
-            m._parent.render()
+        """Test tile attribution unicode"""
         m = folium.Map(location=[45.5236, -122.6750],
                        tiles='test', attr='юникод')
         m._parent.render()

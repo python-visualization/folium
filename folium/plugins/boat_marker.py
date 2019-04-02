@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Marker
-from folium.utilities import _validate_location, parse_options
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
@@ -50,7 +48,7 @@ class BoatMarker(Marker):
     def __init__(self, location, popup=None, icon=None,
                  heading=0, wind_heading=None, wind_speed=0, **kwargs):
         super(BoatMarker, self).__init__(
-            _validate_location(location),
+            location,
             popup=popup,
             icon=icon
         )

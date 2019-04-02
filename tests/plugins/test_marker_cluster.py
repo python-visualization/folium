@@ -5,8 +5,6 @@ Test MarkerCluster
 ------------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
 from folium import plugins
 from folium.utilities import normalize
@@ -22,7 +20,7 @@ def test_marker_cluster():
     data = np.array([
         np.random.uniform(low=35, high=60, size=N),   # Random latitudes.
         np.random.uniform(low=-12, high=30, size=N),  # Random longitudes.
-        ]).T
+    ]).T
     m = folium.Map([45., 3.], zoom_start=4)
     mc = plugins.MarkerCluster(data).add_to(m)
 

@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, division, print_function
-
 from branca.element import CssLink, Figure, JavascriptLink
 
-from folium.map import Icon, Layer, Marker, Popup
-from folium.utilities import parse_options
+from folium.map import Layer, Marker
+from folium.utilities import validate_locations, parse_options
 
 from jinja2 import Template
 
@@ -71,24 +69,16 @@ class MarkerCluster(Layer):
         self._name = 'MarkerCluster'
 
         if locations is not None:
-            if popups is None:
-                popups = [None] * len(locations)
-            if icons is None:
-                icons = [None] * len(locations)
-            for location, popup, icon in zip(locations, popups, icons):
-                p = popup if self._validate(popup, Popup) else Popup(popup)
-                i = icon if self._validate(icon, Icon) else Icon(icon)
-                self.add_child(Marker(location, popup=p, icon=i))
+            locations = validate_locations(locations)
+            for i, location in enumerate(locations):
+                self.add_child(Marker(location,
+                                      popup=popups and popups[i],
+                                      icon=icons and icons[i]))
 
         self.options = parse_options(**kwargs)
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function
-
-    @staticmethod
-    def _validate(obj, cls):
-        """Check whether the given object is from the given class or is None."""
-        return True if obj is None or isinstance(obj, cls) else False
 
     def render(self, **kwargs):
         super(MarkerCluster, self).render(**kwargs)

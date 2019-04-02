@@ -5,8 +5,6 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 import warnings
 import functools
@@ -19,7 +17,7 @@ from branca.utilities import color_brewer
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import (
-    _iter_tolist,
+    validate_locations,
     _parse_size,
     get_bounds,
     image_to_url,
@@ -36,8 +34,6 @@ import numpy as np
 
 import requests
 
-from six import binary_type, text_type
-
 
 class RegularPolygonMarker(Marker):
     """
@@ -45,7 +41,7 @@ class RegularPolygonMarker(Marker):
 
     Parameters
     ----------
-    location: tuple or list, default None
+    location: tuple or list
         Latitude and Longitude of Marker (Northing, Easting)
     number_of_sides: int, default 4
         Number of polygon sides
@@ -75,7 +71,7 @@ class RegularPolygonMarker(Marker):
     def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
                  popup=None, tooltip=None, **kwargs):
         super(RegularPolygonMarker, self).__init__(
-            _iter_tolist(location),
+            location,
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
@@ -136,7 +132,7 @@ class Vega(Element):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         # Size Parameters.
@@ -228,7 +224,7 @@ class VegaLite(Element):
         super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         self.json = json.dumps(self.data)
@@ -475,7 +471,7 @@ class GeoJson(Layer):
         if isinstance(data, dict):
             self.embed = True
             return data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
+        elif isinstance(data, str):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 if not self.embed:
                     self.embed_link = data
@@ -1357,6 +1353,7 @@ class ColorLine(FeatureGroup):
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)
         self._name = 'ColorLine'
+        positions = validate_locations(positions)
 
         if colormap is None:
             cm = LinearColormap(['green', 'yellow', 'red'],

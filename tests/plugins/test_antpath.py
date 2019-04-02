@@ -5,8 +5,6 @@ Test AntPath
 -------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
 from folium import plugins
 from folium.utilities import normalize
@@ -39,7 +37,6 @@ def test_antpath():
     antpath = plugins.AntPath(locations=locations)
     antpath.add_to(m)
 
-    m._repr_html_()
     out = m._parent.render()
 
     # We verify that the script import is present.
@@ -49,7 +46,7 @@ def test_antpath():
     # We verify that the script part is correct.
     tmpl = Template("""
           {{this.get_name()}} = L.polyline.antPath(
-                  {{ this.location|tojson }},
+                  {{ this.locations|tojson }},
                   {{ this.options|tojson }}
                 )
                 .addTo({{this._parent.get_name()}});

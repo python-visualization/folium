@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from folium.plugins.marker_cluster import MarkerCluster
-from folium.utilities import _validate_coordinates
+from folium.utilities import if_pandas_df_convert_to_numpy, validate_location
 
 from jinja2 import Template
 
@@ -22,14 +20,15 @@ class FastMarkerCluster(MarkerCluster):
 
     Parameters
     ----------
-    data: list
-        List of list of shape [[], []]. Data points should be of
-        the form [[lat, lng]].
-    callback: string, default None
+    data: list of list with values
+        List of list of shape [[lat, lon], [lat, lon], etc.]
+        When you use a custom callback you could add more values after the
+        lat and lon. E.g. [[lat, lon, 'red'], [lat, lon, 'blue']]
+    callback: string, optional
         A string representation of a valid Javascript function
-        that will be passed a lat, lon coordinate pair. See the
+        that will be passed each row in data. See the
         FasterMarkerCluster for an example of a custom callback.
-    name : string, default None
+    name : string, optional
         The name of the Layer, as it will appear in LayerControls.
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
@@ -37,18 +36,25 @@ class FastMarkerCluster(MarkerCluster):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+    icon_create_function : string, default None
+        Override the default behaviour, making possible to customize
+        markers colors and sizes.
     **kwargs
-        Additional arguments are passed to Leaflet.markercluster. See
-        https://github.com/Leaflet/Leaflet.markercluster for options.
+        Additional arguments are passed to Leaflet.markercluster options. See
+        https://github.com/Leaflet/Leaflet.markercluster
 
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = (function(){
-                {{ this._callback }}
+                {{ this.callback }}
 
-                var data = {{ this._data|tojson }};
+                var data = {{ this.data|tojson }};
                 var cluster = L.markerClusterGroup({{ this.options|tojson }});
+                {%- if this.icon_create_function is not none %}
+                cluster.options.iconCreateFunction =
+                    {{ this.icon_create_function.strip() }};
+                {%- endif %}
 
                 for (var i = 0; i < data.length; i++) {
                     var row = data[i];
@@ -62,17 +68,20 @@ class FastMarkerCluster(MarkerCluster):
         {% endmacro %}""")
 
     def __init__(self, data, callback=None, options=None,
-                 name=None, overlay=True, control=True, show=True, **kwargs):
+                 name=None, overlay=True, control=True, show=True, icon_create_function=None, **kwargs):
         if options is not None:
             kwargs.update(options)  # options argument is legacy
         super(FastMarkerCluster, self).__init__(name=name, overlay=overlay,
                                                 control=control, show=show,
+                                                icon_create_function=icon_create_function,
                                                 **kwargs)
         self._name = 'FastMarkerCluster'
-        self._data = _validate_coordinates(data)
+        data = if_pandas_df_convert_to_numpy(data)
+        self.data = [[*validate_location(row[:2]), *row[2:]]  # noqa: E999
+                     for row in data]
 
         if callback is None:
-            self._callback = """
+            self.callback = """
                 var callback = function (row) {
                     var icon = L.AwesomeMarkers.icon();
                     var marker = L.marker(new L.LatLng(row[0], row[1]));
@@ -80,4 +89,4 @@ class FastMarkerCluster(MarkerCluster):
                     return marker;
                 };"""
         else:
-            self._callback = 'var callback = {};'.format(callback)
+            self.callback = 'var callback = {};'.format(callback)

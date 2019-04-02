@@ -5,24 +5,15 @@ Classes for drawing maps.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from collections import OrderedDict
 
 import warnings
 
-from branca.element import CssLink, Element, Figure, Html, JavascriptLink, MacroElement  # noqa
+from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import (
-    _validate_coordinates,
-    camelize,
-    get_bounds,
-    parse_options,
-)
+from folium.utilities import validate_location, camelize, parse_options
 
 from jinja2 import Template
-
-from six import binary_type, text_type
 
 
 class Layer(MacroElement):
@@ -225,7 +216,7 @@ class Icon(MacroElement):
             warnings.warn('color argument of Icon should be one of: {}.'
                           .format(self.color_options), stacklevel=2)
         self.options = parse_options(
-            color=color,
+            marker_color=color,
             icon_color=icon_color,
             icon=icon,
             prefix=prefix,
@@ -241,7 +232,7 @@ class Marker(MacroElement):
 
     Parameters
     ----------
-    location: tuple or list, default None
+    location: tuple or list
         Latitude and Longitude of Marker (Northing, Easting)
     popup: string or folium.Popup, default None
         Label for the Marker; either an escaped HTML string to initialize
@@ -278,7 +269,7 @@ class Marker(MacroElement):
                  draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = _validate_coordinates(location)
+        self.location = validate_location(location)
         self.options = parse_options(
             draggable=draggable or None,
             autoPan=draggable or None,
@@ -286,22 +277,19 @@ class Marker(MacroElement):
         )
         if icon is not None:
             self.add_child(icon)
-        if isinstance(popup, text_type) or isinstance(popup, binary_type):
-            self.add_child(Popup(popup))
-        elif popup is not None:
-            self.add_child(popup)
-        if isinstance(tooltip, Tooltip):
-            self.add_child(tooltip)
-        elif tooltip is not None:
-            self.add_child(Tooltip(tooltip.__str__()))
+        if popup is not None:
+            self.add_child(popup if isinstance(popup, Popup)
+                           else Popup(str(popup)))
+        if tooltip is not None:
+            self.add_child(tooltip if isinstance(tooltip, Tooltip)
+                           else Tooltip(str(tooltip)))
 
     def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]].
+        """Computes the bounds of the object itself.
 
+        Because a marker has only single coordinates, we repeat them.
         """
-        return get_bounds(self.location)
+        return [self.location, self.location]
 
 
 class Popup(Element):
@@ -352,8 +340,8 @@ class Popup(Element):
 
         if isinstance(html, Element):
             self.html.add_child(html)
-        elif isinstance(html, text_type) or isinstance(html, binary_type):
-            self.html.add_child(Html(text_type(html), script=script))
+        elif isinstance(html, str):
+            self.html.add_child(Html(html, script=script))
 
         self.show = show
         self.options = parse_options(

@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import Figure, JavascriptLink
 
-from folium import Marker
-from folium.vector_layers import path_options
+from folium.vector_layers import path_options, BaseMultiLocation
 
 from jinja2 import Template
 
 
-class AntPath(Marker):
+class AntPath(BaseMultiLocation):
     """
     Class for drawing AntPath polyline overlays on a map.
 
@@ -34,7 +31,7 @@ class AntPath(Marker):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             {{ this.get_name() }} = L.polyline.antPath(
-              {{ this.location|tojson }},
+              {{ this.locations|tojson }},
               {{ this.options|tojson }}
         ).addTo({{this._parent.get_name()}});
         {% endmacro %}
@@ -42,7 +39,7 @@ class AntPath(Marker):
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(AntPath, self).__init__(
-            location=locations,
+            locations,
             popup=popup,
             tooltip=tooltip,
         )
