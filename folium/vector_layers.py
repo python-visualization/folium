@@ -5,9 +5,10 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circlem and CircleMarker
 
 """
 
-from __future__ import absolute_import, division, print_function
+from branca.element import MacroElement
 
-from folium.map import Marker
+from folium.map import Marker, Popup, Tooltip
+from folium.utilities import validate_locations, get_bounds
 
 from jinja2 import Template
 
@@ -98,7 +99,29 @@ def path_options(line=False, radius=False, **kwargs):
     return default
 
 
-class PolyLine(Marker):
+class BaseMultiLocation(MacroElement):
+    """Base class for vector classes with multiple coordinates.
+
+    Not for direct consumption
+
+    """
+
+    def __init__(self, locations, popup=None, tooltip=None):
+        super(BaseMultiLocation, self).__init__()
+        self.locations = validate_locations(locations)
+        if popup is not None:
+            self.add_child(popup if isinstance(popup, Popup)
+                           else Popup(str(popup)))
+        if tooltip is not None:
+            self.add_child(tooltip if isinstance(tooltip, Tooltip)
+                           else Tooltip(str(tooltip)))
+
+    def _get_self_bounds(self):
+        """Compute the bounds of the object itself."""
+        return get_bounds(self.locations)
+
+
+class PolyLine(BaseMultiLocation):
     """Draw polyline overlays on a map.
 
     See :func:`folium.vector_layers.path_options` for the `Path` options.
@@ -126,20 +149,19 @@ class PolyLine(Marker):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polyline(
-                {{ this.location|tojson }},
+                {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(location=locations, popup=popup,
-                                       tooltip=tooltip)
+        super(PolyLine, self).__init__(locations, popup=popup, tooltip=tooltip)
         self._name = 'PolyLine'
         self.options = path_options(line=True, **kwargs)
 
 
-class Polygon(Marker):
+class Polygon(BaseMultiLocation):
     """Draw polygon overlays on a map.
 
     See :func:`folium.vector_layers.path_options` for the `Path` options.
@@ -161,7 +183,7 @@ class Polygon(Marker):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polygon(
-                {{ this.location|tojson }},
+                {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
@@ -173,14 +195,14 @@ class Polygon(Marker):
         self.options = path_options(line=True, **kwargs)
 
 
-class Rectangle(Marker):
+class Rectangle(BaseMultiLocation):
     """Draw rectangle overlays on a map.
 
     See :func:`folium.vector_layers.path_options` for the `Path` options.
 
     Parameters
     ----------
-    locations: list of points (latitude, longitude)
+    bounds: list of points (latitude, longitude)
         Latitude and Longitude of line (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
@@ -195,15 +217,14 @@ class Rectangle(Marker):
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.rectangle(
-                {{ this.location|tojson }},
+                {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)
 
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(location=bounds, popup=popup,
-                                        tooltip=tooltip)
+        super(Rectangle, self).__init__(bounds, popup=popup, tooltip=tooltip)
         self._name = 'rectangle'
         self.options = path_options(line=True, **kwargs)
 
@@ -219,8 +240,8 @@ class Circle(Marker):
 
     Parameters
     ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
+    location: tuple[float, float]
+        Latitude and Longitude pair (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
     tooltip: str or folium.Tooltip, default None
@@ -243,8 +264,7 @@ class Circle(Marker):
         """)
 
     def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location=location, popup=popup,
-                                     tooltip=tooltip)
+        super(Circle, self).__init__(location, popup=popup, tooltip=tooltip)
         self._name = 'circle'
         self.options = path_options(line=False, radius=radius, **kwargs)
 
@@ -257,8 +277,8 @@ class CircleMarker(Marker):
 
     Parameters
     ----------
-    locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
+    location: tuple[float, float]
+        Latitude and Longitude pair (Northing, Easting)
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
     tooltip: str or folium.Tooltip, default None
@@ -281,7 +301,7 @@ class CircleMarker(Marker):
         """)
 
     def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location=location, popup=popup,
+        super(CircleMarker, self).__init__(location, popup=popup,
                                            tooltip=tooltip)
         self._name = 'CircleMarker'
         self.options = path_options(line=False, radius=radius, **kwargs)
