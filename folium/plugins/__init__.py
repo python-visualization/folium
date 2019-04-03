@@ -19,6 +19,7 @@ from folium.plugins.float_image import FloatImage
 from folium.plugins.fullscreen import Fullscreen
 from folium.plugins.heat_map import HeatMap
 from folium.plugins.heat_map_withtime import HeatMapWithTime
+from folium.plugins.locate_control import LocateControl
 from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
@@ -45,6 +46,7 @@ __all__ = [
     'Fullscreen',
     'HeatMap',
     'HeatMapWithTime',
+    'LocateControl',
     'MarkerCluster',
     'MeasureControl',
     'MiniMap',
