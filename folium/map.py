@@ -495,7 +495,7 @@ class CustomPane(MacroElement):
         determine which map elements lie over/under it. The default
         (625) corresponds to between markers and tooltips. Default
         panes and z-indexes can be found at
-        https://github.com/Leaflet/Leaflet/blob/v1.0.0/dist/leaflet.css#L87
+        https://leafletjs.com/reference-1.4.0.html#map-pane
     pointer_events: bool, default False
         Whether or not layers in the pane should interact with the
         cursor. Setting to False will prevent interfering with
@@ -503,12 +503,11 @@ class CustomPane(MacroElement):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.createPane('{{this.name}}');
-            {{this._parent.get_name()}}.getPane(
-                '{{this.name}}').style.zIndex = {{this.z_index}};
+            var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
+                {{ this.name|tojson }});
+            {{ this.get_name() }}.style.zIndex = {{ this.z_index|tojson }};
             {% if not this.pointer_events %}
-                {{this._parent.get_name()}}.getPane(
-                    '{{this.name}}').style.pointerEvents = 'none';
+                {{ this.get_name() }}.style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
         """)
@@ -517,5 +516,5 @@ class CustomPane(MacroElement):
         super(CustomPane, self).__init__()
         self._name = 'Pane'
         self.name = name
-        self.z_index = str(z_index)
+        self.z_index = z_index
         self.pointer_events = pointer_events
