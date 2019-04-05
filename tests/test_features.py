@@ -14,8 +14,6 @@ from branca.element import Element
 import folium
 from folium import Map, Popup
 
-from six import text_type
-
 import pytest
 
 
@@ -49,7 +47,7 @@ def test_figure_creation():
 def test_figure_rendering():
     f = folium.Figure()
     out = f.render()
-    assert type(out) is text_type
+    assert type(out) is str
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds

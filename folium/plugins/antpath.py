@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import Figure, JavascriptLink
 
 from folium.vector_layers import path_options, BaseMultiLocation

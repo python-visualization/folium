@@ -5,8 +5,6 @@ Test HeatMap
 ------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
 from folium.plugins import HeatMap
 from folium.utilities import normalize

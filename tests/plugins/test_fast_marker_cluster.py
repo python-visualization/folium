@@ -5,8 +5,6 @@ Test FastMarkerCluster
 ----------------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
 from folium.plugins import FastMarkerCluster
 from folium.utilities import normalize
@@ -44,6 +42,10 @@ def test_fast_marker_cluster():
 
             var data = {{ this.data|tojson }};
             var cluster = L.markerClusterGroup({{ this.options|tojson }});
+            {%- if this.icon_create_function is not none %}
+            cluster.options.iconCreateFunction =
+                {{ this.icon_create_function.strip() }};
+            {%- endif %}
 
             for (var i = 0; i < data.length; i++) {
                 var row = data[i];
