@@ -12,7 +12,12 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _tmp_html, validate_location
+from folium.utilities import (
+    _parse_size,
+    _tmp_html,
+    validate_location,
+    parse_options,
+)
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -132,6 +137,9 @@ class Map(MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    **kwargs
+        Additional keyword arguments are passed to Leaflets Map class:
+        https://leafletjs.com/reference-1.4.0.html#map
 
     Returns
     -------
@@ -173,25 +181,14 @@ class Map(MacroElement):
         {% endmacro %}
 
         {% macro script(this, kwargs) %}
-            {%- if this.max_bounds %}
-                var bounds = L.latLngBounds(
-                    [{{ this.min_lat }}, {{ this.min_lon }}],
-                    [{{ this.max_lat }}, {{ this.max_lon }}]
-                );
-            {%- else %}
-                var bounds = null;
-            {%- endif %}
-
             var {{ this.get_name() }} = L.map(
                 {{ this.get_name()|tojson }},
                 {
                     center: {{ this.location|tojson }},
-                    zoom: {{ this.zoom_start|tojson }},
-                    maxBounds: bounds,
-                    layers: [],
-                    worldCopyJump: {{ this.world_copy_jump|tojson }},
                     crs: L.CRS.{{ this.crs }},
-                    zoomControl: {{ this.zoom_control|tojson }},
+                    {%- for key, value in this.options.items() %}
+                    {{ key }}: {{ value|tojson }},
+                    {%- endfor %}
                 }
             );
 
@@ -237,6 +234,7 @@ class Map(MacroElement):
             disable_3d=False,
             png_enabled=False,
             zoom_control=True,
+            **kwargs
     ):
         super(Map, self).__init__()
         self._name = 'Map'
@@ -248,10 +246,9 @@ class Map(MacroElement):
         if location is None:
             # If location is not passed we center and zoom out.
             self.location = [0, 0]
-            self.zoom_start = 1
+            zoom_start = 1
         else:
             self.location = validate_location(location)
-            self.zoom_start = zoom_start
 
         Figure().add_child(self)
 
@@ -262,17 +259,18 @@ class Map(MacroElement):
         self.top = _parse_size(top)
         self.position = position
 
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-        self.max_bounds = max_bounds
-        self.no_wrap = no_wrap
-        self.world_copy_jump = world_copy_jump
+        max_bounds_array = [[min_lat, min_lon], [max_lat, max_lon]] \
+            if max_bounds else None
 
         self.crs = crs
         self.control_scale = control_scale
-        self.zoom_control = zoom_control
+
+        self.options = parse_options(
+            max_bounds=max_bounds_array,
+            zoom=zoom_start,
+            zoom_control=zoom_control,
+            **kwargs
+        )
 
         self.global_switches = GlobalSwitches(
             prefer_canvas,
