@@ -93,23 +93,15 @@ class Map(MacroElement):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from a list of built-in tiles,
         pass a custom URL or pass `None` to create a map without tiles.
-    API_key: str, default None
-        API key for Cloudmade or Mapbox tiles.
+        For more advanced tile layer options, use the `TileLayer` class.
     min_zoom: int, default 0
         Minimum allowed zoom level for the tile layer that is created.
     max_zoom: int, default 18
         Maximum allowed zoom level for the tile layer that is created.
-    max_native_zoom: int, default None
-        The highest zoom level at which the tile server can provide tiles.
-        If provided you can zoom in past this level. Else tiles will turn grey.
     zoom_start: int, default 10
         Initial zoom level for the map.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
-    detect_retina: bool, default False
-        If true and user is on a retina display, it will request four
-        tiles of half the specified size and a bigger zoom level in place
-        of one to utilize the high resolution.
     crs : str, default 'EPSG3857'
         Defines coordinate reference systems for projecting geographical points
         into pixel (screen) coordinates and back.
@@ -220,15 +212,32 @@ class Map(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location=None, width='100%', height='100%',
-                 left='0%', top='0%', position='relative',
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=0,
-                 max_native_zoom=None, zoom_start=10, world_copy_jump=False,
-                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=False,
-                 detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False, zoom_control=True):
+    def __init__(
+            self,
+            location=None,
+            width='100%',
+            height='100%',
+            left='0%',
+            top='0%',
+            position='relative',
+            tiles='OpenStreetMap',
+            attr=None,
+            min_zoom=0,
+            max_zoom=18,
+            zoom_start=10,
+            min_lat=-90,
+            max_lat=90,
+            min_lon=-180,
+            max_lon=180,
+            max_bounds=False,
+            crs='EPSG3857',
+            control_scale=False,
+            prefer_canvas=False,
+            no_touch=False,
+            disable_3d=False,
+            png_enabled=False,
+            zoom_control=True,
+    ):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -274,12 +283,9 @@ class Map(MacroElement):
         self.objects_to_stay_in_front = []
 
         if tiles:
-            self.add_tile_layer(
-                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                max_native_zoom=max_native_zoom, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina,
-                subdomains=subdomains
-            )
+            tile_layer = TileLayer(tiles=tiles, attr=attr,
+                                   min_zoom=min_zoom, max_zoom=max_zoom)
+            self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -328,24 +334,6 @@ class Map(MacroElement):
         if not self.png_enabled:
             return None
         return self._to_png()
-
-    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
-                       API_key=None, max_zoom=18, min_zoom=0,
-                       max_native_zoom=None, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, subdomains='abc',
-                       **kwargs):
-        """
-        Add a tile layer to the map. See TileLayer for options.
-
-        """
-        tile_layer = TileLayer(tiles=tiles, name=name,
-                               min_zoom=min_zoom, max_zoom=max_zoom,
-                               max_native_zoom=max_native_zoom,
-                               attr=attr, API_key=API_key,
-                               detect_retina=detect_retina,
-                               subdomains=subdomains,
-                               no_wrap=no_wrap)
-        self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
