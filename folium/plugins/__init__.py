@@ -59,4 +59,4 @@ __all__ = [
     'TimeSliderChoropleth',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
-    ]
+]
