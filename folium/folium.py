@@ -147,13 +147,13 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
     ...                        width=750, height=500)
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
-    >>> map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
                                tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.Map(
+    >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
     ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
@@ -299,8 +299,8 @@ class Map(MacroElement):
 
         Examples
         --------
-        >>> map._to_png()
-        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png()
+        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
         if self._png_image is None:
@@ -408,7 +408,7 @@ class Map(MacroElement):
 
         Examples
         --------
-        >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
+        >>> m.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
         self.add_child(FitBounds(bounds,
