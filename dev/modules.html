@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>folium &#8212; Folium 0.8.3+30.g9729c96 documentation</title>
+    <title>folium &#8212; Folium 0.8.3+35.g99449e2 documentation</title>
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+30.g9729c96 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+35.g99449e2 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -87,7 +87,7 @@
 
 <dl class="class">
 <dt id="folium.folium.Map">
-<em class="property">class </em><code class="descclassname">folium.folium.</code><code class="descname">Map</code><span class="sig-paren">(</span><em>location=None</em>, <em>width='100%'</em>, <em>height='100%'</em>, <em>left='0%'</em>, <em>top='0%'</em>, <em>position='relative'</em>, <em>tiles='OpenStreetMap'</em>, <em>API_key=None</em>, <em>max_zoom=18</em>, <em>min_zoom=0</em>, <em>max_native_zoom=None</em>, <em>zoom_start=10</em>, <em>world_copy_jump=False</em>, <em>no_wrap=False</em>, <em>attr=None</em>, <em>min_lat=-90</em>, <em>max_lat=90</em>, <em>min_lon=-180</em>, <em>max_lon=180</em>, <em>max_bounds=False</em>, <em>detect_retina=False</em>, <em>crs='EPSG3857'</em>, <em>control_scale=False</em>, <em>prefer_canvas=False</em>, <em>no_touch=False</em>, <em>disable_3d=False</em>, <em>subdomains='abc'</em>, <em>png_enabled=False</em>, <em>zoom_control=True</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">folium.folium.</code><code class="descname">Map</code><span class="sig-paren">(</span><em>location=None</em>, <em>width='100%'</em>, <em>height='100%'</em>, <em>left='0%'</em>, <em>top='0%'</em>, <em>position='relative'</em>, <em>tiles='OpenStreetMap'</em>, <em>attr=None</em>, <em>min_zoom=0</em>, <em>max_zoom=18</em>, <em>zoom_start=10</em>, <em>min_lat=-90</em>, <em>max_lat=90</em>, <em>min_lon=-180</em>, <em>max_lon=180</em>, <em>max_bounds=False</em>, <em>crs='EPSG3857'</em>, <em>control_scale=False</em>, <em>prefer_canvas=False</em>, <em>no_touch=False</em>, <em>disable_3d=False</em>, <em>png_enabled=False</em>, <em>zoom_control=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Create a Map with Folium and Leaflet.js</p>
 <p>Generate a base map of given width and height with either default
@@ -113,17 +113,12 @@ URL to the tiles parameter: <code class="docutils literal notranslate"><span cla
 <li><p><strong>width</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Width of the map.</p></li>
 <li><p><strong>height</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Height of the map.</p></li>
 <li><p><strong>tiles</strong> (<em>str</em><em>, </em><em>default 'OpenStreetMap'</em>) – Map tileset to use. Can choose from a list of built-in tiles,
-pass a custom URL or pass <cite>None</cite> to create a map without tiles.</p></li>
-<li><p><strong>API_key</strong> (<em>str</em><em>, </em><em>default None</em>) – API key for Cloudmade or Mapbox tiles.</p></li>
+pass a custom URL or pass <cite>None</cite> to create a map without tiles.
+For more advanced tile layer options, use the <cite>TileLayer</cite> class.</p></li>
 <li><p><strong>min_zoom</strong> (<em>int</em><em>, </em><em>default 0</em>) – Minimum allowed zoom level for the tile layer that is created.</p></li>
 <li><p><strong>max_zoom</strong> (<em>int</em><em>, </em><em>default 18</em>) – Maximum allowed zoom level for the tile layer that is created.</p></li>
-<li><p><strong>max_native_zoom</strong> (<em>int</em><em>, </em><em>default None</em>) – The highest zoom level at which the tile server can provide tiles.
-If provided you can zoom in past this level. Else tiles will turn grey.</p></li>
 <li><p><strong>zoom_start</strong> (<em>int</em><em>, </em><em>default 10</em>) – Initial zoom level for the map.</p></li>
 <li><p><strong>attr</strong> (<em>string</em><em>, </em><em>default None</em>) – Map tile attribution; only required if passing custom tile URL.</p></li>
-<li><p><strong>detect_retina</strong> (<em>bool</em><em>, </em><em>default False</em>) – If true and user is on a retina display, it will request four
-tiles of half the specified size and a bigger zoom level in place
-of one to utilize the high resolution.</p></li>
 <li><p><strong>crs</strong> (<em>str</em><em>, </em><em>default 'EPSG3857'</em>) – Defines coordinate reference systems for projecting geographical points
 into pixel (screen) coordinates and back.
 You can use Leaflet’s values :
@@ -148,6 +143,8 @@ markers on the map).</p></li>
 transforms for positioning (which may cause glitches in some
 rare environments) even if they’re supported.</p></li>
 <li><p><strong>zoom_control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Display zoom controls on the map.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments are passed to Leaflets Map class:
+<a class="reference external" href="https://leafletjs.com/reference-1.4.0.html#map">https://leafletjs.com/reference-1.4.0.html#map</a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -158,13 +155,13 @@ rare environments) even if they’re supported.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
 <span class="gp">... </span>                       <span class="n">width</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
 <span class="go">                           tiles=&#39;Mapbox Control Room&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">),</span> <span class="n">max_zoom</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">),</span> <span class="n">max_zoom</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
 <span class="go">                           tiles=&#39;Cloudmade&#39;, API_key=&#39;YourKey&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
 <span class="gp">... </span>   <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
 <span class="gp">... </span>   <span class="n">zoom_start</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="gp">... </span>   <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;http://</span><span class="si">{s}</span><span class="s1">.tiles.mapbox.com/v3/mapbox.control-room/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">.png&#39;</span><span class="p">,</span>
@@ -172,12 +169,6 @@ rare environments) even if they’re supported.</p></li>
 <span class="go">...)</span>
 </pre></div>
 </div>
-<dl class="method">
-<dt id="folium.folium.Map.add_tile_layer">
-<code class="descname">add_tile_layer</code><span class="sig-paren">(</span><em>tiles='OpenStreetMap'</em>, <em>name=None</em>, <em>API_key=None</em>, <em>max_zoom=18</em>, <em>min_zoom=0</em>, <em>max_native_zoom=None</em>, <em>attr=None</em>, <em>active=False</em>, <em>detect_retina=False</em>, <em>no_wrap=False</em>, <em>subdomains='abc'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map.add_tile_layer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add a tile layer to the map. See TileLayer for options.</p>
-</dd></dl>
-
 <dl class="method">
 <dt id="folium.folium.Map.choropleth">
 <code class="descname">choropleth</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map.choropleth" title="Permalink to this definition">¶</a></dt>
@@ -205,7 +196,7 @@ the same value.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">map</span><span class="o">.</span><span class="n">fit_bounds</span><span class="p">([[</span><span class="mf">52.193636</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.221575</span><span class="p">],</span> <span class="p">[</span><span class="mf">52.636878</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.139759</span><span class="p">]])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">fit_bounds</span><span class="p">([[</span><span class="mf">52.193636</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.221575</span><span class="p">],</span> <span class="p">[</span><span class="mf">52.636878</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.139759</span><span class="p">]])</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1310,7 +1301,7 @@ Ex: ‘relative’, ‘absolute’</p></li>
         <li class="right" >
           <a href="quickstart.html" title="Quickstart"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+30.g9729c96 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.8.3+35.g99449e2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer">
