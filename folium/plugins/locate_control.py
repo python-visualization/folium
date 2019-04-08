@@ -11,39 +11,44 @@ from jinja2 import Template
 class LocateControl(MacroElement):
     """Control plugin to geolocate the user.
 
+    This plugins adds a button to the map, and when it's clicked shows the current
+    user device location.
+
+    To work properly in production, the connection needs to be encrypted, otherwise browser will not
+    allow users to share their location.
+
+    WARNING: This plugin when used with Draw plugin, it must be added to your map before Draw. See
+    example below.
+
     Parameters
     ----------
-    options: dict, optional
+    options: **kwargs
         For possible options, see https://github.com/domoritz/leaflet-locatecontrol
 
     Examples
     --------
-    >>> import folium
-    >>> from folium.plugins import LocateControl
-    >>> map = folium.Map()
+    >>> m = folium.Map()
     # With default settings
-    >>> LocateControl().add_to(map)
+    >>> LocateControl().add_to(m)
 
-    # With custom options
-    >>> options = {"position": "topright",
-    ...             "strings":{
-    ...                     "title":"Show my current location"}}
-    >>> LocateControl(options=options).add_to(map)
+    # With custom options and alongside with Draw
+    >>> LocateControl(position="bottomright").add_to(m)
+    >>> Draw(export=True).add_to(m)
 
     For more info check:
     https://github.com/domoritz/leaflet-locatecontrol
 
     """
 
-    _template = Template(u"""
-                         {% macro script(this, kwargs) %}
-                         var {{this.get_name()}} = L.control.locate(
-                                        {{this.options|tojson}}).addTo({{this._parent.get_name()}});
-                         {% endmacro %}
-                         """)
+    _template = Template("""
+        {% macro script(this, kwargs) %}
+            var {{this.get_name()}} = L.control.locate(
+                {{this.options | tojson}}
+            ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def __init__(self, options=None):
-        """Initialization."""
         super(LocateControl, self).__init__()
         self._name = 'LocateControl'
         self.options = options or {}
