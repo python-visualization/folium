@@ -96,11 +96,8 @@ class TestFolium(object):
         assert self.m.get_name() == 'map_00000000000000000000000000000000'
         assert self.m.get_root() == self.m._parent
         assert self.m.location == [45.5236, -122.6750]
-        assert self.m.zoom_start == 4
-        assert self.m.max_lat == 90
-        assert self.m.min_lat == -90
-        assert self.m.max_lon == 180
-        assert self.m.min_lon == -180
+        assert self.m.options['zoom'] == 4
+        assert self.m.options['maxBounds'] == [[-90, -180], [90, 180]]
         assert self.m.position == 'relative'
         assert self.m.height == (400, 'px')
         assert self.m.width == (900, 'px')
@@ -120,19 +117,6 @@ class TestFolium(object):
                     }
                 }
             }
-
-    def test_cloudmade(self):
-        """Test cloudmade tiles and the API key."""
-        with pytest.raises(ValueError):
-            folium.Map(location=[45.5236, -122.6750], tiles='cloudmade')
-
-        m = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
-                       API_key='###')
-        cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
-        assert m._children['cloudmade'].tiles == cloudmade
-
-        bounds = m.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
 
     def test_builtin_tile(self):
         """Test custom maptiles."""
@@ -200,47 +184,6 @@ class TestFolium(object):
         topo_json = choropleth.geojson
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
-
-    def test_map_build(self):
-        """Test map build."""
-
-        # Standard map.
-        self.setup()
-        rendered = self.m._parent.render()
-
-        html_templ = self.env.get_template('fol_template.html')
-        attr = 'http://openstreetmap.org'
-        tile_layers = [
-            {'id': 'tile_layer_'+'0'*32,
-             'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-             'attr': attr,
-             'max_native_zoom': 20,
-             'max_zoom': 20,
-             'min_zoom': 0,
-             'detect_retina': False,
-             'no_wrap': False,
-             'tms': False,
-             'opacity': 1,
-             'subdomains': 'abc'
-             }]
-        tmpl = {'map_id': 'map_' + '0' * 32,
-                'lat': 45.5236, 'lon': -122.675,
-                'width': 'width: 900.0px;',
-                'height': 'height: 400.0px;',
-                'zoom_level': 4,
-                'max_bounds': True,
-                'min_lat': -90,
-                'max_lat': 90,
-                'min_lon': -180,
-                'max_lon': 180,
-                'tile_layers': tile_layers,
-                'crs': 'EPSG3857',
-                'world_copy_jump': False,
-                'zoom_control': True
-                }
-        expected = html_templ.render(tmpl, plugins={})
-
-        assert normalize(rendered) == normalize(expected)
 
     def test_choropleth_features(self):
         """Test to make sure that Choropleth function doesn't allow

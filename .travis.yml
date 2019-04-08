@@ -38,7 +38,6 @@ before_install:
     conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
     conda update conda --quiet
     conda config --add channels conda-forge --force
-    conda install pycryptosat
     conda config --set channel_priority strict
     conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
@@ -77,7 +76,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-code' ]]; then
-      pytest --nbval-lax -p no:python /tmp/examples ;
+      pytest --nbval-lax /tmp/examples ;
     fi
 
 # Docs

@@ -76,7 +76,7 @@ class Draw(MacroElement):
                     'href', 'data:' + convertedData
                 );
                 document.getElementById('export').setAttribute(
-                    'download', {{ this.filename|tojson }}"
+                    'download', {{ this.filename|tojson }}
                 );
             }
         {% endmacro %}
