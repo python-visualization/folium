@@ -12,7 +12,12 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _tmp_html, validate_location
+from folium.utilities import (
+    _parse_size,
+    _tmp_html,
+    validate_location,
+    parse_options,
+)
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -93,23 +98,15 @@ class Map(MacroElement):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from a list of built-in tiles,
         pass a custom URL or pass `None` to create a map without tiles.
-    API_key: str, default None
-        API key for Cloudmade or Mapbox tiles.
+        For more advanced tile layer options, use the `TileLayer` class.
     min_zoom: int, default 0
         Minimum allowed zoom level for the tile layer that is created.
     max_zoom: int, default 18
         Maximum allowed zoom level for the tile layer that is created.
-    max_native_zoom: int, default None
-        The highest zoom level at which the tile server can provide tiles.
-        If provided you can zoom in past this level. Else tiles will turn grey.
     zoom_start: int, default 10
         Initial zoom level for the map.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
-    detect_retina: bool, default False
-        If true and user is on a retina display, it will request four
-        tiles of half the specified size and a bigger zoom level in place
-        of one to utilize the high resolution.
     crs : str, default 'EPSG3857'
         Defines coordinate reference systems for projecting geographical points
         into pixel (screen) coordinates and back.
@@ -140,6 +137,9 @@ class Map(MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    **kwargs
+        Additional keyword arguments are passed to Leaflets Map class:
+        https://leafletjs.com/reference-1.4.0.html#map
 
     Returns
     -------
@@ -147,13 +147,13 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
     ...                        width=750, height=500)
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
-    >>> map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
                                tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.Map(
+    >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
     ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
@@ -181,25 +181,14 @@ class Map(MacroElement):
         {% endmacro %}
 
         {% macro script(this, kwargs) %}
-            {%- if this.max_bounds %}
-                var bounds = L.latLngBounds(
-                    [{{ this.min_lat }}, {{ this.min_lon }}],
-                    [{{ this.max_lat }}, {{ this.max_lon }}]
-                );
-            {%- else %}
-                var bounds = null;
-            {%- endif %}
-
             var {{ this.get_name() }} = L.map(
                 {{ this.get_name()|tojson }},
                 {
                     center: {{ this.location|tojson }},
-                    zoom: {{ this.zoom_start|tojson }},
-                    maxBounds: bounds,
-                    layers: [],
-                    worldCopyJump: {{ this.world_copy_jump|tojson }},
                     crs: L.CRS.{{ this.crs }},
-                    zoomControl: {{ this.zoom_control|tojson }},
+                    {%- for key, value in this.options.items() %}
+                    {{ key }}: {{ value|tojson }},
+                    {%- endfor %}
                 }
             );
 
@@ -220,15 +209,33 @@ class Map(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location=None, width='100%', height='100%',
-                 left='0%', top='0%', position='relative',
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=0,
-                 max_native_zoom=None, zoom_start=10, world_copy_jump=False,
-                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=False,
-                 detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False, zoom_control=True):
+    def __init__(
+            self,
+            location=None,
+            width='100%',
+            height='100%',
+            left='0%',
+            top='0%',
+            position='relative',
+            tiles='OpenStreetMap',
+            attr=None,
+            min_zoom=0,
+            max_zoom=18,
+            zoom_start=10,
+            min_lat=-90,
+            max_lat=90,
+            min_lon=-180,
+            max_lon=180,
+            max_bounds=False,
+            crs='EPSG3857',
+            control_scale=False,
+            prefer_canvas=False,
+            no_touch=False,
+            disable_3d=False,
+            png_enabled=False,
+            zoom_control=True,
+            **kwargs
+    ):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -239,10 +246,9 @@ class Map(MacroElement):
         if location is None:
             # If location is not passed we center and zoom out.
             self.location = [0, 0]
-            self.zoom_start = 1
+            zoom_start = 1
         else:
             self.location = validate_location(location)
-            self.zoom_start = zoom_start
 
         Figure().add_child(self)
 
@@ -253,17 +259,18 @@ class Map(MacroElement):
         self.top = _parse_size(top)
         self.position = position
 
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-        self.max_bounds = max_bounds
-        self.no_wrap = no_wrap
-        self.world_copy_jump = world_copy_jump
+        max_bounds_array = [[min_lat, min_lon], [max_lat, max_lon]] \
+            if max_bounds else None
 
         self.crs = crs
         self.control_scale = control_scale
-        self.zoom_control = zoom_control
+
+        self.options = parse_options(
+            max_bounds=max_bounds_array,
+            zoom=zoom_start,
+            zoom_control=zoom_control,
+            **kwargs
+        )
 
         self.global_switches = GlobalSwitches(
             prefer_canvas,
@@ -274,12 +281,9 @@ class Map(MacroElement):
         self.objects_to_stay_in_front = []
 
         if tiles:
-            self.add_tile_layer(
-                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                max_native_zoom=max_native_zoom, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina,
-                subdomains=subdomains
-            )
+            tile_layer = TileLayer(tiles=tiles, attr=attr,
+                                   min_zoom=min_zoom, max_zoom=max_zoom)
+            self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -299,8 +303,8 @@ class Map(MacroElement):
 
         Examples
         --------
-        >>> map._to_png()
-        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png()
+        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
         if self._png_image is None:
@@ -328,24 +332,6 @@ class Map(MacroElement):
         if not self.png_enabled:
             return None
         return self._to_png()
-
-    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
-                       API_key=None, max_zoom=18, min_zoom=0,
-                       max_native_zoom=None, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, subdomains='abc',
-                       **kwargs):
-        """
-        Add a tile layer to the map. See TileLayer for options.
-
-        """
-        tile_layer = TileLayer(tiles=tiles, name=name,
-                               min_zoom=min_zoom, max_zoom=max_zoom,
-                               max_native_zoom=max_native_zoom,
-                               attr=attr, API_key=API_key,
-                               detect_retina=detect_retina,
-                               subdomains=subdomains,
-                               no_wrap=no_wrap)
-        self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -408,7 +394,7 @@ class Map(MacroElement):
 
         Examples
         --------
-        >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
+        >>> m.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
         self.add_child(FitBounds(bounds,
