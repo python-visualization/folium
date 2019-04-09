@@ -6,6 +6,7 @@ Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
+from folium.utilities import parse_options
 
 
 class LocateControl(MacroElement):
@@ -22,7 +23,7 @@ class LocateControl(MacroElement):
 
     Parameters
     ----------
-    options: **kwargs
+    **kwargs
         For possible options, see https://github.com/domoritz/leaflet-locatecontrol
 
     Examples
@@ -32,7 +33,11 @@ class LocateControl(MacroElement):
     >>> LocateControl().add_to(m)
 
     # With custom options and alongside with Draw
-    >>> LocateControl(position="bottomright").add_to(m)
+    >>> LocateControl(
+    ...     position="bottomright",
+    ...     strings={"title": "See you current location",
+    ...              "popup": "Your position"}).add_to(m))
+
     >>> Draw(export=True).add_to(m)
 
     For more info check:
@@ -48,10 +53,10 @@ class LocateControl(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, options=None):
+    def __init__(self, **kwargs):
         super(LocateControl, self).__init__()
         self._name = 'LocateControl'
-        self.options = options or {}
+        self.options = parse_options(**kwargs)
 
     def render(self, **kwargs):
         super(LocateControl, self).render(**kwargs)
