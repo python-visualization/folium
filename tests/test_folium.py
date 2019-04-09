@@ -133,10 +133,10 @@ class TestFolium(object):
         for tiles in default_tiles:
             m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
             tiles = "".join(tiles.lower().strip().split())
-            url = f"tiles/{tiles}/tiles.txt"
-            attr = f"tiles/{tiles}/attr.txt"
-            url = m._env.get_template(url).render()
-            attr = m._env.get_template(attr).render()
+            url = "tiles/{}/tiles.txt".format
+            attr = "tiles/{}/attr.txt".format
+            url = m._env.get_template(url(tiles)).render()
+            attr = m._env.get_template(attr(tiles)).render()
 
             assert m._children[tiles].tiles == url
             assert htmlsafe_json_dumps(attr) in m._parent.render()
