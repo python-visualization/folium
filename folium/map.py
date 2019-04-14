@@ -476,3 +476,45 @@ class FitBounds(MacroElement):
             padding_bottom_right=padding_bottom_right,
             padding=padding,
         )
+
+
+class CustomPane(MacroElement):
+    """
+    Creates a custom pane to hold map elements.
+
+    Behavior is as in https://leafletjs.com/examples/map-panes/
+
+    Parameters
+    ----------
+    name: string
+        Name of the custom pane. Other map elements can be added
+        to the pane by specifying the 'pane' kwarg when constructing
+        them.
+    z_index: int or string, default 625
+        The z-index that will be associated with the pane, and will
+        determine which map elements lie over/under it. The default
+        (625) corresponds to between markers and tooltips. Default
+        panes and z-indexes can be found at
+        https://leafletjs.com/reference-1.4.0.html#map-pane
+    pointer_events: bool, default False
+        Whether or not layers in the pane should interact with the
+        cursor. Setting to False will prevent interfering with
+        pointer events associated with lower layers.
+    """
+    _template = Template(u"""
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
+                {{ this.name|tojson }});
+            {{ this.get_name() }}.style.zIndex = {{ this.z_index|tojson }};
+            {% if not this.pointer_events %}
+                {{ this.get_name() }}.style.pointerEvents = 'none';
+            {% endif %}
+        {% endmacro %}
+        """)
+
+    def __init__(self, name, z_index=625, pointer_events=False):
+        super(CustomPane, self).__init__()
+        self._name = 'Pane'
+        self.name = name
+        self.z_index = z_index
+        self.pointer_events = pointer_events
