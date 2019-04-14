@@ -90,6 +90,23 @@ class TileLayer(Layer):
         self._name = 'TileLayer'
         self._env = ENV
 
+        tiles_flat = ''.join(tiles.lower().strip().split())
+        if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
+            raise ValueError('You must pass an API key if using Cloudmade'
+                             ' or non-default Mapbox tiles.')
+        templates = list(self._env.list_templates(
+            filter_func=lambda x: x.startswith('tiles/')))
+        tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
+        attr_template = 'tiles/' + tiles_flat + '/attr.txt'
+
+        if tile_template in templates and attr_template in templates:
+            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
+            attr = self._env.get_template(attr_template).render()
+        else:
+            self.tiles = tiles
+            if not attr:
+                raise ValueError('Custom tiles must have an attribution.')
+
         self.options = parse_options(
             min_zoom=min_zoom,
             max_zoom=max_zoom,
@@ -102,23 +119,6 @@ class TileLayer(Layer):
             opacity=opacity,
             **kwargs
         )
-        tiles_flat = ''.join(tiles.lower().strip().split())
-        if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
-            raise ValueError('You must pass an API key if using Cloudmade'
-                             ' or non-default Mapbox tiles.')
-        templates = list(self._env.list_templates(
-            filter_func=lambda x: x.startswith('tiles/')))
-        tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
-        attr_template = 'tiles/' + tiles_flat + '/attr.txt'
-
-        if tile_template in templates and attr_template in templates:
-            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
-            self.attr = self._env.get_template(attr_template).render()
-        else:
-            self.tiles = tiles
-            if not attr:
-                raise ValueError('Custom tiles must have an attribution.')
-            self.attr = attr
 
 
 class WmsTileLayer(Layer):

@@ -13,10 +13,10 @@ import branca.element
 
 import folium
 from folium.features import GeoJson, Choropleth
-from folium.utilities import normalize
 
 import jinja2
 from jinja2 import Environment, PackageLoader
+from jinja2.utils import htmlsafe_json_dumps
 
 import numpy as np
 import pandas as pd
@@ -114,24 +114,32 @@ class TestFolium(object):
                     'name': 'TileLayer',
                     'id': '00000000000000000000000000000000',
                     'children': {}
-                    }
                 }
             }
+        }
 
     def test_builtin_tile(self):
         """Test custom maptiles."""
 
-        default_tiles = ['OpenStreetMap', 'Stamen Terrain', 'Stamen Toner']
+        default_tiles = [
+            "OpenStreetMap",
+            "Stamen Terrain",
+            "Stamen Toner",
+            "Mapbox Bright",
+            "Mapbox Control Room",
+            "CartoDB positron",
+            "CartoDB dark_matter",
+        ]
         for tiles in default_tiles:
             m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
-            tiles = ''.join(tiles.lower().strip().split())
-            url = 'tiles/{}/tiles.txt'.format
-            attr = 'tiles/{}/attr.txt'.format
+            tiles = "".join(tiles.lower().strip().split())
+            url = "tiles/{}/tiles.txt".format
+            attr = "tiles/{}/attr.txt".format
             url = m._env.get_template(url(tiles)).render()
             attr = m._env.get_template(attr(tiles)).render()
 
             assert m._children[tiles].tiles == url
-            assert m._children[tiles].attr == attr
+            assert htmlsafe_json_dumps(attr) in m._parent.render()
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
@@ -139,15 +147,15 @@ class TestFolium(object):
     def test_custom_tile(self):
         """Test custom tile URLs."""
 
-        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
-        attr = 'Attribution for custom tiles'
+        url = "http://{s}.custom_tiles.org/{z}/{x}/{y}.png"
+        attr = "Attribution for custom tiles"
 
         with pytest.raises(ValueError):
             folium.Map(location=[45.5236, -122.6750], tiles=url)
 
         m = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
         assert m._children[url].tiles == url
-        assert m._children[url].attr == attr
+        assert attr in m._parent.render()
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
