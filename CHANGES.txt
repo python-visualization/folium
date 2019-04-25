@@ -1,7 +1,27 @@
 0.9.0
 ~~~~~
 
+This version drops support for Python 2.7. (#1100, #1104, #1111)
+Python 3.5+ is required.
+
 - Geojson separate style mapping (conengmo #1058)
+- Warn for wrong color values in Icon (conengmo #1099)
+- Use Jinja2's `tojson` filter to convert data (conengmo #1101)
+- Pass **kwargs as options to Leaflet classes (conengmo #1101)
+- Explicit coordinate validation (conengmo #1090)
+- Add `icon_create_function` arg to `FastMarkerCluster` plugin (Gordonei #1109)
+- Add `PolyLineOffset` plugin (FabeG #1091)
+- Add Locate Control plugin (fullonic #1116)
+- Add Leaflet `CustomPane` class (Ipkirwin #1094)
+
+API changes
+
+- Remove `add_tile_layer` method from `Map` (conengmo #1127)
+- Remove args from `Map`, if needed use `TileLayer` instead (conengmo #1127)
+
+Bug fixes
+
+- Fix broken attribution for built-in tiles (FabeG #1128)
 
 0.8.3
 ~~~~~

@@ -9,7 +9,7 @@ Folium map Tests
 import pytest
 
 from folium import Map
-from folium.map import Popup, Icon
+from folium.map import Popup, Icon, CustomPane
 from folium.utilities import normalize
 
 
@@ -96,6 +96,19 @@ def test_icon_valid_marker_colors():
         for color in Icon.color_options:
             Icon(color=color)
     assert len(record) == 0
+
+
+def test_custom_pane_show():
+    m = Map()
+    pane = CustomPane('test-name', z_index=625, pointer_events=False).add_to(m)
+    rendered = pane._template.module.script(this=pane, kwargs={})
+    expected = """
+    var {pane_name} = {map_name}.createPane("test-name");
+    {pane_name}.style.zIndex = 625;
+    {pane_name}.style.pointerEvents = 'none';
+    """.format(pane_name=pane.get_name(),
+               map_name=m.get_name())
+    assert normalize(rendered) == normalize(expected)
 
 
 @pytest.mark.filterwarnings('ignore::UserWarning')
