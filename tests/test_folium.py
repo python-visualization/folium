@@ -103,7 +103,6 @@ class TestFolium(object):
         assert self.m.width == (900, 'px')
         assert self.m.left == (0, '%')
         assert self.m.top == (0, '%')
-        assert self.m.global_switches.prefer_canvas is False
         assert self.m.global_switches.no_touch is False
         assert self.m.global_switches.disable_3d is False
         assert self.m.to_dict() == {
@@ -278,7 +277,7 @@ class TestFolium(object):
                                               'padding': (3, 3), },
                                              sort_keys=True),
             'this': fitbounds,
-            })
+        })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
@@ -310,22 +309,30 @@ class TestFolium(object):
 
     def test_global_switches(self):
         m = folium.Map(prefer_canvas=True)
-        assert m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:true" in out_str
         assert not m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(no_touch=True)
-        assert not m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:false" in out_str
         assert m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(disable_3d=True)
-        assert not m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:false" in out_str
         assert not m.global_switches.no_touch
         assert m.global_switches.disable_3d
 
         m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
-        assert m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:true" in out_str
         assert m.global_switches.no_touch
         assert m.global_switches.disable_3d
 

@@ -55,16 +55,14 @@ class GlobalSwitches(Element):
 
     _template = Template("""
         <script>
-            L_PREFER_CANVAS = {{ this.prefer_canvas|tojson }};
             L_NO_TOUCH = {{ this.no_touch |tojson}};
             L_DISABLE_3D = {{ this.disable_3d|tojson }};
         </script>
     """)
 
-    def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
+    def __init__(self, no_touch=False, disable_3d=False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
-        self.prefer_canvas = prefer_canvas
         self.no_touch = no_touch
         self.disable_3d = disable_3d
 
@@ -124,11 +122,6 @@ class Map(MacroElement):
         (going from bottom to top).
     control_scale : bool, default False
         Whether to add a control scale on the map.
-    prefer_canvas : bool, default False
-        Forces Leaflet to use the Canvas back-end (if available) for
-        vector layers instead of SVG. This can increase performance
-        considerably in some cases (e.g. many thousands of circle
-        markers on the map).
     no_touch : bool, default False
         Forces Leaflet to not use touch events even if it detects them.
     disable_3d : bool, default False
@@ -269,11 +262,11 @@ class Map(MacroElement):
             max_bounds=max_bounds_array,
             zoom=zoom_start,
             zoom_control=zoom_control,
+            prefer_canvas=prefer_canvas,
             **kwargs
         )
 
         self.global_switches = GlobalSwitches(
-            prefer_canvas,
             no_touch,
             disable_3d
         )
