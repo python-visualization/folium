@@ -424,10 +424,16 @@ class GeoJson(Layer):
         }).addTo({{ this._parent.get_name() }});
         {%- if this.embed %}
             {{ this.get_name() }}.addData({{ this.data|tojson }});
+            {% if this._parent.get_name()|truncate(14, True, "") == "marker_cluster" %}
+            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+            {% endif %}
         {%- else %}
             $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true,
                 success: function(data) {
                     {{ this.get_name() }}.addData(data);
+                    {% if (this._parent.get_name()|truncate(14, True, "") == "marker_cluster") %}
+                    {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+                    {% endif %}
             }});
         {%- endif %}
         {% endmacro %}
