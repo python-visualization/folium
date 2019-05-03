@@ -60,6 +60,10 @@ The basic workflow for contributing is:
    git checkout -b name-of-your-branch
    ```
 4. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
+   ```
+   pip install -r requirements.txt
+   pip install -r requirements-dev.txt
+   ```
 5. Install Firefox, download [geckodriver](https://github.com/mozilla/geckodriver/releases) 
    and put it in the PATH.
 6. Make changes to your local copy of the folium repository
