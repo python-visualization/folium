@@ -32,7 +32,7 @@ Contents
    :maxdepth: 3
 
    installing
-   flask
    quickstart.ipynb
+   flask
    modules
    plugins
