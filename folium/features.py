@@ -1178,7 +1178,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.4.0.html#divicon
+    See https://leafletjs.com/reference-1.5.0.html#divicon
 
     """
 

@@ -137,7 +137,7 @@ class Map(MacroElement):
         Display zoom controls on the map.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
-        https://leafletjs.com/reference-1.4.0.html#map
+        https://leafletjs.com/reference-1.5.0.html#map
 
     Returns
     -------
