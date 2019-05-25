@@ -3,6 +3,7 @@ from jinja2 import Template
 from branca.element import MacroElement, Figure, JavascriptLink
 
 from folium.folium import Map
+from folium.map import LayerControl
 from folium.utilities import deep_copy
 
 
@@ -102,6 +103,8 @@ class DualMap(MacroElement):
                 # This map has been rendered before, child was copied already.
                 continue
             child_copy = deep_copy(child)
+            if isinstance(child_copy, LayerControl):
+                child_copy.reset()
             self.m2.add_child(child_copy, name, index)
             # m2 has already been rendered, so render the child here:
             child_copy.render()

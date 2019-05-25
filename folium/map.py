@@ -145,6 +145,11 @@ class LayerControl(MacroElement):
         self.overlays = OrderedDict()
         self.layers_untoggle = OrderedDict()
 
+    def reset(self):
+        self.base_layers = OrderedDict()
+        self.overlays = OrderedDict()
+        self.layers_untoggle = OrderedDict()
+
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         for item in self._parent._children.values():
