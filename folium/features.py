@@ -25,6 +25,7 @@ from folium.utilities import (
     none_min,
     get_obj_in_upper_tree,
     parse_options,
+    dict_get,
 )
 from folium.vector_layers import PolyLine, path_options
 
@@ -521,17 +522,29 @@ class GeoJson(Layer):
                              .format(name))
 
     def find_identifier(self):
-        """Find a unique identifier for each feature, create it if needed."""
+        """Find a unique identifier for each feature, create it if needed.
+
+        According to the GeoJSON specs a feature:
+         - MAY have an 'id' field with a string or numerical value.
+         - MUST have a 'properties' field. The content can be any json object
+           or even null.
+
+        """
         features = self.data['features']
         n = len(features)
         feature = features[0]
+        # Each feature has an 'id' field with a unique value.
         if 'id' in feature and len(set(feat['id'] for feat in features)) == n:
             return 'feature.id'
-        for key in feature.get('properties', []):
-            if len(set(feat['properties'][key] for feat in features)) == n:
-                return 'feature.properties.{}'.format(key)
+        # Each feature has a unique string/float/int property.
+        #   'properties' may be missing or None:
+        if isinstance(feature.get('properties', None), dict):
+            field_name = self._search_properties(features, 'properties')
+            if field_name is not None:
+                return field_name
+        # We add an 'id' field with a unique value to the data.
         if self.embed:
-            for i, feature in enumerate(self.data['features']):
+            for i, feature in enumerate(features):
                 feature['id'] = str(i)
             return 'feature.id'
         raise ValueError(
@@ -539,6 +552,30 @@ class GeoJson(Layer):
             '`embed=False` it cannot be added. Consider adding an `id` '
             'field to your geojson data or set `embed=True`. '
         )
+
+    @classmethod
+    def _search_properties(cls, features, *keys):
+        """Find a property for which each feature has a unique str/num value."""
+        value_first_feature = dict_get(features[0], *keys)
+        # Recursively look through the dictionary to find a unique value.
+        if isinstance(value_first_feature, dict):
+            for key in value_first_feature:
+                field_name = cls._search_properties(features, *[*keys, key])
+                if field_name is not None:
+                    return field_name
+        # Check that all features have these keys and that the values are unique.
+        unique_values = set()
+        for feat in features:
+            try:
+                value = dict_get(feat, *keys)
+            except TypeError:
+                # not all features have the same properties layout
+                return None
+            if not isinstance(value, (str, float, int)):
+                return None
+            unique_values.add(value)
+        if len(unique_values) == len(features):
+            return '.'.join(['feature', *keys])
 
     def _get_self_bounds(self):
         """

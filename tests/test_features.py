@@ -12,7 +12,7 @@ import warnings
 from branca.element import Element
 
 import folium
-from folium import Map, Popup
+from folium import Map, Popup, GeoJson
 
 import pytest
 
@@ -213,3 +213,72 @@ def test_geojson_tooltip():
         warnings.simplefilter('always')
         m._repr_html_()
         assert issubclass(w[-1].category, UserWarning), 'GeoJsonTooltip GeometryCollection test failed.'
+
+
+def test_geojson_search_properties():
+    features = [{'properties': None} for _ in range(3)]
+    assert GeoJson._search_properties(features, 'properties') is None
+    features = [{'properties': {'hi': 'there'}},
+                {'properties': {'hi': 'what'}}]
+    assert GeoJson._search_properties(features, 'properties') == 'feature.properties.hi'
+    features = [{'properties': {'hi': {'more': 'some value'}}},
+                {'properties': {'hi': {'more': 'another value'}}}]
+    assert (GeoJson._search_properties(features, 'properties')
+            == 'feature.properties.hi.more')
+    features = [{'properties': {'hi': 'there'}},
+                {'properties': {'hi': 'there'}}]
+    assert GeoJson._search_properties(features, 'properties') is None
+    features = [{'properties': {'hi': 'there'}},
+                {'properties': {'hi': None}}]
+    assert GeoJson._search_properties(features, 'properties') is None
+    features = [{'properties': {'hi': 'there'}},
+                {'properties': 42}]
+    assert GeoJson._search_properties(features, 'properties') is None
+    features = [{'properties': [42, 43]},
+                {'properties': [1, 2]}]
+    assert GeoJson._search_properties(features, 'properties') is None
+
+
+def test_geojson_find_identifier():
+
+    def _create(properties):
+        return {"type": "FeatureCollection", "features": [
+            {"type": "Feature",
+             "properties": properties}
+        ]}
+
+    data_bare = _create(None)
+    data_with_id = _create(None)
+    data_with_id['features'][0]['id'] = 'this-is-an-id'
+    data_with_unique_property = _create({
+        'property-key': 'some-value',
+    })
+    data_with_nested_properties = _create({
+        "summary": {"distance": 343.2},
+        "way_points": [3, 5],
+    })
+    data_with_incompatible_properties = _create({
+        "summary": {"distances": [0, 6], "durations": None},
+        "way_points": [3, 5],
+    })
+
+    geojson = GeoJson(data_with_id)
+    assert geojson.find_identifier() == 'feature.id'
+    geojson = GeoJson(data_bare)
+    assert geojson.find_identifier() == 'feature.id'
+    assert geojson.data['features'][0]['id'] == '0'  # the id got added
+    geojson = GeoJson(data_with_unique_property)
+    assert geojson.find_identifier() == 'feature.properties.property-key'
+    geojson = GeoJson(data_with_nested_properties)
+    assert geojson.find_identifier() == 'feature.properties.summary.distance'
+    geojson = GeoJson(data_with_incompatible_properties)
+    assert geojson.find_identifier() == 'feature.id'
+    assert geojson.data['features'][0]['id'] == '0'  # the id got added
+
+    data_loose_geometry = {"type": "LineString", "coordinates": [
+        [3.961389, 43.583333], [3.968056, 43.580833], [3.974722, 43.578333],
+        [3.986389, 43.575278], [3.998333, 43.5725], [4.163333, 43.530556],
+    ]}
+    geojson = GeoJson(data_loose_geometry)
+    geojson.convert_to_feature_collection()
+    assert geojson.find_identifier() == 'feature.id'  # id got added
