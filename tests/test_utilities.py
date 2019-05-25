@@ -11,6 +11,7 @@ from folium.utilities import (
     deep_copy,
     get_obj_in_upper_tree,
     parse_options,
+    dict_get,
 )
 
 
@@ -154,3 +155,16 @@ def test_parse_options():
     assert parse_options(thing=None) == {}
     assert parse_options(long_thing=42) == {'longThing': 42}
     assert parse_options(thing=42, lst=[1, 2]) == {'thing': 42, 'lst': [1, 2]}
+
+
+def test_dict_get():
+    assert dict_get({}) == {}
+    assert dict_get({'hi': 'there'}) == {'hi': 'there'}
+    assert dict_get({'hi': {'there': 42}}, 'hi', 'there') == 42
+    assert dict_get({'hi': [1, 2, 3]}, 'hi') == [1, 2, 3]
+    with pytest.raises(TypeError):
+        dict_get({'hi': 42}, 'hi', 'wrong-key')
+    with pytest.raises(TypeError):
+        dict_get(42, 'wrong-key')
+    with pytest.raises(KeyError):
+        dict_get({'hi': 42}, 'wrong-key')
