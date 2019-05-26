@@ -490,20 +490,3 @@ def parse_options(**kwargs):
     return {camelize(key): value
             for key, value in kwargs.items()
             if value is not None}
-
-
-def dict_get(d, *keys):
-    """Return the field in dictionary d under the given keys.
-
-    Examples
-    --------
-    >>> dict_get({'hi': {'there': 42}}, 'hi', 'there')
-    42
-
-    """
-    if len(keys) == 0:
-        return d
-    if not isinstance(d, dict):
-        raise TypeError('The first argument should be a dictionary, not a {}.'
-                        .format(type(d)))
-    return dict_get(d[keys[0]], *keys[1:])
