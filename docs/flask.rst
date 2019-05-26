@@ -1,20 +1,9 @@
-Flask Example
-=============
+Using folium with flask
+=======================
 
-Getting Started
----------------
-::
+A very common use case is to use folium with in a flask app.
+The trick is to return folium's HTML representation.
+Here is an example on how to d that:
 
-    from flask import Flask, render_template
-    import folium
 
-    app = Flask(__name__)
-
-    @app.route('/')
-    def index():
-        start_coords = (46.9540700, 142.7360300)
-        folium_map = folium.Map(location=start_coords, zoom_start=14)
-        return folium_map._repr_html_() # returns pure html code
-
-    if __name__ == '__main__':
-        app.run(debug=True)
+.. literalinclude:: ../examples/flask_example.py
