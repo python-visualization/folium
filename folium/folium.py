@@ -26,7 +26,7 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js'),
     ('jquery',
      'https://code.jquery.com/jquery-1.12.4.min.js'),
     ('bootstrap',
@@ -37,7 +37,7 @@ _default_js = [
 
 _default_css = [
     ('leaflet_css',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.css'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css'),
     ('bootstrap_css',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
     ('bootstrap_theme_css',
@@ -137,7 +137,7 @@ class Map(MacroElement):
         Display zoom controls on the map.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
-        https://leafletjs.com/reference-1.4.0.html#map
+        https://leafletjs.com/reference-1.5.1.html#map
 
     Returns
     -------
