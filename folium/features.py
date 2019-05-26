@@ -807,7 +807,7 @@ class GeoJsonTooltip(Tooltip):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.2.0#tooltip
+        available here: https://leafletjs.com/reference-1.5.1#tooltip
 
     Examples
     --------
