@@ -12,7 +12,7 @@ import warnings
 from branca.element import Element
 
 import folium
-from folium import Map, Popup
+from folium import Map, Popup, GeoJson
 
 import pytest
 
@@ -213,3 +213,93 @@ def test_geojson_tooltip():
         warnings.simplefilter('always')
         m._repr_html_()
         assert issubclass(w[-1].category, UserWarning), 'GeoJsonTooltip GeometryCollection test failed.'
+
+
+def test_geojson_find_identifier():
+
+    def _create(*properties):
+        return {"type": "FeatureCollection", "features": [
+            {"type": "Feature", "properties": item}
+            for item in properties]}
+
+    def _assert_id_got_added(data):
+        _geojson = GeoJson(data)
+        assert _geojson.find_identifier() == 'feature.id'
+        assert _geojson.data['features'][0]['id'] == '0'
+
+    data_with_id = _create(None, None)
+    data_with_id['features'][0]['id'] = 'this-is-an-id'
+    data_with_id['features'][1]['id'] = 'this-is-another-id'
+    geojson = GeoJson(data_with_id)
+    assert geojson.find_identifier() == 'feature.id'
+    assert geojson.data['features'][0]['id'] == 'this-is-an-id'
+
+    data_with_unique_properties = _create(
+        {'property-key': 'some-value'},
+        {'property-key': 'another-value'},
+    )
+    geojson = GeoJson(data_with_unique_properties)
+    assert geojson.find_identifier() == 'feature.properties.property-key'
+
+    data_with_unique_properties = _create(
+        {'property-key': 42},
+        {'property-key': 43},
+        {'property-key': 'or a string'},
+    )
+    geojson = GeoJson(data_with_unique_properties)
+    assert geojson.find_identifier() == 'feature.properties.property-key'
+
+    # The test cases below have no id field or unique property,
+    # so an id will be added to the data.
+
+    data_with_identical_ids = _create(None, None)
+    data_with_identical_ids['features'][0]['id'] = 'identical-ids'
+    data_with_identical_ids['features'][1]['id'] = 'identical-ids'
+    _assert_id_got_added(data_with_identical_ids)
+
+    data_with_some_missing_ids = _create(None, None)
+    data_with_some_missing_ids['features'][0]['id'] = 'this-is-an-id'
+    # the second feature doesn't have an id
+    _assert_id_got_added(data_with_some_missing_ids)
+
+    data_with_identical_properties = _create(
+        {'property-key': 'identical-value'},
+        {'property-key': 'identical-value'},
+    )
+    _assert_id_got_added(data_with_identical_properties)
+
+    data_bare = _create(None)
+    _assert_id_got_added(data_bare)
+
+    data_empty_dict = _create({})
+    _assert_id_got_added(data_empty_dict)
+
+    data_without_properties = _create(None)
+    del data_without_properties['features'][0]['properties']
+    _assert_id_got_added(data_without_properties)
+
+    data_some_without_properties = _create({'key': 'value'}, 'will be deleted')
+    # the first feature has properties, but the second doesn't
+    del data_some_without_properties['features'][1]['properties']
+    _assert_id_got_added(data_some_without_properties)
+
+    data_with_nested_properties = _create({
+        "summary": {"distance": 343.2},
+        "way_points": [3, 5],
+    })
+    _assert_id_got_added(data_with_nested_properties)
+
+    data_with_incompatible_properties = _create({
+        "summary": {"distances": [0, 6], "durations": None},
+        "way_points": [3, 5],
+    })
+    _assert_id_got_added(data_with_incompatible_properties)
+
+    data_loose_geometry = {"type": "LineString", "coordinates": [
+        [3.961389, 43.583333], [3.968056, 43.580833], [3.974722, 43.578333],
+        [3.986389, 43.575278], [3.998333, 43.5725], [4.163333, 43.530556],
+    ]}
+    geojson = GeoJson(data_loose_geometry)
+    geojson.convert_to_feature_collection()
+    assert geojson.find_identifier() == 'feature.id'
+    assert geojson.data['features'][0]['id'] == '0'

@@ -521,17 +521,31 @@ class GeoJson(Layer):
                              .format(name))
 
     def find_identifier(self):
-        """Find a unique identifier for each feature, create it if needed."""
-        features = self.data['features']
-        n = len(features)
-        feature = features[0]
-        if 'id' in feature and len(set(feat['id'] for feat in features)) == n:
+        """Find a unique identifier for each feature, create it if needed.
+
+        According to the GeoJSON specs a feature:
+         - MAY have an 'id' field with a string or numerical value.
+         - MUST have a 'properties' field. The content can be any json object
+           or even null.
+
+        """
+        feats = self.data['features']
+        # Each feature has an 'id' field with a unique value.
+        unique_ids = set(feat.get('id', None) for feat in feats)
+        if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
-        for key in feature.get('properties', []):
-            if len(set(feat['properties'][key] for feat in features)) == n:
-                return 'feature.properties.{}'.format(key)
+        # Each feature has a unique string or int property.
+        if all(isinstance(feat.get('properties', None), dict) for feat in feats):
+            for key in feats[0]['properties']:
+                unique_values = set(
+                    feat['properties'].get(key, None) for feat in feats
+                    if isinstance(feat['properties'].get(key, None), (str, int))
+                )
+                if len(unique_values) == len(feats):
+                    return 'feature.properties.{}'.format(key)
+        # We add an 'id' field with a unique value to the data.
         if self.embed:
-            for i, feature in enumerate(self.data['features']):
+            for i, feature in enumerate(feats):
                 feature['id'] = str(i)
             return 'feature.id'
         raise ValueError(
@@ -807,7 +821,7 @@ class GeoJsonTooltip(Tooltip):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.2.0#tooltip
+        available here: https://leafletjs.com/reference-1.5.1#tooltip
 
     Examples
     --------
@@ -1095,6 +1109,8 @@ class Choropleth(FeatureGroup):
 
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
+                if not key_of_x:
+                    raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
                 if key_of_x not in color_data.keys():
                     return nan_fill_color, nan_fill_opacity
@@ -1178,7 +1194,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.4.0.html#divicon
+    See https://leafletjs.com/reference-1.5.1.html#divicon
 
     """
 

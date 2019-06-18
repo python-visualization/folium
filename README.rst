@@ -1,4 +1,4 @@
-|PyPI| |Travis| |Gitter| |DOI|
+|PyPI| |Travis| |Gitter| |DOI| |binder|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
@@ -15,6 +15,9 @@
 .. |DOI| image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
    :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
    :alt: DOI
+   
+.. |binder| image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/python-visualization/folium/master?filepath=examples
 
 folium
 ======

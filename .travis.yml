@@ -28,11 +28,13 @@ matrix:
   allow_failures:
   - name: latest-branca
     env: PY=3.7
+  - name: linkcheck
+    env: PY=3.7
 
 before_install:
   # Install miniconda and create TEST env.
   - |
-    wget http://bit.ly/miniconda -O miniconda.sh
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     bash miniconda.sh -b -p $HOME/miniconda
     export PATH="$HOME/miniconda/bin:$PATH"
     conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
@@ -86,7 +88,7 @@ script:
       conda install doctr
       cp examples/Quickstart.ipynb docs/quickstart.ipynb
       pushd docs
-      make clean html linkcheck
+      make clean html
       popd
       if [[ -z "$TRAVIS_TAG" ]]; then 
         python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ dev
@@ -96,6 +98,11 @@ script:
       fi
     fi
 
+
+  - if [[ $TRAVIS_JOB_NAME == 'linkcheck' ]]; then
+      cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
+      pushd docs && make clean html linkcheck && popd ;
+    fi
 
 deploy:
   skip_cleanup: true
