@@ -413,22 +413,23 @@ class GeoJson(Layer):
                 }
             });
         };
-        var {{ this.get_name() }} = L.geoJson(null, {
-            {%- if this.smooth_factor is not none  %}
-                smoothFactor: {{ this.smooth_factor|tojson }},
-            {%- endif %}
-                onEachFeature: {{ this.get_name() }}_onEachFeature,
-            {% if this.style %}
-                style: {{ this.get_name() }}_styler,
-            {%- endif %}
-        }).addTo({{ this._parent.get_name() }});
+        var options = {
+        {%- if this.smooth_factor is not none  %}
+            smoothFactor: {{ this.smooth_factor|tojson }},
+        {%- endif %}
+            onEachFeature: {{ this.get_name() }}_onEachFeature,
+        {% if this.style %}
+            style: {{ this.get_name() }}_styler,
+        {%- endif %} };
         {%- if this.embed %}
-            {{ this.get_name() }}.addData({{ this.data|tojson }});
+        var {{ this.get_name() }} = L.geoJson(
+            {{ this.data|tojson }}, options).addTo({{ this._parent.get_name() }});
         {%- else %}
-            $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true,
-                success: function(data) {
-                    {{ this.get_name() }}.addData(data);
-            }});
+        var json_url = $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true })
+        $.when(json_url).done(function() {
+            var geo_json_32b06f4a0e6d419c8f501b4e6c43bc57 = L.geoJson(json_url.responseJSON
+            , options).addTo({{ this._parent.get_name() }});
+            });
         {%- endif %}
         {% endmacro %}
         """)  # noqa
