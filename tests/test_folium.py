@@ -230,6 +230,29 @@ class TestFolium(object):
         assert '"fillColor":"a_random_color","fillOpacity":0.123454321' in out_str
         assert '"fillOpacity":0.543212345' in out_str
 
+    def test_choropleth_key_on(self):
+        """Test to make sure that Choropleth function doesn't raises
+        a ValueError when the 'key_on' field is set to a column that might
+        have 0 as a value.
+        """
+        with open(os.path.join(rootpath, 'geo_grid.json')) as f:
+            geo_data = json.load(f)
+        data = pd.DataFrame({'idx': {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5},
+                             'value': {'0': 78.0, '1': 39.0, '2': 0.0, '3': 81.0, '4': 42.0, '5': 68.0}})
+        fill_color = 'BuPu'
+        columns = ['idx', 'value']
+        key_on = 'feature.properties.idx'
+
+        try:
+            Choropleth(
+                geo_data=geo_data,
+                data=data,
+                key_on=key_on,
+                fill_color=fill_color,
+                columns=columns)
+        except ValueError as e:
+            pytest.fail("Unexpected ValueError: %s" % e)
+
     def test_choropleth_warning(self):
         """Test that the Map.choropleth method works and raises a warning."""
         self.setup()
