@@ -92,6 +92,7 @@ def test_popup_show():
 
 
 def test_icon_valid_marker_colors():
+    assert len(Icon.color_options) == 19
     with pytest.warns(None) as record:
         for color in Icon.color_options:
             Icon(color=color)
