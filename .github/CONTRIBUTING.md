@@ -61,6 +61,10 @@ The basic workflow for contributing is:
    ```
 4. Install the [miniconda](https://docs.conda.io/en/latest/miniconda.html) to avoid any external library errors.
 
+   If using `conda` one can create a development environment with:
+   ```
+   $ conda create --name FOLIUM python=3.7 --file requirements.txt --file requirements-dev.txt
+   ```
 5. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
    ```
    pip install -r requirements.txt
