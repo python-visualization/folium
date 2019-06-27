@@ -59,7 +59,7 @@ The basic workflow for contributing is:
    ```
    git checkout -b name-of-your-branch
    ```
-4. Install the [anaconda](https://www.anaconda.com/distribution/#download-section) to avoid any external library errors.
+4. Install the [miniconda](https://docs.conda.io/en/latest/miniconda.html) to avoid any external library errors.
 
 5. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
    ```
