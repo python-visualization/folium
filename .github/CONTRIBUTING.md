@@ -74,7 +74,7 @@ The basic workflow for contributing is:
    and put it in the PATH.
 7. Make changes to your local copy of the folium repository
 8. Make sure the tests pass:
-   * in the repository folder do `pip install -e .`  (needed for notebook tests)
+   * in the repository folder do `pip install -e . --no-deps`  (needed for notebook tests)
    * run `python -m pytest tests`
    * run `flake8 folium --max-line-length=120`
    * resolve all errors
