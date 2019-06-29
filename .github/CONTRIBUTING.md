@@ -59,26 +59,32 @@ The basic workflow for contributing is:
    ```
    git checkout -b name-of-your-branch
    ```
-4. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
+4. Install the [miniconda](https://docs.conda.io/en/latest/miniconda.html) to avoid any external library errors.
+
+   If using `conda` one can create a development environment with:
+   ```
+   $ conda create --name FOLIUM python=3.7 --file requirements.txt --file requirements-dev.txt
+   ```
+5. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
    ```
    pip install -r requirements.txt
    pip install -r requirements-dev.txt
    ```
-5. Install Firefox, download [geckodriver](https://github.com/mozilla/geckodriver/releases) 
+6. Install Firefox, download [geckodriver](https://github.com/mozilla/geckodriver/releases) 
    and put it in the PATH.
-6. Make changes to your local copy of the folium repository
-7. Make sure the tests pass:
-   * in the repository folder do `pip install -e .`  (needed for notebook tests)
+7. Make changes to your local copy of the folium repository
+8. Make sure the tests pass:
+   * in the repository folder do `pip install -e . --no-deps`  (needed for notebook tests)
    * run `python -m pytest tests`
    * run `flake8 folium --max-line-length=120`
    * resolve all errors
-8. Commit those changes
+9. Commit those changes
    ```
    git add file1 file2 file3
    git commit -m 'a descriptive commit message'
    ```
-9. Push your updated branch to your fork
+10. Push your updated branch to your fork
    ```
    git push origin name-of-your-branch
    ```
-10. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
+11. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
