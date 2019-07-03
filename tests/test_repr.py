@@ -48,11 +48,13 @@ def test__repr_png_no_image(m):
     assert png is None
 
 
+@pytest.mark.xfail
 def test__repr_png_is_bytes(m_png):
     png = m_png._repr_png_()
     assert isinstance(png, bytes)
 
 
+@pytest.mark.xfail
 @pytest.mark.skipif(sys.version_info < (3, 0),
                     reason="Doesn't work on Python 2.7.")
 def test_valid_png(m_png):
