@@ -44,8 +44,8 @@ class Draw(MacroElement):
         {% macro script(this, kwargs) %}
             var options = {
               position: {{ this.position|tojson }},
-              draw: {{ this.draw_options }},
-              edit: {{ this.edit_options }},
+              draw: {{ this.draw_options|tojson }},
+              edit: {{ this.edit_options|tojson }},
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
