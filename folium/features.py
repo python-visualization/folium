@@ -1212,7 +1212,7 @@ class DivIcon(MacroElement):
         self.options = parse_options(
             html=html,
             icon_size=icon_size,
-            icon_ancher=icon_anchor,
+            icon_anchor=icon_anchor,
             popup_anchor=popup_anchor,
             class_name=class_name,
         )
