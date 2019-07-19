@@ -27,6 +27,7 @@ class TileLayer(Layer):
             - "OpenStreetMap"
             - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
             - "CartoDB positron", "CartoDB dark_matter"
+            - "Amap", "AmapSatellite"
             - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)

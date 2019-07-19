@@ -78,6 +78,7 @@ class Map(MacroElement):
         - "Mapbox Bright" (Limited levels of zoom for free tiles)
         - "Mapbox Control Room" (Limited levels of zoom for free tiles)
         - "Stamen" (Terrain, Toner, and Watercolor)
+        - "Amap", "AmapSatellite"
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
