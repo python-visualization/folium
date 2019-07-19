@@ -97,6 +97,8 @@ class Map(MacroElement):
         Map tileset to use. Can choose from a list of built-in tiles,
         pass a custom URL or pass `None` to create a map without tiles.
         For more advanced tile layer options, use the `TileLayer` class.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls
     min_zoom: int, default 0
         Minimum allowed zoom level for the tile layer that is created.
     max_zoom: int, default 18
@@ -216,6 +218,7 @@ class Map(MacroElement):
             top='0%',
             position='relative',
             tiles='OpenStreetMap',
+            name=None,
             attr=None,
             min_zoom=0,
             max_zoom=18,
@@ -280,7 +283,7 @@ class Map(MacroElement):
 
         if tiles:
             tile_layer = TileLayer(tiles=tiles, attr=attr,
-                                   min_zoom=min_zoom, max_zoom=max_zoom)
+                                   min_zoom=min_zoom, max_zoom=max_zoom, name=name)
             self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
