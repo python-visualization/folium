@@ -68,6 +68,7 @@ class Draw(MacroElement):
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
+            {% if this.export %}
             document.getElementById('export').onclick = function(e) {
                 var data = drawnItems.toGeoJSON();
                 var convertedData = 'text/json;charset=utf-8,'
@@ -79,6 +80,7 @@ class Draw(MacroElement):
                     'download', {{ this.filename|tojson }}
                 );
             }
+            {% endif %}
         {% endmacro %}
         """)
 
