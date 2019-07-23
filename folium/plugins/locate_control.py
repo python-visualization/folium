@@ -18,9 +18,6 @@ class LocateControl(MacroElement):
     To work properly in production, the connection needs to be encrypted, otherwise browser will not
     allow users to share their location.
 
-    WARNING: This plugin when used with Draw plugin, it must be added to your map before Draw. See
-    example below.
-
     Parameters
     ----------
     **kwargs
@@ -32,13 +29,11 @@ class LocateControl(MacroElement):
     # With default settings
     >>> LocateControl().add_to(m)
 
-    # With custom options and alongside with Draw
+    # With some custom options
     >>> LocateControl(
     ...     position="bottomright",
     ...     strings={"title": "See you current location",
     ...              "popup": "Your position"}).add_to(m))
-
-    >>> Draw(export=True).add_to(m)
 
     For more info check:
     https://github.com/domoritz/leaflet-locatecontrol
