@@ -243,15 +243,12 @@ class TestFolium(object):
         columns = ['idx', 'value']
         key_on = 'feature.properties.idx'
 
-        try:
-            Choropleth(
-                geo_data=geo_data,
-                data=data,
-                key_on=key_on,
-                fill_color=fill_color,
-                columns=columns)
-        except ValueError as e:
-            assert str(e) != "key_on `'properties.idx'` not found in GeoJSON."
+        Choropleth(
+            geo_data=geo_data,
+            data=data,
+            key_on=key_on,
+            fill_color=fill_color,
+            columns=columns)
 
     def test_choropleth_warning(self):
         """Test that the Map.choropleth method works and raises a warning."""
