@@ -1109,7 +1109,7 @@ class Choropleth(FeatureGroup):
 
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
-                if not key_of_x:
+                if key_of_x is None:
                     raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
                 if key_of_x not in color_data.keys():
