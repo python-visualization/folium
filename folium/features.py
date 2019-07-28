@@ -421,14 +421,16 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
-        }).addTo({{ this._parent.get_name() }});
+        });
+        function {{ this.get_name() }}_add (data) {
+            {{ this.get_name() }}.addData(data)
+                .addTo({{ this._parent.get_name() }});
+        }
         {%- if this.embed %}
-            {{ this.get_name() }}.addData({{ this.data|tojson }});
+            {{ this.get_name() }}_add({{ this.data|tojson }});
         {%- else %}
-            $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true,
-                success: function(data) {
-                    {{ this.get_name() }}.addData(data);
-            }});
+            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json'})
+                .done({{ this.get_name() }}_add);
         {%- endif %}
         {% endmacro %}
         """)  # noqa
