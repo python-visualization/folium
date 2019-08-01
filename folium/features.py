@@ -1060,12 +1060,26 @@ class Choropleth(FeatureGroup):
                 'in favor of the `bins` parameter.', DeprecationWarning)
 
         # Create color_data dict
-        if hasattr(data, 'set_index'):
+        str_color_data = None
+        if hasattr(data, 'to_dict'):
+            # This is a pd.Dataframe or pd.Series
+            # check for numbers in future color_data keys
+            future_keys = data[columns[0]] if columns is not None else data.index
+            any_numeric_key = any([isinstance(e, (int, float, np.floating, np.integer))
+                                    for e in future_keys])
+
+            if hasattr(data, 'set_index'):
             # This is a pd.DataFrame
-            color_data = data.set_index(columns[0])[columns[1]].to_dict()
-        elif hasattr(data, 'to_dict'):
-            # This is a pd.Series
+                data = data.set_index(columns[0])[columns[1]]
+
+            # convert the data to dictionary
             color_data = data.to_dict()
+
+            # create another dict with all keys converted to str if needed
+            if any_numeric_key:
+                data.index = data.index.astype(str)
+                str_color_data = data.to_dict()
+
         elif data:
             color_data = dict(data)
         else:
@@ -1114,10 +1128,13 @@ class Choropleth(FeatureGroup):
                 if key_of_x is None:
                     raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
-                if key_of_x not in color_data.keys():
+                if key_of_x in color_data.keys():
+                    value_of_x = color_data[key_of_x]
+                elif str_color_data is not None and key_of_x in str_color_data.keys():
+                    value_of_x = str_color_data[key_of_x]
+                else:
                     return nan_fill_color, nan_fill_opacity
 
-                value_of_x = color_data[key_of_x]
                 if np.isnan(value_of_x):
                     return nan_fill_color, nan_fill_opacity
 
