@@ -255,16 +255,16 @@ class TestFolium(object):
         """Test to make sure that Choropleth function does complete the lookup
         between a GeoJSON generated from a GeoDataFrame and data from the GeoDataFrame itself.
 
-        key_on field is dtype = str, while column 0 is dtype = int 
+        key_on field is dtype = str, while column 0 is dtype = int
         All geometries have matching values (no nan_fill_color allowed)
         """
         self.setup()
 
         with open(os.path.join(rootpath, 'geo_grid.json')) as f:
             geo_data = json.load(f)
-        
+
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data['features'])
-        geo_data_frame.crs = {'init':'epsg:4326'}
+        geo_data_frame.crs = {'init': 'epsg:4326'}
         fill_color = 'BuPu'
         key_on = 'feature.id'
 
@@ -294,9 +294,9 @@ class TestFolium(object):
 
         with open(os.path.join(rootpath, 'geo_grid.json')) as f:
             geo_data = json.load(f)
-        
+
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data['features'])
-        geo_data_frame.crs = {'init':'epsg:4326'}
+        geo_data_frame.crs = {'init': 'epsg:4326'}
         data = pd.DataFrame({'idx': {'0': 0, '1': '1', '2': 2, '3': 3, '4': 4, '5': 5},
                              'value': {'0': 78.0, '1': 39.0, '2': 0.0, '3': 81.0, '4': 42.0, '5': 68.0}})
         fill_color = 'BuPu'
@@ -330,9 +330,9 @@ class TestFolium(object):
 
         with open(os.path.join(rootpath, 'geo_grid.json')) as f:
             geo_data = json.load(f)
-        
+
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data['features'])
-        geo_data_frame.crs = {'init':'epsg:4326'}
+        geo_data_frame.crs = {'init': 'epsg:4326'}
         data = pd.DataFrame({'idx': {'0': '0', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5'},
                              'value': {'0': 78.0, '1': 39.0, '2': 0.0, '3': 81.0, '4': 42.0, '5': 68.0}})
         fill_color = 'BuPu'

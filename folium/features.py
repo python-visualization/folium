@@ -1064,9 +1064,10 @@ class Choropleth(FeatureGroup):
         if hasattr(data, 'to_dict'):
             # This is a pd.Dataframe or pd.Series
             # check for numbers in future color_data keys
-            future_keys = data[columns[0]] if columns is not None else data.index
-            any_numeric_key = any([isinstance(e, (int, float, np.floating, np.integer))
-                                    for e in future_keys])
+            future_keys = data[columns[0]] if columns is not None else data.index  # noqa
+            any_numeric_key = any([isinstance(e,
+                                   (int, float, np.floating, np.integer))
+                                   for e in future_keys])
 
             if hasattr(data, 'set_index'):
             # This is a pd.DataFrame
