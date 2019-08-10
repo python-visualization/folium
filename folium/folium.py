@@ -318,7 +318,8 @@ class Map(MacroElement):
                 driver.get('file:///{path}'.format(path=fname))
                 driver.maximize_window()
                 time.sleep(delay)
-                png = driver.get_screenshot_as_png()
+                div = driver.find_elements_by_class_name("folium-map")[0]
+                png = div.screenshot_as_png
                 driver.quit()
             self._png_image = png
         return self._png_image
