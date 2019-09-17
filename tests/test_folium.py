@@ -367,3 +367,14 @@ class TestFolium(object):
         self.m._parent.render()
         bounds = self.m.get_bounds()
         assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds  # noqa
+
+    def test_api_key_param():
+        """
+        Test that folium.Map can accept an API_key and pass it down to the tile layer.
+        """
+        m = folium.Map(tiles='Mapbox', API_key='abc123')
+
+        # This assertion is not ideal because it access the private _children
+        # attribute, but there isn't currently another way to test this
+        # behavior.
+        assert 'abc123' in m._children['mapbox'].tiles
