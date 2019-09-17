@@ -135,6 +135,8 @@ class Map(MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    API_key: str, default None
+        API key for Cloudmade or Mapbox tiles.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
         https://leafletjs.com/reference-1.5.1.html#map
@@ -232,6 +234,7 @@ class Map(MacroElement):
             disable_3d=False,
             png_enabled=False,
             zoom_control=True,
+            API_key=None,
             **kwargs
     ):
         super(Map, self).__init__()
@@ -280,7 +283,8 @@ class Map(MacroElement):
 
         if tiles:
             tile_layer = TileLayer(tiles=tiles, attr=attr,
-                                   min_zoom=min_zoom, max_zoom=max_zoom)
+                                   min_zoom=min_zoom, max_zoom=max_zoom,
+                                   API_key=API_key)
             self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
