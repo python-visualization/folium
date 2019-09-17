@@ -368,7 +368,7 @@ class TestFolium(object):
         bounds = self.m.get_bounds()
         assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds  # noqa
 
-    def test_api_key_param():
+    def test_api_key_param(self):
         """
         Test that folium.Map can accept an API_key and pass it down to the tile layer.
         """
