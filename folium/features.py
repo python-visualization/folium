@@ -516,6 +516,11 @@ class GeoJson(Layer):
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
         """
+        # If for some reason there are no features (e.g., empty API response)
+        # don't attempt validation
+        if not self.data['features']:
+          return
+
         test_feature = self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
@@ -566,7 +571,8 @@ class GeoJson(Layer):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
-        if self.style or self.highlight:
+        # Need at least one feature, otherwise style mapping fails
+        if self.data['features'] and (self.style or self.highlight):
             mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
                                         self)
             if self.style:
