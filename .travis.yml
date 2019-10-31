@@ -25,10 +25,14 @@ matrix:
     env: PY=3.7
   - name: docs
     env: PY=3.7
+  - name: "tarball"
+    env: PY=3.7
   allow_failures:
   - name: latest-branca
     env: PY=3.7
   - name: linkcheck
+    env: PY=3.7
+  - name: notebooks-conding-standard
     env: PY=3.7
 
 before_install:
@@ -54,9 +58,15 @@ before_install:
 
 # Test source distribution.
 install:
-  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall folium-${version}.tar.gz && popd
+  - pip install -e . --no-deps --force-reinstall
 
 script:
+  - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      pip wheel . -w dist --no-deps ;
+      check-manifest --verbose ;
+      twine check dist/* ;
+    fi
+
   - if [[ $TRAVIS_JOB_NAME != 'docs' ]]; then
       cp -r tests/ examples/ /tmp ;
     fi

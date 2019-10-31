@@ -421,14 +421,16 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
-        }).addTo({{ this._parent.get_name() }});
+        });
+        function {{ this.get_name() }}_add (data) {
+            {{ this.get_name() }}.addData(data)
+                .addTo({{ this._parent.get_name() }});
+        }
         {%- if this.embed %}
-            {{ this.get_name() }}.addData({{ this.data|tojson }});
+            {{ this.get_name() }}_add({{ this.data|tojson }});
         {%- else %}
-            $.ajax({url: {{ this.embed_link|tojson }}, dataType: 'json', async: true,
-                success: function(data) {
-                    {{ this.get_name() }}.addData(data);
-            }});
+            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json'})
+                .done({{ this.get_name() }}_add);
         {%- endif %}
         {% endmacro %}
         """)  # noqa
@@ -1109,7 +1111,7 @@ class Choropleth(FeatureGroup):
 
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
-                if not key_of_x:
+                if key_of_x is None:
                     raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
                 if key_of_x not in color_data.keys():
@@ -1212,7 +1214,7 @@ class DivIcon(MacroElement):
         self.options = parse_options(
             html=html,
             icon_size=icon_size,
-            icon_ancher=icon_anchor,
+            icon_anchor=icon_anchor,
             popup_anchor=popup_anchor,
             class_name=class_name,
         )

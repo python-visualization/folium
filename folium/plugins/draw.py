@@ -44,8 +44,8 @@ class Draw(MacroElement):
         {% macro script(this, kwargs) %}
             var options = {
               position: {{ this.position|tojson }},
-              draw: {{ this.draw_options }},
-              edit: {{ this.edit_options }},
+              draw: {{ this.draw_options|tojson }},
+              edit: {{ this.edit_options|tojson }},
             }
             // FeatureGroup is to store editable layers.
             var drawnItems = new L.featureGroup().addTo(
@@ -68,6 +68,7 @@ class Draw(MacroElement):
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems.addLayer(e.layer);
             });
+            {% if this.export %}
             document.getElementById('export').onclick = function(e) {
                 var data = drawnItems.toGeoJSON();
                 var convertedData = 'text/json;charset=utf-8,'
@@ -79,6 +80,7 @@ class Draw(MacroElement):
                     'download', {{ this.filename|tojson }}
                 );
             }
+            {% endif %}
         {% endmacro %}
         """)
 

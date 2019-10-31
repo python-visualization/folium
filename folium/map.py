@@ -211,7 +211,7 @@ class Icon(MacroElement):
                      'green', 'darkgreen', 'lightgreen',
                      'blue', 'darkblue', 'cadetblue', 'lightblue',
                      'purple',  'darkpurple', 'pink',
-                     'white', 'gray', 'lightgray' 'black'}
+                     'white', 'gray', 'lightgray', 'black'}
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
                  angle=0, prefix='glyphicon', **kwargs):
