@@ -967,14 +967,8 @@ class GeoJsonTooltip(GeoJsonDetail):
 
 class GeoJsonPopup(GeoJsonDetail):
     """
-    Create a popup feature to bind to each element of a GeoJson layer based on its attributes.
-
-    Follows the form of GeoJsonTooltip with `fields`, `aliases` arguments to embed GeoJson properties as a table in
-    the popup.
-
-    Also has functionality to embed dynamic VegaLite charts for each feature based on a 'join' key for an attribute of
-    the GeoJson feature, and a data layer in a VegaLite specification. Make sure both join keys contain string
-    datatypes for best consistency.
+    Create a popup feature to bind to each element of a GeoJson layer based on
+    its attributes.
 
     Parameters
     ----------
