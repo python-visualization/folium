@@ -162,6 +162,10 @@ class HeatMapWithTime(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
+            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
+            name='iso8601')
+
+        figure.header.add_child(
             JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
             name='leaflet.timedimension.min.js')
 
