@@ -107,7 +107,12 @@ class TimeSliderChoropleth(Layer):
             ).addTo({{ this._parent.get_name() }});
 
             {{ this.get_name() }}.setStyle(function(feature) {
-                feature.properties.style;
+                if (feature.properties.style !== undefined){
+                    return feature.properties.style;
+                }
+                else{
+                    return "";
+                }
             });
 
             {{ this.get_name() }}.eachLayer(function (layer) {
