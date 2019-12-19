@@ -66,7 +66,7 @@ class SemiCircle(Marker):
                         fillOpacity: {{this.fill_opacity}},
                         color: '{{this.color}}',
                         opacity: {{this.opacity}},
-                        startAngle:{{this.start_angle}}, 
+                        startAngle:{{this.start_angle}},
                         stopAngle:{{this.stop_angle}}
                         })
                         .addTo({{this._parent.get_name()}});
