@@ -59,7 +59,7 @@ def path_options(line=False, radius=False, **kwargs):
 
     Note that the presence of `fill_color` will override `fill=False`.
 
-    See https://leafletjs.com/reference-1.5.1.html#path
+    See https://leafletjs.com/reference-1.6.0.html#path
 
     """
 
@@ -142,7 +142,7 @@ class PolyLine(BaseMultiLocation):
         Disable polyline clipping.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.5.1.html#polyline
+        https://leafletjs.com/reference-1.6.0.html#polyline
 
     """
 
@@ -176,7 +176,7 @@ class Polygon(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.5.1.html#polygon
+        https://leafletjs.com/reference-1.6.0.html#polygon
 
     """
 
@@ -210,7 +210,7 @@ class Rectangle(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.5.1.html#rectangle
+        https://leafletjs.com/reference-1.6.0.html#rectangle
 
     """
 
@@ -250,7 +250,7 @@ class Circle(Marker):
         Radius of the circle, in meters.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.5.1.html#circle
+        https://leafletjs.com/reference-1.6.0.html#circle
 
     """
 
@@ -287,7 +287,7 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.5.1.html#circlemarker
+        https://leafletjs.com/reference-1.6.0.html#circlemarker
 
     """
 
