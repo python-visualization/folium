@@ -20,6 +20,9 @@ class LocateControl(MacroElement):
 
     Parameters
     ----------
+    auto-start : bool, default False
+        When set to True, plugin will be activated on map loading and search for user position.
+        Once user location is founded, the map will automatically centered in using user coordinates.
     **kwargs
         For possible options, see https://github.com/domoritz/leaflet-locatecontrol
 
@@ -45,12 +48,16 @@ class LocateControl(MacroElement):
             var {{this.get_name()}} = L.control.locate(
                 {{this.options | tojson}}
             ).addTo({{this._parent.get_name()}});
+            {% if this.auto_start %}
+                {{this.get_name()}}.start();
+            {% endif %}
         {% endmacro %}
         """)
 
-    def __init__(self, **kwargs):
+    def __init__(self, auto_start=False, **kwargs):
         super(LocateControl, self).__init__()
         self._name = 'LocateControl'
+        self.auto_start = auto_start
         self.options = parse_options(**kwargs)
 
     def render(self, **kwargs):
