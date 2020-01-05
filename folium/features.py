@@ -931,7 +931,7 @@ class GeoJsonTooltip(GeoJsonDetail):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.5.1#tooltip
+        available here: https://leafletjs.com/reference-1.6.0#tooltip
 
     Examples
     --------
@@ -1287,7 +1287,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.5.1.html#divicon
+    See https://leafletjs.com/reference-1.6.0.html#divicon
 
     """
 
