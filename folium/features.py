@@ -25,6 +25,7 @@ from folium.utilities import (
     none_min,
     get_obj_in_upper_tree,
     parse_options,
+    camelize
 )
 from folium.vector_layers import PolyLine, path_options
 
@@ -437,7 +438,7 @@ class GeoJson(Layer):
 
     def __init__(self, data, style_function=None, highlight_function=None,  # noqa
                  name=None, overlay=True, control=True, show=True,
-                 smooth_factor=None, tooltip=None, embed=True):
+                 smooth_factor=None, tooltip=None, embed=True, popup=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
@@ -467,6 +468,8 @@ class GeoJson(Layer):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+        if isinstance(popup, (GeoJsonPopup)):
+            self.add_child(popup)
 
     def process_data(self, data):
         """Convert an unknown data input into a geojson dictionary."""
@@ -796,7 +799,112 @@ class TopoJson(Layer):
         ]
 
 
-class GeoJsonTooltip(Tooltip):
+class GeoJsonDetail(MacroElement):
+
+    """
+    Base class for GeoJsonTooltip and GeoJsonPopup to inherit methods and
+    template structure from. Not for direct usage.
+
+    """
+    base_template = u"""
+    function(layer){
+    let div = L.DomUtil.create('div');
+    {% if this.fields %}
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = {{ this.fields | tojson | safe }};
+    let aliases = {{ this.aliases | tojson | safe }};
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>{% if this.labels %}
+            <th>${aliases[i]{% if this.localize %}.toLocaleString(){% endif %}}</th>
+            {% endif %}
+            <td>${handleObject(layer.feature.properties[v]){% if this.localize %}.toLocaleString(){% endif %}}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    {% endif %}
+    return div
+    }
+    """
+
+    def __init__(self, fields, aliases=None, labels=True, localize=False, style=None,
+                 class_name="geojsondetail"):
+        super(GeoJsonDetail, self).__init__()
+        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
+                                                  'tuple to fields.'
+        if aliases is not None:
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), 'fields and aliases must have' \
+                                                ' the same length.'
+        assert isinstance(labels, bool), 'labels requires a boolean value.'
+        assert isinstance(localize, bool), 'localize must be bool.'
+        self._name = "GeoJsonDetail"
+        self.fields = fields
+        self.aliases = aliases if aliases is not None else fields
+        self.labels = labels
+        self.localize = localize
+        self.class_name = class_name
+        if style:
+            assert isinstance(style, str), \
+                'Pass a valid inline HTML style property string to style.'
+            # noqa outside of type checking.
+            self.style = style
+
+    def warn_for_geometry_collections(self):
+        """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
+        geom_collections = [
+            feature.get('properties') if feature.get('properties') is not None else key
+            for key, feature in enumerate(self._parent.data['features'])
+            if feature['geometry']['type'] == 'GeometryCollection'
+        ]
+        if any(geom_collections):
+            warnings.warn(
+                "{} is not configured to render for GeoJson GeometryCollection geometries. "
+                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
+                "https://tools.ietf.org/html/rfc7946#page-9".format(self._name, geom_collections), UserWarning)
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        figure = self.get_root()
+        if isinstance(self._parent, GeoJson):
+            keys = tuple(self._parent.data['features'][0]['properties'].keys())
+            self.warn_for_geometry_collections()
+        elif isinstance(self._parent, TopoJson):
+            obj_name = self._parent.object_path.split('.')[-1]
+            keys = tuple(self._parent.data['objects'][obj_name][
+                             'geometries'][0]['properties'].keys())
+        else:
+            raise TypeError('You cannot add a {} to anything other than a '
+                            'GeoJson or TopoJson object.'.format(self._name))
+        keys = tuple(x for x in keys if x not in ('style', 'highlight'))
+        for value in self.fields:
+            assert value in keys, ('The field {} is not available in the data. '
+                                   'Choose from: {}.'.format(value, keys))
+        figure.header.add_child(Element(
+            Template(u"""
+                    <style>
+                        .{{ this.class_name }} {
+                            {{ this.style }}
+                        }
+                       .{{ this.class_name }} table{
+                            margin: auto;
+                        }
+                        .{{ this.class_name }} tr{
+                            text-align: left;
+                        }
+                        .{{ this.class_name }} th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            """).render(this=self)), name=self.get_name() + "tablestyle"
+        )
+
+        super(GeoJsonDetail, self).render()
+
+
+class GeoJsonTooltip(GeoJsonDetail):
     """
     Create a tooltip that uses data from either geojson or topojson.
 
@@ -839,93 +947,76 @@ class GeoJsonTooltip(Tooltip):
     >>> GeoJsonTooltip(fields=('CNTY_NM',), labels=False, sticky=False)
     """
     _template = Template(u"""
-        {% macro script(this, kwargs) %}
-        {{ this._parent.get_name() }}.bindTooltip(
-            function(layer){
-            // Convert non-primitive to String.
-            let handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
-            let fields = {{ this.fields|tojson }};
-            {%- if this.aliases %}
-            let aliases = {{ this.aliases|tojson }};
-            {%- endif %}
-            return '<table{% if this.style %} style={{ this.style|tojson }}{% endif%}>' +
-            String(
-                fields.map(
-                columnname=>
-                    `<tr style="text-align: left;">{% if this.labels %}
-                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
-                        ${aliases[fields.indexOf(columnname)]
-                        {% if this.localize %}.toLocaleString(){% endif %}}
-                    {% else %}
-                    ${ columnname{% if this.localize %}.toLocaleString(){% endif %}}
-                    {% endif %}</th>
-                    {% endif %}
-                    <td style="padding: 4px;">${handleObject(layer.feature.properties[columnname])
-                    {% if this.localize %}.toLocaleString(){% endif %}}</td></tr>`
-                ).join(''))
-                +'</table>'
-            }, {{ this.options|tojson }});
-        {% endmacro %}
-        """)
+    {% macro script(this, kwargs) %}
+    {{ this._parent.get_name() }}.bindTooltip(""" + GeoJsonDetail.base_template +
+                         u""",{{ this.tooltip_options | tojson | safe }});
+                     {% endmacro %}
+                     """)
 
-    def __init__(self, fields, aliases=None, labels=True,
-                 localize=False, style=None, sticky=True, **kwargs):
+    def __init__(self, fields, aliases=None, labels=True, localize=False,
+                 style=None, class_name='foliumtooltip', sticky=True, **kwargs):
         super(GeoJsonTooltip, self).__init__(
-            text='', style=style, sticky=sticky, **kwargs
+            fields=fields, aliases=aliases, labels=labels, localize=localize,
+            style=style, class_name=class_name
         )
         self._name = 'GeoJsonTooltip'
+        kwargs.update({'sticky': sticky, 'class_name': class_name})
+        self.tooltip_options = {
+            camelize(key): kwargs[key] for key in kwargs.keys()}
 
-        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
-                                                  'tuple to fields.'
-        if aliases is not None:
-            assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), 'fields and aliases must have' \
-                                                ' the same length.'
-        assert isinstance(labels, bool), 'labels requires a boolean value.'
-        assert isinstance(localize, bool), 'localize must be bool.'
-        assert 'permanent' not in kwargs, 'The `permanent` option does not ' \
-                                          'work with GeoJsonTooltip.'
 
-        self.fields = fields
-        self.aliases = aliases
-        self.labels = labels
-        self.localize = localize
-        if style:
-            assert isinstance(style, str), \
-                'Pass a valid inline HTML style property string to style.'
-            # noqa outside of type checking.
-            self.style = style
+class GeoJsonPopup(GeoJsonDetail):
+    """
+    Create a popup feature to bind to each element of a GeoJson layer based on
+    its attributes.
 
-    def warn_for_geometry_collections(self):
-        """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
-        geom_collections = [
-            feature.get('properties') if feature.get('properties') is not None else key
-            for key, feature in enumerate(self._parent.data['features'])
-            if feature['geometry']['type'] == 'GeometryCollection'
-        ]
-        if any(geom_collections):
-            warnings.warn(
-                "GeoJsonTooltip is not configured to render tooltips for GeoJson GeometryCollection geometries. "
-                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
-                "https://tools.ietf.org/html/rfc7946#page-9".format(geom_collections), UserWarning)
+    Parameters
+    ----------
+    fields: list or tuple.
+        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
+        columns you'd like to display.
+    aliases: list/tuple of strings, same length/order as fields, default None.
+        Optional aliases you'd like to display in the tooltip as field name
+        instead of the keys of `fields`.
+    labels: bool, default True.
+        Set to False to disable displaying the field names or aliases.
+    localize: bool, default False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation, etc.
+        *Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+    style: str, default None.
+        HTML inline style properties like font and colors. Will be applied to
+        a div with the text in it.
 
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        if isinstance(self._parent, GeoJson):
-            keys = tuple(self._parent.data['features'][0]['properties'].keys())
-            self.warn_for_geometry_collections()
-        elif isinstance(self._parent, TopoJson):
-            obj_name = self._parent.object_path.split('.')[-1]
-            keys = tuple(self._parent.data['objects'][obj_name][
-                             'geometries'][0]['properties'].keys())
-        else:
-            raise TypeError('You cannot add a GeoJsonTooltip to anything else '
-                            'than a GeoJson or TopoJson object.')
-        keys = tuple(x for x in keys if x not in ('style', 'highlight'))
-        for value in self.fields:
-            assert value in keys, ('The field {} is not available in the data. '
-                                   'Choose from: {}.'.format(value, keys))
-        super(GeoJsonTooltip, self).render(**kwargs)
+    Examples
+    ---
+    gjson = folium.GeoJson(gdf).add_to(m)
+
+    folium.features.GeoJsonPopup(fields=['NAME'],
+                                labels=False
+                                ).add_to(gjson)
+    """
+
+    _template = Template(u"""
+    {% macro script(this, kwargs) %}
+    let name_getter = '{{this._parent.get_name()}}';
+    {{ this._parent.get_name() }}.bindPopup(""" + GeoJsonDetail.base_template +
+                         u""",{{ this.popup_options | tojson | safe }});
+                     {% endmacro %}
+                     """)
+
+    def __init__(self, fields=None, aliases=None, labels=True,
+                 style="margin: auto;", class_name='foliumpopup', localize=True,
+                 **kwargs):
+        super(GeoJsonPopup, self).__init__(
+            fields=fields, aliases=aliases, labels=labels, localize=localize,
+            class_name=class_name, style=style)
+        self._name = "GeoJsonPopup"
+        kwargs.update({'class_name': self.class_name})
+        self.popup_options = {
+            camelize(key): value for key, value in kwargs.items()}
 
 
 class Choropleth(FeatureGroup):
