@@ -175,7 +175,7 @@ class HeatMapWithTime(Layer):
             name='heatmap.min.js')
 
         figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js'),  # noqa
+            JavascriptLink('https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js'),  # noqa
             name='leaflet-heatmap.js')
 
         figure.header.add_child(
