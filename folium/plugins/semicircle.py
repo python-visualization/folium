@@ -14,23 +14,22 @@ from jinja2 import Template
 
 class SemiCircle(Marker):
     """
-    Creates a Semicircle plugin to append into a map with
-    Map.add_plugin.
+    Creates a Semicircle plugin to add to a map.
     Use (direction and arc) or (start_angle and stop_angle)
     Parameters
     ----------
-    location: tuple of length 2, default None
+    location: tuple of length 2,
         The latitude and longitude of the marker.
         If None, then the middle of the map is used.
-    radius: int, default 0
+    radius: int
         Radius of semicircle in meters
-    direction: int, default 0
+    direction: int, default None
         Heading of direction angle value between 0 and 360 degrees
-    arc: int, default 0
+    arc: int, default None
         Heading of arc angle value between 0 and 360 degrees.
-    start_angle: int, default 0
+    start_angle: int, default None
         Heading of the start angle value between 0 and 360 degrees
-    stop_angle: int, default 0
+    stop_angle: int, default None
         Heading of the stop angle value between 0 and 360 degrees.
     fill_color: string, default '#3388ff' (blue)
         Fill color
@@ -74,7 +73,7 @@ class SemiCircle(Marker):
             {% endmacro %}
             """)
 
-    def __init__(self, location, radius=0, direction=None, arc=None, start_angle=None, stop_angle=None, fill=True,
+    def __init__(self, location, radius, direction=None, arc=None, start_angle=None, stop_angle=None, fill=True,
                  fill_color='#3388ff', fill_opacity=0.5, color='#3388ff', opacity=1, **kwargs):
         super(SemiCircle, self).__init__(_validate_location(location), **kwargs)
         self._name = 'SemiCircle'
@@ -93,8 +92,9 @@ class SemiCircle(Marker):
         self.opacity = opacity
         self.kwargs = json.dumps(kwargs)
 
-        if not (direction and arc) and not (start_angle and stop_angle):
-            raise ValueError("Invalid arguments. Either provide direction and arc or start_angle and stop_angle")
+        if not ((direction is None and arc is None) and (start_angle is not None and stop_angle is not None)
+                or (direction is not None and arc is not None) and (start_angle is None and stop_angle is None)):
+            raise ValueError("Invalid arguments. Either provide direction and arc OR start_angle and stop_angle")
 
     def render(self, **kwargs):
         super(SemiCircle, self).render(**kwargs)
