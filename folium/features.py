@@ -492,7 +492,7 @@ class GeoJson(Layer):
         elif hasattr(data, '__geo_interface__'):
             self.embed = True
             if hasattr(data, 'to_crs'):
-                data = data.to_crs(epsg='4326')
+                data = data.to_crs('EPSG:4326')
             return json.loads(json.dumps(data.__geo_interface__))
         else:
             raise ValueError('Cannot render objects with any missing geometries'
