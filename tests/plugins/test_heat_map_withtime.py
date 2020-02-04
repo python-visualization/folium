@@ -32,7 +32,7 @@ def test_heat_map_with_time():
     assert script in out
     script = '<script src="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js"></script>'  # noqa
     assert script in out
-    script = '<link rel="stylesheet" href="http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"/>'  # noqa
+    script = '<link rel="stylesheet" href="https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"/>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.
