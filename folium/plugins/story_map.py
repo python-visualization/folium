@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from collections import OrderedDict, Iterable
+from collections import Iterable, OrderedDict
 
-from branca.element import Figure, JavascriptLink, Element, MacroElement
+from branca.element import Element, Figure, JavascriptLink, MacroElement
 
 from folium import Map
 from folium.map import FeatureGroup
@@ -42,14 +42,14 @@ class StoryMap(FeatureGroup):
                 var {{ this.get_name() }} = L.featureGroup(
                     {{ this.options|tojson }}
                 ).addTo({{ this._parent.get_name() }});
-            
+
                 {{this.get_name()}}_clearStoryMap = function (map) {
                     // Remove all story map layers
                     {%- for feature in this.story_steps.values() %}
                     {{this.get_name()}}.removeLayer({{ feature.get_name() }});
                     {%- endfor %}
                 }
-    
+
                 {{this.get_name()}}_changeStoryMap = function( {label, value, map} ) {
                     {{this.get_name()}}_clearStoryMap(map);
                     switch(label) {
@@ -61,18 +61,18 @@ class StoryMap(FeatureGroup):
                                       {{ this.pan_zoom }}
                                       {% else %}
                                       map.getZoom()
-                                      {% endif %} 
+                                      {% endif %}
                                       );
                             break;
                       {%- endfor %}
                     }
                 }
-                
+
             {% endmacro %}
             """)
 
     _after_children_template = Template(u"""
-            {% macro after_children_script(this, kwargs) %}            
+            {% macro after_children_script(this, kwargs) %}
                 var {{this.get_name()}}_timesline_slider = L.control.timelineSlider({
                     changeMap: {{this.get_name()}}_changeStoryMap,
                     timelineItems: {{this._story_steps_list|safe}},
@@ -89,7 +89,7 @@ class StoryMap(FeatureGroup):
     def __init__(self, data, name=None, overlay=True, control=False, show=True, pan_zoom=10, timeslider_options={}):
         # Creating the feature group
         super().__init__(name=name, overlay=overlay, control=control, show=show)
-        self._name = "story_map"
+        self._name = 'story_map'
         self.pan_zoom = pan_zoom
 
         for reserved_opt in self._reserved_timeslider_options:
@@ -99,7 +99,7 @@ class StoryMap(FeatureGroup):
         self.timeslider_options = timeslider_options
 
         # Constructing ordered dictionary
-        assert isinstance(data, Iterable), "Step data has to be an Iterable"
+        assert isinstance(data, Iterable), 'Step data has to be an Iterable'
         self.story_steps = data if isinstance(data, OrderedDict) else OrderedDict([
             (key, feature)
             for key, feature in data
@@ -107,8 +107,8 @@ class StoryMap(FeatureGroup):
 
         # Verifying all of the features passed in are map features
         for key, feature in self.story_steps.items():
-            assert isinstance(feature, MacroElement), ("Feature '{}' for step '{}' is not a MacroElement,"
-                                                       "or a child class thereof".format(feature, key))
+            assert isinstance(feature, MacroElement), ('Feature "{}" for step "{}" is not a MacroElement,'
+                                                       'or a child class thereof'.format(feature, key))
 
         # Convenience list because (dict key) -> list conversions are a pain in Jinja
         self._story_steps_list = list(self.story_steps.keys())
@@ -134,14 +134,14 @@ class StoryMap(FeatureGroup):
         # Otherwise it will try refer to one of the kids when it first runs
         after_children_script = self._after_children_template.module.__dict__['after_children_script']
         figure.script.add_child(Element(after_children_script(self, kwargs)),
-                                name=self.get_name() + "_bootstrap")
+                                name=self.get_name() + '_bootstrap')
 
     def add_to(self, parent, name=None, index=None):
         assert isinstance(parent, Map), 'The Story Map has to be added to a Map instance'
         super().add_to(parent, name, index)
 
     def add_child(self, child, name=None, index=None):
-        raise RuntimeError("Children may only be added to StoryMap class via the constructor.")
+        raise RuntimeError('Children may only be added to StoryMap class via the constructor.')
 
     def add_children(self, child, name=None, index=None):
-        raise RuntimeError("Children may only be added to StoryMap class via the constructor.")
+        raise RuntimeError('Children may only be added to StoryMap class via the constructor.')
