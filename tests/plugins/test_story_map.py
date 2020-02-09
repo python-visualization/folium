@@ -33,8 +33,6 @@ def test_story_map_rendering():
     assert StoryMap._template.render(this=sm)
     assert StoryMap._after_children_template.render(this=sm)
 
-    sm.save("/home/gordon/workspace/scratch/map_test.html")
-
 
 def test_story_map_data():
     # The happy case
