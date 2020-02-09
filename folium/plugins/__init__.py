@@ -29,6 +29,7 @@ from folium.plugins.pattern import CirclePattern, StripePattern
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.search import Search
+from folium.plugins.story_map import StoryMap
 from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
@@ -56,6 +57,7 @@ __all__ = [
     'PolyLineOffset',
     'ScrollZoomToggler',
     'Search',
+    'StoryMap',
     'StripePattern',
     'Terminator',
     'TimeSliderChoropleth',
