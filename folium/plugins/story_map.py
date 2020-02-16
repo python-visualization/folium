@@ -82,7 +82,7 @@ class StoryMap(FeatureGroup):
                     {% endfor %}
                     initializeChange: true
                 }).addTo({{this._parent.get_name()}});
-                
+
                 {{ this.get_name() }}.on('remove', function(){
                     {{this.get_name()}}_timeline_slider.remove()
                 });
