@@ -74,7 +74,7 @@ class StoryMap(FeatureGroup):
 
     _after_children_template = Template(u"""
             {% macro after_children_script(this, kwargs) %}
-                var {{this.get_name()}}_timesline_slider = L.control.timelineSlider({
+                var {{this.get_name()}}_timeline_slider = L.control.timelineSlider({
                     changeMap: {{this.get_name()}}_changeStoryMap,
                     timelineItems: {{this._story_steps_list|safe}},
                     {% for name, value in this.timeslider_options.items() %}
@@ -82,6 +82,13 @@ class StoryMap(FeatureGroup):
                     {% endfor %}
                     initializeChange: true
                 }).addTo({{this._parent.get_name()}});
+                
+                {{ this.get_name() }}.on('remove', function(){
+                    {{this.get_name()}}_timeline_slider.remove()
+                });
+                {{ this.get_name() }}.on('add', function(){
+                    {{this.get_name()}}_timeline_slider.addTo({{this._parent.get_name()}})
+                });
             {% endmacro %}
             """)
 
