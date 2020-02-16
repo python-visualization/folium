@@ -56,12 +56,13 @@ class StoryMap(FeatureGroup):
                       {%- for story_step, feature in this.story_steps.items() %}
                         case ("{{ story_step }}"):
                             {{this.get_name()}}.addLayer({{ feature.get_name() }});
-                            map.flyTo({{this.get_name()}}.getBounds().getCenter(),
-                                      {% if this.pan_zoom is not none %}
+                            var story_step_bounds = {{this.get_name()}}.getBounds();
+                            map.flyTo(story_step_bounds.getCenter(),
+                                      {%- if this.pan_zoom is not none %}
                                       {{ this.pan_zoom }}
-                                      {% else %}
-                                      map.getZoom()
-                                      {% endif %}
+                                      {%- else %}
+                                      map.getBoundsZoom(story_step_bounds)
+                                      {%- endif %}
                                       );
                             break;
                       {%- endfor %}
@@ -86,7 +87,7 @@ class StoryMap(FeatureGroup):
 
     _reserved_timeslider_options = {'changeMap', 'timelineItems', 'initializeChange'}
 
-    def __init__(self, data, name=None, overlay=True, control=False, show=True, pan_zoom=10, timeslider_options={}):
+    def __init__(self, data, name=None, overlay=True, control=False, show=True, pan_zoom=None, timeslider_options={}):
         # Creating the feature group
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = 'story_map'
