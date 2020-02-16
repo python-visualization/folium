@@ -56,14 +56,24 @@ class StoryMap(FeatureGroup):
                       {%- for story_step, feature in this.story_steps.items() %}
                         case ("{{ story_step }}"):
                             {{this.get_name()}}.addLayer({{ feature.get_name() }});
-                            var story_step_bounds = {{this.get_name()}}.getBounds();
-                            map.flyTo(story_step_bounds.getCenter(),
-                                      {%- if this.pan_zoom is not none %}
-                                      {{ this.pan_zoom }}
-                                      {%- else %}
-                                      map.getBoundsZoom(story_step_bounds)
-                                      {%- endif %}
-                                      );
+                            var story_step_centre = map.getCenter();
+                            var story_step_zoom = {% if this.pan_zoom is none %} map.getZoom()
+                                                  {% else %} {{ this.pan_zoom }}
+                                                  {%- endif %};
+                            try {
+                                var story_step_bounds = {{this.get_name()}}.getBounds();
+                                story_step_centre = story_step_bounds.getCenter();
+                                {%- if this.pan_zoom is none %}
+                                story_step_zoom = map.getBoundsZoom(story_step_bounds);
+                                {%- endif %}
+                            }
+                            catch(err) {
+                                console.log("Received the following error when trying to pan: " + err);
+                                console.log("This is probably because the Leaflet FeatureGroup doesn't know how to " +
+                                            "get the bounds of the underlying feature."
+                                );
+                            }
+                            map.flyTo(story_step_centre, story_step_zoom);
                             break;
                       {%- endfor %}
                     }
