@@ -1095,7 +1095,7 @@ class Choropleth(FeatureGroup):
         Enable highlight functionality when hovering over a GeoJSON area.
     name : string, optional
         The name of the layer, as it will appear in LayerControls
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
