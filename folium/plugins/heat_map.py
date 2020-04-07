@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import warnings
+
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Layer
@@ -37,8 +39,6 @@ class HeatMap(Layer):
     max_zoom : default 18
         Zoom level where the points reach maximum intensity (as intensity
         scales with zoom), equals maxZoom of the map by default
-    max_val : float, default 1.
-        Maximum point intensity
     radius : int, default 25
         Radius of each "point" of the heatmap
     blur : int, default 15
@@ -62,7 +62,7 @@ class HeatMap(Layer):
         """)
 
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
-                 max_val=1.0, radius=25, blur=15, gradient=None,
+                 radius=25, blur=15, gradient=None,
                  overlay=True, control=True, show=True, **kwargs):
         super(HeatMap, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
@@ -72,10 +72,13 @@ class HeatMap(Layer):
                      for line in data]
         if np.any(np.isnan(self.data)):
             raise ValueError('data may not contain NaNs.')
+        if kwargs.pop('max_val', None):
+            warnings.warn('The `max_val` parameter is no longer necessary. '
+                          'The largest intensity is calculated automatically.',
+                          stacklevel=2)
         self.options = parse_options(
             min_opacity=min_opacity,
             max_zoom=max_zoom,
-            max=max_val,
             radius=radius,
             blur=blur,
             gradient=gradient,
