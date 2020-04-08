@@ -10,7 +10,7 @@ from folium.utilities import (
     camelize,
     deep_copy,
     get_obj_in_upper_tree,
-    parse_options,
+    parse_options, validate_multi_locations,
 )
 
 
@@ -67,8 +67,8 @@ def test_validate_locations(locations):
 @pytest.mark.parametrize('locations', [
     [[(0, 5), (1, 6), (2, 7)], [(3, 8), (4, 9)]],
 ])
-def test_validate_locations_multi(locations):
-    outcome = validate_locations(locations)
+def test_validate_multi_locations(locations):
+    outcome = validate_multi_locations(locations)
     assert outcome == [[[0, 5], [1, 6], [2, 7]], [[3, 8], [4, 9]]]
 
 

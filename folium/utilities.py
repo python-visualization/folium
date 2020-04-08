@@ -10,9 +10,25 @@ from contextlib import contextmanager
 import copy
 import uuid
 import collections
+from typing import (
+    Iterable,
+    Sequence,
+    Union,
+    List,
+    Optional,
+    Callable,
+    Tuple,
+    Iterator,
+    Type,
+    Dict,
+    Any,
+)
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
+
+from branca.element import Element
+
 try:
     import pandas as pd
 except ImportError:
@@ -22,8 +38,16 @@ except ImportError:
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
 
+TypeLine = Iterable[Sequence[float]]
+TypeMultiLine = Union[TypeLine, Iterable[TypeLine]]
 
-def validate_location(location):  # noqa: C901
+TypeJsonValueNoNone = Union[str, float, bool, Sequence, dict]
+TypeJsonValue = Union[TypeJsonValueNoNone, None]
+
+TypePathOptions = Union[bool, str, float, None]
+
+
+def validate_location(location: Sequence[float]) -> List[float]:  # noqa: C901
     """Validate a single lat/lon coordinate pair and convert to a list
 
     Validate that location:
@@ -32,10 +56,6 @@ def validate_location(location):  # noqa: C901
     * allows indexing (i.e. has an ordering)
     * where both values are floats (or convertible to float)
     * and both values are not NaN
-
-    Returns
-    -------
-    list[float, float]
 
     """
     if isinstance(location, np.ndarray) \
@@ -66,14 +86,25 @@ def validate_location(location):  # noqa: C901
     return [float(x) for x in coords]
 
 
-def validate_locations(locations):
-    """Validate an iterable with multiple lat/lon coordinate pairs.
+def validate_locations(locations: TypeLine) -> List[List[float]]:
+    """Validate an iterable with lat/lon coordinate pairs."""
+    locations = if_pandas_df_convert_to_numpy(locations)
+    try:
+        iter(locations)
+    except TypeError:
+        raise TypeError('Locations should be an iterable with coordinate pairs,'
+                        ' but instead got {!r}.'.format(locations))
+    try:
+        next(iter(locations))
+    except StopIteration:
+        raise ValueError('Locations is empty.')
+    return [validate_location(coord_pair) for coord_pair in locations]
 
-    Returns
-    -------
-    list[list[float, float]] or list[list[list[float, float]]]
 
-    """
+def validate_multi_locations(
+        locations: TypeMultiLine
+) -> Union[List[List[float]], List[List[List[float]]]]:
+    """Validate an iterable with possibly nested lists of coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
     try:
         iter(locations)
@@ -85,16 +116,17 @@ def validate_locations(locations):
     except StopIteration:
         raise ValueError('Locations is empty.')
     try:
-        float(next(iter(next(iter(next(iter(locations)))))))
+        float(next(iter(next(iter(next(iter(locations)))))))  # type: ignore
     except (TypeError, StopIteration):
         # locations is a list of coordinate pairs
-        return [validate_location(coord_pair) for coord_pair in locations]
+        return [validate_location(coord_pair)  # type: ignore
+                for coord_pair in locations]
     else:
         # locations is a list of a list of coordinate pairs, recurse
-        return [validate_locations(lst) for lst in locations]
+        return [validate_locations(lst) for lst in locations]  # type: ignore
 
 
-def if_pandas_df_convert_to_numpy(obj):
+def if_pandas_df_convert_to_numpy(obj: Any) -> Any:
     """Return a Numpy array from a Pandas dataframe.
 
     Iterating over a DataFrame has weird side effects, such as the first
@@ -106,7 +138,11 @@ def if_pandas_df_convert_to_numpy(obj):
         return obj
 
 
-def image_to_url(image, colormap=None, origin='upper'):
+def image_to_url(
+        image: Any,
+        colormap: Optional[Callable] = None,
+        origin: str = 'upper',
+) -> str:
     """
     Infers the type of an image argument and transforms it into a URL.
 
@@ -144,7 +180,7 @@ def image_to_url(image, colormap=None, origin='upper'):
     return url.replace('\n', ' ')
 
 
-def _is_url(url):
+def _is_url(url: str) -> bool:
     """Check to see if `url` has a valid protocol."""
     try:
         return urlparse(url).scheme in _VALID_URLS
@@ -152,7 +188,11 @@ def _is_url(url):
         return False
 
 
-def write_png(data, origin='upper', colormap=None):
+def write_png(
+        data: Any,
+        origin: str = 'upper',
+        colormap: Optional[Callable] = None,
+) -> bytes:
     """
     Transform an array of data into a PNG string.
     This can be written to disk using binary I/O, or encoded using base64
@@ -184,9 +224,7 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
 
     """
-    if colormap is None:
-        def colormap(x):
-            return (x, x, x, 1)
+    colormap = colormap or (lambda x: (x, x, x, 1))
 
     arr = np.atleast_3d(data)
     height, width, nblayers = arr.shape
@@ -239,7 +277,12 @@ def write_png(data, origin='upper', colormap=None):
         png_pack(b'IEND', b'')])
 
 
-def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
+def mercator_transform(
+        data: Any,
+        lat_bounds: Tuple[float, float],
+        origin: str = 'upper',
+        height_out: Optional[int] = None,
+) -> np.ndarray:
     """
     Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
@@ -266,7 +309,6 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     See https://en.wikipedia.org/wiki/Web_Mercator for more details.
 
     """
-    import numpy as np
 
     def mercator(x):
         return np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
@@ -300,7 +342,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     return out
 
 
-def none_min(x, y):
+def none_min(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -309,7 +351,7 @@ def none_min(x, y):
         return min(x, y)
 
 
-def none_max(x, y):
+def none_max(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -318,7 +360,7 @@ def none_max(x, y):
         return max(x, y)
 
 
-def iter_coords(obj):
+def iter_coords(obj: Any) -> Iterator[Tuple[float, ...]]:
     """
     Returns all the coordinate tuples from a geometry or feature.
 
@@ -340,7 +382,7 @@ def iter_coords(obj):
                 yield f
 
 
-def _locations_mirror(x):
+def _locations_mirror(x: Any) -> Any:
     """
     Mirrors the points in a list-of-list-of-...-of-list-of-points.
     For example:
@@ -357,13 +399,16 @@ def _locations_mirror(x):
         return x
 
 
-def get_bounds(locations, lonlat=False):
+def get_bounds(
+        locations: Any,
+        lonlat: bool = False,
+) -> List[List[Optional[float]]]:
     """
     Computes the bounds of the object in the form
     [[lat_min, lon_min], [lat_max, lon_max]]
 
     """
-    bounds = [[None, None], [None, None]]
+    bounds: List[List[Optional[float]]] = [[None, None], [None, None]]
     for point in iter_coords(locations):
         bounds = [
             [
@@ -380,7 +425,7 @@ def get_bounds(locations, lonlat=False):
     return bounds
 
 
-def camelize(key):
+def camelize(key: str) -> str:
     """Convert a python_style_variable_name to lowerCamelCase.
 
     Examples
@@ -394,7 +439,7 @@ def camelize(key):
                    for i, x in enumerate(key.split('_')))
 
 
-def _parse_size(value):
+def _parse_size(value: Union[str, float]) -> Tuple[float, str]:
     try:
         if isinstance(value, (int, float)):
             value_type = 'px'
@@ -410,7 +455,7 @@ def _parse_size(value):
     return value, value_type
 
 
-def compare_rendered(obj1, obj2):
+def compare_rendered(obj1: str, obj2: str) -> bool:
     """
     Return True/False if the normalized rendered version of
     two folium map objects are the equal or not.
@@ -419,7 +464,7 @@ def compare_rendered(obj1, obj2):
     return normalize(obj1) == normalize(obj2)
 
 
-def normalize(rendered):
+def normalize(rendered: str) -> str:
     """Return the input string without non-functional spaces or newlines."""
     out = ''.join([line.strip()
                    for line in rendered.splitlines()
@@ -429,7 +474,7 @@ def normalize(rendered):
 
 
 @contextmanager
-def _tmp_html(data):
+def _tmp_html(data: str) -> Iterator[str]:
     """Yields the path of a temporary HTML file containing data."""
     filepath = ''
     try:
@@ -442,7 +487,7 @@ def _tmp_html(data):
             os.remove(filepath)
 
 
-def deep_copy(item_original):
+def deep_copy(item_original: Element) -> Element:
     """Return a recursive deep-copy of item where each copy has a new ID."""
     item = copy.copy(item_original)
     item._id = uuid.uuid4().hex
@@ -456,18 +501,18 @@ def deep_copy(item_original):
     return item
 
 
-def get_obj_in_upper_tree(element, cls):
+def get_obj_in_upper_tree(element: Element, cls: Type) -> Element:
     """Return the first object in the parent tree of class `cls`."""
-    if not hasattr(element, '_parent'):
+    parent = element._parent
+    if parent is None:
         raise ValueError('The top of the tree was reached without finding a {}'
                          .format(cls))
-    parent = element._parent
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
     return parent
 
 
-def parse_options(**kwargs):
+def parse_options(**kwargs: TypeJsonValue) -> Dict[str, TypeJsonValueNoNone]:
     """Return a dict with lower-camelcase keys and non-None values.."""
     return {camelize(key): value
             for key, value in kwargs.items()

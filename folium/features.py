@@ -9,13 +9,14 @@ import json
 import warnings
 import functools
 import operator
+from typing import Any, Dict, Callable, Sequence, Optional, Union, List, Tuple, Iterable
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
 from branca.utilities import color_brewer
 
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
 from folium.utilities import (
     validate_locations,
     _parse_size,
@@ -25,7 +26,7 @@ from folium.utilities import (
     none_min,
     get_obj_in_upper_tree,
     parse_options,
-    camelize
+    camelize, TypeJsonValue, TypePathOptions, TypeLine,
 )
 from folium.vector_layers import PolyLine, path_options
 
@@ -69,21 +70,28 @@ class RegularPolygonMarker(Marker):
         {% endmacro %}
         """)
 
-    def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
-                 popup=None, tooltip=None, **kwargs):
+    def __init__(
+            self,
+            location: Sequence[float],
+            number_of_sides: int = 4,
+            rotation: int = 0,
+            radius: int = 15,
+            popup: Optional[Union[str, Popup]] = None,
+            tooltip: Optional[Union[str, Tooltip]] = None,
+            **kwargs: TypePathOptions
+    ):
         super(RegularPolygonMarker, self).__init__(
             location,
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
-        self.options = path_options(**kwargs)
+        self.options = path_options(line=False, radius=radius, **kwargs)
         self.options.update(parse_options(
             number_of_sides=number_of_sides,
             rotation=rotation,
-            radius=radius,
         ))
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         super(RegularPolygonMarker, self).render()
 
@@ -128,8 +136,15 @@ class Vega(Element):
     """
     _template = Template(u'')
 
-    def __init__(self, data, width=None, height=None,
-                 left='0%', top='0%', position='relative'):
+    def __init__(
+            self,
+            data: Any,
+            width: Optional[Union[int, str]] = None,
+            height: Optional[Union[int, str]] = None,
+            left: Union[int, str] = '0%',
+            top: Union[int, str] = '0%',
+            position: str = 'relative',
+    ):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
@@ -145,7 +160,7 @@ class Vega(Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         self.json = json.dumps(self.data)
 
@@ -220,8 +235,15 @@ class VegaLite(Element):
     """
     _template = Template(u'')
 
-    def __init__(self, data, width=None, height=None,
-                 left='0%', top='0%', position='relative'):
+    def __init__(
+            self,
+            data: Any,
+            width: Optional[Union[int, str]] = None,
+            height: Optional[Union[int, str]] = None,
+            left: Union[int, str] = '0%',
+            top: Union[int, str] = '0%',
+            position: str = 'relative',
+    ):
         super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
@@ -239,7 +261,7 @@ class VegaLite(Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         vegalite_major_version = self._get_vegalite_major_versions(self.data)
 
@@ -271,7 +293,7 @@ class VegaLite(Element):
             # Version 2 is assumed as the default, if no version is given in the schema.
             self._embed_vegalite_v2(figure)
 
-    def _get_vegalite_major_versions(self, spec):
+    def _get_vegalite_major_versions(self, spec: dict) -> Optional[str]:
         try:
             schema = spec['$schema']
         except KeyError:
@@ -281,28 +303,28 @@ class VegaLite(Element):
 
         return major_version
 
-    def _embed_vegalite_v3(self, figure):
+    def _embed_vegalite_v3(self, figure: Figure) -> None:
         self._vega_embed()
 
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@4'), name='vega')
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@3'), name='vega-lite')
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
 
-    def _embed_vegalite_v2(self, figure):
+    def _embed_vegalite_v2(self, figure: Figure) -> None:
         self._vega_embed()
 
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega@3'), name='vega')
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@2'), name='vega-lite')
         figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@3'), name='vega-embed')
 
-    def _vega_embed(self):
+    def _vega_embed(self) -> None:
         self._parent.script.add_child(Element(Template("""
                     vegaEmbed({{this.get_name()}}, {{this.json}})
                         .then(function(result) {})
                         .catch(console.error);
                 """).render(this=self)), name=self.get_name())
 
-    def _embed_vegalite_v1(self, figure):
+    def _embed_vegalite_v1(self, figure: Figure) -> None:
         self._parent.script.add_child(Element(Template("""
                     var embedSpec = {
                         mode: "vega-lite",
@@ -354,6 +376,8 @@ class GeoJson(Layer):
     embed: bool, default True
         Whether to embed the data in the html file or not. Note that disabling
         embedding is only supported if you provide a file link or URL.
+    popup: GeoJsonPopup, optional
+        Add popups to each feature based on the features content.
 
     Examples
     --------
@@ -436,15 +460,25 @@ class GeoJson(Layer):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, style_function=None, highlight_function=None,  # noqa
-                 name=None, overlay=True, control=True, show=True,
-                 smooth_factor=None, tooltip=None, embed=True, popup=None):
+    def __init__(
+            self,
+            data: Any,
+            style_function: Optional[Callable] = None,
+            highlight_function: Optional[Callable] = None,
+            name: Optional[str] = None,
+            overlay: bool = True,
+            control: bool = True,
+            show: bool = True,
+            smooth_factor: Optional[float] = None,
+            tooltip: Optional[Union[str, Tooltip, 'GeoJsonTooltip']] = None,
+            embed: bool = True,
+            popup: Optional['GeoJsonPopup'] = None,
+    ):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
         self.embed = embed
-        self.embed_link = None
-        self.json = None
+        self.embed_link: Optional[str] = None
         self.parent_map = None
         self.smooth_factor = smooth_factor
         self.style = style_function is not None
@@ -454,14 +488,14 @@ class GeoJson(Layer):
 
         if self.style or self.highlight:
             self.convert_to_feature_collection()
-            if self.style:
-                self._validate_function(style_function, 'style_function')
-                self.style_function = style_function
-                self.style_map = {}
-            if self.highlight:
-                self._validate_function(highlight_function, 'highlight_function')
-                self.highlight_function = highlight_function
-                self.highlight_map = {}
+            if style_function is not None:
+                self.style_function: Callable = style_function
+                self._validate_function(self.style_function, 'style_function')
+                self.style_map: dict = {}
+            if highlight_function is not None:
+                self.highlight_function: Callable = highlight_function
+                self._validate_function(self.highlight_function, 'highlight_function')
+                self.highlight_map: dict = {}
             self.feature_identifier = self.find_identifier()
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
@@ -471,7 +505,7 @@ class GeoJson(Layer):
         if isinstance(popup, (GeoJsonPopup)):
             self.add_child(popup)
 
-    def process_data(self, data):
+    def process_data(self, data: Any) -> dict:
         """Convert an unknown data input into a geojson dictionary."""
         if isinstance(data, dict):
             self.embed = True
@@ -498,7 +532,7 @@ class GeoJson(Layer):
             raise ValueError('Cannot render objects with any missing geometries'
                              ': {!r}'.format(data))
 
-    def convert_to_feature_collection(self):
+    def convert_to_feature_collection(self) -> None:
         """Convert data into a FeatureCollection if it is not already."""
         if self.data['type'] == 'FeatureCollection':
             return
@@ -514,7 +548,7 @@ class GeoJson(Layer):
             self.data = {'type': 'Feature', 'geometry': self.data}
         self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
-    def _validate_function(self, func, name):
+    def _validate_function(self, func: Callable, name: str) -> None:
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
@@ -525,13 +559,16 @@ class GeoJson(Layer):
                              'data[\'features\'] and returns a dictionary.'
                              .format(name))
 
-    def find_identifier(self):
+    def find_identifier(self) -> str:
         """Find a unique identifier for each feature, create it if needed.
 
         According to the GeoJSON specs a feature:
          - MAY have an 'id' field with a string or numerical value.
          - MUST have a 'properties' field. The content can be any json object
            or even null.
+
+        In this implementation the returned field name will point
+        to a str or int value only.
 
         """
         feats = self.data['features']
@@ -559,7 +596,7 @@ class GeoJson(Layer):
             'field to your geojson data or set `embed=True`. '
         )
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
@@ -567,17 +604,18 @@ class GeoJson(Layer):
         """
         return get_bounds(self.data, lonlat=True)
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         self.parent_map = get_obj_in_upper_tree(self, Map)
         if self.style or self.highlight:
-            mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
-                                        self)
+            mapper = GeoJsonStyleMapper(self.data, self.feature_identifier, self)
             if self.style:
                 self.style_map = mapper.get_style_map(self.style_function)
             if self.highlight:
-                self.highlight_map = mapper.get_highlight_map(
-                    self.highlight_function)
+                self.highlight_map = mapper.get_highlight_map(self.highlight_function)
         super(GeoJson, self).render()
+
+
+TypeStyleMapping = Dict[str, Union[str, List[Union[str, int]]]]
 
 
 class GeoJsonStyleMapper:
@@ -586,22 +624,37 @@ class GeoJsonStyleMapper:
     Used in the GeoJson class. Users don't have to call this class directly.
     """
 
-    def __init__(self, data, feature_identifier, geojson_obj):
+    def __init__(
+            self,
+            data: dict,
+            feature_identifier: str,
+            geojson_obj: GeoJson,
+    ):
         self.data = data
         self.feature_identifier = feature_identifier
         self.geojson_obj = geojson_obj
 
-    def get_style_map(self, style_function):
+    def get_style_map(
+            self,
+            style_function: Callable,
+    ) -> TypeStyleMapping:
         """Return a dict that maps style parameters to features."""
         return self._create_mapping(style_function, 'style')
 
-    def get_highlight_map(self, highlight_function):
+    def get_highlight_map(
+            self,
+            highlight_function: Callable,
+    ) -> TypeStyleMapping:
         """Return a dict that maps highlight parameters to features."""
         return self._create_mapping(highlight_function, 'highlight')
 
-    def _create_mapping(self, func, switch):
+    def _create_mapping(
+            self,
+            func: Callable,
+            switch: str,
+    ) -> TypeStyleMapping:
         """Internal function to create the mapping."""
-        mapping = {}
+        mapping: TypeStyleMapping = {}
         for feature in self.data['features']:
             content = func(feature)
             if switch == 'style':
@@ -614,26 +667,28 @@ class GeoJsonStyleMapper:
                         # Replace objects with their Javascript var names:
                         content[key] = "{{'" + value.get_name() + "'}}"
             key = self._to_key(content)
-            mapping.setdefault(key, []).append(self.get_feature_id(feature))
+            feature_id = self.get_feature_id(feature)
+            mapping.setdefault(key, []).append(feature_id)  # type: ignore
         self._set_default_key(mapping)
         return mapping
 
-    def get_feature_id(self, feature):
+    def get_feature_id(self, feature: dict) -> Union[str, int]:
         """Return a value identifying the feature."""
         fields = self.feature_identifier.split('.')[1:]
-        return functools.reduce(operator.getitem, fields, feature)
+        value = functools.reduce(operator.getitem, fields, feature)
+        assert isinstance(value, (str, int))
+        return value
 
     @staticmethod
-    def _to_key(d):
+    def _to_key(d: dict) -> str:
         """Convert dict to str and enable Jinja2 template syntax."""
         as_str = json.dumps(d, sort_keys=True)
         return as_str.replace('"{{', '{{').replace('}}"', '}}')
 
     @staticmethod
-    def _set_default_key(mapping):
+    def _set_default_key(mapping: TypeStyleMapping) -> None:
         """Replace the field with the most features with a 'default' field."""
-        key_longest = sorted([(len(v), k) for k, v in mapping.items()],
-                             reverse=True)[0][1]
+        key_longest = max(mapping, key=mapping.get)
         mapping['default'] = key_longest
         del (mapping[key_longest])
 
@@ -710,9 +765,18 @@ class TopoJson(Layer):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, object_path, style_function=None,
-                 name=None, overlay=True, control=True, show=True,
-                 smooth_factor=None, tooltip=None):
+    def __init__(
+            self,
+            data: Any,
+            object_path: str,
+            style_function: Optional[Callable] = None,
+            name: Optional[str] = None,
+            overlay: bool = True,
+            control: bool = True,
+            show: bool = True,
+            smooth_factor: Optional[float] = None,
+            tooltip: Optional[Union[str, Tooltip]] = None,
+    ):
         super(TopoJson, self).__init__(name=name, overlay=overlay,
                                        control=control, show=show)
         self._name = 'TopoJson'
@@ -729,10 +793,7 @@ class TopoJson(Layer):
 
         self.object_path = object_path
 
-        if style_function is None:
-            def style_function(x):
-                return {}
-        self.style_function = style_function
+        self.style_function = style_function or (lambda x: {})
 
         self.smooth_factor = smooth_factor
 
@@ -741,7 +802,7 @@ class TopoJson(Layer):
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
 
-    def style_data(self):
+    def style_data(self) -> None:
         """Applies self.style_function to each feature of self.data."""
 
         def recursive_get(data, keys):
@@ -754,7 +815,7 @@ class TopoJson(Layer):
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         self.style_data()
         super(TopoJson, self).render(**kwargs)
@@ -767,7 +828,7 @@ class TopoJson(Layer):
             JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
             name='topojson')
 
-    def get_bounds(self):
+    def get_bounds(self) -> List[List[float]]:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -829,8 +890,15 @@ class GeoJsonDetail(MacroElement):
     }
     """
 
-    def __init__(self, fields, aliases=None, labels=True, localize=False, style=None,
-                 class_name="geojsondetail"):
+    def __init__(
+            self,
+            fields: Sequence[str],
+            aliases: Optional[Sequence[str]] = None,
+            labels: bool = True,
+            localize: bool = False,
+            style: Optional[str] = None,
+            class_name: str = "geojsondetail",
+    ):
         super(GeoJsonDetail, self).__init__()
         assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
                                                   'tuple to fields.'
@@ -852,7 +920,7 @@ class GeoJsonDetail(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    def warn_for_geometry_collections(self):
+    def warn_for_geometry_collections(self) -> None:
         """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
         geom_collections = [
             feature.get('properties') if feature.get('properties') is not None else key
@@ -865,7 +933,7 @@ class GeoJsonDetail(MacroElement):
                 "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
                 "https://tools.ietf.org/html/rfc7946#page-9".format(self._name, geom_collections), UserWarning)
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         if isinstance(self._parent, GeoJson):
@@ -953,8 +1021,17 @@ class GeoJsonTooltip(GeoJsonDetail):
                      {% endmacro %}
                      """)
 
-    def __init__(self, fields, aliases=None, labels=True, localize=False,
-                 style=None, class_name='foliumtooltip', sticky=True, **kwargs):
+    def __init__(
+            self,
+            fields: Sequence[str],
+            aliases: Optional[Sequence[str]] = None,
+            labels: bool = True,
+            localize: bool = False,
+            style: Optional[str] = None,
+            class_name: str = 'foliumtooltip',
+            sticky: bool = True,
+            **kwargs: TypeJsonValue
+    ):
         super(GeoJsonTooltip, self).__init__(
             fields=fields, aliases=aliases, labels=labels, localize=localize,
             style=style, class_name=class_name
@@ -1007,9 +1084,16 @@ class GeoJsonPopup(GeoJsonDetail):
                      {% endmacro %}
                      """)
 
-    def __init__(self, fields=None, aliases=None, labels=True,
-                 style="margin: auto;", class_name='foliumpopup', localize=True,
-                 **kwargs):
+    def __init__(
+            self,
+            fields: Sequence[str],
+            aliases: Optional[Sequence[str]] = None,
+            labels: bool = True,
+            style: str = "margin: auto;",
+            class_name: str = 'foliumpopup',
+            localize: bool = True,
+            **kwargs: TypeJsonValue
+    ):
         super(GeoJsonPopup, self).__init__(
             fields=fields, aliases=aliases, labels=labels, localize=localize,
             class_name=class_name, style=style)
@@ -1051,7 +1135,7 @@ class Choropleth(FeatureGroup):
         geometries
     data: Pandas DataFrame or Series, default None
         Data to bind to the GeoJSON.
-    columns: dict or tuple, default None
+    columns: tuple with two values, default None
         If the data is a Pandas DataFrame, the columns of data to be bound.
         Must pass column 1 as the key, and column 2 the values.
     key_on: string, default None
@@ -1125,13 +1209,30 @@ class Choropleth(FeatureGroup):
     ...            highlight=True)
     """
 
-    def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
-                 bins=6, fill_color='blue', nan_fill_color='black',
-                 fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
-                 line_weight=1, line_opacity=1, name=None, legend_name='',
-                 overlay=True, control=True, show=True,
-                 topojson=None, smooth_factor=None, highlight=None,
-                 **kwargs):
+    def __init__(  # noqa: C901
+            self,
+            geo_data: Any,
+            data: Optional[Any] = None,
+            columns: Optional[Sequence[Any]] = None,
+            key_on: Optional[str] = None,
+            bins: Union[int, Sequence[float]] = 6,
+            fill_color: str = 'blue',
+            nan_fill_color: str = 'black',
+            fill_opacity: float = 0.6,
+            nan_fill_opacity: Optional[float] = None,
+            line_color: str = 'black',
+            line_weight: float = 1,
+            line_opacity: float = 1,
+            name: Optional[str] = None,
+            legend_name: str = '',
+            overlay: bool = True,
+            control: bool = True,
+            show: bool = True,
+            topojson: Optional[str] = None,
+            smooth_factor: Optional[float] = None,
+            highlight: bool = False,
+            **kwargs
+    ):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
@@ -1153,10 +1254,11 @@ class Choropleth(FeatureGroup):
         # Create color_data dict
         if hasattr(data, 'set_index'):
             # This is a pd.DataFrame
-            color_data = data.set_index(columns[0])[columns[1]].to_dict()
+            assert columns is not None
+            color_data = data.set_index(columns[0])[columns[1]].to_dict()  # type: ignore
         elif hasattr(data, 'to_dict'):
             # This is a pd.Series
-            color_data = data.to_dict()
+            color_data = data.to_dict()  # type: ignore
         elif data:
             color_data = dict(data)
         else:
@@ -1252,7 +1354,7 @@ class Choropleth(FeatureGroup):
         if self.color_scale:
             self.add_child(self.color_scale)
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Render the GeoJson/TopoJson and color scale objects."""
         if self.color_scale:
             # ColorMap needs Map as its parent
@@ -1298,8 +1400,14 @@ class DivIcon(MacroElement):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, html=None, icon_size=None, icon_anchor=None,
-                 popup_anchor=None, class_name='empty'):
+    def __init__(
+            self,
+            html: Optional[str] = None,
+            icon_size: Optional[Tuple[int, int]] = None,
+            icon_anchor: Optional[Tuple[int, int]] = None,
+            popup_anchor: Optional[Tuple[int, int]] = None,
+            class_name: str = 'empty',
+    ):
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
         self.options = parse_options(
@@ -1362,7 +1470,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup=None):
+    def __init__(self, popup: Optional[str] = None):
         super(ClickForMarker, self).__init__()
         self._name = 'ClickForMarker'
 
@@ -1412,9 +1520,16 @@ class CustomIcon(Icon):
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, icon_image, icon_size=None, icon_anchor=None,
-                 shadow_image=None, shadow_size=None, shadow_anchor=None,
-                 popup_anchor=None):
+    def __init__(
+            self,
+            icon_image: Any,
+            icon_size: Optional[Tuple[int, int]] = None,
+            icon_anchor: Optional[Tuple[int, int]] = None,
+            shadow_image: Any = None,
+            shadow_size: Optional[Tuple[int, int]] = None,
+            shadow_anchor: Optional[Tuple[int, int]] = None,
+            popup_anchor: Optional[Tuple[int, int]] = None,
+    ):
         super(Icon, self).__init__()
         self._name = 'CustomIcon'
         self.options = parse_options(
@@ -1434,17 +1549,16 @@ class ColorLine(FeatureGroup):
 
     Parameters
     ----------
-    positions: tuple or list
-        The list of points latitude and longitude
-    colors: tuple or list
-        The list of segments colors.
+    positions: iterable of (lat, lon) pairs
+        The points on the line. Segments between points will be colored.
+    colors: iterable of float
+        Values that determine the color of a line segment.
         It must have length equal to `len(positions)-1`.
     colormap: branca.colormap.Colormap or list or tuple
         The colormap to use. If a list or tuple of colors is provided,
         a LinearColormap will be created from it.
     nb_steps: int, default 12
-        To have lighter output the colormap will be discretized
-        to that number of colors.
+        The colormap will be discretized to this number of colors.
     opacity: float, default 1
         Line opacity, scale 0-1
     weight: int, default 2
@@ -1458,11 +1572,19 @@ class ColorLine(FeatureGroup):
 
     """
 
-    def __init__(self, positions, colors, colormap=None, nb_steps=12,
-                 weight=None, opacity=None, **kwargs):
+    def __init__(
+            self,
+            positions: TypeLine,
+            colors: Iterable[float],
+            colormap: Optional[Union[LinearColormap, Sequence[Any]]] = None,
+            nb_steps: int = 12,
+            weight: Optional[int] = None,
+            opacity: Optional[float] = None,
+            **kwargs: Any
+    ):
         super(ColorLine, self).__init__(**kwargs)
         self._name = 'ColorLine'
-        positions = validate_locations(positions)
+        coords = validate_locations(positions)
 
         if colormap is None:
             cm = LinearColormap(['green', 'yellow', 'red'],
@@ -1478,8 +1600,8 @@ class ColorLine(FeatureGroup):
                                 ).to_step(nb_steps)
         else:
             cm = colormap
-        out = {}
-        for (lat1, lng1), (lat2, lng2), color in zip(positions[:-1], positions[1:], colors):  # noqa
+        out: Dict[str, List[List[List[float]]]] = {}
+        for (lat1, lng1), (lat2, lng2), color in zip(coords[:-1], coords[1:], colors):  # noqa
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
             self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))  # noqa

@@ -6,12 +6,18 @@ Classes for drawing maps.
 """
 
 from collections import OrderedDict
+from typing import Dict, Sequence, Optional, Union, List, Tuple, Type
 
 import warnings
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import validate_location, camelize, parse_options
+from folium.utilities import (
+    validate_location,
+    camelize,
+    parse_options,
+    TypeJsonValue,
+)
 
 from jinja2 import Template
 
@@ -32,7 +38,14 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
-    def __init__(self, name=None, overlay=False, control=True, show=True):
+
+    def __init__(
+            self,
+            name: Optional[str] = None,
+            overlay: bool = False,
+            control: bool = True,
+            show: bool = True,
+    ):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
@@ -72,8 +85,14 @@ class FeatureGroup(Layer):
         {% endmacro %}
         """)
 
-    def __init__(self, name=None, overlay=True, control=True, show=True,
-                 **kwargs):
+    def __init__(
+            self,
+            name: Optional[str] = None,
+            overlay: bool = True,
+            control: bool = True,
+            show: bool = True,
+            **kwargs: TypeJsonValue
+    ):
         super(FeatureGroup, self).__init__(name=name, overlay=overlay,
                                            control=control, show=show)
         self._name = 'FeatureGroup'
@@ -131,8 +150,13 @@ class LayerControl(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True,
-                 **kwargs):
+    def __init__(
+            self,
+            position: str = 'topright',
+            collapsed: bool = True,
+            autoZIndex: bool = True,
+            **kwargs: TypeJsonValue
+    ):
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
         self.options = parse_options(
@@ -141,16 +165,16 @@ class LayerControl(MacroElement):
             autoZIndex=autoZIndex,
             **kwargs
         )
+        self.base_layers: OrderedDict[str, str] = OrderedDict()
+        self.overlays: OrderedDict[str, str] = OrderedDict()
+        self.layers_untoggle: OrderedDict[str, str] = OrderedDict()
+
+    def reset(self) -> None:
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
         self.layers_untoggle = OrderedDict()
 
-    def reset(self):
-        self.base_layers = OrderedDict()
-        self.overlays = OrderedDict()
-        self.layers_untoggle = OrderedDict()
-
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         for item in self._parent._children.values():
             if not isinstance(item, Layer) or not item.control:
@@ -207,14 +231,21 @@ class Icon(MacroElement):
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """)
-    color_options = {'red', 'darkred',  'lightred', 'orange', 'beige',
+    color_options = {'red', 'darkred', 'lightred', 'orange', 'beige',
                      'green', 'darkgreen', 'lightgreen',
                      'blue', 'darkblue', 'cadetblue', 'lightblue',
-                     'purple',  'darkpurple', 'pink',
+                     'purple', 'darkpurple', 'pink',
                      'white', 'gray', 'lightgray', 'black'}
 
-    def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon', **kwargs):
+    def __init__(
+            self,
+            color: str = 'blue',
+            icon_color: str = 'white',
+            icon: str = 'info-sign',
+            angle: int = 0,
+            prefix: str = 'glyphicon',
+            **kwargs: TypeJsonValue
+    ):
         super(Icon, self).__init__()
         self._name = 'Icon'
         if color not in self.color_options:
@@ -270,8 +301,15 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None,
-                 draggable=False, **kwargs):
+    def __init__(
+            self,
+            location: Sequence[float],
+            popup: Optional[Union[str, 'Popup']] = None,
+            tooltip: Optional[Union[str, 'Tooltip']] = None,
+            icon: Optional[Icon] = None,
+            draggable: bool = False,
+            **kwargs: TypeJsonValue
+    ):
         super(Marker, self).__init__()
         self._name = 'Marker'
         self.location = validate_location(location)
@@ -289,7 +327,7 @@ class Marker(MacroElement):
             self.add_child(tooltip if isinstance(tooltip, Tooltip)
                            else Tooltip(str(tooltip)))
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> List[List[float]]:
         """Computes the bounds of the object itself.
 
         Because a marker has only single coordinates, we repeat them.
@@ -329,8 +367,15 @@ class Popup(Element):
         {% endfor %}
     """)  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width='100%',
-                 show=False, sticky=False, **kwargs):
+    def __init__(
+            self,
+            html: Optional[Union[str, Element]] = None,
+            parse_html: bool = False,
+            max_width: Union[str, int] = '100%',
+            show: bool = False,
+            sticky: bool = False,
+            **kwargs: TypeJsonValue
+    ):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -356,7 +401,7 @@ class Popup(Element):
             **kwargs
         )
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
@@ -399,7 +444,7 @@ class Tooltip(MacroElement):
             );
         {% endmacro %}
         """)
-    valid_options = {
+    valid_options: Dict[str, Tuple[Type, ...]] = {
         'pane': (str, ),
         'offset': (tuple, ),
         'direction': (str, ),
@@ -411,7 +456,13 @@ class Tooltip(MacroElement):
         'className': (str, ),
     }
 
-    def __init__(self, text, style=None, sticky=True, **kwargs):
+    def __init__(
+            self,
+            text: str,
+            style: Optional[str] = None,
+            sticky: bool = True,
+            **kwargs: TypeJsonValue
+    ):
         super(Tooltip, self).__init__()
         self._name = 'Tooltip'
 
@@ -426,7 +477,10 @@ class Tooltip(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    def parse_options(self, kwargs):
+    def parse_options(
+            self,
+            kwargs: Dict[str, TypeJsonValue],
+    ) -> Dict[str, TypeJsonValue]:
         """Validate the provided kwargs and return options as json string."""
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
@@ -470,8 +524,14 @@ class FitBounds(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, bounds, padding_top_left=None,
-                 padding_bottom_right=None, padding=None, max_zoom=None):
+    def __init__(
+            self,
+            bounds: Sequence[Sequence[float]],
+            padding_top_left: Optional[Sequence[float]] = None,
+            padding_bottom_right: Optional[Sequence[float]] = None,
+            padding: Optional[Sequence[float]] = None,
+            max_zoom: Optional[int] = None,
+    ):
         super(FitBounds, self).__init__()
         self._name = 'FitBounds'
         self.bounds = bounds
@@ -517,7 +577,12 @@ class CustomPane(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, name, z_index=625, pointer_events=False):
+    def __init__(
+            self,
+            name: str,
+            z_index: Union[int, str] = 625,
+            pointer_events: bool = False,
+    ):
         super(CustomPane, self).__init__()
         self._name = 'Pane'
         self.name = name

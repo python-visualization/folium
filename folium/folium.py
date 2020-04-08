@@ -7,16 +7,17 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 import time
 import warnings
+from typing import Optional, Sequence, Union, List
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 
-from folium.map import FitBounds
+from folium.map import FitBounds, Layer
 from folium.raster_layers import TileLayer
 from folium.utilities import (
     _parse_size,
     _tmp_html,
     validate_location,
-    parse_options,
+    parse_options, TypeJsonValue,
 )
 
 from jinja2 import Environment, PackageLoader, Template
@@ -60,7 +61,7 @@ class GlobalSwitches(Element):
         </script>
     """)
 
-    def __init__(self, no_touch=False, disable_3d=False):
+    def __init__(self, no_touch: bool = False, disable_3d: bool = False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
         self.no_touch = no_touch
@@ -209,41 +210,41 @@ class Map(MacroElement):
 
     def __init__(
             self,
-            location=None,
-            width='100%',
-            height='100%',
-            left='0%',
-            top='0%',
-            position='relative',
-            tiles='OpenStreetMap',
-            attr=None,
-            min_zoom=0,
-            max_zoom=18,
-            zoom_start=10,
-            min_lat=-90,
-            max_lat=90,
-            min_lon=-180,
-            max_lon=180,
-            max_bounds=False,
-            crs='EPSG3857',
-            control_scale=False,
-            prefer_canvas=False,
-            no_touch=False,
-            disable_3d=False,
-            png_enabled=False,
-            zoom_control=True,
-            **kwargs
+            location: Optional[Sequence[float]] = None,
+            width: Union[str, int] = '100%',
+            height: Union[str, int] = '100%',
+            left: Union[str, int] = '0%',
+            top: Union[str, int] = '0%',
+            position: str = 'relative',
+            tiles: str = 'OpenStreetMap',
+            attr: Optional[str] = None,
+            min_zoom: int = 0,
+            max_zoom: int = 18,
+            zoom_start: int = 10,
+            min_lat: int = -90,
+            max_lat: int = 90,
+            min_lon: int = -180,
+            max_lon: int = 180,
+            max_bounds: bool = False,
+            crs: str = 'EPSG3857',
+            control_scale: bool = False,
+            prefer_canvas: bool = False,
+            no_touch: bool = False,
+            disable_3d: bool = False,
+            png_enabled: bool = False,
+            zoom_control: bool = True,
+            **kwargs: TypeJsonValue
     ):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
         # Undocumented for now b/c this will be subject to a re-factor soon.
-        self._png_image = None
+        self._png_image = ''
         self.png_enabled = png_enabled
 
         if location is None:
             # If location is not passed we center and zoom out.
-            self.location = [0, 0]
+            self.location = [0.0, 0.0]
             zoom_start = 1
         else:
             self.location = validate_location(location)
@@ -276,24 +277,25 @@ class Map(MacroElement):
             disable_3d
         )
 
-        self.objects_to_stay_in_front = []
+        self.objects_to_stay_in_front: List[Layer] = []
 
         if tiles:
             tile_layer = TileLayer(tiles=tiles, attr=attr,
                                    min_zoom=min_zoom, max_zoom=max_zoom)
             self.add_child(tile_layer, name=tile_layer.tile_name)
 
-    def _repr_html_(self, **kwargs):
+    def _repr_html_(self, **kwargs) -> str:
         """Displays the HTML Map in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
+            self._parent: Figure
             out = self._parent._repr_html_(**kwargs)
             self._parent = None
         else:
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, delay=3):
+    def _to_png(self, delay: int = 3) -> str:
         """Export the HTML to byte representation of a PNG image.
 
         Uses selenium to render the HTML and record a PNG. You may need to
@@ -323,7 +325,7 @@ class Map(MacroElement):
             self._png_image = png
         return self._png_image
 
-    def _repr_png_(self):
+    def _repr_png_(self) -> Optional[str]:
         """Displays the PNG Map in a Jupyter notebook."""
         # The notebook calls all _repr_*_ by default.
         # We don't want that here b/c this one is quite slow.
@@ -331,7 +333,7 @@ class Map(MacroElement):
             return None
         return self._to_png()
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
@@ -369,8 +371,14 @@ class Map(MacroElement):
 
         super(Map, self).render(**kwargs)
 
-    def fit_bounds(self, bounds, padding_top_left=None,
-                   padding_bottom_right=None, padding=None, max_zoom=None):
+    def fit_bounds(
+            self,
+            bounds: Sequence[Sequence[float]],
+            padding_top_left: Optional[Sequence[float]] = None,
+            padding_bottom_right: Optional[Sequence[float]] = None,
+            padding: Optional[Sequence[float]] = None,
+            max_zoom: Optional[int] = None,
+    ) -> None:
         """Fit the map to contain a bounding box with the
         maximum zoom level possible.
 
@@ -403,7 +411,7 @@ class Map(MacroElement):
                                  )
                        )
 
-    def choropleth(self, *args, **kwargs):
+    def choropleth(self, *args, **kwargs) -> None:
         """Call the Choropleth class with the same arguments.
 
         This method may be deleted after a year from now (Nov 2018).
@@ -417,7 +425,7 @@ class Map(MacroElement):
         from folium.features import Choropleth
         self.add_child(Choropleth(*args, **kwargs))
 
-    def keep_in_front(self, *args):
+    def keep_in_front(self, *args: Layer) -> None:
         """Pass one or multiple layers that must stay in front.
 
         The ordering matters, the last one is put on top.
