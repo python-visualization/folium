@@ -1064,9 +1064,9 @@ class Choropleth(FeatureGroup):
         If `bins` is a sequence, it directly defines the bin edges.
         For more information on this parameter, have a look at
         numpy.histogram function.
-    fill_color: string, default 'blue'
-        Area fill color. Can pass a hex code, color name, or if you are
-        binding data, one of the following color brewer palettes:
+    fill_color: string, optional
+        Area fill color, defaults to blue. Can pass a hex code, color name,
+        or if you are binding data, one of the following color brewer palettes:
         'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
         'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
     nan_fill_color: string, default 'black'
@@ -1126,7 +1126,7 @@ class Choropleth(FeatureGroup):
     """
 
     def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
-                 bins=6, fill_color='blue', nan_fill_color='black',
+                 bins=6, fill_color=None, nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
@@ -1135,6 +1135,8 @@ class Choropleth(FeatureGroup):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
+
+        fill_color = fill_color or ('blue' if data is None else 'Blues')
 
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
