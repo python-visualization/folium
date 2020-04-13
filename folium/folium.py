@@ -418,7 +418,7 @@ class Map(MacroElement):
         self.add_child(Choropleth(*args, **kwargs))
 
     def keep_in_front(self, *args):
-        """Pass one or multiples object that must stay in front.
+        """Pass one or multiple layers that must stay in front.
 
         The ordering matters, the last one is put on top.
 
@@ -426,7 +426,8 @@ class Map(MacroElement):
         ----------
         *args :
             Variable length argument list. Any folium object that counts as an
-            overlay. For example FeatureGroup or a vector object such as Marker.
+            overlay. For example FeatureGroup or TileLayer.
+            Does not work with markers, for those use z_index_offset.
         """
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
