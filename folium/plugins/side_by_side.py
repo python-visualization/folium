@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink
+from branca.element import Figure, JavascriptLink
 
 from folium.map import Layer
 
