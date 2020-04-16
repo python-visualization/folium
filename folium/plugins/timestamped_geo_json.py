@@ -5,7 +5,7 @@ import json
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from folium.folium import Map
-from folium.utilities import iter_points, none_max, none_min, parse_options
+from folium.utilities import parse_options, get_bounds
 
 from jinja2 import Template
 
@@ -227,17 +227,4 @@ class TimestampedGeoJson(MacroElement):
                 data = {'type': 'Feature', 'geometry': data}
             data = {'type': 'FeatureCollection', 'features': [data]}
 
-        bounds = [[None, None], [None, None]]
-        for feature in data['features']:
-            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
-                bounds = [
-                    [
-                        none_min(bounds[0][0], point[1]),
-                        none_min(bounds[0][1], point[0]),
-                        ],
-                    [
-                        none_max(bounds[1][0], point[1]),
-                        none_max(bounds[1][1], point[0]),
-                        ],
-                    ]
-        return bounds
+        return get_bounds(data, lonlat=True)
