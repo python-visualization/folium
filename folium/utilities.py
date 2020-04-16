@@ -410,24 +410,6 @@ def _parse_size(value):
     return value, value_type
 
 
-def iter_points(x):
-    """Iterates over a list representing a feature, and returns a list of points,
-    whatever the shape of the array (Point, MultiPolyline, etc).
-    """
-    if not isinstance(x, (list, tuple)):
-        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
-    if len(x):
-        if isinstance(x[0], (list, tuple)):
-            out = []
-            for y in x:
-                out += iter_points(y)
-            return out
-        else:
-            return [x]
-    else:
-        return []
-
-
 def compare_rendered(obj1, obj2):
     """
     Return True/False if the normalized rendered version of
