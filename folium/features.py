@@ -492,8 +492,6 @@ class GeoJson(Layer):
         elif hasattr(data, '__geo_interface__'):
             self.embed = True
             if hasattr(data, 'to_crs'):
-                if isinstance(data.crs, dict) and 'init' in data.crs:
-                    data.crs = data.crs['init']
                 data = data.to_crs('EPSG:4326')
             return json.loads(json.dumps(data.__geo_interface__))
         else:
