@@ -11,6 +11,9 @@ class SideBySideLayers(Layer):
     """
     Creates a SideBySideLayers that takes two Layers and adds a sliding
     control with the leaflet-side-by-side plugin.
+
+    Uses the Leaflet leaflet-side-by-side plugin https://github.com/digidem/leaflet-side-by-side
+
     Parameters
     ----------
     layer_left: Layer.
@@ -29,30 +32,8 @@ class SideBySideLayers(Layer):
         Whether the layer will be shown on opening (only for overlays).
     Examples
     --------
-    >>> layer_left = WmsTileLayer(
-    ...          'http://this.wms.server/ncWMS/wms',
-    ...          name='Test WMS Data',
-    ...          styles='',
-    ...          fmt='image/png',
-    ...          transparent=True,
-    ...          layers='test_data',
-    ...          COLORSCALERANGE='0,10',
-    ...)
-    >>> layer_left.add_to(m)
-    >>> layer_right = WmsTileLayer(
-    ...          'http://this.wms.server/ncWMS/wms',
-    ...          name='Test WMS Data',
-    ...          styles='',
-    ...          fmt='image/png',
-    ...          transparent=True,
-    ...          layers='test_data_2',
-    ...          COLORSCALERANGE='0,5',
-    ...)
-    >>> layer_right.add_to(m)
-    >>> # Add layers to sidebyside control.
     >>> sidebyside = SideBySideLayers(layer_left, layer_right)
     >>> sidebyside.add_to(m)
-    See https://github.com/digidem/leaflet-side-by-side for more information.
     """
 
     _template = Template(u"""
@@ -80,5 +61,5 @@ class SideBySideLayers(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('http://lab.digital-democracy.org/leaflet-side-by-side/leaflet-side-by-side.js'),  # noqa
+            JavascriptLink('https://raw.githack.com/digidem/leaflet-side-by-side/gh-pages/leaflet-side-by-side.js'),  # noqa
             name='leaflet.sidebyside')
