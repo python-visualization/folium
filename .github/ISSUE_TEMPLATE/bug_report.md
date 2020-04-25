@@ -24,8 +24,13 @@ A clear and concise description of what you expected to happen.
 
 **Environment (please complete the following information):**
  - Browser [e.g. chrome, firefox]
- - Jupyter Notebook or standalone maps?
+ - Jupyter Notebook or html files?
  - folium version (check it with `print(folium.__version__)`)
 
 **Additional context**
 Add any other context about the problem here.
+
+**Possible solutions**
+List any solutions you may have come up with.
+
+folium is maintained by volunteers. Can you help making a fix for this issue?
