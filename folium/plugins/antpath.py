@@ -2,9 +2,11 @@
 
 from branca.element import Figure, JavascriptLink
 
-from folium.vector_layers import path_options, BaseMultiLocation
+from folium.vector_layers import BaseMultiLocation, path_options
 
 from jinja2 import Template
+
+_javascript_link = 'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js'
 
 
 class AntPath(BaseMultiLocation):
@@ -67,6 +69,6 @@ class AntPath(BaseMultiLocation):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js'),  # noqa
+            JavascriptLink(_javascript_link),  # noqa
             name='antpath',
         )

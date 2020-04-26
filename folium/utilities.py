@@ -1,23 +1,23 @@
 import base64
+import collections
+import copy
 import io
 import json
 import math
 import os
 import struct
 import tempfile
+import uuid
 import zlib
 from contextlib import contextmanager
-import copy
-import uuid
-import collections
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
+
 try:
     import pandas as pd
 except ImportError:
     pd = None
-
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
@@ -214,7 +214,7 @@ def write_png(data, origin='upper', colormap=None):
     # Normalize to uint8 if it isn't already.
     if arr.dtype != 'uint8':
         with np.errstate(divide='ignore', invalid='ignore'):
-            arr = arr * 255./arr.max(axis=(0, 1)).reshape((1, 1, 4))
+            arr = arr * 255. / arr.max(axis=(0, 1)).reshape((1, 1, 4))
             arr[~np.isfinite(arr)] = 0
         arr = arr.astype('uint8')
 
@@ -269,7 +269,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     import numpy as np
 
     def mercator(x):
-        return np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
+        return np.arcsinh(np.tan(x * np.pi / 180.)) * 180. / np.pi
 
     array = np.atleast_3d(data).copy()
     height, width, nblayers = array.shape
@@ -283,16 +283,16 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     if origin == 'upper':
         array = array[::-1, :, :]
 
-    lats = (lat_min + np.linspace(0.5/height, 1.-0.5/height, height) *
-            (lat_max-lat_min))
+    lats = (lat_min + np.linspace(0.5 / height, 1. - 0.5 / height, height) *
+            (lat_max - lat_min))
     latslats = (mercator(lat_min) +
-                np.linspace(0.5/height_out, 1.-0.5/height_out, height_out) *
-                (mercator(lat_max)-mercator(lat_min)))
+                np.linspace(0.5 / height_out, 1. - 0.5 / height_out, height_out) *
+                (mercator(lat_max) - mercator(lat_min)))
 
     out = np.zeros((height_out, width, nblayers))
     for i in range(width):
         for j in range(nblayers):
-            out[:, i, j] = np.interp(latslats, mercator(lats),  array[:, i, j])
+            out[:, i, j] = np.interp(latslats, mercator(lats), array[:, i, j])
 
     # Eventually flip the image.
     if origin == 'upper':

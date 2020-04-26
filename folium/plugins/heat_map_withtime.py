@@ -7,6 +7,19 @@ from folium.utilities import none_max, none_min
 
 from jinja2 import Template
 
+_default_js = [
+    ('iso8601',
+     'https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),
+    ('leaflet.timedimension.min.js',
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),
+    ('heatmap.min.js',
+     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),
+    ('leaflet-heatmap.js',
+     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js'),  # noqa
+]
+
+_css_link = 'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css' # noqa
+
 
 class HeatMapWithTime(Layer):
     """
@@ -161,25 +174,13 @@ class HeatMapWithTime(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
+        # Import Css
         figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension.min.js')
-
-        figure.header.add_child(
-            JavascriptLink(
-                'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),  # noqa
-            name='heatmap.min.js')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js'),  # noqa
-            name='leaflet-heatmap.js')
-
-        figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css'),  # noqa
+            CssLink(_css_link),  # noqa
             name='leaflet.timedimension.control.min.css')
 
         figure.header.add_child(

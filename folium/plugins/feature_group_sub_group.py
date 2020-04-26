@@ -6,6 +6,8 @@ from folium.map import Layer
 
 from jinja2 import Template
 
+_javascript_link = 'https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'
+
 
 class FeatureGroupSubGroup(Layer):
     """
@@ -79,5 +81,5 @@ class FeatureGroupSubGroup(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),  # noqa
+            JavascriptLink(_javascript_link),  # noqa
             name='featuregroupsubgroupjs')

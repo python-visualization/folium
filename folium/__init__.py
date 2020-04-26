@@ -24,13 +24,13 @@ from folium.features import (
     CustomIcon,
     DivIcon,
     GeoJson,
-    GeoJsonTooltip,
     GeoJsonPopup,
+    GeoJsonTooltip,
     LatLngPopup,
     RegularPolygonMarker,
     TopoJson,
     Vega,
-    VegaLite,
+    VegaLite
 )
 from folium.folium import Map
 from folium.map import (
@@ -86,6 +86,7 @@ __all__ = [
     'Figure',
     'FitBounds',
     'GeoJson',
+    'GeoJsonPopup',
     'GeoJsonTooltip',
     'Html',
     'IFrame',

@@ -15,14 +15,13 @@ from folium.raster_layers import TileLayer
 from folium.utilities import (
     _parse_size,
     _tmp_html,
-    validate_location,
     parse_options,
+    validate_location
 )
 
 from jinja2 import Environment, PackageLoader, Template
 
 ENV = Environment(loader=PackageLoader('folium', 'templates'))
-
 
 _default_js = [
     ('leaflet',
@@ -33,7 +32,7 @@ _default_js = [
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
-    ]
+]
 
 _default_css = [
     ('leaflet_css',
@@ -47,12 +46,11 @@ _default_css = [
     ('awesome_markers_css',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
-     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
-    ]
+     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'), # noqa
+]
 
 
 class GlobalSwitches(Element):
-
     _template = Template("""
         <script>
             L_NO_TOUCH = {{ this.no_touch |tojson}};
@@ -411,7 +409,7 @@ class Map(MacroElement):
         warnings.warn(
             'The choropleth  method has been deprecated. Instead use the new '
             'Choropleth class, which has the same arguments. See the example '
-            'notebook \'GeoJSON_and_choropleth\' for how to do this.',
+            "notebook 'GeoJSON_and_choropleth' for how to do this.",
             FutureWarning
         )
         from folium.features import Choropleth

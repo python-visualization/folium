@@ -7,6 +7,8 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_javascript_link = 'https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'
+
 
 class BoatMarker(Marker):
     """Add a Marker in the shape of a boat.
@@ -66,5 +68,5 @@ class BoatMarker(Marker):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),  # noqa
+            JavascriptLink(_javascript_link),  # noqa
             name='markerclusterjs')

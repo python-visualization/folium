@@ -6,6 +6,10 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_javascript_link = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js'
+
+_css_link = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css'
+
 
 class Fullscreen(MacroElement):
     """
@@ -58,11 +62,11 @@ class Fullscreen(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js'),  # noqa
+            JavascriptLink(_javascript_link),  # noqa
             name='Control.Fullscreen.js'
         )
 
         figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css'),  # noqa
+            CssLink(_css_link),  # noqa
             name='Control.FullScreen.css'
         )

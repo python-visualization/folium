@@ -5,10 +5,10 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-import json
-import warnings
 import functools
+import json
 import operator
+import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -17,15 +17,15 @@ from branca.utilities import color_brewer
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import (
-    validate_locations,
     _parse_size,
+    camelize,
     get_bounds,
+    get_obj_in_upper_tree,
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree,
     parse_options,
-    camelize
+    validate_locations
 )
 from folium.vector_layers import PolyLine, path_options
 
@@ -314,9 +314,12 @@ class VegaLite(Element):
                 """).render(this=self)), name=self.get_name())
 
         figure.header.add_child(JavascriptLink('https://d3js.org/d3.v3.min.js'), name='d3')
-        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'), name='vega')  # noqa
-        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'), name='vega-lite')  # noqa
-        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'), name='vega-embed')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js'),
+                                name='vega')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js'),
+                                name='vega-lite')  # noqa
+        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js'),
+                                name='vega-embed')  # noqa
 
 
 class GeoJson(Layer):
@@ -522,7 +525,7 @@ class GeoJson(Layer):
         test_feature = self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
-                             'data[\'features\'] and returns a dictionary.'
+                             "data['features'] and returns a dictionary."
                              .format(name))
 
     def find_identifier(self):
@@ -536,16 +539,16 @@ class GeoJson(Layer):
         """
         feats = self.data['features']
         # Each feature has an 'id' field with a unique value.
-        unique_ids = set(feat.get('id', None) for feat in feats)
+        unique_ids = {feat.get('id', None) for feat in feats}
         if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
         # Each feature has a unique string or int property.
         if all(isinstance(feat.get('properties', None), dict) for feat in feats):
             for key in feats[0]['properties']:
-                unique_values = set(
+                unique_values = {
                     feat['properties'].get(key, None) for feat in feats
                     if isinstance(feat['properties'].get(key, None), (str, int))
-                )
+                }
                 if len(unique_values) == len(feats):
                     return 'feature.properties.{}'.format(key)
         # We add an 'id' field with a unique value to the data.
@@ -632,8 +635,7 @@ class GeoJsonStyleMapper:
     @staticmethod
     def _set_default_key(mapping):
         """Replace the field with the most features with a 'default' field."""
-        key_longest = sorted([(len(v), k) for k, v in mapping.items()],
-                             reverse=True)[0][1]
+        key_longest = sorted(((len(v), k) for k, v in mapping.items()), reverse=True)[0][1]
         mapping['default'] = key_longest
         del (mapping[key_longest])
 
@@ -800,7 +802,6 @@ class TopoJson(Layer):
 
 
 class GeoJsonDetail(MacroElement):
-
     """
     Base class for GeoJsonTooltip and GeoJsonPopup to inherit methods and
     template structure from. Not for direct usage.
@@ -830,7 +831,7 @@ class GeoJsonDetail(MacroElement):
     """
 
     def __init__(self, fields, aliases=None, labels=True, localize=False, style=None,
-                 class_name="geojsondetail"):
+                 class_name='geojsondetail'):
         super(GeoJsonDetail, self).__init__()
         assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
                                                   'tuple to fields.'
@@ -840,7 +841,7 @@ class GeoJsonDetail(MacroElement):
                                                 ' the same length.'
         assert isinstance(labels, bool), 'labels requires a boolean value.'
         assert isinstance(localize, bool), 'localize must be bool.'
-        self._name = "GeoJsonDetail"
+        self._name = 'GeoJsonDetail'
         self.fields = fields
         self.aliases = aliases if aliases is not None else fields
         self.labels = labels
@@ -861,9 +862,9 @@ class GeoJsonDetail(MacroElement):
         ]
         if any(geom_collections):
             warnings.warn(
-                "{} is not configured to render for GeoJson GeometryCollection geometries. "
-                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
-                "https://tools.ietf.org/html/rfc7946#page-9".format(self._name, geom_collections), UserWarning)
+                '{} is not configured to render for GeoJson GeometryCollection geometries. '
+                'Please consider reworking these features: {} to MultiPolygon for full functionality.\n'
+                'https://tools.ietf.org/html/rfc7946#page-9'.format(self._name, geom_collections), UserWarning)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -898,7 +899,7 @@ class GeoJsonDetail(MacroElement):
                             padding: 2px; padding-right: 8px;
                         }
                     </style>
-            """).render(this=self)), name=self.get_name() + "tablestyle"
+            """).render(this=self)), name=self.get_name() + 'tablestyle'
         )
 
         super(GeoJsonDetail, self).render()
@@ -1008,12 +1009,12 @@ class GeoJsonPopup(GeoJsonDetail):
                      """)
 
     def __init__(self, fields=None, aliases=None, labels=True,
-                 style="margin: auto;", class_name='foliumpopup', localize=True,
+                 style='margin: auto;', class_name='foliumpopup', localize=True,
                  **kwargs):
         super(GeoJsonPopup, self).__init__(
             fields=fields, aliases=aliases, labels=labels, localize=localize,
             class_name=class_name, style=style)
-        self._name = "GeoJsonPopup"
+        self._name = 'GeoJsonPopup'
         kwargs.update({'class_name': self.class_name})
         self.popup_options = {
             camelize(key): value for key, value in kwargs.items()}
@@ -1203,7 +1204,7 @@ class Choropleth(FeatureGroup):
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
                 if key_of_x is None:
-                    raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
+                    raise ValueError('key_on `{!r}` not found in GeoJSON.'.format(key_on))
 
                 if key_of_x not in color_data.keys():
                     return nan_fill_color, nan_fill_opacity

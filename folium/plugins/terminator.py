@@ -4,6 +4,8 @@ from branca.element import Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
+_javascript_link = 'https://unpkg.com/@joergdietrich/leaflet.terminator'
+
 
 class Terminator(MacroElement):
     """
@@ -29,4 +31,4 @@ class Terminator(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink("https://unpkg.com/@joergdietrich/leaflet.terminator"), name='terminator')  # noqa
+            JavascriptLink(_javascript_link), name='terminator')  # noqa

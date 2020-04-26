@@ -6,6 +6,10 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_javascript_link = 'https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'
+
+_css_link = 'https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'
+
 
 class BeautifyIcon(MacroElement):
     """
@@ -83,9 +87,9 @@ class BeautifyIcon(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
         figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'),  # noqa
+            CssLink(_css_link),  # noqa
             name='beautify_icon_css')
 
         figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'),  # noqa
+            JavascriptLink(_javascript_link),  # noqa
             name='beautify_icon_js')
