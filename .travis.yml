@@ -50,7 +50,6 @@ before_install:
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
     python -m pip install seleniumbase
-    seleniumbase install chromedriver latest
   # Install firefox headless driver.
   - |
     wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
@@ -58,7 +57,7 @@ before_install:
     tar -xzf geckodriver.tar.gz -C geckodriver
     export PATH=$PATH:$PWD/geckodriver
   -  |
-    google-chrome-stable --headless --disable-gpu --remote-debugging-port=4444 http://localhost &
+    google-chrome-stable --disable-gpu --no-sandbox --disable-dev-shm-usage --remote-debugging-port=9222 http://localhost &
 
 # Test source distribution.
 install:
