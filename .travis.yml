@@ -76,7 +76,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py --headed ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
