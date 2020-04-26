@@ -7,6 +7,7 @@ env:
 
 addons:
   firefox: latest
+  chrome: stable
 
 env:
   global:
@@ -48,6 +49,8 @@ before_install:
     conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
+    python -m pip install seleniumbase
+    seleniumbase install chromedriver
   # Install firefox headless driver.
   - |
     wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
