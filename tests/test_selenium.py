@@ -40,7 +40,7 @@ def get_notebook_html(filepath_notebook, run=True):
             '<body>{}</body></html>').format(body)
     filepath_html = filepath_notebook.replace('.ipynb', '.html')
     filepath_html = os.path.abspath(filepath_html)
-    with open(filepath_html, 'w') as f:
+    with open(filepath_html, 'w', encoding="utf-8") as f:
         f.write(html)
     try:
         yield filepath_html
