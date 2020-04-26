@@ -57,7 +57,7 @@ before_install:
     mkdir geckodriver
     tar -xzf geckodriver.tar.gz -C geckodriver
     export PATH=$PATH:$PWD/geckodriver
-
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 # Test source distribution.
 install:
