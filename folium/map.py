@@ -5,12 +5,13 @@ Classes for drawing maps.
 
 """
 
-import warnings
 from collections import OrderedDict
+
+import warnings
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import camelize, parse_options, validate_location
+from folium.utilities import validate_location, camelize, parse_options
 
 from jinja2 import Template
 
@@ -31,7 +32,6 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
-
     def __init__(self, name=None, overlay=False, control=True, show=True):
         super(Layer, self).__init__()
         self.layer_name = name if name is not None else self.get_name()
@@ -207,10 +207,10 @@ class Icon(MacroElement):
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """)
-    color_options = {'red', 'darkred', 'lightred', 'orange', 'beige',
+    color_options = {'red', 'darkred',  'lightred', 'orange', 'beige',
                      'green', 'darkgreen', 'lightgreen',
                      'blue', 'darkblue', 'cadetblue', 'lightblue',
-                     'purple', 'darkpurple', 'pink',
+                     'purple',  'darkpurple', 'pink',
                      'white', 'gray', 'lightgray', 'black'}
 
     def __init__(self, color='blue', icon_color='white', icon='info-sign',
@@ -400,15 +400,15 @@ class Tooltip(MacroElement):
         {% endmacro %}
         """)
     valid_options = {
-        'pane': (str,),
-        'offset': (tuple,),
-        'direction': (str,),
-        'permanent': (bool,),
-        'sticky': (bool,),
-        'interactive': (bool,),
+        'pane': (str, ),
+        'offset': (tuple, ),
+        'direction': (str, ),
+        'permanent': (bool, ),
+        'sticky': (bool, ),
+        'interactive': (bool, ),
         'opacity': (float, int),
-        'attribution': (str,),
-        'className': (str,),
+        'attribution': (str, ),
+        'className': (str, ),
     }
 
     def __init__(self, text, style=None, sticky=True, **kwargs):
@@ -430,10 +430,13 @@ class Tooltip(MacroElement):
         """Validate the provided kwargs and return options as json string."""
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
-            assert key in self.valid_options, \
-                ('The option {} is not in the available options: {}.'.format(key, ', '.join(self.valid_options)))
+            assert key in self.valid_options, (
+                'The option {} is not in the available options: {}.'
+                .format(key, ', '.join(self.valid_options))
+            )
             assert isinstance(kwargs[key], self.valid_options[key]), (
-                'The option {} must be one of the following types: {}.'.format(key, self.valid_options[key])
+                'The option {} must be one of the following types: {}.'
+                .format(key, self.valid_options[key])
             )
         return kwargs
 

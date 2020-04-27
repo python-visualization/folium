@@ -6,10 +6,6 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_javascript_link = 'https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.js'
-
-_css_link = 'https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.css'
-
 
 class MousePosition(MacroElement):
     """Add a field that shows the coordinates of the mouse position.
@@ -84,6 +80,6 @@ class MousePosition(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink(_javascript_link))  # noqa
+        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.js'))  # noqa
 
-        figure.header.add_child(CssLink(_css_link))  # noqa
+        figure.header.add_child(CssLink('https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.css'))  # noqa

@@ -4,18 +4,16 @@ from branca.element import Figure, JavascriptLink
 
 from folium.map import Layer
 from folium.utilities import (
-    if_pandas_df_convert_to_numpy,
     none_max,
     none_min,
     parse_options,
-    validate_location
+    if_pandas_df_convert_to_numpy,
+    validate_location,
 )
 
 from jinja2 import Template
 
 import numpy as np
-
-_javascript_link = 'https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'
 
 
 class HeatMap(Layer):
@@ -87,7 +85,7 @@ class HeatMap(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink(_javascript_link),  # noqa
+            JavascriptLink('https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),  # noqa
             name='leaflet-heat.js')
 
     def _get_self_bounds(self):

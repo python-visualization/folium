@@ -1,12 +1,10 @@
-from branca.element import Figure, JavascriptLink, MacroElement
+from jinja2 import Template
+
+from branca.element import MacroElement, Figure, JavascriptLink
 
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.utilities import deep_copy
-
-from jinja2 import Template
-
-_javascript_link = 'https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'
 
 
 class DualMap(MacroElement):
@@ -54,7 +52,7 @@ class DualMap(MacroElement):
                                        'DualMap.'.format(key))
         if layout not in ('horizontal', 'vertical'):
             raise ValueError('Undefined option for argument `layout`: {}. '
-                             "Use either 'horizontal' or 'vertical'."
+                             'Use either \'horizontal\' or \'vertical\'.'
                              .format(layout))
         width = '50%' if layout == 'horizontal' else '100%'
         height = '100%' if layout == 'horizontal' else '50%'
@@ -95,7 +93,7 @@ class DualMap(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink(_javascript_link), # noqa
+        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
                                 name='Leaflet.Sync')
 
         super(DualMap, self).render(**kwargs)

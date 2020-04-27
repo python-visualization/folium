@@ -4,10 +4,6 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from jinja2 import Template
 
-_javascript_link = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'
-
-_css_link = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'
-
 
 class Draw(MacroElement):
     """
@@ -19,7 +15,7 @@ class Draw(MacroElement):
         Add a small button that exports the drawn shapes as a geojson file.
     filename : string, default 'data.geojson'
         Name of geojson file
-    position : {'topleft', 'topright', 'bottomleft', 'bottomright'}
+    position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
         Position of control.
         See https://leafletjs.com/reference-1.6.0.html#control
     draw_options : dict, optional
@@ -105,8 +101,10 @@ class Draw(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink(_javascript_link))  # noqa
-        figure.header.add_child(CssLink(_css_link))  # noqa
+        figure.header.add_child(
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'))  # noqa
+        figure.header.add_child(
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'))  # noqa
 
         export_style = """
             <style>

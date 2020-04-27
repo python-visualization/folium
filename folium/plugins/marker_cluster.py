@@ -3,18 +3,9 @@
 from branca.element import CssLink, Figure, JavascriptLink
 
 from folium.map import Layer, Marker
-from folium.utilities import parse_options, validate_locations
+from folium.utilities import validate_locations, parse_options
 
 from jinja2 import Template
-
-_javascript_link = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js'
-
-_default_css = [
-    ('markerclustercss',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'),
-    ('markerclusterdefaultcss',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css'),
-]
 
 
 class MarkerCluster(Layer):
@@ -97,9 +88,13 @@ class MarkerCluster(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink(_javascript_link),  # noqa
+            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js'),  # noqa
             name='markerclusterjs')
 
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
+        figure.header.add_child(
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'),  # noqa
+            name='markerclustercss')
+
+        figure.header.add_child(
+            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css'),  # noqa
+            name='markerclusterdefaultcss')

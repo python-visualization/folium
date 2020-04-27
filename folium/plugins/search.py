@@ -2,16 +2,12 @@
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
+from jinja2 import Template
+
 from folium import Map
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
 from folium.utilities import parse_options
-
-from jinja2 import Template
-
-_javascript_link = 'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'
-
-_css_link = 'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css'
 
 
 class Search(MacroElement):
@@ -109,9 +105,10 @@ class Search(MacroElement):
     def test_params(self, keys):
         if keys is not None and self.search_label is not None:
             assert self.search_label in keys, "The label '{}' was not " \
-                                              'available in {}' \
-                                              "".format(self.search_label, keys) # noqa
-        assert isinstance(self._parent, Map), 'Search can only be added to folium Map objects.'
+                                              "available in {}" \
+                                              "".format(self.search_label, keys)
+        assert isinstance(self._parent, Map), "Search can only be added to " \
+                                              "folium Map objects."
 
     def render(self, **kwargs):
         if isinstance(self.layer, GeoJson):
@@ -129,11 +126,11 @@ class Search(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink(_javascript_link),  # noqa
+            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'),  # noqa
             name='Leaflet.Search.js'
         )
 
         figure.header.add_child(
-            CssLink(_css_link),  # noqa
+            CssLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css'),  # noqa
             name='Leaflet.Search.css'
         )

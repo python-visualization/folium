@@ -7,8 +7,6 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_javascript_link = 'https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js'
-
 
 class PolyLineTextPath(MacroElement):
     """
@@ -72,5 +70,5 @@ class PolyLineTextPath(MacroElement):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink(_javascript_link),  # noqa
+            JavascriptLink("https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"),  # noqa
             name='polylinetextpath')

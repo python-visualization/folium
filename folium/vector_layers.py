@@ -8,7 +8,7 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 from branca.element import MacroElement
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import get_bounds, validate_locations
+from folium.utilities import validate_locations, get_bounds
 
 from jinja2 import Template
 
@@ -20,10 +20,6 @@ def path_options(line=False, radius=False, **kwargs):
 
     Parameters
     ----------
-    line: Bool, False
-        Whether to include smooth_factor and no_clip options for lines.
-    radius: Bool, False
-        Whether to include Bool argument for radius.
     stroke: Bool, True
         Whether to draw stroke along the path.
         Set it to false to disable borders on polygons or circles.

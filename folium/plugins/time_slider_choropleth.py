@@ -7,8 +7,6 @@ from folium.map import Layer
 
 from jinja2 import Template
 
-_javascript_link = 'https://d3js.org/d3.v4.min.js'
-
 
 class TimeSliderChoropleth(Layer):
     """
@@ -147,7 +145,7 @@ class TimeSliderChoropleth(Layer):
         timestamps = set()
         for feature in styledict.values():
             timestamps.update(set(feature.keys()))
-        timestamps = sorted(timestamps)
+        timestamps = sorted(list(timestamps))
 
         self.timestamps = timestamps
         self.styledict = styledict
@@ -157,5 +155,4 @@ class TimeSliderChoropleth(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-
-        figure.header.add_child(JavascriptLink(_javascript_link), name='d3v4')
+        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v4.min.js'), name='d3v4')
