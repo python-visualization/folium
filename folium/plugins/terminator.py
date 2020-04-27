@@ -4,6 +4,11 @@ from branca.element import Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
 
+_default_js = [
+    ('terminator',
+     'https://unpkg.com/@joergdietrich/leaflet.terminator')
+    ]
+
 
 class Terminator(MacroElement):
     """
@@ -28,5 +33,6 @@ class Terminator(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink("https://unpkg.com/@joergdietrich/leaflet.terminator"), name='terminator')  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

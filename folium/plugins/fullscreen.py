@@ -6,6 +6,16 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_default_js = [
+    ('Control.Fullscreen.js',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js')
+    ]
+
+_default_css = [
+    ('Control.FullScreen.css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css')
+    ]
+
 
 class Fullscreen(MacroElement):
     """
@@ -27,7 +37,6 @@ class Fullscreen(MacroElement):
         force seperate button to detach from zoom buttons,
 
     See https://github.com/brunob/leaflet.fullscreen for more information.
-
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
@@ -57,12 +66,10 @@ class Fullscreen(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js'),  # noqa
-            name='Control.Fullscreen.js'
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css'),  # noqa
-            name='Control.FullScreen.css'
-        )
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)

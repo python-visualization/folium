@@ -1,10 +1,15 @@
-from jinja2 import Template
-
 from branca.element import MacroElement, Figure, JavascriptLink
 
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.utilities import deep_copy
+
+from jinja2 import Template
+
+_default_js = [
+    ('Leaflet.Sync',
+     'https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js')
+    ]
 
 
 class DualMap(MacroElement):
@@ -93,8 +98,9 @@ class DualMap(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
-                                name='Leaflet.Sync')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
         super(DualMap, self).render(**kwargs)
 
