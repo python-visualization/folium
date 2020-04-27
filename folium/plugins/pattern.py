@@ -7,6 +7,11 @@ from folium.utilities import get_obj_in_upper_tree, parse_options
 
 from jinja2 import Template
 
+_default_js = [
+    ('pattern',
+     'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')
+    ]
+
 
 class StripePattern(MacroElement):
     """Fill Pattern for polygon composed of alternating lines.
@@ -67,10 +72,9 @@ class StripePattern(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern'
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
 
 class CirclePattern(MacroElement):
@@ -143,7 +147,6 @@ class CirclePattern(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern'
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

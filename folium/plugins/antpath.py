@@ -6,6 +6,11 @@ from folium.vector_layers import path_options, BaseMultiLocation
 
 from jinja2 import Template
 
+_default_js = [
+    ('antpath',
+     'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js')
+]
+
 
 class AntPath(BaseMultiLocation):
     """
@@ -66,7 +71,6 @@ class AntPath(BaseMultiLocation):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js'),  # noqa
-            name='antpath',
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

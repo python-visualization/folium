@@ -5,8 +5,19 @@ Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
-from jinja2 import Template
 from folium.utilities import parse_options
+
+from jinja2 import Template
+
+_default_js = [
+    ('Control_locate_min_js',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js')
+    ]
+
+_default_css = [
+    ('Control_locate_min_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css')
+    ]
 
 
 class LocateControl(MacroElement):
@@ -66,8 +77,10 @@ class LocateControl(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            CssLink(
-                "https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css"))  # noqa
-        figure.header.add_child(JavascriptLink(
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js"))  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
+
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)
