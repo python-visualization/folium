@@ -11,6 +11,7 @@ from selenium.webdriver import Chrome, ChromeOptions
 
 def test_selenium_chrome():
     options = ChromeOptions()
+    options.add_argument('--headless')
     driver = Chrome(options=options)
     driver.get("http://www.python.org")
     assert "Python" in driver.title
