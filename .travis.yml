@@ -2,6 +2,9 @@ language: minimal
 
 sudo: false
 
+services:
+  - xvfb
+
 env:
   - MOZ_HEADLESS=1
 
@@ -56,8 +59,11 @@ before_install:
     mkdir geckodriver
     tar -xzf geckodriver.tar.gz -C geckodriver
     export PATH=$PATH:$PWD/geckodriver
-  -  |
-    google-chrome-stable --disable-gpu --no-sandbox --disable-dev-shm-usage --remote-debugging-port=9222 http://localhost &
+  - |
+    wget https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip -O chromedriver.zip
+    mkdir chromedriver
+    unzip chromedriver.zip -d chromedriver
+    export PATH=$PATH:$PWD/chromedriver
 
 # Test source distribution.
 install:
