@@ -12,6 +12,8 @@ from selenium.webdriver import Chrome, ChromeOptions
 def test_selenium_chrome():
     options = ChromeOptions()
     options.add_argument('--headless')
+    options.add_argument('--disable-dev-shm-usage')  # overcome limited resource problems
+    options.add_argument('--no-sandbox')  # Bypass OS security model
     driver = Chrome(options=options)
     driver.get("http://www.python.org")
     assert "Python" in driver.title
