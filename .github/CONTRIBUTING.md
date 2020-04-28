@@ -90,8 +90,7 @@ The basic workflow for contributing is:
    ```
 11. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
 
-Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change. Please don't apply the 'boy scout rule'.
-
+Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change.
 
 ## Plugin acceptence criteria
 
