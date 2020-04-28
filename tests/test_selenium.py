@@ -5,7 +5,7 @@ from contextlib import contextmanager
 
 import nbconvert
 from parameterized import parameterized
-
+from seleniumbase import BaseCase
 from selenium.webdriver import Chrome, ChromeOptions
 
 
@@ -22,25 +22,24 @@ def test_selenium_chrome():
     assert "Python" in driver.title
 
 
-# from seleniumbase import BaseCase
-# class TestNotebooks(BaseCase):
-#
-#     @parameterized.expand(glob.glob('examples/*.ipynb'))
-#     def test_notebook(self, filepath):
-#         with get_notebook_html(filepath) as filepath_html:
-#             self.open('file://' + filepath_html)
-#             self.assert_element('iframe')
-#             iframes = self.find_elements('iframe')
-#             for iframe in iframes:
-#                 self.switch_to_frame(iframe)
-#                 self.assert_element('.folium-map')
-#                 self.switch_to_default_content()
-#             # logs don't work in firefox, use chrome
-#             logs = self.driver.get_log("browser")
-#             for log in logs:
-#                 if log['level'] == 'SEVERE':
-#                     msg = ' '.join(log['message'].split()[2:])
-#                     raise RuntimeError('Javascript error: "{}".'.format(msg))
+class TestNotebooks(BaseCase):
+
+    @parameterized.expand(glob.glob('examples/*.ipynb'))
+    def test_notebook(self, filepath):
+        with get_notebook_html(filepath) as filepath_html:
+            self.open('file://' + filepath_html)
+            self.assert_element('iframe')
+            iframes = self.find_elements('iframe')
+            for iframe in iframes:
+                self.switch_to_frame(iframe)
+                self.assert_element('.folium-map')
+                self.switch_to_default_content()
+            # logs don't work in firefox, use chrome
+            logs = self.driver.get_log("browser")
+            for log in logs:
+                if log['level'] == 'SEVERE':
+                    msg = ' '.join(log['message'].split()[2:])
+                    raise RuntimeError('Javascript error: "{}".'.format(msg))
 
 
 @contextmanager
