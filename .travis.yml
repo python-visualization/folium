@@ -52,7 +52,7 @@ before_install:
     conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
-    python -m pip install seleniumbase
+    # python -m pip install seleniumbase
   # Install firefox headless driver.
   - |
     wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
@@ -81,7 +81,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py --headed ;
+      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
