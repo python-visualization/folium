@@ -13,10 +13,10 @@ def test_selenium_chrome():
     options = ChromeOptions()
     print(subprocess.run(['which', 'google-chrome'], capture_output=True))
     print(subprocess.run(['which', 'chromium-browser'], capture_output=True))
+    options.add_argument('--no-sandbox')  # Bypass OS security model
+    options.add_argument('--disable-dev-shm-usage')  # overcome limited resource problems
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
-    options.add_argument('--disable-dev-shm-usage')  # overcome limited resource problems
-    options.add_argument('--no-sandbox')  # Bypass OS security model
     driver = Chrome(options=options)
     driver.get("http://www.python.org")
     assert "Python" in driver.title
