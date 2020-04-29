@@ -96,7 +96,7 @@ script:
   - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      pytest /tmp -vv ;
+      pytest /tmp -vv --ignore=tests/selenium ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-conding-standard' ]]; then
@@ -110,7 +110,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'selenium' ]]; then
-      pytest /tmp/tests/selenium -vv --headed --no-sandbox ;
+      pytest /tmp/tests/selenium -vv --headless --no-sandbox --disable-gpu ;
     fi
 
 # Docs
