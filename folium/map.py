@@ -128,6 +128,36 @@ class LayerControl(MacroElement):
             {%- for val in this.layers_untoggle.values() %}
             {{ val }}.remove();
             {%- endfor %}
+
+            {{this._parent.get_name()}}.on('overlayadd', function(e) {
+                var temp = new L.FeatureGroup()
+                {{this._parent.get_name()}}.eachLayer(function(layer){
+                    try {
+                        console.log(layer.getBounds());
+                        temp.addLayer(layer);
+                    } catch {
+                        console.log('no bounds');
+                    }
+                });
+                {{this._parent.get_name()}}.fitBounds(temp.getBounds());
+                delete temp;
+            });
+
+            {{this._parent.get_name()}}.on('overlayremove', function(e) {
+                var temp = new L.FeatureGroup()
+                {{this._parent.get_name()}}.eachLayer(function(layer){
+                    try {
+                        console.log(layer.getBounds());
+                        temp.addLayer(layer);
+
+                    } catch {
+                        console.log('no bounds');
+                    }
+                });
+                {{this._parent.get_name()}}.fitBounds(temp.getBounds());
+                delete temp;
+            });
+
         {% endmacro %}
         """)
 
