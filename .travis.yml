@@ -25,6 +25,8 @@ matrix:
     env: PY=3.7
   - name: notebooks-code
     env: PY=3.7
+  - name: selenium
+    env: PY=3.7
   - name: latest-branca
     env: PY=3.7
   - name: docs
@@ -88,13 +90,13 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv --ignore=tests/selenium ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-conding-standard' ]]; then
@@ -105,6 +107,10 @@ script:
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-code' ]]; then
       pytest --nbval-lax /tmp/examples ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'selenium' ]]; then
+      pytest /tmp/tests/selenium -vv --headed --no-sandbox ;
     fi
 
 # Docs

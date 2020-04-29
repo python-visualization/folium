@@ -22,9 +22,23 @@ def test_selenium_chrome():
     assert "Python" in driver.title
 
 
+def find_notebooks():
+    path = os.path.dirname(__file__)
+    search_patterns = [
+        os.path.join(path, '..', '..', 'examples', '*.ipynb'),  # normal
+        os.path.join(path, '..', '*.ipynb'),  # travis
+    ]
+    for pattern in search_patterns:
+        files = glob.glob(pattern)
+        if files:
+            return files
+    else:
+        raise IOError('Could not find the notebooks')
+
+
 class TestNotebooks(BaseCase):
 
-    @parameterized.expand(glob.glob('examples/*.ipynb'))
+    @parameterized.expand(find_notebooks())
     def test_notebook(self, filepath):
         with get_notebook_html(filepath) as filepath_html:
             self.open('file://' + filepath_html)
@@ -43,7 +57,7 @@ class TestNotebooks(BaseCase):
 
 
 @contextmanager
-def get_notebook_html(filepath_notebook, run=True):
+def get_notebook_html(filepath_notebook, run=False):
     if run:
         subprocess.run(['jupyter', 'nbconvert', '--to', 'notebook', '--execute',
                         '--inplace', filepath_notebook])
