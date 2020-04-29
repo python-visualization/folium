@@ -32,13 +32,14 @@ based on its use in the README file for the
 ## Usage questions
 
 The best place to submit questions about how to use folium is via the
-[gitter](https://gitter.im/python-visualization/folium) channel.
+[gitter](https://gitter.im/python-visualization/folium) channel or on
+[Stackoverflow](https://stackoverflow.com/questions/tagged/folium).
 Usage question in the issue tracker will probably go unanswered.
 
 ## Reporting issues
 
-When reporting issues please include as much detail as possible regarding the folium and python version, use of notebooks, etc.
-Whenever possible, please also include a [short, self-contained code example](http://sscce.org) that demonstrates the problem.
+When reporting issues please include as much detail as possible regarding the folium and python version, use of notebooks, errors in Python, errors in your browser console, etc.
+Whenever possible, please also include a [short, self-contained code example](http://sscce.org) that demonstrates the problem. Don't forget a data snippet or link to your dataset.
 
 ## Contributing code
 
@@ -88,3 +89,39 @@ The basic workflow for contributing is:
    git push origin name-of-your-branch
    ```
 11. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
+
+Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change.
+
+## Plugin acceptence criteria
+
+If you have a Leaflet plugin you would like to include in folium's plugins, please
+check these criteria to see if it's a good candidate.
+
+Criteria for the Leaflet plugin:
+- the plugin provides interesting new functionality.
+- the plugin is not abandoned. It's okay if not all issues or PR's are being
+  processed, as long as there are no critical bugs or fixes being ignored.
+
+Criteria for the Python wrapper:
+- the template is simple.
+- the class has not much logic, just passing some things to the template.
+- no/little integration with other folium classes.
+
+As well as these criteria for the process:
+
+- the contributor communicates well.
+- the PR is of reasonably good quality.
+
+The *final* PR should contain:
+
+- a new module in `folium/plugins` with the plugin class, with docstring
+- importing that class in `folium/plugins/__init__.py`
+- a test in `tests/plugins/test_[new plugin module].py`
+- an entry in the plugins gallery notebook `examples/Plugins.ipynb`
+- optionally, a separate example notebook to show more usage examples
+
+Before doing all this work it's a good idea to open a PR with just the plugin
+to discuss whether it's something to include in folium.
+
+If your plugin is not a good fit for folium, you should consider publishing your
+plugin yourself! We can link to your plugin so users can find it.
