@@ -11,8 +11,8 @@ from selenium.webdriver import Chrome, ChromeOptions
 
 def test_selenium_chrome():
     options = ChromeOptions()
-    print(subprocess.run(['which', 'google-chrome'], capture_output=True))
-    print(subprocess.run(['which', 'chromium-browser'], capture_output=True))
+    # print(subprocess.run(['which', 'google-chrome'], capture_output=True))
+    # print(subprocess.run(['which', 'chromium-browser'], capture_output=True))
     options.add_argument('--no-sandbox')  # Bypass OS security model
     options.add_argument('--disable-dev-shm-usage')  # overcome limited resource problems
     options.add_argument('--disable-gpu')
@@ -23,10 +23,10 @@ def test_selenium_chrome():
 
 
 def find_notebooks():
+    """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
     search_patterns = [
-        os.path.join(path, '..', '..', 'examples', '*.ipynb'),  # normal
-        os.path.join(path, '..', '*.ipynb'),  # travis
+        os.path.join(path, '..', '..', 'examples', '*.ipynb'),
     ]
     for pattern in search_patterns:
         files = glob.glob(pattern)
@@ -44,11 +44,13 @@ class TestNotebooks(BaseCase):
             self.open('file://' + filepath_html)
             self.assert_element('iframe')
             iframes = self.find_elements('iframe')
+            print('Checking', len(iframes), 'iframes')
             for iframe in iframes:
                 self.switch_to_frame(iframe)
                 self.assert_element('.folium-map')
                 self.switch_to_default_content()
             # logs don't work in firefox, use chrome
+            print('Checking JS logs')
             logs = self.driver.get_log("browser")
             for log in logs:
                 if log['level'] == 'SEVERE':
@@ -70,6 +72,7 @@ def get_notebook_html(filepath_notebook, run=False):
     filepath_html = os.path.abspath(filepath_html)
     with open(filepath_html, 'w', encoding="utf-8") as f:
         f.write(html)
+    print('Created file', filepath_html)
     try:
         yield filepath_html
     finally:
