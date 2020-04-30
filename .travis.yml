@@ -90,13 +90,13 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
-      pytest /tmp -vv --ignore=tmp/tests/selenium ;
+      pytest /tmp -vv --ignore=/tmp/tests/selenium ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      pytest /tmp -vv --ignore=tmp/tests/selenium ;
+      pytest /tmp -vv --ignore=/tmp/tests/selenium ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-conding-standard' ]]; then
