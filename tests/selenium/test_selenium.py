@@ -54,7 +54,7 @@ class TestNotebooks(BaseCase):
                     raise RuntimeError('Javascript error: "{}".'.format(msg))
 
 
-def get_notebook_html(filepath_notebook, run=False):
+def get_notebook_html(filepath_notebook, run=True):
     if run:
         subprocess.run(['jupyter', 'nbconvert', '--to', 'notebook', '--execute',
                         '--inplace', filepath_notebook])
