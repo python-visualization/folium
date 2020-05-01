@@ -56,8 +56,10 @@ class TestNotebooks(BaseCase):
 
 def get_notebook_html(filepath_notebook, run=True):
     if run:
-        subprocess.run(['jupyter', 'nbconvert', '--to', 'notebook', '--execute',
-                        '--inplace', filepath_notebook])
+        subprocess.run([
+            'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
+        ])
+        filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
     html_exporter = nbconvert.HTMLExporter()
     html_exporter.template_file = 'basic'
     body, _ = html_exporter.from_filename(filepath_notebook)
@@ -67,7 +69,7 @@ def get_notebook_html(filepath_notebook, run=True):
     iframes = parser.iframes
 
     for i, iframe in enumerate(iframes):
-        filepath_html = filepath_notebook.replace('.ipynb', '_{}.html'.format(i))
+        filepath_html = filepath_notebook.replace('.ipynb', '.{}.html'.format(i))
         filepath_html = os.path.abspath(filepath_html)
         with open(filepath_html, 'wb') as f:
             f.write(iframe)
