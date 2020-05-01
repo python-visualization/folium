@@ -33,7 +33,7 @@ def find_notebooks():
     for pattern in search_patterns:
         files = glob.glob(pattern)
         if files:
-            return files[:3]
+            return files
     else:
         raise IOError('Could not find the notebooks')
 
