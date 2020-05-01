@@ -130,25 +130,27 @@ class LayerControl(MacroElement):
             {%- endfor %}
 
             {{this._parent.get_name()}}.on('overlayadd', function(e) {
-                var temp = new L.FeatureGroup()
+                var bounds = L.latLngBounds([]);
                 {{this._parent.get_name()}}.eachLayer(function(layer){
                     if (typeof layer.getBounds === 'function') {
-                        temp.addLayer(layer);
+                        bounds.extend(layer.getBounds());
                     }
-                });
-                {{this._parent.get_name()}}.fitBounds(temp.getBounds());
-                delete temp;
+                })
+                {{this._parent.get_name()}}.fitBounds(bounds);
             });
 
             {{this._parent.get_name()}}.on('overlayremove', function(e) {
-                var temp = new L.FeatureGroup()
+                var bounds = L.latLngBounds([]);
+                var c = 0;
                 {{this._parent.get_name()}}.eachLayer(function(layer){
                     if (typeof layer.getBounds === 'function') {
-                        temp.addLayer(layer);
+                        bounds.extend(layer.getBounds());
+                        c+=1;
                     }
                 });
-                {{this._parent.get_name()}}.fitBounds(temp.getBounds());
-                delete temp;
+                if (c > 0) {
+                    {{this._parent.get_name()}}.fitBounds(bounds);
+                }
             });
 
         {% endmacro %}
