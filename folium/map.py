@@ -132,11 +132,8 @@ class LayerControl(MacroElement):
             {{this._parent.get_name()}}.on('overlayadd', function(e) {
                 var temp = new L.FeatureGroup()
                 {{this._parent.get_name()}}.eachLayer(function(layer){
-                    try {
-                        console.log(layer.getBounds());
+                    if (typeof layer.getBounds === 'function') {
                         temp.addLayer(layer);
-                    } catch {
-                        console.log('no bounds');
                     }
                 });
                 {{this._parent.get_name()}}.fitBounds(temp.getBounds());
@@ -146,12 +143,8 @@ class LayerControl(MacroElement):
             {{this._parent.get_name()}}.on('overlayremove', function(e) {
                 var temp = new L.FeatureGroup()
                 {{this._parent.get_name()}}.eachLayer(function(layer){
-                    try {
-                        console.log(layer.getBounds());
+                    if (typeof layer.getBounds === 'function') {
                         temp.addLayer(layer);
-
-                    } catch {
-                        console.log('no bounds');
                     }
                 });
                 {{this._parent.get_name()}}.fitBounds(temp.getBounds());
