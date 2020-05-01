@@ -1,7 +1,9 @@
+
+import base64
 import glob
+from html.parser import HTMLParser
 import os
 import subprocess
-from contextlib import contextmanager
 
 import nbconvert
 from parameterized import parameterized
@@ -40,15 +42,9 @@ class TestNotebooks(BaseCase):
 
     @parameterized.expand(find_notebooks())
     def test_notebook(self, filepath):
-        with get_notebook_html(filepath) as filepath_html:
+        for filepath_html in get_notebook_html(filepath):
             self.open('file://' + filepath_html)
-            self.assert_element('iframe')
-            iframes = self.find_elements('iframe')
-            print('Checking', len(iframes), 'iframes')
-            for iframe in iframes:
-                self.switch_to_frame(iframe)
-                self.assert_element('.folium-map')
-                self.switch_to_default_content()
+            self.assert_element('.folium-map')
             # logs don't work in firefox, use chrome
             print('Checking JS logs')
             logs = self.driver.get_log("browser")
@@ -58,7 +54,6 @@ class TestNotebooks(BaseCase):
                     raise RuntimeError('Javascript error: "{}".'.format(msg))
 
 
-@contextmanager
 def get_notebook_html(filepath_notebook, run=False):
     if run:
         subprocess.run(['jupyter', 'nbconvert', '--to', 'notebook', '--execute',
@@ -66,14 +61,36 @@ def get_notebook_html(filepath_notebook, run=False):
     html_exporter = nbconvert.HTMLExporter()
     html_exporter.template_file = 'basic'
     body, _ = html_exporter.from_filename(filepath_notebook)
-    html = ('<!DOCTYPE html><html><head><meta charset="UTF-8"></head>'
-            '<body>{}</body></html>').format(body)
-    filepath_html = filepath_notebook.replace('.ipynb', '.html')
-    filepath_html = os.path.abspath(filepath_html)
-    with open(filepath_html, 'w', encoding="utf-8") as f:
-        f.write(html)
-    print('Created file', filepath_html)
-    try:
-        yield filepath_html
-    finally:
-        os.remove(filepath_html)
+
+    parser = IframeParser()
+    parser.feed(body)
+    iframes = parser.iframes
+
+    for i, iframe in enumerate(iframes):
+        filepath_html = filepath_notebook.replace('.ipynb', '_{}.html'.format(i))
+        filepath_html = os.path.abspath(filepath_html)
+        with open(filepath_html, 'wb') as f:
+            f.write(iframe)
+        print('Created file', filepath_html)
+        try:
+            yield filepath_html
+        finally:
+            os.remove(filepath_html)
+
+
+class IframeParser(HTMLParser):
+
+    def __init__(self):
+        super().__init__()
+        self.iframes = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'iframe':
+            attrs = dict(attrs)
+            if 'data-html' in attrs:
+                html_base64 = attrs['data-html']
+            else:  # legacy, can be removed when all notebooks have `data-html`.
+                src = attrs['src']
+                html_base64 = src.split(',')[-1]
+            html_bytes = base64.b64decode(html_base64)
+            self.iframes.append(html_bytes)
