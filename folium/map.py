@@ -100,6 +100,8 @@ class LayerControl(MacroElement):
     autoZIndex : bool, default True
           If true the control assigns zIndexes in increasing order to all of
           its layers so that the order is preserved when switching them on/off.
+    zoomSelected : bool, default False
+          If true the map zooms to the selected layers.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference-1.6.0.html#control-layers
@@ -129,6 +131,7 @@ class LayerControl(MacroElement):
             {{ val }}.remove();
             {%- endfor %}
 
+            {%- if this.options.zoomSelected is sameas true %}
             {{this._parent.get_name()}}.on('overlayadd', function(e) {
                 var bounds = L.latLngBounds([]);
                 {{this._parent.get_name()}}.eachLayer(function(layer){
@@ -152,11 +155,12 @@ class LayerControl(MacroElement):
                     {{this._parent.get_name()}}.fitBounds(bounds);
                 }
             });
+            {%- endif %}
 
         {% endmacro %}
         """)
 
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True,
+    def __init__(self, position='topright', collapsed=True, autoZIndex=True, zoomSelected=False,
                  **kwargs):
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
@@ -164,6 +168,7 @@ class LayerControl(MacroElement):
             position=position,
             collapsed=collapsed,
             autoZIndex=autoZIndex,
+            zoomSelected=zoomSelected,
             **kwargs
         )
         self.base_layers = OrderedDict()
