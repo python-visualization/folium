@@ -139,7 +139,7 @@ class LayerControl(MacroElement):
                         bounds.extend(layer.getBounds());
                     }
                 })
-                {{this._parent.get_name()}}.fitBounds(bounds);
+                {{this._parent.get_name()}}.flyToBounds(bounds);
             });
 
             {{this._parent.get_name()}}.on('overlayremove', function(e) {
@@ -152,7 +152,7 @@ class LayerControl(MacroElement):
                     }
                 });
                 if (c > 0) {
-                    {{this._parent.get_name()}}.fitBounds(bounds);
+                    {{this._parent.get_name()}}.flyToBounds(bounds);
                 }
             });
             {%- endif %}
