@@ -132,17 +132,7 @@ class LayerControl(MacroElement):
             {%- endfor %}
 
             {%- if this.options.zoomSelected is sameas true %}
-            {{this._parent.get_name()}}.on('overlayadd', function(e) {
-                var bounds = L.latLngBounds([]);
-                {{this._parent.get_name()}}.eachLayer(function(layer){
-                    if (typeof layer.getBounds === 'function') {
-                        bounds.extend(layer.getBounds());
-                    }
-                })
-                {{this._parent.get_name()}}.flyToBounds(bounds);
-            });
-
-            {{this._parent.get_name()}}.on('overlayremove', function(e) {
+            {{this._parent.get_name()}}.on('overlayadd overlayremove', function(e) {
                 var bounds = L.latLngBounds([]);
                 var c = 0;
                 {{this._parent.get_name()}}.eachLayer(function(layer){
