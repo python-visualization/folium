@@ -100,7 +100,7 @@ class LayerControl(MacroElement):
     autoZIndex : bool, default True
           If true the control assigns zIndexes in increasing order to all of
           its layers so that the order is preserved when switching them on/off.
-    zoomSelected : bool, default False
+    zoom_selected : bool, default False
           If true the map zooms to the selected layers.
     **kwargs
         Additional (possibly inherited) options. See
@@ -131,7 +131,7 @@ class LayerControl(MacroElement):
             {{ val }}.remove();
             {%- endfor %}
 
-            {%- if this.options.zoomSelected is sameas true %}
+            {%- if this.zoom_selected is sameas true %}
             {{this._parent.get_name()}}.on('overlayadd overlayremove', function(e) {
                 var bounds = L.latLngBounds([]);
                 var c = 0;
@@ -150,15 +150,15 @@ class LayerControl(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True, zoomSelected=False,
+    def __init__(self, position='topright', collapsed=True, autoZIndex=True, zoom_selected=False,
                  **kwargs):
         super(LayerControl, self).__init__()
         self._name = 'LayerControl'
+        self.zoom_selected = zoom_selected
         self.options = parse_options(
             position=position,
             collapsed=collapsed,
             autoZIndex=autoZIndex,
-            zoomSelected=zoomSelected,
             **kwargs
         )
         self.base_layers = OrderedDict()
