@@ -98,12 +98,11 @@ class TimestampedWmsTileLayers(Layer):
         """)
 
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period='P1D', time_interval=False, name=None,
-                 overlay=True, control=True, show=True):
+                 period='P1D', time_interval=False, name=None):
         super(TimestampedWmsTileLayers, self).__init__(name=name,
-                                                       overlay=overlay,
-                                                       control=control,
-                                                       show=show)
+                                                       overlay=True,
+                                                       control=False,
+                                                       show=True)
         self._name = 'TimestampedWmsTileLayers'
         self.options = parse_options(
             period=period,
