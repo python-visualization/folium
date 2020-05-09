@@ -34,13 +34,14 @@ def test__repr_html_is_str(m):
 def test_valid_html(m):
     html = m._repr_html_()
     parts = html.split('><')
-    assert len(parts) == 6
+    assert len(parts) == 7
     assert parts[0].lstrip('<div ') == 'style="width:100%;"'
     assert parts[1].lstrip('<div ') == 'style="position:relative;width:100%;height:0;padding-bottom:60%;"'  # noqa
-    assert parts[2].startswith('iframe')
-    assert parts[3] == '/iframe'
-    assert parts[4] == '/div'
-    assert parts[5] == '/div>'
+    assert 'make this notebook trusted' in parts[2].lower()
+    assert parts[3].startswith('iframe')
+    assert parts[4] == '/iframe'
+    assert parts[5] == '/div'
+    assert parts[6] == '/div>'
 
 
 def test__repr_png_no_image(m):
