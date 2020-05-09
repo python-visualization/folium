@@ -16,6 +16,7 @@ from selenium.webdriver.support.expected_conditions import visibility_of_element
 
 @pytest.fixture()
 def driver():
+    """Create a Selenium WebDriver instance."""
     options = ChromeOptions()
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -58,11 +59,7 @@ def test_notebook(filepath, driver):
 
 
 def get_notebook_html(filepath_notebook, execute=True):
-    """Store iframes from a notebook in html files, remove them when done.
-
-    If run is True the notebook will first be executed.
-
-    """
+    """Store iframes from a notebook in html files, remove them when done."""
     if execute:
         subprocess.run([
             'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
