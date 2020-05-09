@@ -8,32 +8,15 @@ import subprocess
 import nbconvert
 from parameterized import parameterized
 from seleniumbase import BaseCase
-from selenium.webdriver import Chrome, ChromeOptions
-
-
-def test_selenium_chrome():
-    options = ChromeOptions()
-    # print(subprocess.run(['which', 'google-chrome'], capture_output=True))
-    # print(subprocess.run(['which', 'chromium-browser'], capture_output=True))
-    options.add_argument('--no-sandbox')  # Bypass OS security model
-    options.add_argument('--disable-dev-shm-usage')  # overcome limited resource problems
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-    driver = Chrome(options=options)
-    driver.get("http://www.python.org")
-    assert "Python" in driver.title
 
 
 def find_notebooks():
     """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
-    search_patterns = [
-        os.path.join(path, '..', '..', 'examples', '*.ipynb'),
-    ]
-    for pattern in search_patterns:
-        files = glob.glob(pattern)
-        if files:
-            return files
+    pattern = os.path.join(path, '..', '..', 'examples', '*.ipynb')
+    files = glob.glob(pattern)
+    if files:
+        return files
     else:
         raise IOError('Could not find the notebooks')
 
@@ -46,20 +29,21 @@ class TestNotebooks(BaseCase):
             self.open('file://' + filepath_html)
             self.assert_element('.folium-map')
             # logs don't work in firefox, use chrome
-            print('Checking JS logs')
-            logs = self.driver.get_log("browser")
-            for log in logs:
-                if log['level'] == 'SEVERE':
-                    msg = ' '.join(log['message'].split()[2:])
-                    raise RuntimeError('Javascript error: "{}".'.format(msg))
+            self.assert_no_js_errors()
 
 
-def get_notebook_html(filepath_notebook, run=True):
-    if run:
+def get_notebook_html(filepath_notebook, execute=True):
+    """Store iframes from a notebook in html files, remove them when done.
+
+    If run is True the notebook will first be executed.
+
+    """
+    if execute:
         subprocess.run([
             'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
         ])
         filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
+
     html_exporter = nbconvert.HTMLExporter()
     html_exporter.template_file = 'basic'
     body, _ = html_exporter.from_filename(filepath_notebook)
@@ -73,7 +57,6 @@ def get_notebook_html(filepath_notebook, run=True):
         filepath_html = os.path.abspath(filepath_html)
         with open(filepath_html, 'wb') as f:
             f.write(iframe)
-        print('Created file', filepath_html)
         try:
             yield filepath_html
         finally:
@@ -81,6 +64,7 @@ def get_notebook_html(filepath_notebook, run=True):
 
 
 class IframeParser(HTMLParser):
+    """Extract the iframes from an html page."""
 
     def __init__(self):
         super().__init__()
