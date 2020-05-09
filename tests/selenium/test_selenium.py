@@ -8,6 +8,7 @@ import subprocess
 import nbconvert
 import pytest
 from selenium.webdriver import Chrome, ChromeOptions
+from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
@@ -45,14 +46,23 @@ def test_selenium_chrome(driver):
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
         driver.get('file://' + filepath_html)
-        WebDriverWait(driver, timeout=10).until(
-            visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
-        )
+        try:
+            assert _verify_map(driver)
+        except UnexpectedAlertPresentException:
+            # in Plugins.ipynb close an alert about geolocation permission
+            driver.switch_to.alert.accept()
+            assert _verify_map(driver)
         logs = driver.get_log('browser')
         for log in logs:
             if log['level'] == 'SEVERE':
                 msg = ' '.join(log['message'].split()[2:])
                 raise RuntimeError('Javascript error: "{}".'.format(msg))
+
+
+def _verify_map(driver):
+    return WebDriverWait(driver, timeout=10).until(
+        visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
+    )
 
 
 def get_notebook_html(filepath_notebook, execute=True):
