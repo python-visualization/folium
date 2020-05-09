@@ -25,14 +25,13 @@ def create_driver():
     return driver
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def driver():
     """Pytest fixture that yields a Selenium WebDriver instance"""
     driver = create_driver()
     try:
         yield driver
     finally:
-        print('quit driver')
         driver.quit()
 
 
