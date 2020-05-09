@@ -41,14 +41,14 @@ def test_selenium_chrome(driver):
     assert "Python" in driver.title
 
 
-@pytest.mark.parametrize("filepath", find_notebooks())
+@pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
         driver.get('file://' + filepath_html)
-        WebDriverWait(driver, timeout=5).until(
+        WebDriverWait(driver, timeout=10).until(
             visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
         )
-        logs = driver.get_log("browser")
+        logs = driver.get_log('browser')
         for log in logs:
             if log['level'] == 'SEVERE':
                 msg = ' '.join(log['message'].split()[2:])
