@@ -26,10 +26,7 @@ _default_css = [
     ('highlight.js_css',
      'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
     ('leaflet.timedimension_css',
-     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css'),
-    # noqa
-    ('bootstrap_theme_css',
-     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css')
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css')
 ]
 
 
