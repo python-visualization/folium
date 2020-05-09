@@ -37,11 +37,6 @@ def find_notebooks():
         raise IOError('Could not find the notebooks')
 
 
-def test_selenium_chrome(driver):
-    driver.get("http://www.python.org")
-    assert "Python" in driver.title
-
-
 @pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
