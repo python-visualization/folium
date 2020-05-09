@@ -6,8 +6,22 @@ import os
 import subprocess
 
 import nbconvert
-from parameterized import parameterized
-from seleniumbase import BaseCase
+import pytest
+from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located
+
+
+@pytest.fixture()
+def driver():
+    options = ChromeOptions()
+    options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    options.add_argument('--disable-gpu')
+    options.add_argument('--headless')
+    driver = Chrome(options=options)
+    yield driver
 
 
 def find_notebooks():
@@ -15,21 +29,30 @@ def find_notebooks():
     path = os.path.dirname(__file__)
     pattern = os.path.join(path, '..', '..', 'examples', '*.ipynb')
     files = glob.glob(pattern)
+    files = [f for f in files if not f.endswith('.nbconvert.ipynb')]
     if files:
         return files
     else:
         raise IOError('Could not find the notebooks')
 
 
-class TestNotebooks(BaseCase):
+def test_selenium_chrome(driver):
+    driver.get("http://www.python.org")
+    assert "Python" in driver.title
 
-    @parameterized.expand(find_notebooks())
-    def test_notebook(self, filepath):
-        for filepath_html in get_notebook_html(filepath):
-            self.open('file://' + filepath_html)
-            self.assert_element('.folium-map')
-            # logs don't work in firefox, use chrome
-            self.assert_no_js_errors()
+
+@pytest.mark.parametrize("filepath", find_notebooks())
+def test_notebook(filepath, driver):
+    for filepath_html in get_notebook_html(filepath):
+        driver.get('file://' + filepath_html)
+        WebDriverWait(driver, timeout=5).until(
+            visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
+        )
+        logs = driver.get_log("browser")
+        for log in logs:
+            if log['level'] == 'SEVERE':
+                msg = ' '.join(log['message'].split()[2:])
+                raise RuntimeError('Javascript error: "{}".'.format(msg))
 
 
 def get_notebook_html(filepath_notebook, execute=True):
