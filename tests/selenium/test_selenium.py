@@ -11,7 +11,10 @@ from selenium.webdriver import Chrome, ChromeOptions
 from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.expected_conditions import visibility_of_element_located
+from selenium.webdriver.support.expected_conditions import (
+    alert_is_present,
+    visibility_of_element_located,
+)
 
 
 @pytest.fixture()
@@ -30,7 +33,8 @@ def find_notebooks():
     path = os.path.dirname(__file__)
     pattern = os.path.join(path, '..', '..', 'examples', '*.ipynb')
     files = glob.glob(pattern)
-    files = [f for f in files if not f.endswith('.nbconvert.ipynb')]
+    files = [f for f in files if not f.endswith('.nbconvert.ipynb')
+             and f.endswith('Plugins.ipynb')]
     if files:
         return files
     else:
@@ -41,23 +45,20 @@ def find_notebooks():
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
         driver.get('file://' + filepath_html)
+        wait = WebDriverWait(driver, timeout=10)
+        map_is_visible = visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
         try:
-            assert _verify_map(driver)
+            assert wait.until(map_is_visible)
         except UnexpectedAlertPresentException:
             # in Plugins.ipynb close an alert about geolocation permission
-            driver.switch_to.alert.accept()
-            assert _verify_map(driver)
+            alert = wait.until(alert_is_present())
+            alert.accept()
+            assert wait.until(map_is_visible)
         logs = driver.get_log('browser')
         for log in logs:
             if log['level'] == 'SEVERE':
                 msg = ' '.join(log['message'].split()[2:])
                 raise RuntimeError('Javascript error: "{}".'.format(msg))
-
-
-def _verify_map(driver):
-    return WebDriverWait(driver, timeout=10).until(
-        visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
-    )
 
 
 def get_notebook_html(filepath_notebook, execute=True):
