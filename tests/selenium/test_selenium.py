@@ -14,8 +14,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
 
-@pytest.fixture()
-def driver():
+def create_driver():
     """Create a Selenium WebDriver instance."""
     options = ChromeOptions()
     options.add_argument('--no-sandbox')
@@ -23,7 +22,27 @@ def driver():
     options.add_argument('--disable-gpu')
     options.add_argument('--headless')
     driver = Chrome(options=options)
-    yield driver
+    return driver
+
+
+@pytest.fixture
+def driver():
+    """Pytest fixture that yields a Selenium WebDriver instance"""
+    driver = create_driver()
+    try:
+        yield driver
+    finally:
+        print('quit driver')
+        driver.quit()
+
+
+def clean_window(driver):
+    # open new tab
+    driver.execute_script('window.open();')
+    # close old tab
+    driver.close()
+    # switch to new tab
+    driver.switch_to.window(driver.window_handles[0])
 
 
 def find_notebooks():
@@ -41,6 +60,7 @@ def find_notebooks():
 @pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
+        clean_window(driver)
         driver.get('file://' + filepath_html)
         wait = WebDriverWait(driver, timeout=10)
         map_is_visible = visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
