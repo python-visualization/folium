@@ -9,6 +9,25 @@ from folium.utilities import parse_options
 from jinja2 import Template
 
 
+_default_js = [
+    ('jquery2.0.0',
+     'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
+    ('jqueryui1.10.2',
+     'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+    ('iso8601',
+     'https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),
+    ('leaflet.timedimension',
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+]
+
+_default_css = [
+    ('highlight.js_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
+    ('leaflet.timedimension_css',
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css')  # noqa
+]
+
+
 class TimestampedWmsTileLayers(Layer):
     """
     Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
@@ -128,26 +147,10 @@ class TimestampedWmsTileLayers(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
-            name='jquery2.0.0')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
-            name='jqueryui1.10.2')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
-            name='highlight.js_css')
-
-        figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css'),  # noqa
-            name='leaflet.timedimension_css')
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)
