@@ -75,12 +75,13 @@ class Map(MacroElement):
     to Folium. Pass any of the following to the "tiles" keyword:
 
         - "OpenStreetMap"
-        - "Mapbox Bright" (Limited levels of zoom for free tiles)
-        - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-        - "Stamen" (Terrain, Toner, and Watercolor)
+        - "Stamen" (Terrain, Toner, Watercolor,
+                    Toner Background, and Toner Labels)
+        - "CartoDB" (Positron, Dark_matter, Positron No Labels,
+                     and Positron Only Labels)
+        - "Mapbox Bright", "Mapbox Control Room" (limited levels of zoom for free tiles)
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
-        - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
     URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.

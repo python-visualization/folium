@@ -25,9 +25,11 @@ class TileLayer(Layer):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
-            - "CartoDB positron", "CartoDB dark_matter"
-            - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
+            - "Stamen" (Terrain, Toner, Watercolor,
+                        Toner Background, and Toner Labels)
+            - "CartoDB" (Positron, Dark_matter, Positron No Labels,
+                         and Positron Only Labels)
+            - "Mapbox Bright", "Mapbox Control Room" (limited levels of zoom for free tiles)
             - "Cloudmade" (Must pass API key)
             - "Mapbox" (Must pass API key)
 
