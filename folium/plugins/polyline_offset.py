@@ -6,6 +6,11 @@ from branca.element import JavascriptLink
 
 from folium.vector_layers import PolyLine
 
+_default_js = [
+    ('polylineoffset',
+     'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js')
+    ]
+
 
 class PolyLineOffset(PolyLine):
     """
@@ -53,7 +58,7 @@ class PolyLineOffset(PolyLine):
     def render(self, **kwargs):
         super(PolyLineOffset, self).render()
         figure = self.get_root()
-        figure.header.add_child(
-            JavascriptLink("https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"),  # noqa
-            name="polylineoffset",
-        )
+
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

@@ -15,6 +15,11 @@ from jinja2 import Template
 
 import numpy as np
 
+_default_js = [
+    ('leaflet-heat.js',
+     'https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),
+    ]
+
 
 class HeatMap(Layer):
     """
@@ -84,9 +89,9 @@ class HeatMap(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),  # noqa
-            name='leaflet-heat.js')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
     def _get_self_bounds(self):
         """
@@ -94,6 +99,7 @@ class HeatMap(Layer):
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
+
         bounds = [[None, None], [None, None]]
         for point in self.data:
             bounds = [

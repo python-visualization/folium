@@ -6,6 +6,16 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_default_js = [
+    ('leaflet_measure_js',
+     'https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js')
+    ]
+
+_default_css = [
+    ('leaflet_measure_css',
+     'https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css')
+    ]
+
 
 class MeasureControl(MacroElement):
     """ Add a measurement widget on the map.
@@ -54,8 +64,10 @@ class MeasureControl(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js'))  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css'))  # noqa
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)

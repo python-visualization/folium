@@ -7,6 +7,11 @@ from folium.map import Layer
 
 from jinja2 import Template
 
+_default_js = [
+    ('d3v4',
+     'https://d3js.org/d3.v4.min.js')
+    ]
+
 
 class TimeSliderChoropleth(Layer):
     """
@@ -155,4 +160,7 @@ class TimeSliderChoropleth(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v4.min.js'), name='d3v4')
+
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
