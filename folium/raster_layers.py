@@ -32,8 +32,12 @@ class TileLayer(Layer):
             - "Mapbox" (Must pass API key)
 
         You can pass a custom tileset to Folium by passing a Leaflet-style
-        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
-        You must then also provide attribution, use the `attr` keyword.
+        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+
+        You can find a list of free tile providers here:
+        ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+        Be sure to check their terms and conditions and to provide attribution
+        with the `attr` keyword.
     min_zoom: int, default 0
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
