@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import Figure, JavascriptLink, MacroElement
 
 from jinja2 import Template
+
+_default_js = [
+    ('terminator',
+     'https://unpkg.com/@joergdietrich/leaflet.terminator')
+    ]
 
 
 class Terminator(MacroElement):
@@ -14,10 +17,10 @@ class Terminator(MacroElement):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                L.terminator().addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            L.terminator().addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def __init__(self):
         super(Terminator, self).__init__()
@@ -30,5 +33,6 @@ class Terminator(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink("https://unpkg.com/@joergdietrich/leaflet.terminator"), name='terminator')  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 import sys
-import warnings
 
 import branca
 from branca.colormap import (ColorMap, LinearColormap, StepColormap)
@@ -28,6 +25,7 @@ from folium.features import (
     DivIcon,
     GeoJson,
     GeoJsonTooltip,
+    GeoJsonPopup,
     LatLngPopup,
     RegularPolygonMarker,
     TopoJson,
@@ -47,20 +45,32 @@ from folium.map import (
 from folium.raster_layers import TileLayer, WmsTileLayer
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
 
+__version__ = get_versions()['version']
+del get_versions
+
 if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
     raise ImportError('branca version 0.3.0 or higher is required. '
                       'Update branca with e.g. `pip install branca --upgrade`.')
 
 if sys.version_info < (3, 0):
-    warnings.warn(
-        ('folium will stop working with Python 2.7 starting Jan. 1, 2019.'
-         ' Please transition to Python 3 before this time.'
-         ' Check out https://python3statement.org/ for more info.'),
-        PendingDeprecationWarning
-    )
-
-__version__ = get_versions()['version']
-del get_versions
+    raise ImportError(
+        """You are running folium {} on Python 2
+    
+    folium 0.9 and above are no longer compatible with Python 2, but somehow
+    you got this version anyway. Make sure you have pip >= 9.0 to avoid this
+    kind of issue, as well as setuptools >= 24.2:
+    
+     $ pip install pip setuptools --upgrade
+    
+    Your choices:
+    
+    - Upgrade to Python 3.
+    
+    - Install an older version of folium:
+    
+     $ pip install 'folium<0.9.0'
+    
+    """.format(__version__))  # noqa
 
 __all__ = [
     'Choropleth',

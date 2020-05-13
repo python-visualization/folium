@@ -5,27 +5,27 @@ Test HeatMap
 ------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
-
-from folium import plugins
+from folium.plugins import HeatMap
+from folium.utilities import normalize
 
 from jinja2 import Template
 
 import numpy as np
 
+import pytest
+
 
 def test_heat_map():
     np.random.seed(3141592)
     data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
-            np.array([[48, 5]])).tolist()
+            np.array([[48, 5]]))
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
-    hm = plugins.HeatMap(data)
+    hm = HeatMap(data)
     m.add_child(hm)
     m._repr_html_()
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script import is present.
     script = '<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>'  # noqa
@@ -51,3 +51,19 @@ def test_heat_map():
     bounds = m.get_bounds()
     assert bounds == [[46.218566840847025, 3.0302801394447734],
                       [50.75345011431167, 7.132453997672826]], bounds
+
+
+def test_heatmap_data():
+    data = HeatMap(np.array([[3, 4, 1], [5, 6, 1], [7, 8, 0.5]])).data
+    assert isinstance(data, list)
+    assert len(data) == 3
+    for i in range(len(data)):
+        assert isinstance(data[i], list)
+        assert len(data[i]) == 3
+
+
+def test_heat_map_exception():
+    with pytest.raises(ValueError):
+        HeatMap(np.array([[4, 5, 1], [3, 6, np.nan]]))
+    with pytest.raises(Exception):
+        HeatMap(np.array([3, 4, 5]))

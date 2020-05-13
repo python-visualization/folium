@@ -5,10 +5,10 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 import warnings
+import functools
+import operator
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -17,22 +17,23 @@ from branca.utilities import color_brewer
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import (
-    _iter_tolist,
+    validate_locations,
     _parse_size,
     get_bounds,
     image_to_url,
     none_max,
     none_min,
+    get_obj_in_upper_tree,
+    parse_options,
+    camelize
 )
-from folium.vector_layers import PolyLine
+from folium.vector_layers import PolyLine, path_options
 
 from jinja2 import Template
 
 import numpy as np
 
 import requests
-
-from six import binary_type, text_type
 
 
 class RegularPolygonMarker(Marker):
@@ -41,67 +42,46 @@ class RegularPolygonMarker(Marker):
 
     Parameters
     ----------
-    location: tuple or list, default None
+    location: tuple or list
         Latitude and Longitude of Marker (Northing, Easting)
-    color: string, default 'black'
-        Marker line color
-    opacity: float, default 1
-        Line opacity, scale 0-1
-    weight: int, default 2
-        Stroke weight in pixels
-    fill_color: string, default 'blue'
-        Marker fill color
-    fill_opacity: float, default 1
-        Marker fill opacity
     number_of_sides: int, default 4
         Number of polygon sides
     rotation: int, default 0
         Rotation angle in degrees
     radius: int, default 15
         Marker radius, in pixels
-    popup: string or folium.Popup, default None
+    popup: string or Popup, optional
         Input text or visualization for object displayed when clicking.
-    tooltip: str or folium.Tooltip, default None
+    tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
+    **kwargs:
+        See vector layers path_options for additional arguments.
 
     https://humangeo.github.io/leaflet-dvf/
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = new L.RegularPolygonMarker(
-                new L.LatLng({{this.location[0]}},{{this.location[1]}}),
-                {
-                    icon : new L.Icon.Default(),
-                    color: '{{this.color}}',
-                    opacity: {{this.opacity}},
-                    weight: {{this.weight}},
-                    fillColor: '{{this.fill_color}}',
-                    fillOpacity: {{this.fill_opacity}},
-                    numberOfSides: {{this.number_of_sides}},
-                    rotation: {{this.rotation}},
-                    radius: {{this.radius}}
-                    }
-                ).addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = new L.RegularPolygonMarker(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
-    def __init__(self, location, color='black', opacity=1, weight=2,
-                 fill_color='blue', fill_opacity=1, number_of_sides=4,
-                 rotation=0, radius=15, popup=None, tooltip=None):
+    def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
+                 popup=None, tooltip=None, **kwargs):
         super(RegularPolygonMarker, self).__init__(
-            _iter_tolist(location),
+            location,
             popup=popup, tooltip=tooltip
         )
         self._name = 'RegularPolygonMarker'
-        self.color = color
-        self.opacity = opacity
-        self.weight = weight
-        self.fill_color = fill_color
-        self.fill_opacity = fill_opacity
-        self.number_of_sides = number_of_sides
-        self.rotation = rotation
-        self.radius = radius
+        self.options = path_options(**kwargs)
+        self.options.update(parse_options(
+            number_of_sides=number_of_sides,
+            rotation=rotation,
+            radius=radius,
+        ))
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -153,7 +133,7 @@ class Vega(Element):
         super(Vega, self).__init__()
         self._name = 'Vega'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         # Size Parameters.
@@ -245,7 +225,7 @@ class VegaLite(Element):
         super(self.__class__, self).__init__()
         self._name = 'VegaLite'
         self.data = data.to_json() if hasattr(data, 'to_json') else data
-        if isinstance(self.data, text_type) or isinstance(data, binary_type):
+        if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
         self.json = json.dumps(self.data)
@@ -371,13 +351,16 @@ class GeoJson(Layer):
     tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
         see folium.GeoJsonTooltip for info on how to do that.
+    embed: bool, default True
+        Whether to embed the data in the html file or not. Note that disabling
+        embedding is only supported if you provide a file link or URL.
 
     Examples
     --------
-    >>> # Providing file that shall be embedded.
-    >>> GeoJson(open('foo.json'))
-    >>> # Providing filename that shall not be embedded.
+    >>> # Providing filename that shall be embedded.
     >>> GeoJson('foo.json')
+    >>> # Providing filename that shall not be embedded.
+    >>> GeoJson('foo.json', embed=False)
     >>> # Providing dict.
     >>> GeoJson(json.load(open('foo.json')))
     >>> # Providing string.
@@ -392,110 +375,189 @@ class GeoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        {% if this.highlight %}
-            {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                layer.on({
-                    mouseout: function(e) {
-                        e.target.setStyle(e.target.feature.properties.style);},
-                    mouseover: function(e) {
-                        e.target.setStyle(e.target.feature.properties.highlight);},
-                    click: function(e) {
-                        {{this._parent.get_name()}}.fitBounds(e.target.getBounds());}
-                    });
-            };
-        {% endif %}
-        var {{this.get_name()}} = L.geoJson(
-            {% if this.embed %}{{this.style_data()}}{% else %}"{{this.data}}"{% endif %}
-            {% if this.smooth_factor is not none or this.highlight %}
-                , {
-                {% if this.smooth_factor is not none  %}
-                    smoothFactor:{{this.smooth_factor}}
-                {% endif %}
-
-                {% if this.highlight %}
-                    {% if this.smooth_factor is not none  %}
-                    ,
-                    {% endif %}
-                    onEachFeature: {{this.get_name()}}_onEachFeature
-                {% endif %}
+        {%- if this.style %}
+        function {{ this.get_name() }}_styler(feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.style_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case {{ id_val|tojson }}: {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.style_map['default'] }};
+            }
+        }
+        {%- endif %}
+        {%- if this.highlight %}
+        function {{ this.get_name() }}_highlighter(feature) {
+            switch({{ this.feature_identifier }}) {
+                {%- for style, ids_list in this.highlight_map.items() if not style == 'default' %}
+                {% for id_val in ids_list %}case {{ id_val|tojson }}: {% endfor %}
+                    return {{ style }};
+                {%- endfor %}
+                default:
+                    return {{ this.highlight_map['default'] }};
+            }
+        }
+        {%- endif %}
+        function {{this.get_name()}}_onEachFeature(feature, layer) {
+            layer.on({
+                {%- if this.highlight %}
+                mouseout: function(e) {
+                    {{ this.get_name() }}.resetStyle(e.target);
+                },
+                mouseover: function(e) {
+                    e.target.setStyle({{ this.get_name() }}_highlighter(e.target.feature));
+                },
+                {%- endif %}
+                click: function(e) {
+                    {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
                 }
-            {% endif %}
-            ).addTo({{this._parent.get_name()}});
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+            });
+        };
+        var {{ this.get_name() }} = L.geoJson(null, {
+            {%- if this.smooth_factor is not none  %}
+                smoothFactor: {{ this.smooth_factor|tojson }},
+            {%- endif %}
+                onEachFeature: {{ this.get_name() }}_onEachFeature,
+            {% if this.style %}
+                style: {{ this.get_name() }}_styler,
+            {%- endif %}
+        }).addTo({{ this._parent.get_name() }});
+
+        function {{ this.get_name() }}_add (data) {
+            {{ this.get_name() }}.addData(data);
+        }
+        {%- if this.embed %}
+            {{ this.get_name() }}_add({{ this.data|tojson }});
+        {%- else %}
+            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json'})
+                .done({{ this.get_name() }}_add);
+        {%- endif %}
         {% endmacro %}
         """)  # noqa
 
-    def __init__(self, data, style_function=None, name=None,
-                 overlay=True, control=True, show=True,
-                 smooth_factor=None, highlight_function=None, tooltip=None):
+    def __init__(self, data, style_function=None, highlight_function=None,  # noqa
+                 name=None, overlay=True, control=True, show=True,
+                 smooth_factor=None, tooltip=None, embed=True, popup=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
-        if isinstance(data, dict):
-            self.embed = True
-            self.data = data
-        elif isinstance(data, text_type) or isinstance(data, binary_type):
-            self.embed = True
-            if data.lower().startswith(('http:', 'ftp:', 'https:')):
-                self.data = requests.get(data).json()
-            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
-                self.data = json.loads(data)
-            else:  # This is a filename
-                with open(data) as f:
-                    self.data = json.loads(f.read())
-        elif hasattr(data, '__geo_interface__'):
-            self.embed = True
-            if hasattr(data, 'to_crs'):
-                data = data.to_crs(epsg='4326')
-            self.data = json.loads(json.dumps(data.__geo_interface__))  # noqa
-        else:
-            raise ValueError('Unhandled object {!r}.'.format(data))
-
-        self.style_function = style_function or (lambda x: {})
-
+        self.embed = embed
+        self.embed_link = None
+        self.json = None
+        self.parent_map = None
+        self.smooth_factor = smooth_factor
+        self.style = style_function is not None
         self.highlight = highlight_function is not None
 
-        self.highlight_function = highlight_function or (lambda x: {})
+        self.data = self.process_data(data)
 
-        self.smooth_factor = smooth_factor
-
-        self._validate_function(self.style_function, 'style_function')
-        self._validate_function(self.highlight_function, 'highlight_function')
+        if self.style or self.highlight:
+            self.convert_to_feature_collection()
+            if self.style:
+                self._validate_function(style_function, 'style_function')
+                self.style_function = style_function
+                self.style_map = {}
+            if self.highlight:
+                self._validate_function(highlight_function, 'highlight_function')
+                self.highlight_function = highlight_function
+                self.highlight_map = {}
+            self.feature_identifier = self.find_identifier()
 
         if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
+        if isinstance(popup, (GeoJsonPopup)):
+            self.add_child(popup)
+
+    def process_data(self, data):
+        """Convert an unknown data input into a geojson dictionary."""
+        if isinstance(data, dict):
+            self.embed = True
+            return data
+        elif isinstance(data, str):
+            if data.lower().startswith(('http:', 'ftp:', 'https:')):
+                if not self.embed:
+                    self.embed_link = data
+                return requests.get(data).json()
+            elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
+                self.embed = True
+                return json.loads(data)
+            else:  # This is a filename
+                if not self.embed:
+                    self.embed_link = data
+                with open(data) as f:
+                    return json.loads(f.read())
+        elif hasattr(data, '__geo_interface__'):
+            self.embed = True
+            if hasattr(data, 'to_crs'):
+                data = data.to_crs('EPSG:4326')
+            return json.loads(json.dumps(data.__geo_interface__))
+        else:
+            raise ValueError('Cannot render objects with any missing geometries'
+                             ': {!r}'.format(data))
+
+    def convert_to_feature_collection(self):
+        """Convert data into a FeatureCollection if it is not already."""
+        if self.data['type'] == 'FeatureCollection':
+            return
+        if not self.embed:
+            raise ValueError(
+                'Data is not a FeatureCollection, but it should be to apply '
+                'style or highlight. Because `embed=False` it cannot be '
+                'converted into one.\nEither change your geojson data to a '
+                'FeatureCollection, set `embed=True` or disable styling.')
+        # Catch case when GeoJSON is just a single Feature or a geometry.
+        if 'geometry' not in self.data.keys():
+            # Catch case when GeoJSON is just a geometry.
+            self.data = {'type': 'Feature', 'geometry': self.data}
+        self.data = {'type': 'FeatureCollection', 'features': [self.data]}
 
     def _validate_function(self, func, name):
         """
         Tests `self.style_function` and `self.highlight_function` to ensure
         they are functions returning dictionaries.
         """
-        test_feature = self.data if self.data.get('features') is None else self.data['features'][0]  # noqa
+        test_feature = self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError('{} should be a function that accepts items from '
                              'data[\'features\'] and returns a dictionary.'
                              .format(name))
 
-    def style_data(self):
-        """
-        Applies `self.style_function` to each feature of `self.data` and
-        returns a corresponding JSON output.
+    def find_identifier(self):
+        """Find a unique identifier for each feature, create it if needed.
+
+        According to the GeoJSON specs a feature:
+         - MAY have an 'id' field with a string or numerical value.
+         - MUST have a 'properties' field. The content can be any json object
+           or even null.
 
         """
-        if 'features' not in self.data.keys():
-            # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(self.data, dict) and 'geometry' in self.data.keys()):  # noqa
-                # Catch case when GeoJSON is just a geometry.
-                self.data = {'type': 'Feature', 'geometry': self.data}
-            self.data = {'type': 'FeatureCollection', 'features': [self.data]}
-
-        for feature in self.data['features']:
-            feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-            feature.setdefault('properties', {}).setdefault('highlight', {}).update(
-                self.highlight_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
+        feats = self.data['features']
+        # Each feature has an 'id' field with a unique value.
+        unique_ids = set(feat.get('id', None) for feat in feats)
+        if None not in unique_ids and len(unique_ids) == len(feats):
+            return 'feature.id'
+        # Each feature has a unique string or int property.
+        if all(isinstance(feat.get('properties', None), dict) for feat in feats):
+            for key in feats[0]['properties']:
+                unique_values = set(
+                    feat['properties'].get(key, None) for feat in feats
+                    if isinstance(feat['properties'].get(key, None), (str, int))
+                )
+                if len(unique_values) == len(feats):
+                    return 'feature.properties.{}'.format(key)
+        # We add an 'id' field with a unique value to the data.
+        if self.embed:
+            for i, feature in enumerate(feats):
+                feature['id'] = str(i)
+            return 'feature.id'
+        raise ValueError(
+            'There is no unique identifier for each feature and because '
+            '`embed=False` it cannot be added. Consider adding an `id` '
+            'field to your geojson data or set `embed=True`. '
+        )
 
     def _get_self_bounds(self):
         """
@@ -504,6 +566,76 @@ class GeoJson(Layer):
 
         """
         return get_bounds(self.data, lonlat=True)
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        if self.style or self.highlight:
+            mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
+                                        self)
+            if self.style:
+                self.style_map = mapper.get_style_map(self.style_function)
+            if self.highlight:
+                self.highlight_map = mapper.get_highlight_map(
+                    self.highlight_function)
+        super(GeoJson, self).render()
+
+
+class GeoJsonStyleMapper:
+    """Create dicts that map styling to GeoJson features.
+
+    Used in the GeoJson class. Users don't have to call this class directly.
+    """
+
+    def __init__(self, data, feature_identifier, geojson_obj):
+        self.data = data
+        self.feature_identifier = feature_identifier
+        self.geojson_obj = geojson_obj
+
+    def get_style_map(self, style_function):
+        """Return a dict that maps style parameters to features."""
+        return self._create_mapping(style_function, 'style')
+
+    def get_highlight_map(self, highlight_function):
+        """Return a dict that maps highlight parameters to features."""
+        return self._create_mapping(highlight_function, 'highlight')
+
+    def _create_mapping(self, func, switch):
+        """Internal function to create the mapping."""
+        mapping = {}
+        for feature in self.data['features']:
+            content = func(feature)
+            if switch == 'style':
+                for key, value in content.items():
+                    if isinstance(value, MacroElement):
+                        # Make sure objects are rendered:
+                        if value._parent is None:
+                            value._parent = self.geojson_obj
+                            value.render()
+                        # Replace objects with their Javascript var names:
+                        content[key] = "{{'" + value.get_name() + "'}}"
+            key = self._to_key(content)
+            mapping.setdefault(key, []).append(self.get_feature_id(feature))
+        self._set_default_key(mapping)
+        return mapping
+
+    def get_feature_id(self, feature):
+        """Return a value identifying the feature."""
+        fields = self.feature_identifier.split('.')[1:]
+        return functools.reduce(operator.getitem, fields, feature)
+
+    @staticmethod
+    def _to_key(d):
+        """Convert dict to str and enable Jinja2 template syntax."""
+        as_str = json.dumps(d, sort_keys=True)
+        return as_str.replace('"{{', '{{').replace('}}"', '}}')
+
+    @staticmethod
+    def _set_default_key(mapping):
+        """Replace the field with the most features with a 'default' field."""
+        key_longest = sorted([(len(v), k) for k, v in mapping.items()],
+                             reverse=True)[0][1]
+        mapping['default'] = key_longest
+        del (mapping[key_longest])
 
 
 class TopoJson(Layer):
@@ -560,15 +692,21 @@ class TopoJson(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-        var {{this.get_name()}}_data = {{this.style_data()}};
-        var {{this.get_name()}} = L.geoJson(topojson.feature(
-            {{this.get_name()}}_data,
-            {{this.get_name()}}_data.{{this.object_path}})
-                {% if this.smooth_factor is not none %}
-                    , {smoothFactor: {{this.smooth_factor}}}
-                {% endif %}
-                ).addTo({{this._parent.get_name()}});
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+            var {{ this.get_name() }}_data = {{ this.data|tojson }};
+            var {{ this.get_name() }} = L.geoJson(
+                topojson.feature(
+                    {{ this.get_name() }}_data,
+                    {{ this.get_name() }}_data.{{ this.object_path }}
+                ),
+                {
+                {%- if this.smooth_factor is not none %}
+                    smoothFactor: {{ this.smooth_factor|tojson }},
+                {%- endif %}
+                }
+            ).addTo({{ this._parent.get_name() }});
+            {{ this.get_name() }}.setStyle(function(feature) {
+                return feature.properties.style;
+            });
         {% endmacro %}
         """)  # noqa
 
@@ -604,11 +742,7 @@ class TopoJson(Layer):
             self.add_child(Tooltip(tooltip))
 
     def style_data(self):
-        """
-        Applies self.style_function to each feature of self.data and returns
-        a corresponding JSON output.
-
-        """
+        """Applies self.style_function to each feature of self.data."""
 
         def recursive_get(data, keys):
             if len(keys):
@@ -619,10 +753,10 @@ class TopoJson(Layer):
         geometries = recursive_get(self.data, self.object_path.split('.'))['geometries']  # noqa
         for feature in geometries:
             feature.setdefault('properties', {}).setdefault('style', {}).update(self.style_function(feature))  # noqa
-        return json.dumps(self.data, sort_keys=True)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
+        self.style_data()
         super(TopoJson, self).render(**kwargs)
 
         figure = self.get_root()
@@ -665,9 +799,176 @@ class TopoJson(Layer):
         ]
 
 
-class GeoJsonTooltip(Tooltip):
+class GeoJsonDetail(MacroElement):
+
+    """
+    Base class for GeoJsonTooltip and GeoJsonPopup to inherit methods and
+    template structure from. Not for direct usage.
+
+    """
+    base_template = u"""
+    function(layer){
+    let div = L.DomUtil.create('div');
+    {% if this.fields %}
+    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let fields = {{ this.fields | tojson | safe }};
+    let aliases = {{ this.aliases | tojson | safe }};
+    let table = '<table>' +
+        String(
+        fields.map(
+        (v,i)=>
+        `<tr>{% if this.labels %}
+            <th>${aliases[i]{% if this.localize %}.toLocaleString(){% endif %}}</th>
+            {% endif %}
+            <td>${handleObject(layer.feature.properties[v]){% if this.localize %}.toLocaleString(){% endif %}}</td>
+        </tr>`).join(''))
+    +'</table>';
+    div.innerHTML=table;
+    {% endif %}
+    return div
+    }
+    """
+
+    def __init__(self, fields, aliases=None, labels=True, localize=False, style=None,
+                 class_name="geojsondetail"):
+        super(GeoJsonDetail, self).__init__()
+        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
+                                                  'tuple to fields.'
+        if aliases is not None:
+            assert isinstance(aliases, (list, tuple))
+            assert len(fields) == len(aliases), 'fields and aliases must have' \
+                                                ' the same length.'
+        assert isinstance(labels, bool), 'labels requires a boolean value.'
+        assert isinstance(localize, bool), 'localize must be bool.'
+        self._name = "GeoJsonDetail"
+        self.fields = fields
+        self.aliases = aliases if aliases is not None else fields
+        self.labels = labels
+        self.localize = localize
+        self.class_name = class_name
+        if style:
+            assert isinstance(style, str), \
+                'Pass a valid inline HTML style property string to style.'
+            # noqa outside of type checking.
+            self.style = style
+
+    def warn_for_geometry_collections(self):
+        """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
+        geom_collections = [
+            feature.get('properties') if feature.get('properties') is not None else key
+            for key, feature in enumerate(self._parent.data['features'])
+            if feature['geometry']['type'] == 'GeometryCollection'
+        ]
+        if any(geom_collections):
+            warnings.warn(
+                "{} is not configured to render for GeoJson GeometryCollection geometries. "
+                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
+                "https://tools.ietf.org/html/rfc7946#page-9".format(self._name, geom_collections), UserWarning)
+
+    def render(self, **kwargs):
+        """Renders the HTML representation of the element."""
+        figure = self.get_root()
+        if isinstance(self._parent, GeoJson):
+            keys = tuple(self._parent.data['features'][0]['properties'].keys())
+            self.warn_for_geometry_collections()
+        elif isinstance(self._parent, TopoJson):
+            obj_name = self._parent.object_path.split('.')[-1]
+            keys = tuple(self._parent.data['objects'][obj_name][
+                             'geometries'][0]['properties'].keys())
+        else:
+            raise TypeError('You cannot add a {} to anything other than a '
+                            'GeoJson or TopoJson object.'.format(self._name))
+        keys = tuple(x for x in keys if x not in ('style', 'highlight'))
+        for value in self.fields:
+            assert value in keys, ('The field {} is not available in the data. '
+                                   'Choose from: {}.'.format(value, keys))
+        figure.header.add_child(Element(
+            Template(u"""
+                    <style>
+                        .{{ this.class_name }} {
+                            {{ this.style }}
+                        }
+                       .{{ this.class_name }} table{
+                            margin: auto;
+                        }
+                        .{{ this.class_name }} tr{
+                            text-align: left;
+                        }
+                        .{{ this.class_name }} th{
+                            padding: 2px; padding-right: 8px;
+                        }
+                    </style>
+            """).render(this=self)), name=self.get_name() + "tablestyle"
+        )
+
+        super(GeoJsonDetail, self).render()
+
+
+class GeoJsonTooltip(GeoJsonDetail):
     """
     Create a tooltip that uses data from either geojson or topojson.
+
+    Parameters
+    ----------
+    fields: list or tuple.
+        Labels of GeoJson/TopoJson 'properties' or GeoPandas GeoDataFrame
+        columns you'd like to display.
+    aliases: list/tuple of strings, same length/order as fields, default None.
+        Optional aliases you'd like to display in the tooltip as field name
+        instead of the keys of `fields`.
+    labels: bool, default True.
+        Set to False to disable displaying the field names or aliases.
+    localize: bool, default False.
+        This will use JavaScript's .toLocaleString() to format 'clean' values
+        as strings for the user's location; i.e. 1,000,000.00 comma separators,
+        float truncation, etc.
+        Available for most of JavaScript's primitive types (any data you'll
+        serve into the template).
+    style: str, default None.
+        HTML inline style properties like font and colors. Will be applied to
+        a div with the text in it.
+    sticky: bool, default True
+        Whether the tooltip should follow the mouse.
+    **kwargs: Assorted.
+        These values will map directly to the Leaflet Options. More info
+        available here: https://leafletjs.com/reference-1.6.0#tooltip
+
+    Examples
+    --------
+    # Provide fields and aliases, with Style.
+    >>> GeoJsonTooltip(
+    >>>     fields=['CNTY_NM', 'census-pop-2015', 'census-md-income-2015'],
+    >>>     aliases=['County', '2015 Census Population', '2015 Median Income'],
+    >>>     localize=True,
+    >>>     style=('background-color: grey; color: white; font-family:'
+    >>>            'courier new; font-size: 24px; padding: 10px;')
+    >>> )
+    # Provide fields, with labels off and fixed tooltip positions.
+    >>> GeoJsonTooltip(fields=('CNTY_NM',), labels=False, sticky=False)
+    """
+    _template = Template(u"""
+    {% macro script(this, kwargs) %}
+    {{ this._parent.get_name() }}.bindTooltip(""" + GeoJsonDetail.base_template +
+                         u""",{{ this.tooltip_options | tojson | safe }});
+                     {% endmacro %}
+                     """)
+
+    def __init__(self, fields, aliases=None, labels=True, localize=False,
+                 style=None, class_name='foliumtooltip', sticky=True, **kwargs):
+        super(GeoJsonTooltip, self).__init__(
+            fields=fields, aliases=aliases, labels=labels, localize=localize,
+            style=style, class_name=class_name
+        )
+        self._name = 'GeoJsonTooltip'
+        kwargs.update({'sticky': sticky, 'class_name': class_name})
+        self.tooltip_options = {
+            camelize(key): kwargs[key] for key in kwargs.keys()}
+
+
+class GeoJsonPopup(GeoJsonDetail):
+    """
+    Create a popup feature to bind to each element of a GeoJson layer based on
+    its attributes.
 
     Parameters
     ----------
@@ -688,113 +989,34 @@ class GeoJsonTooltip(Tooltip):
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
         a div with the text in it.
-    sticky: bool, default True
-        Whether the tooltip should follow the mouse.
-    **kwargs: Assorted.
-        These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.2.0#tooltip
 
     Examples
-    --------
-    # Provide fields and aliases, with Style.
-    >>> GeoJsonTooltip(
-    >>>     fields=['CNTY_NM', 'census-pop-2015', 'census-md-income-2015'],
-    >>>     aliases=['County', '2015 Census Population', '2015 Median Income'],
-    >>>     localize=True,
-    >>>     style=('background-color: grey; color: white; font-family:'
-    >>>            'courier new; font-size: 24px; padding: 10px;')
-    >>> )
-    # Provide fields, with labels off and fixed tooltip positions.
-    >>> GeoJsonTooltip(fields=('CNTY_NM',), labels=False, sticky=False)
+    ---
+    gjson = folium.GeoJson(gdf).add_to(m)
+
+    folium.features.GeoJsonPopup(fields=['NAME'],
+                                labels=False
+                                ).add_to(gjson)
     """
+
     _template = Template(u"""
-        {% macro script(this, kwargs) %}
-        {{ this._parent.get_name() }}.bindTooltip(
-            function(layer){
-            // Convert non-primitive to String.
-            let handleObject = (feature)=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
-            let fields = {{ this.fields }};
-            {% if this.aliases %}
-            let aliases = {{ this.aliases }};
-            {% endif %}
-            return '<table{% if this.style %} style="{{this.style}}"{% endif%}>' +
-            String(
-                fields.map(
-                columnname=>
-                    `<tr style="text-align: left;">{% if this.labels %}
-                    <th style="padding: 4px; padding-right: 10px;">{% if this.aliases %}
-                        ${aliases[fields.indexOf(columnname)]
-                        {% if this.localize %}.toLocaleString(){% endif %}}
-                    {% else %}
-                    ${ columnname{% if this.localize %}.toLocaleString(){% endif %}}
-                    {% endif %}</th>
-                    {% endif %}
-                    <td style="padding: 4px;">${handleObject(layer.feature.properties[columnname])
-                    {% if this.localize %}.toLocaleString(){% endif %}}</td></tr>`
-                ).join(''))
-                +'</table>'
-            }, {{ this.options }});
-        {% endmacro %}
-        """)
+    {% macro script(this, kwargs) %}
+    let name_getter = '{{this._parent.get_name()}}';
+    {{ this._parent.get_name() }}.bindPopup(""" + GeoJsonDetail.base_template +
+                         u""",{{ this.popup_options | tojson | safe }});
+                     {% endmacro %}
+                     """)
 
-    def __init__(self, fields, aliases=None, labels=True,
-                 localize=False, style=None, sticky=True, **kwargs):
-        super(GeoJsonTooltip, self).__init__(
-            text='', style=style, sticky=sticky, **kwargs
-        )
-        self._name = 'GeoJsonTooltip'
-
-        assert isinstance(fields, (list, tuple)), 'Please pass a list or ' \
-                                                  'tuple to fields.'
-        if aliases is not None:
-            assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), 'fields and aliases must have' \
-                                                ' the same length.'
-        assert isinstance(labels, bool), 'labels requires a boolean value.'
-        assert isinstance(localize, bool), 'localize must be bool.'
-        assert 'permanent' not in kwargs, 'The `permanent` option does not ' \
-                                          'work with GeoJsonTooltip.'
-
-        self.fields = fields
-        self.aliases = aliases
-        self.labels = labels
-        self.localize = localize
-        if style:
-            assert isinstance(style, str), \
-                'Pass a valid inline HTML style property string to style.'
-            # noqa outside of type checking.
-            self.style = style
-
-    def warn_for_geometry_collections(self):
-        """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
-        geom_collections = [
-            feature.get('properties') if feature.get('properties') is not None else key
-            for key, feature in enumerate(self._parent.data['features'])
-            if feature['geometry']['type'] == 'GeometryCollection'
-        ]
-        if any(geom_collections):
-            warnings.warn(
-                "GeoJsonTooltip is not configured to render tooltips for GeoJson GeometryCollection geometries. "
-                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
-                "https://tools.ietf.org/html/rfc7946#page-9".format(geom_collections), UserWarning)
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        if isinstance(self._parent, GeoJson):
-            keys = tuple(self._parent.data['features'][0]['properties'].keys())
-            self.warn_for_geometry_collections()
-        elif isinstance(self._parent, TopoJson):
-            obj_name = self._parent.object_path.split('.')[-1]
-            keys = tuple(self._parent.data['objects'][obj_name][
-                             'geometries'][0]['properties'].keys())
-        else:
-            raise TypeError('You cannot add a GeoJsonTooltip to anything else '
-                            'than a GeoJson or TopoJson object.')
-        keys = tuple(x for x in keys if x not in ('style', 'highlight'))
-        for value in self.fields:
-            assert value in keys, ('The field {} is not available in the data. '
-                                   'Choose from: {}.'.format(value, keys))
-        super(GeoJsonTooltip, self).render(**kwargs)
+    def __init__(self, fields=None, aliases=None, labels=True,
+                 style="margin: auto;", class_name='foliumpopup', localize=True,
+                 **kwargs):
+        super(GeoJsonPopup, self).__init__(
+            fields=fields, aliases=aliases, labels=labels, localize=localize,
+            class_name=class_name, style=style)
+        self._name = "GeoJsonPopup"
+        kwargs.update({'class_name': self.class_name})
+        self.popup_options = {
+            camelize(key): value for key, value in kwargs.items()}
 
 
 class Choropleth(FeatureGroup):
@@ -842,9 +1064,9 @@ class Choropleth(FeatureGroup):
         If `bins` is a sequence, it directly defines the bin edges.
         For more information on this parameter, have a look at
         numpy.histogram function.
-    fill_color: string, default 'blue'
-        Area fill color. Can pass a hex code, color name, or if you are
-        binding data, one of the following color brewer palettes:
+    fill_color: string, optional
+        Area fill color, defaults to blue. Can pass a hex code, color name,
+        or if you are binding data, one of the following color brewer palettes:
         'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
         'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
     nan_fill_color: string, default 'black'
@@ -873,7 +1095,7 @@ class Choropleth(FeatureGroup):
         Enable highlight functionality when hovering over a GeoJSON area.
     name : string, optional
         The name of the layer, as it will appear in LayerControls
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
@@ -904,7 +1126,7 @@ class Choropleth(FeatureGroup):
     """
 
     def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
-                 bins=6, fill_color='blue', nan_fill_color='black',
+                 bins=6, fill_color=None, nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
@@ -913,6 +1135,8 @@ class Choropleth(FeatureGroup):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
+
+        fill_color = fill_color or ('blue' if data is None else 'Blues')
 
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '
@@ -980,6 +1204,8 @@ class Choropleth(FeatureGroup):
 
             def color_scale_fun(x):
                 key_of_x = get_by_key(x, key_on)
+                if key_of_x is None:
+                    raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
                 if key_of_x not in color_data.keys():
                     return nan_fill_color, nan_fill_opacity
@@ -1063,33 +1289,28 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.4.0.html#divicon
+    See https://leafletjs.com/reference-1.6.0.html#divicon
 
     """
 
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.divIcon({
-                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
-                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
-                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
-                    {% if this.className %}className: '{{this.className}}',{% endif %}
-                    {% if this.html %}html: '{{this.html}}',{% endif %}
-                    });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.divIcon({{ this.options|tojson }});
+            {{this._parent.get_name()}}.setIcon({{this.get_name()}});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, html=None, icon_size=None, icon_anchor=None,
                  popup_anchor=None, class_name='empty'):
         super(DivIcon, self).__init__()
         self._name = 'DivIcon'
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-        self.popup_anchor = popup_anchor
-        self.html = html
-        self.className = class_name
+        self.options = parse_options(
+            html=html,
+            icon_size=icon_size,
+            icon_anchor=icon_anchor,
+            popup_anchor=popup_anchor,
+            class_name=class_name,
+        )
 
 
 class LatLngPopup(MacroElement):
@@ -1166,58 +1387,47 @@ class CustomIcon(Icon):
         output file.
         * If array-like, it will be converted to PNG base64 string
         and embedded in the output.
-    icon_size : tuple of 2 int
+    icon_size : tuple of 2 int, optional
         Size of the icon image in pixels.
-    icon_anchor : tuple of 2 int
+    icon_anchor : tuple of 2 int, optional
         The coordinates of the "tip" of the icon
         (relative to its top left corner).
         The icon will be aligned so that this point is at the
         marker's geographical location.
-    shadow_image :  string, file or array-like object
+    shadow_image :  string, file or array-like object, optional
         The data for the shadow image. If not specified,
         no shadow image will be created.
-    shadow_size : tuple of 2 int
+    shadow_size : tuple of 2 int, optional
         Size of the shadow image in pixels.
-    shadow_anchor : tuple of 2 int
+    shadow_anchor : tuple of 2 int, optional
         The coordinates of the "tip" of the shadow relative to its
         top left corner (the same as icon_anchor if not specified).
-    popup_anchor : tuple of 2 int
+    popup_anchor : tuple of 2 int, optional
         The coordinates of the point from which popups will "open",
         relative to the icon anchor.
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-
-                var {{this.get_name()}} = L.icon({
-                    iconUrl: '{{this.icon_url}}',
-                    {% if this.icon_size %}iconSize: [{{this.icon_size[0]}},{{this.icon_size[1]}}],{% endif %}
-                    {% if this.icon_anchor %}iconAnchor: [{{this.icon_anchor[0]}},{{this.icon_anchor[1]}}],{% endif %}
-
-                    {% if this.shadow_url %}shadowUrl: '{{this.shadow_url}}',{% endif %}
-                    {% if this.shadow_size %}shadowSize: [{{this.shadow_size[0]}},{{this.shadow_size[1]}}],{% endif %}
-                    {% if this.shadow_anchor %}shadowAnchor: [{{this.shadow_anchor[0]}},{{this.shadow_anchor[1]}}],{% endif %}
-
-                    {% if this.popup_anchor %}popupAnchor: [{{this.popup_anchor[0]}},{{this.popup_anchor[1]}}],{% endif %}
-                    });
-                {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+        var {{ this.get_name() }} = L.icon({{ this.options|tojson }});
+        {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
+        {% endmacro %}
+        """)  # noqa
 
     def __init__(self, icon_image, icon_size=None, icon_anchor=None,
                  shadow_image=None, shadow_size=None, shadow_anchor=None,
                  popup_anchor=None):
         super(Icon, self).__init__()
         self._name = 'CustomIcon'
-        self.icon_url = image_to_url(icon_image)
-        self.icon_size = icon_size
-        self.icon_anchor = icon_anchor
-
-        self.shadow_url = (image_to_url(shadow_image)
-                           if shadow_image is not None else None)
-        self.shadow_size = shadow_size
-        self.shadow_anchor = shadow_anchor
-        self.popup_anchor = popup_anchor
+        self.options = parse_options(
+            icon_url=image_to_url(icon_image),
+            icon_size=icon_size,
+            icon_anchor=icon_anchor,
+            shadow_url=shadow_image and image_to_url(shadow_image),
+            shadow_size=shadow_size,
+            shadow_anchor=shadow_anchor,
+            popup_anchor=popup_anchor,
+        )
 
 
 class ColorLine(FeatureGroup):
@@ -1254,6 +1464,7 @@ class ColorLine(FeatureGroup):
                  weight=None, opacity=None, **kwargs):
         super(ColorLine, self).__init__(**kwargs)
         self._name = 'ColorLine'
+        positions = validate_locations(positions)
 
         if colormap is None:
             cm = LinearColormap(['green', 'yellow', 'red'],

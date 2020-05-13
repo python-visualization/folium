@@ -6,17 +6,12 @@ Test Vector Layers
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 
 from folium import Map
-from folium.utilities import get_bounds
+from folium.utilities import get_bounds, normalize
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
 
-
-def _normalize(rendered):
-    return [line.strip() for line in rendered.splitlines() if line.strip()]
 
 def test_circle():
     m = Map()
@@ -78,11 +73,11 @@ def test_circle():
     """.format(name=circle.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle._template.module.script(circle)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert circle.get_bounds() == [location, location]
     assert json.dumps(circle.to_dict()) == circle.to_json()
     assert circle.location == [-27.551667, -48.478889]
-    assert circle.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+    assert circle.options == expected_options
 
 
 def test_circle_marker():
@@ -146,11 +141,11 @@ def test_circle_marker():
     """.format(name=circle_marker.get_name(), location=location, radius=radius, map=m.get_name())  # noqa
 
     rendered = circle_marker._template.module.script(circle_marker)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert circle_marker.get_bounds() == expected_bounds
     assert json.dumps(circle_marker.to_dict()) == circle_marker.to_json()
     assert circle_marker.location == location
-    assert circle_marker.options == json.dumps(options, sort_keys=True, indent=2)  # noqa
+    assert circle_marker.options == options
 
 
 def test_rectangle():
@@ -212,10 +207,10 @@ def test_rectangle():
     """.format(name=rectangle.get_name(), location=location, map=m.get_name())
 
     rendered = rectangle._template.module.script(rectangle)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert rectangle.get_bounds() == location
     assert json.dumps(rectangle.to_dict()) == rectangle.to_json()
-    assert rectangle.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+    assert rectangle.options == expected_options
 
 
 def test_polygon_marker():
@@ -275,15 +270,15 @@ def test_polygon_marker():
     """.format(locations=locations, name=polygon.get_name(), map=m.get_name())
 
     rendered = polygon._template.module.script(polygon)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert polygon.get_bounds() == get_bounds(locations)
     assert json.dumps(polygon.to_dict()) == polygon.to_json()
-    assert polygon.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+    assert polygon.options == expected_options
 
 
 def test_polyline():
     m = Map()
-    locations = [[40, -80], [45, -80]]
+    locations = [[40.0, -80.0], [45.0, -80.0]]
     polyline = PolyLine(locations=locations, popup='I am PolyLine')
     polyline.add_to(m)
 
@@ -331,10 +326,10 @@ def test_polyline():
     """.format(locations=locations, name=polyline.get_name(), map=m.get_name())
 
     rendered = polyline._template.module.script(polyline)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert polyline.get_bounds() == get_bounds(locations)
     assert json.dumps(polyline.to_dict()) == polyline.to_json()
-    assert polyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+    assert polyline.options == expected_options
 
 
 def test_mulyipolyline():
@@ -390,7 +385,7 @@ def test_mulyipolyline():
     """.format(locations=locations, name=multipolyline.get_name(), map=m.get_name())
 
     rendered = multipolyline._template.module.script(multipolyline)
-    assert _normalize(rendered) == _normalize(expected_rendered)
+    assert normalize(rendered) == normalize(expected_rendered)
     assert multipolyline.get_bounds() == get_bounds(locations)
     assert json.dumps(multipolyline.to_dict()) == multipolyline.to_json()
-    assert multipolyline.options == json.dumps(expected_options, sort_keys=True, indent=2)  # noqa
+    assert multipolyline.options == expected_options

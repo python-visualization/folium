@@ -5,12 +5,11 @@ Test DualMap
 ------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 from jinja2 import Template
 
 import folium
 import folium.plugins
+from folium.utilities import normalize
 
 
 def test_dual_map():
@@ -22,7 +21,7 @@ def test_dual_map():
 
     figure = m.get_root()
     assert isinstance(figure, folium.Figure)
-    out = figure.render()
+    out = normalize(figure.render())
 
     script = '<script src="https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js"></script>'  # noqa
     assert script in out
@@ -32,4 +31,4 @@ def test_dual_map():
         {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
     """)
 
-    assert tmpl.render(this=m) in out
+    assert normalize(tmpl.render(this=m)) in out

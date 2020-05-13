@@ -7,67 +7,90 @@ env:
 
 addons:
   firefox: latest
+  # chrome addon fails to install
 
 env:
   global:
-    - secure: "gRT413onDOvwgiHpNXRsiqo+ZZSjwwBpjZryQ9h6IqYw6cTN9YVivYF15uTMD//mZyFeHRz+F/7/0EG2z+UYIBKbgktiNMbie/KizwRBnCThGpcch1VeizkBkPluWSQXndXM6STkHvn0eZBZBBh0QdTm1qaI0babUmgZuWhrX38="
+    - secure: "MTRxGE7N7I60vOk3f32NZjL2BLmP1H0W11HqfcbDO9IEN9Pb47mXQW6rNF0ZqOTt78kWtcHsR2non+nrLIjkglAb4psjUWOdQVh73y3JU4OrXqGCLssgIq9m6fMGOeFWvdektKG4v0TlnYwLhd6Lzes6eTrc+Z2UMHf4dZtuOPs="
 
 matrix:
   fast_finish: true
   include:
-  - name: default-python2
-    env: TEST_TARGET=default PY=2.7
   - name: default
-    env: TEST_TARGET=default PY=3.7
+    env: PY=3.7
   - name: notebooks-conding-standard
     env: PY=3.7
   - name: notebooks-code
     env: PY=3.7
-  - name: latest_branca
+  - name: selenium
+    env: PY=3.7
+  - name: latest-branca
     env: PY=3.7
   - name: docs
     env: PY=3.7
+  - name: "tarball"
+    env: PY=3.7
   allow_failures:
-  - name: latest_branca
+  - name: linkcheck
+    env: PY=3.7
+  - name: notebooks-conding-standard
     env: PY=3.7
 
 before_install:
-  - wget http://bit.ly/miniconda -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-  - conda update conda
-  - conda config --remove channels defaults --force
-  - conda config --add channels conda-forge --force
-  - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
-  - source activate TEST
-  # firefox headless driver
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
-  - mkdir geckodriver
-  - tar -xzf geckodriver.tar.gz -C geckodriver
-  - export PATH=$PATH:$PWD/geckodriver
-
-  - if [[ "$PY" == "2.7" ]]; then
-      conda install mock ;
-    fi
+  # Install miniconda and create TEST env.
+  - |
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+    bash miniconda.sh -b -p $HOME/miniconda
+    export PATH="$HOME/miniconda/bin:$PATH"
+    conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
+    conda update conda --quiet
+    conda config --add channels conda-forge --force
+    conda config --set channel_priority strict
+    conda config --set safety_checks disabled
+    conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
+    source activate TEST
+  # Install firefox headless driver.
+  - |
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
+    mkdir geckodriver
+    tar -xzf geckodriver.tar.gz -C geckodriver
+    export PATH=$PATH:$PWD/geckodriver
+  # Install Chrome
+  - |
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    sudo apt-get install -y -f
+    # sudo dpkg -i google-chrome-stable_current_amd64.deb
+  # Install chromedriver
+  - |
+    wget https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip -O chromedriver.zip
+    mkdir chromedriver
+    unzip chromedriver.zip -d chromedriver
+    export PATH=$PATH:$PWD/chromedriver
 
 # Test source distribution.
 install:
-  - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install folium-${version}.tar.gz && popd
+  - pip install -e . --no-deps --force-reinstall
 
 script:
+  - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      pip wheel . -w dist --no-deps ;
+      check-manifest --verbose ;
+      twine check dist/* ;
+    fi
+
   - if [[ $TRAVIS_JOB_NAME != 'docs' ]]; then
       cp -r tests/ examples/ /tmp ;
     fi
 
-  - if [[ $TEST_TARGET == 'default' ]]; then
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+  - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
+      pytest /tmp -vv --ignore=/tmp/tests/selenium ;
     fi
 
-  - if [[ $TRAVIS_JOB_NAME == 'latest_branca' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'latest-branca' ]]; then
       conda uninstall branca ;
       pip install git+https://github.com/python-visualization/branca.git ;
-      pytest /tmp -vv --ignore=tests/notebooks/test_notebooks.py ;
+      pytest /tmp -vv --ignore=/tmp/tests/selenium ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-conding-standard' ]]; then
@@ -77,23 +100,35 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'notebooks-code' ]]; then
-      pytest --nbval-lax -p no:python /tmp/examples ;
+      pytest --nbval-lax /tmp/examples ;
     fi
 
-  - if [[ $TEST_TARGET == 'docs' ]]; then
-      set -e ;
-      conda install doctr ;
+  - if [[ $TRAVIS_JOB_NAME == 'selenium' ]]; then
+      pytest /tmp/tests/selenium -vv ;
+    fi
+
+# Docs
+  - |
+    if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
+      set -e
+      conda install doctr
+      cp examples/Quickstart.ipynb docs/quickstart.ipynb
+      pushd docs
+      make clean html
+      popd
+      if [[ -z "$TRAVIS_TAG" ]]; then 
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ dev
+      else
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ "version-$TRAVIS_TAG"
+        python -m doctr deploy --build-tags --key-path github_deploy_key_python_visualization_folium.enc --built-docs docs/_build/html/ .
+      fi
+    fi
+
+
+  - if [[ $TRAVIS_JOB_NAME == 'linkcheck' ]]; then
       cp examples/Quickstart.ipynb docs/quickstart.ipynb ;
-      pushd docs ;
-      make clean html linkcheck ;
-      popd ;
-      python -m doctr deploy --sync .;
-      python -m doctr deploy --sync --no-require-master  --built-docs docs/_build/html "docs-$TRAVIS_BRANCH" ;
+      pushd docs && make clean html linkcheck && popd ;
     fi
-
-doctr:
-  require-master: true
-  sync: False
 
 deploy:
   skip_cleanup: true
@@ -107,4 +142,4 @@ deploy:
     repo: python-visualization/folium
     tags: true
     all_branches: master
-    condition: '$TRAVIS_JOB_NAME == "default"'
+    condition: '$TRAVIS_JOB_NAME == "tarball"'

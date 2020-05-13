@@ -1,18 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
-import json
-
 from branca.element import Figure, JavascriptLink
 
-from folium import Marker
-from folium.vector_layers import path_options
+from folium.vector_layers import path_options, BaseMultiLocation
 
 from jinja2 import Template
 
+_default_js = [
+    ('antpath',
+     'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js')
+]
 
-class AntPath(Marker):
+
+class AntPath(BaseMultiLocation):
     """
     Class for drawing AntPath polyline overlays on a map.
 
@@ -24,7 +24,7 @@ class AntPath(Marker):
         Latitude and Longitude of line (Northing, Easting)
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
-     tooltip: str or folium.Tooltip, optional
+    tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
     **kwargs:
         Polyline and AntPath options. See their Github page for the
@@ -34,26 +34,25 @@ class AntPath(Marker):
 
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                {{this.get_name()}} = L.polyline.antPath(
-                  {{this.location}},
-                  {{ this.options }}
-                )
-                .addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)  # noqa
+        {% macro script(this, kwargs) %}
+            {{ this.get_name() }} = L.polyline.antPath(
+              {{ this.locations|tojson }},
+              {{ this.options|tojson }}
+        ).addTo({{this._parent.get_name()}});
+        {% endmacro %}
+        """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(AntPath, self).__init__(
-            location=locations,
+            locations,
             popup=popup,
             tooltip=tooltip,
         )
 
         self._name = 'AntPath'
         # Polyline + AntPath defaults.
-        options = path_options(line=True, **kwargs)
-        options.update({
+        self.options = path_options(line=True, **kwargs)
+        self.options.update({
             'paused': kwargs.pop('paused', False),
             'reverse': kwargs.pop('reverse', False),
             'hardwareAcceleration': kwargs.pop('hardware_acceleration', False),
@@ -64,7 +63,6 @@ class AntPath(Marker):
             'color': kwargs.pop('color', '#0000FF'),
             'pulseColor': kwargs.pop('pulse_color', '#FFFFFF'),
         })
-        self.options = json.dumps(options, sort_keys=True, indent=2)
 
     def render(self, **kwargs):
         super(AntPath, self).render()
@@ -73,7 +71,6 @@ class AntPath(Marker):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js'),  # noqa
-            name='antpath',
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

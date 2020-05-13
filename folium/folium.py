@@ -5,8 +5,6 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import time
 import warnings
 
@@ -14,7 +12,12 @@ from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElemen
 
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
-from folium.utilities import _parse_size, _tmp_html, _validate_location
+from folium.utilities import (
+    _parse_size,
+    _tmp_html,
+    validate_location,
+    parse_options,
+)
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -23,9 +26,9 @@ ENV = Environment(loader=PackageLoader('folium', 'templates'))
 
 _default_js = [
     ('leaflet',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.js'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js'),
     ('jquery',
-     'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js'),
+     'https://code.jquery.com/jquery-1.12.4.min.js'),
     ('bootstrap',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
@@ -34,7 +37,7 @@ _default_js = [
 
 _default_css = [
     ('leaflet_css',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.4.0/dist/leaflet.css'),
+     'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'),
     ('bootstrap_css',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
     ('bootstrap_theme_css',
@@ -50,19 +53,16 @@ _default_css = [
 
 class GlobalSwitches(Element):
 
-    _template = Template(
-        '<script>'
-        'L_PREFER_CANVAS={% if this.prefer_canvas %}true{% else %}false{% endif %}; '
-        'L_NO_TOUCH={% if this.no_touch %}true{% else %}false{% endif %}; '
-        'L_DISABLE_3D={% if this.disable_3d %}true{% else %}false{% endif %};'
-        '</script>'
-    )
+    _template = Template("""
+        <script>
+            L_NO_TOUCH = {{ this.no_touch |tojson}};
+            L_DISABLE_3D = {{ this.disable_3d|tojson }};
+        </script>
+    """)
 
-    def __init__(self, prefer_canvas=False, no_touch=False, disable_3d=False):
+    def __init__(self, no_touch=False, disable_3d=False):
         super(GlobalSwitches, self).__init__()
         self._name = 'GlobalSwitches'
-
-        self.prefer_canvas = prefer_canvas
         self.no_touch = no_touch
         self.disable_3d = disable_3d
 
@@ -83,7 +83,12 @@ class Map(MacroElement):
         - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
-    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
+    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+
+    You can find a list of free tile providers here:
+    ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+    Be sure to check their terms and conditions and to provide attribution
+    with the `attr` keyword.
 
     Parameters
     ----------
@@ -96,23 +101,15 @@ class Map(MacroElement):
     tiles: str, default 'OpenStreetMap'
         Map tileset to use. Can choose from a list of built-in tiles,
         pass a custom URL or pass `None` to create a map without tiles.
-    API_key: str, default None
-        API key for Cloudmade or Mapbox tiles.
+        For more advanced tile layer options, use the `TileLayer` class.
     min_zoom: int, default 0
         Minimum allowed zoom level for the tile layer that is created.
     max_zoom: int, default 18
         Maximum allowed zoom level for the tile layer that is created.
-    max_native_zoom: int, default None
-        The highest zoom level at which the tile server can provide tiles.
-        If provided you can zoom in past this level. Else tiles will turn grey.
     zoom_start: int, default 10
         Initial zoom level for the map.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
-    detect_retina: bool, default False
-        If true and user is on a retina display, it will request four
-        tiles of half the specified size and a bigger zoom level in place
-        of one to utilize the high resolution.
     crs : str, default 'EPSG3857'
         Defines coordinate reference systems for projecting geographical points
         into pixel (screen) coordinates and back.
@@ -143,6 +140,9 @@ class Map(MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    **kwargs
+        Additional keyword arguments are passed to Leaflets Map class:
+        https://leafletjs.com/reference-1.6.0.html#map
 
     Returns
     -------
@@ -150,13 +150,13 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
     ...                        width=750, height=500)
-    >>> map = folium.Map(location=[45.523, -122.675],
+    >>> m = folium.Map(location=[45.523, -122.675],
                                tiles='Mapbox Control Room')
-    >>> map = folium.Map(location=(45.523, -122.675), max_zoom=20,
+    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
                                tiles='Cloudmade', API_key='YourKey')
-    >>> map = folium.Map(
+    >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
     ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
@@ -165,65 +165,80 @@ class Map(MacroElement):
 
     """
     _template = Template(u"""
-{% macro header(this, kwargs) %}
-    <meta name="viewport" content="width=device-width,
-        initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <style>#{{this.get_name()}} {
-        position: {{this.position}};
-        width: {{this.width[0]}}{{this.width[1]}};
-        height: {{this.height[0]}}{{this.height[1]}};
-        left: {{this.left[0]}}{{this.left[1]}};
-        top: {{this.top[0]}}{{this.top[1]}};
-        }
-    </style>
-{% endmacro %}
-{% macro html(this, kwargs) %}
-    <div class="folium-map" id="{{this.get_name()}}" ></div>
-{% endmacro %}
+        {% macro header(this, kwargs) %}
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #{{ this.get_name() }} {
+                    position: {{this.position}};
+                    width: {{this.width[0]}}{{this.width[1]}};
+                    height: {{this.height[0]}}{{this.height[1]}};
+                    left: {{this.left[0]}}{{this.left[1]}};
+                    top: {{this.top[0]}}{{this.top[1]}};
+                }
+            </style>
+        {% endmacro %}
 
-{% macro script(this, kwargs) %}
-    {% if this.max_bounds %}
-        var southWest = L.latLng({{ this.min_lat }}, {{ this.min_lon }});
-        var northEast = L.latLng({{ this.max_lat }}, {{ this.max_lon }});
-        var bounds = L.latLngBounds(southWest, northEast);
-    {% else %}
-        var bounds = null;
-    {% endif %}
+        {% macro html(this, kwargs) %}
+            <div class="folium-map" id={{ this.get_name()|tojson }} ></div>
+        {% endmacro %}
 
-    var {{this.get_name()}} = L.map(
-        '{{this.get_name()}}', {
-        center: [{{this.location[0]}}, {{this.location[1]}}],
-        zoom: {{this.zoom_start}},
-        maxBounds: bounds,
-        layers: [],
-        worldCopyJump: {{this.world_copy_jump.__str__().lower()}},
-        crs: L.CRS.{{this.crs}},
-        zoomControl: {{this.zoom_control.__str__().lower()}},
-        });
-{% if this.control_scale %}L.control.scale().addTo({{this.get_name()}});{% endif %}
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.map(
+                {{ this.get_name()|tojson }},
+                {
+                    center: {{ this.location|tojson }},
+                    crs: L.CRS.{{ this.crs }},
+                    {%- for key, value in this.options.items() %}
+                    {{ key }}: {{ value|tojson }},
+                    {%- endfor %}
+                }
+            );
 
-    {% if this.objects_to_stay_in_front %}
-    function objects_in_front() {
-        {% for obj in this.objects_to_stay_in_front %}
-            {{ obj.get_name() }}.bringToFront();
-        {% endfor %}
-    };
+            {%- if this.control_scale %}
+            L.control.scale().addTo({{ this.get_name() }});
+            {%- endif %}
 
-{{ this.get_name() }}.on("overlayadd", objects_in_front);
-$(document).ready(objects_in_front);
-{% endif %}
-{% endmacro %}
-""")  # noqa
+            {% if this.objects_to_stay_in_front %}
+            function objects_in_front() {
+                {%- for obj in this.objects_to_stay_in_front %}
+                    {{ obj.get_name() }}.bringToFront();
+                {%- endfor %}
+            };
+            {{ this.get_name() }}.on("overlayadd", objects_in_front);
+            $(document).ready(objects_in_front);
+            {%- endif %}
 
-    def __init__(self, location=None, width='100%', height='100%',
-                 left='0%', top='0%', position='relative',
-                 tiles='OpenStreetMap', API_key=None, max_zoom=18, min_zoom=0,
-                 max_native_zoom=None, zoom_start=10, world_copy_jump=False,
-                 no_wrap=False, attr=None, min_lat=-90, max_lat=90,
-                 min_lon=-180, max_lon=180, max_bounds=False,
-                 detect_retina=False, crs='EPSG3857', control_scale=False,
-                 prefer_canvas=False, no_touch=False, disable_3d=False,
-                 subdomains='abc', png_enabled=False, zoom_control=True):
+        {% endmacro %}
+        """)
+
+    def __init__(
+            self,
+            location=None,
+            width='100%',
+            height='100%',
+            left='0%',
+            top='0%',
+            position='relative',
+            tiles='OpenStreetMap',
+            attr=None,
+            min_zoom=0,
+            max_zoom=18,
+            zoom_start=10,
+            min_lat=-90,
+            max_lat=90,
+            min_lon=-180,
+            max_lon=180,
+            max_bounds=False,
+            crs='EPSG3857',
+            control_scale=False,
+            prefer_canvas=False,
+            no_touch=False,
+            disable_3d=False,
+            png_enabled=False,
+            zoom_control=True,
+            **kwargs
+    ):
         super(Map, self).__init__()
         self._name = 'Map'
         self._env = ENV
@@ -231,13 +246,12 @@ $(document).ready(objects_in_front);
         self._png_image = None
         self.png_enabled = png_enabled
 
-        if not location:
+        if location is None:
             # If location is not passed we center and zoom out.
             self.location = [0, 0]
-            self.zoom_start = 1
+            zoom_start = 1
         else:
-            self.location = _validate_location(location)
-            self.zoom_start = zoom_start
+            self.location = validate_location(location)
 
         Figure().add_child(self)
 
@@ -248,20 +262,21 @@ $(document).ready(objects_in_front);
         self.top = _parse_size(top)
         self.position = position
 
-        self.min_lat = min_lat
-        self.max_lat = max_lat
-        self.min_lon = min_lon
-        self.max_lon = max_lon
-        self.max_bounds = max_bounds
-        self.no_wrap = no_wrap
-        self.world_copy_jump = world_copy_jump
+        max_bounds_array = [[min_lat, min_lon], [max_lat, max_lon]] \
+            if max_bounds else None
 
         self.crs = crs
         self.control_scale = control_scale
-        self.zoom_control = zoom_control
+
+        self.options = parse_options(
+            max_bounds=max_bounds_array,
+            zoom=zoom_start,
+            zoom_control=zoom_control,
+            prefer_canvas=prefer_canvas,
+            **kwargs
+        )
 
         self.global_switches = GlobalSwitches(
-            prefer_canvas,
             no_touch,
             disable_3d
         )
@@ -269,12 +284,9 @@ $(document).ready(objects_in_front);
         self.objects_to_stay_in_front = []
 
         if tiles:
-            self.add_tile_layer(
-                tiles=tiles, min_zoom=min_zoom, max_zoom=max_zoom,
-                max_native_zoom=max_native_zoom, no_wrap=no_wrap, attr=attr,
-                API_key=API_key, detect_retina=detect_retina,
-                subdomains=subdomains
-            )
+            tile_layer = TileLayer(tiles=tiles, attr=attr,
+                                   min_zoom=min_zoom, max_zoom=max_zoom)
+            self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
         """Displays the HTML Map in a Jupyter notebook."""
@@ -294,8 +306,8 @@ $(document).ready(objects_in_front);
 
         Examples
         --------
-        >>> map._to_png()
-        >>> map._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png()
+        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
         if self._png_image is None:
@@ -323,24 +335,6 @@ $(document).ready(objects_in_front);
         if not self.png_enabled:
             return None
         return self._to_png()
-
-    def add_tile_layer(self, tiles='OpenStreetMap', name=None,
-                       API_key=None, max_zoom=18, min_zoom=0,
-                       max_native_zoom=None, attr=None, active=False,
-                       detect_retina=False, no_wrap=False, subdomains='abc',
-                       **kwargs):
-        """
-        Add a tile layer to the map. See TileLayer for options.
-
-        """
-        tile_layer = TileLayer(tiles=tiles, name=name,
-                               min_zoom=min_zoom, max_zoom=max_zoom,
-                               max_native_zoom=max_native_zoom,
-                               attr=attr, API_key=API_key,
-                               detect_retina=detect_retina,
-                               subdomains=subdomains,
-                               no_wrap=no_wrap)
-        self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -403,7 +397,7 @@ $(document).ready(objects_in_front);
 
         Examples
         --------
-        >>> map.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
+        >>> m.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
         self.add_child(FitBounds(bounds,
@@ -429,7 +423,7 @@ $(document).ready(objects_in_front);
         self.add_child(Choropleth(*args, **kwargs))
 
     def keep_in_front(self, *args):
-        """Pass one or multiples object that must stay in front.
+        """Pass one or multiple layers that must stay in front.
 
         The ordering matters, the last one is put on top.
 
@@ -437,7 +431,8 @@ $(document).ready(objects_in_front);
         ----------
         *args :
             Variable length argument list. Any folium object that counts as an
-            overlay. For example FeatureGroup or a vector object such as Marker.
+            overlay. For example FeatureGroup or TileLayer.
+            Does not work with markers, for those use z_index_offset.
         """
         for obj in args:
             self.objects_to_stay_in_front.append(obj)

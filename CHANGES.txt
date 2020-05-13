@@ -1,3 +1,103 @@
+0.11.0
+~~~~~~
+
+- Upgrade Leaflet 1.5.1 -> 1.6.0 (@conengmo #1241)
+- Add auto_start parameter to locate control plugin (@fullonic #1220)
+- New feature: GeoJsonPopup (@jtbaker #1023)
+
+Bug fixes
+
+- Choropleth: default color for with and without data (@conengmo #1288)
+- Update WMS data url in WmsTimeDimension example notebook (@sknzl #1259)
+- Search plugin: fix position argument (@jjbenes #1304)
+- Fix GeoJsonPopupAndTooltip example notebook (@conengmo #1298)
+- Change geopandas dataframe `to_crs()` usage syntax (@artnikitin #1251)
+- GeoJson: fix `show` parameter when embedding data (@conengmo #1289)
+- Use https CDN for leaflet.timedimension.control.min.css (@sknzl #1256)
+- Host leaflet-heatmap.js under different name to avoid adblockers (@conengmo #1240)
+
+API changes
+
+- Removed unused `folium.utilities.iter_points` function, use instead `iter_coords` (@conengmo #1294)
+
+0.10.1
+~~~~~~
+
+Bug fixes
+
+- Fix TimeSliderChoropleth plugin broken setStyle (@khllkcm #1227)
+- Fix HeatMapWithTime plugin (@farisnanosoft @conengmo #1228)
+- Fix adding GeoJSON to MarkerCluster (@conengmo #1190)
+
+Documentation 
+
+- Typo corrections in examples/Colormaps.ipynb (@nik-ahuja #1215)
+
+0.10.0
+~~~~~~
+
+- Bump Leaflet version from 1.4.0 to 1.5.1 (@ocefpaf #1149)
+- Choropleth: warn if `key_on` not found in data (@evwhiz #1144)
+
+Bug fixes
+
+- Fix layer control in DualMap plugin (@conengmo #1156)
+- Fix typo in DivIcon options (@fullonic #1181)
+- Fix JS error in Draw plugin export option (@fullonic #1180)
+- Fix typo in color options in Icon (@adnanhemani #1171)
+- Fix draw and edit options in Draw plugin (@mccarthyryanc #1175)
+- Remove warnings about conflicts with Draw plugin (@fullonic #1184)
+- More explicit `key_on` check in Choropleth (@leandroordonez #1169)
+
+Documentation
+
+- Add Flask example (@penguindustin #1140)
+- Improve contribution guide (@leonardofurtado #1173)
+
+0.9.1
+~~~~~
+
+Bug fixes
+
+- Fix geojson identifier (conengmo #1155)
+
+0.9.0
+~~~~~
+
+This version drops support for Python 2.7. (#1100, #1104, #1111)
+Python 3.5+ is required.
+
+- Geojson separate style mapping (conengmo #1058)
+- Warn for wrong color values in Icon (conengmo #1099)
+- Use Jinja2's `tojson` filter to convert data (conengmo #1101)
+- Pass **kwargs as options to Leaflet classes (conengmo #1101)
+- Explicit coordinate validation (conengmo #1090)
+- Add `icon_create_function` arg to `FastMarkerCluster` plugin (Gordonei #1109)
+- Add `PolyLineOffset` plugin (FabeG #1091)
+- Add Locate Control plugin (fullonic #1116)
+- Add Leaflet `CustomPane` class (Ipkirwin #1094)
+
+API changes
+
+- Remove `add_tile_layer` method from `Map` (conengmo #1127)
+- Remove args from `Map`, if needed use `TileLayer` instead (conengmo #1127)
+
+Bug fixes
+
+- Fix broken attribution for built-in tiles (FabeG #1128)
+- Fix broken prefer_canvas option of `Map` (FabeG #1133)
+
+0.8.3
+~~~~~
+
+- Relaxing location data type restriction (dskkato #1084)
+- Add options to draw control (EtsuNDmA  #1035)
+- folium 0.8.x will be the last version series to support Python 2 (conengmo #1087)
+
+Bug Fixes
+
+- Use jquery.com CDN instead of Google (conengmo #1086)
+
 0.8.0
 ~~~~~
 
@@ -6,6 +106,11 @@
 - Automatically detect VegaLite version from specs (JarnoRFB #959)
 - Validate style and highlight functions in GeoJson (jtbaker #1024)
 - AntPath plugin (ocefpaf #1016)
+- Update Leaflet version to 1.4.0 (conengmo #1047)
+- DualMap plugin (conengmo #933)
+- CirclePattern and StripePattern plugins (talbertc-usgs #966)
+- Add option to make Marker draggable (Conengmo #1053)
+- Example notebook on creating polygons from points (HZALK #1056)
 
 API changes
 
@@ -14,7 +119,7 @@ API changes
 Bug Fixes
 
 - Re-add missing GeoJsonTooltip in __init__ (Conengmo  #1029)
-
+- Use Javascript template literals in DivIcon (Conengmo #1054)
 
 0.7.0
 ~~~~~

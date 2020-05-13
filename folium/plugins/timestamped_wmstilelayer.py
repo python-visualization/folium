@@ -1,13 +1,31 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import CssLink, Figure, JavascriptLink
 
 from folium.map import Layer
 from folium.raster_layers import WmsTileLayer
+from folium.utilities import parse_options
 
 from jinja2 import Template
+
+
+_default_js = [
+    ('jquery2.0.0',
+     'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
+    ('jqueryui1.10.2',
+     'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+    ('iso8601',
+     'https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),
+    ('leaflet.timedimension',
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+]
+
+_default_css = [
+    ('highlight.js_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
+    ('leaflet.timedimension_css',
+     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css')  # noqa
+]
 
 
 class TimestampedWmsTileLayers(Layer):
@@ -46,7 +64,7 @@ class TimestampedWmsTileLayers(Layer):
 
     Examples
     --------
-    >>> w0 = features.WmsTileLayer(
+    >>> w0 = WmsTileLayer(
     ...          'http://this.wms.server/ncWMS/wms',
     ...          name='Test WMS Data',
     ...          styles='',
@@ -56,7 +74,7 @@ class TimestampedWmsTileLayers(Layer):
     ...          COLORSCALERANGE='0,10',
     ...)
     >>> w0.add_to(m)
-    >>> w1 = features.WmsTileLayer(
+    >>> w1 = WmsTileLayer(
     ...          'http://this.wms.server/ncWMS/wms',
     ...          name='Test WMS Data',
     ...          styles='',
@@ -67,7 +85,7 @@ class TimestampedWmsTileLayers(Layer):
     ...)
     >>> w1.add_to(m)
     >>> # Add WmsTileLayers to time control.
-    >>> time = plugins.TimestampedWmsTileLayers([w0, w1])
+    >>> time = TimestampedWmsTileLayers([w0, w1])
     >>> time.add_to(m)
 
     See https://github.com/socib/Leaflet.TimeDimension for more information.
@@ -75,45 +93,48 @@ class TimestampedWmsTileLayers(Layer):
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({
-                period:"{{this.period}}",
-                {% if this.time_interval %}
-                timeInterval: "{{ this.time_interval }}",
-                {% endif %}
-                });
-            {{this._parent.get_name()}}.timeDimensionControl = L.control.timeDimension({
-                position: 'bottomleft',
-                autoPlay: {{'true' if this.auto_play else 'false'}},
-                playerOptions: {
-                    transitionTime: {{this.transition_time}},
-                    loop: {{'true' if this.loop else 'false'}}}
-                    });
-            {{this._parent.get_name()}}.addControl({{this._parent.get_name()}}.timeDimensionControl);
+            {{ this._parent.get_name() }}.timeDimension = L.timeDimension(
+                {{ this.options|tojson }}
+            );
+            {{ this._parent.get_name() }}.timeDimensionControl =
+                L.control.timeDimension(
+                    {{ this.options_control|tojson }}
+                );
+            {{ this._parent.get_name() }}.addControl(
+                {{ this._parent.get_name() }}.timeDimensionControl
+            );
 
             {% for layer in this.layers %}
-            var {{ layer.get_name() }} = L.timeDimension.layer.wms({{ layer.get_name() }},
-                {updateTimeDimension: false,
-                 wmsVersion: '{{ layer.version }}',
+            var {{ layer.get_name() }} = L.timeDimension.layer.wms(
+                {{ layer.get_name() }},
+                {
+                    updateTimeDimension: false,
+                    wmsVersion: {{ layer.options['version']|tojson }},
                 }
-                ).addTo({{this._parent.get_name()}});
+            ).addTo({{ this._parent.get_name() }});
             {% endfor %}
         {% endmacro %}
         """)
 
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period='P1D', time_interval=False, name=None,
-                 overlay=True, control=True, show=True):
+                 period='P1D', time_interval=False, name=None):
         super(TimestampedWmsTileLayers, self).__init__(name=name,
-                                                       overlay=overlay,
-                                                       control=control,
-                                                       show=show)
+                                                       overlay=True,
+                                                       control=False,
+                                                       show=True)
         self._name = 'TimestampedWmsTileLayers'
-
-        self.transition_time = int(transition_time)
-        self.loop = bool(loop)
-        self.auto_play = bool(auto_play)
-        self.period = period
-        self.time_interval = time_interval
+        self.options = parse_options(
+            period=period,
+            time_interval=time_interval,
+        )
+        self.options_control = parse_options(
+            position='bottomleft',
+            auto_play=auto_play,
+            player_options={
+                'transitionTime': int(transition_time),
+                'loop': loop,
+            },
+        )
         if isinstance(data, WmsTileLayer):
             self.layers = [data]
         else:
@@ -126,26 +147,10 @@ class TimestampedWmsTileLayers(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
-            name='jquery2.0.0')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
-            name='jqueryui1.10.2')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
-            name='highlight.js_css')
-
-        figure.header.add_child(
-            CssLink('http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css'),  # noqa
-            name='leaflet.timedimension_css')
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)

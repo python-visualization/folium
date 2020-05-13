@@ -3,11 +3,28 @@
 from __future__ import (absolute_import, division, print_function)
 
 import os
+import sys
 from setuptools import setup
 
 import versioneer
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
+
+if sys.version_info < (3, 5):
+    error = """
+    folium 0.9+ supports Python 3.5 and above.
+    When using Python 2.7, please install folium 0.8.*.
+
+    See folium `README.rst` file for more information:
+
+    https://github.com/python-visualization/folium/blob/master/README.rst
+
+    Python {py} detected.
+
+    Try upgrading pip and retry.
+    """.format(py='.'.join([str(v) for v in sys.version_info[:3]]))
+    print(error, file=sys.stderr)
+    sys.exit(1)
 
 
 def read(*parts):
@@ -43,9 +60,6 @@ packages = [
     'folium.plugins'
 ]
 
-LICENSE = read('LICENSE.txt')
-long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
-
 # Dependencies.
 with open('requirements.txt') as f:
     tests_require = f.readlines()
@@ -55,25 +69,27 @@ setup(
     name='folium',
     version=versioneer.get_version(),
     description='Make beautiful maps with Leaflet.js & Python',
-    long_description=long_description,
+    license="MIT",
+    long_description='{}'.format(read("README.rst")),
+    long_description_content_type="text/x-rst",
     author='Rob Story',
     author_email='wrobstory@gmail.com',
     url='https://github.com/python-visualization/folium',
     keywords='data visualization',
     classifiers=[
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Topic :: Scientific/Engineering :: GIS',
         'Topic :: Scientific/Engineering :: Visualization',
         'License :: OSI Approved :: MIT License',
-        'Development Status :: 5 - Production/Stable'],
+        'Development Status :: 5 - Production/Stable'
+    ],
+    platforms="any",
     packages=packages,
     package_data=package_data,
-    tests_require=['pytest'],
-    license=LICENSE,
+    python_requires='>=3.5',
+    extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
     cmdclass=versioneer.get_cmdclass(),

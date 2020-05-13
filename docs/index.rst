@@ -33,5 +33,6 @@ Contents
 
    installing
    quickstart.ipynb
+   flask
    modules
    plugins

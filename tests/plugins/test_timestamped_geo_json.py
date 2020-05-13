@@ -6,11 +6,9 @@ Test TimestampedGeoJson
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -93,11 +91,9 @@ def test_timestamped_geo_json():
         }
 
     m = folium.Map([47, 3], zoom_start=1)
-    tgj = plugins.TimestampedGeoJson(data)
-    m.add_child(tgj)
-    m._repr_html_()
+    tgj = plugins.TimestampedGeoJson(data).add_to(m)
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # Verify the imports.
     assert '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>' in out
@@ -110,58 +106,65 @@ def test_timestamped_geo_json():
 
     # Verify that the script is okay.
     tmpl = Template("""
-            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
-                _getDisplayDateFormat: function(date){
-                    var newdate = new moment(date);
-                    console.log(newdate)
-                    return newdate.format("{{this.date_options}}");
-                }
-            });
-            {{this._parent.get_name()}}.timeDimension = L.timeDimension({period:"{{this.period}}"});
-            var timeDimensionControl = new L.Control.TimeDimensionCustom({{ this.options }});
-            {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
+        L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+            _getDisplayDateFormat: function(date){
+                var newdate = new moment(date);
+                console.log(newdate)
+                return newdate.format("{{this.date_options}}");
+            }
+        });
+        {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+            {
+                period: {{ this.period|tojson }},
+            }
+        );
+        var timeDimensionControl = new L.Control.TimeDimensionCustom(
+            {{ this.options|tojson }}
+        );
+        {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
-            console.log("{{this.marker}}");
-
-            var geoJsonLayer = L.geoJson({{this.data}}, {
-                    pointToLayer: function (feature, latLng) {
-                        if (feature.properties.icon == 'marker') {
-                            if(feature.properties.iconstyle){
-                                return new L.Marker(latLng, {
-                                    icon: L.icon(feature.properties.iconstyle)});
-                            }
-                            //else
-                            return new L.Marker(latLng);
-                        }
-                        if (feature.properties.icon == 'circle') {
-                            if (feature.properties.iconstyle) {
-                                return new L.circleMarker(latLng, feature.properties.iconstyle)
-                                };
-                            //else
-                            return new L.circleMarker(latLng);
+        var geoJsonLayer = L.geoJson({{this.data}}, {
+                pointToLayer: function (feature, latLng) {
+                    if (feature.properties.icon == 'marker') {
+                        if(feature.properties.iconstyle){
+                            return new L.Marker(latLng, {
+                                icon: L.icon(feature.properties.iconstyle)});
                         }
                         //else
-
                         return new L.Marker(latLng);
-                    },
-                    style: function (feature) {
-                        return feature.properties.style;
-                    },
-                    onEachFeature: function(feature, layer) {
-                        if (feature.properties.popup) {
-                        layer.bindPopup(feature.properties.popup);
-                        }
                     }
-                })
+                    if (feature.properties.icon == 'circle') {
+                        if (feature.properties.iconstyle) {
+                            return new L.circleMarker(latLng, feature.properties.iconstyle)
+                            };
+                        //else
+                        return new L.circleMarker(latLng);
+                    }
+                    //else
 
-            var {{this.get_name()}} = L.timeDimension.layer.geoJson(geoJsonLayer,
-                {updateTimeDimension: true,
-                 addlastPoint: {{'true' if this.add_last_point else 'false'}},
-                 duration: {{this.duration}},
-                }).addTo({{this._parent.get_name()}});
+                    return new L.Marker(latLng);
+                },
+                style: function (feature) {
+                    return feature.properties.style;
+                },
+                onEachFeature: function(feature, layer) {
+                    if (feature.properties.popup) {
+                    layer.bindPopup(feature.properties.popup);
+                    }
+                }
+            })
+
+        var {{this.get_name()}} = L.timeDimension.layer.geoJson(
+            geoJsonLayer,
+            {
+                updateTimeDimension: true,
+                addlastPoint: {{ this.add_last_point|tojson }},
+                duration: {{ this.duration }},
+            }
+        ).addTo({{this._parent.get_name()}});
     """)  # noqa
-
-    assert ''.join(tmpl.render(this=tgj).split()) in ''.join(out.split())
+    expected = normalize(tmpl.render(this=tgj))
+    assert expected in out
 
     bounds = m.get_bounds()
     assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds

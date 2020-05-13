@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
-import json
-
-from ..utilities import camelize
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+
+from folium import Map
+from folium.features import FeatureGroup, GeoJson, TopoJson
+from folium.plugins import MarkerCluster
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
-from folium import Map
 
-from folium.features import FeatureGroup, GeoJson, TopoJson
+_default_js = [
+    ('Leaflet.Search.js',
+     'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js')
+    ]
 
-from folium.plugins import MarkerCluster
+_default_css = [
+    ('Leaflet.Search.css',
+     'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css')
+    ]
 
 
 class Search(MacroElement):
@@ -32,7 +36,7 @@ class Search(MacroElement):
         By default zooms to Polygon/Line bounds and points
         on their natural extent.
     geom_type: str, default 'Point'
-        Feature geometry type. "Point","Line" or "Polygon"
+        Feature geometry type. "Point", "Line" or "Polygon"
     position: str, default 'topleft'
         Change the position of the search bar, can be:
         'topleft', 'topright', 'bottomright' or 'bottomleft',
@@ -56,12 +60,12 @@ class Search(MacroElement):
                 {% endif %}
                 collapsed: {{this.collapsed|tojson|safe}},
                 textPlaceholder: '{{this.placeholder}}',
+                position:'{{this.position}}',                
             {% if this.geom_type == 'Point' %}
                 initial: false,
                 {% if this.search_zoom %}
                 zoom: {{this.search_zoom}},
                 {% endif %}
-                position:'{{this.position}}',
                 hideMarkerOnCollapse: true
             {% else %}
                 marker: false,
@@ -76,7 +80,7 @@ class Search(MacroElement):
                         return feature.properties.style
                     })
                     {% if this.options %}
-                    e.layer.setStyle({{ this.options }});
+                    e.layer.setStyle({{ this.options|tojson }});
                     {% endif %}
                     if(e.layer._popup)
                         e.layer.openPopup();
@@ -107,13 +111,10 @@ class Search(MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = collapsed
-        self.options = None
-        if len(kwargs.items()) > 0:
-            self.options = json.dumps({camelize(key): value
-                                       for key, value in kwargs.items()})
+        self.options = parse_options(**kwargs)
 
     def test_params(self, keys):
-        if keys is not None:
+        if keys is not None and self.search_label is not None:
             assert self.search_label in keys, "The label '{}' was not " \
                                               "available in {}" \
                                               "".format(self.search_label, keys)
@@ -135,12 +136,10 @@ class Search(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'),  # noqa
-            name='Leaflet.Search.js'
-        )
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(
-            CssLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css'),  # noqa
-            name='Leaflet.Search.css'
-        )
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)

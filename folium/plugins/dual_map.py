@@ -1,9 +1,15 @@
-from jinja2 import Template
-
 from branca.element import MacroElement, Figure, JavascriptLink
 
 from folium.folium import Map
+from folium.map import LayerControl
 from folium.utilities import deep_copy
+
+from jinja2 import Template
+
+_default_js = [
+    ('Leaflet.Sync',
+     'https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js')
+    ]
 
 
 class DualMap(MacroElement):
@@ -16,6 +22,8 @@ class DualMap(MacroElement):
 
     Parameters
     ----------
+    location: tuple or list, optional
+        Latitude and longitude of center point of the maps.
     layout : {'horizontal', 'vertical'}
         Select how the two maps should be positioned. Either horizontal (left
         and right) or vertical (top and bottom).
@@ -37,8 +45,8 @@ class DualMap(MacroElement):
 
     _template = Template("""
         {% macro script(this, kwargs) %}
-        {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
-        {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
+            {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
+            {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
         {% endmacro %}
     """)
 
@@ -90,8 +98,9 @@ class DualMap(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
-                                name='Leaflet.Sync')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
         super(DualMap, self).render(**kwargs)
 
@@ -100,6 +109,8 @@ class DualMap(MacroElement):
                 # This map has been rendered before, child was copied already.
                 continue
             child_copy = deep_copy(child)
+            if isinstance(child_copy, LayerControl):
+                child_copy.reset()
             self.m2.add_child(child_copy, name, index)
             # m2 has already been rendered, so render the child here:
             child_copy.render()

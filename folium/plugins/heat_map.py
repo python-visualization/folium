@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
-import json
-
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Layer
-from folium.utilities import _isnan, _iter_tolist, none_max, none_min
+from folium.utilities import (
+    none_max,
+    none_min,
+    parse_options,
+    if_pandas_df_convert_to_numpy,
+    validate_location,
+)
 
 from jinja2 import Template
+
+import numpy as np
+
+_default_js = [
+    ('leaflet-heat.js',
+     'https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),
+    ]
 
 
 class HeatMap(Layer):
@@ -45,38 +54,33 @@ class HeatMap(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.heatLayer(
-                {{this.data}},
-                {
-                    minOpacity: {{this.min_opacity}},
-                    maxZoom: {{this.max_zoom}},
-                    max: {{this.max_val}},
-                    radius: {{this.radius}},
-                    blur: {{this.blur}},
-                    gradient: {{this.gradient}}
-                    })
-                .addTo({{this._parent.get_name()}});
+            var {{ this.get_name() }} = L.heatLayer(
+                {{ this.data|tojson }},
+                {{ this.options|tojson }}
+            ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """)
 
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
                  max_val=1.0, radius=25, blur=15, gradient=None,
-                 overlay=True, control=True, show=True):
+                 overlay=True, control=True, show=True, **kwargs):
         super(HeatMap, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
-        data = _iter_tolist(data)
-        if _isnan(data):
-            raise ValueError('data cannot contain NaNs, '
-                             'got:\n{!r}'.format(data))
         self._name = 'HeatMap'
-        self.data = [[x for x in line] for line in data]
-        self.min_opacity = min_opacity
-        self.max_zoom = max_zoom
-        self.max_val = max_val
-        self.radius = radius
-        self.blur = blur
-        self.gradient = (json.dumps(gradient, sort_keys=True) if
-                         gradient is not None else 'null')
+        data = if_pandas_df_convert_to_numpy(data)
+        self.data = [[*validate_location(line[:2]), *line[2:]]  # noqa: E999
+                     for line in data]
+        if np.any(np.isnan(self.data)):
+            raise ValueError('data may not contain NaNs.')
+        self.options = parse_options(
+            min_opacity=min_opacity,
+            max_zoom=max_zoom,
+            max=max_val,
+            radius=radius,
+            blur=blur,
+            gradient=gradient,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         super(HeatMap, self).render(**kwargs)
@@ -85,9 +89,9 @@ class HeatMap(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),  # noqa
-            name='leaflet-heat.js')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
     def _get_self_bounds(self):
         """
@@ -95,6 +99,7 @@ class HeatMap(Layer):
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
+
         bounds = [[None, None], [None, None]]
         for point in self.data:
             bounds = [

@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
 from branca.element import Figure, JavascriptLink
 
 from folium.map import Layer
 
 from jinja2 import Template
+
+_default_js = [
+    ('featuregroupsubgroupjs',
+     'https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),
+    ]
 
 
 class FeatureGroupSubGroup(Layer):
@@ -21,7 +24,6 @@ class FeatureGroupSubGroup(Layer):
     ----------
     group : Layer
         The MarkerCluster or FeatureGroup containing this subgroup.
-
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -59,11 +61,13 @@ class FeatureGroupSubGroup(Layer):
     >>> folium.LayerControl().add_to(m)
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-            var {{this.get_name()}} = L.featureGroup.subGroup({{this._group.get_name()}});
-            {{this.get_name()}}.addTo({{this._parent.get_name()}});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.featureGroup.subGroup(
+                {{ this._group.get_name() }}
+            );
+            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
     def __init__(self, group, name=None, overlay=True, control=True, show=True):
         super(FeatureGroupSubGroup, self).__init__(name=name, overlay=overlay,
@@ -79,6 +83,6 @@ class FeatureGroupSubGroup(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),  # noqa
-            name='featuregroupsubgroupjs')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

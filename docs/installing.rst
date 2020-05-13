@@ -5,7 +5,7 @@ Requirements
 ------------
 ::
 
- branca, jinja2, requests, and six.
+ branca, jinja2 and requests.
 
 Some functionalities may require extra dependencies
 `numpy`, `pandas`, `geopandas`, `altair`, etc.

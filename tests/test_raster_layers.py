@@ -5,10 +5,10 @@ Test raster_layers
 -----------------
 
 """
-
-from __future__ import (absolute_import, division, print_function)
+import pytest
 
 import folium
+from folium.utilities import normalize
 
 from jinja2 import Template
 
@@ -47,30 +47,26 @@ def _is_working_zoom_level(zoom, tiles, session):
 
 def test_custom_tile_subdomains():
     """Test custom tile subdomains."""
-
     url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
-    m = folium.Map(location=[45.52, -122.67], tiles=url,
-                   attr='attribution',
-                   subdomains='1234')
-
-    url_with_name = 'http://{s}.custom_tiles-subdomains.org/{z}/{x}/{y}.png'
-    tile_layer = folium.raster_layers.TileLayer(
+    m = folium.Map()
+    folium.TileLayer(
         tiles=url,
         name='subdomains2',
         attr='attribution',
-        subdomains='5678'
-    )
-    tile_layer.add_to(m)
-
-    m.add_tile_layer(
-        tiles=url_with_name, attr='attribution',
-        subdomains='9012'
-    )
-
+        subdomains='mytilesubdomain'
+    ).add_to(m)
     out = m._parent.render()
-    assert '1234' in out
-    assert '5678' in out
-    assert '9012' in out
+    assert 'mytilesubdomain' in out
+
+
+def test_tilelayer_api_key():
+    """Test cloudmade tiles and the API key."""
+    with pytest.raises(ValueError):
+        folium.TileLayer(tiles='cloudmade')
+
+    tile_layer = folium.TileLayer(tiles='cloudmade', API_key='###')
+    cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
+    assert tile_layer.tiles == cloudmade
 
 
 def test_wms():
@@ -114,13 +110,13 @@ def test_image_overlay():
 
     # Verify the script part is okay.
     tmpl = Template("""
-                var {{this.get_name()}} = L.imageOverlay(
-                    '{{ this.url }}',
-                    {{ this.bounds }},
-                    {{ this.options }}
-                    ).addTo({{this._parent.get_name()}});
+        var {{this.get_name()}} = L.imageOverlay(
+            "{{ this.url }}",
+            {{ this.bounds }},
+            {{ this.options }}
+            ).addTo({{this._parent.get_name()}});
     """)
-    assert tmpl.render(this=io) in out
+    assert normalize(tmpl.render(this=io)) in normalize(out)
 
     bounds = m.get_bounds()
     assert bounds == [[0, -180], [90, 180]], bounds

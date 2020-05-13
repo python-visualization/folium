@@ -6,8 +6,6 @@ Folium Tests
 
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import json
 import os
 
@@ -18,12 +16,12 @@ from folium.features import GeoJson, Choropleth
 
 import jinja2
 from jinja2 import Environment, PackageLoader
+from jinja2.utils import htmlsafe_json_dumps
 
+import numpy as np
 import pandas as pd
 
 import pytest
-
-from six import PY3
 
 try:
     from unittest import mock
@@ -62,6 +60,17 @@ def test_get_templates():
     assert isinstance(env, jinja2.environment.Environment)
 
 
+def test_location_args():
+    """Test some data types for a location arg."""
+    location = np.array([45.5236, -122.6750])
+    m = folium.Map(location)
+    assert m.location == [45.5236, -122.6750]
+
+    df = pd.DataFrame({"location": [45.5236, -122.6750]})
+    m = folium.Map(df["location"])
+    assert m.location == [45.5236, -122.6750]
+
+
 class TestFolium(object):
     """Test class for the Folium library."""
 
@@ -87,17 +96,13 @@ class TestFolium(object):
         assert self.m.get_name() == 'map_00000000000000000000000000000000'
         assert self.m.get_root() == self.m._parent
         assert self.m.location == [45.5236, -122.6750]
-        assert self.m.zoom_start == 4
-        assert self.m.max_lat == 90
-        assert self.m.min_lat == -90
-        assert self.m.max_lon == 180
-        assert self.m.min_lon == -180
+        assert self.m.options['zoom'] == 4
+        assert self.m.options['maxBounds'] == [[-90, -180], [90, 180]]
         assert self.m.position == 'relative'
         assert self.m.height == (400, 'px')
         assert self.m.width == (900, 'px')
         assert self.m.left == (0, '%')
         assert self.m.top == (0, '%')
-        assert self.m.global_switches.prefer_canvas is False
         assert self.m.global_switches.no_touch is False
         assert self.m.global_switches.disable_3d is False
         assert self.m.to_dict() == {
@@ -108,37 +113,32 @@ class TestFolium(object):
                     'name': 'TileLayer',
                     'id': '00000000000000000000000000000000',
                     'children': {}
-                    }
                 }
             }
-
-    def test_cloudmade(self):
-        """Test cloudmade tiles and the API key."""
-        with pytest.raises(ValueError):
-            folium.Map(location=[45.5236, -122.6750], tiles='cloudmade')
-
-        m = folium.Map(location=[45.5236, -122.6750], tiles='cloudmade',
-                       API_key='###')
-        cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
-        assert m._children['cloudmade'].tiles == cloudmade
-
-        bounds = m.get_bounds()
-        assert bounds == [[None, None], [None, None]], bounds
+        }
 
     def test_builtin_tile(self):
         """Test custom maptiles."""
 
-        default_tiles = ['OpenStreetMap', 'Stamen Terrain', 'Stamen Toner']
+        default_tiles = [
+            "OpenStreetMap",
+            "Stamen Terrain",
+            "Stamen Toner",
+            "Mapbox Bright",
+            "Mapbox Control Room",
+            "CartoDB positron",
+            "CartoDB dark_matter",
+        ]
         for tiles in default_tiles:
             m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
-            tiles = ''.join(tiles.lower().strip().split())
-            url = 'tiles/{}/tiles.txt'.format
-            attr = 'tiles/{}/attr.txt'.format
+            tiles = "".join(tiles.lower().strip().split())
+            url = "tiles/{}/tiles.txt".format
+            attr = "tiles/{}/attr.txt".format
             url = m._env.get_template(url(tiles)).render()
             attr = m._env.get_template(attr(tiles)).render()
 
             assert m._children[tiles].tiles == url
-            assert m._children[tiles].attr == attr
+            assert htmlsafe_json_dumps(attr) in m._parent.render()
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
@@ -146,15 +146,15 @@ class TestFolium(object):
     def test_custom_tile(self):
         """Test custom tile URLs."""
 
-        url = 'http://{s}.custom_tiles.org/{z}/{x}/{y}.png'
-        attr = 'Attribution for custom tiles'
+        url = "http://{s}.custom_tiles.org/{z}/{x}/{y}.png"
+        attr = "Attribution for custom tiles"
 
         with pytest.raises(ValueError):
             folium.Map(location=[45.5236, -122.6750], tiles=url)
 
         m = folium.Map(location=[45.52, -122.67], tiles=url, attr=attr)
         assert m._children[url].tiles == url
-        assert m._children[url].attr == attr
+        assert attr in m._parent.render()
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
@@ -191,48 +191,6 @@ class TestFolium(object):
         topo_json = choropleth.geojson
         topojson_str = topo_json._template.module.script(topo_json)
         assert ''.join(topojson_str.split())[:-1] in ''.join(out.split())
-
-    def test_map_build(self):
-        """Test map build."""
-
-        # Standard map.
-        self.setup()
-        rendered = [line.strip() for line in self.m._parent.render().splitlines() if line.strip()]
-
-        html_templ = self.env.get_template('fol_template.html')
-        attr = 'http://openstreetmap.org'
-        tile_layers = [
-            {'id': 'tile_layer_'+'0'*32,
-             'address': 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-             'attr': attr,
-             'max_native_zoom': 20,
-             'max_zoom': 20,
-             'min_zoom': 0,
-             'detect_retina': False,
-             'no_wrap': False,
-             'tms': False,
-             'opacity': 1,
-             'subdomains': 'abc'
-             }]
-        tmpl = {'map_id': 'map_' + '0' * 32,
-                'lat': 45.5236, 'lon': -122.675,
-                'width': 'width: 900.0px;',
-                'height': 'height: 400.0px;',
-                'zoom_level': 4,
-                'max_bounds': True,
-                'min_lat': -90,
-                'max_lat': 90,
-                'min_lon': -180,
-                'max_lon': 180,
-                'tile_layers': tile_layers,
-                'crs': 'EPSG3857',
-                'world_copy_jump': False,
-                'zoom_control': True
-                }
-        HTML = html_templ.render(tmpl, plugins={})
-        expected = [line.strip() for line in HTML.splitlines() if line.strip()]
-
-        assert rendered == expected
 
     def test_choropleth_features(self):
         """Test to make sure that Choropleth function doesn't allow
@@ -272,6 +230,26 @@ class TestFolium(object):
         assert '"fillColor":"a_random_color","fillOpacity":0.123454321' in out_str
         assert '"fillOpacity":0.543212345' in out_str
 
+    def test_choropleth_key_on(self):
+        """Test to make sure that Choropleth function doesn't raises
+        a ValueError when the 'key_on' field is set to a column that might
+        have 0 as a value.
+        """
+        with open(os.path.join(rootpath, 'geo_grid.json')) as f:
+            geo_data = json.load(f)
+        data = pd.DataFrame({'idx': {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5},
+                             'value': {'0': 78.0, '1': 39.0, '2': 0.0, '3': 81.0, '4': 42.0, '5': 68.0}})
+        fill_color = 'BuPu'
+        columns = ['idx', 'value']
+        key_on = 'feature.properties.idx'
+
+        Choropleth(
+            geo_data=geo_data,
+            data=data,
+            key_on=key_on,
+            fill_color=fill_color,
+            columns=columns)
+
     def test_choropleth_warning(self):
         """Test that the Map.choropleth method works and raises a warning."""
         self.setup()
@@ -283,20 +261,7 @@ class TestFolium(object):
                     for child in self.m._children.values()])
 
     def test_tile_attr_unicode(self):
-        """Test tile attribution unicode
-
-        Test does not cover b'юникод'
-        because for python 3 bytes can only contain ASCII literal characters.
-        """
-
-        if not PY3:
-            m = folium.Map(location=[45.5236, -122.6750],
-                           tiles='test', attr=b'unicode')
-            m._parent.render()
-        else:
-            m = folium.Map(location=[45.5236, -122.6750],
-                           tiles='test', attr=u'юникод')
-            m._parent.render()
+        """Test tile attribution unicode"""
         m = folium.Map(location=[45.5236, -122.6750],
                        tiles='test', attr='юникод')
         m._parent.render()
@@ -332,7 +297,7 @@ class TestFolium(object):
                                               'padding': (3, 3), },
                                              sort_keys=True),
             'this': fitbounds,
-            })
+        })
 
         assert ''.join(fit_bounds_rendered.split()) in ''.join(out.split())
 
@@ -364,22 +329,30 @@ class TestFolium(object):
 
     def test_global_switches(self):
         m = folium.Map(prefer_canvas=True)
-        assert m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:true" in out_str
         assert not m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(no_touch=True)
-        assert not m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:false" in out_str
         assert m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(disable_3d=True)
-        assert not m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:false" in out_str
         assert not m.global_switches.no_touch
         assert m.global_switches.disable_3d
 
         m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
-        assert m.global_switches.prefer_canvas
+        out = m._parent.render()
+        out_str = ''.join(out.split())
+        assert "preferCanvas:true" in out_str
         assert m.global_switches.no_touch
         assert m.global_switches.disable_3d
 

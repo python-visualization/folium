@@ -5,19 +5,13 @@ Test HeatMapWithTime
 ------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 from jinja2 import Template
 
 import numpy as np
-
-
-def _normalize(rendered):
-    return ''.join(rendered.split())
 
 
 def test_heat_map_with_time():
@@ -27,20 +21,18 @@ def test_heat_map_with_time():
     move_data = np.random.normal(size=(100, 2)) * 0.01
     data = [(initial_data + move_data * i).tolist() for i in range(100)]
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
-    hm = plugins.HeatMapWithTime(data)
-    m.add_child(hm)
-    m._repr_html_()
+    hm = plugins.HeatMapWithTime(data).add_to(m)
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # We verify that the script imports are present.
     script = '<script src="https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"></script>'  # noqa
     assert script in out
     script = '<script src="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js"></script>'  # noqa
     assert script in out
-    script = '<script src="https://rawcdn.githack.com/pa7/heatmap.js/develop/plugins/leaflet-heatmap/leaflet-heatmap.js"></script>'  # noqa
+    script = '<script src="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js"></script>'  # noqa
     assert script in out
-    script = '<link rel="stylesheet" href="http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css"/>'  # noqa
+    script = '<link rel="stylesheet" href="https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"/>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.
@@ -87,4 +79,4 @@ def test_heat_map_with_time():
             .addTo({{this._parent.get_name()}});
     """)
 
-    assert _normalize(tmpl.render(this=hm)) in _normalize(out)
+    assert normalize(tmpl.render(this=hm)) in out

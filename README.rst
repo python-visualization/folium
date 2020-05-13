@@ -1,4 +1,4 @@
-|PyPI| |Travis| |Gitter| |DOI|
+|PyPI| |Travis| |Gitter| |DOI| |binder|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
@@ -15,6 +15,9 @@
 .. |DOI| image:: https://zenodo.org/badge/18669/python-visualization/folium.svg
    :target: https://zenodo.org/badge/latestdoi/18669/python-visualization/folium
    :alt: DOI
+   
+.. |binder| image:: https://mybinder.org/badge_logo.svg
+ :target: https://mybinder.org/v2/gh/python-visualization/folium/master?filepath=examples
 
 folium
 ======
@@ -44,10 +47,8 @@ or
 Documentation
 -------------
 
-https://python-visualization.github.io/folium/docs-v0.6.0/
+https://python-visualization.github.io/folium/
 
-The documentation for the development version can be found here:
-https://python-visualization.github.io/folium/docs-master/
 
 Gallery
 -------
@@ -68,4 +69,11 @@ and we'd love to have you hang out in our community.
 See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md>`_ for more info.
 
 
-.. |folium| image:: http://python-visualization.github.io/folium/docs-master/_images/folium_logo.jpg
+.. |folium| image:: http://python-visualization.github.io/folium/_images/folium_logo.jpg
+
+
+
+Changelog
+---------
+
+Check the `changelog <https://raw.githubusercontent.com/python-visualization/folium/master/CHANGES.txt>`_ for a detailed list of the latest changes.

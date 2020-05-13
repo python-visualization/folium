@@ -5,11 +5,9 @@ Test MiniMap
 ---------------
 """
 
-from __future__ import (absolute_import, division, print_function)
-
 import folium
-
 from folium import plugins
+from folium.utilities import normalize
 
 
 def test_minimap():
@@ -18,7 +16,7 @@ def test_minimap():
     minimap = plugins.MiniMap()
     m.add_child(minimap)
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
 
     # Verify that a new minimap is getting created.
     assert 'new L.Control.MiniMap' in out
@@ -27,6 +25,6 @@ def test_minimap():
     minimap = plugins.MiniMap(tile_layer="Stamen Toner")
     minimap.add_to(m)
 
-    out = m._parent.render()
+    out = normalize(m._parent.render())
     # verify that Stamen Toner tiles are being used
     assert 'https://stamen-tiles' in out

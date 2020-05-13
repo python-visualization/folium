@@ -1,14 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import (absolute_import, division, print_function)
-
-import json
-
 from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from folium.raster_layers import TileLayer
+from folium.utilities import parse_options
 
 from jinja2 import Template
+
+_default_js = [
+    ('Control_MiniMap_js',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')
+    ]
+
+_default_css = [
+    ('Control_MiniMap_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'),
+    ]
 
 
 class MiniMap(MacroElement):
@@ -66,15 +73,15 @@ class MiniMap(MacroElement):
 
     _template = Template("""
         {% macro script(this, kwargs) %}
-
-        var {{ this.tile_layer.get_name() }} = L.tileLayer(
-        '{{ this.tile_layer.tiles }}',
-        {{ this.tile_layer.options }} );
-
-        var {{ this.get_name() }} = new L.Control.MiniMap( {{this.tile_layer.get_name()}},
-         {{ this.options }});
-        {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
-
+            var {{ this.tile_layer.get_name() }} = L.tileLayer(
+                {{ this.tile_layer.tiles|tojson }},
+                {{ this.tile_layer.options|tojson }}
+            );
+            var {{ this.get_name() }} = new L.Control.MiniMap(
+                {{ this.tile_layer.get_name() }},
+                {{ this.options|tojson }}
+            );
+            {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
         {% endmacro %}
     """)  # noqa
 
@@ -83,7 +90,7 @@ class MiniMap(MacroElement):
                  zoom_level_offset=-5, zoom_level_fixed=None,
                  center_fixed=False, zoom_animation=False,
                  toggle_display=False, auto_toggle_display=False,
-                 minimized=False):
+                 minimized=False, **kwargs):
 
         super(MiniMap, self).__init__()
         self._name = 'MiniMap'
@@ -95,21 +102,21 @@ class MiniMap(MacroElement):
         else:
             self.tile_layer = TileLayer(tile_layer)
 
-        options = {
-            'position': position,
-            'width': width,
-            'height': height,
-            'collapsedWidth': collapsed_width,
-            'collapsedHeight': collapsed_height,
-            'zoomLevelOffset': zoom_level_offset,
-            'zoomLevelFixed': zoom_level_fixed,
-            'centerFixed': center_fixed,
-            'zoomAnimation': zoom_animation,
-            'toggleDisplay': toggle_display,
-            'autoToggleDisplay': auto_toggle_display,
-            'minimized': minimized,
-        }
-        self.options = json.dumps(options, sort_keys=True, indent=2)
+        self.options = parse_options(
+            position=position,
+            width=width,
+            height=height,
+            collapsed_width=collapsed_width,
+            collapsed_height=collapsed_height,
+            zoom_level_offset=zoom_level_offset,
+            zoom_level_fixed=zoom_level_fixed,
+            center_fixed=center_fixed,
+            zoom_animation=zoom_animation,
+            toggle_display=toggle_display,
+            auto_toggle_display=auto_toggle_display,
+            minimized=minimized,
+            **kwargs
+        )
 
     def render(self, **kwargs):
         figure = self.get_root()
@@ -117,6 +124,10 @@ class MiniMap(MacroElement):
                                             'if it is not in a Figure.')
         super(MiniMap, self).render()
 
-        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js'))  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'))  # noqa
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)
