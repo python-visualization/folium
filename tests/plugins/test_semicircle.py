@@ -49,7 +49,7 @@ def test_semicircle():
     # We verify that the script part is correct.
     tmpl_sc1 = Template(u"""
         var {{ this.get_name() }} = L.semiCircle(
-        [{{ this.location[0] }},{{ this.location[1] }}],
+        {{ this.location|tojson }},
         {{ this.options | tojson }}
         )
             .setDirection{{ this.direction }}
@@ -58,7 +58,7 @@ def test_semicircle():
 
     tmpl_sc2 = Template(u"""
         var {{ this.get_name() }} = L.semiCircle(
-        [{{ this.location[0] }},{{ this.location[1] }}],
+        {{ this.location|tojson }},
         {{ this.options | tojson }}
         )
         .addTo({{ this._parent.get_name() }});

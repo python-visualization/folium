@@ -42,7 +42,7 @@ class SemiCircle(Marker):
     _template = Template(u"""
             {% macro script(this, kwargs) %}
                     var {{ this.get_name() }} = L.semiCircle(
-                        [{{ this.location[0] }},{{ this.location[1] }}],
+                        {{ this.location|tojson }},
                         {{ this.options | tojson }}
                         )
                         {% if this.direction %}
