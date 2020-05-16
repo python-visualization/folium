@@ -6,6 +6,11 @@ from folium.map import Layer
 
 from jinja2 import Template
 
+_default_js = [
+    ('featuregroupsubgroupjs',
+     'https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),
+    ]
+
 
 class FeatureGroupSubGroup(Layer):
     """
@@ -78,6 +83,6 @@ class FeatureGroupSubGroup(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),  # noqa
-            name='featuregroupsubgroupjs')
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)

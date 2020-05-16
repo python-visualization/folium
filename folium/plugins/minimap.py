@@ -7,6 +7,16 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+_default_js = [
+    ('Control_MiniMap_js',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')
+    ]
+
+_default_css = [
+    ('Control_MiniMap_css',
+     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'),
+    ]
+
 
 class MiniMap(MacroElement):
     """Add a minimap (locator) to an existing map.
@@ -114,6 +124,10 @@ class MiniMap(MacroElement):
                                             'if it is not in a Figure.')
         super(MiniMap, self).render()
 
-        figure.header.add_child(JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js'))  # noqa
+        # Import Javascripts
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
 
-        figure.header.add_child(CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'))  # noqa
+        # Import Css
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)

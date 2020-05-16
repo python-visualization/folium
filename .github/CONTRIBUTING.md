@@ -71,13 +71,13 @@ The basic workflow for contributing is:
    pip install -r requirements.txt
    pip install -r requirements-dev.txt
    ```
-6. Install Firefox, download [geckodriver](https://github.com/mozilla/geckodriver/releases) 
-   and put it in the PATH.
+6. Install Chrome, download [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) and put it in the PATH.
 7. Make changes to your local copy of the folium repository
 8. Make sure the tests pass:
    * in the repository folder do `pip install -e . --no-deps`  (needed for notebook tests)
-   * run `python -m pytest tests`
    * run `flake8 folium --max-line-length=120`
+   * run `python -m pytest tests --ignore=tests/selenium`
+   * run `python -m pytest tests/selenium`
    * resolve all errors
 9. Commit those changes
    ```
