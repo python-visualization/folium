@@ -3,6 +3,16 @@ from jinja2 import Template
 
 from folium.utilities import parse_options
 
+_default_js = [
+    ('Control.Geocoder.js',
+     'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js')
+    ]
+
+_default_css = [
+    ('Control.Geocoder.css',
+     'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css')
+    ]
+
 
 class Geocoder(MacroElement):
     """A simple geocoder for Leaflet that by default uses OSM/Nominatim.
@@ -56,7 +66,8 @@ class Geocoder(MacroElement):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(CssLink(
-            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css"))  # noqa
-        figure.header.add_child(JavascriptLink(
-            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"))  # noqa
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
+
+        for name, url in _default_css:
+            figure.header.add_child(CssLink(url), name=name)
