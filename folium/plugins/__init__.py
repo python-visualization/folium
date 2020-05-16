@@ -46,6 +46,7 @@ __all__ = [
     'FeatureGroupSubGroup',
     'FloatImage',
     'Fullscreen',
+    'Geocoder',
     'HeatMap',
     'HeatMapWithTime',
     'LocateControl',

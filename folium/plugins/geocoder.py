@@ -37,7 +37,7 @@ class Geocoder(MacroElement):
         {% macro script(this, kwargs) %}
             L.Control.geocoder(
                 {{ this.options|tojson }}
-            ).on('markgeocode', function(e) { 
+            ).on('markgeocode', function(e) {
                 {{ this._parent.get_name() }}.setView(e.geocode.center, 11);
             }).addTo({{ this._parent.get_name() }});
 
