@@ -22,6 +22,7 @@ from folium.plugins.heat_map import HeatMap
 from folium.plugins.heat_map_withtime import HeatMapWithTime
 from folium.plugins.locate_control import LocateControl
 from folium.plugins.marker_cluster import MarkerCluster
+from folium.plugins.mbtiles import MBTiles
 from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
@@ -49,6 +50,7 @@ __all__ = [
     'HeatMapWithTime',
     'LocateControl',
     'MarkerCluster',
+    'MBTiles',
     'MeasureControl',
     'MiniMap',
     'MousePosition',
