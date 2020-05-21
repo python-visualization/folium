@@ -7,67 +7,68 @@ from folium.utilities import parse_options
 
 from jinja2 import Template
 
+from folium.vector_layers import path_options
+
+_default_js = [
+    ('semicirclejs',
+     'https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js')
+]
+
 
 class SemiCircle(Marker):
-    """
-    Creates a Semicircle plugin to add to a map.
-    Use (direction and arc) or (start_angle and stop_angle)
+    """Add a marker in the shape of a semicircle, similar to the Circle class.
+
+    Use (direction and arc) or (start_angle and stop_angle), not both.
+
     Parameters
     ----------
-    location: tuple of length 2,
-        The latitude and longitude of the marker.
-        If None, then the middle of the map is used.
-    radius: int
-        Radius of semicircle in meters
+    location: tuple[float, float]
+        Latitude and Longitude pair (Northing, Easting)
+    radius: float
+        Radius of the circle, in meters.
     direction: int, default None
-        Heading of direction angle value between 0 and 360 degrees
+        Direction angle in degrees
     arc: int, default None
-        Heading of arc angle value between 0 and 360 degrees.
+        Arc angle in degrees.
     start_angle: int, default None
-        Heading of the start angle value between 0 and 360 degrees
+        Start angle in degrees
     stop_angle: int, default None
-        Heading of the stop angle value between 0 and 360 degrees.
-    fill_color: string, default '#3388ff' (blue)
-        Fill color
-    fill_opacity: float 0-1, default 0.5
-        Fill opacity
-    color: string, default '#3388ff' (blue)
-        Line color
-    opacity: float 0-1, default 1
-        Line opacity
-    **kwargs:
-        Passed to Marker so a popup and tooltip can be provided.
-    https://github.com/jieter/Leaflet-semicircle
+        Stop angle in degrees.
+    popup: str or folium.Popup, optional
+        Input text or visualization for object displayed when clicking.
+    tooltip: str or folium.Tooltip, optional
+        Display a text when hovering over the object.
+    **kwargs
+        For additional arguments see :func:`folium.vector_layers.path_options`
+
+    Uses Leaflet plugin https://github.com/jieter/Leaflet-semicircle
+
     """
     _template = Template(u"""
-            {% macro script(this, kwargs) %}
-                    var {{ this.get_name() }} = L.semiCircle(
-                        {{ this.location|tojson }},
-                        {{ this.options | tojson }}
-                        )
-                        {% if this.direction %}
-                            .setDirection{{ this.direction }}
-                        {% endif %}
-                        .addTo({{ this._parent.get_name() }});
-            {% endmacro %}
-            """)
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.semiCircle(
+                {{ this.location|tojson }},
+                {{ this.options|tojson }}
+                )
+                {%- if this.direction %}
+                    .setDirection({{ this.direction[0] }}, {{ this.direction[1] }})
+                {%- endif %}
+                .addTo({{ this._parent.get_name() }});
+        {% endmacro %}
+        """)
 
-    def __init__(self, location, radius, direction=None, arc=None, start_angle=None, stop_angle=None, fill=True,
-                 fill_color='#3388ff', fill_opacity=0.5, color='#3388ff', opacity=1, **kwargs):
-        super(SemiCircle, self).__init__(location, **kwargs)
+    def __init__(self, location, radius,
+                 direction=None, arc=None,
+                 start_angle=None, stop_angle=None,
+                 popup=None, tooltip=None, **kwargs):
+        super(SemiCircle, self).__init__(location, popup=popup, tooltip=tooltip)
         self._name = 'SemiCircle'
-        self.direction = (direction, arc) if direction and arc else None
-        self.options = parse_options(
-            radius=radius,
+        self.direction = (direction, arc) if direction is not None and arc is not None else None
+        self.options = path_options(line=False, radius=radius, **kwargs)
+        self.options.update(parse_options(
             start_angle=start_angle,
             stop_angle=stop_angle,
-            fill_color=fill_color,
-            fill_opacity=fill_opacity,
-            color=color,
-            opacity=opacity,
-            fill='true' if fill else 'false',
-            **kwargs
-        )
+        ))
 
         if not ((direction is None and arc is None) and (start_angle is not None and stop_angle is not None)
                 or (direction is not None and arc is not None) and (start_angle is None and stop_angle is None)):
@@ -80,6 +81,5 @@ class SemiCircle(Marker):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js'),
-            name='semicirclejs')
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
