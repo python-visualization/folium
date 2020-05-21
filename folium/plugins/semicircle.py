@@ -9,6 +9,11 @@ from jinja2 import Template
 
 from folium.vector_layers import path_options
 
+_default_js = [
+    ('semicirclejs',
+     'https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js')
+]
+
 
 class SemiCircle(Marker):
     """Add a marker in the shape of a semicircle, similar to the Circle class.
@@ -76,6 +81,5 @@ class SemiCircle(Marker):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js'),
-            name='semicirclejs')
+        for name, url in _default_js:
+            figure.header.add_child(JavascriptLink(url), name=name)
