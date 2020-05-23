@@ -9,18 +9,19 @@ from jinja2 import Template
 
 _default_js = [
     ('iso8601',
-     'https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),
+     'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
     ('leaflet.timedimension.min.js',
-     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),
+     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
     ('heatmap.min.js',
-     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
     ('leaflet-heatmap.js',
-     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js'),
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
     ]
+
 
 _default_css = [
     ('leaflet.timedimension.control.min.css',
-     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css')
+     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
     ]
 
 

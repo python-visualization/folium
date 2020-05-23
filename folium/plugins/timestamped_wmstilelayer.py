@@ -15,16 +15,16 @@ _default_js = [
     ('jqueryui1.10.2',
      'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
     ('iso8601',
-     'https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),
+     'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
     ('leaflet.timedimension',
-     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
+     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),  # noqa
 ]
 
 _default_css = [
     ('highlight.js_css',
      'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
     ('leaflet.timedimension_css',
-     'https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css')  # noqa
+     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')  # noqa
 ]
 
 

@@ -8,12 +8,12 @@ from jinja2 import Template
 
 _default_js = [
     ('beautify_icon_js',
-     'https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js')
+     'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js')
     ]
 
 _default_css = [
     ('beautify_icon_css',
-     'https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css')
+     'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css')
     ]
 
 
