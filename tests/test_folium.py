@@ -124,8 +124,6 @@ class TestFolium(object):
             "OpenStreetMap",
             "Stamen Terrain",
             "Stamen Toner",
-            "Mapbox Bright",
-            "Mapbox Control Room",
             "CartoDB positron",
             "CartoDB dark_matter",
         ]
