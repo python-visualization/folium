@@ -150,20 +150,16 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> m = folium.Map(location=[45.523, -122.675],
-    ...                        width=750, height=500)
-    >>> m = folium.Map(location=[45.523, -122.675],
-                               tiles='Mapbox Control Room')
-    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
-                               tiles='Cloudmade', API_key='YourKey')
+    >>> m = folium.Map(location=[45.523, -122.675], width=750, height=500)
+    >>> m = folium.Map(location=[45.523, -122.675], tiles='cartodb positron')
     >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
-    ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+    ...    tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=mytoken',
     ...    attr='Mapbox attribution'
     ...)
 
-    """
+    """  # noqa
     _template = Template(u"""
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
