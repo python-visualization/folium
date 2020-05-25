@@ -9,7 +9,7 @@ from jinja2 import Template
 
 _default_js = [
     ('polylinetextpath',
-     'https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js')
+     'https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js')
     ]
 
 
