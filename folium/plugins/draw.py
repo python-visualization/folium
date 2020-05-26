@@ -28,7 +28,7 @@ _export_style = """
             font-family: 'Helvetica Neue';
             cursor: pointer;
             font-size: 12px;
-            text-decoration: none;  
+            text-decoration: none;
         }
     </style>
 """
