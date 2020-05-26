@@ -14,6 +14,25 @@ _default_css = [
      'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css')
     ]
 
+_export_style = """
+    <style>
+        #export {
+            position: absolute;
+            top: 90px;
+            right: 10px;
+            z-index: 999;
+            background: white;
+            color: black;
+            padding: 6px;
+            border-radius: 4px;
+            font-family: 'Helvetica Neue';
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;  
+        }
+    </style>
+"""
+
 
 class Draw(MacroElement):
     """
@@ -119,26 +138,7 @@ class Draw(MacroElement):
         for name, url in _default_css:
             figure.header.add_child(CssLink(url), name=name)
 
-        export_style = """
-            <style>
-                #export {
-                    position: absolute;
-                    top: 5px;
-                    right: 10px;
-                    z-index: 999;
-                    background: white;
-                    color: black;
-                    padding: 6px;
-                    border-radius: 4px;
-                    font-family: 'Helvetica Neue';
-                    cursor: pointer;
-                    font-size: 12px;
-                    text-decoration: none;
-                    top: 90px;
-                }
-            </style>
-        """
         export_button = """<a href='#' id='export'>Export</a>"""
         if self.export:
-            figure.header.add_child(Element(export_style), name='export')
+            figure.header.add_child(Element(_export_style), name='export')
             figure.html.add_child(Element(export_button), name='export_button')
