@@ -5,12 +5,12 @@ from jinja2 import Template
 
 from folium.raster_layers import TileLayer
 
-_default_js = _default_js = [
+_default_js = [
     ('sql-js',
      'https://unpkg.com/sql.js@0.3.2/js/sql.js'),
     ('MBTiles',
-     'https://unpkg.com/leaflet.tilelayer.mbtiles@latest/Leaflet.TileLayer.MBTiles.js')
-    ]
+     'https://unpkg.com/Leaflet.TileLayer.MBTiles@1.0.0/Leaflet.TileLayer.MBTiles.js')
+]
 
 
 class MBTiles(TileLayer):
@@ -22,18 +22,21 @@ class MBTiles(TileLayer):
 
     Example
     -------
+    attr_text = 'Attribution Text'
+
     # Map from Folium Quickstart
     m = folium.Map(
         location=[45.5236, -122.6750],
-        tiles='Stamen Toner',
+        tiles=None,
         zoom_start=13
     )
 
     # Add mbtiles layer to Map
     MBTiles(
-        location=[45.5236, -122.6750],
         tiles='path/to/your_tiles.mbtiles',
-        zoom_start=13
+        min_zoom = 0,
+        max_zoom = 18,
+        attr = attr_text
     ).add_to(m)
     """
 
@@ -46,6 +49,10 @@ class MBTiles(TileLayer):
         {% endmacro %}
         """)  # noqa
 
+    def __init__(self, tiles, *args, **kwargs):
+        assert tiles.lower().endswith('.mbtiles')
+        super(MBTiles, self).__init__(tiles=tiles, *args, **kwargs)
+
     def render(self, **kwargs):
         super().render()
 
@@ -55,4 +62,3 @@ class MBTiles(TileLayer):
         # Import Javascripts
         for name, url in _default_js:
             figure.header.add_child(JavascriptLink(url), name=name)
-
