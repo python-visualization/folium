@@ -47,7 +47,7 @@ _default_css = [
     ('awesome_markers_css',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
-     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css'),  # noqa
     ]
 
 
@@ -83,7 +83,12 @@ class Map(MacroElement):
         - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
-    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
+    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+
+    You can find a list of free tile providers here:
+    ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+    Be sure to check their terms and conditions and to provide attribution
+    with the `attr` keyword.
 
     Parameters
     ----------
@@ -145,20 +150,16 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> m = folium.Map(location=[45.523, -122.675],
-    ...                        width=750, height=500)
-    >>> m = folium.Map(location=[45.523, -122.675],
-                               tiles='Mapbox Control Room')
-    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
-                               tiles='Cloudmade', API_key='YourKey')
+    >>> m = folium.Map(location=[45.523, -122.675], width=750, height=500)
+    >>> m = folium.Map(location=[45.523, -122.675], tiles='cartodb positron')
     >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
-    ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+    ...    tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=mytoken',
     ...    attr='Mapbox attribution'
     ...)
 
-    """
+    """  # noqa
     _template = Template(u"""
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,

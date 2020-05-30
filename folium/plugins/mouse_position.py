@@ -8,12 +8,12 @@ from jinja2 import Template
 
 _default_js = [
     ('Control_MousePosition_js',
-     'https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.js')
+     'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js')
     ]
 
 _default_css = [
     ('Control_MousePosition_css',
-     'https://rawcdn.githack.com/ardhi/Leaflet.MousePosition/c32f1c84/src/L.Control.MousePosition.css')
+     'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css')
     ]
 
 

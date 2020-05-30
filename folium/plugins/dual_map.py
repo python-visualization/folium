@@ -8,7 +8,7 @@ from jinja2 import Template
 
 _default_js = [
     ('Leaflet.Sync',
-     'https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js')
+     'https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js')
     ]
 
 

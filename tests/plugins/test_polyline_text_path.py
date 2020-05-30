@@ -46,7 +46,7 @@ def test_polyline_text_path():
     out = normalize(m._parent.render())
 
     # We verify that the script import is present.
-    script = '<script src="https://rawcdn.githack.com/makinacorpus/Leaflet.TextPath/leaflet0.8-dev/leaflet.textpath.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.

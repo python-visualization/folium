@@ -8,12 +8,12 @@ from jinja2 import Template
 
 _default_js = [
     ('leaflet_measure_js',
-     'https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.js')
+     'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js')
     ]
 
 _default_css = [
     ('leaflet_measure_css',
-     'https://rawcdn.githack.com/ljagis/leaflet-measure/2.1.7/dist/leaflet-measure.css')
+     'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css')
     ]
 
 
