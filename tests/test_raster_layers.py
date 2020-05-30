@@ -59,16 +59,6 @@ def test_custom_tile_subdomains():
     assert 'mytilesubdomain' in out
 
 
-def test_tilelayer_api_key():
-    """Test cloudmade tiles and the API key."""
-    with pytest.raises(ValueError):
-        folium.TileLayer(tiles='cloudmade')
-
-    tile_layer = folium.TileLayer(tiles='cloudmade', API_key='###')
-    cloudmade = 'http://{s}.tile.cloudmade.com/###/997/256/{z}/{x}/{y}.png'
-    assert tile_layer.tiles == cloudmade
-
-
 def test_wms():
     m = folium.Map([40, -100], zoom_start=4)
     url = 'http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi'
