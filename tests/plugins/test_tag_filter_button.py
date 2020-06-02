@@ -15,7 +15,6 @@ import random
 
 import numpy as np
 
-import json
 
 def test_tag_filter_button():
     np.random.seed(3141592)
@@ -26,7 +25,8 @@ def test_tag_filter_button():
     # Generate the data to segment by (levels of another categorical pandas column in practical usage)
     n = 5
     categories = ['category{}'.format(i+1) for i in range(n)]
-    category_column = [random.choice(categories) for i in range(len(data))]
+    category_column = [random.choice(categories)
+                       for i in range(len(initial_data))]
     # Create map and add the data with additional parameter tags as the segmentation
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
     for i, latlng in enumerate(initial_data):
