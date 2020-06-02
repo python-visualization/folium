@@ -23,9 +23,10 @@ def test_tag_filter_button():
     # Generate base data
     initial_data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
                     np.array([[48, 5]]))
-    # Generate the data to segment by (levels of another column in practical usage)
-    variables = ['var{}'.format(i) for i in range(5)]
-    category_column = [random.choice(variables) for i in range(len(initial_data))]
+    # Generate the data to segment by (levels of another categorical pandas column in practical usage)
+    n = 5
+    categories = ['category{}'.format(i+1) for i in range(n)]
+    category_column = [random.choice(categories) for i in range(len(data))]
     # Create map and add the data with additional parameter tags as the segmentation
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
     for i, latlng in enumerate(initial_data):
@@ -35,7 +36,7 @@ def test_tag_filter_button():
             tags=[category]
         ).add_to(m)
 
-    hm = plugins.TagFilterButton(category_column).add_to(m)
+    hm = plugins.TagFilterButton(categories).add_to(m)
     out = normalize(m._parent.render())
 
     # We verify that the script imports are present.
