@@ -18,7 +18,7 @@ class TagFilterButton(Layer):
 
     Parameters
     ----------
-    
+
     data: list, of strings.
         The tags to filter for this filter button.
     name: string, default None
@@ -51,10 +51,10 @@ class TagFilterButton(Layer):
     def __init__(self, data, name=None, icon="fa-filter",
                  on_selection_complete=None,
                  clear_text='clear', filter_on_every_click=True,
-                 open_popup_on_hover=False, 
+                 open_popup_on_hover=False,
                  overlay=True, control=True, show=True, **kwargs):
         super(TagFilterButton, self).__init__(name=name, overlay=overlay,
-                                      control=control, show=show)
+                                              control=control, show=show)
         self._name = 'TagFilterButton'
         data = if_pandas_df_convert_to_numpy(data)
         self.options = parse_options(
@@ -75,24 +75,27 @@ class TagFilterButton(Layer):
                                             'if it is not in a Figure.')
 
         figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.js'),
+            JavascriptLink(
+                'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.js'),
             name='tag-filter-button.js')
-            # JavascriptLink('https://raw.githubusercontent.com/maydemirx/leaflet-tag-filter-button/master/src/leaflet-tag-filter-button.js'),  # noqa
+        # JavascriptLink('https://raw.githubusercontent.com/maydemirx/leaflet-tag-filter-button/master/src/leaflet-tag-filter-button.js'),  # noqa
 
         figure.header.add_child(
             JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js'),  # noqa
             name='easy-button.js')
-        
+
         figure.header.add_child(
-            CssLink('https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.css'),
+            CssLink(
+                'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.css'),
             name='tag-filter-button.css')
         # CssLink('https://raw.githubusercontent.com/maydemirx/leaflet-tag-filter-button/master/src/leaflet-tag-filter-button.css'),  # noqa
 
         figure.header.add_child(
-            CssLink('https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css'),
+            CssLink(
+                'https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css'),
             name='easy-button.css')
-        
-        figure.header.add_child(
-            CssLink('https://cdn.jsdelivr.net/npm/css-ripple-effect@1.0.5/dist/ripple.min.css'),
-            name='ripples.min.css')
 
+        figure.header.add_child(
+            CssLink(
+                'https://cdn.jsdelivr.net/npm/css-ripple-effect@1.0.5/dist/ripple.min.css'),
+            name='ripples.min.css')
