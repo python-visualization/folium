@@ -1001,7 +1001,6 @@ class GeoJsonPopup(GeoJsonDetail):
 
     _template = Template(u"""
     {% macro script(this, kwargs) %}
-    let name_getter = '{{this._parent.get_name()}}';
     {{ this._parent.get_name() }}.bindPopup(""" + GeoJsonDetail.base_template +
                          u""",{{ this.popup_options | tojson | safe }});
                      {% endmacro %}
