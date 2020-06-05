@@ -354,6 +354,8 @@ class GeoJson(Layer):
     embed: bool, default True
         Whether to embed the data in the html file or not. Note that disabling
         embedding is only supported if you provide a file link or URL.
+    zoom_on_click: bool, default False
+        Set to True to enable zooming in on a geometry when clicking on it.
 
     Examples
     --------
@@ -409,11 +411,13 @@ class GeoJson(Layer):
                     e.target.setStyle({{ this.get_name() }}_highlighter(e.target.feature));
                 },
                 {%- endif %}
+                {%- if this.zoom_on_click %}
                 click: function(e) {
                     if (typeof e.target.getBounds === 'function') {
                         {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
                     }
                 }
+                {%- endif %}
             });
         };
         var {{ this.get_name() }} = L.geoJson(null, {
@@ -440,7 +444,8 @@ class GeoJson(Layer):
 
     def __init__(self, data, style_function=None, highlight_function=None,  # noqa
                  name=None, overlay=True, control=True, show=True,
-                 smooth_factor=None, tooltip=None, embed=True, popup=None):
+                 smooth_factor=None, tooltip=None, embed=True, popup=None,
+                 zoom_on_click=False):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
@@ -451,6 +456,7 @@ class GeoJson(Layer):
         self.smooth_factor = smooth_factor
         self.style = style_function is not None
         self.highlight = highlight_function is not None
+        self.zoom_on_click = zoom_on_click
 
         self.data = self.process_data(data)
 
