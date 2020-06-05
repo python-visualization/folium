@@ -410,7 +410,9 @@ class GeoJson(Layer):
                 },
                 {%- endif %}
                 click: function(e) {
-                    {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                    if (typeof e.target.getBounds === 'function') {
+                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                    }
                 }
             });
         };
