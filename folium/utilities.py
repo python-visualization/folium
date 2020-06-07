@@ -434,7 +434,7 @@ def temp_html_filepath(data):
     filepath = ''
     try:
         fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
-        os.write(fid, data.encode('utf8'))
+        os.write(fid, data.encode('utf8') if isinstance(data, str) else data)
         os.close(fid)
         yield filepath
     finally:
