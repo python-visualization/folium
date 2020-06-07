@@ -429,7 +429,7 @@ def normalize(rendered):
 
 
 @contextmanager
-def _tmp_html(data):
+def temp_html_filepath(data):
     """Yields the path of a temporary HTML file containing data."""
     filepath = ''
     try:
