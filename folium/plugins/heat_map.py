@@ -19,7 +19,7 @@ import numpy as np
 
 _default_js = [
     ('leaflet-heat.js',
-     'https://raw.githack.com/Conengmo/folium/fix-heatmap-intensity/folium/templates/leaflet_heat.min.js'),
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),  # noqa
     ]
 
 
