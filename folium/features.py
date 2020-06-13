@@ -428,17 +428,20 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
-        }).addTo({{ this._parent.get_name() }});
+        });
 
         function {{ this.get_name() }}_add (data) {
-            {{ this.get_name() }}.addData(data);
+            {{ this.get_name() }}
+                .addData(data)
+                .addTo({{ this._parent.get_name() }});
         }
         {%- if this.embed %}
             {{ this.get_name() }}_add({{ this.data|tojson }});
         {%- else %}
-            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json'})
+            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json', async: false})
                 .done({{ this.get_name() }}_add);
         {%- endif %}
+
         {% endmacro %}
         """)  # noqa
 
