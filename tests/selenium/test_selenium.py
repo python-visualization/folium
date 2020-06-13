@@ -58,6 +58,8 @@ def find_notebooks():
 
 @pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
+    if 'WmsTimeDimension' in filepath:
+        pytest.xfail('WmsTimeDimension.ipynb external resource makes this test flaky')
     for filepath_html in get_notebook_html(filepath):
         clean_window(driver)
         driver.get('file://' + filepath_html)
