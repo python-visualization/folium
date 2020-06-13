@@ -26,7 +26,6 @@ def test_heat_map_with_weights(driver):
     ).add_to(m)
     html = m.get_root().render()
     with temp_html_filepath(html) as filepath:
-        driver.set_window_size(600, 600)
         driver.get_file(filepath)
         assert driver.wait_until('.folium-map')
         driver.verify_js_logs()

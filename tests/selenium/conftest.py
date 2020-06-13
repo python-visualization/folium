@@ -25,6 +25,7 @@ class DriverFolium(Chrome):
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
         options.add_argument('--headless')
+        options.add_argument("--window-size=1024,768")
         super().__init__(options=options)
 
     def get_file(self, filepath):
