@@ -27,8 +27,7 @@ def find_notebooks():
 @pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
-        driver.clean_window()
-        driver.get('file://' + filepath_html)
+        driver.get_file(filepath_html)
         try:
             assert driver.wait_until('.folium-map')
         except UnexpectedAlertPresentException:

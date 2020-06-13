@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
 
-@pytest.fixture(scope='module')
+@pytest.fixture(scope='session')
 def driver():
     """Pytest fixture that yields a Selenium WebDriver instance"""
     driver = DriverFolium()
@@ -26,6 +26,10 @@ class DriverFolium(Chrome):
         options.add_argument('--disable-gpu')
         options.add_argument('--headless')
         super().__init__(options=options)
+
+    def get_file(self, filepath):
+        self.clean_window()
+        super().get('file://' + filepath)
 
     def clean_window(self):
         """Make sure we have a fresh window (without restarting the browser)."""
