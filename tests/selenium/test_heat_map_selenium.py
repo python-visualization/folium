@@ -34,4 +34,6 @@ def test_heat_map_with_weights(driver):
     path = os.path.dirname(__file__)
     with open(os.path.join(path, 'test_heat_map_selenium_screenshot.png'), 'rb') as f:
         screenshot_expected = f.read()
-    assert hash(screenshot) == hash(screenshot_expected)
+    if hash(screenshot) != hash(screenshot_expected):
+        print(screenshot)
+        assert False, 'screenshot is not as expected'
