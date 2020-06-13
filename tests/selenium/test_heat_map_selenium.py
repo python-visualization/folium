@@ -1,4 +1,4 @@
-
+import base64
 import os
 
 import folium
@@ -29,8 +29,12 @@ def test_heat_map_with_weights(driver):
         driver.get_file(filepath)
         assert driver.wait_until('.folium-map')
         driver.verify_js_logs()
-    assert driver.wait_until('canvas.leaflet-heatmap-layer')
-    screenshot = driver.get_screenshot_as_png()
+    canvas = driver.wait_until('canvas.leaflet-heatmap-layer')
+    assert canvas
+    # get the canvas as a PNG base64 string
+    canvas_base64 = driver.execute_script(
+        "return arguments[0].toDataURL('image/png').substring(21);", canvas)
+    screenshot = base64.b64decode(canvas_base64)
     path = os.path.dirname(__file__)
     with open(os.path.join(path, 'test_heat_map_selenium_screenshot.png'), 'rb') as f:
         screenshot_expected = f.read()
