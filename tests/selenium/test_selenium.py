@@ -7,41 +7,9 @@ import subprocess
 
 import nbconvert
 import pytest
-from selenium.webdriver import Chrome, ChromeOptions
 from selenium.common.exceptions import UnexpectedAlertPresentException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support.expected_conditions import visibility_of_element_located
 
-
-def create_driver():
-    """Create a Selenium WebDriver instance."""
-    options = ChromeOptions()
-    options.add_argument('--no-sandbox')
-    options.add_argument('--disable-dev-shm-usage')
-    options.add_argument('--disable-gpu')
-    options.add_argument('--headless')
-    driver = Chrome(options=options)
-    return driver
-
-
-@pytest.fixture(scope='module')
-def driver():
-    """Pytest fixture that yields a Selenium WebDriver instance"""
-    driver = create_driver()
-    try:
-        yield driver
-    finally:
-        driver.quit()
-
-
-def clean_window(driver):
-    # open new tab
-    driver.execute_script('window.open();')
-    # close old tab
-    driver.close()
-    # switch to new tab
-    driver.switch_to.window(driver.window_handles[0])
+from folium.utilities import temp_html_filepath
 
 
 def find_notebooks():
@@ -59,22 +27,15 @@ def find_notebooks():
 @pytest.mark.parametrize('filepath', find_notebooks())
 def test_notebook(filepath, driver):
     for filepath_html in get_notebook_html(filepath):
-        clean_window(driver)
-        driver.get('file://' + filepath_html)
-        wait = WebDriverWait(driver, timeout=10)
-        map_is_visible = visibility_of_element_located((By.CSS_SELECTOR, '.folium-map'))
+        driver.get_file(filepath_html)
         try:
-            assert wait.until(map_is_visible)
+            assert driver.wait_until('.folium-map')
         except UnexpectedAlertPresentException:
             # in Plugins.ipynb we get an alert about geolocation permission
             # for some reason it cannot be closed or avoided, so just ignore it
             print('skipping', filepath_html, 'because of alert')
             continue
-        logs = driver.get_log('browser')
-        for log in logs:
-            if log['level'] == 'SEVERE':
-                msg = ' '.join(log['message'].split()[2:])
-                raise RuntimeError('Javascript error: "{}".'.format(msg))
+        driver.verify_js_logs()
 
 
 def get_notebook_html(filepath_notebook, execute=True):
@@ -93,15 +54,9 @@ def get_notebook_html(filepath_notebook, execute=True):
     parser.feed(body)
     iframes = parser.iframes
 
-    for i, iframe in enumerate(iframes):
-        filepath_html = filepath_notebook.replace('.ipynb', '.{}.html'.format(i))
-        filepath_html = os.path.abspath(filepath_html)
-        with open(filepath_html, 'wb') as f:
-            f.write(iframe)
-        try:
+    for iframe in iframes:
+        with temp_html_filepath(iframe) as filepath_html:
             yield filepath_html
-        finally:
-            os.remove(filepath_html)
 
 
 class IframeParser(HTMLParser):

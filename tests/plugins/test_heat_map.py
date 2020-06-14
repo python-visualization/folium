@@ -28,7 +28,7 @@ def test_heat_map():
     out = normalize(m._parent.render())
 
     # We verify that the script import is present.
-    script = '<script src="https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.
@@ -38,7 +38,6 @@ def test_heat_map():
                 {
                     minOpacity: {{this.min_opacity}},
                     maxZoom: {{this.max_zoom}},
-                    max: {{this.max_val}},
                     radius: {{this.radius}},
                     blur: {{this.blur}},
                     gradient: {{this.gradient}}

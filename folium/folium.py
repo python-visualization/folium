@@ -14,7 +14,7 @@ from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import (
     _parse_size,
-    _tmp_html,
+    temp_html_filepath,
     validate_location,
     parse_options,
 )
@@ -314,7 +314,7 @@ class Map(MacroElement):
             driver = webdriver.Firefox(options=options)
 
             html = self.get_root().render()
-            with _tmp_html(html) as fname:
+            with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get('file:///{path}'.format(path=fname))
                 driver.maximize_window()

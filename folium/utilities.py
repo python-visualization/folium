@@ -429,12 +429,12 @@ def normalize(rendered):
 
 
 @contextmanager
-def _tmp_html(data):
+def temp_html_filepath(data):
     """Yields the path of a temporary HTML file containing data."""
     filepath = ''
     try:
         fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
-        os.write(fid, data.encode('utf8'))
+        os.write(fid, data.encode('utf8') if isinstance(data, str) else data)
         os.close(fid)
         yield filepath
     finally:
