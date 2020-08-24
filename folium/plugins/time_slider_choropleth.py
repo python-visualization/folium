@@ -131,7 +131,7 @@ class TimeSliderChoropleth(Layer):
             fill_map();
 
             {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
-            
+
             function onOverlayAdd(e) {
                 {{ this.get_name() }}.eachLayer(function (layer) {
                     layer._path.id = 'feature-' + layer.feature.id;
@@ -142,7 +142,7 @@ class TimeSliderChoropleth(Layer):
                 .attr('stroke-width', 0.8)
                 .attr('stroke-dasharray', '5,5')
                 .attr('fill-opacity', 0);
-                
+
                 fill_map(); // this fills the map for the initial, starting time value
             }
         {% endmacro %}
