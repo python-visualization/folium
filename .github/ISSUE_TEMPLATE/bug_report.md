@@ -25,7 +25,9 @@ A clear and concise description of what you expected to happen.
 **Environment (please complete the following information):**
  - Browser [e.g. chrome, firefox]
  - Jupyter Notebook or html files?
- - folium version (check it with `print(folium.__version__)`)
+ - Python version (check it with `import sys; print(sys.version_info)`)
+ - folium version (check it with `import folium; print(folium.__version__)`)
+ - branca version (check it with `import branca; print(branca.__version__)`)
 
 **Additional context**
 Add any other context about the problem here.
