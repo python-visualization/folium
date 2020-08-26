@@ -132,7 +132,7 @@ class TimeSliderChoropleth(Layer):
                 fill_map();
             }
             {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
-            
+
             onOverlayAdd(); // fill map as layer is loaded
         {% endmacro %}
         """)
