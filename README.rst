@@ -64,7 +64,7 @@ Contributing
 ------------
 
 We love contributions!  folium is open source, built on open source,
-and we'd love to have you hang out in our community.
+and we had love to have you hang out in our community.
 
 See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/master/.github/CONTRIBUTING.md>`_ for more info.
 
