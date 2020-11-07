@@ -50,7 +50,9 @@ def get_notebook_html(filepath_notebook):
     filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
 
     html_exporter = nbconvert.HTMLExporter()
-    html_exporter.template_file = 'basic.tpl'
+    nbconvert_path = os.path.abspath(os.path.dirname(nbconvert.__file__))
+    template_path = os.path.join(nbconvert_path, 'templates', 'html', 'basic.tpl')
+    html_exporter.template_file = template_path
     body, _ = html_exporter.from_filename(filepath_notebook)
 
     parser = IframeParser()
