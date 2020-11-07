@@ -36,7 +36,6 @@ class TimeSliderChoropleth(Layer):
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
             var current_timestamp = timestamps[0];
@@ -80,9 +79,9 @@ class TimeSliderChoropleth(Layer):
 
             d3.select("#slider").on("input", function() {
                 current_timestamp = timestamps[this.value];
-            var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
-            d3.select("output#slider-value").text(datestring);
-            fill_map();
+                var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+                d3.select("output#slider-value").text(datestring);
+                fill_map();
             });
 
             {% if this.highlight %}
@@ -104,7 +103,6 @@ class TimeSliderChoropleth(Layer):
                     }
                     });
                 };
-
             {% endif %}
 
             var {{ this.get_name() }} = L.geoJson(
@@ -120,17 +118,22 @@ class TimeSliderChoropleth(Layer):
                 }
             });
 
-            {{ this.get_name() }}.eachLayer(function (layer) {
-                layer._path.id = 'feature-' + layer.feature.id;
-            });
+            function onOverlayAdd(e) {
+                {{ this.get_name() }}.eachLayer(function (layer) {
+                    layer._path.id = 'feature-' + layer.feature.id;
+                });
 
-            d3.selectAll('path')
-            .attr('stroke', 'white')
-            .attr('stroke-width', 0.8)
-            .attr('stroke-dasharray', '5,5')
-            .attr('fill-opacity', 0);
-            fill_map();
+                d3.selectAll('path')
+                .attr('stroke', 'white')
+                .attr('stroke-width', 0.8)
+                .attr('stroke-dasharray', '5,5')
+                .attr('fill-opacity', 0);
 
+                fill_map();
+            }
+            {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
+
+            onOverlayAdd(); // fill map as layer is loaded
         {% endmacro %}
         """)
 
