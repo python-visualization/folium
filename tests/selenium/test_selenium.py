@@ -40,13 +40,13 @@ def test_notebook(filepath, driver):
         driver.verify_js_logs()
 
 
-def get_notebook_html(filepath_notebook, execute=True):
+def get_notebook_html(filepath_notebook):
     """Store iframes from a notebook in html files, remove them when done."""
-    if execute:
-        subprocess.run([
-            'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
-        ])
-        filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
+    # run the notebook to make sure the output is up-to-date
+    subprocess.run([
+        'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
+    ])
+    filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
 
     html_exporter = nbconvert.HTMLExporter()
     html_exporter.template_file = 'basic'
