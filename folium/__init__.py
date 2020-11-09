@@ -16,7 +16,6 @@ from branca.element import (
     MacroElement,
 )
 
-from folium._version import get_versions
 from folium.features import (
     Choropleth,
     ClickForMarker,
@@ -45,8 +44,11 @@ from folium.map import (
 from folium.raster_layers import TileLayer, WmsTileLayer
 from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
 
-__version__ = get_versions()['version']
-del get_versions
+try:
+    from ._version import __version__
+except ImportError:
+    __version__ = "unknown"
+
 
 if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
     raise ImportError('branca version 0.3.0 or higher is required. '

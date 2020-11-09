@@ -74,6 +74,7 @@ install:
 
 script:
   - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      python setup.py --version ;
       pip wheel . -w dist --no-deps ;
       check-manifest --verbose ;
       twine check dist/* ;
