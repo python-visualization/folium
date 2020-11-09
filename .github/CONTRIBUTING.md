@@ -92,7 +92,7 @@ The basic workflow for contributing is:
 
 Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change.
 
-## Plugin acceptence criteria
+## Plugin acceptance criteria
 
 If you have a Leaflet plugin you would like to include in folium's plugins, please
 check these criteria to see if it's a good candidate.

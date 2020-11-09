@@ -721,9 +721,9 @@ class TopoJson(JSCSSMixin, Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> TopoJson(open('foo.json'), 'object.myobject')
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> TopoJson('foo.json', 'object.myobject')
     >>> # Providing dict.
     >>> TopoJson(json.load(open('foo.json')), 'object.myobject')

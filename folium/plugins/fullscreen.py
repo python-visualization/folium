@@ -23,7 +23,7 @@ class Fullscreen(JSCSSMixin, MacroElement):
         change the title of the button when fullscreen is on,
         default: 'Exit Full Screen'
     force_separate_button : bool, default False
-        force seperate button to detach from zoom buttons,
+        force separate button to detach from zoom buttons,
 
     See https://github.com/brunob/leaflet.fullscreen for more information.
     """
