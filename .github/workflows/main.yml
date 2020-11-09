@@ -1,0 +1,60 @@
+name: Tests
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.6, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install micromamba
+      shell: bash -l {0}
+      run: |
+        DIR=bin
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          url=https://micromamba.snakepit.net/api/micromamba/linux-64/latest
+        elif [ "$RUNNER_OS" == "Windows" ]; then
+          url=https://micromamba.snakepit.net/api/micromamba/win-64/latest
+          DIR=Library/bin
+        else
+         url=https://micromamba.snakepit.net/api/micromamba/osx-64/latest
+        fi
+        wget -qO- $URL | tar -xvj bin/micromamba
+        mv $DIR/micromamba* ./micromamba
+        ./micromamba shell init -s bash -p ~/micromamba
+        mkdir -p ~/micromamba/pkgs/
+
+    - name: Mamba create env
+      shell: bash -l {0}
+      run: |
+        export MAMBA_ROOT_PREFIX=~/micromamba
+        export MAMBA_EXE=$(pwd)/micromamba
+        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
+        ./micromamba create --yes --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        ./micromamba activate TEST
+
+
+    - name: Install folium
+      shell: bash -l {0}
+      run: |
+        pip install -e . --no-deps --force-reinstall
+
+    - name: Run tests
+      shell: bash -l {0}
+      run: |
+        cp -r tests/ examples/ /tmp 
+        pytest /tmp -vv --ignore=/tmp/tests/selenium
