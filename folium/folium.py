@@ -8,8 +8,9 @@ Make beautiful, interactive maps with Python and Leaflet.js
 import time
 import warnings
 
-from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from branca.element import Element, Figure, MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import (
@@ -67,7 +68,7 @@ class GlobalSwitches(Element):
         self.disable_3d = disable_3d
 
 
-class Map(MacroElement):
+class Map(JSCSSMixin, MacroElement):
     """Create a Map with Folium and Leaflet.js
 
     Generate a base map of given width and height with either default
@@ -208,6 +209,10 @@ class Map(MacroElement):
         {% endmacro %}
         """)
 
+    # use the module variables for backwards compatibility
+    default_js = _default_js
+    default_css = _default_css
+
     def __init__(
             self,
             location=None,
@@ -340,14 +345,6 @@ class Map(MacroElement):
 
         # Set global switches
         figure.header.add_child(self.global_switches, name='global_switches')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
 
         figure.header.add_child(Element(
             '<style>html, body {'

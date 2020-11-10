@@ -1,21 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Marker
 from folium.utilities import parse_options
+from folium.vector_layers import path_options
 
 from jinja2 import Template
 
-from folium.vector_layers import path_options
 
-_default_js = [
-    ('semicirclejs',
-     'https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js')
-]
-
-
-class SemiCircle(Marker):
+class SemiCircle(JSCSSMixin, Marker):
     """Add a marker in the shape of a semicircle, similar to the Circle class.
 
     Use (direction and arc) or (start_angle and stop_angle), not both.
@@ -57,6 +50,11 @@ class SemiCircle(Marker):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('semicirclejs',
+         'https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js')
+    ]
+
     def __init__(self, location, radius,
                  direction=None, arc=None,
                  start_angle=None, stop_angle=None,
@@ -73,13 +71,3 @@ class SemiCircle(Marker):
         if not ((direction is None and arc is None) and (start_angle is not None and stop_angle is not None)
                 or (direction is not None and arc is not None) and (start_angle is None and stop_angle is None)):
             raise ValueError("Invalid arguments. Either provide direction and arc OR start_angle and stop_angle")
-
-    def render(self, **kwargs):
-        super(SemiCircle, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)

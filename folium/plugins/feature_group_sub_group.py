@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 
 from jinja2 import Template
 
-_default_js = [
-    ('featuregroupsubgroupjs',
-     'https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),
-    ]
 
-
-class FeatureGroupSubGroup(Layer):
+class FeatureGroupSubGroup(JSCSSMixin, Layer):
     """
     Creates a Feature Group that adds its child layers into a parent group when
     added to a map (e.g. through LayerControl). Useful to create nested groups,
@@ -69,20 +63,14 @@ class FeatureGroupSubGroup(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('featuregroupsubgroupjs',
+         'https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js'),
+    ]
+
     def __init__(self, group, name=None, overlay=True, control=True, show=True):
         super(FeatureGroupSubGroup, self).__init__(name=name, overlay=overlay,
                                                    control=control, show=show)
 
         self._group = group
         self._name = 'FeatureGroupSubGroup'
-
-    def render(self, **kwargs):
-        super(FeatureGroupSubGroup, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)

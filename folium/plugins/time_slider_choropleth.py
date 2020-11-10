@@ -1,19 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import Layer
 
 from jinja2 import Template
 
-_default_js = [
-    ('d3v4',
-     'https://d3js.org/d3.v4.min.js')
-    ]
 
-
-class TimeSliderChoropleth(Layer):
+class TimeSliderChoropleth(JSCSSMixin, Layer):
     """
     Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.
 
@@ -137,6 +131,11 @@ class TimeSliderChoropleth(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('d3v4',
+         'https://d3js.org/d3.v4.min.js')
+    ]
+
     def __init__(self, data, styledict, name=None, overlay=True, control=True,
                  show=True):
         super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
@@ -157,13 +156,3 @@ class TimeSliderChoropleth(Layer):
 
         self.timestamps = timestamps
         self.styledict = styledict
-
-    def render(self, **kwargs):
-        super(TimeSliderChoropleth, self).render(**kwargs)
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)

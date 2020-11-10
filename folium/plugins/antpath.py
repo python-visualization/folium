@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.vector_layers import path_options, BaseMultiLocation
 
 from jinja2 import Template
 
-_default_js = [
-    ('antpath',
-     'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js')
-]
 
-
-class AntPath(BaseMultiLocation):
+class AntPath(JSCSSMixin, BaseMultiLocation):
     """
     Class for drawing AntPath polyline overlays on a map.
 
@@ -42,6 +36,11 @@ class AntPath(BaseMultiLocation):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('antpath',
+         'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js')
+    ]
+
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super(AntPath, self).__init__(
             locations,
@@ -63,14 +62,3 @@ class AntPath(BaseMultiLocation):
             'color': kwargs.pop('color', '#0000FF'),
             'pulseColor': kwargs.pop('pulse_color', '#FFFFFF'),
         })
-
-    def render(self, **kwargs):
-        super(AntPath, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
