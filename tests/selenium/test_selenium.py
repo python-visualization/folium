@@ -4,6 +4,7 @@ import glob
 from html.parser import HTMLParser
 import os
 import subprocess
+from urllib.parse import unquote
 
 import nbconvert
 import pytest
@@ -72,9 +73,15 @@ class IframeParser(HTMLParser):
         if tag == 'iframe':
             attrs = dict(attrs)
             if 'data-html' in attrs:
-                html_base64 = attrs['data-html']
+                data_html = attrs['data-html']
+                if '%' in data_html[:20]:
+                    # newest branca version: data-html is percent-encoded
+                    html_bytes = unquote(data_html).encode()
+                else:
+                    # legacy branca version: data-html is base64 encoded
+                    html_bytes = base64.b64decode(data_html)
             else:  # legacy, can be removed when all notebooks have `data-html`.
                 src = attrs['src']
                 html_base64 = src.split(',')[-1]
-            html_bytes = base64.b64decode(html_base64)
+                html_bytes = base64.b64decode(html_base64)
             self.iframes.append(html_bytes)
