@@ -9,7 +9,6 @@ from folium.utilities import get_obj_in_upper_tree, parse_options
 from jinja2 import Template
 
 
-
 class StripePattern(JSCSSMixin, MacroElement):
     """Fill Pattern for polygon composed of alternating lines.
 
