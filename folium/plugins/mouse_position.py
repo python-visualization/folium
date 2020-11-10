@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('Control_MousePosition_js',
-     'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js')
-    ]
 
-_default_css = [
-    ('Control_MousePosition_css',
-     'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css')
-    ]
-
-
-class MousePosition(MacroElement):
+class MousePosition(JSCSSMixin, MacroElement):
     """Add a field that shows the coordinates of the mouse position.
 
     Uses the Leaflet plugin by Ardhi Lukianto under MIT license.
@@ -64,6 +55,15 @@ class MousePosition(MacroElement):
         {% endmacro %}
     """)
 
+    default_js = [
+        ('Control_MousePosition_js',
+         'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js')
+    ]
+    default_css = [
+        ('Control_MousePosition_css',
+         'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css')
+    ]
+
     def __init__(self, position='bottomright', separator=' : ',
                  empty_string='Unavailable', lng_first=False, num_digits=5,
                  prefix='', lat_formatter=None, lng_formatter=None, **kwargs):
@@ -82,18 +82,3 @@ class MousePosition(MacroElement):
         )
         self.lat_formatter = lat_formatter or 'undefined'
         self.lng_formatter = lng_formatter or 'undefined'
-
-    def render(self, **kwargs):
-        super(MousePosition, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)

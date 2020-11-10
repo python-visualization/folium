@@ -1,24 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.raster_layers import TileLayer
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('Control_MiniMap_js',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')
-    ]
 
-_default_css = [
-    ('Control_MiniMap_css',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'),
-    ]
-
-
-class MiniMap(MacroElement):
+class MiniMap(JSCSSMixin, MacroElement):
     """Add a minimap (locator) to an existing map.
 
     Uses the Leaflet plugin by Norkart under BSD 2-Clause "Simplified" License.
@@ -85,6 +76,15 @@ class MiniMap(MacroElement):
         {% endmacro %}
     """)  # noqa
 
+    default_js = [
+        ('Control_MiniMap_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')
+    ]
+    default_css = [
+        ('Control_MiniMap_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'),
+    ]
+
     def __init__(self, tile_layer=None, position='bottomright', width=150,
                  height=150, collapsed_width=25, collapsed_height=25,
                  zoom_level_offset=-5, zoom_level_fixed=None,
@@ -117,17 +117,3 @@ class MiniMap(MacroElement):
             minimized=minimized,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-        super(MiniMap, self).render()
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)

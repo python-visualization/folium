@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('leaflet_measure_js',
-     'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js')
-    ]
 
-_default_css = [
-    ('leaflet_measure_css',
-     'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css')
-    ]
-
-
-class MeasureControl(MacroElement):
+class MeasureControl(JSCSSMixin, MacroElement):
     """ Add a measurement widget on the map.
 
     Parameters
@@ -41,6 +32,16 @@ class MeasureControl(MacroElement):
         {% endmacro %}
         """)  # noqa
 
+    default_js = [
+        ('leaflet_measure_js',
+         'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.js')
+    ]
+
+    default_css = [
+        ('leaflet_measure_css',
+         'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure@2.1.7/dist/leaflet-measure.min.css')
+    ]
+
     def __init__(self, position='topright', primary_length_unit='meters',
                  secondary_length_unit='miles', primary_area_unit='sqmeters',
                  secondary_area_unit='acres', **kwargs):
@@ -56,18 +57,3 @@ class MeasureControl(MacroElement):
             secondary_area_unit=secondary_area_unit,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(MeasureControl, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)

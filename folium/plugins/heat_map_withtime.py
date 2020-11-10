@@ -1,31 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Element, Figure, JavascriptLink
+from branca.element import Element, Figure
 
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import none_max, none_min
 
 from jinja2 import Template
 
-_default_js = [
-    ('iso8601',
-     'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
-    ('leaflet.timedimension.min.js',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
-    ('heatmap.min.js',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
-    ('leaflet-heatmap.js',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
-    ]
 
-
-_default_css = [
-    ('leaflet.timedimension.control.min.css',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
-    ]
-
-
-class HeatMapWithTime(Layer):
+class HeatMapWithTime(JSCSSMixin, Layer):
     """
     Create a HeatMapWithTime layer
 
@@ -122,6 +106,21 @@ class HeatMapWithTime(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension.min.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        ('heatmap.min.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
+        ('leaflet-heatmap.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
+    ]
+    default_css = [
+        ('leaflet.timedimension.control.min.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
+
     def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
                  max_opacity=0.6, scale_radius=False, gradient=None,
                  use_local_extrema=False, auto_play=False,
@@ -177,14 +176,6 @@ class HeatMapWithTime(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
 
         figure.header.add_child(
             Element(

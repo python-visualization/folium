@@ -1,21 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from branca.element import Element, Figure, MacroElement
+
+from folium.elements import JSCSSMixin
 
 from jinja2 import Template
 
-_default_js = [
-    ('leaflet_draw_js',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js')
-    ]
 
-_default_css = [
-    ('leaflet_draw_css',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css')
-    ]
-
-
-class Draw(MacroElement):
+class Draw(JSCSSMixin, MacroElement):
     """
     Vector drawing and editing plugin for Leaflet.
 
@@ -94,6 +86,15 @@ class Draw(MacroElement):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('leaflet_draw_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js')
+    ]
+    default_css = [
+        ('leaflet_draw_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css')
+    ]
+
     def __init__(self, export=False, filename='data.geojson',
                  position='topleft', draw_options=None, edit_options=None):
         super(Draw, self).__init__()
@@ -110,14 +111,6 @@ class Draw(MacroElement):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
 
         export_style = """
             <style>

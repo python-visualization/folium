@@ -2,8 +2,7 @@
 
 import warnings
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import (
     none_max,
@@ -17,13 +16,8 @@ from jinja2 import Template
 
 import numpy as np
 
-_default_js = [
-    ('leaflet-heat.js',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),  # noqa
-    ]
 
-
-class HeatMap(Layer):
+class HeatMap(JSCSSMixin, Layer):
     """
     Create a Heatmap layer
 
@@ -61,6 +55,11 @@ class HeatMap(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('leaflet-heat.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),
+    ]
+
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
                  radius=25, blur=15, gradient=None,
                  overlay=True, control=True, show=True, **kwargs):
@@ -84,17 +83,6 @@ class HeatMap(Layer):
             gradient=gradient,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(HeatMap, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
 
     def _get_self_bounds(self):
         """

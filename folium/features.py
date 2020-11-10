@@ -14,6 +14,7 @@ from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
 from branca.utilities import color_brewer
 
+from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import (
@@ -36,7 +37,7 @@ import numpy as np
 import requests
 
 
-class RegularPolygonMarker(Marker):
+class RegularPolygonMarker(JSCSSMixin, Marker):
     """
     Custom markers using the Leaflet Data Vis Framework.
 
@@ -69,6 +70,11 @@ class RegularPolygonMarker(Marker):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('dvf_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+    ]
+
     def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
                  popup=None, tooltip=None, **kwargs):
         super(RegularPolygonMarker, self).__init__(
@@ -83,21 +89,8 @@ class RegularPolygonMarker(Marker):
             radius=radius,
         ))
 
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        super(RegularPolygonMarker, self).render()
 
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
-            # noqa
-            name='dvf_js')
-
-
-class Vega(Element):
+class Vega(JSCSSMixin, Element):
     """
     Creates a Vega chart element.
 
@@ -128,6 +121,15 @@ class Vega(Element):
     """
     _template = Template(u'')
 
+    default_js = [
+        ('d3',
+         'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+        ('vega',
+         'https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+        ('jquery',
+         'https://code.jquery.com/jquery-2.1.0.min.js'),
+    ]
+
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
         super(Vega, self).__init__()
@@ -147,6 +149,8 @@ class Vega(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
+        super().render(**kwargs)
+
         self.json = json.dumps(self.data)
 
         self._parent.html.add_child(Element(Template("""
@@ -170,18 +174,6 @@ class Vega(Element):
                 top: {{this.top[0]}}{{this.top[1]}};
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
-            name='d3')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
-            name='vega')
-
-        figure.header.add_child(
-            JavascriptLink('https://code.jquery.com/jquery-2.1.0.min.js'),
-            name='jquery')
 
         figure.script.add_child(
             Template("""function vega_parse(spec, div) {
@@ -649,7 +641,7 @@ class GeoJsonStyleMapper:
         del (mapping[key_longest])
 
 
-class TopoJson(Layer):
+class TopoJson(JSCSSMixin, Layer):
     """
     Creates a TopoJson object for plotting into a Map.
 
@@ -721,6 +713,11 @@ class TopoJson(Layer):
         {% endmacro %}
         """)  # noqa
 
+    default_js = [
+        ('topojson',
+         'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),
+    ]
+
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, show=True,
                  smooth_factor=None, tooltip=None):
@@ -769,14 +766,6 @@ class TopoJson(Layer):
         """Renders the HTML representation of the element."""
         self.style_data()
         super(TopoJson, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
-            name='topojson')
 
     def get_bounds(self):
         """
