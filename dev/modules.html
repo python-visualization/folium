@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>folium &#8212; Folium 0.11.0+25.gc12db38 documentation</title>
+    <title>folium &#8212; Folium 0.11.0+32.g0de6914 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -33,7 +33,7 @@
         <li class="right" >
           <a href="flask.html" title="Using folium with flask"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0+25.gc12db38 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0+32.g0de6914 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">folium</span></code></a></li> 
       </ul>
     </div>
@@ -91,7 +91,7 @@
 <dl class="py class">
 <dt id="folium.folium.Map">
 <em class="property">class </em><code class="sig-prename descclassname">folium.folium.</code><code class="sig-name descname">Map</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">'100%'</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">'100%'</span></em>, <em class="sig-param"><span class="n">left</span><span class="o">=</span><span class="default_value">'0%'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">'0%'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'relative'</span></em>, <em class="sig-param"><span class="n">tiles</span><span class="o">=</span><span class="default_value">'OpenStreetMap'</span></em>, <em class="sig-param"><span class="n">attr</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_zoom</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_zoom</span><span class="o">=</span><span class="default_value">18</span></em>, <em class="sig-param"><span class="n">zoom_start</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_lat</span><span class="o">=</span><span class="default_value">- 90</span></em>, <em class="sig-param"><span class="n">max_lat</span><span class="o">=</span><span class="default_value">90</span></em>, <em class="sig-param"><span class="n">min_lon</span><span class="o">=</span><span class="default_value">- 180</span></em>, <em class="sig-param"><span class="n">max_lon</span><span class="o">=</span><span class="default_value">180</span></em>, <em class="sig-param"><span class="n">max_bounds</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">crs</span><span class="o">=</span><span class="default_value">'EPSG3857'</span></em>, <em class="sig-param"><span class="n">control_scale</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">prefer_canvas</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">no_touch</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">disable_3d</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">png_enabled</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">zoom_control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Create a Map with Folium and Leaflet.js</p>
 <p>Generate a base map of given width and height with either default
 tilesets or a custom tileset URL. The following tilesets are built-in
@@ -178,6 +178,16 @@ rare environments) even if they’re supported.</p></li>
 <dd><p>Call the Choropleth class with the same arguments.</p>
 <p>This method may be deleted after a year from now (Nov 2018).</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.folium.Map.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.6.0/dist/leaflet.css'), ('bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'), ('bootstrap_theme_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'), ('awesome_markers_font_css', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'), ('awesome_markers_css', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'), ('awesome_rotate_css', 'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css')]</em><a class="headerlink" href="#folium.folium.Map.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.folium.Map.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.6.0/dist/leaflet.js'), ('jquery', 'https://code.jquery.com/jquery-1.12.4.min.js'), ('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'), ('awesome_markers', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js')]</em><a class="headerlink" href="#folium.folium.Map.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="folium.folium.Map.fit_bounds">
@@ -1206,7 +1216,7 @@ a popup is shown that displays the latitude and longitude of the pointer.</p>
 <dl class="py class">
 <dt id="folium.features.RegularPolygonMarker">
 <em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">RegularPolygonMarker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">number_of_sides</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">rotation</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tooltip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.RegularPolygonMarker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
 <p>Custom markers using the Leaflet Data Vis Framework.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1222,18 +1232,17 @@ a popup is shown that displays the latitude and longitude of the pointer.</p>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.features.RegularPolygonMarker.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.RegularPolygonMarker.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.features.RegularPolygonMarker.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('dvf_js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js')]</em><a class="headerlink" href="#folium.features.RegularPolygonMarker.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.features.TopoJson">
 <em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">TopoJson</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">object_path</span></em>, <em class="sig-param"><span class="n">style_function</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">smooth_factor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tooltip</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.TopoJson" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a TopoJson object for plotting into a Map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1277,6 +1286,11 @@ see folium.GeoJsonTooltip for info on how to do that.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="n">topo_json</span><span class="p">,</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">,</span> <span class="n">style_function</span><span class="o">=</span><span class="n">style_function</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="py attribute">
+<dt id="folium.features.TopoJson.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('topojson', 'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js')]</em><a class="headerlink" href="#folium.features.TopoJson.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.features.TopoJson.get_bounds">
 <code class="sig-name descname">get_bounds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.TopoJson.get_bounds" title="Permalink to this definition">¶</a></dt>
@@ -1301,7 +1315,7 @@ in the form [[lat_min, lon_min], [lat_max, lon_max]]</p>
 <dl class="py class">
 <dt id="folium.features.Vega">
 <em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">Vega</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">left</span><span class="o">=</span><span class="default_value">'0%'</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">'0%'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'relative'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Vega" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></p>
 <p>Creates a Vega chart element.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1324,6 +1338,11 @@ Ex: ‘relative’, ‘absolute’</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="folium.features.Vega.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('d3', 'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'), ('vega', 'https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'), ('jquery', 'https://code.jquery.com/jquery-2.1.0.min.js')]</em><a class="headerlink" href="#folium.features.Vega.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.features.Vega.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Vega.render" title="Permalink to this definition">¶</a></dt>
@@ -1390,7 +1409,7 @@ Ex: ‘relative’, ‘absolute’</p></li>
         <li class="right" >
           <a href="flask.html" title="Using folium with flask"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0+25.gc12db38 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0+32.g0de6914 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">folium</span></code></a></li> 
       </ul>
     </div>
