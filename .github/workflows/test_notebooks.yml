@@ -43,9 +43,9 @@ jobs:
       run: |
         $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install -e . --no-deps --force-reinstall
 
-    - name: Tarball tests
+    - name: Notebook coding standards tests
       shell: bash -l {0}
       run: |
         for NB in $(find . -type f -name "*.ipynb")
-          do $MAMBA_ROOT_PREFIX/envs/TEST/bin/jupyter-nbconvert --template-file tests/strip_markdown.tpl --stdout --to python "${NB}" | $MAMBA_ROOT_PREFIX/envs/TEST/bin/flake8 - --ignore=W391,E226,E402,,W504,I100,I201,I202 --max-line-length=120 --show-source
+          do $MAMBA_ROOT_PREFIX/envs/TEST/bin/jupyter-nbconvert --stdout --to python "${NB}" | $MAMBA_ROOT_PREFIX/envs/TEST/bin/flake8 - --ignore=W391,E226,E402,,W504,I100,I201,I202 --max-line-length=120 --show-source
         done
