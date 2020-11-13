@@ -1,0 +1,47 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Get tags
+      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      shell: bash
+
+    - name: Install build tools
+      run: |
+        python -m pip install --upgrade pip wheel setuptools setuptools_scm build twine "branca>=0.3.0" "jinja2>=2.9" numpy requests
+
+      shell: bash
+
+    - name: Build binary wheel
+      run: python -m build --sdist --wheel . --outdir dist
+
+    - name: CheckFiles
+      run: |
+        ls dist
+      shell: bash
+
+    - name: Test wheels
+      run: |
+        cd dist && python -m pip install folium*.whl
+        python -m twine check *
+      shell: bash
+
+    - name: Publish a Python distribution to PyPI
+      uses: pypa/gh-action-pypi-publish@master
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
