@@ -1,4 +1,4 @@
-name: Notebook Code Tests
+name: Selenium Tests
 
 on:
   push:
@@ -14,8 +14,9 @@ env:
 
 jobs:
   run:
-    #  change to Linux when we fix micromamba
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
 
     steps:
     - uses: actions/checkout@v2
@@ -32,14 +33,16 @@ jobs:
       shell: bash -l {0}
       run: |
         . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
-        ./micromamba create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        ./micromamba create --yes --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
 
     - name: Install folium
       shell: bash -l {0}
       run: |
         $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install -e . --no-deps --force-reinstall
 
-    - name: Notebook tests
+    - name: Selenium tests
       shell: bash -l {0}
       run: |
-        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest --nbval-lax examples
+        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
+        micromamba activate --prefix $MAMBA_ROOT_PREFIX/envs/TEST
+        pytest tests/selenium -vv

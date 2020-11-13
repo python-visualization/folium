@@ -1,4 +1,4 @@
-name: Test Code
+name: Code Tests
 
 on:
   push:
@@ -14,11 +14,11 @@ env:
 
 jobs:
   run:
-    runs-on: ${{ matrix.os }}
+    #  change to Linux when we fix micromamba
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
         python-version: [3.6, 3.9]
 
     steps:
@@ -27,11 +27,7 @@ jobs:
     - name: Install micromamba
       shell: bash -l {0}
       run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-          wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-        else
-          wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
-        fi
+        wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
         mv bin/micromamba ./micromamba
         ./micromamba shell init -s bash -p $HOME/micromamba
         mkdir -p $HOME/micromamba/pkgs/
@@ -65,15 +61,3 @@ jobs:
         ./micromamba remove branca --yes
         $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install git+https://github.com/python-visualization/branca.git
         $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest -vv --ignore=tests/selenium
-
-    - name: Selenium tests
-      shell: bash -l {0}
-      run: |
-        if [ "$RUNNER_OS" == "Linux" ]; then
-            sudo apt-get update
-            sudo apt-get --only-upgrade install google-chrome-stable
-            sudo apt-get -yqq install chromium-chromedriver
-        else
-            brew update && brew cask install google-chrome chromedriver
-        fi
-        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest tests/selenium -vv
