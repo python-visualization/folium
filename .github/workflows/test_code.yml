@@ -1,4 +1,4 @@
-name: Code Tests
+name: Test Code
 
 on:
   push:
@@ -73,5 +73,7 @@ jobs:
             sudo apt-get update
             sudo apt-get --only-upgrade install google-chrome-stable
             sudo apt-get -yqq install chromium-chromedriver
-            $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest tests/selenium -vv
+        else
+            brew update && brew cask install google-chrome chromedriver
         fi
+        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest tests/selenium -vv
