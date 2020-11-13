@@ -1,0 +1,49 @@
+name: Notebook Tests
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+env:
+  MAMBA_ROOT_PREFIX: $HOME/micromamba
+  MAMBA_EXE: $(pwd)/micromamba
+
+jobs:
+  run:
+    #  change to Linux when we fix micromamba
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install micromamba
+      shell: bash -l {0}
+      run: |
+        if [ "$RUNNER_OS" == "Linux" ]; then
+          wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+        else
+          wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
+        fi
+        mv bin/micromamba ./micromamba
+        ./micromamba shell init -s bash -p $HOME/micromamba
+        mkdir -p $HOME/micromamba/pkgs/
+
+    - name: Mamba create env
+      shell: bash -l {0}
+      run: |
+        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
+        ./micromamba create --yes --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+
+    - name: Install folium
+      shell: bash -l {0}
+      run: |
+        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install -e . --no-deps --force-reinstall
+
+    - name: Notebook coding standards tests
+      shell: bash -l {0}
+      run: |
+        $MAMBA_ROOT_PREFIX/envs/TEST/bin/flake8-nb examples --ignore=W391,E226,E402,W504,I100,I201,I202 --max-line-length=120 --show-source --count
