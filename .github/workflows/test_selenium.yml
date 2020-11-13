@@ -8,43 +8,26 @@ on:
     branches:
     - master
 
-env:
-  MAMBA_ROOT_PREFIX: $HOME/micromamba
-  MAMBA_EXE: $(pwd)/micromamba
-
 jobs:
   run:
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
+    - name: Conda setup
+      uses: s-weigand/setup-conda@v1.0.5
+      with:
+        update-conda: true
 
-    - name: Install micromamba
+    - name: Conda environment creation
       shell: bash -l {0}
       run: |
-        wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
-        mv bin/micromamba ./micromamba
-        ./micromamba shell init -s bash -p $HOME/micromamba
-        mkdir -p $HOME/micromamba/pkgs/
-
-    - name: Mamba create env
-      shell: bash -l {0}
-      run: |
-        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
-        ./micromamba create --yes --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
-
-    - name: Install folium
-      shell: bash -l {0}
-      run: |
-        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install -e . --no-deps --force-reinstall
+        conda create --yes --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        source activate TEST
+        pip install -e . --no-deps --force-reinstall
 
     - name: Selenium tests
       shell: bash -l {0}
       run: |
-        export MAMBA_ROOT_PREFIX=$HOME/micromamba
-        export MAMBA_EXE=$(pwd)/micromamba
-        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
-        micromamba activate --prefix $MAMBA_ROOT_PREFIX/envs/TEST
+        source activate TEST
         pytest tests/selenium -vv
