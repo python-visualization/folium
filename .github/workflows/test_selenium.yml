@@ -43,6 +43,8 @@ jobs:
     - name: Selenium tests
       shell: bash -l {0}
       run: |
+        export MAMBA_ROOT_PREFIX=$HOME/micromamba
+        export MAMBA_EXE=$(pwd)/micromamba
         . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
         micromamba activate --prefix $MAMBA_ROOT_PREFIX/envs/TEST
         pytest tests/selenium -vv
