@@ -32,7 +32,7 @@ jobs:
       shell: bash -l {0}
       run: |
         . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
-        ./micromamba create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        ./micromamba create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
 
     - name: Install folium
       shell: bash -l {0}
