@@ -8,38 +8,28 @@ on:
     branches:
     - master
 
-env:
-  MAMBA_ROOT_PREFIX: $HOME/micromamba
-  MAMBA_EXE: $(pwd)/micromamba
-
 jobs:
   run:
-    #  change to Linux when we fix micromamba
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Install micromamba
-      shell: bash -l {0}
-      run: |
-        wget -qO- https://micromamba.snakepit.net/api/micromamba/osx-64/latest | tar -xvj bin/micromamba
-        mv bin/micromamba ./micromamba
-        ./micromamba shell init -s bash -p $HOME/micromamba
-        mkdir -p $HOME/micromamba/pkgs/
+    - name: Setup Conda
+      uses: s-weigand/setup-conda@v1
+      with:
+        activate-conda: false
+        conda-channels: conda-forge
 
-    - name: Mamba create env
+    - name: Create env
       shell: bash -l {0}
       run: |
-        . $MAMBA_ROOT_PREFIX/etc/profile.d/mamba.sh
-        ./micromamba create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
-
-    - name: Install folium
-      shell: bash -l {0}
-      run: |
-        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pip install -e . --no-deps --force-reinstall
+        conda create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
+        source activate TEST
+        pip install -e . --no-deps --force-reinstall
 
     - name: Notebook tests
       shell: bash -l {0}
       run: |
-        $MAMBA_ROOT_PREFIX/envs/TEST/bin/pytest --nbval-lax examples
+        source activate TEST
+        pytest --nbval-lax examples
