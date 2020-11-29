@@ -1,0 +1,35 @@
+name: Notebook Style Tests
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Conda
+      uses: s-weigand/setup-conda@v1
+      with:
+        activate-conda: false
+        conda-channels: conda-forge
+
+    - name: Create env
+      shell: bash -l {0}
+      run: |
+        conda create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
+        source activate TEST
+        pip install -e . --no-deps --force-reinstall
+
+    - name: Notebook coding standards tests
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        flake8-nb examples --ignore=W391,E226,E402,W504,I100,I201,I202,E703 --max-line-length=120 --show-source --count
