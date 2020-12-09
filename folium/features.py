@@ -324,8 +324,8 @@ class GeoJson(Layer):
         * If dict, then data will be converted to JSON and embedded
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
-        * If `__geo_interface__` is available, the `__geo_interface__` 
-        dictionary will be serialized to JSON and 
+        * If `__geo_interface__` is available, the `__geo_interface__`
+        dictionary will be serialized to JSON and
         reprojected if `to_crs` is available.
     style_function: function, default None
         Function mapping a GeoJson Feature to a style dict.
