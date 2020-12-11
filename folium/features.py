@@ -393,6 +393,23 @@ class GeoJson(Layer):
             }
         }
         {%- endif %}
+
+        {%- if this.marker %}
+        function {{ this.get_name() }}pointToLayer(feature, latlng) {
+            var opts = {{this.marker.options | tojson | safe}};
+            {% if this.marker._name =='Marker' and this.marker.icon %}
+            const iconOptions = {{this.marker.icon.options | tojson | safe}}
+            const iconRootAlias = L{%- if this.marker.icon._name=="Icon"%}.AwesomeMarkers{%- endif %}
+            opts.icon=new iconRootAlias.{{this.marker.icon._name}}(iconOptions)
+            {% endif %}
+            {%- if this.style_function %}
+            let style = {{ this.get_name()}}_styler(feature)
+            Object.assign({%- if this.marker.icon -%}opts.icon.options{%- else -%} opts {%- endif -%}, style)
+            {% endif %}
+            return new L.{{this.marker._name}}(latlng, opts)
+        }
+        {%- endif %}
+
         function {{this.get_name()}}_onEachFeature(feature, layer) {
             layer.on({
                 {%- if this.highlight %}
@@ -420,6 +437,9 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
+            {%- if this.marker %}
+                pointToLayer: {{ this.get_name() }}pointToLayer
+            {%- endif %}
         });
 
         function {{ this.get_name() }}_add (data) {
@@ -440,7 +460,7 @@ class GeoJson(Layer):
     def __init__(self, data, style_function=None, highlight_function=None,  # noqa
                  name=None, overlay=True, control=True, show=True,
                  smooth_factor=None, tooltip=None, embed=True, popup=None,
-                 zoom_on_click=False):
+                 zoom_on_click=False, marker=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
@@ -452,6 +472,7 @@ class GeoJson(Layer):
         self.style = style_function is not None
         self.highlight = highlight_function is not None
         self.zoom_on_click = zoom_on_click
+        self.marker = marker
 
         self.data = self.process_data(data)
 

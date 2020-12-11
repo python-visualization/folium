@@ -263,7 +263,7 @@ class Circle(Marker):
         {% endmacro %}
         """)
 
-    def __init__(self, location, radius, popup=None, tooltip=None, **kwargs):
+    def __init__(self, location=None, radius=50, popup=None, tooltip=None, **kwargs):
         super(Circle, self).__init__(location, popup=popup, tooltip=tooltip)
         self._name = 'circle'
         self.options = path_options(line=False, radius=radius, **kwargs)
@@ -300,7 +300,7 @@ class CircleMarker(Marker):
         {% endmacro %}
         """)
 
-    def __init__(self, location, radius=10, popup=None, tooltip=None, **kwargs):
+    def __init__(self, location=None, radius=10, popup=None, tooltip=None, **kwargs):
         super(CircleMarker, self).__init__(location, popup=popup,
                                            tooltip=tooltip)
         self._name = 'CircleMarker'
