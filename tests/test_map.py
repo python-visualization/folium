@@ -9,7 +9,7 @@ Folium map Tests
 import pytest
 
 from folium import Map
-from folium.map import Popup, Icon, CustomPane
+from folium.map import Popup, Icon, CustomPane, Marker
 from folium.utilities import normalize
 
 
@@ -110,6 +110,14 @@ def test_custom_pane_show():
     """.format(pane_name=pane.get_name(),
                map_name=m.get_name())
     assert normalize(rendered) == normalize(expected)
+
+
+def test_marker_valid_location():
+    m = Map()
+    marker = Marker()
+    marker.add_to(m)
+    with pytest.raises(ValueError):
+        m.render()
 
 
 @pytest.mark.filterwarnings('ignore::UserWarning')

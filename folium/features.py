@@ -28,7 +28,7 @@ from folium.utilities import (
     parse_options,
     camelize
 )
-from folium.vector_layers import PolyLine, path_options
+from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
 from jinja2 import Template
 
@@ -482,6 +482,9 @@ class GeoJson(Layer):
         self.style = style_function is not None
         self.highlight = highlight_function is not None
         self.zoom_on_click = zoom_on_click
+        if marker:
+            if not isinstance(marker, (Circle, CircleMarker, Marker)):
+                raise TypeError("Only Marker, Circle, and CircleMarker are supported as GeoJson marker types.")
         self.marker = marker
 
         self.data = self.process_data(data)
