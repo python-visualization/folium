@@ -414,16 +414,26 @@ class GeoJson(Layer):
             layer.on({
                 {%- if this.highlight %}
                 mouseout: function(e) {
-                    {{ this.get_name() }}.resetStyle(e.target);
+                    if(typeof e.target.setStyle === "function"){
+                        {{ this.get_name() }}.resetStyle(e.target);
+                    }
                 },
                 mouseover: function(e) {
-                    e.target.setStyle({{ this.get_name() }}_highlighter(e.target.feature));
+                    if(typeof e.target.setStyle === "function"){
+                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
+                        e.target.setStyle(highlightStyle);
+                    }
                 },
                 {%- endif %}
                 {%- if this.zoom_on_click %}
                 click: function(e) {
                     if (typeof e.target.getBounds === 'function') {
                         {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                    }
+                    else if (typeof e.target.getLatLng === 'function'){
+                        let zoom = {{ this.parent_map.get_name() }}.getZoom()
+                        zoom = zoom > 12 ? zoom : zoom + 1
+                        {{ this.parent_map.get_name() }}.flyTo(e.target.getLatLng(), zoom)
                     }
                 }
                 {%- endif %}
