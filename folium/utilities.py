@@ -21,6 +21,7 @@ except ImportError:
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
+_VALID_URLS.add('data')
 
 
 def validate_location(location):  # noqa: C901
