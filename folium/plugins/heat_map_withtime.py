@@ -42,7 +42,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
     display_index: default True
         Display the index (usually time) in the time control.
     index_steps: default 1
-        Steps to take in the index dimension between aimation steps.
+        Steps to take in the index dimension between animation steps.
     min_speed: default 0.1
         Minimum fps speed for animation.
     max_speed: default 10
