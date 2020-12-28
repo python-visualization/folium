@@ -395,12 +395,12 @@ class GeoJson(Layer):
         {%- endif %}
 
         {%- if this.marker %}
-        function {{ this.get_name() }}pointToLayer(feature, latlng) {
-            var opts = {{this.marker.options | tojson | safe}};
-            {% if this.marker._name =='Marker' and this.marker.icon %}
-            const iconOptions = {{this.marker.icon.options | tojson | safe}}
-            const iconRootAlias = L{%- if this.marker.icon._name=="Icon"%}.AwesomeMarkers{%- endif %}
-            opts.icon=new iconRootAlias.{{this.marker.icon._name}}(iconOptions)
+        function {{ this.get_name() }}_pointToLayer(feature, latlng) {
+            var opts = {{ this.marker.options | tojson | safe }};
+            {% if this.marker._name == 'Marker' and this.marker.icon %}
+            const iconOptions = {{ this.marker.icon.options | tojson | safe }}
+            const iconRootAlias = L{%- if this.marker.icon._name == "Icon" %}.AwesomeMarkers{%- endif %}
+            opts.icon = new iconRootAlias.{{ this.marker.icon._name }}(iconOptions)
             {% endif %}
             {%- if this.style_function %}
             let style = {{ this.get_name()}}_styler(feature)
@@ -448,7 +448,7 @@ class GeoJson(Layer):
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
             {%- if this.marker %}
-                pointToLayer: {{ this.get_name() }}pointToLayer
+                pointToLayer: {{ this.get_name() }}_pointToLayer
             {%- endif %}
         });
 
