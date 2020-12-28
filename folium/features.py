@@ -343,6 +343,12 @@ class GeoJson(Layer):
     tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
         see folium.GeoJsonTooltip for info on how to do that.
+    popup: GeoJsonPopup, optional
+        Show a different popup for each feature by passing a GeoJsonPopup object.
+    marker: Circle, CircleMarker or Marker, optional
+        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        CircleMarker or Marker object with your wanted options. The `style_function` and
+        `highlight_function` will also target the marker object you passed.
     embed: bool, default True
         Whether to embed the data in the html file or not. Note that disabling
         embedding is only supported if you provide a file link or URL.
