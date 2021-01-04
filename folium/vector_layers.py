@@ -81,9 +81,9 @@ def path_options(line=False, radius=False, **kwargs):
         fill_color = color
         fill = kwargs.pop('fill', False)
 
-    gradient = kwargs.pop('gradiant', None)
+    gradient = kwargs.pop('gradient', None)
     if gradient is not None:
-        extra_options.update({'gradiant': gradient})
+        extra_options.update({'gradient': gradient})
 
     default = {
         'stroke': kwargs.pop('stroke', True),
