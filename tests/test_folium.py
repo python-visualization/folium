@@ -364,4 +364,6 @@ class TestFolium(object):
 
         self.m._parent.render()
         bounds = self.m.get_bounds()
-        assert bounds == [[18.948267, -178.123152], [71.351633, 173.304726]], bounds  # noqa
+        np.testing.assert_allclose(
+            bounds,
+            [[18.948267, -178.123152], [71.351633, 173.304726]])
