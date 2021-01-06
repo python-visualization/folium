@@ -3,14 +3,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>plugins &#8212; Folium 0.11.0 documentation</title>
-    <link rel="stylesheet" href="_static/f6.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>plugins &#8212; Folium 0.12.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/f6.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,7 +28,8 @@
         <li class="right" >
           <a href="modules.html" title="folium"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugins</span></code></a></li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -77,7 +78,7 @@
 <dl class="py class">
 <dt id="folium.plugins.AntPath">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">AntPath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">locations</span></em>, <em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tooltip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.AntPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.vector_layers.BaseMultiLocation" title="folium.vector_layers.BaseMultiLocation"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.BaseMultiLocation</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.vector_layers.BaseMultiLocation" title="folium.vector_layers.BaseMultiLocation"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.BaseMultiLocation</span></code></a></p>
 <p>Class for drawing AntPath polyline overlays on a map.</p>
 <p>See <a class="reference internal" href="modules.html#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a> for the <cite>Path</cite> options.</p>
 <dl class="field-list simple">
@@ -92,18 +93,17 @@ available parameters.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.AntPath.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.AntPath.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.AntPath.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('antpath', 'https://cdn.jsdelivr.net/npm/leaflet-ant-path&#64;1.1.2/dist/leaflet-ant-path.min.js')]</em><a class="headerlink" href="#folium.plugins.AntPath.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.BeautifyIcon">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">BeautifyIcon</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">icon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">icon_shape</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">border_width</span><span class="o">=</span><span class="default_value">3</span></em>, <em class="sig-param"><span class="n">border_color</span><span class="o">=</span><span class="default_value">'#000'</span></em>, <em class="sig-param"><span class="n">text_color</span><span class="o">=</span><span class="default_value">'#000'</span></em>, <em class="sig-param"><span class="n">background_color</span><span class="o">=</span><span class="default_value">'#FFF'</span></em>, <em class="sig-param"><span class="n">inner_icon_style</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">spin</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">number</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BeautifyIcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Create a BeautifyIcon that can be added to a Marker</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -134,18 +134,22 @@ available parameters.</p></li>
 <code class="sig-name descname">ICON_SHAPE_TYPES</code><em class="property"> = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot', 'marker', None]</em><a class="headerlink" href="#folium.plugins.BeautifyIcon.ICON_SHAPE_TYPES" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="folium.plugins.BeautifyIcon.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BeautifyIcon.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.BeautifyIcon.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('beautify_icon_css', 'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css')]</em><a class="headerlink" href="#folium.plugins.BeautifyIcon.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.BeautifyIcon.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('beautify_icon_js', 'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js')]</em><a class="headerlink" href="#folium.plugins.BeautifyIcon.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.BoatMarker">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">BoatMarker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">icon</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">heading</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">wind_heading</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">wind_speed</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BoatMarker" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
 <p>Add a Marker in the shape of a boat.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -160,18 +164,17 @@ If None, then no wind is represented.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.BoatMarker.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.BoatMarker.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.BoatMarker.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('markerclusterjs', 'https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js')]</em><a class="headerlink" href="#folium.plugins.BoatMarker.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.CirclePattern">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">CirclePattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">12</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">2.0</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">'#3388ff'</span></em>, <em class="sig-param"><span class="n">fill_color</span><span class="o">=</span><span class="default_value">'#3388ff'</span></em>, <em class="sig-param"><span class="n">opacity</span><span class="o">=</span><span class="default_value">0.75</span></em>, <em class="sig-param"><span class="n">fill_opacity</span><span class="o">=</span><span class="default_value">0.5</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.CirclePattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Fill Pattern for polygon composed of repeating circles.</p>
 <p>Add these to the ‘fillPattern’ field in GeoJson style functions.</p>
 <dl class="field-list simple">
@@ -189,6 +192,11 @@ If None, then no wind is represented.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="folium.plugins.CirclePattern.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('pattern', 'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')]</em><a class="headerlink" href="#folium.plugins.CirclePattern.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.CirclePattern.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.CirclePattern.render" title="Permalink to this definition">¶</a></dt>
@@ -200,7 +208,7 @@ If None, then no wind is represented.</p></li>
 <dl class="py class">
 <dt id="folium.plugins.Draw">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">export</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'data.geojson'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topleft'</span></em>, <em class="sig-param"><span class="n">draw_options</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">edit_options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Vector drawing and editing plugin for Leaflet.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -229,6 +237,16 @@ See <a class="reference external" href="https://leafletjs.com/reference-1.6.0.ht
 </div>
 <p>For more info please check
 <a class="reference external" href="https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html">https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html</a></p>
+<dl class="py attribute">
+<dt id="folium.plugins.Draw.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet_draw_css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css')]</em><a class="headerlink" href="#folium.plugins.Draw.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.Draw.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet_draw_js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js')]</em><a class="headerlink" href="#folium.plugins.Draw.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.Draw.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw.render" title="Permalink to this definition">¶</a></dt>
@@ -240,7 +258,7 @@ See <a class="reference external" href="https://leafletjs.com/reference-1.6.0.ht
 <dl class="py class">
 <dt id="folium.plugins.DualMap">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">DualMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">layout</span><span class="o">=</span><span class="default_value">'horizontal'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Create two maps in the same window.</p>
 <p>Adding children to this objects adds them to both maps. You can access
 the individual maps with <cite>DualMap.m1</cite> and <cite>DualMap.m2</cite>.</p>
@@ -271,6 +289,11 @@ and right) or vertical (top and bottom).</p></li>
 <code class="sig-name descname">add_child</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">child</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.DualMap.add_child" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add object <cite>child</cite> to the first map and store it for the second.</p>
 </dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.DualMap.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Leaflet.Sync', 'https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js')]</em><a class="headerlink" href="#folium.plugins.DualMap.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="folium.plugins.DualMap.fit_bounds">
@@ -327,7 +350,7 @@ markers colors and sizes.</p></li>
 <dl class="py class">
 <dt id="folium.plugins.FeatureGroupSubGroup">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">FeatureGroupSubGroup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">group</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FeatureGroupSubGroup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a Feature Group that adds its child layers into a parent group when
 added to a map (e.g. through LayerControl). Useful to create nested groups,
 or cluster markers from multiple overlays. From [0].</p>
@@ -366,11 +389,10 @@ or cluster markers from multiple overlays. From [0].</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="folium.plugins.FeatureGroupSubGroup.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FeatureGroupSubGroup.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.FeatureGroupSubGroup.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('featuregroupsubgroupjs', 'https://unpkg.com/leaflet.featuregroup.subgroup&#64;1.0.2/dist/leaflet.featuregroup.subgroup.js')]</em><a class="headerlink" href="#folium.plugins.FeatureGroupSubGroup.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -384,7 +406,7 @@ or cluster markers from multiple overlays. From [0].</p>
 <dl class="py class">
 <dt id="folium.plugins.Fullscreen">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Fullscreen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topleft'</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Full Screen'</span></em>, <em class="sig-param"><span class="n">title_cancel</span><span class="o">=</span><span class="default_value">'Exit Full Screen'</span></em>, <em class="sig-param"><span class="n">force_separate_button</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Fullscreen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Adds a fullscreen button to your map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -401,18 +423,51 @@ default: ‘Exit Full Screen’</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.Fullscreen.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Fullscreen.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
+<dl class="py attribute">
+<dt id="folium.plugins.Fullscreen.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Control.FullScreen.css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css')]</em><a class="headerlink" href="#folium.plugins.Fullscreen.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.Fullscreen.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Control.Fullscreen.js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js')]</em><a class="headerlink" href="#folium.plugins.Fullscreen.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
+
+<dl class="py class">
+<dt id="folium.plugins.Geocoder">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Geocoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">collapsed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topright'</span></em>, <em class="sig-param"><span class="n">add_marker</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Geocoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>A simple geocoder for Leaflet that by default uses OSM/Nominatim.</p>
+<p>Please respect the Nominatim usage policy:
+<a class="reference external" href="https://operations.osmfoundation.org/policies/nominatim/">https://operations.osmfoundation.org/policies/nominatim/</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>collapsed</strong> (<em>bool</em><em>, </em><em>default False</em>) – If True, collapses the search box unless hovered/clicked.</p></li>
+<li><p><strong>position</strong> (<em>str</em><em>, </em><em>default 'topright'</em>) – Choose from ‘topleft’, ‘topright’, ‘bottomleft’ or ‘bottomright’.</p></li>
+<li><p><strong>add_marker</strong> (<em>bool</em><em>, </em><em>default True</em>) – If True, adds a marker on the found location.</p></li>
+<li><p><strong>all options see https</strong> (<em>For</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="folium.plugins.Geocoder.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Control.Geocoder.css', 'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css')]</em><a class="headerlink" href="#folium.plugins.Geocoder.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.Geocoder.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Control.Geocoder.js', 'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js')]</em><a class="headerlink" href="#folium.plugins.Geocoder.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.HeatMap">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">max_zoom</span><span class="o">=</span><span class="default_value">18</span></em>, <em class="sig-param"><span class="n">max_val</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">blur</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">max_zoom</span><span class="o">=</span><span class="default_value">18</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">blur</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Create a Heatmap layer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -423,7 +478,6 @@ You can also provide a numpy.array of shape (n,2) or (n,3).</p></li>
 <li><p><strong>min_opacity</strong> (<em>default 1.</em>) – The minimum opacity the heat will start at.</p></li>
 <li><p><strong>max_zoom</strong> (<em>default 18</em>) – Zoom level where the points reach maximum intensity (as intensity
 scales with zoom), equals maxZoom of the map by default</p></li>
-<li><p><strong>max_val</strong> (<em>float</em><em>, </em><em>default 1.</em>) – Maximum point intensity</p></li>
 <li><p><strong>radius</strong> (<em>int</em><em>, </em><em>default 25</em>) – Radius of each “point” of the heatmap</p></li>
 <li><p><strong>blur</strong> (<em>int</em><em>, </em><em>default 15</em>) – Amount of blur</p></li>
 <li><p><strong>gradient</strong> (<em>dict</em><em>, </em><em>default None</em>) – Color gradient config. e.g. {0.4: ‘blue’, 0.65: ‘lime’, 1: ‘red’}</p></li>
@@ -433,18 +487,17 @@ scales with zoom), equals maxZoom of the map by default</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.HeatMap.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.HeatMap.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet-heat.js', 'https://cdn.jsdelivr.net/gh/python-visualization/folium&#64;master/folium/templates/leaflet_heat.min.js')]</em><a class="headerlink" href="#folium.plugins.HeatMap.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.HeatMapWithTime">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMapWithTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_opacity</span><span class="o">=</span><span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">scale_radius</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_local_extrema</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display_index</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">index_steps</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">speed_step</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'bottomleft'</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Create a HeatMapWithTime layer</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -464,7 +517,7 @@ RGB values (‘rgb(255,0,0)’) or a hex number (‘#FF0000’).</p></li>
 OR a local extrema (the maximum and minimum of the currently displayed view).</p></li>
 <li><p><strong>auto_play</strong> (<em>default False</em>) – Automatically play the animation across time.</p></li>
 <li><p><strong>display_index</strong> (<em>default True</em>) – Display the index (usually time) in the time control.</p></li>
-<li><p><strong>index_steps</strong> (<em>default 1</em>) – Steps to take in the index dimension between aimation steps.</p></li>
+<li><p><strong>index_steps</strong> (<em>default 1</em>) – Steps to take in the index dimension between animation steps.</p></li>
 <li><p><strong>min_speed</strong> (<em>default 0.1</em>) – Minimum fps speed for animation.</p></li>
 <li><p><strong>max_speed</strong> (<em>default 10</em>) – Maximum fps speed for animation.</p></li>
 <li><p><strong>speed_step</strong> (<em>default 0.1</em>) – Step between different fps speeds on the speed slider.</p></li>
@@ -475,6 +528,16 @@ OR a local extrema (the maximum and minimum of the currently displayed view).</p
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="folium.plugins.HeatMapWithTime.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet.timedimension.control.min.css', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.control.css')]</em><a class="headerlink" href="#folium.plugins.HeatMapWithTime.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.HeatMapWithTime.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('iso8601', 'https://cdn.jsdelivr.net/npm/iso8601-js-period&#64;0.2.1/iso8601.min.js'), ('leaflet.timedimension.min.js', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.min.js'), ('heatmap.min.js', 'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'), ('leaflet-heatmap.js', 'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js')]</em><a class="headerlink" href="#folium.plugins.HeatMapWithTime.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.HeatMapWithTime.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime.render" title="Permalink to this definition">¶</a></dt>
@@ -486,7 +549,7 @@ OR a local extrema (the maximum and minimum of the currently displayed view).</p
 <dl class="py class">
 <dt id="folium.plugins.LocateControl">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">LocateControl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">auto_start</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.LocateControl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Control plugin to geolocate the user.</p>
 <p>This plugins adds a button to the map, and when it’s clicked shows the current
 user device location.</p>
@@ -514,18 +577,22 @@ Once user location is founded, the map will automatically centered in using user
 …              “popup”: “Your position”}).add_to(m))</p>
 <p>For more info check:
 <a class="reference external" href="https://github.com/domoritz/leaflet-locatecontrol">https://github.com/domoritz/leaflet-locatecontrol</a></p>
-<dl class="py method">
-<dt id="folium.plugins.LocateControl.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.LocateControl.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.LocateControl.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Control_locate_min_css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css')]</em><a class="headerlink" href="#folium.plugins.LocateControl.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.LocateControl.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Control_locate_min_js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js')]</em><a class="headerlink" href="#folium.plugins.LocateControl.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.MarkerCluster">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">MarkerCluster</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">locations</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">popups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">icons</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">icon_create_function</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MarkerCluster" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Provides Beautiful Animated Marker Clustering functionality for maps.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -554,18 +621,22 @@ markers colors and sizes.</p></li>
 <span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="folium.plugins.MarkerCluster.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MarkerCluster.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.MarkerCluster.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('markerclustercss', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'), ('markerclusterdefaultcss', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css')]</em><a class="headerlink" href="#folium.plugins.MarkerCluster.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.MarkerCluster.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('markerclusterjs', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js')]</em><a class="headerlink" href="#folium.plugins.MarkerCluster.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.MeasureControl">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">MeasureControl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topright'</span></em>, <em class="sig-param"><span class="n">primary_length_unit</span><span class="o">=</span><span class="default_value">'meters'</span></em>, <em class="sig-param"><span class="n">secondary_length_unit</span><span class="o">=</span><span class="default_value">'miles'</span></em>, <em class="sig-param"><span class="n">primary_area_unit</span><span class="o">=</span><span class="default_value">'sqmeters'</span></em>, <em class="sig-param"><span class="n">secondary_area_unit</span><span class="o">=</span><span class="default_value">'acres'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MeasureControl" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Add a measurement widget on the map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -579,18 +650,22 @@ markers colors and sizes.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.MeasureControl.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MeasureControl.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.MeasureControl.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet_measure_css', 'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure&#64;2.1.7/dist/leaflet-measure.min.css')]</em><a class="headerlink" href="#folium.plugins.MeasureControl.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.MeasureControl.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet_measure_js', 'https://cdn.jsdelivr.net/gh/ljagis/leaflet-measure&#64;2.1.7/dist/leaflet-measure.min.js')]</em><a class="headerlink" href="#folium.plugins.MeasureControl.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.MiniMap">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">MiniMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tile_layer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'bottomright'</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">150</span></em>, <em class="sig-param"><span class="n">height</span><span class="o">=</span><span class="default_value">150</span></em>, <em class="sig-param"><span class="n">collapsed_width</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">collapsed_height</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">zoom_level_offset</span><span class="o">=</span><span class="default_value">- 5</span></em>, <em class="sig-param"><span class="n">zoom_level_fixed</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">center_fixed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">zoom_animation</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">toggle_display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_toggle_display</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">minimized</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MiniMap" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Add a minimap (locator) to an existing map.</p>
 <p>Uses the Leaflet plugin by Norkart under BSD 2-Clause “Simplified” License.
 <a class="reference external" href="https://github.com/Norkart/Leaflet-MiniMap">https://github.com/Norkart/Leaflet-MiniMap</a></p>
@@ -630,18 +705,22 @@ Especially useful when ‘zoomLevelFixed’ is set.</p></li>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MiniMap</span><span class="p">(</span><span class="n">tile_layer</span><span class="o">=</span><span class="s1">&#39;Stamen WaterColor&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;bottomleft&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="folium.plugins.MiniMap.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MiniMap.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.MiniMap.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Control_MiniMap_css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css')]</em><a class="headerlink" href="#folium.plugins.MiniMap.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.MiniMap.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Control_MiniMap_js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')]</em><a class="headerlink" href="#folium.plugins.MiniMap.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.MousePosition">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">MousePosition</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'bottomright'</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">' : '</span></em>, <em class="sig-param"><span class="n">empty_string</span><span class="o">=</span><span class="default_value">'Unavailable'</span></em>, <em class="sig-param"><span class="n">lng_first</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">num_digits</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">prefix</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">lat_formatter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lng_formatter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MousePosition" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Add a field that shows the coordinates of the mouse position.</p>
 <p>Uses the Leaflet plugin by Ardhi Lukianto under MIT license.
 <a class="reference external" href="https://github.com/ardhi/Leaflet.MousePosition">https://github.com/ardhi/Leaflet.MousePosition</a></p>
@@ -667,49 +746,22 @@ longitude and latitude decimal degree values.</p></li>
 <span class="gp">... </span>              <span class="n">lat_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">,</span> <span class="n">lng_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="folium.plugins.MousePosition.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.MousePosition.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.MousePosition.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Control_MousePosition_css', 'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css')]</em><a class="headerlink" href="#folium.plugins.MousePosition.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt id="folium.plugins.PolyLineTextPath">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">PolyLineTextPath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">polyline</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">repeat</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">below</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">attributes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineTextPath" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
-<p>Shows a text along a PolyLine.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>polyline</strong> (<em>folium.features.PolyLine object</em>) – The folium.features.PolyLine object to attach the text to.</p></li>
-<li><p><strong>text</strong> (<em>string</em>) – The string to be attached to the polyline.</p></li>
-<li><p><strong>repeat</strong> (<em>bool</em><em>, </em><em>default False</em>) – Specifies if the text should be repeated along the polyline.</p></li>
-<li><p><strong>center</strong> (<em>bool</em><em>, </em><em>default False</em>) – Centers the text according to the polyline’s bounding box</p></li>
-<li><p><strong>below</strong> (<em>bool</em><em>, </em><em>default False</em>) – Show text below the path</p></li>
-<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>default 0</em>) – Set an offset to position text relative to the polyline.</p></li>
-<li><p><strong>orientation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotate text to a specified angle.</p></li>
-<li><p><strong>attributes</strong> (<em>dict</em>) – Object containing the attributes applied to the text tag.
-Check valid attributes here:
-<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes">https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes</a>
-Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size’: ‘24’}</p></li>
-<li><p><strong>https</strong> (<em>See</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt id="folium.plugins.PolyLineTextPath.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineTextPath.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.MousePosition.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Control_MousePosition_js', 'https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js')]</em><a class="headerlink" href="#folium.plugins.MousePosition.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.PolyLineOffset">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">PolyLineOffset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">locations</span></em>, <em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tooltip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineOffset" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.vector_layers.PolyLine" title="folium.vector_layers.PolyLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.PolyLine</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.vector_layers.PolyLine" title="folium.vector_layers.PolyLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.vector_layers.PolyLine</span></code></a></p>
 <p>Add offset capabilities to the PolyLine class.</p>
 <p>This plugin adds to folium Polylines the ability to be drawn with a
 relative pixel offset, without modifying their actual coordinates. The offset
@@ -735,11 +787,40 @@ available parameters.</p></li>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">PolyLineOffset</span><span class="p">([[</span><span class="mi">58</span><span class="p">,</span> <span class="o">-</span><span class="mi">28</span><span class="p">],</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span> <span class="o">-</span><span class="mi">23</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#080&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
-<dl class="py method">
-<dt id="folium.plugins.PolyLineOffset.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineOffset.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
+<dl class="py attribute">
+<dt id="folium.plugins.PolyLineOffset.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('polylineoffset', 'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset&#64;1.1.1/leaflet.polylineoffset.min.js')]</em><a class="headerlink" href="#folium.plugins.PolyLineOffset.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
+
+<dl class="py class">
+<dt id="folium.plugins.PolyLineTextPath">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">PolyLineTextPath</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">polyline</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">repeat</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">center</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">below</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">orientation</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">attributes</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineTextPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Shows a text along a PolyLine.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>polyline</strong> (<em>folium.features.PolyLine object</em>) – The folium.features.PolyLine object to attach the text to.</p></li>
+<li><p><strong>text</strong> (<em>string</em>) – The string to be attached to the polyline.</p></li>
+<li><p><strong>repeat</strong> (<em>bool</em><em>, </em><em>default False</em>) – Specifies if the text should be repeated along the polyline.</p></li>
+<li><p><strong>center</strong> (<em>bool</em><em>, </em><em>default False</em>) – Centers the text according to the polyline’s bounding box</p></li>
+<li><p><strong>below</strong> (<em>bool</em><em>, </em><em>default False</em>) – Show text below the path</p></li>
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>default 0</em>) – Set an offset to position text relative to the polyline.</p></li>
+<li><p><strong>orientation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotate text to a specified angle.</p></li>
+<li><p><strong>attributes</strong> (<em>dict</em>) – Object containing the attributes applied to the text tag.
+Check valid attributes here:
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes">https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes</a>
+Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size’: ‘24’}</p></li>
+<li><p><strong>https</strong> (<em>See</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="folium.plugins.PolyLineTextPath.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('polylinetextpath', 'https://cdn.jsdelivr.net/npm/leaflet-textpath&#64;1.2.3/leaflet.textpath.min.js')]</em><a class="headerlink" href="#folium.plugins.PolyLineTextPath.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -753,7 +834,7 @@ available parameters.</p></li>
 <dl class="py class">
 <dt id="folium.plugins.Search">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">layer</span></em>, <em class="sig-param"><span class="n">search_label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">search_zoom</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">geom_type</span><span class="o">=</span><span class="default_value">'Point'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topleft'</span></em>, <em class="sig-param"><span class="n">placeholder</span><span class="o">=</span><span class="default_value">'Search'</span></em>, <em class="sig-param"><span class="n">collapsed</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Search" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Adds a search tool to your map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -774,6 +855,16 @@ Use the same way as vector layer arguments.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="folium.plugins.Search.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('Leaflet.Search.css', 'https://cdn.jsdelivr.net/npm/leaflet-search&#64;2.9.7/dist/leaflet-search.min.css')]</em><a class="headerlink" href="#folium.plugins.Search.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.Search.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('Leaflet.Search.js', 'https://cdn.jsdelivr.net/npm/leaflet-search&#64;2.9.7/dist/leaflet-search.min.js')]</em><a class="headerlink" href="#folium.plugins.Search.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.Search.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Search.render" title="Permalink to this definition">¶</a></dt>
@@ -788,9 +879,38 @@ Use the same way as vector layer arguments.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt id="folium.plugins.SemiCircle">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">SemiCircle</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">location</span></em>, <em class="sig-param"><span class="n">radius</span></em>, <em class="sig-param"><span class="n">direction</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">arc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">start_angle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">stop_angle</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tooltip</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.SemiCircle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Marker" title="folium.map.Marker"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Marker</span></code></a></p>
+<p>Add a marker in the shape of a semicircle, similar to the Circle class.</p>
+<p>Use (direction and arc) or (start_angle and stop_angle), not both.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>location</strong> (<em>tuple</em><em>[</em><em>float</em><em>, </em><em>float</em><em>]</em>) – Latitude and Longitude pair (Northing, Easting)</p></li>
+<li><p><strong>radius</strong> (<em>float</em>) – Radius of the circle, in meters.</p></li>
+<li><p><strong>direction</strong> (<em>int</em><em>, </em><em>default None</em>) – Direction angle in degrees</p></li>
+<li><p><strong>arc</strong> (<em>int</em><em>, </em><em>default None</em>) – Arc angle in degrees.</p></li>
+<li><p><strong>start_angle</strong> (<em>int</em><em>, </em><em>default None</em>) – Start angle in degrees</p></li>
+<li><p><strong>stop_angle</strong> (<em>int</em><em>, </em><em>default None</em>) – Stop angle in degrees.</p></li>
+<li><p><strong>popup</strong> (<em>str</em><em> or </em><em>folium.Popup</em><em>, </em><em>optional</em>) – Input text or visualization for object displayed when clicking.</p></li>
+<li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>optional</em>) – Display a text when hovering over the object.</p></li>
+<li><p><strong>**kwargs</strong> – For additional arguments see <a class="reference internal" href="modules.html#folium.vector_layers.path_options" title="folium.vector_layers.path_options"><code class="xref py py-func docutils literal notranslate"><span class="pre">folium.vector_layers.path_options()</span></code></a></p></li>
+<li><p><strong>Leaflet plugin https</strong> (<em>Uses</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="folium.plugins.SemiCircle.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('semicirclejs', 'https://cdn.jsdelivr.net/npm/leaflet-semicircle&#64;2.0.4/Semicircle.min.js')]</em><a class="headerlink" href="#folium.plugins.SemiCircle.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="folium.plugins.StripePattern">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">StripePattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">space_weight</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">space_color</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">opacity</span><span class="o">=</span><span class="default_value">0.75</span></em>, <em class="sig-param"><span class="n">space_opacity</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.StripePattern" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Fill Pattern for polygon composed of alternating lines.</p>
 <p>Add these to the ‘fillPattern’ field in GeoJson style functions.</p>
 <dl class="field-list simple">
@@ -807,6 +927,11 @@ Use the same way as vector layer arguments.</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt id="folium.plugins.StripePattern.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('pattern', 'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')]</em><a class="headerlink" href="#folium.plugins.StripePattern.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.StripePattern.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.StripePattern.render" title="Permalink to this definition">¶</a></dt>
@@ -818,21 +943,20 @@ Use the same way as vector layer arguments.</p></li>
 <dl class="py class">
 <dt id="folium.plugins.Terminator">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Terminator</code><a class="headerlink" href="#folium.plugins.Terminator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Leaflet.Terminator is a simple plug-in to the Leaflet library to
 overlay day and night regions on maps.</p>
-<dl class="py method">
-<dt id="folium.plugins.Terminator.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Terminator.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.Terminator.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('terminator', 'https://unpkg.com/&#64;joergdietrich/leaflet.terminator')]</em><a class="headerlink" href="#folium.plugins.Terminator.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.TimeSliderChoropleth">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimeSliderChoropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">styledict</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -847,18 +971,17 @@ dicts of <cite>{time: style_options_dict}</cite></p></li>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt id="folium.plugins.TimeSliderChoropleth.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.TimeSliderChoropleth.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('d3v4', 'https://d3js.org/d3.v4.min.js')]</em><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.TimestampedGeoJson">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimestampedGeoJson</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">transition_time</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">add_last_point</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">'P1D'</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">loop_button</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">date_options</span><span class="o">=</span><span class="default_value">'YYYY-MM-DD HH:mm:ss'</span></em>, <em class="sig-param"><span class="n">time_slider_drag_update</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
 into a map with Map.add_child.</p>
 <p>A geo-json is timestamped if:</p>
@@ -917,6 +1040,16 @@ ex: ‘P1M’ 1/month, ‘P1D’ 1/day, ‘PT1H’ 1/hour, and ‘PT1M’ 1/minu
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/socib/Leaflet.TimeDimension">https://github.com/socib/Leaflet.TimeDimension</a> for more information.</p>
+<dl class="py attribute">
+<dt id="folium.plugins.TimestampedGeoJson.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('highlight.js_css', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'), ('leaflet.timedimension_css', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.control.css')]</em><a class="headerlink" href="#folium.plugins.TimestampedGeoJson.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.TimestampedGeoJson.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('jquery2.0.0', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'), ('jqueryui1.10.2', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'), ('iso8601', 'https://cdn.jsdelivr.net/npm/iso8601-js-period&#64;0.2.1/iso8601.min.js'), ('leaflet.timedimension', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.min.js'), ('moment', 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')]</em><a class="headerlink" href="#folium.plugins.TimestampedGeoJson.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt id="folium.plugins.TimestampedGeoJson.render">
 <code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson.render" title="Permalink to this definition">¶</a></dt>
@@ -927,8 +1060,8 @@ ex: ‘P1M’ 1/month, ‘P1D’ 1/day, ‘PT1H’ 1/hour, and ‘PT1M’ 1/minu
 
 <dl class="py class">
 <dt id="folium.plugins.TimestampedWmsTileLayers">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimestampedWmsTileLayers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">transition_time</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">'P1D'</span></em>, <em class="sig-param"><span class="n">time_interval</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimestampedWmsTileLayers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">transition_time</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">'P1D'</span></em>, <em class="sig-param"><span class="n">time_interval</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
 control with the Leaflet.TimeDimension plugin.</p>
 <dl class="field-list simple">
@@ -980,11 +1113,15 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/socib/Leaflet.TimeDimension">https://github.com/socib/Leaflet.TimeDimension</a> for more information.</p>
-<dl class="py method">
-<dt id="folium.plugins.TimestampedWmsTileLayers.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers.render" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the HTML representation of the element.</p>
-</dd></dl>
+<dl class="py attribute">
+<dt id="folium.plugins.TimestampedWmsTileLayers.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('highlight.js_css', 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'), ('leaflet.timedimension_css', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.control.css')]</em><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.TimestampedWmsTileLayers.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('jquery2.0.0', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'), ('jqueryui1.10.2', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'), ('iso8601', 'https://cdn.jsdelivr.net/npm/iso8601-js-period&#64;0.2.1/iso8601.min.js'), ('leaflet.timedimension', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.min.js')]</em><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -992,6 +1129,7 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -1009,12 +1147,13 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
         <li class="right" >
           <a href="modules.html" title="folium"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.11.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugins</span></code></a></li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Rob Story.
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.0.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.4.2.Theme by <a href="http://github.com/vkvn">vkvn</a>
     </div>
   </body>
 </html>
