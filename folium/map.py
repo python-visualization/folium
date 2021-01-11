@@ -270,11 +270,11 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None,
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
                  draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = validate_location(location)
+        self.location = validate_location(location) if location else None
         self.options = parse_options(
             draggable=draggable or None,
             autoPan=draggable or None,
@@ -282,6 +282,7 @@ class Marker(MacroElement):
         )
         if icon is not None:
             self.add_child(icon)
+            self.icon = icon
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup)
                            else Popup(str(popup)))
@@ -296,6 +297,10 @@ class Marker(MacroElement):
         """
         return [self.location, self.location]
 
+    def render(self):
+        if self.location is None:
+            raise ValueError("{} location must be assigned when added directly to map.".format(self._name))
+        super(Marker, self).render()
 
 class Popup(Element):
     """Create a Popup instance that can be linked to a Layer.

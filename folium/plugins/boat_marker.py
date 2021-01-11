@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Marker
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
 
-class BoatMarker(Marker):
+class BoatMarker(JSCSSMixin, Marker):
     """Add a Marker in the shape of a boat.
 
     Parameters
@@ -45,6 +44,11 @@ class BoatMarker(Marker):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('markerclusterjs',
+         'https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),
+    ]
+
     def __init__(self, location, popup=None, icon=None,
                  heading=0, wind_heading=None, wind_speed=0, **kwargs):
         super(BoatMarker, self).__init__(
@@ -57,14 +61,3 @@ class BoatMarker(Marker):
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed
         self.options = parse_options(**kwargs)
-
-    def render(self, **kwargs):
-        super(BoatMarker, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),  # noqa
-            name='markerclusterjs')

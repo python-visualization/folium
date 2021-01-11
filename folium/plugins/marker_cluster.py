@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
 from folium.utilities import validate_locations, parse_options
 
 from jinja2 import Template
 
 
-class MarkerCluster(Layer):
+class MarkerCluster(JSCSSMixin, Layer):
     """
     Provides Beautiful Animated Marker Clustering functionality for maps.
 
@@ -59,6 +58,18 @@ class MarkerCluster(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('markerclusterjs',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js')
+    ]
+
+    default_css = [
+        ('markerclustercss',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'),
+        ('markerclusterdefaultcss',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css')
+    ]
+
     def __init__(self, locations=None, popups=None, icons=None, name=None,
                  overlay=True, control=True, show=True,
                  icon_create_function=None, options=None, **kwargs):
@@ -79,22 +90,3 @@ class MarkerCluster(Layer):
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function
-
-    def render(self, **kwargs):
-        super(MarkerCluster, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js'),  # noqa
-            name='markerclusterjs')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'),  # noqa
-            name='markerclustercss')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css'),  # noqa
-            name='markerclusterdefaultcss')

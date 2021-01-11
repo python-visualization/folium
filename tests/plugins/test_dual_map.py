@@ -23,7 +23,7 @@ def test_dual_map():
     assert isinstance(figure, folium.Figure)
     out = normalize(figure.render())
 
-    script = '<script src="https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js"></script>'  # noqa
     assert script in out
 
     tmpl = Template("""

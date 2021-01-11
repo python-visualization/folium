@@ -53,5 +53,7 @@ def test_marker_cluster():
     assert expected in out
 
     bounds = m.get_bounds()
-    assert bounds == [[35.147332572663785, -11.520684337300109],
-                      [59.839718052359274, 29.94931046497927]], bounds
+    np.testing.assert_allclose(
+        bounds,
+        [[35.147332572663785, -11.520684337300109],
+         [59.839718052359274, 29.94931046497927]])

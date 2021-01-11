@@ -14,6 +14,7 @@ from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
 from branca.utilities import color_brewer
 
+from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
 from folium.utilities import (
@@ -27,7 +28,7 @@ from folium.utilities import (
     parse_options,
     camelize
 )
-from folium.vector_layers import PolyLine, path_options
+from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
 from jinja2 import Template
 
@@ -36,7 +37,7 @@ import numpy as np
 import requests
 
 
-class RegularPolygonMarker(Marker):
+class RegularPolygonMarker(JSCSSMixin, Marker):
     """
     Custom markers using the Leaflet Data Vis Framework.
 
@@ -69,6 +70,11 @@ class RegularPolygonMarker(Marker):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('dvf_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
+    ]
+
     def __init__(self, location, number_of_sides=4, rotation=0, radius=15,
                  popup=None, tooltip=None, **kwargs):
         super(RegularPolygonMarker, self).__init__(
@@ -83,21 +89,8 @@ class RegularPolygonMarker(Marker):
             radius=radius,
         ))
 
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        super(RegularPolygonMarker, self).render()
 
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet-dvf/0.3.0/leaflet-dvf.markers.min.js'),
-            # noqa
-            name='dvf_js')
-
-
-class Vega(Element):
+class Vega(JSCSSMixin, Element):
     """
     Creates a Vega chart element.
 
@@ -128,6 +121,15 @@ class Vega(Element):
     """
     _template = Template(u'')
 
+    default_js = [
+        ('d3',
+         'https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),
+        ('vega',
+         'https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),
+        ('jquery',
+         'https://code.jquery.com/jquery-2.1.0.min.js'),
+    ]
+
     def __init__(self, data, width=None, height=None,
                  left='0%', top='0%', position='relative'):
         super(Vega, self).__init__()
@@ -147,6 +149,8 @@ class Vega(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
+        super().render(**kwargs)
+
         self.json = json.dumps(self.data)
 
         self._parent.html.add_child(Element(Template("""
@@ -170,18 +174,6 @@ class Vega(Element):
                 top: {{this.top[0]}}{{this.top[1]}};
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js'),  # noqa
-            name='d3')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js'),  # noqa
-            name='vega')
-
-        figure.header.add_child(
-            JavascriptLink('https://code.jquery.com/jquery-2.1.0.min.js'),
-            name='jquery')
 
         figure.script.add_child(
             Template("""function vega_parse(spec, div) {
@@ -332,6 +324,9 @@ class GeoJson(Layer):
         * If dict, then data will be converted to JSON and embedded
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
+        * If `__geo_interface__` is available, the `__geo_interface__`
+        dictionary will be serialized to JSON and
+        reprojected if `to_crs` is available.
     style_function: function, default None
         Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
@@ -351,9 +346,17 @@ class GeoJson(Layer):
     tooltip: GeoJsonTooltip, Tooltip or str, default None
         Display a text when hovering over the object. Can utilize the data,
         see folium.GeoJsonTooltip for info on how to do that.
+    popup: GeoJsonPopup, optional
+        Show a different popup for each feature by passing a GeoJsonPopup object.
+    marker: Circle, CircleMarker or Marker, optional
+        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        CircleMarker or Marker object with your wanted options. The `style_function` and
+        `highlight_function` will also target the marker object you passed.
     embed: bool, default True
         Whether to embed the data in the html file or not. Note that disabling
         embedding is only supported if you provide a file link or URL.
+    zoom_on_click: bool, default False
+        Set to True to enable zooming in on a geometry when clicking on it.
 
     Examples
     --------
@@ -399,19 +402,50 @@ class GeoJson(Layer):
             }
         }
         {%- endif %}
+
+        {%- if this.marker %}
+        function {{ this.get_name() }}_pointToLayer(feature, latlng) {
+            var opts = {{ this.marker.options | tojson | safe }};
+            {% if this.marker._name == 'Marker' and this.marker.icon %}
+            const iconOptions = {{ this.marker.icon.options | tojson | safe }}
+            const iconRootAlias = L{%- if this.marker.icon._name == "Icon" %}.AwesomeMarkers{%- endif %}
+            opts.icon = new iconRootAlias.{{ this.marker.icon._name }}(iconOptions)
+            {% endif %}
+            {%- if this.style_function %}
+            let style = {{ this.get_name()}}_styler(feature)
+            Object.assign({%- if this.marker.icon -%}opts.icon.options{%- else -%} opts {%- endif -%}, style)
+            {% endif %}
+            return new L.{{this.marker._name}}(latlng, opts)
+        }
+        {%- endif %}
+
         function {{this.get_name()}}_onEachFeature(feature, layer) {
             layer.on({
                 {%- if this.highlight %}
                 mouseout: function(e) {
-                    {{ this.get_name() }}.resetStyle(e.target);
+                    if(typeof e.target.setStyle === "function"){
+                        {{ this.get_name() }}.resetStyle(e.target);
+                    }
                 },
                 mouseover: function(e) {
-                    e.target.setStyle({{ this.get_name() }}_highlighter(e.target.feature));
+                    if(typeof e.target.setStyle === "function"){
+                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
+                        e.target.setStyle(highlightStyle);
+                    }
                 },
                 {%- endif %}
+                {%- if this.zoom_on_click %}
                 click: function(e) {
-                    {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                    if (typeof e.target.getBounds === 'function') {
+                        {{ this.parent_map.get_name() }}.fitBounds(e.target.getBounds());
+                    }
+                    else if (typeof e.target.getLatLng === 'function'){
+                        let zoom = {{ this.parent_map.get_name() }}.getZoom()
+                        zoom = zoom > 12 ? zoom : zoom + 1
+                        {{ this.parent_map.get_name() }}.flyTo(e.target.getLatLng(), zoom)
+                    }
                 }
+                {%- endif %}
             });
         };
         var {{ this.get_name() }} = L.geoJson(null, {
@@ -422,23 +456,30 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
-        }).addTo({{ this._parent.get_name() }});
+            {%- if this.marker %}
+                pointToLayer: {{ this.get_name() }}_pointToLayer
+            {%- endif %}
+        });
 
         function {{ this.get_name() }}_add (data) {
-            {{ this.get_name() }}.addData(data);
+            {{ this.get_name() }}
+                .addData(data)
+                .addTo({{ this._parent.get_name() }});
         }
         {%- if this.embed %}
             {{ this.get_name() }}_add({{ this.data|tojson }});
         {%- else %}
-            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json'})
+            $.ajax({{ this.embed_link|tojson }}, {dataType: 'json', async: false})
                 .done({{ this.get_name() }}_add);
         {%- endif %}
+
         {% endmacro %}
         """)  # noqa
 
     def __init__(self, data, style_function=None, highlight_function=None,  # noqa
                  name=None, overlay=True, control=True, show=True,
-                 smooth_factor=None, tooltip=None, embed=True, popup=None):
+                 smooth_factor=None, tooltip=None, embed=True, popup=None,
+                 zoom_on_click=False, marker=None):
         super(GeoJson, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
         self._name = 'GeoJson'
@@ -449,6 +490,11 @@ class GeoJson(Layer):
         self.smooth_factor = smooth_factor
         self.style = style_function is not None
         self.highlight = highlight_function is not None
+        self.zoom_on_click = zoom_on_click
+        if marker:
+            if not isinstance(marker, (Circle, CircleMarker, Marker)):
+                raise TypeError("Only Marker, Circle, and CircleMarker are supported as GeoJson marker types.")
+        self.marker = marker
 
         self.data = self.process_data(data)
 
@@ -638,7 +684,7 @@ class GeoJsonStyleMapper:
         del (mapping[key_longest])
 
 
-class TopoJson(Layer):
+class TopoJson(JSCSSMixin, Layer):
     """
     Creates a TopoJson object for plotting into a Map.
 
@@ -710,6 +756,11 @@ class TopoJson(Layer):
         {% endmacro %}
         """)  # noqa
 
+    default_js = [
+        ('topojson',
+         'https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),
+    ]
+
     def __init__(self, data, object_path, style_function=None,
                  name=None, overlay=True, control=True, show=True,
                  smooth_factor=None, tooltip=None):
@@ -758,14 +809,6 @@ class TopoJson(Layer):
         """Renders the HTML representation of the element."""
         self.style_data()
         super(TopoJson, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js'),  # noqa
-            name='topojson')
 
     def get_bounds(self):
         """
@@ -1001,7 +1044,6 @@ class GeoJsonPopup(GeoJsonDetail):
 
     _template = Template(u"""
     {% macro script(this, kwargs) %}
-    let name_getter = '{{this._parent.get_name()}}';
     {{ this._parent.get_name() }}.bindPopup(""" + GeoJsonDetail.base_template +
                          u""",{{ this.popup_options | tojson | safe }});
                      {% endmacro %}
@@ -1064,9 +1106,9 @@ class Choropleth(FeatureGroup):
         If `bins` is a sequence, it directly defines the bin edges.
         For more information on this parameter, have a look at
         numpy.histogram function.
-    fill_color: string, default 'blue'
-        Area fill color. Can pass a hex code, color name, or if you are
-        binding data, one of the following color brewer palettes:
+    fill_color: string, optional
+        Area fill color, defaults to blue. Can pass a hex code, color name,
+        or if you are binding data, one of the following color brewer palettes:
         'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
         'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
     nan_fill_color: string, default 'black'
@@ -1126,7 +1168,7 @@ class Choropleth(FeatureGroup):
     """
 
     def __init__(self, geo_data, data=None, columns=None, key_on=None,  # noqa
-                 bins=6, fill_color='blue', nan_fill_color='black',
+                 bins=6, fill_color=None, nan_fill_color='black',
                  fill_opacity=0.6, nan_fill_opacity=None, line_color='black',
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
@@ -1135,6 +1177,8 @@ class Choropleth(FeatureGroup):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
         self._name = 'Choropleth'
+
+        fill_color = fill_color or ('blue' if data is None else 'Blues')
 
         if data is not None and not color_brewer(fill_color):
             raise ValueError('Please pass a valid color brewer code to '

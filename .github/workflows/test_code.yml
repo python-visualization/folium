@@ -1,0 +1,55 @@
+name: Code Tests
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: [3.6, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Conda
+      uses: s-weigand/setup-conda@v1
+      with:
+        activate-conda: false
+        conda-channels: conda-forge
+
+    - name: Python ${{ matrix.python-version }}
+      shell: bash -l {0}
+      run: |
+        conda create --yes --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
+        source activate TEST
+        pip install -e . --no-deps --force-reinstall
+
+    - name: Tarball tests
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        pip wheel . -w dist --no-deps
+        check-manifest --verbose
+        twine check dist/*
+
+    - name: Tests
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        pytest -vv --ignore=tests/selenium
+
+    - name: Tests with latest branca
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        conda remove branca --yes
+        pip install git+https://github.com/python-visualization/branca.git
+        pytest -vv --ignore=tests/selenium

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import Figure, JavascriptLink
+import warnings
 
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import (
     none_max,
@@ -16,7 +17,7 @@ from jinja2 import Template
 import numpy as np
 
 
-class HeatMap(Layer):
+class HeatMap(JSCSSMixin, Layer):
     """
     Create a Heatmap layer
 
@@ -32,8 +33,6 @@ class HeatMap(Layer):
     max_zoom : default 18
         Zoom level where the points reach maximum intensity (as intensity
         scales with zoom), equals maxZoom of the map by default
-    max_val : float, default 1.
-        Maximum point intensity
     radius : int, default 25
         Radius of each "point" of the heatmap
     blur : int, default 15
@@ -56,8 +55,13 @@ class HeatMap(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('leaflet-heat.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),
+    ]
+
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
-                 max_val=1.0, radius=25, blur=15, gradient=None,
+                 radius=25, blur=15, gradient=None,
                  overlay=True, control=True, show=True, **kwargs):
         super(HeatMap, self).__init__(name=name, overlay=overlay,
                                       control=control, show=show)
@@ -67,26 +71,18 @@ class HeatMap(Layer):
                      for line in data]
         if np.any(np.isnan(self.data)):
             raise ValueError('data may not contain NaNs.')
+        if kwargs.pop('max_val', None):
+            warnings.warn('The `max_val` parameter is no longer necessary. '
+                          'The largest intensity is calculated automatically.',
+                          stacklevel=2)
         self.options = parse_options(
             min_opacity=min_opacity,
             max_zoom=max_zoom,
-            max=max_val,
             radius=radius,
             blur=blur,
             gradient=gradient,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(HeatMap, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js'),  # noqa
-            name='leaflet-heat.js')
 
     def _get_self_bounds(self):
         """
@@ -94,6 +90,7 @@ class HeatMap(Layer):
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
+
         bounds = [[None, None], [None, None]]
         for point in self.data:
             bounds = [

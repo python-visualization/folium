@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, division, print_function
-
-from branca.element import JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.vector_layers import PolyLine
 
 
-class PolyLineOffset(PolyLine):
+class PolyLineOffset(JSCSSMixin, PolyLine):
     """
     Add offset capabilities to the PolyLine class.
 
@@ -42,6 +39,11 @@ class PolyLineOffset(PolyLine):
 
     """
 
+    default_js = [
+        ('polylineoffset',
+         'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js')
+    ]
+
     def __init__(self, locations, popup=None, tooltip=None, offset=0, **kwargs):
         super(PolyLineOffset, self).__init__(
             locations=locations, popup=popup, tooltip=tooltip, **kwargs
@@ -49,11 +51,3 @@ class PolyLineOffset(PolyLine):
         self._name = "PolyLineOffset"
         # Add PolyLineOffset offset.
         self.options.update({"offset": offset})
-
-    def render(self, **kwargs):
-        super(PolyLineOffset, self).render()
-        figure = self.get_root()
-        figure.header.add_child(
-            JavascriptLink("https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js"),  # noqa
-            name="polylineoffset",
-        )

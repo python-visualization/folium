@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Element, Figure, JavascriptLink
+from branca.element import Element, Figure
 
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import none_max, none_min
 
 from jinja2 import Template
 
 
-class HeatMapWithTime(Layer):
+class HeatMapWithTime(JSCSSMixin, Layer):
     """
     Create a HeatMapWithTime layer
 
@@ -41,7 +42,7 @@ class HeatMapWithTime(Layer):
     display_index: default True
         Display the index (usually time) in the time control.
     index_steps: default 1
-        Steps to take in the index dimension between aimation steps.
+        Steps to take in the index dimension between animation steps.
     min_speed: default 0.1
         Minimum fps speed for animation.
     max_speed: default 10
@@ -105,6 +106,21 @@ class HeatMapWithTime(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension.min.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        ('heatmap.min.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
+        ('leaflet-heatmap.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
+    ]
+    default_css = [
+        ('leaflet.timedimension.control.min.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
+
     def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
                  max_opacity=0.6, scale_radius=False, gradient=None,
                  use_local_extrema=False, auto_play=False,
@@ -160,27 +176,6 @@ class HeatMapWithTime(Layer):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension.min.js')
-
-        figure.header.add_child(
-            JavascriptLink(
-                'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js'),  # noqa
-            name='heatmap.min.js')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js'),  # noqa
-            name='leaflet-heatmap.js')
-
-        figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css'),  # noqa
-            name='leaflet.timedimension.control.min.css')
 
         figure.header.add_child(
             Element(

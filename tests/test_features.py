@@ -12,7 +12,7 @@ import warnings
 from branca.element import Element
 
 import folium
-from folium import Map, Popup, GeoJson
+from folium import Map, Popup, GeoJson, ClickForMarker
 
 import pytest
 
@@ -213,6 +213,17 @@ def test_geojson_tooltip():
         warnings.simplefilter('always')
         m._repr_html_()
         assert issubclass(w[-1].category, UserWarning), 'GeoJsonTooltip GeometryCollection test failed.'
+
+
+# GeoJsonMarker type validation.
+def test_geojson_marker():
+    m = folium.Map([30.4, -97.5], zoom_start=10)
+    with pytest.raises(TypeError):
+        folium.GeoJson(
+                os.path.join(rootpath, 'subwaystations.geojson'),
+                marker=ClickForMarker()
+            ).add_to(m)
+
 
 
 def test_geojson_find_identifier():

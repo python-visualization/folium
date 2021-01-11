@@ -11,6 +11,7 @@ from folium.utilities import (
     deep_copy,
     get_obj_in_upper_tree,
     parse_options,
+    _is_url,
 )
 
 
@@ -154,3 +155,14 @@ def test_parse_options():
     assert parse_options(thing=None) == {}
     assert parse_options(long_thing=42) == {'longThing': 42}
     assert parse_options(thing=42, lst=[1, 2]) == {'thing': 42, 'lst': [1, 2]}
+
+
+@pytest.mark.parametrize('url', [
+    "https://example.com/img.png",
+    "http://example.com/img.png",
+    "ftp://example.com/img.png",
+    "file:///t.jpg",
+    "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+])
+def test_is_url(url):
+    assert _is_url(url) is True

@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
 
-class BeautifyIcon(MacroElement):
+class BeautifyIcon(JSCSSMixin, MacroElement):
     """
     Create a BeautifyIcon that can be added to a Marker
 
@@ -55,6 +56,15 @@ class BeautifyIcon(MacroElement):
     ICON_SHAPE_TYPES = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot',
                         'marker', None]
 
+    default_js = [
+        ('beautify_icon_js',
+         'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js')
+    ]
+    default_css = [
+        ('beautify_icon_css',
+         'https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css')
+    ]
+
     def __init__(self, icon=None, icon_shape=None, border_width=3,
                  border_color='#000', text_color='#000',
                  background_color='#FFF', inner_icon_style='', spin=False,
@@ -75,17 +85,3 @@ class BeautifyIcon(MacroElement):
             text=number,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(BeautifyIcon, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-        figure.header.add_child(
-            CssLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.css'),  # noqa
-            name='beautify_icon_css')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/marslan390/BeautifyMarker/master/leaflet-beautify-marker-icon.js'),  # noqa
-            name='beautify_icon_js')

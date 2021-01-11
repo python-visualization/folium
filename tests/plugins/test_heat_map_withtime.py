@@ -26,13 +26,13 @@ def test_heat_map_with_time():
     out = normalize(m._parent.render())
 
     # We verify that the script imports are present.
-    script = '<script src="https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js"></script>'  # noqa
     assert script in out
-    script = '<script src="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_hm.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js"></script>'  # noqa
     assert script in out
-    script = '<script src="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/pa7_leaflet_hm.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js"></script>'  # noqa
     assert script in out
-    script = '<link rel="stylesheet" href="https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"/>'  # noqa
+    script = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css"/>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.

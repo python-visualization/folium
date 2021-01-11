@@ -8,13 +8,14 @@ Make beautiful, interactive maps with Python and Leaflet.js
 import time
 import warnings
 
-from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from branca.element import Element, Figure, MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import (
     _parse_size,
-    _tmp_html,
+    temp_html_filepath,
     validate_location,
     parse_options,
 )
@@ -47,7 +48,7 @@ _default_css = [
     ('awesome_markers_css',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
     ('awesome_rotate_css',
-     'https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css'),  # noqa
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css'),  # noqa
     ]
 
 
@@ -67,7 +68,7 @@ class GlobalSwitches(Element):
         self.disable_3d = disable_3d
 
 
-class Map(MacroElement):
+class Map(JSCSSMixin, MacroElement):
     """Create a Map with Folium and Leaflet.js
 
     Generate a base map of given width and height with either default
@@ -83,7 +84,12 @@ class Map(MacroElement):
         - "CartoDB" (positron and dark_matter)
 
     You can pass a custom tileset to Folium by passing a Leaflet-style
-    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
+    URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+
+    You can find a list of free tile providers here:
+    ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+    Be sure to check their terms and conditions and to provide attribution
+    with the `attr` keyword.
 
     Parameters
     ----------
@@ -145,20 +151,16 @@ class Map(MacroElement):
 
     Examples
     --------
-    >>> m = folium.Map(location=[45.523, -122.675],
-    ...                        width=750, height=500)
-    >>> m = folium.Map(location=[45.523, -122.675],
-                               tiles='Mapbox Control Room')
-    >>> m = folium.Map(location=(45.523, -122.675), max_zoom=20,
-                               tiles='Cloudmade', API_key='YourKey')
+    >>> m = folium.Map(location=[45.523, -122.675], width=750, height=500)
+    >>> m = folium.Map(location=[45.523, -122.675], tiles='cartodb positron')
     >>> m = folium.Map(
     ...    location=[45.523, -122.675],
     ...    zoom_start=2,
-    ...    tiles='http://{s}.tiles.mapbox.com/v3/mapbox.control-room/{z}/{x}/{y}.png',
+    ...    tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=mytoken',
     ...    attr='Mapbox attribution'
     ...)
 
-    """
+    """  # noqa
     _template = Template(u"""
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
@@ -206,6 +208,10 @@ class Map(MacroElement):
 
         {% endmacro %}
         """)
+
+    # use the module variables for backwards compatibility
+    default_js = _default_js
+    default_css = _default_css
 
     def __init__(
             self,
@@ -313,7 +319,7 @@ class Map(MacroElement):
             driver = webdriver.Firefox(options=options)
 
             html = self.get_root().render()
-            with _tmp_html(html) as fname:
+            with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get('file:///{path}'.format(path=fname))
                 driver.maximize_window()
@@ -339,14 +345,6 @@ class Map(MacroElement):
 
         # Set global switches
         figure.header.add_child(self.global_switches, name='global_switches')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
 
         figure.header.add_child(Element(
             '<style>html, body {'

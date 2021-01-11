@@ -27,13 +27,14 @@ class TileLayer(Layer):
             - "OpenStreetMap"
             - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
             - "CartoDB positron", "CartoDB dark_matter"
-            - "Mapbox Bright", "Mapbox Control Room" (Limited zoom)
-            - "Cloudmade" (Must pass API key)
-            - "Mapbox" (Must pass API key)
 
         You can pass a custom tileset to Folium by passing a Leaflet-style
-        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``
-        You must then also provide attribution, use the `attr` keyword.
+        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+
+        You can find a list of free tile providers here:
+        ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+        Be sure to check their terms and conditions and to provide attribution
+        with the `attr` keyword.
     min_zoom: int, default 0
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
@@ -43,8 +44,6 @@ class TileLayer(Layer):
         If provided you can zoom in past this level. Else tiles will turn grey.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
-    API_key: str, default None
-        API key for Cloudmade or Mapbox tiles.
     detect_retina: bool, default False
         If true and user is on a retina display, it will request four
         tiles of half the specified size and a bigger zoom level in place
@@ -78,7 +77,7 @@ class TileLayer(Layer):
         """)
 
     def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
-                 max_native_zoom=None, attr=None, API_key=None,
+                 max_native_zoom=None, attr=None,
                  detect_retina=False, name=None, overlay=False,
                  control=True, show=True, no_wrap=False, subdomains='abc',
                  tms=False, opacity=1, **kwargs):
@@ -91,16 +90,20 @@ class TileLayer(Layer):
         self._env = ENV
 
         tiles_flat = ''.join(tiles.lower().strip().split())
-        if tiles_flat in ('cloudmade', 'mapbox') and not API_key:
-            raise ValueError('You must pass an API key if using Cloudmade'
-                             ' or non-default Mapbox tiles.')
+        if tiles_flat in {'cloudmade', 'mapbox', 'mapboxbright', 'mapboxcontrolroom'}:
+            # added in May 2020 after v0.11.0, remove in a future release
+            raise ValueError(
+                'Built-in templates for Mapbox and Cloudmade have been removed. '
+                'You can still use these providers by passing a URL to the `tiles` '
+                'argument. See the documentation of the `TileLayer` class.'
+            )
         templates = list(self._env.list_templates(
             filter_func=lambda x: x.startswith('tiles/')))
         tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
         attr_template = 'tiles/' + tiles_flat + '/attr.txt'
 
         if tile_template in templates and attr_template in templates:
-            self.tiles = self._env.get_template(tile_template).render(API_key=API_key)  # noqa
+            self.tiles = self._env.get_template(tile_template).render()
             attr = self._env.get_template(attr_template).render()
         else:
             self.tiles = tiles
