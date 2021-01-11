@@ -26,13 +26,21 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
-
+    init_timestamp: int, default 0
+        Initial time-stamp index on the slider. Must be in the range
+        `[-L, L-1]`, where `L` is the maximum number of time stamps in
+        `styledict`. For example, use `-1` to initialize the slider to the
+        latest timestamp.
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
-            var current_timestamp = timestamps[0];
+            {% if this.init_timestamp >= 0 %}
+            var current_timestamp = timestamps[{{ this.init_timestamp }}];
+            {% else %}
+            var current_timestamp = timestamps[timestamps.length+{{ this.init_timestamp }}];
+            {% endif %}
 
             // insert time slider
             d3.select("body").insert("p", ":first-child").append("input")
@@ -40,7 +48,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 .attr("width", "100px")
                 .attr("min", 0)
                 .attr("max", timestamps.length - 1)
-                .attr("value", 0)
+                .attr("value", current_timestamp)
                 .attr("id", "slider")
                 .attr("step", "1")
                 .style('align', 'center');
@@ -137,7 +145,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     ]
 
     def __init__(self, data, styledict, name=None, overlay=True, control=True,
-                 show=True):
+                 show=True, init_timestamp=0):
         super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
                                                    control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
@@ -156,3 +164,14 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
         self.timestamps = timestamps
         self.styledict = styledict
+        if init_timestamp >= 0:
+            assert init_timestamp < len(timestamps), (
+                'init_timestamp cannot be {} since it is greater than the'
+                ' number of timestamps, which is {}.'
+            ).format(init_timestamp, len(timestamps))
+        else:
+            assert -len(timestamps) <= init_timestamp, (
+                'When init_timestamp is negative, it must be in the range'
+                ' `[-len(timestamps), -1]` but got {} instead.'
+            ).format(init_timestamp)
+        self.init_timestamp = init_timestamp
