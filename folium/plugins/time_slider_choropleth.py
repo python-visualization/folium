@@ -36,12 +36,8 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         {% macro script(this, kwargs) %}
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
-            {% if this.init_timestamp >= 0 %}
-            var current_timestamp = timestamps[{{ this.init_timestamp }}];
-            {% else %}
-            var current_timestamp = timestamps[timestamps.length+{{ this.init_timestamp }}];
-            {% endif %}
-
+            var current_timestamp = timestamps[
+                (timestamps.length+{{ this.init_timestamp}}) % timestamps.length];
             // insert time slider
             d3.select("body").insert("p", ":first-child").append("input")
                 .attr("type", "range")
@@ -164,14 +160,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
         self.timestamps = timestamps
         self.styledict = styledict
-        if init_timestamp >= 0:
-            assert init_timestamp < len(timestamps), (
-                'init_timestamp cannot be {} since it is greater than the'
-                ' number of timestamps, which is {}.'
-            ).format(init_timestamp, len(timestamps))
-        else:
-            assert -len(timestamps) <= init_timestamp, (
-                'When init_timestamp is negative, it must be in the range'
-                ' `[-len(timestamps), -1]` but got {} instead.'
-            ).format(init_timestamp)
+        assert -len(timestamps) <= init_timestamp < len(timestamps), (
+            'init_timestamp must be in the range [-{}, {}) but got {}'.format(
+                len(timestamps), len(timestamps), init_timestamp))
         self.init_timestamp = init_timestamp
