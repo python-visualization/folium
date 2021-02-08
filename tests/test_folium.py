@@ -248,6 +248,18 @@ class TestFolium(object):
             fill_color=fill_color,
             columns=columns)
 
+    def test_choropleth_geopandas_no_crs(self):
+        import geopandas as gpd
+        world = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+        world.crs = None
+        world["idx"] = range(len(world))
+        Choropleth(
+            world,
+            data=world[["idx", "pop_est"]],
+            key_on="feature.properties.idx",
+            columns=["idx", "pop_est"],
+        )
+
     def test_choropleth_warning(self):
         """Test that the Map.choropleth method works and raises a warning."""
         self.setup()
