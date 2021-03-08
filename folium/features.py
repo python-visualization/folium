@@ -543,10 +543,10 @@ class GeoJson(Layer):
         else:
             raise ValueError('Cannot render objects with any missing geometries'
                              ': {!r}'.format(data))
-   
+
     def get_geojson_from_web(self, url):
         return requests.get(url).json()
-        
+
     def convert_to_feature_collection(self):
         """Convert data into a FeatureCollection if it is not already."""
         if self.data['type'] == 'FeatureCollection':
