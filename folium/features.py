@@ -526,7 +526,7 @@ class GeoJson(Layer):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 if not self.embed:
                     self.embed_link = data
-                return requests.get(data).json()
+                return self.get_geojson_from_web(data)
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.embed = True
                 return json.loads(data)
@@ -543,6 +543,9 @@ class GeoJson(Layer):
         else:
             raise ValueError('Cannot render objects with any missing geometries'
                              ': {!r}'.format(data))
+
+    def get_geojson_from_web(self, url):
+        return requests.get(url).json()
 
     def convert_to_feature_collection(self):
         """Convert data into a FeatureCollection if it is not already."""
