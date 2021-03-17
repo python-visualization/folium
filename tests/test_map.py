@@ -125,3 +125,8 @@ def test_icon_invalid_marker_colors():
     pytest.warns(UserWarning, Icon, color='lila')
     pytest.warns(UserWarning, Icon, color=42)
     pytest.warns(UserWarning, Icon, color=None)
+
+
+def test_map_render_returns_str():
+    m = Map()
+    assert isinstance(m.render(), str)

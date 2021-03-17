@@ -365,7 +365,7 @@ class Map(JSCSSMixin, MacroElement):
             '}'
             '</style>'), name='map_style')
 
-        super(Map, self).render(**kwargs)
+        return super(Map, self).render(**kwargs)
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):

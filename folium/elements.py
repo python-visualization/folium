@@ -18,4 +18,4 @@ class JSCSSMixin(Element):
         for name, url in self.default_css:
             figure.header.add_child(CssLink(url), name=name)
 
-        super().render(**kwargs)
+        return super().render(**kwargs)
