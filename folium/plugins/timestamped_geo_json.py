@@ -124,6 +124,9 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                         if (feature.properties.popup) {
                         layer.bindPopup(feature.properties.popup);
                         }
+                        if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
+                        }
                     }
                 })
 
