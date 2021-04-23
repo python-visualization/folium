@@ -151,6 +151,9 @@ def test_timestamped_geo_json():
                     if (feature.properties.popup) {
                     layer.bindPopup(feature.properties.popup);
                     }
+                    if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
+                    }
                 }
             })
 
