@@ -68,8 +68,9 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
     ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
     ...           },
     ...         'properties': {
-    ...           'times': [1435708800000, 1435795200000, 1435881600000]
-    ...           }
+    ...           'times': [1435708800000, 1435795200000, 1435881600000],
+    ...           'tooltip': 'my tooltip text'
+    ...           },
     ...         }
     ...       ]
     ...     })
