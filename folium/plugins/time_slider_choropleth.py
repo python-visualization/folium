@@ -44,7 +44,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 .attr("width", "100px")
                 .attr("min", 0)
                 .attr("max", timestamps.length - 1)
-                .attr("value", current_timestamp)
+                .attr("value", {{ this.init_timestamp }})
                 .attr("id", "slider")
                 .attr("step", "1")
                 .style('align', 'center');
