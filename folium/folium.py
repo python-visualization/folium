@@ -40,7 +40,7 @@ _default_css = [
     ('leaflet_css',
      'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'),
     ('bootstrap_css',
-     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
+     'https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'),
     ('bootstrap_theme_css',
      'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'),  # noqa
     ('awesome_markers_font_css',
