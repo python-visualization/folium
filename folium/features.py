@@ -259,6 +259,8 @@ class VegaLite(Element):
             self._embed_vegalite_v2(figure)
         elif vegalite_major_version == '3':
             self._embed_vegalite_v3(figure)
+        elif vegalite_major_version == '4':
+            self._embed_vegalite_v4(figure)
         else:
             # Version 2 is assumed as the default, if no version is given in the schema.
             self._embed_vegalite_v2(figure)
@@ -272,6 +274,13 @@ class VegaLite(Element):
             major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
 
         return major_version
+
+    def _embed_vegalite_v4(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm//vega@5'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@4'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@6'), name='vega-embed')
 
     def _embed_vegalite_v3(self, figure):
         self._vega_embed()
