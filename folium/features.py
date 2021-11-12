@@ -16,7 +16,7 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
 from folium.utilities import (
     validate_locations,
     _parse_size,
@@ -514,7 +514,7 @@ class GeoJson(Layer):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
-        if isinstance(popup, (GeoJsonPopup)):
+        if isinstance(popup, (GeoJsonPopup, Popup)):
             self.add_child(popup)
 
     def process_data(self, data):
