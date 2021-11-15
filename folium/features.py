@@ -1441,7 +1441,7 @@ class ClickForLatLng(MacroElement):
                         lng = e.latlng.lng.toFixed(6);
                     var txt = {{this.format_str}};
                     navigator.clipboard.writeText(txt);
-                    {% if this.alert %}alert("Copied to clipboads : \\n    " + txt);{% endif %}
+                    {% if this.alert %}alert("Copied to clipboard : \\n    " + txt);{% endif %}
                     };
                 {{this._parent.get_name()}}.on('click', getLatLng);
             {% endmacro %}
