@@ -15,7 +15,7 @@ if sys.version_info < (3, 5):
 
     See folium `README.rst` file for more information:
 
-    https://github.com/python-visualization/folium/blob/master/README.rst
+    https://github.com/python-visualization/folium/blob/main/README.rst
 
     Python {py} detected.
 

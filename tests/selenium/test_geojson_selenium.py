@@ -11,7 +11,7 @@ def test_geojson(driver):
     - https://github.com/python-visualization/folium/pull/1289
 
     """
-    data_url = 'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/examples/data/search_bars_rome.json'
+    data_url = 'https://cdn.jsdelivr.net/gh/python-visualization/folium@main/examples/data/search_bars_rome.json'
 
     m = folium.Map((41.9, 12.5), zoom_start=10, tiles='cartodbpositron')
     marker_cluster = folium.plugins.MarkerCluster(name='cluster').add_to(m)

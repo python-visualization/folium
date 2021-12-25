@@ -32,7 +32,7 @@ except ImportError:
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 # For testing remote requests
-remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json'  # noqa
+remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/main/examples/data/us-states.json'  # noqa
 
 
 def setup_data():
