@@ -4,27 +4,27 @@
     :target: https://pypi.org/project/folium
     :alt: PyPI Package
 
-.. |Test| image:: https://github.com/python-visualization/folium/actions/workflows/test_code/badge.svg
+.. |Test| image:: https://github.com/python-visualization/folium/actions/workflows/test_code.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_code.yml
     :alt: Code tests
 
-.. |Branca| image:: https://github.com/python-visualization/folium/actions/workflows/test_latest_branca/badge.svg
+.. |Branca| image:: https://github.com/python-visualization/folium/actions/workflows/test_latest_branca.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_latest_branca.yml
     :alt: Code Tests with Latest branca
 
-.. |Selenium| image:: https://github.com/python-visualization/folium/actions/workflows/test_selenium/badge.svg
+.. |Selenium| image:: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml
     :alt: Selenium Tests
 
-.. |Notebook| image:: https://github.com/python-visualization/folium/actions/workflows/test_code_notebooks/badge.svg
+.. |Notebook| image:: https://github.com/python-visualization/folium/actions/workflows/test_code_notebooks.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_code_notebooks.yml
     :alt: Notebook Code Tests
 
-.. |Notebook-Style| image:: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks/badge.svg
+.. |Notebook-Style| image:: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml
     :alt: Notebook Style Tests
 
-.. |Publish-PyPI| image:: https://github.com/python-visualization/folium/actions/workflows/publish/badge.svg
+.. |Publish-PyPI| image:: https://github.com/python-visualization/folium/actions/workflows/publish.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/publish.yml
     :alt: Publish to PyPI
 
