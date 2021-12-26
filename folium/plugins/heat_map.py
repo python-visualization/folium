@@ -57,7 +57,7 @@ class HeatMap(JSCSSMixin, Layer):
 
     default_js = [
         ('leaflet-heat.js',
-         'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js'),
     ]
 
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
