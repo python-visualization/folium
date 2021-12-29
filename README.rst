@@ -1,4 +1,4 @@
-|PyPI| |Travis| |Gitter| |DOI| |binder|
+|PyPI| |Travis| |Gitter| |DOI| |binder| |pre-commit.ci|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
@@ -17,7 +17,12 @@
    :alt: DOI
    
 .. |binder| image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/python-visualization/folium/main?filepath=examples
+   :target: https://mybinder.org/v2/gh/python-visualization/folium/main?filepath=examples
+   :alt: binder
+
+.. |pre-commit.ci| image:: https://results.pre-commit.ci/badge/github/python-visualization/folium/main.svg
+   :target: https://results.pre-commit.ci/latest/github/python-visualization/folium/main
+   :alt: pre-commit.ci status
 
 folium
 ======
