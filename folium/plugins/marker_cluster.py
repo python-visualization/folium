@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
 from folium.utilities import validate_locations, parse_options

@@ -1,4 +1,3 @@
-
 import base64
 import glob
 from html.parser import HTMLParser
