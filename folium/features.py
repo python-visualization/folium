@@ -347,7 +347,7 @@ class GeoJson(Layer):
     popup: GeoJsonPopup, optional
         Show a different popup for each feature by passing a GeoJsonPopup object.
     marker: Circle, CircleMarker or Marker, optional
-        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        If your data contains Point geometry, you can format the markers by passing a Circle,
         CircleMarker or Marker object with your wanted options. The `style_function` and
         `highlight_function` will also target the marker object you passed.
     embed: bool, default True
