@@ -12,9 +12,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.6
+        python-version: 3.x
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
@@ -22,10 +22,8 @@ jobs:
 
     - name: build
       run: |
-        python -m pip install wheel twine
-        python -m pip install -r requirements.txt
-        python setup.py sdist
-        pip wheel . -w dist --no-deps
+        python -m pip install --upgrade pip wheel setuptools setuptools_scm build twine
+        python -m build --sdist --wheel . --outdir dist
 
     - name: Check files
       run: |
@@ -34,7 +32,8 @@ jobs:
 
     - name: Test wheels
       run: |
-        python -m twine check dist/*
+        cd dist && python -m pip install folium*.whl
+        python -m twine check *
       shell: bash
 
     - name: Publish a Python distribution to PyPI
