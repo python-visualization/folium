@@ -1,4 +1,4 @@
-|PyPI| |Test| |Branca| |Selenium| |Notebook| |Notebook-Style| |Publish-PyPI| |Gitter| |DOI| |binder|
+|PyPI| |Test| |Selenium| |Notebook| |Notebook-Style| |Gitter| |DOI| |binder|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
@@ -7,10 +7,6 @@
 .. |Test| image:: https://github.com/python-visualization/folium/actions/workflows/test_code.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_code.yml
     :alt: Code tests
-
-.. |Branca| image:: https://github.com/python-visualization/folium/actions/workflows/test_latest_branca.yml/badge.svg
-    :target: https://github.com/python-visualization/folium/actions/workflows/test_latest_branca.yml
-    :alt: Code Tests with Latest branca
 
 .. |Selenium| image:: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml
@@ -23,10 +19,6 @@
 .. |Notebook-Style| image:: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml
     :alt: Notebook Style Tests
-
-.. |Publish-PyPI| image:: https://github.com/python-visualization/folium/actions/workflows/publish.yml/badge.svg
-    :target: https://github.com/python-visualization/folium/actions/workflows/publish.yml
-    :alt: Publish to PyPI
 
 .. |Gitter| image:: https://badges.gitter.im/python-visualization/folium.svg
     :target: https://gitter.im/python-visualization/folium
