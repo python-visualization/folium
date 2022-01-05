@@ -1,12 +1,6 @@
-name: Publish to PyPI
+name: publish
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   release:
     types:
       - published
@@ -26,16 +20,12 @@ jobs:
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
       shell: bash
 
-    - name: Install build tools
+    - name: build
       run: |
-        python -m pip install --upgrade pip wheel build twine
+        python -m pip install --upgrade pip wheel setuptools setuptools_scm build twine
+        python -m build --sdist --wheel . --outdir dist
 
-      shell: bash
-
-    - name: Build binary wheel and sdist
-      run: python -m build --sdist --wheel . --outdir dist
-
-    - name: CheckFiles
+    - name: Check files
       run: |
         ls dist
       shell: bash
@@ -47,7 +37,6 @@ jobs:
       shell: bash
 
     - name: Publish a Python distribution to PyPI
-      if: ${{ github.event_name == 'create' && github.event.ref_type == 'tag' }}
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__

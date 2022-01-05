@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import json
 
 from branca.element import MacroElement

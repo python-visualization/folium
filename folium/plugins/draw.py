@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from branca.element import Element, Figure, MacroElement
 
 from folium.elements import JSCSSMixin

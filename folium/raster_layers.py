@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 

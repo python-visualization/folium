@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from branca.element import MacroElement
 
 from jinja2 import Template

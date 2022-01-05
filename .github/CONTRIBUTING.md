@@ -64,7 +64,7 @@ The basic workflow for contributing is:
 
    If using `conda` one can create a development environment with:
    ```
-   $ conda create --name FOLIUM python=3.7 --file requirements.txt --file requirements-dev.txt
+   $ conda create --name FOLIUM -c conda-forge python=3 --file requirements.txt --file requirements-dev.txt
    ```
 5. Install the dependencies listed in `requirements.txt` and `requirements-dev.txt`.
    ```

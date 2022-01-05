@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 

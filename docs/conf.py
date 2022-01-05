@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Folium documentation build configuration file, created by
 # sphinx-quickstart on Sun May 19 19:39:34 2013.
 #
