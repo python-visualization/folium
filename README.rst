@@ -1,4 +1,4 @@
-|PyPI| |Test| |Selenium| |Notebook| |Notebook-Style| |Gitter| |DOI| |binder|
+|PyPI| |Test| |Gitter| |DOI| |binder|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
@@ -7,18 +7,6 @@
 .. |Test| image:: https://github.com/python-visualization/folium/actions/workflows/test_code.yml/badge.svg
     :target: https://github.com/python-visualization/folium/actions/workflows/test_code.yml
     :alt: Code tests
-
-.. |Selenium| image:: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml/badge.svg
-    :target: https://github.com/python-visualization/folium/actions/workflows/test_selenium.yml
-    :alt: Selenium Tests
-
-.. |Notebook| image:: https://github.com/python-visualization/folium/actions/workflows/test_code_notebooks.yml/badge.svg
-    :target: https://github.com/python-visualization/folium/actions/workflows/test_code_notebooks.yml
-    :alt: Notebook Code Tests
-
-.. |Notebook-Style| image:: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml/badge.svg
-    :target: https://github.com/python-visualization/folium/actions/workflows/test_style_notebooks.yml
-    :alt: Notebook Style Tests
 
 .. |Gitter| image:: https://badges.gitter.im/python-visualization/folium.svg
     :target: https://gitter.im/python-visualization/folium
