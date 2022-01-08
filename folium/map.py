@@ -86,6 +86,11 @@ class LayerControl(MacroElement):
     This object should be added to a Map object. Only Layer children
     of Map are included in the layer control.
 
+    Note
+    ----
+    The LayerControl should be added last to the map.
+    Otherwise, the LayerControl and/or the controlled layers may not appear.
+
     Parameters
     ----------
     position : str
