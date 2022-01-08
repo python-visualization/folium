@@ -1,12 +1,12 @@
-|PyPI| |Travis| |Gitter| |DOI| |binder|
+|PyPI| |Test| |Gitter| |DOI| |binder|
 
 .. |PyPI| image:: https://img.shields.io/pypi/v/folium.svg
     :target: https://pypi.org/project/folium
     :alt: PyPI Package
 
-.. |Travis| image:: https://travis-ci.org/python-visualization/folium.svg?branch=main
-    :target: https://travis-ci.org/python-visualization/folium
-    :alt: Travis Build Status
+.. |Test| image:: https://github.com/python-visualization/folium/actions/workflows/test_code.yml/badge.svg
+    :target: https://github.com/python-visualization/folium/actions/workflows/test_code.yml
+    :alt: Code tests
 
 .. |Gitter| image:: https://badges.gitter.im/python-visualization/folium.svg
     :target: https://gitter.im/python-visualization/folium
