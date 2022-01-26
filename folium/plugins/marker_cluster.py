@@ -1,6 +1,6 @@
 from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
-from folium.utilities import validate_locations, parse_options
+from folium.utilities import parse_options, validate_locations
 
 from jinja2 import Template
 

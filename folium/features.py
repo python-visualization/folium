@@ -3,10 +3,10 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-import json
-import warnings
 import functools
+import json
 import operator
+import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -14,17 +14,17 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Popup, Tooltip)
 from folium.utilities import (
-    validate_locations,
     _parse_size,
+    camelize,
     get_bounds,
+    get_obj_in_upper_tree,
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree,
     parse_options,
-    camelize
+    validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -583,16 +583,16 @@ class GeoJson(Layer):
         """
         feats = self.data['features']
         # Each feature has an 'id' field with a unique value.
-        unique_ids = set(feat.get('id', None) for feat in feats)
+        unique_ids = {feat.get('id', None) for feat in feats}
         if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
         # Each feature has a unique string or int property.
         if all(isinstance(feat.get('properties', None), dict) for feat in feats):
             for key in feats[0]['properties']:
-                unique_values = set(
+                unique_values = {
                     feat['properties'].get(key, None) for feat in feats
                     if isinstance(feat['properties'].get(key, None), (str, int))
-                )
+                }
                 if len(unique_values) == len(feats):
                     return 'feature.properties.{}'.format(key)
         # We add an 'id' field with a unique value to the data.
