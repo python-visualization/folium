@@ -28,6 +28,8 @@ from folium.utilities import (
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
+from jenkspy import jenks_breaks
+
 from jinja2 import Template
 
 import numpy as np
@@ -1174,6 +1176,7 @@ class Choropleth(FeatureGroup):
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
                  topojson=None, smooth_factor=None, highlight=None,
+                 use_jenks=False,
                  **kwargs):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
@@ -1212,7 +1215,12 @@ class Choropleth(FeatureGroup):
         if color_data is not None and key_on is not None:
             real_values = np.array(list(color_data.values()))
             real_values = real_values[~np.isnan(real_values)]
-            _, bin_edges = np.histogram(real_values, bins=bins)
+            if use_jenks:
+                if not isinstance(bins, int):
+                    raise ValueError(f'bins value must be an integer. Invalid value "{bins}" received.')
+                bin_edges = np.array(jenks_breaks(real_values, bins))
+            else:
+                _, bin_edges = np.histogram(real_values, bins=bins)
 
             bins_min, bins_max = min(bin_edges), max(bin_edges)
             if np.any((real_values < bins_min) | (real_values > bins_max)):
