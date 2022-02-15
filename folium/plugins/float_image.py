@@ -31,3 +31,4 @@ class FloatImage(MacroElement):
         self.image = image
         self.bottom = bottom
         self.left = left
+        self.width = width
