@@ -118,7 +118,7 @@ def test_color_line():
 
 @pytest.fixture
 def vegalite_spec(version):
-    file_version = 'v1' if version == '1' else 'vlater'
+    file_version = 'v1' if version == 1 else 'vlater'
     file = os.path.join(rootpath, 'vegalite_data', f'vegalite_{file_version}.json')
 
     if not os.path.exists(file):
@@ -132,7 +132,6 @@ def vegalite_spec(version):
 
     # Sample versions that might show up
     schema_version = {
-        1: 'v1.3.1',
         2: 'v2.6.0',
         3: 'v3.6.0',
         4: 'v4.6.0',
