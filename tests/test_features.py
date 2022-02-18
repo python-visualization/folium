@@ -142,6 +142,7 @@ def vegalite_spec(version):
 
     return spec
 
+
 @pytest.mark.parametrize(
     'version',
     ['1', '2', '3', '4', '5', 'none']
