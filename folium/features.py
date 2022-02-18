@@ -252,11 +252,11 @@ class VegaLite(Element):
             """).render(this=self, **kwargs)), name=self.get_name())
 
         embed_mapping = {
-            '1': self._embed_vegalite_v1,
-            '2': self._embed_vegalite_v2,
-            '3': self._embed_vegalite_v3,
-            '4': self._embed_vegalite_v4,
-            '5': self._embed_vegalite_v5
+            1: self._embed_vegalite_v1,
+            2: self._embed_vegalite_v2,
+            3: self._embed_vegalite_v3,
+            4: self._embed_vegalite_v4,
+            5: self._embed_vegalite_v5,
         }
 
         # Version 2 is assumed as the default, if no version is given in the schema.
@@ -264,13 +264,13 @@ class VegaLite(Element):
         embed_vegalite(figure)
 
     @property
-    def vegalite_major_version(self):
+    def vegalite_major_version(self) -> int:
         if '$schema' not in self.data:
             return None
 
         schema = self.data['$schema']
 
-        return schema.split('/')[-1].split('.')[0].lstrip('v')
+        return int(schema.split('/')[-1].split('.')[0].lstrip('v'))
 
     def _embed_vegalite_v5(self, figure):
         self._vega_embed()

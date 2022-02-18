@@ -127,16 +127,16 @@ def vegalite_spec(version):
     with open(file, 'r') as f:
         spec = json.load(f)
 
-    if version == 'none' or '$schema' in spec:
+    if version is None or '$schema' in spec:
         return spec
 
     # Sample versions that might show up
     schema_version = {
-        '1': 'v1.3.1',
-        '2': 'v2.6.0',
-        '3': 'v3.6.0',
-        '4': 'v4.6.0',
-        '5': 'v5.1.0'
+        1: 'v1.3.1',
+        2: 'v2.6.0',
+        3: 'v3.6.0',
+        4: 'v4.6.0',
+        5: 'v5.1.0'
     }[version]
     spec['$schema'] = f'https://vega.github.io/schema/vega-lite/{schema_version}.json'
 
@@ -145,12 +145,12 @@ def vegalite_spec(version):
 
 @pytest.mark.parametrize(
     'version',
-    ['1', '2', '3', '4', '5', 'none']
+    [1, 2, 3, 4, 5, None]
 )
 def test_vegalite_major_version(vegalite_spec, version):
     vegalite = folium.features.VegaLite(vegalite_spec)
 
-    if version == 'none':
+    if version is None:
         assert vegalite.vegalite_major_version is None
     else:
         assert vegalite.vegalite_major_version == version
