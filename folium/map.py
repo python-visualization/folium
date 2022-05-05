@@ -325,7 +325,7 @@ class Popup(Element):
 
         {% for name, element in this.html._children.items() %}
             {% if this.lazy %}
-                {{ this._parent.get_name() }}.on('click', function() {
+                {{ this._parent.get_name() }}.once('click', function() {
                     {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
                 });
             {% else %}
