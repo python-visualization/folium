@@ -17,12 +17,12 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     options: dict or str, VectorGrid.protobuf options
 
         For convenience you can pass VectorGrid.protobuf options as python dictionary or string.
-        Strings allow plan JavaScript to be passed, therefor allow for conditional styling (see examples).
+        Strings allow plain JavaScript to be passed, therefore allow for conditional styling (see examples).
 
         Additionally the url might contain any string literals like {token}, or {key}
         that can be passed as attribute to the options dict and will be substituted.
 
-        Every layer inside the tile layer has to be styled separatly.
+        Every layer inside the tile layer has to be styled separately.
 
     Examples
     --------
