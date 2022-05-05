@@ -27,7 +27,7 @@ jobs:
     - name: Python ${{ matrix.python-version }}
       shell: bash -l {0}
       run: |
-        conda create --yes --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt
+        conda create --yes --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --strict-channel-priority
         source activate TEST
         pip install -e . --no-deps --force-reinstall
 
