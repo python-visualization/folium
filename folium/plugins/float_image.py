@@ -12,6 +12,7 @@ class FloatImage(MacroElement):
                         position:absolute;
                         bottom:{{this.bottom}}%;
                         left:{{this.left}}%;
+                        width:{{this.width}}%;
                         }
                 </style>
             {% endmacro %}
@@ -24,9 +25,10 @@ class FloatImage(MacroElement):
             {% endmacro %}
             """)
 
-    def __init__(self, image, bottom=75, left=75):
+    def __init__(self, image, bottom=75, left=75, width=100):
         super(FloatImage, self).__init__()
         self._name = 'FloatImage'
         self.image = image
         self.bottom = bottom
         self.left = left
+        self.width = width
