@@ -70,7 +70,9 @@ class IframeParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         if tag == 'iframe':
             attrs = dict(attrs)
-            if 'data-html' in attrs:
+            if 'srcdoc' in attrs:
+                html_bytes = attrs['srcdoc'].encode()
+            elif 'data-html' in attrs:  # legacy
                 data_html = attrs['data-html']
                 if '%' in data_html[:20]:
                     # newest branca version: data-html is percent-encoded
@@ -78,7 +80,7 @@ class IframeParser(HTMLParser):
                 else:
                     # legacy branca version: data-html is base64 encoded
                     html_bytes = base64.b64decode(data_html)
-            else:  # legacy, can be removed when all notebooks have `data-html`.
+            else:  # legacy
                 src = attrs['src']
                 html_base64 = src.split(',')[-1]
                 html_bytes = base64.b64decode(html_base64)
