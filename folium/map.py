@@ -320,13 +320,21 @@ class Popup(Element):
         True renders the popup open on page load.
     sticky: bool, default False
         True prevents map and other popup clicks from closing.
+    lazy: bool, default False
+        True only loads the Popup content when clicking on the Marker.
     """
     _template = Template(u"""
         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
         {% for name, element in this.html._children.items() %}
-            var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
-            {{ this.get_name() }}.setContent({{ name }});
+            {% if this.lazy %}
+                {{ this._parent.get_name() }}.once('click', function() {
+                    {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
+                });
+            {% else %}
+                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
+                {{ this.get_name() }}.setContent({{ name }});
+            {% endif %}
         {% endfor %}
 
         {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
@@ -338,7 +346,7 @@ class Popup(Element):
     """)  # noqa
 
     def __init__(self, html=None, parse_html=False, max_width='100%',
-                 show=False, sticky=False, **kwargs):
+                 show=False, sticky=False, lazy=False, **kwargs):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -357,6 +365,7 @@ class Popup(Element):
             self.html.add_child(Html(html, script=script))
 
         self.show = show
+        self.lazy = lazy
         self.options = parse_options(
             max_width=max_width,
             autoClose=False if show or sticky else None,
