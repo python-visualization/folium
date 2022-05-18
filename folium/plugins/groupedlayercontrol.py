@@ -7,6 +7,28 @@ from collections import OrderedDict
 
 class GroupedLayerControl(JSCSSMixin, LayerControl):
     """
+    Creates a GroupedLayerControl object to be added on a folium map. 
+    Allows grouping overlays together so that within groups, overlays are 
+    mutually exclusive.
+
+    Parameters
+    ----------
+    groups : dict
+          A dictionary where the keys are group names and the values are overlay names.
+    position : str
+          The position of the control (one of the map corners), can be
+          'topleft', 'topright', 'bottomleft' or 'bottomright'
+          default: 'topright'
+    collapsed : bool, default True
+          If true the control will be collapsed into an icon and expanded on
+          mouse hover or touch.
+    autoZIndex : bool, default True
+          If true the control assigns zIndexes in increasing order to all of
+          its layers so that the order is preserved when switching them on/off.
+    **kwargs
+        Additional (possibly inherited) options. See
+        https://leafletjs.com/reference-1.6.0.html#control-layers
+
     """
     default_js = [
         ('leaflet.groupedlayercontrol.min.js',
@@ -81,13 +103,11 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
         position='topright', 
         collapsed=False, 
         autoZIndex=True, 
-        groupCheckboxes=True,
         **kwargs
     ):
         super(GroupedLayerControl, self).__init__()
         self._name = 'GroupedLayerControl'
         self.groups = {x:key for key,sublist in groups.items() for x in sublist}
-        self.groupCheckboxes = groupCheckboxes
         self.options = parse_options(
             position=position,
             collapsed=collapsed,
