@@ -117,7 +117,6 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
             autoZIndex=autoZIndex,
             **kwargs
         )
-        self.base_layers = OrderedDict()
         self.un_grouped_overlays = OrderedDict()
         self.layers_untoggle = OrderedDict()
         self.grouped_overlays = OrderedDict()
@@ -132,10 +131,6 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
             key = item.layer_name
 
             if not item.overlay:
-                self.base_layers[key] = item.get_name()
-                if len(self.base_layers) > 1:
-                    self.layers_untoggle[key] = item.get_name()
-            else:
                 if key in self.groups.keys():
                     self.grouped_overlays[self.groups[key]][key] = item.get_name()
                     if not item.show:
