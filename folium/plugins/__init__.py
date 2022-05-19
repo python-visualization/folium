@@ -48,6 +48,7 @@ __all__ = [
     'FloatImage',
     'Fullscreen',
     'Geocoder',
+    'GroupedLayerControl',
     'HeatMap',
     'HeatMapWithTime',
     'LocateControl',
