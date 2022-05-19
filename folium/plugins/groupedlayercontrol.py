@@ -1,20 +1,24 @@
+from collections import OrderedDict
+
 from folium.elements import JSCSSMixin
 from folium.map import Layer, LayerControl
 from folium.utilities import parse_options
 
 from jinja2 import Template
-from collections import OrderedDict
+
 
 class GroupedLayerControl(JSCSSMixin, LayerControl):
     """
-    Creates a GroupedLayerControl object to be added on a folium map. 
-    Allows grouping overlays together so that within groups, overlays are 
-    mutually exclusive.
+    Creates a GroupedLayerControl object to be added on a folium map.
+    Allows grouping overlays together so that within groups, overlays are
+    mutually exclusive (radio buttons).
 
     Parameters
     ----------
     groups : dict
-          A dictionary where the keys are group names and the values are overlay names.
+          A dictionary where the keys are group names and the values are overlay names to be
+          displayed with radio buttons. Overlays NOT specified in this dictionary are 
+          added with check boxes.
     position : str
           The position of the control (one of the map corners), can be
           'topleft', 'topright', 'bottomleft' or 'bottomright'
@@ -96,18 +100,17 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
         {% endmacro %}
         """)
 
-
     def __init__(
-        self, 
+        self,
         groups,
-        position='topright', 
-        collapsed=False, 
-        autoZIndex=True, 
+        position='topright',
+        collapsed=False,
+        autoZIndex=True,
         **kwargs
     ):
         super(GroupedLayerControl, self).__init__()
         self._name = 'GroupedLayerControl'
-        self.groups = {x:key for key,sublist in groups.items() for x in sublist}
+        self.groups = {x: key for key, sublist in groups.items() for x in sublist}
         self.options = parse_options(
             position=position,
             collapsed=collapsed,
@@ -121,19 +124,13 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
         for val in self.groups.values():
             self.grouped_overlays[val] = OrderedDict()
 
-    def reset(self):
-        self.base_layers = OrderedDict()
-        self.un_grouped_overlays = OrderedDict()
-        self.layers_untoggle = OrderedDict()
-        self.grouped_overlays = OrderedDict()
-
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         for item in self._parent._children.values():
             if not isinstance(item, Layer) or not item.control:
                 continue
             key = item.layer_name
-            
+
             if not item.overlay:
                 self.base_layers[key] = item.get_name()
                 if len(self.base_layers) > 1:
