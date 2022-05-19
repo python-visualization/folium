@@ -130,7 +130,7 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
                 continue
             key = item.layer_name
 
-            if not item.overlay:
+            if item.overlay:
                 if key in self.groups.keys():
                     self.grouped_overlays[self.groups[key]][key] = item.get_name()
                     if not item.show:
