@@ -16,12 +16,12 @@ class GroupedLayerControl(JSCSSMixin, LayerControl):
     Parameters
     ----------
     groups : dict
-          A dictionary where the keys are group names and the values are lists of overlay 
-          names to be displayed with radio buttons. Overlays NOT specified in this 
-          dictionary are added with check boxes; 
+          A dictionary where the keys are group names and the values are lists of overlay
+          names to be displayed with radio buttons. Overlays NOT specified in this
+          dictionary are added with check boxes;
           e.g. {
-              "Group1":["layer1","layer2"], 
-              "Group2":["layer3","layer4"]
+              "Group1": ["layer1", "layer2"],
+              "Group2": ["layer3", "layer4"]
             }
     position : str
           The position of the control (one of the map corners), can be
