@@ -9,7 +9,7 @@ from folium.utilities import normalize
 
 from jinja2 import Template
 
-# %%
+
 def test_feature_group_sub_group():
     m = folium.Map([40., 70.], zoom_start=6)
     fg1 = folium.FeatureGroup(name='g1')
@@ -21,7 +21,7 @@ def test_feature_group_sub_group():
     m.add_child(fg1)
     m.add_child(fg2)
     m.add_child(fg3)
-    lc = groupedlayercontrol.GroupedLayerControl(groups={'groups1':['g1','g2']})
+    lc = groupedlayercontrol.GroupedLayerControl(groups={'groups1': ['g1', 'g2']})
     lc.add_to(m)
     out = normalize(m._parent.render())
 
