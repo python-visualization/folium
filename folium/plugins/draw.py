@@ -60,9 +60,9 @@ class Draw(JSCSSMixin, MacroElement):
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
                 layer.on('click', function() {
-                    alert(coords);
                     console.log(coords);
                 });
+                console.log({polygon_created: coords});
                 drawnItems.addLayer(layer);
              });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
@@ -102,6 +102,8 @@ class Draw(JSCSSMixin, MacroElement):
         self.position = position
         self.draw_options = draw_options or {}
         self.edit_options = edit_options or {}
+
+
 
     def render(self, **kwargs):
         super(Draw, self).render(**kwargs)
