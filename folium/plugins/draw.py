@@ -62,7 +62,7 @@ class Draw(JSCSSMixin, MacroElement):
                 layer.on('click', function() {
                     console.log(coords);
                 });
-                console.log(JSON.stringify({polygon_created: coords}));
+                console.log(JSON.stringify({polygon_created: layer.toGeoJSON()}));
                 drawnItems.addLayer(layer);
              });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
