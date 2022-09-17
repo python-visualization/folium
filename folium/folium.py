@@ -189,9 +189,14 @@ class Map(JSCSSMixin, MacroElement):
                     {%- endfor %}
                 }
             );
+            
+            {{ this.get_name() }}.on('click', function(e) {        
+                console.log(JSON.stringify(e.latlng));    
+            });
 
             {%- if this.control_scale %}
             L.control.scale().addTo({{ this.get_name() }});
+            
             {%- endif %}
 
             {% if this.objects_to_stay_in_front %}
