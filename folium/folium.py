@@ -191,7 +191,7 @@ class Map(JSCSSMixin, MacroElement):
             );
             
             {{ this.get_name() }}.on('click', function(e) {        
-                console.log(JSON.stringify({event: 'MAP_CLICK', value: e.latlng}));    
+                console.log(JSON.stringify({event: 'MAP_CLICKED', value: e.latlng}));    
                 
             });
 
