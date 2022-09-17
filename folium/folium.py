@@ -191,7 +191,7 @@ class Map(JSCSSMixin, MacroElement):
             );
             
             {{ this.get_name() }}.on('click', function(e) {        
-                console.log(JSON.stringify({polygon_created: e.latlng}));    
+                console.log(JSON.stringify({MAP_CLICK: e.latlng}));    
             });
 
             {%- if this.control_scale %}

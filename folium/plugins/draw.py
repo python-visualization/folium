@@ -60,9 +60,9 @@ class Draw(JSCSSMixin, MacroElement):
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
                 layer.on('click', function() {
-                    console.log(coords);
+                    console.log(JSON.stringify({POLYGON_CLICKED: layer.toGeoJSON()}));
                 });
-                console.log(JSON.stringify({polygon_created: layer.toGeoJSON()}));
+                console.log(JSON.stringify({POLYGON_CREATED: layer.toGeoJSON()}));
                 drawnItems.addLayer(layer);
              });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
