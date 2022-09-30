@@ -297,7 +297,7 @@ class Map(JSCSSMixin, MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, delay=3):
+    def _to_png(self, delay=3, webdriver_type='firefox', webdriver_path=None):
         """Export the HTML to byte representation of a PNG image.
 
         Uses selenium to render the HTML and record a PNG. You may need to
@@ -311,11 +311,14 @@ class Map(JSCSSMixin, MacroElement):
         """
         if self._png_image is None:
             from selenium import webdriver
-
-            options = webdriver.firefox.options.Options()
-            options.add_argument('--headless')
-            driver = webdriver.Firefox(options=options)
-
+            if webdriver_type == "chrome":
+                options = webdriver.ChromeOptions()
+                options.add_argument('--headless')
+                driver = webdriver.Chrome(webdriver_path, options=options)
+            else:
+                options = webdriver.firefox.options.Options()
+                options.add_argument('--headless')
+                driver = webdriver.Firefox(options=options)
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
