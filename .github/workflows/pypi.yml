@@ -1,36 +1,29 @@
 name: Publish to PyPI
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  release:
-    types:
-      - published
+on: ["push", "pull_request"]
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   packages:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.x
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      shell: bash
+      
 
     - name: Install build tools
       run: |
         python -m pip install --upgrade pip wheel build twine
-
-      shell: bash
 
     - name: Build binary wheel and sdist
       run: python -m build --sdist --wheel . --outdir dist
@@ -38,17 +31,15 @@ jobs:
     - name: CheckFiles
       run: |
         ls dist
-      shell: bash
 
     - name: Test wheels
       run: |
         cd dist && python -m pip install folium*.whl
         python -m twine check *
-      shell: bash
 
     - name: Publish a Python distribution to PyPI
-      if: ${{ github.event_name == 'create' && github.event.ref_type == 'tag' }}
-      uses: pypa/gh-action-pypi-publish@master
+      if: ${{ github.event_name == 'release' }}
+      uses: pypa/gh-action-pypi-publish@v1.5.1
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
