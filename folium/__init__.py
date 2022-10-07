@@ -88,6 +88,7 @@ __all__ = [
     'Figure',
     'FitBounds',
     'GeoJson',
+    'GeoJsonPopup',
     'GeoJsonTooltip',
     'Html',
     'IFrame',
