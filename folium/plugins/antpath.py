@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from folium.elements import JSCSSMixin
 from folium.vector_layers import path_options, BaseMultiLocation
 

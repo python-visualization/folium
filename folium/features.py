@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Leaflet GeoJson and miscellaneous features.
 
@@ -16,7 +14,7 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
 from folium.utilities import (
     validate_locations,
     _parse_size,
@@ -349,7 +347,7 @@ class GeoJson(Layer):
     popup: GeoJsonPopup, optional
         Show a different popup for each feature by passing a GeoJsonPopup object.
     marker: Circle, CircleMarker or Marker, optional
-        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        If your data contains Point geometry, you can format the markers by passing a Circle,
         CircleMarker or Marker object with your wanted options. The `style_function` and
         `highlight_function` will also target the marker object you passed.
     embed: bool, default True
@@ -514,7 +512,7 @@ class GeoJson(Layer):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
-        if isinstance(popup, (GeoJsonPopup)):
+        if isinstance(popup, (GeoJsonPopup, Popup)):
             self.add_child(popup)
 
     def process_data(self, data):
@@ -723,9 +721,9 @@ class TopoJson(JSCSSMixin, Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> TopoJson(open('foo.json'), 'object.myobject')
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> TopoJson('foo.json', 'object.myobject')
     >>> # Providing dict.
     >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
@@ -1417,6 +1415,41 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+
+class ClickForLatLng(MacroElement):
+    """
+    When one clicks on a Map that contains a ClickForLatLng,
+    the coordinates of the pointer's position are copied to clipboard.
+
+    Parameters
+    ==========
+    format_str : str, default 'lat + "," + lng'
+        The javascript string used to format the text copied to clipboard.
+        eg:
+            format_str = 'lat + "," + lng'              >> 46.558860,3.397397
+            format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
+    alert : bool, default True
+        Whether there should be an alert when something has been copied to clipboard.
+    """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                function getLatLng(e){
+                    var lat = e.latlng.lat.toFixed(6),
+                        lng = e.latlng.lng.toFixed(6);
+                    var txt = {{this.format_str}};
+                    navigator.clipboard.writeText(txt);
+                    {% if this.alert %}alert("Copied to clipboard : \\n    " + txt);{% endif %}
+                    };
+                {{this._parent.get_name()}}.on('click', getLatLng);
+            {% endmacro %}
+            """)  # noqa
+
+    def __init__(self, format_str=None, alert=True):
+        super(ClickForLatLng, self).__init__()
+        self._name = 'ClickForLatLng'
+        self.format_str = format_str or 'lat + "," + lng'
+        self.alert = alert
 
 
 class CustomIcon(Icon):

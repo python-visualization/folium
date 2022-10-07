@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Make beautiful, interactive maps with Python and Leaflet.js
 

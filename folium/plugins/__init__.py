@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Folium plugins
 --------------
@@ -35,6 +33,7 @@ from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
+from folium.plugins.vectorgrid_protobuf import VectorGridProtobuf
 
 __all__ = [
     'AntPath',
@@ -65,4 +64,5 @@ __all__ = [
     'TimeSliderChoropleth',
     'TimestampedGeoJson',
     'TimestampedWmsTileLayers',
+    'VectorGridProtobuf'
 ]

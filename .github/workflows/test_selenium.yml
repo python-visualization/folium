@@ -3,10 +3,10 @@ name: Selenium Tests
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
     branches:
-    - master
+    - main
 
 jobs:
   run:
@@ -15,14 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Conda setup
-      uses: s-weigand/setup-conda@v1.0.5
+      uses: s-weigand/setup-conda@v1
       with:
         update-conda: true
 
     - name: Conda environment creation
       shell: bash -l {0}
       run: |
-        conda create --yes --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
+        conda create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
         source activate TEST
         pip install -e . --no-deps --force-reinstall
 

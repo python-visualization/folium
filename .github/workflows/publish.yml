@@ -1,6 +1,12 @@
 name: Publish to PyPI
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   release:
     types:
       - published
@@ -12,9 +18,9 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.8
+        python-version: 3.x
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
@@ -22,24 +28,17 @@ jobs:
 
     - name: Install build tools
       run: |
-        python -m pip install --upgrade pip wheel setuptools setuptools_scm twine "branca>=0.3.0" "jinja2>=2.9" numpy requests
+        python -m pip install --upgrade pip wheel build twine
 
       shell: bash
 
-    - name: Build binary wheel
-      run: pip wheel . -w dist --no-deps
-
-    - name: Build sdist
-      run: python setup.py sdist
+    - name: Build binary wheel and sdist
+      run: python -m build --sdist --wheel . --outdir dist
 
     - name: CheckFiles
       run: |
         ls dist
       shell: bash
-
-    - name: Check Version
-      run: |
-        python setup.py --version
 
     - name: Test wheels
       run: |
@@ -48,6 +47,7 @@ jobs:
       shell: bash
 
     - name: Publish a Python distribution to PyPI
+      if: ${{ github.event_name == 'create' && github.event.ref_type == 'tag' }}
       uses: pypa/gh-action-pypi-publish@master
       with:
         user: __token__

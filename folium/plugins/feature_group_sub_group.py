@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 

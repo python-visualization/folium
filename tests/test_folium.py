@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Folium Tests
 -------
@@ -23,16 +21,11 @@ import pandas as pd
 
 import pytest
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
-
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 # For testing remote requests
-remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/master/examples/data/us-states.json'  # noqa
+remote_url = 'https://raw.githubusercontent.com/python-visualization/folium/main/examples/data/us-states.json'  # noqa
 
 
 def setup_data():
@@ -76,24 +69,22 @@ class TestFolium(object):
 
     def setup(self):
         """Setup Folium Map."""
-        with mock.patch('branca.element.uuid4') as uuid4:
-            uuid4().hex = '0' * 32
-            attr = 'http://openstreetmap.org'
-            self.m = folium.Map(
-                location=[45.5236, -122.6750],
-                width=900,
-                height=400,
-                max_zoom=20,
-                zoom_start=4,
-                max_bounds=True,
-                attr=attr
-            )
+        attr = 'http://openstreetmap.org'
+        self.m = folium.Map(
+            location=[45.5236, -122.6750],
+            width=900,
+            height=400,
+            max_zoom=20,
+            zoom_start=4,
+            max_bounds=True,
+            attr=attr
+        )
         self.env = Environment(loader=PackageLoader('folium', 'templates'))
 
     def test_init(self):
         """Test map initialization."""
 
-        assert self.m.get_name() == 'map_00000000000000000000000000000000'
+        assert self.m.get_name().startswith('map_')
         assert self.m.get_root() == self.m._parent
         assert self.m.location == [45.5236, -122.6750]
         assert self.m.options['zoom'] == 4
@@ -107,11 +98,11 @@ class TestFolium(object):
         assert self.m.global_switches.disable_3d is False
         assert self.m.to_dict() == {
             'name': 'Map',
-            'id': '00000000000000000000000000000000',
+            'id': self.m._id,
             'children': {
                 'openstreetmap': {
                     'name': 'TileLayer',
-                    'id': '00000000000000000000000000000000',
+                    'id': self.m._children["openstreetmap"]._id,
                     'children': {}
                 }
             }

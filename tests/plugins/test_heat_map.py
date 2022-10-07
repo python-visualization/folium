@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Test HeatMap
 ------------
@@ -28,7 +26,7 @@ def test_heat_map():
     out = normalize(m._parent.render())
 
     # We verify that the script import is present.
-    script = '<script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.
