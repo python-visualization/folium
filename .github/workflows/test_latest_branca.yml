@@ -1,35 +1,30 @@
 name: Code Tests with Latest branca
 
-on:
-  pull_request:
-  push:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
   run:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup Conda
-      uses: s-weigand/setup-conda@v1
+    - name: Setup Micromamba
+      uses: mamba-org/provision-with-micromamba@v13
       with:
-        activate-conda: false
-        update-conda: true
-        conda-channels: conda-forge
+        environment-file: false
 
     - name: Python 3.x
       shell: bash -l {0}
       run: |
-        conda create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt
-        source activate TEST
-        pip install -e . --no-deps --force-reinstall
+        micromamba create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        micromamba activate TEST
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Tests with latest branca
       shell: bash -l {0}
       run: |
-        source activate TEST
-        conda remove branca --yes
-        pip install git+https://github.com/python-visualization/branca.git
-        pytest -vv --ignore=tests/selenium
+        micromamba activate TEST
+        micromamba remove branca --yes
+        python -m pip install git+https://github.com/python-visualization/branca.git
+        python -m pytest -vv --ignore=tests/selenium
