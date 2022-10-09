@@ -1,5 +1,6 @@
 import folium
 import folium.plugins
+from selenium.webdriver.common.by import By
 from folium.utilities import temp_html_filepath
 
 
@@ -32,5 +33,5 @@ def test_geojson(driver):
         '.leaflet-control-layers-overlays > label:nth-of-type(2)'
     )
     assert control_label.text == 'geojson'
-    control_input = control_label.find_element_by_css_selector('input')
+    control_input = control_label.find_element(By.CSS_SELECTOR, value='input')
     assert control_input.get_attribute('checked') is None
