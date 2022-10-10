@@ -975,7 +975,7 @@ class GeoJsonTooltip(GeoJsonDetail):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.6.0#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     Examples
     --------
@@ -1028,7 +1028,7 @@ class GeoJsonPopup(GeoJsonDetail):
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
+        Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
@@ -1076,7 +1076,7 @@ class Choropleth(FeatureGroup):
     on which to key the data. The 'columns' keyword does not need to be
     passed for a Pandas series.
 
-    Colors are generated from color brewer (http://colorbrewer2.org/)
+    Colors are generated from color brewer (https://colorbrewer2.org/)
     sequential palettes. By default, linear binning is used between
     the min and the max of the values. Custom binning can be achieved
     with the `bins` parameter.
@@ -1332,7 +1332,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.6.0.html#divicon
+    See https://leafletjs.com/reference.html#divicon
 
     """
 
@@ -1427,8 +1427,8 @@ class ClickForLatLng(MacroElement):
     format_str : str, default 'lat + "," + lng'
         The javascript string used to format the text copied to clipboard.
         eg:
-            format_str = 'lat + "," + lng'              >> 46.558860,3.397397
-            format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
+        format_str = 'lat + "," + lng'              >> 46.558860,3.397397
+        format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
     alert : bool, default True
         Whether there should be an alert when something has been copied to clipboard.
     """

@@ -141,7 +141,7 @@ class Map(JSCSSMixin, MacroElement):
         Display zoom controls on the map.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
-        https://leafletjs.com/reference-1.6.0.html#map
+        https://leafletjs.com/reference.html#map
 
     Returns
     -------
