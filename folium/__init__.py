@@ -56,21 +56,21 @@ if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
 if sys.version_info < (3, 0):
     raise ImportError(
         """You are running folium {} on Python 2
-    
+
     folium 0.9 and above are no longer compatible with Python 2, but somehow
     you got this version anyway. Make sure you have pip >= 9.0 to avoid this
     kind of issue, as well as setuptools >= 24.2:
-    
+
      $ pip install pip setuptools --upgrade
-    
+
     Your choices:
-    
+
     - Upgrade to Python 3.
-    
+
     - Install an older version of folium:
-    
+
      $ pip install 'folium<0.9.0'
-    
+
     """.format(__version__))  # noqa
 
 __all__ = [

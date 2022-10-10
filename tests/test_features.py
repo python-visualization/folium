@@ -223,7 +223,6 @@ def test_geojson_marker():
             ).add_to(m)
 
 
-
 def test_geojson_find_identifier():
 
     def _create(*properties):
