@@ -17,6 +17,7 @@ from branca.element import (
 from folium.features import (
     Choropleth,
     ClickForMarker,
+    ClickForLatLng,
     ColorLine,
     CustomIcon,
     DivIcon,
@@ -75,6 +76,7 @@ if sys.version_info < (3, 0):
 __all__ = [
     'Choropleth',
     'ClickForMarker',
+    'ClickForLatLng',
     'ColorLine',
     'ColorMap',
     'CssLink',
