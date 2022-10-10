@@ -1,6 +1,11 @@
 name: Publish to PyPI
 
-on: ["push", "pull_request"]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
 
 defaults:
   run:
@@ -19,7 +24,7 @@ jobs:
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-      
+
 
     - name: Install build tools
       run: |

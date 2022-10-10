@@ -1,6 +1,11 @@
 name: Selenium Tests
 
-on: [push, pull_request]
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * 1'
 
 jobs:
   run:
