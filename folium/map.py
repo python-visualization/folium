@@ -3,13 +3,12 @@ Classes for drawing maps.
 
 """
 
-from collections import OrderedDict
-
 import warnings
+from collections import OrderedDict
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import validate_location, camelize, parse_options
+from folium.utilities import camelize, parse_options, validate_location
 
 from jinja2 import Template
 
@@ -304,6 +303,7 @@ class Marker(MacroElement):
         if self.location is None:
             raise ValueError("{} location must be assigned when added directly to map.".format(self._name))
         super(Marker, self).render()
+
 
 class Popup(Element):
     """Create a Popup instance that can be linked to a Layer.

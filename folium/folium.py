@@ -13,9 +13,9 @@ from folium.map import FitBounds
 from folium.raster_layers import TileLayer
 from folium.utilities import (
     _parse_size,
+    parse_options,
     temp_html_filepath,
     validate_location,
-    parse_options,
 )
 
 from jinja2 import Environment, PackageLoader, Template

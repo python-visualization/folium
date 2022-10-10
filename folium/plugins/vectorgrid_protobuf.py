@@ -1,6 +1,6 @@
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer
+
 from jinja2 import Template
 
 

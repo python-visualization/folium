@@ -1,16 +1,17 @@
 import base64
+import collections
+import copy
 import io
 import json
 import math
 import os
 import struct
 import tempfile
+import uuid
 import zlib
 from contextlib import contextmanager
-import copy
-import uuid
-import collections
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
+
 
 import numpy as np
 try:

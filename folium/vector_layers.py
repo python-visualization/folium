@@ -6,7 +6,7 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 from branca.element import MacroElement
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import validate_locations, get_bounds
+from folium.utilities import get_bounds, validate_locations
 
 from jinja2 import Template
 
