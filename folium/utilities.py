@@ -331,6 +331,8 @@ def iter_coords(obj):
         coords = [geom['geometry']['coordinates'] for geom in obj['features']]
     elif 'geometry' in obj:
         coords = obj['geometry']['coordinates']
+    elif 'geometries' in obj and 'coordinates' in obj['geometries'][0]:
+        coords = obj['geometries'][0]['coordinates']
     else:
         coords = obj.get('coordinates', obj)
     for coord in coords:
