@@ -1,5 +1,8 @@
 import base64
+import io
 import os
+
+from PIL import Image
 
 import folium
 from folium.plugins.heat_map import HeatMap
@@ -34,10 +37,10 @@ def test_heat_map_with_weights(driver):
     # get the canvas as a PNG base64 string
     canvas_base64 = driver.execute_script(
         "return arguments[0].toDataURL('image/png').substring(21);", canvas)
-    screenshot = base64.b64decode(canvas_base64)
+    screenshot_bytes = base64.b64decode(canvas_base64)
+    screenshot = Image.open(io.BytesIO(screenshot_bytes))
     path = os.path.dirname(__file__)
     with open(os.path.join(path, 'test_heat_map_selenium_screenshot.png'), 'rb') as f:
-        screenshot_expected = f.read()
-    if hash(screenshot) != hash(screenshot_expected):
-        print(screenshot)
-        assert False, 'screenshot is not as expected'
+        screenshot_expected = Image.open(f)
+        if list(screenshot.getdata()) != list(screenshot_expected.getdata()):
+            assert False, 'screenshot is not as expected'

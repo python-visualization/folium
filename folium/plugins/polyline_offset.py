@@ -22,7 +22,7 @@ class PolyLineOffset(JSCSSMixin, PolyLine):
     tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
     offset: int, default 0
-        Relative pixel offset to draw a line parallel to an existant one,
+        Relative pixel offset to draw a line parallel to an existent one,
         at a fixed distance.
     **kwargs:
         Polyline options. See their Github page for the

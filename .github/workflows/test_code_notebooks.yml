@@ -1,35 +1,28 @@
 name: Notebook Code Tests
 
-on:
-  push:
-    branches:
-    - main
-  pull_request:
-    branches:
-    - main
+on: [push, pull_request]
 
 jobs:
   run:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup Conda
-      uses: s-weigand/setup-conda@v1
+    - name: Setup Micromamba
+      uses: mamba-org/provision-with-micromamba@v13
       with:
-        activate-conda: false
-        conda-channels: conda-forge
+        environment-file: false
 
     - name: Create env
       shell: bash -l {0}
       run: |
-        conda create --yes --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge --strict-channel-priority
-        source activate TEST
-        pip install -e . --no-deps --force-reinstall
+        micromamba create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        micromamba activate TEST
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Notebook tests
       shell: bash -l {0}
       run: |
-        source activate TEST
-        pytest --nbval-lax examples
+        micromamba activate TEST
+        python -m pytest --nbval-lax examples

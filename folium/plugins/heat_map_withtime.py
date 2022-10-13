@@ -23,6 +23,8 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         The name of the Layer, as it will appear in LayerControls.
     radius: default 15.
         The radius used around points for the heatmap.
+    blur: default 0.8.
+        Blur strength used for the heatmap. Must be between 0 and 1.
     min_opacity: default 0
         The minimum opacity for the heatmap.
     max_opacity: default 0.6
@@ -91,6 +93,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 var {{this.get_name()}} = new TDHeatmap({{this.data}},
                 {heatmapOptions: {
                         radius: {{this.radius}},
+                        blur: {{this.blur}},
                         minOpacity: {{this.min_opacity}},
                         maxOpacity: {{this.max_opacity}},
                         scaleRadius: {{this.scale_radius}},
@@ -119,7 +122,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
          'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
     ]
 
-    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
+    def __init__(self, data, index=None, name=None, radius=15, blur=0.8, min_opacity=0,
                  max_opacity=0.6, scale_radius=False, gradient=None,
                  use_local_extrema=False, auto_play=False,
                  display_index=True, index_steps=1, min_speed=0.1,
@@ -140,6 +143,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
 
         # Heatmap settings.
         self.radius = radius
+        self.blur = blur
         self.min_opacity = min_opacity
         self.max_opacity = max_opacity
         self.scale_radius = 'true' if scale_radius else 'false'
@@ -184,6 +188,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
             initialize: function(data, options) {
                 var heatmapCfg = {
                     radius: 15,
+                    blur: 0.8,
                     maxOpacity: 1.,
                     scaleRadius: false,
                     useLocalExtrema: false,

@@ -3,10 +3,10 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-import json
-import warnings
 import functools
+import json
 import operator
+import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -14,17 +14,17 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Popup, Tooltip)
 from folium.utilities import (
-    validate_locations,
     _parse_size,
+    camelize,
     get_bounds,
+    get_obj_in_upper_tree,
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree,
     parse_options,
-    camelize
+    validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -349,7 +349,7 @@ class GeoJson(Layer):
     popup: GeoJsonPopup, optional
         Show a different popup for each feature by passing a GeoJsonPopup object.
     marker: Circle, CircleMarker or Marker, optional
-        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        If your data contains Point geometry, you can format the markers by passing a Circle,
         CircleMarker or Marker object with your wanted options. The `style_function` and
         `highlight_function` will also target the marker object you passed.
     embed: bool, default True
@@ -585,16 +585,16 @@ class GeoJson(Layer):
         """
         feats = self.data['features']
         # Each feature has an 'id' field with a unique value.
-        unique_ids = set(feat.get('id', None) for feat in feats)
+        unique_ids = {feat.get('id', None) for feat in feats}
         if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
         # Each feature has a unique string or int property.
         if all(isinstance(feat.get('properties', None), dict) for feat in feats):
             for key in feats[0]['properties']:
-                unique_values = set(
+                unique_values = {
                     feat['properties'].get(key, None) for feat in feats
                     if isinstance(feat['properties'].get(key, None), (str, int))
-                )
+                }
                 if len(unique_values) == len(feats):
                     return 'feature.properties.{}'.format(key)
         # We add an 'id' field with a unique value to the data.
@@ -723,9 +723,9 @@ class TopoJson(JSCSSMixin, Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> TopoJson(open('foo.json'), 'object.myobject')
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> TopoJson('foo.json', 'object.myobject')
     >>> # Providing dict.
     >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
@@ -1423,6 +1423,41 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+
+class ClickForLatLng(MacroElement):
+    """
+    When one clicks on a Map that contains a ClickForLatLng,
+    the coordinates of the pointer's position are copied to clipboard.
+
+    Parameters
+    ==========
+    format_str : str, default 'lat + "," + lng'
+        The javascript string used to format the text copied to clipboard.
+        eg:
+            format_str = 'lat + "," + lng'              >> 46.558860,3.397397
+            format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
+    alert : bool, default True
+        Whether there should be an alert when something has been copied to clipboard.
+    """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                function getLatLng(e){
+                    var lat = e.latlng.lat.toFixed(6),
+                        lng = e.latlng.lng.toFixed(6);
+                    var txt = {{this.format_str}};
+                    navigator.clipboard.writeText(txt);
+                    {% if this.alert %}alert("Copied to clipboard : \\n    " + txt);{% endif %}
+                    };
+                {{this._parent.get_name()}}.on('click', getLatLng);
+            {% endmacro %}
+            """)  # noqa
+
+    def __init__(self, format_str=None, alert=True):
+        super(ClickForLatLng, self).__init__()
+        self._name = 'ClickForLatLng'
+        self.format_str = format_str or 'lat + "," + lng'
+        self.alert = alert
 
 
 class CustomIcon(Icon):

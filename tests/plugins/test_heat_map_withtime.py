@@ -66,6 +66,7 @@ def test_heat_map_with_time():
             var {{this.get_name()}} = new TDHeatmap({{this.data}},
             {heatmapOptions: {
                     radius: {{this.radius}},
+                    blur: {{this.blur}},
                     minOpacity: {{this.min_opacity}},
                     maxOpacity: {{this.max_opacity}},
                     scaleRadius: {{this.scale_radius}},

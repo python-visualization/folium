@@ -4,7 +4,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.utilities import parse_options, get_bounds
+from folium.utilities import get_bounds, parse_options
 
 from jinja2 import Template
 

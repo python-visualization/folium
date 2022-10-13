@@ -13,7 +13,7 @@ from jinja2 import Template
 def test_float_image():
     m = folium.Map([45., 3.], zoom_start=4)
     url = 'https://raw.githubusercontent.com/SECOORA/static_assets/master/maps/img/rose.png'
-    szt = plugins.FloatImage(url, bottom=60, left=70)
+    szt = plugins.FloatImage(url, bottom=60, left=70, width=20)
     m.add_child(szt)
     m._repr_html_()
 
@@ -35,6 +35,7 @@ def test_float_image():
                 position:absolute;
                 bottom:60%;
                 left:70%;
+                width:20%;
                 }
         </style>
     """)
