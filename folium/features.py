@@ -28,8 +28,6 @@ from folium.utilities import (
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
-from jenkspy import jenks_breaks
-
 from jinja2 import Template
 
 import numpy as np
@@ -1216,6 +1214,8 @@ class Choropleth(FeatureGroup):
             real_values = np.array(list(color_data.values()))
             real_values = real_values[~np.isnan(real_values)]
             if use_jenks:
+                from jenkspy import jenks_breaks
+
                 if not isinstance(bins, int):
                     raise ValueError(f'bins value must be an integer. Invalid value "{bins}" received.')
                 bin_edges = np.array(jenks_breaks(real_values, bins))
