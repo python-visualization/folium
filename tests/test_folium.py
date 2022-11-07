@@ -153,7 +153,7 @@ class TestFolium(object):
         url = "http://{s}.custom_tiles.org/{z}/{x}/{y}.png"
         attr = "Attribution for custom tiles"
         m = folium.Map(location=[45.52, -122.67], tiles=TileLayer(url, attr=attr))
-        assert m._children[url].tiles == url
+        assert next(iter(m._children.values())).tiles == url
         assert attr in m._parent.render()
 
     def test_feature_group(self):
