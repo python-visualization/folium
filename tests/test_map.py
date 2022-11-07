@@ -89,6 +89,38 @@ def test_popup_show():
     assert normalize(rendered) == normalize(expected)
 
 
+def test_popup_backticks():
+    m = Map()
+    popup = Popup('back`tick').add_to(m)
+    rendered = popup._template.render(this=popup, kwargs={})
+    expected = """
+    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick</div>`)[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
+    # assert compare_rendered(rendered, expected)
+    assert normalize(rendered) == normalize(expected)
+
+
+def test_popup_backticks_already_escaped():
+    m = Map()
+    popup = Popup('back\\`tick').add_to(m)
+    rendered = popup._template.render(this=popup, kwargs={})
+    expected = """
+    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick</div>`)[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
+    # assert compare_rendered(rendered, expected)
+    assert normalize(rendered) == normalize(expected)
+
+
 def test_icon_valid_marker_colors():
     assert len(Icon.color_options) == 19
     with pytest.warns(None) as record:

@@ -2,7 +2,7 @@
 Classes for drawing maps.
 
 """
-
+import re
 import warnings
 from collections import OrderedDict
 
@@ -362,6 +362,8 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, str):
+            # escape backticks because we use those in the JS template
+            html = re.sub(r"(?<!\\)`", r'\`', html)
             self.html.add_child(Html(html, script=script))
 
         self.show = show
