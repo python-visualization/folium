@@ -5,6 +5,7 @@ import io
 import json
 import math
 import os
+import re
 import struct
 import tempfile
 import uuid
@@ -474,3 +475,8 @@ def parse_options(**kwargs):
     return {camelize(key): value
             for key, value in kwargs.items()
             if value is not None}
+
+
+def escape_backticks(text):
+    """Escape backticks so text can be used in a JS template."""
+    return re.sub(r"(?<!\\)`", r'\`', text)
