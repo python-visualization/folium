@@ -2,7 +2,6 @@
 Classes for drawing maps.
 
 """
-import re
 import warnings
 from collections import OrderedDict
 
