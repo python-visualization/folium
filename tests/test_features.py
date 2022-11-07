@@ -19,6 +19,7 @@ import pytest
 def tmpl():
     yield ("""
     <!DOCTYPE html>
+    <html>
     <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     </head>
@@ -26,6 +27,7 @@ def tmpl():
     </body>
     <script>
     </script>
+    </html>
     """)  # noqa
 
 

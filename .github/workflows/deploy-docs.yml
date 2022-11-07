@@ -1,0 +1,38 @@
+name: Publish Docs
+
+on: ["push", "pull_request"]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Micromamba
+      uses: mamba-org/provision-with-micromamba@v14
+      with:
+        environment-file: false
+
+    - name: Create environment
+      shell: bash -l {0}
+      run: |
+        micromamba create --name TEST python=3 --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        micromamba activate TEST
+        pip install -e . --no-deps --force-reinstall
+
+    - name: Build documentation
+      shell: bash -l {0}
+      run: |
+        set -e
+        micromamba activate TEST
+        cp examples/Quickstart.ipynb docs/quickstart.ipynb
+        pushd docs
+        make clean html linkcheck
+        popd
+
+    - name: GitHub Pages action
+      if: ${{ github.event_name == 'release' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/

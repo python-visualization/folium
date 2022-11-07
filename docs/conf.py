@@ -245,3 +245,8 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# Ignore tile URLs
+linkcheck_ignore = [
+  r"https://free.*",
+]

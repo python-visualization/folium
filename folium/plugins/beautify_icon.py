@@ -33,7 +33,7 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
 
     Examples
     --------
-    Plugin Website: https://github.com/marslan390/BeautifyMarker
+    Plugin Website: https://github.com/masajid390/BeautifyMarker
     >>> BeautifyIcon(text_color='#000', border_color='transparent',
     ...              background_color='#FFF').add_to(marker)
     >>> number_icon = BeautifyIcon(text_color='#000', border_color='transparent',
