@@ -2,13 +2,12 @@
 Classes for drawing maps.
 
 """
-
 import warnings
 from collections import OrderedDict
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import camelize, parse_options, validate_location
+from folium.utilities import camelize, parse_options, validate_location, escape_backticks
 
 from jinja2 import Template
 
@@ -362,6 +361,7 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, str):
+            html = escape_backticks(html)
             self.html.add_child(Html(html, script=script))
 
         self.show = show
