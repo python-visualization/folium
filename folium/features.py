@@ -231,8 +231,6 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        vegalite_major_version = self._get_vegalite_major_versions(self.data)
-
         self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
@@ -251,25 +249,40 @@ class VegaLite(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
-        if vegalite_major_version == '1':
-            self._embed_vegalite_v1(figure)
-        elif vegalite_major_version == '2':
-            self._embed_vegalite_v2(figure)
-        elif vegalite_major_version == '3':
-            self._embed_vegalite_v3(figure)
-        else:
-            # Version 2 is assumed as the default, if no version is given in the schema.
-            self._embed_vegalite_v2(figure)
+        embed_mapping = {
+            1: self._embed_vegalite_v1,
+            2: self._embed_vegalite_v2,
+            3: self._embed_vegalite_v3,
+            4: self._embed_vegalite_v4,
+            5: self._embed_vegalite_v5,
+        }
 
-    def _get_vegalite_major_versions(self, spec):
-        try:
-            schema = spec['$schema']
-        except KeyError:
-            major_version = None
-        else:
-            major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
+        # Version 2 is assumed as the default, if no version is given in the schema.
+        embed_vegalite = embed_mapping.get(self.vegalite_major_version, self._embed_vegalite_v2)
+        embed_vegalite(figure)
 
-        return major_version
+    @property
+    def vegalite_major_version(self) -> int:
+        if '$schema' not in self.data:
+            return None
+
+        schema = self.data['$schema']
+
+        return int(schema.split('/')[-1].split('.')[0].lstrip('v'))
+
+    def _embed_vegalite_v5(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm//vega@5'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@5'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@6'), name='vega-embed')
+
+    def _embed_vegalite_v4(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm//vega@5'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@4'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@6'), name='vega-embed')
 
     def _embed_vegalite_v3(self, figure):
         self._vega_embed()

@@ -7,6 +7,8 @@ Folium Features Tests
 import os
 import warnings
 
+import json
+
 from branca.element import Element
 
 import folium
@@ -114,94 +116,43 @@ def test_color_line():
     m._repr_html_()
 
 
-def test_get_vegalite_major_version():
-    spec_v2 = {'$schema': 'https://vega.github.io/schema/vega-lite/v2.6.0.json',
-               'config': {'view': {'height': 300, 'width': 400}},
-               'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
-               'datasets': {'data-aac17e868e23f98b5e0830d45504be45': [{'folium usage': 0,
-                                                                       'happiness': 1.0},
-                                                                      {'folium usage': 1,
-                                                                       'happiness': 2.718281828459045},
-                                                                      {'folium usage': 2,
-                                                                       'happiness': 7.38905609893065},
-                                                                      {'folium usage': 3,
-                                                                       'happiness': 20.085536923187668},
-                                                                      {'folium usage': 4,
-                                                                       'happiness': 54.598150033144236},
-                                                                      {'folium usage': 5,
-                                                                       'happiness': 148.4131591025766},
-                                                                      {'folium usage': 6,
-                                                                       'happiness': 403.4287934927351},
-                                                                      {'folium usage': 7,
-                                                                       'happiness': 1096.6331584284585},
-                                                                      {'folium usage': 8,
-                                                                       'happiness': 2980.9579870417283},
-                                                                      {'folium usage': 9,
-                                                                       'happiness': 8103.083927575384}]},
-               'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
-                            'y': {'field': 'happiness', 'type': 'quantitative'}},
-               'mark': 'point'}
+@pytest.fixture
+def vegalite_spec(version):
+    file_version = 'v1' if version == 1 else 'vlater'
+    file = os.path.join(rootpath, 'vegalite_data', f'vegalite_{file_version}.json')
 
-    vegalite_v2 = folium.features.VegaLite(spec_v2)
+    if not os.path.exists(file):
+        raise FileNotFoundError(f'The vegalite data {file} does not exist.')
 
-    assert vegalite_v2._get_vegalite_major_versions(spec_v2) == '2'
+    with open(file, 'r') as f:
+        spec = json.load(f)
 
-    spec_v1 = {'$schema': 'https://vega.github.io/schema/vega-lite/v1.3.1.json',
-               'data': {'values': [{'folium usage': 0, 'happiness': 1.0},
-                                   {'folium usage': 1, 'happiness': 2.718281828459045},
-                                   {'folium usage': 2, 'happiness': 7.38905609893065},
-                                   {'folium usage': 3, 'happiness': 20.085536923187668},
-                                   {'folium usage': 4, 'happiness': 54.598150033144236},
-                                   {'folium usage': 5, 'happiness': 148.4131591025766},
-                                   {'folium usage': 6, 'happiness': 403.4287934927351},
-                                   {'folium usage': 7, 'happiness': 1096.6331584284585},
-                                   {'folium usage': 8, 'happiness': 2980.9579870417283},
-                                   {'folium usage': 9, 'happiness': 8103.083927575384}]},
-               'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
-                            'y': {'field': 'happiness', 'type': 'quantitative'}},
-               'height': 300,
-               'mark': 'point',
-               'width': 400}
+    if version is None or '$schema' in spec:
+        return spec
 
-    vegalite_v1 = folium.features.VegaLite(spec_v1)
+    # Sample versions that might show up
+    schema_version = {
+        2: 'v2.6.0',
+        3: 'v3.6.0',
+        4: 'v4.6.0',
+        5: 'v5.1.0'
+    }[version]
+    spec['$schema'] = f'https://vega.github.io/schema/vega-lite/{schema_version}.json'
 
-    assert vegalite_v1._get_vegalite_major_versions(spec_v1) == '1'
+    return spec
 
-    spec_no_version = {
-        'config': {
-            'view': {'height': 300, 'width': 400}},
-        'data': {'name': 'data-aac17e868e23f98b5e0830d45504be45'},
-        'datasets': {
-            'data-aac17e868e23f98b5e0830d45504be45': [
-                {'folium usage': 0,
-                 'happiness': 1.0},
-                {'folium usage': 1,
-                 'happiness': 2.718281828459045},
-                {'folium usage': 2,
-                 'happiness': 7.38905609893065},
-                {'folium usage': 3,
-                 'happiness': 20.085536923187668},
-                {'folium usage': 4,
-                 'happiness': 54.598150033144236},
-                {'folium usage': 5,
-                 'happiness': 148.4131591025766},
-                {'folium usage': 6,
-                 'happiness': 403.4287934927351},
-                {'folium usage': 7,
-                 'happiness': 1096.6331584284585},
-                {'folium usage': 8,
-                 'happiness': 2980.9579870417283},
-                {'folium usage': 9,
-                 'happiness': 8103.083927575384}]},
-        'encoding': {'x': {'field': 'folium usage', 'type': 'quantitative'},
-                     'y': {'field': 'happiness', 'type': 'quantitative'}},
-        'mark': 'point'
-    }
 
-    vegalite_no_version = folium.features.VegaLite(spec_no_version)
+@pytest.mark.parametrize(
+    'version',
+    [1, 2, 3, 4, 5, None]
+)
+def test_vegalite_major_version(vegalite_spec, version):
+    vegalite = folium.features.VegaLite(vegalite_spec)
 
-    assert vegalite_no_version._get_vegalite_major_versions(spec_no_version) is None
-
+    if version is None:
+        assert vegalite.vegalite_major_version is None
+    else:
+        assert vegalite.vegalite_major_version == version
 
 # GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
