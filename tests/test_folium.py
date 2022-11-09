@@ -10,6 +10,7 @@ import os
 import branca.element
 
 import folium
+from folium import TileLayer
 from folium.features import GeoJson, Choropleth
 
 import jinja2
@@ -147,6 +148,13 @@ class TestFolium(object):
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
+
+    def test_tilelayer_object(self):
+        url = "http://{s}.custom_tiles.org/{z}/{x}/{y}.png"
+        attr = "Attribution for custom tiles"
+        m = folium.Map(location=[45.52, -122.67], tiles=TileLayer(url, attr=attr))
+        assert next(iter(m._children.values())).tiles == url
+        assert attr in m._parent.render()
 
     def test_feature_group(self):
         """Test FeatureGroup."""

@@ -3,10 +3,10 @@ import warnings
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import (
+    if_pandas_df_convert_to_numpy,
     none_max,
     none_min,
     parse_options,
-    if_pandas_df_convert_to_numpy,
     validate_location,
 )
 

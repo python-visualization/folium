@@ -28,7 +28,7 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
     attributes: dict
         Object containing the attributes applied to the text tag.
         Check valid attributes here:
-        https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
+        https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#attributes
         Example: {'fill': '#007DEF', 'font-weight': 'bold', 'font-size': '24'}
 
     See https://github.com/makinacorpus/Leaflet.TextPath for more information.

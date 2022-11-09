@@ -6,7 +6,7 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 from branca.element import MacroElement
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import validate_locations, get_bounds
+from folium.utilities import get_bounds, validate_locations
 
 from jinja2 import Template
 
@@ -57,7 +57,7 @@ def path_options(line=False, radius=False, **kwargs):
 
     Note that the presence of `fill_color` will override `fill=False`.
 
-    See https://leafletjs.com/reference-1.6.0.html#path
+    See https://leafletjs.com/reference.html#path
 
     """
 
@@ -140,7 +140,7 @@ class PolyLine(BaseMultiLocation):
         Disable polyline clipping.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#polyline
+        https://leafletjs.com/reference.html#polyline
 
     """
 
@@ -174,7 +174,7 @@ class Polygon(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#polygon
+        https://leafletjs.com/reference.html#polygon
 
     """
 
@@ -208,7 +208,7 @@ class Rectangle(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#rectangle
+        https://leafletjs.com/reference.html#rectangle
 
     """
 
@@ -248,7 +248,7 @@ class Circle(Marker):
         Radius of the circle, in meters.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#circle
+        https://leafletjs.com/reference.html#circle
 
     """
 
@@ -285,7 +285,7 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#circlemarker
+        https://leafletjs.com/reference.html#circlemarker
 
     """
 
