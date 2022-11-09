@@ -150,7 +150,10 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         timestamps = set()
         for feature in styledict.values():
             timestamps.update(set(feature.keys()))
-        timestamps = sorted(timestamps)
+        try:
+            timestamps = sorted(timestamps, key=int)
+        except (TypeError, ValueError):
+            timestamps = sorted(timestamps)
 
         self.timestamps = timestamps
         self.styledict = styledict
