@@ -300,11 +300,13 @@ class Map(JSCSSMixin, MacroElement):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, delay=3):
+    def _to_png(self, delay=3, driver=None):
         """Export the HTML to byte representation of a PNG image.
 
         Uses selenium to render the HTML and record a PNG. You may need to
         adjust the `delay` time keyword argument if maps render without data or tiles.
+
+        Uses a headless Firefox webdriver by default, though you can provide your own.
 
         Examples
         --------
@@ -313,11 +315,12 @@ class Map(JSCSSMixin, MacroElement):
 
         """
         if self._png_image is None:
-            from selenium import webdriver
+            if driver is None:
+                from selenium import webdriver
 
-            options = webdriver.firefox.options.Options()
-            options.add_argument('--headless')
-            driver = webdriver.Firefox(options=options)
+                options = webdriver.firefox.options.Options()
+                options.add_argument('--headless')
+                driver = webdriver.Firefox(options=options)
 
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
