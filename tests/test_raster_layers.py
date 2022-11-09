@@ -1,10 +1,8 @@
 """
 Test raster_layers
------------------
+------------------
 
 """
-import pytest
-
 import folium
 from folium.utilities import normalize
 

@@ -1,0 +1,22 @@
+exclude: examples/data/|.*\.css|.*\.json|.*\.geojson|.*\.html
+
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.3.0
+  hooks:
+    - id: trailing-whitespace
+    - id: check-ast
+    - id: debug-statements
+    - id: end-of-file-fixer
+    - id: check-docstring-first
+    - id: check-added-large-files
+    - id: requirements-txt-fixer
+    - id: file-contents-sorter
+      files: requirements-dev.txt
+
+- repo: https://github.com/PyCQA/flake8
+  rev: 5.0.4
+  hooks:
+    - id: flake8
+      exclude: docs/conf.py
+      args: [--max-line-length=120]
