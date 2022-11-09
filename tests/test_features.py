@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """"
 Folium Features Tests
 ---------------------
@@ -23,6 +21,7 @@ import pytest
 def tmpl():
     yield ("""
     <!DOCTYPE html>
+    <html>
     <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     </head>
@@ -30,6 +29,7 @@ def tmpl():
     </body>
     <script>
     </script>
+    </html>
     """)  # noqa
 
 
@@ -265,3 +265,24 @@ def test_geojson_find_identifier():
     geojson.convert_to_feature_collection()
     assert geojson.find_identifier() == 'feature.id'
     assert geojson.data['features'][0]['id'] == '0'
+
+
+def test_geometry_collection_get_bounds():
+    """Assert #1599 is fixed"""
+    geojson_data = {
+        "geometries": [
+            {
+                "coordinates": [
+                    [
+                        [-1, 1],
+                        [0, 2],
+                        [-3, 4],
+                        [2, 0],
+                    ]
+                ],
+                "type": "Polygon",
+            },
+        ],
+        "type": "GeometryCollection",
+    }
+    assert folium.GeoJson(geojson_data).get_bounds() == [[0, -3], [4, 2]]

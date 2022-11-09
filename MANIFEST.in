@@ -1,4 +1,6 @@
 include *.txt
+include README.rst
+include pyproject.toml
 
 recursive-include folium *.py
 recursive-include folium *.js
@@ -8,3 +10,10 @@ recursive-include folium/templates *
 prune examples
 prune tests
 prune docs
+prune *.egg-info
+
+exclude *.yml
+exclude .pre-commit-config.yaml
+exclude *.enc
+exclude .gitignore
+exclude .isort.cfg

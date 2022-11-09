@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import Layer
@@ -152,7 +150,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         timestamps = set()
         for feature in styledict.values():
             timestamps.update(set(feature.keys()))
-        timestamps = sorted(list(timestamps))
+        timestamps = sorted(timestamps)
 
         self.timestamps = timestamps
         self.styledict = styledict
