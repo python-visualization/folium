@@ -1,4 +1,4 @@
-from branca.element import MacroElement, Figure
+from branca.element import Figure, MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map

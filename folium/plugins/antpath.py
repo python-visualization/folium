@@ -1,5 +1,5 @@
 from folium.elements import JSCSSMixin
-from folium.vector_layers import path_options, BaseMultiLocation
+from folium.vector_layers import BaseMultiLocation, path_options
 
 from jinja2 import Template
 

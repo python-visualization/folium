@@ -1,4 +1,4 @@
-from branca.element import Figure, Element, JavascriptLink, CssLink
+from branca.element import CssLink, Element, Figure, JavascriptLink
 
 
 class JSCSSMixin(Element):

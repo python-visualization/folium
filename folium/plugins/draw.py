@@ -17,7 +17,7 @@ class Draw(JSCSSMixin, MacroElement):
         Name of geojson file
     position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
         Position of control.
-        See https://leafletjs.com/reference-1.6.0.html#control
+        See https://leafletjs.com/reference.html#control
     draw_options : dict, optional
         The options used to configure the draw toolbar. See
         http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions

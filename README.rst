@@ -58,7 +58,7 @@ using Jupyter's nbviewer:
 
 https://nbviewer.jupyter.org/github/python-visualization/folium/tree/main/examples/
 
-https://nbviewer.jupyter.org/github/python-visualization/folium_contrib/tree/master/notebooks/
+https://nbviewer.org/github/python-visualization/folium_contrib/tree/main/notebooks/
 
 Contributing
 ------------

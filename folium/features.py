@@ -3,10 +3,10 @@ Leaflet GeoJson and miscellaneous features.
 
 """
 
-import json
-import warnings
 import functools
+import json
 import operator
+import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -14,17 +14,17 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip, Popup)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Popup, Tooltip)
 from folium.utilities import (
-    validate_locations,
     _parse_size,
+    camelize,
     get_bounds,
+    get_obj_in_upper_tree,
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree,
     parse_options,
-    camelize
+    validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -583,16 +583,16 @@ class GeoJson(Layer):
         """
         feats = self.data['features']
         # Each feature has an 'id' field with a unique value.
-        unique_ids = set(feat.get('id', None) for feat in feats)
+        unique_ids = {feat.get('id', None) for feat in feats}
         if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
         # Each feature has a unique string or int property.
         if all(isinstance(feat.get('properties', None), dict) for feat in feats):
             for key in feats[0]['properties']:
-                unique_values = set(
+                unique_values = {
                     feat['properties'].get(key, None) for feat in feats
                     if isinstance(feat['properties'].get(key, None), (str, int))
-                )
+                }
                 if len(unique_values) == len(feats):
                     return 'feature.properties.{}'.format(key)
         # We add an 'id' field with a unique value to the data.
@@ -975,7 +975,7 @@ class GeoJsonTooltip(GeoJsonDetail):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.6.0#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     Examples
     --------
@@ -1028,7 +1028,7 @@ class GeoJsonPopup(GeoJsonDetail):
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
+        Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
@@ -1076,7 +1076,7 @@ class Choropleth(FeatureGroup):
     on which to key the data. The 'columns' keyword does not need to be
     passed for a Pandas series.
 
-    Colors are generated from color brewer (http://colorbrewer2.org/)
+    Colors are generated from color brewer (https://colorbrewer2.org/)
     sequential palettes. By default, linear binning is used between
     the min and the max of the values. Custom binning can be achieved
     with the `bins` parameter.
@@ -1332,7 +1332,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.6.0.html#divicon
+    See https://leafletjs.com/reference.html#divicon
 
     """
 
@@ -1427,8 +1427,8 @@ class ClickForLatLng(MacroElement):
     format_str : str, default 'lat + "," + lng'
         The javascript string used to format the text copied to clipboard.
         eg:
-            format_str = 'lat + "," + lng'              >> 46.558860,3.397397
-            format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
+        format_str = 'lat + "," + lng'              >> 46.558860,3.397397
+        format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
     alert : bool, default True
         Whether there should be an alert when something has been copied to clipboard.
     """
