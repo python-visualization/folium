@@ -20,8 +20,6 @@ class TagFilterButton(JSCSSMixin, Layer):
         The name of the Layer, as it will appear in LayerControls.
     icon: string, default 'fa-filter'
         The icon for the filter button
-    on_selection_complete: func, default None
-        Callback function for the selected tags
     clear_text: string, default 'clear'
         Text of the clear button
     filter_on_every_click: bool, default True
@@ -44,7 +42,6 @@ class TagFilterButton(JSCSSMixin, Layer):
         """)
 
     def __init__(self, data, name=None, icon="fa-filter",
-                 on_selection_complete=None,
                  clear_text='clear', filter_on_every_click=True,
                  open_popup_on_hover=False,
                  overlay=True, control=True, show=True, **kwargs):
@@ -54,7 +51,6 @@ class TagFilterButton(JSCSSMixin, Layer):
         self.options = parse_options(
             data=data,
             icon=icon,
-            on_selection_complete=on_selection_complete,
             clear_text=clear_text,
             filter_on_every_click=filter_on_every_click,
             open_popup_on_hover=open_popup_on_hover,
