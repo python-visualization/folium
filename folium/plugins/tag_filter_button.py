@@ -13,7 +13,6 @@ class TagFilterButton(JSCSSMixin, Layer):
 
     Parameters
     ----------
-
     data: list, of strings.
         The tags to filter for this filter button.
     name: string, default None
@@ -24,7 +23,7 @@ class TagFilterButton(JSCSSMixin, Layer):
         Text of the clear button
     filter_on_every_click: bool, default True
         if True, the plugin will filter on every click event on checkbox.
-    open_popup_on_hover:bool, default False
+    open_popup_on_hover: bool, default False
         if True, popup that contains tags will be open at mouse hover time
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
@@ -32,6 +31,7 @@ class TagFilterButton(JSCSSMixin, Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
+
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
