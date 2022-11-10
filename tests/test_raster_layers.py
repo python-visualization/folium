@@ -8,6 +8,8 @@ from folium.utilities import normalize
 
 from jinja2 import Template
 
+import xyzservices
+
 
 def test_tile_layer():
     m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
@@ -109,8 +111,6 @@ def test_image_overlay():
 
 
 def test_xyzservices():
-    xyzservices = pytest.importorskip("xyzservices")
-
     m = folium.Map([48., 5.], tiles=xyzservices.providers.Stamen.Toner, zoom_start=6)
 
     folium.raster_layers.TileLayer(
