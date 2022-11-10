@@ -582,7 +582,7 @@ class GeoJson(Layer):
         # If for some reason there are no features (e.g., empty API response)
         # don't attempt validation
         if not self.data['features']:
-          return
+            return
 
         test_feature = self.data['features'][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
@@ -635,7 +635,7 @@ class GeoJson(Layer):
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         # Need at least one feature, otherwise style mapping fails
-        if self.data['features'] and (self.style or self.highlight):
+        if (self.style or self.highlight) and self.data['features']:
             mapper = GeoJsonStyleMapper(self.data, self.feature_identifier,
                                         self)
             if self.style:
