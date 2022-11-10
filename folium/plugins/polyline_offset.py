@@ -1,18 +1,8 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import absolute_import, division, print_function
-
-from branca.element import JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.vector_layers import PolyLine
 
-_default_js = [
-    ('polylineoffset',
-     'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js')
-    ]
 
-
-class PolyLineOffset(PolyLine):
+class PolyLineOffset(JSCSSMixin, PolyLine):
     """
     Add offset capabilities to the PolyLine class.
 
@@ -32,7 +22,7 @@ class PolyLineOffset(PolyLine):
     tooltip: str or folium.Tooltip, optional
         Display a text when hovering over the object.
     offset: int, default 0
-        Relative pixel offset to draw a line parallel to an existant one,
+        Relative pixel offset to draw a line parallel to an existent one,
         at a fixed distance.
     **kwargs:
         Polyline options. See their Github page for the
@@ -47,6 +37,11 @@ class PolyLineOffset(PolyLine):
 
     """
 
+    default_js = [
+        ('polylineoffset',
+         'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js')
+    ]
+
     def __init__(self, locations, popup=None, tooltip=None, offset=0, **kwargs):
         super(PolyLineOffset, self).__init__(
             locations=locations, popup=popup, tooltip=tooltip, **kwargs
@@ -54,11 +49,3 @@ class PolyLineOffset(PolyLine):
         self._name = "PolyLineOffset"
         # Add PolyLineOffset offset.
         self.options.update({"offset": offset})
-
-    def render(self, **kwargs):
-        super(PolyLineOffset, self).render()
-        figure = self.get_root()
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)

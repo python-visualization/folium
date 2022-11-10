@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Folium documentation build configuration file, created by
 # sphinx-quickstart on Sun May 19 19:39:34 2013.
 #
@@ -53,9 +51,8 @@ copyright = '2013, Rob Story'
 
 # The full version, including alpha/beta/rc tags.
 
-from folium._version import get_versions
-release = get_versions()['version']
-del get_versions
+import folium
+version = release = folium.__version__
 
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
@@ -248,3 +245,8 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# Ignore tile URLs
+linkcheck_ignore = [
+  r"https://free.*",
+]

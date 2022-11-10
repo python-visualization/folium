@@ -1,20 +1,12 @@
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
-from jinja2 import Template
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
-_default_js = [
-    ('Control.Geocoder.js',
-     'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js')
-    ]
-
-_default_css = [
-    ('Control.Geocoder.css',
-     'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css')
-    ]
+from jinja2 import Template
 
 
-class Geocoder(MacroElement):
+class Geocoder(JSCSSMixin, MacroElement):
     """A simple geocoder for Leaflet that by default uses OSM/Nominatim.
 
     Please respect the Nominatim usage policy:
@@ -44,6 +36,15 @@ class Geocoder(MacroElement):
         {% endmacro %}
     """)
 
+    default_js = [
+        ('Control.Geocoder.js',
+         'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js')
+    ]
+    default_css = [
+        ('Control.Geocoder.css',
+         'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css')
+    ]
+
     def __init__(
             self,
             collapsed=False,
@@ -59,15 +60,3 @@ class Geocoder(MacroElement):
             defaultMarkGeocode=add_marker,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(Geocoder, self).render(**kwargs)
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)

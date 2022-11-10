@@ -1,36 +1,15 @@
-# -*- coding: utf-8 -*-
-
 import json
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.utilities import parse_options, get_bounds
+from folium.utilities import get_bounds, parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('jquery2.0.0',
-     'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
-    ('jqueryui1.10.2',
-     'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
-    ('iso8601',
-     'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
-    ('leaflet.timedimension',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),  # noqa
-    ('moment',
-     'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')
-]
 
-_default_css = [
-    ('highlight.js_css',
-     'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
-    ('leaflet.timedimension_css',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
-]
-
-
-class TimestampedGeoJson(MacroElement):
+class TimestampedGeoJson(JSCSSMixin, MacroElement):
     """
     Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
     into a map with Map.add_child.
@@ -87,8 +66,9 @@ class TimestampedGeoJson(MacroElement):
     ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
     ...           },
     ...         'properties': {
-    ...           'times': [1435708800000, 1435795200000, 1435881600000]
-    ...           }
+    ...           'times': [1435708800000, 1435795200000, 1435881600000],
+    ...           'tooltip': 'my tooltip text'
+    ...           },
     ...         }
     ...       ]
     ...     })
@@ -143,6 +123,9 @@ class TimestampedGeoJson(MacroElement):
                         if (feature.properties.popup) {
                         layer.bindPopup(feature.properties.popup);
                         }
+                        if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
+                        }
                     }
                 })
 
@@ -156,6 +139,26 @@ class TimestampedGeoJson(MacroElement):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
+
+    default_js = [
+        ('jquery2.0.0',
+         'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
+        ('jqueryui1.10.2',
+         'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        # noqa
+        ('moment',
+         'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')
+    ]
+    default_css = [
+        ('highlight.js_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
+        ('leaflet.timedimension_css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
 
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
@@ -196,19 +199,7 @@ class TimestampedGeoJson(MacroElement):
         assert isinstance(self._parent, Map), (
             'TimestampedGeoJson can only be added to a Map object.'
         )
-        super(TimestampedGeoJson, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
+        super().render(**kwargs)
 
     def _get_self_bounds(self):
         """

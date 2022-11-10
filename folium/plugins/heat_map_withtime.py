@@ -1,31 +1,13 @@
-# -*- coding: utf-8 -*-
+from branca.element import Element, Figure
 
-from branca.element import CssLink, Element, Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import none_max, none_min
 
 from jinja2 import Template
 
-_default_js = [
-    ('iso8601',
-     'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
-    ('leaflet.timedimension.min.js',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
-    ('heatmap.min.js',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
-    ('leaflet-heatmap.js',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
-    ]
 
-
-_default_css = [
-    ('leaflet.timedimension.control.min.css',
-     'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
-    ]
-
-
-class HeatMapWithTime(Layer):
+class HeatMapWithTime(JSCSSMixin, Layer):
     """
     Create a HeatMapWithTime layer
 
@@ -41,6 +23,8 @@ class HeatMapWithTime(Layer):
         The name of the Layer, as it will appear in LayerControls.
     radius: default 15.
         The radius used around points for the heatmap.
+    blur: default 0.8.
+        Blur strength used for the heatmap. Must be between 0 and 1.
     min_opacity: default 0
         The minimum opacity for the heatmap.
     max_opacity: default 0.6
@@ -58,7 +42,7 @@ class HeatMapWithTime(Layer):
     display_index: default True
         Display the index (usually time) in the time control.
     index_steps: default 1
-        Steps to take in the index dimension between aimation steps.
+        Steps to take in the index dimension between animation steps.
     min_speed: default 0.1
         Minimum fps speed for animation.
     max_speed: default 10
@@ -109,6 +93,7 @@ class HeatMapWithTime(Layer):
                 var {{this.get_name()}} = new TDHeatmap({{this.data}},
                 {heatmapOptions: {
                         radius: {{this.radius}},
+                        blur: {{this.blur}},
                         minOpacity: {{this.min_opacity}},
                         maxOpacity: {{this.max_opacity}},
                         scaleRadius: {{this.scale_radius}},
@@ -122,7 +107,22 @@ class HeatMapWithTime(Layer):
         {% endmacro %}
         """)
 
-    def __init__(self, data, index=None, name=None, radius=15, min_opacity=0,
+    default_js = [
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension.min.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        ('heatmap.min.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
+        ('leaflet-heatmap.js',
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
+    ]
+    default_css = [
+        ('leaflet.timedimension.control.min.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
+
+    def __init__(self, data, index=None, name=None, radius=15, blur=0.8, min_opacity=0,
                  max_opacity=0.6, scale_radius=False, gradient=None,
                  use_local_extrema=False, auto_play=False,
                  display_index=True, index_steps=1, min_speed=0.1,
@@ -143,6 +143,7 @@ class HeatMapWithTime(Layer):
 
         # Heatmap settings.
         self.radius = radius
+        self.blur = blur
         self.min_opacity = min_opacity
         self.max_opacity = max_opacity
         self.scale_radius = 'true' if scale_radius else 'false'
@@ -178,14 +179,6 @@ class HeatMapWithTime(Layer):
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
 
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)
-
         figure.header.add_child(
             Element(
                 """
@@ -195,6 +188,7 @@ class HeatMapWithTime(Layer):
             initialize: function(data, options) {
                 var heatmapCfg = {
                     radius: 15,
+                    blur: 0.8,
                     maxOpacity: 1.,
                     scaleRadius: false,
                     useLocalExtrema: false,

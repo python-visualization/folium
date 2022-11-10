@@ -1,19 +1,11 @@
-# -*- coding: utf-8 -*-
-
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.features import MacroElement
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('polylinetextpath',
-     'https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js')
-    ]
 
-
-class PolyLineTextPath(MacroElement):
+class PolyLineTextPath(JSCSSMixin, MacroElement):
     """
     Shows a text along a PolyLine.
 
@@ -36,7 +28,7 @@ class PolyLineTextPath(MacroElement):
     attributes: dict
         Object containing the attributes applied to the text tag.
         Check valid attributes here:
-        https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes
+        https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#attributes
         Example: {'fill': '#007DEF', 'font-weight': 'bold', 'font-size': '24'}
 
     See https://github.com/makinacorpus/Leaflet.TextPath for more information.
@@ -50,6 +42,11 @@ class PolyLineTextPath(MacroElement):
             );
         {% endmacro %}
         """)
+
+    default_js = [
+        ('polylinetextpath',
+         'https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js')
+    ]
 
     def __init__(self, polyline, text, repeat=False, center=False, below=False,
                  offset=0, orientation=0, attributes=None, **kwargs):
@@ -66,14 +63,3 @@ class PolyLineTextPath(MacroElement):
             attributes=attributes,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(PolyLineTextPath, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """"
 Folium _repr_*_ Tests
 ---------------------

@@ -3,24 +3,15 @@
 Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 """
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
-_default_js = [
-    ('Control_locate_min_js',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js')
-    ]
 
-_default_css = [
-    ('Control_locate_min_css',
-     'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css')
-    ]
-
-
-class LocateControl(MacroElement):
+class LocateControl(JSCSSMixin, MacroElement):
     """Control plugin to geolocate the user.
 
     This plugins adds a button to the map, and when it's clicked shows the current
@@ -65,22 +56,17 @@ class LocateControl(MacroElement):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('Control_locate_min_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js')
+    ]
+    default_css = [
+        ('Control_locate_min_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css')
+    ]
+
     def __init__(self, auto_start=False, **kwargs):
         super(LocateControl, self).__init__()
         self._name = 'LocateControl'
         self.auto_start = auto_start
         self.options = parse_options(**kwargs)
-
-    def render(self, **kwargs):
-        super(LocateControl, self).render(**kwargs)
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            figure.header.add_child(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            figure.header.add_child(CssLink(url), name=name)

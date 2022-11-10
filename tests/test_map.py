@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Folium map Tests
 ----------------
@@ -9,7 +7,7 @@ Folium map Tests
 import pytest
 
 from folium import Map
-from folium.map import Popup, Icon, CustomPane
+from folium.map import Popup, Icon, CustomPane, Marker
 from folium.utilities import normalize
 
 
@@ -91,6 +89,36 @@ def test_popup_show():
     assert normalize(rendered) == normalize(expected)
 
 
+def test_popup_backticks():
+    m = Map()
+    popup = Popup('back`tick`tick').add_to(m)
+    rendered = popup._template.render(this=popup, kwargs={})
+    expected = """
+    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick\\`tick</div>`)[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
+    assert normalize(rendered) == normalize(expected)
+
+
+def test_popup_backticks_already_escaped():
+    m = Map()
+    popup = Popup('back\\`tick').add_to(m)
+    rendered = popup._template.render(this=popup, kwargs={})
+    expected = """
+    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick</div>`)[0];
+    {popup_name}.setContent({html_name});
+    {map_name}.bindPopup({popup_name});
+    """.format(popup_name=popup.get_name(),
+               html_name=list(popup.html._children.keys())[0],
+               map_name=m.get_name())
+    assert normalize(rendered) == normalize(expected)
+
+
 def test_icon_valid_marker_colors():
     assert len(Icon.color_options) == 19
     with pytest.warns(None) as record:
@@ -110,6 +138,14 @@ def test_custom_pane_show():
     """.format(pane_name=pane.get_name(),
                map_name=m.get_name())
     assert normalize(rendered) == normalize(expected)
+
+
+def test_marker_valid_location():
+    m = Map()
+    marker = Marker()
+    marker.add_to(m)
+    with pytest.raises(ValueError):
+        m.render()
 
 
 @pytest.mark.filterwarnings('ignore::UserWarning')
