@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-from branca.element import Figure, JavascriptLink, CssLink
+from folium.elements import JSCSSMixin
 
 from folium.map import Layer
 from folium.utilities import parse_options
@@ -8,7 +6,7 @@ from folium.utilities import parse_options
 from jinja2 import Template
 
 
-class TagFilterButton(Layer):
+class TagFilterButton(JSCSSMixin, Layer):
     """
     Creates a Tag Filter Button to filter markers based on criteria
     (https://github.com/maydemirx/leaflet-tag-filter-button)
@@ -62,36 +60,3 @@ class TagFilterButton(Layer):
             open_popup_on_hover=open_popup_on_hover,
             **kwargs
         )
-
-    def render(self, **kwargs):
-        super(TagFilterButton, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink(
-                'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.js'),
-            name='tag-filter-button.js')
-        # JavascriptLink('https://raw.githubusercontent.com/maydemirx/leaflet-tag-filter-button/master/src/leaflet-tag-filter-button.js'),  # noqa
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js'),  # noqa
-            name='easy-button.js')
-
-        figure.header.add_child(
-            CssLink(
-                'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.css'),
-            name='tag-filter-button.css')
-        # CssLink('https://raw.githubusercontent.com/maydemirx/leaflet-tag-filter-button/master/src/leaflet-tag-filter-button.css'),  # noqa
-
-        figure.header.add_child(
-            CssLink(
-                'https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css'),
-            name='easy-button.css')
-
-        figure.header.add_child(
-            CssLink(
-                'https://cdn.jsdelivr.net/npm/css-ripple-effect@1.0.5/dist/ripple.min.css'),
-            name='ripples.min.css')
