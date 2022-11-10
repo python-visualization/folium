@@ -29,6 +29,7 @@ from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.search import Search
 from folium.plugins.semicircle import SemiCircle
+from folium.plugins.side_by_side import SideBySideLayers
 from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
@@ -60,6 +61,7 @@ __all__ = [
     'ScrollZoomToggler',
     'Search',
     'SemiCircle',
+    'SideBySideLayers',
     'StripePattern',
     'TagFilterButton',
     'Terminator',

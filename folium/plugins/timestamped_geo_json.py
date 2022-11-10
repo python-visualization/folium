@@ -163,7 +163,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
                  loop_button=False, date_options='YYYY-MM-DD HH:mm:ss',
-                 time_slider_drag_update=False, duration=None):
+                 time_slider_drag_update=False, duration=None, speed_slider=True):
         super(TimestampedGeoJson, self).__init__()
         self._name = 'TimestampedGeoJson'
 
@@ -188,6 +188,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
             auto_play=auto_play,
             loop_button=loop_button,
             time_slider_drag_update=time_slider_drag_update,
+            speed_slider=speed_slider,
             player_options={
                 'transitionTime': int(transition_time),
                 'loop': loop,
