@@ -81,7 +81,8 @@ class Map(JSCSSMixin, MacroElement):
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
 
-    You can pass a custom tileset to Folium by passing a Leaflet-style
+    You can pass a custom tileset to Folium by passing a
+    :class:`xyzservices.TileProvider` or a Leaflet-style
     URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
 
     You can find a list of free tile providers here:
@@ -97,8 +98,9 @@ class Map(JSCSSMixin, MacroElement):
         Width of the map.
     height: pixel int or percentage string (default: '100%')
         Height of the map.
-    tiles: str or TileLayer, default 'OpenStreetMap'
+    tiles: str or TileLayer or :class:`xyzservices.TileProvider`, default 'OpenStreetMap'
         Map tileset to use. Can choose from a list of built-in tiles,
+        pass a :class:`xyzservices.TileProvider`,
         pass a custom URL, pass a TileLayer object,
         or pass `None` to create a map without tiles.
         For more advanced tile layer options, use the `TileLayer` class.
