@@ -54,8 +54,10 @@ def path_options(line=False, radius=False, **kwargs):
     bubbling_mouse_events: Bool, True (bubblingMouseEvents)
         When true a mouse event on this path will trigger the same event on the
         map (unless L.DomEvent.stopPropagation is used).
-    fill_rule: bool, None
-        Whether to apply a gradient to the stroke and fill.
+    gradient: bool, default None
+        When a gradient on the stroke and fill is available,
+        allows turning it on or off.
+
     Note that the presence of `fill_color` will override `fill=False`.
 
     See https://leafletjs.com/reference.html#path
