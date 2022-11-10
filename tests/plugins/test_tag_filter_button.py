@@ -32,7 +32,7 @@ def test_tag_filter_button():
     for i, latlng in enumerate(initial_data):
         category = category_column[i]
         folium.Marker(
-            latlng,
+            tuple(latlng),
             tags=[category]
         ).add_to(m)
 
