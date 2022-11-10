@@ -275,7 +275,7 @@ class Marker(MacroElement):
                  draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = validate_location(location) if location else None
+        self.location = validate_location(location) if location is not None else None
         self.options = parse_options(
             draggable=draggable or None,
             autoPan=draggable or None,
