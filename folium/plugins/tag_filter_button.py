@@ -41,6 +41,21 @@ class TagFilterButton(JSCSSMixin, Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('tag-filter-button.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.js'),
+        ('easy-button.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js'),
+    ]
+    default_css = [
+        ('tag-filter-button.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.css'),
+        ('easy-button.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css'),
+        ('ripples.min.css',
+         'https://cdn.jsdelivr.net/npm/css-ripple-effect@1.0.5/dist/ripple.min.css'),
+    ]
+
     def __init__(self, data, name=None, icon="fa-filter",
                  clear_text='clear', filter_on_every_click=True,
                  open_popup_on_hover=False,
