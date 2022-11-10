@@ -19,14 +19,7 @@ class SideBySideLayers(JSCSSMixin, Layer):
     layer_right: Layer.
         The left Layer within the side by side control.
         Must  be created and added to the map before being passed to this class.
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls.
-    overlay : bool, default True
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls.
-    show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+
     Examples
     --------
     >>> sidebyside = SideBySideLayers(layer_left, layer_right)
@@ -46,11 +39,8 @@ class SideBySideLayers(JSCSSMixin, Layer):
          'https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side@gh-pages/leaflet-side-by-side.min.js'),
     ]
 
-    def __init__(self, layer_left, layer_right, name=None, overlay=True, control=True, show=True):
-        super(SideBySideLayers, self).__init__(name=name,
-                                               overlay=overlay,
-                                               control=control,
-                                               show=show)
+    def __init__(self, layer_left, layer_right):
+        super().__init__(control=False)
         self._name = 'SideBySideLayers'
         self.layer_left = layer_left
         self.layer_right = layer_right
