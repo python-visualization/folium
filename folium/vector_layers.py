@@ -54,6 +54,9 @@ def path_options(line=False, radius=False, **kwargs):
     bubbling_mouse_events: Bool, True (bubblingMouseEvents)
         When true a mouse event on this path will trigger the same event on the
         map (unless L.DomEvent.stopPropagation is used).
+    gradient: bool, default None
+        When a gradient on the stroke and fill is available,
+        allows turning it on or off.
 
     Note that the presence of `fill_color` will override `fill=False`.
 
@@ -77,6 +80,10 @@ def path_options(line=False, radius=False, **kwargs):
     elif not fill_color:
         fill_color = color
         fill = kwargs.pop('fill', False)
+
+    gradient = kwargs.pop('gradient', None)
+    if gradient is not None:
+        extra_options.update({'gradient': gradient})
 
     default = {
         'stroke': kwargs.pop('stroke', True),
