@@ -40,11 +40,11 @@ def test_tag_filter_button():
     out = normalize(m._parent.render())
 
     # We verify that the script imports are present.
-    script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.js"></script>'  # noqa
     assert script in out
     script = '<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>'  # noqa
     assert script in out
-    script = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.4/src/leaflet-tag-filter-button.css"/>'  # noqa
+    script = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.css"/>'  # noqa
     assert script in out
     script = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css"/>'  # noqa
     assert script in out
