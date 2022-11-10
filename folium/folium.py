@@ -29,7 +29,7 @@ _default_js = [
     ('jquery',
      'https://code.jquery.com/jquery-1.12.4.min.js'),
     ('bootstrap',
-     'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js'),
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'),
     ('awesome_markers',
      'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
     ]
@@ -38,10 +38,9 @@ _default_css = [
     ('leaflet_css',
      'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'),
     ('bootstrap_css',
-     'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css'),
-    # glyphicons came from Bootstrap 3 and are used for Awesome Markers
-    ('glyphicons_css',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/bootstrap_3_glyphicons/bootstrap-3-glyphicons.css'),  # noqa
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'),
+    ('bootstrap_theme_css',
+     'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'),  # noqa
     ('awesome_markers_font_css',
      'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css'),  # noqa
     ('awesome_markers_css',
