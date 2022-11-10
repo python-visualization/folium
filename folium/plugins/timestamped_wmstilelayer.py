@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from branca.element import CssLink, Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.raster_layers import WmsTileLayer
 from folium.utilities import parse_options
@@ -9,7 +6,7 @@ from folium.utilities import parse_options
 from jinja2 import Template
 
 
-class TimestampedWmsTileLayers(Layer):
+class TimestampedWmsTileLayers(JSCSSMixin, Layer):
     """
     Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
     control with the Leaflet.TimeDimension plugin.
@@ -97,13 +94,29 @@ class TimestampedWmsTileLayers(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('jquery2.0.0',
+         'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
+        ('jqueryui1.10.2',
+         'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+    ]
+    default_css = [
+        ('highlight.js_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
+        ('leaflet.timedimension_css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
+
     def __init__(self, data, transition_time=200, loop=False, auto_play=False,
-                 period='P1D', time_interval=False, name=None,
-                 overlay=True, control=True, show=True):
+                 period='P1D', time_interval=False, name=None):
         super(TimestampedWmsTileLayers, self).__init__(name=name,
-                                                       overlay=overlay,
-                                                       control=control,
-                                                       show=show)
+                                                       overlay=True,
+                                                       control=False,
+                                                       show=True)
         self._name = 'TimestampedWmsTileLayers'
         self.options = parse_options(
             period=period,
@@ -121,34 +134,3 @@ class TimestampedWmsTileLayers(Layer):
             self.layers = [data]
         else:
             self.layers = data  # Assume iterable
-
-    def render(self, **kwargs):
-        super(TimestampedWmsTileLayers, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
-            name='jquery2.0.0')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
-            name='jqueryui1.10.2')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
-            name='highlight.js_css')
-
-        figure.header.add_child(
-            CssLink('http://apps.socib.es/Leaflet.TimeDimension/dist/leaflet.timedimension.control.min.css'),  # noqa
-            name='leaflet.timedimension_css')

@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
-
 import json
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import MacroElement
 
+from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.utilities import iter_points, none_max, none_min, parse_options
+from folium.utilities import get_bounds, parse_options
 
 from jinja2 import Template
 
 
-class TimestampedGeoJson(MacroElement):
+class TimestampedGeoJson(JSCSSMixin, MacroElement):
     """
     Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
     into a map with Map.add_child.
@@ -67,8 +66,9 @@ class TimestampedGeoJson(MacroElement):
     ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
     ...           },
     ...         'properties': {
-    ...           'times': [1435708800000, 1435795200000, 1435881600000]
-    ...           }
+    ...           'times': [1435708800000, 1435795200000, 1435881600000],
+    ...           'tooltip': 'my tooltip text'
+    ...           },
     ...         }
     ...       ]
     ...     })
@@ -123,6 +123,9 @@ class TimestampedGeoJson(MacroElement):
                         if (feature.properties.popup) {
                         layer.bindPopup(feature.properties.popup);
                         }
+                        if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
+                        }
                     }
                 })
 
@@ -136,6 +139,26 @@ class TimestampedGeoJson(MacroElement):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
+
+    default_js = [
+        ('jquery2.0.0',
+         'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
+        ('jqueryui1.10.2',
+         'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
+        ('iso8601',
+         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
+        ('leaflet.timedimension',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        # noqa
+        ('moment',
+         'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')
+    ]
+    default_css = [
+        ('highlight.js_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
+        ('leaflet.timedimension_css',
+         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+    ]
 
     def __init__(self, data, transition_time=200, loop=True, auto_play=True,
                  add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
@@ -176,39 +199,7 @@ class TimestampedGeoJson(MacroElement):
         assert isinstance(self._parent, Map), (
             'TimestampedGeoJson can only be added to a Map object.'
         )
-        super(TimestampedGeoJson, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),  # noqa
-            name='jquery2.0.0')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),  # noqa
-            name='jqueryui1.10.2')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/nezasa/iso8601-js-period/master/iso8601.min.js'),  # noqa
-            name='iso8601')
-
-        figure.header.add_child(
-            JavascriptLink('https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.min.js'),  # noqa
-            name='leaflet.timedimension')
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),  # noqa
-            name='highlight.js_css')
-
-        figure.header.add_child(
-            CssLink("https://rawcdn.githack.com/socib/Leaflet.TimeDimension/master/dist/leaflet.timedimension.control.min.css"),  # noqa
-            name='leaflet.timedimension_css')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js'),
-            name='moment')
+        super().render(**kwargs)
 
     def _get_self_bounds(self):
         """
@@ -227,17 +218,4 @@ class TimestampedGeoJson(MacroElement):
                 data = {'type': 'Feature', 'geometry': data}
             data = {'type': 'FeatureCollection', 'features': [data]}
 
-        bounds = [[None, None], [None, None]]
-        for feature in data['features']:
-            for point in iter_points(feature.get('geometry', {}).get('coordinates', {})):  # noqa
-                bounds = [
-                    [
-                        none_min(bounds[0][0], point[1]),
-                        none_min(bounds[0][1], point[0]),
-                        ],
-                    [
-                        none_max(bounds[1][0], point[1]),
-                        none_max(bounds[1][1], point[0]),
-                        ],
-                    ]
-        return bounds
+        return get_bounds(data, lonlat=True)

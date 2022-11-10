@@ -1,16 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
-
-from jinja2 import Template
+from branca.element import MacroElement
 
 from folium import Map
+from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
 from folium.utilities import parse_options
 
+from jinja2 import Template
 
-class Search(MacroElement):
+
+class Search(JSCSSMixin, MacroElement):
     """
     Adds a search tool to your map.
 
@@ -49,12 +48,12 @@ class Search(MacroElement):
                 {% endif %}
                 collapsed: {{this.collapsed|tojson|safe}},
                 textPlaceholder: '{{this.placeholder}}',
+                position:'{{this.position}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
                 {% if this.search_zoom %}
                 zoom: {{this.search_zoom}},
                 {% endif %}
-                position:'{{this.position}}',
                 hideMarkerOnCollapse: true
             {% else %}
                 marker: false,
@@ -83,6 +82,15 @@ class Search(MacroElement):
 
         {% endmacro %}
         """)  # noqa
+
+    default_js = [
+        ('Leaflet.Search.js',
+         'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js')
+    ]
+    default_css = [
+        ('Leaflet.Search.css',
+         'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css')
+    ]
 
     def __init__(self, layer, search_label=None, search_zoom=None,
                  geom_type='Point', position='topleft', placeholder='Search',
@@ -119,18 +127,5 @@ class Search(MacroElement):
         else:
             keys = None
         self.test_params(keys=keys)
-        super(Search, self).render()
 
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js'),  # noqa
-            name='Leaflet.Search.js'
-        )
-
-        figure.header.add_child(
-            CssLink('https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css'),  # noqa
-            name='Leaflet.Search.css'
-        )
+        super().render(**kwargs)

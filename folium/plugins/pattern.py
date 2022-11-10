@@ -1,14 +1,13 @@
-# -*- coding: utf-8 -*-
+from branca.element import MacroElement
 
-from branca.element import Figure, JavascriptLink, MacroElement
-
+from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.utilities import get_obj_in_upper_tree, parse_options
 
 from jinja2 import Template
 
 
-class StripePattern(MacroElement):
+class StripePattern(JSCSSMixin, MacroElement):
     """Fill Pattern for polygon composed of alternating lines.
 
     Add these to the 'fillPattern' field in GeoJson style functions.
@@ -42,6 +41,11 @@ class StripePattern(MacroElement):
         {% endmacro %}
     """)
 
+    default_js = [
+        ('pattern',
+         'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')
+    ]
+
     def __init__(self, angle=.5, weight=4, space_weight=4,
                  color="#000000", space_color="#ffffff",
                  opacity=0.75, space_opacity=0.0, **kwargs):
@@ -63,17 +67,8 @@ class StripePattern(MacroElement):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         super(StripePattern, self).render(**kwargs)
 
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
 
-        figure.header.add_child(
-            JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern'
-        )
-
-
-class CirclePattern(MacroElement):
+class CirclePattern(JSCSSMixin, MacroElement):
     """Fill Pattern for polygon composed of repeating circles.
 
     Add these to the 'fillPattern' field in GeoJson style functions.
@@ -113,6 +108,11 @@ class CirclePattern(MacroElement):
         {% endmacro %}
     """)
 
+    default_js = [
+        ('pattern',
+         'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')
+    ]
+
     def __init__(self, width=20, height=20, radius=12, weight=2.0,
                  color="#3388ff", fill_color="#3388ff",
                  opacity=0.75, fill_opacity=0.5):
@@ -138,12 +138,3 @@ class CirclePattern(MacroElement):
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map).get_name()
         super(CirclePattern, self).render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js'),  # noqa
-            name='pattern'
-        )
