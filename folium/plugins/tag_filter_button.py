@@ -3,10 +3,7 @@
 from branca.element import Figure, JavascriptLink, CssLink
 
 from folium.map import Layer
-from folium.utilities import (
-    parse_options,
-    if_pandas_df_convert_to_numpy
-)
+from folium.utilities import parse_options
 
 from jinja2 import Template
 
@@ -56,7 +53,6 @@ class TagFilterButton(Layer):
         super(TagFilterButton, self).__init__(name=name, overlay=overlay,
                                               control=control, show=show)
         self._name = 'TagFilterButton'
-        data = if_pandas_df_convert_to_numpy(data)
         self.options = parse_options(
             data=data,
             icon=icon,
