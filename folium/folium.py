@@ -39,6 +39,9 @@ _default_css = [
      'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'),
     ('bootstrap_css',
      'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css'),
+    # glyphicons came from Bootstrap 3 and are used for Awesome Markers
+    ('glyphicons_css',
+     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/bootstrap_3_glyphicons/bootstrap-3-glyphicons.css'),  # noqa
     ('awesome_markers_font_css',
      'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css'),  # noqa
     ('awesome_markers_css',
