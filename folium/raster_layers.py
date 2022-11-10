@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 
@@ -158,7 +156,7 @@ class WmsTileLayer(Layer):
         for setting extra tileLayer.wms parameters or as extra parameters in
         the WMS request.
 
-    See https://leafletjs.com/reference-1.6.0.html#tilelayer-wms
+    See https://leafletjs.com/reference.html#tilelayer-wms
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -227,7 +225,7 @@ class ImageOverlay(Layer):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
 
-    See https://leafletjs.com/reference-1.6.0.html#imageoverlay for more
+    See https://leafletjs.com/reference.html#imageoverlay for more
     options.
 
     """
@@ -313,7 +311,7 @@ class VideoOverlay(Layer):
         Whether the layer will be shown on opening (only for overlays).
     **kwargs:
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#videooverlay
+        https://leafletjs.com/reference.html#videooverlay
 
     """
     _template = Template(u"""

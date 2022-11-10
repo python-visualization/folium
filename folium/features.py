@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 """
 Leaflet GeoJson and miscellaneous features.
 
 """
 
-import json
-import warnings
 import functools
+import json
 import operator
+import warnings
 
 from branca.colormap import LinearColormap, StepColormap
 from branca.element import (Element, Figure, JavascriptLink, MacroElement)
@@ -16,17 +14,17 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import (FeatureGroup, Icon, Layer, Marker, Tooltip)
+from folium.map import (FeatureGroup, Icon, Layer, Marker, Popup, Tooltip)
 from folium.utilities import (
-    validate_locations,
     _parse_size,
+    camelize,
     get_bounds,
+    get_obj_in_upper_tree,
     image_to_url,
     none_max,
     none_min,
-    get_obj_in_upper_tree,
     parse_options,
-    camelize
+    validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -233,8 +231,6 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        vegalite_major_version = self._get_vegalite_major_versions(self.data)
-
         self._parent.html.add_child(Element(Template("""
             <div id="{{this.get_name()}}"></div>
             """).render(this=self, kwargs=kwargs)), name=self.get_name())
@@ -253,25 +249,40 @@ class VegaLite(Element):
             </style>
             """).render(this=self, **kwargs)), name=self.get_name())
 
-        if vegalite_major_version == '1':
-            self._embed_vegalite_v1(figure)
-        elif vegalite_major_version == '2':
-            self._embed_vegalite_v2(figure)
-        elif vegalite_major_version == '3':
-            self._embed_vegalite_v3(figure)
-        else:
-            # Version 2 is assumed as the default, if no version is given in the schema.
-            self._embed_vegalite_v2(figure)
+        embed_mapping = {
+            1: self._embed_vegalite_v1,
+            2: self._embed_vegalite_v2,
+            3: self._embed_vegalite_v3,
+            4: self._embed_vegalite_v4,
+            5: self._embed_vegalite_v5,
+        }
 
-    def _get_vegalite_major_versions(self, spec):
-        try:
-            schema = spec['$schema']
-        except KeyError:
-            major_version = None
-        else:
-            major_version = schema.split('/')[-1].split('.')[0].lstrip('v')
+        # Version 2 is assumed as the default, if no version is given in the schema.
+        embed_vegalite = embed_mapping.get(self.vegalite_major_version, self._embed_vegalite_v2)
+        embed_vegalite(figure)
 
-        return major_version
+    @property
+    def vegalite_major_version(self) -> int:
+        if '$schema' not in self.data:
+            return None
+
+        schema = self.data['$schema']
+
+        return int(schema.split('/')[-1].split('.')[0].lstrip('v'))
+
+    def _embed_vegalite_v5(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm//vega@5'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@5'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@6'), name='vega-embed')
+
+    def _embed_vegalite_v4(self, figure):
+        self._vega_embed()
+
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm//vega@5'), name='vega')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-lite@4'), name='vega-lite')
+        figure.header.add_child(JavascriptLink('https://cdn.jsdelivr.net/npm/vega-embed@6'), name='vega-embed')
 
     def _embed_vegalite_v3(self, figure):
         self._vega_embed()
@@ -349,7 +360,7 @@ class GeoJson(Layer):
     popup: GeoJsonPopup, optional
         Show a different popup for each feature by passing a GeoJsonPopup object.
     marker: Circle, CircleMarker or Marker, optional
-        If your data contains Point geometry, you can format the markers by passing a Cirle,
+        If your data contains Point geometry, you can format the markers by passing a Circle,
         CircleMarker or Marker object with your wanted options. The `style_function` and
         `highlight_function` will also target the marker object you passed.
     embed: bool, default True
@@ -514,7 +525,7 @@ class GeoJson(Layer):
             self.add_child(tooltip)
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
-        if isinstance(popup, (GeoJsonPopup)):
+        if isinstance(popup, (GeoJsonPopup, Popup)):
             self.add_child(popup)
 
     def process_data(self, data):
@@ -526,7 +537,7 @@ class GeoJson(Layer):
             if data.lower().startswith(('http:', 'ftp:', 'https:')):
                 if not self.embed:
                     self.embed_link = data
-                return requests.get(data).json()
+                return self.get_geojson_from_web(data)
             elif data.lstrip()[0] in '[{':  # This is a GeoJSON inline string
                 self.embed = True
                 return json.loads(data)
@@ -543,6 +554,9 @@ class GeoJson(Layer):
         else:
             raise ValueError('Cannot render objects with any missing geometries'
                              ': {!r}'.format(data))
+
+    def get_geojson_from_web(self, url):
+        return requests.get(url).json()
 
     def convert_to_feature_collection(self):
         """Convert data into a FeatureCollection if it is not already."""
@@ -582,16 +596,16 @@ class GeoJson(Layer):
         """
         feats = self.data['features']
         # Each feature has an 'id' field with a unique value.
-        unique_ids = set(feat.get('id', None) for feat in feats)
+        unique_ids = {feat.get('id', None) for feat in feats}
         if None not in unique_ids and len(unique_ids) == len(feats):
             return 'feature.id'
         # Each feature has a unique string or int property.
         if all(isinstance(feat.get('properties', None), dict) for feat in feats):
             for key in feats[0]['properties']:
-                unique_values = set(
+                unique_values = {
                     feat['properties'].get(key, None) for feat in feats
                     if isinstance(feat['properties'].get(key, None), (str, int))
-                )
+                }
                 if len(unique_values) == len(feats):
                     return 'feature.properties.{}'.format(key)
         # We add an 'id' field with a unique value to the data.
@@ -720,9 +734,9 @@ class TopoJson(JSCSSMixin, Layer):
 
     Examples
     --------
-    >>> # Providing file that shall be embeded.
+    >>> # Providing file that shall be embedded.
     >>> TopoJson(open('foo.json'), 'object.myobject')
-    >>> # Providing filename that shall not be embeded.
+    >>> # Providing filename that shall not be embedded.
     >>> TopoJson('foo.json', 'object.myobject')
     >>> # Providing dict.
     >>> TopoJson(json.load(open('foo.json')), 'object.myobject')
@@ -974,7 +988,7 @@ class GeoJsonTooltip(GeoJsonDetail):
         Whether the tooltip should follow the mouse.
     **kwargs: Assorted.
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.6.0#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     Examples
     --------
@@ -1027,7 +1041,7 @@ class GeoJsonPopup(GeoJsonDetail):
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.
-        *Available for most of JavaScript's primitive types (any data you'll
+        Available for most of JavaScript's primitive types (any data you'll
         serve into the template).
     style: str, default None.
         HTML inline style properties like font and colors. Will be applied to
@@ -1075,7 +1089,7 @@ class Choropleth(FeatureGroup):
     on which to key the data. The 'columns' keyword does not need to be
     passed for a Pandas series.
 
-    Colors are generated from color brewer (http://colorbrewer2.org/)
+    Colors are generated from color brewer (https://colorbrewer2.org/)
     sequential palettes. By default, linear binning is used between
     the min and the max of the values. Custom binning can be achieved
     with the `bins` parameter.
@@ -1331,7 +1345,7 @@ class DivIcon(MacroElement):
     html : string
         A custom HTML code to put inside the div element.
 
-    See https://leafletjs.com/reference-1.6.0.html#divicon
+    See https://leafletjs.com/reference.html#divicon
 
     """
 
@@ -1414,6 +1428,41 @@ class ClickForMarker(MacroElement):
             self.popup = ''.join(['"', popup, '"'])
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
+
+
+class ClickForLatLng(MacroElement):
+    """
+    When one clicks on a Map that contains a ClickForLatLng,
+    the coordinates of the pointer's position are copied to clipboard.
+
+    Parameters
+    ==========
+    format_str : str, default 'lat + "," + lng'
+        The javascript string used to format the text copied to clipboard.
+        eg:
+        format_str = 'lat + "," + lng'              >> 46.558860,3.397397
+        format_str = '"[" + lat + "," + lng + "]"'  >> [46.558860,3.397397]
+    alert : bool, default True
+        Whether there should be an alert when something has been copied to clipboard.
+    """
+    _template = Template(u"""
+            {% macro script(this, kwargs) %}
+                function getLatLng(e){
+                    var lat = e.latlng.lat.toFixed(6),
+                        lng = e.latlng.lng.toFixed(6);
+                    var txt = {{this.format_str}};
+                    navigator.clipboard.writeText(txt);
+                    {% if this.alert %}alert("Copied to clipboard : \\n    " + txt);{% endif %}
+                    };
+                {{this._parent.get_name()}}.on('click', getLatLng);
+            {% endmacro %}
+            """)  # noqa
+
+    def __init__(self, format_str=None, alert=True):
+        super(ClickForLatLng, self).__init__()
+        self._name = 'ClickForLatLng'
+        self.format_str = format_str or 'lat + "," + lng'
+        self.alert = alert
 
 
 class CustomIcon(Icon):

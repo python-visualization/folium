@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Test TimestampedGeoJson
 -----------------------
@@ -150,6 +148,9 @@ def test_timestamped_geo_json():
                 onEachFeature: function(feature, layer) {
                     if (feature.properties.popup) {
                     layer.bindPopup(feature.properties.popup);
+                    }
+                    if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
                     }
                 }
             })

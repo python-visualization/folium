@@ -10,7 +10,7 @@ from branca.colormap import linear
 
 import folium
 from folium.plugins import TimeSliderChoropleth
-
+from folium.utilities import normalize
 
 import numpy as np
 
@@ -19,7 +19,6 @@ import pandas as pd
 import pytest
 
 
-@pytest.mark.xfail
 def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeSliderChoropleth
@@ -29,8 +28,15 @@ def test_timedynamic_geo_json():
     datapath = gpd.datasets.get_path('naturalearth_lowres')
     gdf = gpd.read_file(datapath)
 
+    '''
+    Timestamps, start date is carefully chosen to be earlier than 2001-09-09
+    (9 digit timestamp), end date is later (10 digits). This is to ensure an
+    integer sort is used (and not a string sort were '2' > '10').
+    datetime.strftime('%s') on Windows just generates date and not timestamp so avoid.
+    '''
     n_periods = 3
-    dt_index = pd.date_range('2016-1-1', periods=n_periods, freq='M').strftime('%s')
+    dt_range = pd.Series(pd.date_range('2001-08-1', periods=n_periods, freq='M'))
+    dt_index = [f"{dt.timestamp():.0f}" for dt in dt_range]
 
     styledata = {}
 
@@ -71,12 +77,15 @@ def test_timedynamic_geo_json():
     rendered = time_slider_choropleth._template.module.script(time_slider_choropleth)
 
     m._repr_html_()
-    out = m._parent.render()
+    out = normalize(m._parent.render())
     assert '<script src="https://d3js.org/d3.v4.min.js"></script>' in out
 
     # We verify that data has been inserted correctly
-    expected_timestamps = """var timestamps = ["1454198400", "1456704000", "1459382400"];"""  # noqa
-    assert expected_timestamps.split(';')[0].strip() == rendered.split(';')[0].strip()
+    expected_timestamps = sorted(dt_index, key=int)     # numeric sort
+    expected_timestamps = "var timestamps = {};".format(expected_timestamps)
+    expected_timestamps = expected_timestamps.split(';')[0].strip().replace("'", '"')
+    rendered_timestamps = rendered.split(';')[0].strip()
+    assert expected_timestamps == rendered_timestamps
 
-    expected_styledict = json.dumps(styledict, sort_keys=True, indent=2)
-    assert expected_styledict in rendered
+    expected_styledict = normalize(json.dumps(styledict, sort_keys=True))
+    assert expected_styledict in normalize(rendered)
