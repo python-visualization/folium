@@ -1,14 +1,12 @@
-# -*- coding: utf-8 -*-
-
 import warnings
 
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import (
+    if_pandas_df_convert_to_numpy,
     none_max,
     none_min,
     parse_options,
-    if_pandas_df_convert_to_numpy,
     validate_location,
 )
 
@@ -57,7 +55,7 @@ class HeatMap(JSCSSMixin, Layer):
 
     default_js = [
         ('leaflet-heat.js',
-         'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/folium/templates/leaflet_heat.min.js'),
+         'https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js'),
     ]
 
     def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,

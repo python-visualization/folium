@@ -1,16 +1,18 @@
 import base64
+import collections
+import copy
 import io
 import json
 import math
 import os
+import re
 import struct
 import tempfile
+import uuid
 import zlib
 from contextlib import contextmanager
-import copy
-import uuid
-import collections
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
+
 
 import numpy as np
 try:
@@ -330,6 +332,8 @@ def iter_coords(obj):
         coords = [geom['geometry']['coordinates'] for geom in obj['features']]
     elif 'geometry' in obj:
         coords = obj['geometry']['coordinates']
+    elif 'geometries' in obj and 'coordinates' in obj['geometries'][0]:
+        coords = obj['geometries'][0]['coordinates']
     else:
         coords = obj.get('coordinates', obj)
     for coord in coords:
@@ -473,3 +477,8 @@ def parse_options(**kwargs):
     return {camelize(key): value
             for key, value in kwargs.items()
             if value is not None}
+
+
+def escape_backticks(text):
+    """Escape backticks so text can be used in a JS template."""
+    return re.sub(r"(?<!\\)`", r'\`', text)
