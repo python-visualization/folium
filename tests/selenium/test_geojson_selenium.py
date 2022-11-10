@@ -1,5 +1,6 @@
 import folium
 import folium.plugins
+from selenium.webdriver.common.by import By
 from folium.utilities import temp_html_filepath
 
 
@@ -11,7 +12,7 @@ def test_geojson(driver):
     - https://github.com/python-visualization/folium/pull/1289
 
     """
-    data_url = 'https://cdn.jsdelivr.net/gh/python-visualization/folium@master/examples/data/search_bars_rome.json'
+    data_url = 'https://cdn.jsdelivr.net/gh/python-visualization/folium@main/examples/data/search_bars_rome.json'
 
     m = folium.Map((41.9, 12.5), zoom_start=10, tiles='cartodbpositron')
     marker_cluster = folium.plugins.MarkerCluster(name='cluster').add_to(m)
@@ -32,5 +33,5 @@ def test_geojson(driver):
         '.leaflet-control-layers-overlays > label:nth-of-type(2)'
     )
     assert control_label.text == 'geojson'
-    control_input = control_label.find_element_by_css_selector('input')
+    control_input = control_label.find_element(By.CSS_SELECTOR, value='input')
     assert control_input.get_attribute('checked') is None

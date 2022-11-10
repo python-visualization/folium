@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
-
 """
 Test raster_layers
------------------
+------------------
 
 """
-import pytest
-
 import folium
 from folium.utilities import normalize
 

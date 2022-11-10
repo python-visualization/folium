@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # Folium documentation build configuration file, created by
 # sphinx-quickstart on Sun May 19 19:39:34 2013.
 #
@@ -252,6 +250,11 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# Ignore tile URLs
+linkcheck_ignore = [
+  r"https://free.*",
+]
 
 intersphinx_mapping = {
     "xyzservices": (
