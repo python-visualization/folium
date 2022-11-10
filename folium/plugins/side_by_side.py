@@ -1,13 +1,10 @@
-# -*- coding: utf-8 -*-
-
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.map import Layer
 
 from jinja2 import Template
 
 
-class SideBySideLayers(Layer):
+class SideBySideLayers(JSCSSMixin, Layer):
     """
     Creates a SideBySideLayers that takes two Layers and adds a sliding
     control with the leaflet-side-by-side plugin.
@@ -44,6 +41,11 @@ class SideBySideLayers(Layer):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('leaflet.sidebyside',
+         'https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side@gh-pages/leaflet-side-by-side.min.js'),
+    ]
+
     def __init__(self, layer_left, layer_right, name=None, overlay=True, control=True, show=True):
         super(SideBySideLayers, self).__init__(name=name,
                                                overlay=overlay,
@@ -52,14 +54,3 @@ class SideBySideLayers(Layer):
         self._name = 'SideBySideLayers'
         self.layer_left = layer_left
         self.layer_right = layer_right
-
-    def render(self, **kwargs):
-        super(SideBySideLayers, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://raw.githack.com/digidem/leaflet-side-by-side/gh-pages/leaflet-side-by-side.js'),  # noqa
-            name='leaflet.sidebyside')
