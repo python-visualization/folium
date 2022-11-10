@@ -1,0 +1,33 @@
+name: Code Tests
+
+on: [push, pull_request]
+
+jobs:
+  run:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.7", "3.11"]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup Micromamba
+      uses: mamba-org/provision-with-micromamba@v14
+      with:
+        environment-file: false
+
+    - name: Python ${{ matrix.python-version }}
+      shell: bash -l {0}
+      run: |
+        micromamba create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        micromamba activate TEST
+        python -m pip install -e . --no-deps --force-reinstall
+
+    - name: Tests
+      shell: bash -l {0}
+      run: |
+        micromamba activate TEST
+        python -m pytest -vv --ignore=tests/selenium

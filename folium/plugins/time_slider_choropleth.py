@@ -1,14 +1,11 @@
-# -*- coding: utf-8 -*-
-
-from branca.element import Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import Layer
 
 from jinja2 import Template
 
 
-class TimeSliderChoropleth(Layer):
+class TimeSliderChoropleth(JSCSSMixin, Layer):
     """
     Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.
 
@@ -27,22 +24,24 @@ class TimeSliderChoropleth(Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
-
+    init_timestamp: int, default 0
+        Initial time-stamp index on the slider. Must be in the range
+        `[-L, L-1]`, where `L` is the maximum number of time stamps in
+        `styledict`. For example, use `-1` to initialize the slider to the
+        latest timestamp.
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
-
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
-            var current_timestamp = timestamps[0];
-
+            var current_timestamp = timestamps[{{ this.init_timestamp }}];
             // insert time slider
             d3.select("body").insert("p", ":first-child").append("input")
                 .attr("type", "range")
                 .attr("width", "100px")
                 .attr("min", 0)
                 .attr("max", timestamps.length - 1)
-                .attr("value", 0)
+                .attr("value", {{ this.init_timestamp }})
                 .attr("id", "slider")
                 .attr("step", "1")
                 .style('align', 'center');
@@ -75,9 +74,9 @@ class TimeSliderChoropleth(Layer):
 
             d3.select("#slider").on("input", function() {
                 current_timestamp = timestamps[this.value];
-            var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
-            d3.select("output#slider-value").text(datestring);
-            fill_map();
+                var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+                d3.select("output#slider-value").text(datestring);
+                fill_map();
             });
 
             {% if this.highlight %}
@@ -99,7 +98,6 @@ class TimeSliderChoropleth(Layer):
                     }
                     });
                 };
-
             {% endif %}
 
             var {{ this.get_name() }} = L.geoJson(
@@ -115,22 +113,32 @@ class TimeSliderChoropleth(Layer):
                 }
             });
 
-            {{ this.get_name() }}.eachLayer(function (layer) {
-                layer._path.id = 'feature-' + layer.feature.id;
-            });
+            function onOverlayAdd(e) {
+                {{ this.get_name() }}.eachLayer(function (layer) {
+                    layer._path.id = 'feature-' + layer.feature.id;
+                });
 
-            d3.selectAll('path')
-            .attr('stroke', 'white')
-            .attr('stroke-width', 0.8)
-            .attr('stroke-dasharray', '5,5')
-            .attr('fill-opacity', 0);
-            fill_map();
+                d3.selectAll('path')
+                .attr('stroke', 'white')
+                .attr('stroke-width', 0.8)
+                .attr('stroke-dasharray', '5,5')
+                .attr('fill-opacity', 0);
 
+                fill_map();
+            }
+            {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
+
+            onOverlayAdd(); // fill map as layer is loaded
         {% endmacro %}
         """)
 
+    default_js = [
+        ('d3v4',
+         'https://d3js.org/d3.v4.min.js')
+    ]
+
     def __init__(self, data, styledict, name=None, overlay=True, control=True,
-                 show=True):
+                 show=True, init_timestamp=0):
         super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
                                                    control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
@@ -145,14 +153,16 @@ class TimeSliderChoropleth(Layer):
         timestamps = set()
         for feature in styledict.values():
             timestamps.update(set(feature.keys()))
-        timestamps = sorted(list(timestamps))
+        try:
+            timestamps = sorted(timestamps, key=int)
+        except (TypeError, ValueError):
+            timestamps = sorted(timestamps)
 
         self.timestamps = timestamps
         self.styledict = styledict
-
-    def render(self, **kwargs):
-        super(TimeSliderChoropleth, self).render(**kwargs)
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-        figure.header.add_child(JavascriptLink('https://d3js.org/d3.v4.min.js'), name='d3v4')
+        assert -len(timestamps) <= init_timestamp < len(timestamps), (
+            'init_timestamp must be in the range [-{}, {}) but got {}'.format(
+                len(timestamps), len(timestamps), init_timestamp))
+        if init_timestamp < 0:
+            init_timestamp = len(timestamps) + init_timestamp
+        self.init_timestamp = init_timestamp

@@ -1,3 +1,73 @@
+0.13.0
+~~~~~~
+
+- Lazy popup: only load content on click (@marciogranzotto #1511)
+- Add Leaflet.VectorGrid plugin: VectorGridProtobuf (@iwpnd #1576)
+- Add blur parameter to HeatMapWithTime plugin (@Demetrio92 #1529)
+- New ClickForLatLng class: click to save lat/lon to clipboard (@BibMartin #1530)
+- Add width parameter to css for FloatImage (@beautah #1570)
+- Add support for tooltips in TimestampedGeoJson objects (@tblundy #1472)
+- Expose GeoJson's web retrieval to its own function (@beautah #1458)
+
+Bug fixes
+
+- Restore allowing simple Popup in GeoJson (@ocefpaf #1528)
+
+Tests
+
+- Fix test failure with recent branca change on map ids (@oefe #1556)
+
+Documentation
+
+- Thanks to @oefe, @Demetrio92 and @giswqs for helping out with the documentation
+
+
+0.12.0
+~~~~~~
+
+- GeoJson add `zoom_on_click` option, default False (@conengmo #1349)
+- Add Geocoder plugin (@WBP20 #1323)
+- Replace githack.com CDN with jsdelivr.com (@conengmo #1337)
+- Add SemiCircle plugin (@kuaka #1238)
+- Move hardcoded JS CDN links to class variables (@and-viceversa @conengmo #1312 #1416)
+- Treat data uris as valid (@Kirill888 #1428)
+- Add GeoJson marker option (@jtbaker #957)
+
+Bug fixes
+
+- Fix TimeSliderChoropleth breaking when using layer control (@markhudson42 #1380)
+- Fix GeoJson data loading (@conengmo #1353)
+- Fix heatmap weights/intensity (@conengmo #1354 #1282)
+- Fix multiple GeoJsonPopup 'name_getter' JS SyntaxError (@jtbaker #1347)
+- Fix TimestampedWmsTileLayers layer control (@conengmo #1319)
+
+API changes
+
+- Remove deprecated Mapbox and Cloudmade tilesets (@conengmo #1339)
+
+
+0.11.0
+~~~~~~
+
+- Upgrade Leaflet 1.5.1 -> 1.6.0 (@conengmo #1241)
+- Add auto_start parameter to locate control plugin (@fullonic #1220)
+- New feature: GeoJsonPopup (@jtbaker #1023)
+
+Bug fixes
+
+- Choropleth: default color for with and without data (@conengmo #1288)
+- Update WMS data url in WmsTimeDimension example notebook (@sknzl #1259)
+- Search plugin: fix position argument (@jjbenes #1304)
+- Fix GeoJsonPopupAndTooltip example notebook (@conengmo #1298)
+- Change geopandas dataframe `to_crs()` usage syntax (@artnikitin #1251)
+- GeoJson: fix `show` parameter when embedding data (@conengmo #1289)
+- Use https CDN for leaflet.timedimension.control.min.css (@sknzl #1256)
+- Host leaflet-heatmap.js under different name to avoid adblockers (@conengmo #1240)
+
+API changes
+
+- Removed unused `folium.utilities.iter_points` function, use instead `iter_coords` (@conengmo #1294)
+
 0.10.1
 ~~~~~~
 
@@ -7,7 +77,7 @@ Bug fixes
 - Fix HeatMapWithTime plugin (@farisnanosoft @conengmo #1228)
 - Fix adding GeoJSON to MarkerCluster (@conengmo #1190)
 
-Documentation 
+Documentation
 
 - Typo corrections in examples/Colormaps.ipynb (@nik-ahuja #1215)
 
@@ -198,7 +268,7 @@ Bug Fixes
 API changes
 
 - Removed features `MarkerCluster` in lieu of the plugin version (ocefpaf #704)
-- `choropleth` now takes a single `geo_data` instad of `geo_path`/`geo_str`
+- `choropleth` now takes a single `geo_data` instead of `geo_path`/`geo_str`
   leaving the parsing to `GeoJSON`, remove the unused `data_out` option,
   add geopandas support (ocefpaf #702)
 - All popups are considered HTML text by default (ocefpaf #689)

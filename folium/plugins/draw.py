@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
+from branca.element import Element, Figure, MacroElement
 
-from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from folium.elements import JSCSSMixin
 
 from jinja2 import Template
 
 
-class Draw(MacroElement):
+class Draw(JSCSSMixin, MacroElement):
     """
     Vector drawing and editing plugin for Leaflet.
 
@@ -17,7 +17,7 @@ class Draw(MacroElement):
         Name of geojson file
     position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
         Position of control.
-        See https://leafletjs.com/reference-1.6.0.html#control
+        See https://leafletjs.com/reference.html#control
     draw_options : dict, optional
         The options used to configure the draw toolbar. See
         http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions
@@ -84,6 +84,15 @@ class Draw(MacroElement):
         {% endmacro %}
         """)
 
+    default_js = [
+        ('leaflet_draw_js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js')
+    ]
+    default_css = [
+        ('leaflet_draw_css',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css')
+    ]
+
     def __init__(self, export=False, filename='data.geojson',
                  position='topleft', draw_options=None, edit_options=None):
         super(Draw, self).__init__()
@@ -100,11 +109,6 @@ class Draw(MacroElement):
         figure = self.get_root()
         assert isinstance(figure, Figure), ('You cannot render this Element '
                                             'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js'))  # noqa
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css'))  # noqa
 
         export_style = """
             <style>
