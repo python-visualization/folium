@@ -3,7 +3,7 @@ Folium map Tests
 ----------------
 
 """
-
+import numpy as np
 import pytest
 
 from folium import Map
@@ -146,6 +146,10 @@ def test_marker_valid_location():
     marker.add_to(m)
     with pytest.raises(ValueError):
         m.render()
+
+
+def test_marker_numpy_array_as_location():
+    Marker(np.array([0, 0]))
 
 
 @pytest.mark.filterwarnings('ignore::UserWarning')
