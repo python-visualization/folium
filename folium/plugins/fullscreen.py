@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
+from branca.element import MacroElement
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
-
+from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
 from jinja2 import Template
 
 
-class Fullscreen(MacroElement):
+class Fullscreen(JSCSSMixin, MacroElement):
     """
     Adds a fullscreen button to your map.
 
@@ -24,10 +23,9 @@ class Fullscreen(MacroElement):
         change the title of the button when fullscreen is on,
         default: 'Exit Full Screen'
     force_separate_button : bool, default False
-        force seperate button to detach from zoom buttons,
+        force separate button to detach from zoom buttons,
 
     See https://github.com/brunob/leaflet.fullscreen for more information.
-
     """
     _template = Template("""
         {% macro script(this, kwargs) %}
@@ -36,6 +34,15 @@ class Fullscreen(MacroElement):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """)  # noqa
+
+    default_js = [
+        ('Control.Fullscreen.js',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js')
+    ]
+    default_css = [
+        ('Control.FullScreen.css',
+         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css')
+    ]
 
     def __init__(self, position='topleft', title='Full Screen',
                  title_cancel='Exit Full Screen', force_separate_button=False,
@@ -48,21 +55,4 @@ class Fullscreen(MacroElement):
             title_cancel=title_cancel,
             force_separate_button=force_separate_button,
             **kwargs
-        )
-
-    def render(self, **kwargs):
-        super(Fullscreen, self).render()
-
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(
-            JavascriptLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js'),  # noqa
-            name='Control.Fullscreen.js'
-        )
-
-        figure.header.add_child(
-            CssLink('https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css'),  # noqa
-            name='Control.FullScreen.css'
         )

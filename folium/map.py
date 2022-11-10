@@ -1,17 +1,13 @@
-# -*- coding: utf-8 -*-
-
 """
 Classes for drawing maps.
 
 """
-
-from collections import OrderedDict
-
 import warnings
+from collections import OrderedDict
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import validate_location, camelize, parse_options
+from folium.utilities import camelize, parse_options, validate_location, escape_backticks
 
 from jinja2 import Template
 
@@ -61,7 +57,7 @@ class FeatureGroup(Layer):
         Whether the layer will be shown on opening (only for overlays).
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference-1.5.1.html#featuregroup
+        https://leafletjs.com/reference.html#featuregroup
 
     """
     _template = Template(u"""
@@ -88,6 +84,11 @@ class LayerControl(MacroElement):
     This object should be added to a Map object. Only Layer children
     of Map are included in the layer control.
 
+    Note
+    ----
+    The LayerControl should be added last to the map.
+    Otherwise, the LayerControl and/or the controlled layers may not appear.
+
     Parameters
     ----------
     position : str
@@ -102,7 +103,7 @@ class LayerControl(MacroElement):
           its layers so that the order is preserved when switching them on/off.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference-1.5.1.html#control-layers
+        https://leafletjs.com/reference.html#control-layers
 
     """
     _template = Template("""
@@ -270,11 +271,11 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, location, popup=None, tooltip=None, icon=None,
+    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
                  draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = validate_location(location)
+        self.location = validate_location(location) if location is not None else None
         self.options = parse_options(
             draggable=draggable or None,
             autoPan=draggable or None,
@@ -282,6 +283,7 @@ class Marker(MacroElement):
         )
         if icon is not None:
             self.add_child(icon)
+            self.icon = icon
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup)
                            else Popup(str(popup)))
@@ -295,6 +297,11 @@ class Marker(MacroElement):
         Because a marker has only single coordinates, we repeat them.
         """
         return [self.location, self.location]
+
+    def render(self):
+        if self.location is None:
+            raise ValueError("{} location must be assigned when added directly to map.".format(self._name))
+        super(Marker, self).render()
 
 
 class Popup(Element):
@@ -312,13 +319,21 @@ class Popup(Element):
         True renders the popup open on page load.
     sticky: bool, default False
         True prevents map and other popup clicks from closing.
+    lazy: bool, default False
+        True only loads the Popup content when clicking on the Marker.
     """
     _template = Template(u"""
         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
         {% for name, element in this.html._children.items() %}
-            var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
-            {{ this.get_name() }}.setContent({{ name }});
+            {% if this.lazy %}
+                {{ this._parent.get_name() }}.once('click', function() {
+                    {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
+                });
+            {% else %}
+                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
+                {{ this.get_name() }}.setContent({{ name }});
+            {% endif %}
         {% endfor %}
 
         {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
@@ -330,7 +345,7 @@ class Popup(Element):
     """)  # noqa
 
     def __init__(self, html=None, parse_html=False, max_width='100%',
-                 show=False, sticky=False, **kwargs):
+                 show=False, sticky=False, lazy=False, **kwargs):
         super(Popup, self).__init__()
         self._name = 'Popup'
         self.header = Element()
@@ -346,9 +361,11 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, str):
+            html = escape_backticks(html)
             self.html.add_child(Html(html, script=script))
 
         self.show = show
+        self.lazy = lazy
         self.options = parse_options(
             max_width=max_width,
             autoClose=False if show or sticky else None,
@@ -386,7 +403,7 @@ class Tooltip(MacroElement):
         Whether the tooltip should follow the mouse.
     **kwargs
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.5.1#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     """
     _template = Template(u"""
@@ -500,7 +517,7 @@ class CustomPane(MacroElement):
         determine which map elements lie over/under it. The default
         (625) corresponds to between markers and tooltips. Default
         panes and z-indexes can be found at
-        https://leafletjs.com/reference-1.5.1.html#map-pane
+        https://leafletjs.com/reference.html#map-pane
     pointer_events: bool, default False
         Whether or not layers in the pane should interact with the
         cursor. Setting to False will prevent interfering with
