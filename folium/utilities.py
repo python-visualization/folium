@@ -1,16 +1,18 @@
 import base64
+import collections
+import copy
 import io
 import json
 import math
 import os
+import re
 import struct
 import tempfile
+import uuid
 import zlib
 from contextlib import contextmanager
-import copy
-import uuid
-import collections
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
+
 
 import numpy as np
 try:
@@ -21,6 +23,7 @@ except ImportError:
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard('')
+_VALID_URLS.add('data')
 
 
 def validate_location(location):  # noqa: C901
@@ -329,6 +332,8 @@ def iter_coords(obj):
         coords = [geom['geometry']['coordinates'] for geom in obj['features']]
     elif 'geometry' in obj:
         coords = obj['geometry']['coordinates']
+    elif 'geometries' in obj and 'coordinates' in obj['geometries'][0]:
+        coords = obj['geometries'][0]['coordinates']
     else:
         coords = obj.get('coordinates', obj)
     for coord in coords:
@@ -410,24 +415,6 @@ def _parse_size(value):
     return value, value_type
 
 
-def iter_points(x):
-    """Iterates over a list representing a feature, and returns a list of points,
-    whatever the shape of the array (Point, MultiPolyline, etc).
-    """
-    if not isinstance(x, (list, tuple)):
-        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
-    if len(x):
-        if isinstance(x[0], (list, tuple)):
-            out = []
-            for y in x:
-                out += iter_points(y)
-            return out
-        else:
-            return [x]
-    else:
-        return []
-
-
 def compare_rendered(obj1, obj2):
     """
     Return True/False if the normalized rendered version of
@@ -447,12 +434,12 @@ def normalize(rendered):
 
 
 @contextmanager
-def _tmp_html(data):
+def temp_html_filepath(data):
     """Yields the path of a temporary HTML file containing data."""
     filepath = ''
     try:
         fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
-        os.write(fid, data.encode('utf8'))
+        os.write(fid, data.encode('utf8') if isinstance(data, str) else data)
         os.close(fid)
         yield filepath
     finally:
@@ -490,3 +477,8 @@ def parse_options(**kwargs):
     return {camelize(key): value
             for key, value in kwargs.items()
             if value is not None}
+
+
+def escape_backticks(text):
+    """Escape backticks so text can be used in a JS template."""
+    return re.sub(r"(?<!\\)`", r'\`', text)

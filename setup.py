@@ -1,12 +1,6 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import (absolute_import, division, print_function)
-
 import os
 import sys
 from setuptools import setup
-
-import versioneer
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -17,7 +11,7 @@ if sys.version_info < (3, 5):
 
     See folium `README.rst` file for more information:
 
-    https://github.com/python-visualization/folium/blob/master/README.rst
+    https://github.com/python-visualization/folium/blob/main/README.rst
 
     Python {py} detected.
 
@@ -67,7 +61,6 @@ install_requires = [t.strip() for t in tests_require]
 
 setup(
     name='folium',
-    version=versioneer.get_version(),
     description='Make beautiful maps with Leaflet.js & Python',
     license="MIT",
     long_description='{}'.format(read("README.rst")),
@@ -92,5 +85,9 @@ setup(
     extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
-    cmdclass=versioneer.get_cmdclass(),
+    use_scm_version={
+        "write_to": "folium/_version.py",
+        "write_to_template": '__version__ = "{version}"',
+        "tag_regex": r"^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$",
+    },
 )

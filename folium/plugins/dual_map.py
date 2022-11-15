@@ -1,13 +1,14 @@
-from jinja2 import Template
+from branca.element import Figure, MacroElement
 
-from branca.element import MacroElement, Figure, JavascriptLink
-
+from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.utilities import deep_copy
 
+from jinja2 import Template
 
-class DualMap(MacroElement):
+
+class DualMap(JSCSSMixin, MacroElement):
     """Create two maps in the same window.
 
     Adding children to this objects adds them to both maps. You can access
@@ -44,6 +45,11 @@ class DualMap(MacroElement):
             {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
         {% endmacro %}
     """)
+
+    default_js = [
+        ('Leaflet.Sync',
+         'https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js')
+    ]
 
     def __init__(self, location=None, layout='horizontal', **kwargs):
         super(DualMap, self).__init__()
@@ -89,13 +95,6 @@ class DualMap(MacroElement):
         self.children_for_m2.append((child, name, index))
 
     def render(self, **kwargs):
-        figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
-
-        figure.header.add_child(JavascriptLink('https://rawcdn.githack.com/jieter/Leaflet.Sync/master/L.Map.Sync.js'),  # noqa
-                                name='Leaflet.Sync')
-
         super(DualMap, self).render(**kwargs)
 
         for child, name, index in self.children_for_m2:
