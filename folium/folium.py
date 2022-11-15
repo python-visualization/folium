@@ -330,7 +330,8 @@ class Map(JSCSSMixin, MacroElement):
                 driver.get('file:///{path}'.format(path=fname))
                 driver.maximize_window()
                 time.sleep(delay)
-                png = driver.get_screenshot_as_png()
+                div = driver.find_element('class name', 'folium-map')
+                png = div.screenshot_as_png
                 driver.quit()
             self._png_image = png
         return self._png_image
