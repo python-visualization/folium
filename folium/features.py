@@ -1219,10 +1219,9 @@ class Choropleth(FeatureGroup):
                                    for e in future_keys])
 
             if hasattr(data, 'set_index'):
-            # This is a pd.DataFrame
+                # This is a pd.DataFrame
                 data = data.set_index(columns[0])[columns[1]]
 
-            # convert the data to dictionary
             color_data = data.to_dict()
 
             # create another dict with all keys converted to str if needed
