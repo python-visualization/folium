@@ -154,6 +154,7 @@ def test_vegalite_major_version(vegalite_spec, version):
     else:
         assert vegalite.vegalite_major_version == version
 
+
 # GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
@@ -264,6 +265,14 @@ def test_geojson_find_identifier():
     geojson.convert_to_feature_collection()
     assert geojson.find_identifier() == 'feature.id'
     assert geojson.data['features'][0]['id'] == '0'
+
+
+def test_geojson_empty_features_with_styling():
+    # test we don't fail style function validation when there are no features
+    m = Map()
+    data = {"type": "FeatureCollection", "features": []}
+    GeoJson(data, style_function=lambda x: {}).add_to(m)
+    m.get_root().render()
 
 
 def test_geometry_collection_get_bounds():
