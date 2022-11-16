@@ -384,7 +384,7 @@ class Map(JSCSSMixin, MacroElement):
                 'Your map should have been opened in your browser automatically.'
                 '\nPress ctrl+c to return.'
             )
-            # Block until stopped by user, so we can remove the temporary file
+            # Block until stopped by user, afterwards remove the temporary file
             try:
                 while True:
                     time.sleep(100)
