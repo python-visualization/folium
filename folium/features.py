@@ -1274,7 +1274,7 @@ class Choropleth(FeatureGroup):
                             value_of_x = color_data[int(key_of_x)]
                         else:
                             return nan_fill_color, nan_fill_opacity
-                    except (KeyError, TypeError):
+                    except (KeyError, ValueError):
                         return nan_fill_color, nan_fill_opacity
 
                 if np.isnan(value_of_x):
