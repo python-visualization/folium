@@ -5,6 +5,7 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 import time
 import warnings
+import webbrowser
 
 from branca.element import Element, Figure, MacroElement
 
@@ -374,6 +375,21 @@ class Map(JSCSSMixin, MacroElement):
             '</style>'), name='map_style')
 
         super(Map, self).render(**kwargs)
+
+    def show_in_browser(self):
+        """Display the Map in the default web browser."""
+        with temp_html_filepath(self.get_root().render()) as fname:
+            webbrowser.open(fname)
+            print(
+                'Your map should have been opened in your browser automatically.'
+                '\nPress ctrl+c to return.'
+            )
+            # Block until stopped by user, afterwards remove the temporary file
+            try:
+                while True:
+                    time.sleep(100)
+            except KeyboardInterrupt:
+                pass
 
     def fit_bounds(self, bounds, padding_top_left=None,
                    padding_bottom_right=None, padding=None, max_zoom=None):
