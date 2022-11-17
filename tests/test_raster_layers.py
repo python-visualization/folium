@@ -1,14 +1,14 @@
 """
 Test raster_layers
------------------
+------------------
 
 """
-import pytest
-
 import folium
 from folium.utilities import normalize
 
 from jinja2 import Template
+
+import xyzservices
 
 
 def test_tile_layer():
@@ -108,3 +108,20 @@ def test_image_overlay():
 
     bounds = m.get_bounds()
     assert bounds == [[0, -180], [90, 180]], bounds
+
+
+def test_xyzservices():
+    m = folium.Map([48., 5.], tiles=xyzservices.providers.Stamen.Toner, zoom_start=6)
+
+    folium.raster_layers.TileLayer(
+        tiles=xyzservices.providers.Stamen.Terrain,
+    ).add_to(m)
+    folium.LayerControl().add_to(m)
+
+    out = m._parent.render()
+    assert xyzservices.providers.Stamen.Toner.build_url(
+        fill_subdomain=False, scale_factor="{r}"
+    ) in out
+    assert xyzservices.providers.Stamen.Terrain.build_url(
+        fill_subdomain=False, scale_factor="{r}"
+    ) in out

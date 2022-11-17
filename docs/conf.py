@@ -27,7 +27,12 @@ sys.path.insert(0, os.path.abspath(os.pardir))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'nbsphinx']
+extensions = [
+  'sphinx.ext.autodoc',
+  'sphinx.ext.napoleon',
+  'nbsphinx',
+  'sphinx.ext.intersphinx',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -245,3 +250,15 @@ texinfo_documents = [
 
 # How to display URL addresses: 'footnote', 'no', or 'inline'.
 #texinfo_show_urls = 'footnote'
+
+# Ignore tile URLs
+linkcheck_ignore = [
+  r"https://free.*",
+]
+
+intersphinx_mapping = {
+    "xyzservices": (
+        "https://xyzservices.readthedocs.io/en/latest/",
+        "https://xyzservices.readthedocs.io/en/latest/objects.inv",
+    ),
+}

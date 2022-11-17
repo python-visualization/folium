@@ -20,13 +20,14 @@ class TileLayer(Layer):
 
     Parameters
     ----------
-    tiles: str, default 'OpenStreetMap'
+    tiles: str or :class:`xyzservices.TileProvider`, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
             - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
             - "CartoDB positron", "CartoDB dark_matter"
 
-        You can pass a custom tileset to Folium by passing a Leaflet-style
+        You can pass a custom tileset to Folium by passing a
+        :class:`xyzservices.TileProvider` or a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
 
         You can find a list of free tile providers here:
@@ -79,6 +80,14 @@ class TileLayer(Layer):
                  detect_retina=False, name=None, overlay=False,
                  control=True, show=True, no_wrap=False, subdomains='abc',
                  tms=False, opacity=1, **kwargs):
+
+        # check for xyzservices.TileProvider without importing it
+        if isinstance(tiles, dict):
+            attr = attr if attr else tiles.html_attribution
+            min_zoom = tiles.get("min_zoom", min_zoom)
+            max_zoom = tiles.get("max_zoom", max_zoom)
+            subdomains = tiles.get("subdomains", subdomains)
+            tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")
 
         self.tile_name = (name if name is not None else
                           ''.join(tiles.lower().strip().split()))
@@ -156,7 +165,7 @@ class WmsTileLayer(Layer):
         for setting extra tileLayer.wms parameters or as extra parameters in
         the WMS request.
 
-    See https://leafletjs.com/reference-1.6.0.html#tilelayer-wms
+    See https://leafletjs.com/reference.html#tilelayer-wms
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
@@ -225,7 +234,7 @@ class ImageOverlay(Layer):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
 
-    See https://leafletjs.com/reference-1.6.0.html#imageoverlay for more
+    See https://leafletjs.com/reference.html#imageoverlay for more
     options.
 
     """
@@ -311,7 +320,7 @@ class VideoOverlay(Layer):
         Whether the layer will be shown on opening (only for overlays).
     **kwargs:
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#videooverlay
+        https://leafletjs.com/reference.html#videooverlay
 
     """
     _template = Template(u"""
