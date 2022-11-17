@@ -439,9 +439,9 @@ class Popup(Element):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         figure.script.add_child(
             Element(self._template.render(this=self, kwargs=kwargs)),

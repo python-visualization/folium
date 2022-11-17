@@ -119,9 +119,9 @@ class Draw(JSCSSMixin, MacroElement):
         super().render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         export_style = """
             <style>

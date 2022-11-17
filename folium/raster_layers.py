@@ -312,9 +312,9 @@ class ImageOverlay(Layer):
         super().render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
         if self.pixelated:
             pixelated = """
                 <style>

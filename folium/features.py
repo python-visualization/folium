@@ -184,9 +184,9 @@ class Vega(JSCSSMixin, Element):
         )
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         figure.header.add_child(
             Element(
@@ -282,9 +282,9 @@ class VegaLite(Element):
         )
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         figure.header.add_child(
             Element(
@@ -1063,14 +1063,14 @@ class GeoJsonDetail(MacroElement):
         class_name="geojsondetail",
     ):
         super().__init__()
-        assert isinstance(fields, (list, tuple)), (
-            "Please pass a list or " "tuple to fields."
-        )
+        assert isinstance(
+            fields, (list, tuple)
+        ), "Please pass a list or tuple to fields."
         if aliases is not None:
             assert isinstance(aliases, (list, tuple))
-            assert len(fields) == len(aliases), (
-                "fields and aliases must have" " the same length."
-            )
+            assert len(fields) == len(
+                aliases
+            ), "fields and aliases must have the same length."
         assert isinstance(labels, bool), "labels requires a boolean value."
         assert isinstance(localize, bool), "localize must be bool."
         self._name = "GeoJsonDetail"
@@ -1125,7 +1125,7 @@ class GeoJsonDetail(MacroElement):
         for value in self.fields:
             assert (
                 value in keys
-            ), "The field {} is not available in the data. " "Choose from: {}.".format(
+            ), "The field {} is not available in the data. Choose from: {}.".format(
                 value, keys
             )
         figure.header.add_child(
@@ -1595,9 +1595,9 @@ class Choropleth(FeatureGroup):
         """Render the GeoJson/TopoJson and color scale objects."""
         if self.color_scale:
             # ColorMap needs Map as its parent
-            assert isinstance(self._parent, Map), (
-                "Choropleth must be added" " to a Map object."
-            )
+            assert isinstance(
+                self._parent, Map
+            ), "Choropleth must be added to a Map object."
             self.color_scale._parent = self._parent
 
         super().render(**kwargs)

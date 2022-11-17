@@ -208,7 +208,7 @@ def write_png(data, origin="upper", colormap=None):
     height, width, nblayers = arr.shape
 
     if nblayers not in [1, 3, 4]:
-        raise ValueError("Data must be NxM (mono), " "NxMx3 (RGB), or NxMx4 (RGBA)")
+        raise ValueError("Data must be NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)")
     assert arr.shape == (height, width, nblayers)
 
     if nblayers == 1:
@@ -216,7 +216,7 @@ def write_png(data, origin="upper", colormap=None):
         nblayers = arr.shape[1]
         if nblayers not in [3, 4]:
             raise ValueError(
-                "colormap must provide colors of r" "length 3 (RGB) or 4 (RGBA)"
+                "colormap must provide colors of length 3 (RGB) or 4 (RGBA)"
             )
         arr = arr.reshape((height, width, nblayers))
     assert arr.shape == (height, width, nblayers)

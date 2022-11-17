@@ -131,9 +131,9 @@ class Search(JSCSSMixin, MacroElement):
                 "available in {}"
                 "".format(self.search_label, keys)
             )
-        assert isinstance(self._parent, Map), (
-            "Search can only be added to " "folium Map objects."
-        )
+        assert isinstance(
+            self._parent, Map
+        ), "Search can only be added to folium Map objects."
 
     def render(self, **kwargs):
         if isinstance(self.layer, GeoJson):

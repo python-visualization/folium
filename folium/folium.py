@@ -363,9 +363,9 @@ class Map(JSCSSMixin, MacroElement):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), (
-            "You cannot render this Element " "if it is not in a Figure."
-        )
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         # Set global switches
         figure.header.add_child(self.global_switches, name="global_switches")

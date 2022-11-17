@@ -57,9 +57,7 @@ class DualMap(JSCSSMixin, MacroElement):
     def __init__(self, location=None, layout="horizontal", **kwargs):
         super().__init__()
         for key in ("width", "height", "left", "top", "position"):
-            assert (
-                key not in kwargs
-            ), "Argument {} cannot be used with " "DualMap.".format(key)
+            assert key not in kwargs, f"Argument {key} cannot be used with  DualMap."
         if layout not in ("horizontal", "vertical"):
             raise ValueError(
                 "Undefined option for argument `layout`: {}. "
@@ -74,7 +72,7 @@ class DualMap(JSCSSMixin, MacroElement):
             left="0%",
             top="0%",
             position="absolute",
-            **kwargs
+            **kwargs,
         )
         self.m2 = Map(
             location=location,
@@ -83,7 +81,7 @@ class DualMap(JSCSSMixin, MacroElement):
             left="50%" if layout == "horizontal" else "0%",
             top="0%" if layout == "horizontal" else "50%",
             position="absolute",
-            **kwargs
+            **kwargs,
         )
         figure = Figure()
         figure.add_child(self.m1)
