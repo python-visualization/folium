@@ -16,6 +16,7 @@ from folium.plugins.feature_group_sub_group import FeatureGroupSubGroup
 from folium.plugins.float_image import FloatImage
 from folium.plugins.fullscreen import Fullscreen
 from folium.plugins.geocoder import Geocoder
+from folium.plugins.groupedlayercontrol import GroupedLayerControl
 from folium.plugins.heat_map import HeatMap
 from folium.plugins.heat_map_withtime import HeatMapWithTime
 from folium.plugins.locate_control import LocateControl
@@ -49,6 +50,7 @@ __all__ = [
     'FloatImage',
     'Fullscreen',
     'Geocoder',
+    'GroupedLayerControl',
     'HeatMap',
     'HeatMapWithTime',
     'LocateControl',
