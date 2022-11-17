@@ -1269,10 +1269,20 @@ class Choropleth(FeatureGroup):
                 if key_of_x is None:
                     raise ValueError("key_on `{!r}` not found in GeoJSON.".format(key_on))
 
-                if key_of_x not in color_data.keys():
-                    return nan_fill_color, nan_fill_opacity
+                try:
+                    value_of_x = color_data[key_of_x]
+                except KeyError:
+                    try:
+                        # try again but match str to int and vice versa
+                        if isinstance(key_of_x, int):
+                            value_of_x = color_data[str(key_of_x)]
+                        elif isinstance(key_of_x, str):
+                            value_of_x = color_data[int(key_of_x)]
+                        else:
+                            return nan_fill_color, nan_fill_opacity
+                    except (KeyError, ValueError):
+                        return nan_fill_color, nan_fill_opacity
 
-                value_of_x = color_data[key_of_x]
                 if np.isnan(value_of_x):
                     return nan_fill_color, nan_fill_opacity
 
