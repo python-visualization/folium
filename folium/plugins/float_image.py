@@ -1,11 +1,12 @@
 from branca.element import MacroElement
-
 from jinja2 import Template
 
 
 class FloatImage(MacroElement):
     """Adds a floating image in HTML canvas on top of the map."""
-    _template = Template("""
+
+    _template = Template(
+        """
             {% macro header(this,kwargs) %}
                 <style>
                     #{{this.get_name()}} {
@@ -23,11 +24,12 @@ class FloatImage(MacroElement):
                  style="z-index: 999999">
             </img>
             {% endmacro %}
-            """)
+            """
+    )
 
     def __init__(self, image, bottom=75, left=75, width=100):
-        super(FloatImage, self).__init__()
-        self._name = 'FloatImage'
+        super().__init__()
+        self._name = "FloatImage"
         self.image = image
         self.bottom = bottom
         self.left = left

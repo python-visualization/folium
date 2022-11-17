@@ -4,14 +4,12 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 """
 
 from branca.element import Element, Figure
+from jinja2 import Environment, PackageLoader, Template
 
 from folium.map import Layer
 from folium.utilities import image_to_url, mercator_transform, parse_options
 
-from jinja2 import Environment, PackageLoader, Template
-
-
-ENV = Environment(loader=PackageLoader('folium', 'templates'))
+ENV = Environment(loader=PackageLoader("folium", "templates"))
 
 
 class TileLayer(Layer):
@@ -66,20 +64,36 @@ class TileLayer(Layer):
         Other keyword arguments are passed as options to the Leaflet tileLayer
         object.
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, tiles='OpenStreetMap', min_zoom=0, max_zoom=18,
-                 max_native_zoom=None, attr=None,
-                 detect_retina=False, name=None, overlay=False,
-                 control=True, show=True, no_wrap=False, subdomains='abc',
-                 tms=False, opacity=1, **kwargs):
+    def __init__(
+        self,
+        tiles="OpenStreetMap",
+        min_zoom=0,
+        max_zoom=18,
+        max_native_zoom=None,
+        attr=None,
+        detect_retina=False,
+        name=None,
+        overlay=False,
+        control=True,
+        show=True,
+        no_wrap=False,
+        subdomains="abc",
+        tms=False,
+        opacity=1,
+        **kwargs
+    ):
 
         # check for xyzservices.TileProvider without importing it
         if isinstance(tiles, dict):
@@ -89,25 +103,28 @@ class TileLayer(Layer):
             subdomains = tiles.get("subdomains", subdomains)
             tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")
 
-        self.tile_name = (name if name is not None else
-                          ''.join(tiles.lower().strip().split()))
-        super(TileLayer, self).__init__(name=self.tile_name, overlay=overlay,
-                                        control=control, show=show)
-        self._name = 'TileLayer'
+        self.tile_name = (
+            name if name is not None else "".join(tiles.lower().strip().split())
+        )
+        super().__init__(
+            name=self.tile_name, overlay=overlay, control=control, show=show
+        )
+        self._name = "TileLayer"
         self._env = ENV
 
-        tiles_flat = ''.join(tiles.lower().strip().split())
-        if tiles_flat in {'cloudmade', 'mapbox', 'mapboxbright', 'mapboxcontrolroom'}:
+        tiles_flat = "".join(tiles.lower().strip().split())
+        if tiles_flat in {"cloudmade", "mapbox", "mapboxbright", "mapboxcontrolroom"}:
             # added in May 2020 after v0.11.0, remove in a future release
             raise ValueError(
-                'Built-in templates for Mapbox and Cloudmade have been removed. '
-                'You can still use these providers by passing a URL to the `tiles` '
-                'argument. See the documentation of the `TileLayer` class.'
+                "Built-in templates for Mapbox and Cloudmade have been removed. "
+                "You can still use these providers by passing a URL to the `tiles` "
+                "argument. See the documentation of the `TileLayer` class."
             )
-        templates = list(self._env.list_templates(
-            filter_func=lambda x: x.startswith('tiles/')))
-        tile_template = 'tiles/' + tiles_flat + '/tiles.txt'
-        attr_template = 'tiles/' + tiles_flat + '/attr.txt'
+        templates = list(
+            self._env.list_templates(filter_func=lambda x: x.startswith("tiles/"))
+        )
+        tile_template = "tiles/" + tiles_flat + "/tiles.txt"
+        attr_template = "tiles/" + tiles_flat + "/attr.txt"
 
         if tile_template in templates and attr_template in templates:
             self.tiles = self._env.get_template(tile_template).render()
@@ -115,7 +132,7 @@ class TileLayer(Layer):
         else:
             self.tiles = tiles
             if not attr:
-                raise ValueError('Custom tiles must have an attribution.')
+                raise ValueError("Custom tiles must have an attribution.")
 
         self.options = parse_options(
             min_zoom=min_zoom,
@@ -167,22 +184,36 @@ class WmsTileLayer(Layer):
 
     See https://leafletjs.com/reference.html#tilelayer-wms
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer.wms(
                 {{ this.url|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)  # noqa
+        """
+    )  # noqa
 
-    def __init__(self, url, layers, styles='', fmt='image/jpeg',
-                 transparent=False, version='1.1.1', attr='',
-                 name=None, overlay=True, control=True, show=True, **kwargs):
-        super(WmsTileLayer, self).__init__(name=name, overlay=overlay,
-                                           control=control, show=show)
+    def __init__(
+        self,
+        url,
+        layers,
+        styles="",
+        fmt="image/jpeg",
+        transparent=False,
+        version="1.1.1",
+        attr="",
+        name=None,
+        overlay=True,
+        control=True,
+        show=True,
+        **kwargs
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.url = url
-        kwargs['format'] = fmt
+        kwargs["format"] = fmt
         self.options = parse_options(
             layers=layers,
             styles=styles,
@@ -238,7 +269,9 @@ class ImageOverlay(Layer):
     options.
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
@@ -246,32 +279,42 @@ class ImageOverlay(Layer):
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, image, bounds, origin='upper', colormap=None,
-                 mercator_project=False, pixelated=True,
-                 name=None, overlay=True, control=True, show=True, **kwargs):
-        super(ImageOverlay, self).__init__(name=name, overlay=overlay,
-                                           control=control, show=show)
-        self._name = 'ImageOverlay'
+    def __init__(
+        self,
+        image,
+        bounds,
+        origin="upper",
+        colormap=None,
+        mercator_project=False,
+        pixelated=True,
+        name=None,
+        overlay=True,
+        control=True,
+        show=True,
+        **kwargs
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "ImageOverlay"
         self.bounds = bounds
         self.options = parse_options(**kwargs)
         self.pixelated = pixelated
         if mercator_project:
             image = mercator_transform(
-                image,
-                [bounds[0][0], bounds[1][0]],
-                origin=origin
+                image, [bounds[0][0], bounds[1][0]], origin=origin
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
 
     def render(self, **kwargs):
-        super(ImageOverlay, self).render()
+        super().render()
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(figure, Figure), (
+            "You cannot render this Element " "if it is not in a Figure."
+        )
         if self.pixelated:
             pixelated = """
                 <style>
@@ -286,7 +329,9 @@ class ImageOverlay(Layer):
                     }
                 </style>
             """
-            figure.header.add_child(Element(pixelated), name='leaflet-image-layer')  # noqa
+            figure.header.add_child(
+                Element(pixelated), name="leaflet-image-layer"
+            )  # noqa
 
     def _get_self_bounds(self):
         """
@@ -323,7 +368,9 @@ class VideoOverlay(Layer):
         https://leafletjs.com/reference.html#videooverlay
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.videoOverlay(
                 {{ this.video_url|tojson }},
@@ -331,21 +378,27 @@ class VideoOverlay(Layer):
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, video_url, bounds, autoplay=True, loop=True,
-                 name=None, overlay=True, control=True, show=True, **kwargs):
-        super(VideoOverlay, self).__init__(name=name, overlay=overlay,
-                                           control=control, show=show)
-        self._name = 'VideoOverlay'
+    def __init__(
+        self,
+        video_url,
+        bounds,
+        autoplay=True,
+        loop=True,
+        name=None,
+        overlay=True,
+        control=True,
+        show=True,
+        **kwargs
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "VideoOverlay"
         self.video_url = video_url
 
         self.bounds = bounds
-        self.options = parse_options(
-            autoplay=autoplay,
-            loop=loop,
-            **kwargs
-        )
+        self.options = parse_options(autoplay=autoplay, loop=loop, **kwargs)
 
     def _get_self_bounds(self):
         """

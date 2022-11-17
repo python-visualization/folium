@@ -1,8 +1,8 @@
 import base64
 import glob
-from html.parser import HTMLParser
 import os
 import subprocess
+from html.parser import HTMLParser
 from urllib.parse import unquote
 
 import nbconvert
@@ -15,27 +15,27 @@ from folium.utilities import temp_html_filepath
 def find_notebooks():
     """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
-    pattern = os.path.join(path, '..', '..', 'examples', '*.ipynb')
+    pattern = os.path.join(path, "..", "..", "examples", "*.ipynb")
     files = glob.glob(pattern)
-    files = [f for f in files if not f.endswith('.nbconvert.ipynb')]
+    files = [f for f in files if not f.endswith(".nbconvert.ipynb")]
     if files:
         return files
     else:
-        raise IOError('Could not find the notebooks')
+        raise OSError("Could not find the notebooks")
 
 
-@pytest.mark.parametrize('filepath', find_notebooks())
+@pytest.mark.parametrize("filepath", find_notebooks())
 def test_notebook(filepath, driver):
-    if 'WmsTimeDimension' in filepath:
-        pytest.xfail('WmsTimeDimension.ipynb external resource makes this test flaky')
+    if "WmsTimeDimension" in filepath:
+        pytest.xfail("WmsTimeDimension.ipynb external resource makes this test flaky")
     for filepath_html in get_notebook_html(filepath):
         driver.get_file(filepath_html)
         try:
-            assert driver.wait_until('.folium-map')
+            assert driver.wait_until(".folium-map")
         except UnexpectedAlertPresentException:
             # in Plugins.ipynb we get an alert about geolocation permission
             # for some reason it cannot be closed or avoided, so just ignore it
-            print('skipping', filepath_html, 'because of alert')
+            print("skipping", filepath_html, "because of alert")
             continue
         driver.verify_js_logs()
 
@@ -43,10 +43,17 @@ def test_notebook(filepath, driver):
 def get_notebook_html(filepath_notebook):
     """Store iframes from a notebook in html files, remove them when done."""
     # run the notebook to make sure the output is up-to-date
-    subprocess.run([
-        'jupyter', 'nbconvert', '--to', 'notebook', '--execute', filepath_notebook,
-    ])
-    filepath_notebook = filepath_notebook.replace('.ipynb', '.nbconvert.ipynb')
+    subprocess.run(
+        [
+            "jupyter",
+            "nbconvert",
+            "--to",
+            "notebook",
+            "--execute",
+            filepath_notebook,
+        ]
+    )
+    filepath_notebook = filepath_notebook.replace(".ipynb", ".nbconvert.ipynb")
 
     html_exporter = nbconvert.HTMLExporter()
     body, _ = html_exporter.from_filename(filepath_notebook)
@@ -68,20 +75,20 @@ class IframeParser(HTMLParser):
         self.iframes = []
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'iframe':
+        if tag == "iframe":
             attrs = dict(attrs)
-            if 'srcdoc' in attrs:
-                html_bytes = attrs['srcdoc'].encode()
-            elif 'data-html' in attrs:  # legacy
-                data_html = attrs['data-html']
-                if '%' in data_html[:20]:
+            if "srcdoc" in attrs:
+                html_bytes = attrs["srcdoc"].encode()
+            elif "data-html" in attrs:  # legacy
+                data_html = attrs["data-html"]
+                if "%" in data_html[:20]:
                     # newest branca version: data-html is percent-encoded
                     html_bytes = unquote(data_html).encode()
                 else:
                     # legacy branca version: data-html is base64 encoded
                     html_bytes = base64.b64decode(data_html)
             else:  # legacy
-                src = attrs['src']
-                html_base64 = src.split(',')[-1]
+                src = attrs["src"]
+                html_base64 = src.split(",")[-1]
                 html_bytes = base64.b64decode(html_base64)
             self.iframes.append(html_bytes)

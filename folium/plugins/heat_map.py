@@ -1,5 +1,8 @@
 import warnings
 
+import numpy as np
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import (
@@ -9,10 +12,6 @@ from folium.utilities import (
     parse_options,
     validate_location,
 )
-
-from jinja2 import Template
-
-import numpy as np
 
 
 class HeatMap(JSCSSMixin, Layer):
@@ -44,35 +43,53 @@ class HeatMap(JSCSSMixin, Layer):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.heatLayer(
                 {{ this.data|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('leaflet-heat.js',
-         'https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js'),
+        (
+            "leaflet-heat.js",
+            "https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js",
+        ),
     ]
 
-    def __init__(self, data, name=None, min_opacity=0.5, max_zoom=18,
-                 radius=25, blur=15, gradient=None,
-                 overlay=True, control=True, show=True, **kwargs):
-        super(HeatMap, self).__init__(name=name, overlay=overlay,
-                                      control=control, show=show)
-        self._name = 'HeatMap'
+    def __init__(
+        self,
+        data,
+        name=None,
+        min_opacity=0.5,
+        max_zoom=18,
+        radius=25,
+        blur=15,
+        gradient=None,
+        overlay=True,
+        control=True,
+        show=True,
+        **kwargs
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "HeatMap"
         data = if_pandas_df_convert_to_numpy(data)
-        self.data = [[*validate_location(line[:2]), *line[2:]]  # noqa: E999
-                     for line in data]
+        self.data = [
+            [*validate_location(line[:2]), *line[2:]] for line in data  # noqa: E999
+        ]
         if np.any(np.isnan(self.data)):
-            raise ValueError('data may not contain NaNs.')
-        if kwargs.pop('max_val', None):
-            warnings.warn('The `max_val` parameter is no longer necessary. '
-                          'The largest intensity is calculated automatically.',
-                          stacklevel=2)
+            raise ValueError("data may not contain NaNs.")
+        if kwargs.pop("max_val", None):
+            warnings.warn(
+                "The `max_val` parameter is no longer necessary. "
+                "The largest intensity is calculated automatically.",
+                stacklevel=2,
+            )
         self.options = parse_options(
             min_opacity=min_opacity,
             max_zoom=max_zoom,

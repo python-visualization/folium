@@ -1,7 +1,7 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.vector_layers import BaseMultiLocation, path_options
-
-from jinja2 import Template
 
 
 class AntPath(JSCSSMixin, BaseMultiLocation):
@@ -25,38 +25,45 @@ class AntPath(JSCSSMixin, BaseMultiLocation):
     https://github.com/rubenspgcavalcante/leaflet-ant-path/
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this.get_name() }} = L.polyline.antPath(
               {{ this.locations|tojson }},
               {{ this.options|tojson }}
         ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('antpath',
-         'https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js')
+        (
+            "antpath",
+            "https://cdn.jsdelivr.net/npm/leaflet-ant-path@1.1.2/dist/leaflet-ant-path.min.js",
+        )
     ]
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(AntPath, self).__init__(
+        super().__init__(
             locations,
             popup=popup,
             tooltip=tooltip,
         )
 
-        self._name = 'AntPath'
+        self._name = "AntPath"
         # Polyline + AntPath defaults.
         self.options = path_options(line=True, **kwargs)
-        self.options.update({
-            'paused': kwargs.pop('paused', False),
-            'reverse': kwargs.pop('reverse', False),
-            'hardwareAcceleration': kwargs.pop('hardware_acceleration', False),
-            'delay': kwargs.pop('delay', 400),
-            'dashArray': kwargs.pop('dash_array', [10, 20]),
-            'weight': kwargs.pop('weight', 5),
-            'opacity': kwargs.pop('opacity', 0.5),
-            'color': kwargs.pop('color', '#0000FF'),
-            'pulseColor': kwargs.pop('pulse_color', '#FFFFFF'),
-        })
+        self.options.update(
+            {
+                "paused": kwargs.pop("paused", False),
+                "reverse": kwargs.pop("reverse", False),
+                "hardwareAcceleration": kwargs.pop("hardware_acceleration", False),
+                "delay": kwargs.pop("delay", 400),
+                "dashArray": kwargs.pop("dash_array", [10, 20]),
+                "weight": kwargs.pop("weight", 5),
+                "opacity": kwargs.pop("opacity", 0.5),
+                "color": kwargs.pop("color", "#0000FF"),
+                "pulseColor": kwargs.pop("pulse_color", "#FFFFFF"),
+            }
+        )

@@ -3,31 +3,34 @@ Test ScrollZoomToggler
 ----------------------
 """
 
+from jinja2 import Template
+
 import folium
 from folium import plugins
 from folium.utilities import normalize
 
-from jinja2 import Template
-
 
 def test_scroll_zoom_toggler():
-    m = folium.Map([45., 3.], zoom_start=4)
+    m = folium.Map([45.0, 3.0], zoom_start=4)
     szt = plugins.ScrollZoomToggler()
     m.add_child(szt)
 
     out = normalize(m._parent.render())
 
     # Verify that the div has been created.
-    tmpl = Template("""
+    tmpl = Template(
+        """
         <img id="{{this.get_name()}}" alt="scroll"
         src="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/arrow-move.png"
         style="z-index: 999999"
         onclick="{{this._parent.get_name()}}.toggleScroll()"></img>
-    """)
-    assert ''.join(tmpl.render(this=szt).split()) in ''.join(out.split())
+    """
+    )
+    assert "".join(tmpl.render(this=szt).split()) in "".join(out.split())
 
     # Verify that the style has been created
-    tmpl = Template("""
+    tmpl = Template(
+        """
         <style>
             #{{this.get_name()}} {
                 position:absolute;
@@ -41,12 +44,14 @@ def test_scroll_zoom_toggler():
                 vertical-align: middle;
                 }
         </style>
-    """)
+    """
+    )
     expected = normalize(tmpl.render(this=szt))
     assert expected in out
 
     # Verify that the script is okay.
-    tmpl = Template("""
+    tmpl = Template(
+        """
         {{this._parent.get_name()}}.scrollEnabled = true;
 
         {{this._parent.get_name()}}.toggleScroll = function() {
@@ -60,7 +65,8 @@ def test_scroll_zoom_toggler():
         };
 
         {{this._parent.get_name()}}.toggleScroll();
-    """)
+    """
+    )
     expected = normalize(tmpl.render(this=szt))
     assert expected in out
 

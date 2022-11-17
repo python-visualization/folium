@@ -7,10 +7,9 @@ Folium _repr_*_ Tests
 import io
 
 import PIL.Image
+import pytest
 
 import folium
-
-import pytest
 
 
 @pytest.fixture
@@ -30,15 +29,18 @@ def test__repr_html_is_str(m):
 
 def test_valid_html(m):
     html = m._repr_html_()
-    parts = html.split('><')
+    parts = html.split("><")
     assert len(parts) == 7
-    assert parts[0].lstrip('<div ') == 'style="width:100%;"'
-    assert parts[1].lstrip('<div ') == 'style="position:relative;width:100%;height:0;padding-bottom:60%;"'  # noqa
-    assert 'make this notebook trusted' in parts[2].lower()
-    assert parts[3].startswith('iframe')
-    assert parts[4] == '/iframe'
-    assert parts[5] == '/div'
-    assert parts[6] == '/div>'
+    assert parts[0].lstrip("<div ") == 'style="width:100%;"'
+    assert (
+        parts[1].lstrip("<div ")
+        == 'style="position:relative;width:100%;height:0;padding-bottom:60%;"'
+    )  # noqa
+    assert "make this notebook trusted" in parts[2].lower()
+    assert parts[3].startswith("iframe")
+    assert parts[4] == "/iframe"
+    assert parts[5] == "/div"
+    assert parts[6] == "/div>"
 
 
 def test__repr_png_no_image(m):
@@ -59,6 +61,7 @@ def test_valid_png(m_png):
 
 def test_valid_png_size(m_png):
     from folium.utilities import _parse_size
+
     w = h = 500
     m_png.width = _parse_size(w)
     m_png.height = _parse_size(h)

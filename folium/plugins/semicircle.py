@@ -1,9 +1,9 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.map import Marker
 from folium.utilities import parse_options
 from folium.vector_layers import path_options
-
-from jinja2 import Template
 
 
 class SemiCircle(JSCSSMixin, Marker):
@@ -35,7 +35,9 @@ class SemiCircle(JSCSSMixin, Marker):
     Uses Leaflet plugin https://github.com/jieter/Leaflet-semicircle
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.semiCircle(
                 {{ this.location|tojson }},
@@ -46,26 +48,47 @@ class SemiCircle(JSCSSMixin, Marker):
                 {%- endif %}
                 .addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('semicirclejs',
-         'https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js')
+        (
+            "semicirclejs",
+            "https://cdn.jsdelivr.net/npm/leaflet-semicircle@2.0.4/Semicircle.min.js",
+        )
     ]
 
-    def __init__(self, location, radius,
-                 direction=None, arc=None,
-                 start_angle=None, stop_angle=None,
-                 popup=None, tooltip=None, **kwargs):
-        super(SemiCircle, self).__init__(location, popup=popup, tooltip=tooltip)
-        self._name = 'SemiCircle'
-        self.direction = (direction, arc) if direction is not None and arc is not None else None
+    def __init__(
+        self,
+        location,
+        radius,
+        direction=None,
+        arc=None,
+        start_angle=None,
+        stop_angle=None,
+        popup=None,
+        tooltip=None,
+        **kwargs
+    ):
+        super().__init__(location, popup=popup, tooltip=tooltip)
+        self._name = "SemiCircle"
+        self.direction = (
+            (direction, arc) if direction is not None and arc is not None else None
+        )
         self.options = path_options(line=False, radius=radius, **kwargs)
-        self.options.update(parse_options(
-            start_angle=start_angle,
-            stop_angle=stop_angle,
-        ))
+        self.options.update(
+            parse_options(
+                start_angle=start_angle,
+                stop_angle=stop_angle,
+            )
+        )
 
-        if not ((direction is None and arc is None) and (start_angle is not None and stop_angle is not None)
-                or (direction is not None and arc is not None) and (start_angle is None and stop_angle is None)):
-            raise ValueError("Invalid arguments. Either provide direction and arc OR start_angle and stop_angle")
+        if not (
+            (direction is None and arc is None)
+            and (start_angle is not None and stop_angle is not None)
+            or (direction is not None and arc is not None)
+            and (start_angle is None and stop_angle is None)
+        ):
+            raise ValueError(
+                "Invalid arguments. Either provide direction and arc OR start_angle and stop_angle"
+            )

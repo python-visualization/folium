@@ -8,6 +8,7 @@ import warnings
 import webbrowser
 
 from branca.element import Element, Figure, MacroElement
+from jinja2 import Environment, PackageLoader, Template
 
 from folium.elements import JSCSSMixin
 from folium.map import FitBounds
@@ -19,51 +20,62 @@ from folium.utilities import (
     validate_location,
 )
 
-from jinja2 import Environment, PackageLoader, Template
-
-ENV = Environment(loader=PackageLoader('folium', 'templates'))
+ENV = Environment(loader=PackageLoader("folium", "templates"))
 
 
 _default_js = [
-    ('leaflet',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js'),
-    ('jquery',
-     'https://code.jquery.com/jquery-1.12.4.min.js'),
-    ('bootstrap',
-     'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js'),
-    ('awesome_markers',
-     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'),  # noqa
-    ]
+    ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"),
+    ("jquery", "https://code.jquery.com/jquery-1.12.4.min.js"),
+    (
+        "bootstrap",
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",
+    ),
+    (
+        "awesome_markers",
+        "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js",
+    ),  # noqa
+]
 
 _default_css = [
-    ('leaflet_css',
-     'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'),
-    ('bootstrap_css',
-     'https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css'),
+    ("leaflet_css", "https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"),
+    (
+        "bootstrap_css",
+        "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
+    ),
     # glyphicons came from Bootstrap 3 and are used for Awesome Markers
-    ('glyphicons_css',
-     'https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css'),
-    ('awesome_markers_font_css',
-     'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css'),  # noqa
-    ('awesome_markers_css',
-     'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'),  # noqa
-    ('awesome_rotate_css',
-     'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css'),  # noqa
-    ]
+    (
+        "glyphicons_css",
+        "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css",
+    ),
+    (
+        "awesome_markers_font_css",
+        "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css",
+    ),  # noqa
+    (
+        "awesome_markers_css",
+        "https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css",
+    ),  # noqa
+    (
+        "awesome_rotate_css",
+        "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css",
+    ),  # noqa
+]
 
 
 class GlobalSwitches(Element):
 
-    _template = Template("""
+    _template = Template(
+        """
         <script>
             L_NO_TOUCH = {{ this.no_touch |tojson}};
             L_DISABLE_3D = {{ this.disable_3d|tojson }};
         </script>
-    """)
+    """
+    )
 
     def __init__(self, no_touch=False, disable_3d=False):
-        super(GlobalSwitches, self).__init__()
-        self._name = 'GlobalSwitches'
+        super().__init__()
+        self._name = "GlobalSwitches"
         self.no_touch = no_touch
         self.disable_3d = disable_3d
 
@@ -155,16 +167,18 @@ class Map(JSCSSMixin, MacroElement):
     Examples
     --------
     >>> m = folium.Map(location=[45.523, -122.675], width=750, height=500)
-    >>> m = folium.Map(location=[45.523, -122.675], tiles='cartodb positron')
+    >>> m = folium.Map(location=[45.523, -122.675], tiles="cartodb positron")
     >>> m = folium.Map(
-    ...    location=[45.523, -122.675],
-    ...    zoom_start=2,
-    ...    tiles='https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=mytoken',
-    ...    attr='Mapbox attribution'
-    ...)
+    ...     location=[45.523, -122.675],
+    ...     zoom_start=2,
+    ...     tiles="https://api.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=mytoken",
+    ...     attr="Mapbox attribution",
+    ... )
 
     """  # noqa
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -210,41 +224,42 @@ class Map(JSCSSMixin, MacroElement):
             {%- endif %}
 
         {% endmacro %}
-        """)
+        """
+    )
 
     # use the module variables for backwards compatibility
     default_js = _default_js
     default_css = _default_css
 
     def __init__(
-            self,
-            location=None,
-            width='100%',
-            height='100%',
-            left='0%',
-            top='0%',
-            position='relative',
-            tiles='OpenStreetMap',
-            attr=None,
-            min_zoom=0,
-            max_zoom=18,
-            zoom_start=10,
-            min_lat=-90,
-            max_lat=90,
-            min_lon=-180,
-            max_lon=180,
-            max_bounds=False,
-            crs='EPSG3857',
-            control_scale=False,
-            prefer_canvas=False,
-            no_touch=False,
-            disable_3d=False,
-            png_enabled=False,
-            zoom_control=True,
-            **kwargs
+        self,
+        location=None,
+        width="100%",
+        height="100%",
+        left="0%",
+        top="0%",
+        position="relative",
+        tiles="OpenStreetMap",
+        attr=None,
+        min_zoom=0,
+        max_zoom=18,
+        zoom_start=10,
+        min_lat=-90,
+        max_lat=90,
+        min_lon=-180,
+        max_lon=180,
+        max_bounds=False,
+        crs="EPSG3857",
+        control_scale=False,
+        prefer_canvas=False,
+        no_touch=False,
+        disable_3d=False,
+        png_enabled=False,
+        zoom_control=True,
+        **kwargs,
     ):
-        super(Map, self).__init__()
-        self._name = 'Map'
+        super().__init__()
+        self._name = "Map"
         self._env = ENV
         # Undocumented for now b/c this will be subject to a re-factor soon.
         self._png_image = None
@@ -266,8 +281,9 @@ class Map(JSCSSMixin, MacroElement):
         self.top = _parse_size(top)
         self.position = position
 
-        max_bounds_array = [[min_lat, min_lon], [max_lat, max_lon]] \
-            if max_bounds else None
+        max_bounds_array = (
+            [[min_lat, min_lon], [max_lat, max_lon]] if max_bounds else None
+        )
 
         self.crs = crs
         self.control_scale = control_scale
@@ -277,21 +293,19 @@ class Map(JSCSSMixin, MacroElement):
             zoom=zoom_start,
             zoom_control=zoom_control,
             prefer_canvas=prefer_canvas,
-            **kwargs
+            **kwargs,
         )
 
-        self.global_switches = GlobalSwitches(
-            no_touch,
-            disable_3d
-        )
+        self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front = []
 
         if isinstance(tiles, TileLayer):
             self.add_child(tiles)
         elif tiles:
-            tile_layer = TileLayer(tiles=tiles, attr=attr,
-                                   min_zoom=min_zoom, max_zoom=max_zoom)
+            tile_layer = TileLayer(
+                tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom
+            )
             self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs):
@@ -323,16 +337,16 @@ class Map(JSCSSMixin, MacroElement):
                 from selenium import webdriver
 
                 options = webdriver.firefox.options.Options()
-                options.add_argument('--headless')
+                options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
-                driver.get('file:///{path}'.format(path=fname))
+                driver.get(f"file:///{fname}")
                 driver.maximize_window()
                 time.sleep(delay)
-                div = driver.find_element('class name', 'folium-map')
+                div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
                 driver.quit()
             self._png_image = png
@@ -349,40 +363,49 @@ class Map(JSCSSMixin, MacroElement):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(figure, Figure), (
+            "You cannot render this Element " "if it is not in a Figure."
+        )
 
         # Set global switches
-        figure.header.add_child(self.global_switches, name='global_switches')
+        figure.header.add_child(self.global_switches, name="global_switches")
 
-        figure.header.add_child(Element(
-            '<style>html, body {'
-            'width: 100%;'
-            'height: 100%;'
-            'margin: 0;'
-            'padding: 0;'
-            '}'
-            '</style>'), name='css_style')
+        figure.header.add_child(
+            Element(
+                "<style>html, body {"
+                "width: 100%;"
+                "height: 100%;"
+                "margin: 0;"
+                "padding: 0;"
+                "}"
+                "</style>"
+            ),
+            name="css_style",
+        )
 
-        figure.header.add_child(Element(
-            '<style>#map {'
-            'position:absolute;'
-            'top:0;'
-            'bottom:0;'
-            'right:0;'
-            'left:0;'
-            '}'
-            '</style>'), name='map_style')
+        figure.header.add_child(
+            Element(
+                "<style>#map {"
+                "position:absolute;"
+                "top:0;"
+                "bottom:0;"
+                "right:0;"
+                "left:0;"
+                "}"
+                "</style>"
+            ),
+            name="map_style",
+        )
 
-        super(Map, self).render(**kwargs)
+        super().render(**kwargs)
 
     def show_in_browser(self):
         """Display the Map in the default web browser."""
         with temp_html_filepath(self.get_root().render()) as fname:
             webbrowser.open(fname)
             print(
-                'Your map should have been opened in your browser automatically.'
-                '\nPress ctrl+c to return.'
+                "Your map should have been opened in your browser automatically."
+                "\nPress ctrl+c to return."
             )
             # Block until stopped by user, afterwards remove the temporary file
             try:
@@ -391,8 +414,14 @@ class Map(JSCSSMixin, MacroElement):
             except KeyboardInterrupt:
                 pass
 
-    def fit_bounds(self, bounds, padding_top_left=None,
-                   padding_bottom_right=None, padding=None, max_zoom=None):
+    def fit_bounds(
+        self,
+        bounds,
+        padding_top_left=None,
+        padding_bottom_right=None,
+        padding=None,
+        max_zoom=None,
+    ):
         """Fit the map to contain a bounding box with the
         maximum zoom level possible.
 
@@ -417,13 +446,15 @@ class Map(JSCSSMixin, MacroElement):
         >>> m.fit_bounds([[52.193636, -2.221575], [52.636878, -1.139759]])
 
         """
-        self.add_child(FitBounds(bounds,
-                                 padding_top_left=padding_top_left,
-                                 padding_bottom_right=padding_bottom_right,
-                                 padding=padding,
-                                 max_zoom=max_zoom,
-                                 )
-                       )
+        self.add_child(
+            FitBounds(
+                bounds,
+                padding_top_left=padding_top_left,
+                padding_bottom_right=padding_bottom_right,
+                padding=padding,
+                max_zoom=max_zoom,
+            )
+        )
 
     def choropleth(self, *args, **kwargs):
         """Call the Choropleth class with the same arguments.
@@ -431,12 +462,13 @@ class Map(JSCSSMixin, MacroElement):
         This method may be deleted after a year from now (Nov 2018).
         """
         warnings.warn(
-            'The choropleth  method has been deprecated. Instead use the new '
-            'Choropleth class, which has the same arguments. See the example '
-            'notebook \'GeoJSON_and_choropleth\' for how to do this.',
-            FutureWarning
+            "The choropleth  method has been deprecated. Instead use the new "
+            "Choropleth class, which has the same arguments. See the example "
+            "notebook 'GeoJSON_and_choropleth' for how to do this.",
+            FutureWarning,
         )
         from folium.features import Choropleth
+
         self.add_child(Choropleth(*args, **kwargs))
 
     def keep_in_front(self, *args):

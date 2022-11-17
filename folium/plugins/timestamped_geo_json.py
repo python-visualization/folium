@@ -1,12 +1,11 @@
 import json
 
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.utilities import get_bounds, parse_options
-
-from jinja2 import Template
 
 
 class TimestampedGeoJson(JSCSSMixin, MacroElement):
@@ -56,27 +55,31 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
 
     Examples
     --------
-    >>> TimestampedGeoJson({
-    ...     'type': 'FeatureCollection',
-    ...     'features': [
-    ...       {
-    ...         'type': 'Feature',
-    ...         'geometry': {
-    ...           'type': 'LineString',
-    ...           'coordinates': [[-70,-25],[-70,35],[70,35]],
-    ...           },
-    ...         'properties': {
-    ...           'times': [1435708800000, 1435795200000, 1435881600000],
-    ...           'tooltip': 'my tooltip text'
-    ...           },
-    ...         }
-    ...       ]
-    ...     })
+    >>> TimestampedGeoJson(
+    ...     {
+    ...         "type": "FeatureCollection",
+    ...         "features": [
+    ...             {
+    ...                 "type": "Feature",
+    ...                 "geometry": {
+    ...                     "type": "LineString",
+    ...                     "coordinates": [[-70, -25], [-70, 35], [70, 35]],
+    ...                 },
+    ...                 "properties": {
+    ...                     "times": [1435708800000, 1435795200000, 1435881600000],
+    ...                     "tooltip": "my tooltip text",
+    ...                 },
+    ...             }
+    ...         ],
+    ...     }
+    ... )
 
     See https://github.com/socib/Leaflet.TimeDimension for more information.
 
     """
-    _template = Template("""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
                 _getDisplayDateFormat: function(date){
@@ -138,36 +141,63 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                 }
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)  # noqa
+        """
+    )  # noqa
 
     default_js = [
-        ('jquery2.0.0',
-         'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'),
-        ('jqueryui1.10.2',
-         'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'),
-        ('iso8601',
-         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
-        ('leaflet.timedimension',
-         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
+        (
+            "jquery2.0.0",
+            "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js",
+        ),
+        (
+            "jqueryui1.10.2",
+            "https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
+        ),
+        (
+            "iso8601",
+            "https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js",
+        ),
+        (
+            "leaflet.timedimension",
+            "https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js",
+        ),
         # noqa
-        ('moment',
-         'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')
+        (
+            "moment",
+            "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js",
+        ),
     ]
     default_css = [
-        ('highlight.js_css',
-         'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css'),
-        ('leaflet.timedimension_css',
-         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+        (
+            "highlight.js_css",
+            "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css",
+        ),
+        (
+            "leaflet.timedimension_css",
+            "https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css",
+        ),
     ]
 
-    def __init__(self, data, transition_time=200, loop=True, auto_play=True,
-                 add_last_point=True, period='P1D', min_speed=0.1, max_speed=10,
-                 loop_button=False, date_options='YYYY-MM-DD HH:mm:ss',
-                 time_slider_drag_update=False, duration=None, speed_slider=True):
-        super(TimestampedGeoJson, self).__init__()
-        self._name = 'TimestampedGeoJson'
+    def __init__(
+        self,
+        data,
+        transition_time=200,
+        loop=True,
+        auto_play=True,
+        add_last_point=True,
+        period="P1D",
+        min_speed=0.1,
+        max_speed=10,
+        loop_button=False,
+        date_options="YYYY-MM-DD HH:mm:ss",
+        time_slider_drag_update=False,
+        duration=None,
+        speed_slider=True,
+    ):
+        super().__init__()
+        self._name = "TimestampedGeoJson"
 
-        if 'read' in dir(data):
+        if "read" in dir(data):
             self.embed = True
             self.data = data.read()
         elif type(data) is dict:
@@ -179,10 +209,10 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         self.add_last_point = bool(add_last_point)
         self.period = period
         self.date_options = date_options
-        self.duration = 'undefined' if duration is None else '"' + duration + '"'
+        self.duration = "undefined" if duration is None else '"' + duration + '"'
 
         self.options = parse_options(
-            position='bottomleft',
+            position="bottomleft",
             min_speed=min_speed,
             max_speed=max_speed,
             auto_play=auto_play,
@@ -190,16 +220,16 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
             time_slider_drag_update=time_slider_drag_update,
             speed_slider=speed_slider,
             player_options={
-                'transitionTime': int(transition_time),
-                'loop': loop,
-                'startOver': True
+                "transitionTime": int(transition_time),
+                "loop": loop,
+                "startOver": True,
             },
         )
 
     def render(self, **kwargs):
-        assert isinstance(self._parent, Map), (
-            'TimestampedGeoJson can only be added to a Map object.'
-        )
+        assert isinstance(
+            self._parent, Map
+        ), "TimestampedGeoJson can only be added to a Map object."
         super().render(**kwargs)
 
     def _get_self_bounds(self):
@@ -209,14 +239,14 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
 
         """
         if not self.embed:
-            raise ValueError('Cannot compute bounds of non-embedded GeoJSON.')
+            raise ValueError("Cannot compute bounds of non-embedded GeoJSON.")
 
         data = json.loads(self.data)
-        if 'features' not in data.keys():
+        if "features" not in data.keys():
             # Catch case when GeoJSON is just a single Feature or a geometry.
-            if not (isinstance(data, dict) and 'geometry' in data.keys()):
+            if not (isinstance(data, dict) and "geometry" in data.keys()):
                 # Catch case when GeoJSON is just a geometry.
-                data = {'type': 'Feature', 'geometry': data}
-            data = {'type': 'FeatureCollection', 'features': [data]}
+                data = {"type": "Feature", "geometry": data}
+            data = {"type": "FeatureCollection", "features": [data]}
 
         return get_bounds(data, lonlat=True)

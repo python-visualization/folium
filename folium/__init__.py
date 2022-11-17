@@ -1,7 +1,7 @@
 import sys
 
 import branca
-from branca.colormap import (ColorMap, LinearColormap, StepColormap)
+from branca.colormap import ColorMap, LinearColormap, StepColormap
 from branca.element import (
     CssLink,
     Div,
@@ -16,8 +16,8 @@ from branca.element import (
 
 from folium.features import (
     Choropleth,
-    ClickForMarker,
     ClickForLatLng,
+    ClickForMarker,
     ColorLine,
     CustomIcon,
     DivIcon,
@@ -41,7 +41,7 @@ from folium.map import (
     Tooltip,
 )
 from folium.raster_layers import TileLayer, WmsTileLayer
-from folium.vector_layers import Circle, CircleMarker, PolyLine, Polygon, Rectangle
+from folium.vector_layers import Circle, CircleMarker, Polygon, PolyLine, Rectangle
 
 try:
     from ._version import __version__
@@ -49,9 +49,11 @@ except ImportError:
     __version__ = "unknown"
 
 
-if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
-    raise ImportError('branca version 0.3.0 or higher is required. '
-                      'Update branca with e.g. `pip install branca --upgrade`.')
+if tuple(int(x) for x in branca.__version__.split(".")[:2]) < (0, 3):
+    raise ImportError(
+        "branca version 0.3.0 or higher is required. "
+        "Update branca with e.g. `pip install branca --upgrade`."
+    )
 
 if sys.version_info < (3, 0):
     raise ImportError(
@@ -71,49 +73,52 @@ if sys.version_info < (3, 0):
 
      $ pip install 'folium<0.9.0'
 
-    """.format(__version__))  # noqa
+    """.format(
+            __version__
+        )
+    )  # noqa
 
 __all__ = [
-    'Choropleth',
-    'ClickForMarker',
-    'ClickForLatLng',
-    'ColorLine',
-    'ColorMap',
-    'CssLink',
-    'CustomIcon',
-    'Div',
-    'DivIcon',
-    'Element',
-    'FeatureGroup',
-    'Figure',
-    'FitBounds',
-    'GeoJson',
-    'GeoJsonPopup',
-    'GeoJsonTooltip',
-    'Html',
-    'IFrame',
-    'Icon',
-    'JavascriptLink',
-    'LatLngPopup',
-    'LayerControl',
-    'LinearColormap',
-    'Link',
-    'MacroElement',
-    'Map',
-    'Marker',
-    'Popup',
-    'RegularPolygonMarker',
-    'StepColormap',
-    'TileLayer',
-    'Tooltip',
-    'TopoJson',
-    'Vega',
-    'VegaLite',
-    'WmsTileLayer',
+    "Choropleth",
+    "ClickForMarker",
+    "ClickForLatLng",
+    "ColorLine",
+    "ColorMap",
+    "CssLink",
+    "CustomIcon",
+    "Div",
+    "DivIcon",
+    "Element",
+    "FeatureGroup",
+    "Figure",
+    "FitBounds",
+    "GeoJson",
+    "GeoJsonPopup",
+    "GeoJsonTooltip",
+    "Html",
+    "IFrame",
+    "Icon",
+    "JavascriptLink",
+    "LatLngPopup",
+    "LayerControl",
+    "LinearColormap",
+    "Link",
+    "MacroElement",
+    "Map",
+    "Marker",
+    "Popup",
+    "RegularPolygonMarker",
+    "StepColormap",
+    "TileLayer",
+    "Tooltip",
+    "TopoJson",
+    "Vega",
+    "VegaLite",
+    "WmsTileLayer",
     # vector_layers
-    'Circle',
-    'CircleMarker',
-    'PolyLine',
-    'Polygon',
-    'Rectangle',
+    "Circle",
+    "CircleMarker",
+    "PolyLine",
+    "Polygon",
+    "Rectangle",
 ]

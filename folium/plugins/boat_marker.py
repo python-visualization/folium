@@ -1,8 +1,8 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.map import Marker
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class BoatMarker(JSCSSMixin, Marker):
@@ -24,7 +24,9 @@ class BoatMarker(JSCSSMixin, Marker):
     https://github.com/thomasbrueggemann/leaflet.boatmarker
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.boatMarker(
                 {{ this.location|tojson }},
@@ -40,21 +42,28 @@ class BoatMarker(JSCSSMixin, Marker):
             {{this.get_name()}}.setHeading({{this.heading}});
             {% endif -%}
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('markerclusterjs',
-         'https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js'),
+        (
+            "markerclusterjs",
+            "https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js",
+        ),
     ]
 
-    def __init__(self, location, popup=None, icon=None,
-                 heading=0, wind_heading=None, wind_speed=0, **kwargs):
-        super(BoatMarker, self).__init__(
-            location,
-            popup=popup,
-            icon=icon
-        )
-        self._name = 'BoatMarker'
+    def __init__(
+        self,
+        location,
+        popup=None,
+        icon=None,
+        heading=0,
+        wind_heading=None,
+        wind_speed=0,
+        **kwargs
+    ):
+        super().__init__(location, popup=popup, icon=icon)
+        self._name = "BoatMarker"
         self.heading = heading
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed

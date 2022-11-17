@@ -1,9 +1,8 @@
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class Geocoder(JSCSSMixin, MacroElement):
@@ -25,7 +24,8 @@ class Geocoder(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             L.Control.geocoder(
                 {{ this.options|tojson }}
@@ -34,26 +34,25 @@ class Geocoder(JSCSSMixin, MacroElement):
             }).addTo({{ this._parent.get_name() }});
 
         {% endmacro %}
-    """)
+    """
+    )
 
     default_js = [
-        ('Control.Geocoder.js',
-         'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js')
+        (
+            "Control.Geocoder.js",
+            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js",
+        )
     ]
     default_css = [
-        ('Control.Geocoder.css',
-         'https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css')
+        (
+            "Control.Geocoder.css",
+            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css",
+        )
     ]
 
-    def __init__(
-            self,
-            collapsed=False,
-            position='topright',
-            add_marker=True,
-            **kwargs
-    ):
-        super(Geocoder, self).__init__()
-        self._name = 'Geocoder'
+    def __init__(self, collapsed=False, position="topright", add_marker=True, **kwargs):
+        super().__init__()
+        self._name = "Geocoder"
         self.options = parse_options(
             collapsed=collapsed,
             position=position,

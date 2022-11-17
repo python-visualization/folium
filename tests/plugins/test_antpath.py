@@ -3,15 +3,15 @@ Test AntPath
 -------------
 """
 
+from jinja2 import Template
+
 import folium
 from folium import plugins
 from folium.utilities import normalize
 
-from jinja2 import Template
-
 
 def test_antpath():
-    m = folium.Map([20., 0.], zoom_start=3)
+    m = folium.Map([20.0, 0.0], zoom_start=3)
 
     locations = [
         [59.355600, -31.99219],
@@ -29,7 +29,7 @@ def test_antpath():
         [-43.83453, -41.13281],
         [-47.75410, -49.92187],
         [-50.95843, -54.14062],
-        [-55.97380, -56.60156]
+        [-55.97380, -56.60156],
     ]
 
     antpath = plugins.AntPath(locations=locations)
@@ -42,13 +42,15 @@ def test_antpath():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template("""
+    tmpl = Template(
+        """
           {{this.get_name()}} = L.polyline.antPath(
                   {{ this.locations|tojson }},
                   {{ this.options|tojson }}
                 )
                 .addTo({{this._parent.get_name()}});
-        """)  # noqa
+        """
+    )  # noqa
 
     expected_rendered = tmpl.render(this=antpath)
     rendered = antpath._template.module.script(antpath)

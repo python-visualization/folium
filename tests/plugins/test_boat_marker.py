@@ -4,27 +4,21 @@ Test BoatMarker
 
 """
 
+from jinja2 import Template
+
 import folium
 from folium import plugins
 from folium.utilities import normalize
 
-from jinja2 import Template
-
 
 def test_boat_marker():
-    m = folium.Map([30., 0.], zoom_start=3)
+    m = folium.Map([30.0, 0.0], zoom_start=3)
     bm1 = plugins.BoatMarker(
-        (34, -43),
-        heading=45,
-        wind_heading=150,
-        wind_speed=45,
-        color='#8f8')
+        (34, -43), heading=45, wind_heading=150, wind_speed=45, color="#8f8"
+    )
     bm2 = plugins.BoatMarker(
-        (46, -30),
-        heading=-20,
-        wind_heading=46,
-        wind_speed=25,
-        color='#88f')
+        (46, -30), heading=-20, wind_heading=46, wind_speed=25, color="#88f"
+    )
 
     m.add_child(bm1)
     m.add_child(bm2)
@@ -37,7 +31,8 @@ def test_boat_marker():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(u"""
+    tmpl = Template(
+        """
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
             {{ this.options|tojson }}
@@ -47,7 +42,8 @@ def test_boat_marker():
             {{ this.wind_speed }},
             {{ this.wind_heading }}
         );
-    """)
+    """
+    )
 
     assert normalize(tmpl.render(this=bm1)) in out
     assert normalize(tmpl.render(this=bm2)) in out
@@ -57,22 +53,21 @@ def test_boat_marker():
 
 
 def test_boat_marker_with_no_wind_speed_or_heading():
-    m = folium.Map([30., 0.], zoom_start=3)
-    bm1 = plugins.BoatMarker(
-        (34, -43),
-        heading=45,
-        color='#8f8')
+    m = folium.Map([30.0, 0.0], zoom_start=3)
+    bm1 = plugins.BoatMarker((34, -43), heading=45, color="#8f8")
     m.add_child(bm1)
 
     out = normalize(m._parent.render())
 
     # We verify that the script part is correct.
-    tmpl = Template("""
+    tmpl = Template(
+        """
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
             {{ this.options|tojson }}
         ).addTo({{ this._parent.get_name() }});
         {{ this.get_name() }}.setHeading({{ this.heading }});
-    """)
+    """
+    )
 
     assert normalize(tmpl.render(this=bm1)) in out

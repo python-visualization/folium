@@ -3,22 +3,19 @@ Test HeatMap
 ------------
 """
 
+import numpy as np
+import pytest
+from jinja2 import Template
+
 import folium
 from folium.plugins import HeatMap
 from folium.utilities import normalize
 
-from jinja2 import Template
-
-import numpy as np
-
-import pytest
-
 
 def test_heat_map():
     np.random.seed(3141592)
-    data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
-            np.array([[48, 5]]))
-    m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+    data = np.random.normal(size=(100, 2)) * np.array([[1, 1]]) + np.array([[48, 5]])
+    m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
     hm = HeatMap(data)
     m.add_child(hm)
     m._repr_html_()
@@ -30,7 +27,8 @@ def test_heat_map():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template("""
+    tmpl = Template(
+        """
             var {{this.get_name()}} = L.heatLayer(
                 {{this.data}},
                 {
@@ -41,15 +39,19 @@ def test_heat_map():
                     gradient: {{this.gradient}}
                     })
                 .addTo({{this._parent.get_name()}});
-    """)
+    """
+    )
 
     assert tmpl.render(this=hm)
 
     bounds = m.get_bounds()
     np.testing.assert_allclose(
         bounds,
-        [[46.218566840847025, 3.0302801394447734],
-         [50.75345011431167, 7.132453997672826]])
+        [
+            [46.218566840847025, 3.0302801394447734],
+            [50.75345011431167, 7.132453997672826],
+        ],
+    )
 
 
 def test_heatmap_data():

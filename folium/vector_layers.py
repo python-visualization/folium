@@ -4,11 +4,10 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 """
 
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
 from folium.utilities import get_bounds, validate_locations
-
-from jinja2 import Template
 
 
 def path_options(line=False, radius=False, **kwargs):
@@ -67,38 +66,38 @@ def path_options(line=False, radius=False, **kwargs):
     extra_options = {}
     if line:
         extra_options = {
-            'smoothFactor': kwargs.pop('smooth_factor', 1.0),
-            'noClip': kwargs.pop('no_clip', False),
+            "smoothFactor": kwargs.pop("smooth_factor", 1.0),
+            "noClip": kwargs.pop("no_clip", False),
         }
     if radius:
-        extra_options.update({'radius': radius})
+        extra_options.update({"radius": radius})
 
-    color = kwargs.pop('color', '#3388ff')
-    fill_color = kwargs.pop('fill_color', False)
+    color = kwargs.pop("color", "#3388ff")
+    fill_color = kwargs.pop("fill_color", False)
     if fill_color:
         fill = True
     elif not fill_color:
         fill_color = color
-        fill = kwargs.pop('fill', False)
+        fill = kwargs.pop("fill", False)
 
-    gradient = kwargs.pop('gradient', None)
+    gradient = kwargs.pop("gradient", None)
     if gradient is not None:
-        extra_options.update({'gradient': gradient})
+        extra_options.update({"gradient": gradient})
 
     default = {
-        'stroke': kwargs.pop('stroke', True),
-        'color': color,
-        'weight': kwargs.pop('weight', 3),
-        'opacity': kwargs.pop('opacity', 1.0),
-        'lineCap': kwargs.pop('line_cap', 'round'),
-        'lineJoin': kwargs.pop('line_join', 'round'),
-        'dashArray': kwargs.pop('dash_array', None),
-        'dashOffset': kwargs.pop('dash_offset', None),
-        'fill': fill,
-        'fillColor': fill_color,
-        'fillOpacity': kwargs.pop('fill_opacity', 0.2),
-        'fillRule': kwargs.pop('fill_rule', 'evenodd'),
-        'bubblingMouseEvents': kwargs.pop('bubbling_mouse_events', True),
+        "stroke": kwargs.pop("stroke", True),
+        "color": color,
+        "weight": kwargs.pop("weight", 3),
+        "opacity": kwargs.pop("opacity", 1.0),
+        "lineCap": kwargs.pop("line_cap", "round"),
+        "lineJoin": kwargs.pop("line_join", "round"),
+        "dashArray": kwargs.pop("dash_array", None),
+        "dashOffset": kwargs.pop("dash_offset", None),
+        "fill": fill,
+        "fillColor": fill_color,
+        "fillOpacity": kwargs.pop("fill_opacity", 0.2),
+        "fillRule": kwargs.pop("fill_rule", "evenodd"),
+        "bubblingMouseEvents": kwargs.pop("bubbling_mouse_events", True),
     }
     default.update(extra_options)
     return default
@@ -112,14 +111,14 @@ class BaseMultiLocation(MacroElement):
     """
 
     def __init__(self, locations, popup=None, tooltip=None):
-        super(BaseMultiLocation, self).__init__()
+        super().__init__()
         self.locations = validate_locations(locations)
         if popup is not None:
-            self.add_child(popup if isinstance(popup, Popup)
-                           else Popup(str(popup)))
+            self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
-            self.add_child(tooltip if isinstance(tooltip, Tooltip)
-                           else Tooltip(str(tooltip)))
+            self.add_child(
+                tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
+            )
 
     def _get_self_bounds(self):
         """Compute the bounds of the object itself."""
@@ -151,18 +150,20 @@ class PolyLine(BaseMultiLocation):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polyline(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(PolyLine, self).__init__(locations, popup=popup, tooltip=tooltip)
-        self._name = 'PolyLine'
+        super().__init__(locations, popup=popup, tooltip=tooltip)
+        self._name = "PolyLine"
         self.options = path_options(line=True, **kwargs)
 
 
@@ -185,18 +186,20 @@ class Polygon(BaseMultiLocation):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polygon(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
-        super(Polygon, self).__init__(locations, popup=popup, tooltip=tooltip)
-        self._name = 'Polygon'
+        super().__init__(locations, popup=popup, tooltip=tooltip)
+        self._name = "Polygon"
         self.options = path_options(line=True, **kwargs)
 
 
@@ -219,18 +222,20 @@ class Rectangle(BaseMultiLocation):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.rectangle(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super(Rectangle, self).__init__(bounds, popup=popup, tooltip=tooltip)
-        self._name = 'rectangle'
+        super().__init__(bounds, popup=popup, tooltip=tooltip)
+        self._name = "rectangle"
         self.options = path_options(line=True, **kwargs)
 
 
@@ -259,18 +264,20 @@ class Circle(Marker):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circle(
                 {{ this.location|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, location=None, radius=50, popup=None, tooltip=None, **kwargs):
-        super(Circle, self).__init__(location, popup=popup, tooltip=tooltip)
-        self._name = 'circle'
+        super().__init__(location, popup=popup, tooltip=tooltip)
+        self._name = "circle"
         self.options = path_options(line=False, radius=radius, **kwargs)
 
 
@@ -296,17 +303,18 @@ class CircleMarker(Marker):
 
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circleMarker(
                 {{ this.location|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, location=None, radius=10, popup=None, tooltip=None, **kwargs):
-        super(CircleMarker, self).__init__(location, popup=popup,
-                                           tooltip=tooltip)
-        self._name = 'CircleMarker'
+        super().__init__(location, popup=popup, tooltip=tooltip)
+        self._name = "CircleMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)

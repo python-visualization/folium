@@ -30,17 +30,18 @@ def test_heat_map_with_weights(driver):
     html = m.get_root().render()
     with temp_html_filepath(html) as filepath:
         driver.get_file(filepath)
-        assert driver.wait_until('.folium-map')
+        assert driver.wait_until(".folium-map")
         driver.verify_js_logs()
-    canvas = driver.wait_until('canvas.leaflet-heatmap-layer')
+    canvas = driver.wait_until("canvas.leaflet-heatmap-layer")
     assert canvas
     # get the canvas as a PNG base64 string
     canvas_base64 = driver.execute_script(
-        "return arguments[0].toDataURL('image/png').substring(21);", canvas)
+        "return arguments[0].toDataURL('image/png').substring(21);", canvas
+    )
     screenshot_bytes = base64.b64decode(canvas_base64)
     screenshot = Image.open(io.BytesIO(screenshot_bytes))
     path = os.path.dirname(__file__)
-    with open(os.path.join(path, 'test_heat_map_selenium_screenshot.png'), 'rb') as f:
+    with open(os.path.join(path, "test_heat_map_selenium_screenshot.png"), "rb") as f:
         screenshot_expected = Image.open(f)
         if list(screenshot.getdata()) != list(screenshot_expected.getdata()):
-            assert False, 'screenshot is not as expected'
+            assert False, "screenshot is not as expected"

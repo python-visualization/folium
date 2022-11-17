@@ -1,8 +1,8 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
 from folium.utilities import parse_options, validate_locations
-
-from jinja2 import Template
 
 
 class MarkerCluster(JSCSSMixin, Layer):
@@ -43,7 +43,9 @@ class MarkerCluster(JSCSSMixin, Layer):
     ... '''
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.markerClusterGroup(
                 {{ this.options|tojson }}
@@ -54,35 +56,53 @@ class MarkerCluster(JSCSSMixin, Layer):
             {%- endif %}
             {{ this._parent.get_name() }}.addLayer({{ this.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('markerclusterjs',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js')
+        (
+            "markerclusterjs",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js",
+        )
     ]
 
     default_css = [
-        ('markerclustercss',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css'),
-        ('markerclusterdefaultcss',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css')
+        (
+            "markerclustercss",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css",
+        ),
+        (
+            "markerclusterdefaultcss",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css",
+        ),
     ]
 
-    def __init__(self, locations=None, popups=None, icons=None, name=None,
-                 overlay=True, control=True, show=True,
-                 icon_create_function=None, options=None, **kwargs):
+    def __init__(
+        self,
+        locations=None,
+        popups=None,
+        icons=None,
+        name=None,
+        overlay=True,
+        control=True,
+        show=True,
+        icon_create_function=None,
+        options=None,
+        **kwargs
+    ):
         if options is not None:
             kwargs.update(options)  # options argument is legacy
-        super(MarkerCluster, self).__init__(name=name, overlay=overlay,
-                                            control=control, show=show)
-        self._name = 'MarkerCluster'
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "MarkerCluster"
 
         if locations is not None:
             locations = validate_locations(locations)
             for i, location in enumerate(locations):
-                self.add_child(Marker(location,
-                                      popup=popups and popups[i],
-                                      icon=icons and icons[i]))
+                self.add_child(
+                    Marker(
+                        location, popup=popups and popups[i], icon=icons and icons[i]
+                    )
+                )
 
         self.options = parse_options(**kwargs)
         if icon_create_function is not None:

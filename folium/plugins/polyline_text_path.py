@@ -1,8 +1,8 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.features import MacroElement
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class PolyLineTextPath(JSCSSMixin, MacroElement):
@@ -34,24 +34,39 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
     See https://github.com/makinacorpus/Leaflet.TextPath for more information.
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this.polyline.get_name() }}.setText(
                 {{ this.text|tojson }},
                 {{ this.options|tojson }}
             );
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('polylinetextpath',
-         'https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js')
+        (
+            "polylinetextpath",
+            "https://cdn.jsdelivr.net/npm/leaflet-textpath@1.2.3/leaflet.textpath.min.js",
+        )
     ]
 
-    def __init__(self, polyline, text, repeat=False, center=False, below=False,
-                 offset=0, orientation=0, attributes=None, **kwargs):
-        super(PolyLineTextPath, self).__init__()
-        self._name = 'PolyLineTextPath'
+    def __init__(
+        self,
+        polyline,
+        text,
+        repeat=False,
+        center=False,
+        below=False,
+        offset=0,
+        orientation=0,
+        attributes=None,
+        **kwargs
+    ):
+        super().__init__()
+        self._name = "PolyLineTextPath"
         self.polyline = polyline
         self.text = text
         self.options = parse_options(

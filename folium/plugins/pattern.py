@@ -1,10 +1,9 @@
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.utilities import get_obj_in_upper_tree, parse_options
-
-from jinja2 import Template
 
 
 class StripePattern(JSCSSMixin, MacroElement):
@@ -32,25 +31,34 @@ class StripePattern(JSCSSMixin, MacroElement):
     See https://github.com/teastman/Leaflet.pattern for more information.
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.StripePattern(
                 {{ this.options|tojson }}
             );
             {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
         {% endmacro %}
-    """)
+    """
+    )
 
     default_js = [
-        ('pattern',
-         'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')
+        ("pattern", "https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js")
     ]
 
-    def __init__(self, angle=.5, weight=4, space_weight=4,
-                 color="#000000", space_color="#ffffff",
-                 opacity=0.75, space_opacity=0.0, **kwargs):
-        super(StripePattern, self).__init__()
-        self._name = 'StripePattern'
+    def __init__(
+        self,
+        angle=0.5,
+        weight=4,
+        space_weight=4,
+        color="#000000",
+        space_color="#ffffff",
+        opacity=0.75,
+        space_opacity=0.0,
+        **kwargs
+    ):
+        super().__init__()
+        self._name = "StripePattern"
         self.options = parse_options(
             angle=angle,
             weight=weight,
@@ -65,7 +73,7 @@ class StripePattern(JSCSSMixin, MacroElement):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
-        super(StripePattern, self).render(**kwargs)
+        super().render(**kwargs)
 
 
 class CirclePattern(JSCSSMixin, MacroElement):
@@ -95,7 +103,8 @@ class CirclePattern(JSCSSMixin, MacroElement):
     See https://github.com/teastman/Leaflet.pattern for more information.
     """
 
-    _template = Template(u"""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }}_shape = new L.PatternCircle(
                 {{ this.options_pattern_circle|tojson }}
@@ -106,18 +115,26 @@ class CirclePattern(JSCSSMixin, MacroElement):
             {{ this.get_name() }}.addShape({{ this.get_name() }}_shape);
             {{ this.get_name() }}.addTo({{ this.parent_map }});
         {% endmacro %}
-    """)
+    """
+    )
 
     default_js = [
-        ('pattern',
-         'https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js')
+        ("pattern", "https://teastman.github.io/Leaflet.pattern/leaflet.pattern.js")
     ]
 
-    def __init__(self, width=20, height=20, radius=12, weight=2.0,
-                 color="#3388ff", fill_color="#3388ff",
-                 opacity=0.75, fill_opacity=0.5):
-        super(CirclePattern, self).__init__()
-        self._name = 'CirclePattern'
+    def __init__(
+        self,
+        width=20,
+        height=20,
+        radius=12,
+        weight=2.0,
+        color="#3388ff",
+        fill_color="#3388ff",
+        opacity=0.75,
+        fill_opacity=0.5,
+    ):
+        super().__init__()
+        self._name = "CirclePattern"
         self.options_pattern_circle = parse_options(
             x=radius + 2 * weight,
             y=radius + 2 * weight,
@@ -137,4 +154,4 @@ class CirclePattern(JSCSSMixin, MacroElement):
 
     def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map).get_name()
-        super(CirclePattern, self).render(**kwargs)
+        super().render(**kwargs)
