@@ -21,7 +21,7 @@ import pytest
         ([[0, 0], [1, 1]], "[[0, 0], [1, 1]]"),
         ([(0, 0), (1, 1)], "[[0, 0], [1, 1]]"),
         ({"hi": "there"}, '{"hi": "there"}'),
-        ({"hi": {"there": 1, "what's": "up"}}, '{"hi": {"there": 1, "what\'s": "up"}}'),
+        ({"hi": {"there": 1, "what": "up"}}, '{"hi": {"there": 1, "what": "up"}}'),
     ],
 )
 def test_jinja2_tojson(obj, expected):
