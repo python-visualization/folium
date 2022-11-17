@@ -24,21 +24,24 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
-
+    init_timestamp: int, default 0
+        Initial time-stamp index on the slider. Must be in the range
+        `[-L, L-1]`, where `L` is the maximum number of time stamps in
+        `styledict`. For example, use `-1` to initialize the slider to the
+        latest timestamp.
     """
     _template = Template(u"""
         {% macro script(this, kwargs) %}
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
-            var current_timestamp = timestamps[0];
-
+            var current_timestamp = timestamps[{{ this.init_timestamp }}];
             // insert time slider
             d3.select("body").insert("p", ":first-child").append("input")
                 .attr("type", "range")
                 .attr("width", "100px")
                 .attr("min", 0)
                 .attr("max", timestamps.length - 1)
-                .attr("value", 0)
+                .attr("value", {{ this.init_timestamp }})
                 .attr("id", "slider")
                 .attr("step", "1")
                 .style('align', 'center');
@@ -135,7 +138,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     ]
 
     def __init__(self, data, styledict, name=None, overlay=True, control=True,
-                 show=True):
+                 show=True, init_timestamp=0):
         super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
                                                    control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
@@ -150,7 +153,16 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         timestamps = set()
         for feature in styledict.values():
             timestamps.update(set(feature.keys()))
-        timestamps = sorted(timestamps)
+        try:
+            timestamps = sorted(timestamps, key=int)
+        except (TypeError, ValueError):
+            timestamps = sorted(timestamps)
 
         self.timestamps = timestamps
         self.styledict = styledict
+        assert -len(timestamps) <= init_timestamp < len(timestamps), (
+            'init_timestamp must be in the range [-{}, {}) but got {}'.format(
+                len(timestamps), len(timestamps), init_timestamp))
+        if init_timestamp < 0:
+            init_timestamp = len(timestamps) + init_timestamp
+        self.init_timestamp = init_timestamp

@@ -48,7 +48,7 @@ class Search(JSCSSMixin, MacroElement):
                 {% endif %}
                 collapsed: {{this.collapsed|tojson|safe}},
                 textPlaceholder: '{{this.placeholder}}',
-                position:'{{this.position}}',                
+                position:'{{this.position}}',
             {% if this.geom_type == 'Point' %}
                 initial: false,
                 {% if this.search_zoom %}

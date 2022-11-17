@@ -54,10 +54,13 @@ def path_options(line=False, radius=False, **kwargs):
     bubbling_mouse_events: Bool, True (bubblingMouseEvents)
         When true a mouse event on this path will trigger the same event on the
         map (unless L.DomEvent.stopPropagation is used).
+    gradient: bool, default None
+        When a gradient on the stroke and fill is available,
+        allows turning it on or off.
 
     Note that the presence of `fill_color` will override `fill=False`.
 
-    See https://leafletjs.com/reference-1.6.0.html#path
+    See https://leafletjs.com/reference.html#path
 
     """
 
@@ -77,6 +80,10 @@ def path_options(line=False, radius=False, **kwargs):
     elif not fill_color:
         fill_color = color
         fill = kwargs.pop('fill', False)
+
+    gradient = kwargs.pop('gradient', None)
+    if gradient is not None:
+        extra_options.update({'gradient': gradient})
 
     default = {
         'stroke': kwargs.pop('stroke', True),
@@ -140,7 +147,7 @@ class PolyLine(BaseMultiLocation):
         Disable polyline clipping.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#polyline
+        https://leafletjs.com/reference.html#polyline
 
     """
 
@@ -174,7 +181,7 @@ class Polygon(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#polygon
+        https://leafletjs.com/reference.html#polygon
 
     """
 
@@ -208,7 +215,7 @@ class Rectangle(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#rectangle
+        https://leafletjs.com/reference.html#rectangle
 
     """
 
@@ -248,7 +255,7 @@ class Circle(Marker):
         Radius of the circle, in meters.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#circle
+        https://leafletjs.com/reference.html#circle
 
     """
 
@@ -285,7 +292,7 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference-1.6.0.html#circlemarker
+        https://leafletjs.com/reference.html#circlemarker
 
     """
 

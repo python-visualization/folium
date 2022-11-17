@@ -2,13 +2,12 @@
 Classes for drawing maps.
 
 """
-
 import warnings
 from collections import OrderedDict
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.utilities import camelize, parse_options, validate_location
+from folium.utilities import camelize, parse_options, validate_location, escape_backticks
 
 from jinja2 import Template
 
@@ -58,7 +57,7 @@ class FeatureGroup(Layer):
         Whether the layer will be shown on opening (only for overlays).
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference-1.6.0.html#featuregroup
+        https://leafletjs.com/reference.html#featuregroup
 
     """
     _template = Template(u"""
@@ -104,7 +103,7 @@ class LayerControl(MacroElement):
           its layers so that the order is preserved when switching them on/off.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference-1.6.0.html#control-layers
+        https://leafletjs.com/reference.html#control-layers
 
     """
     _template = Template("""
@@ -276,7 +275,7 @@ class Marker(MacroElement):
                  draggable=False, **kwargs):
         super(Marker, self).__init__()
         self._name = 'Marker'
-        self.location = validate_location(location) if location else None
+        self.location = validate_location(location) if location is not None else None
         self.options = parse_options(
             draggable=draggable or None,
             autoPan=draggable or None,
@@ -362,6 +361,7 @@ class Popup(Element):
         if isinstance(html, Element):
             self.html.add_child(html)
         elif isinstance(html, str):
+            html = escape_backticks(html)
             self.html.add_child(Html(html, script=script))
 
         self.show = show
@@ -403,7 +403,7 @@ class Tooltip(MacroElement):
         Whether the tooltip should follow the mouse.
     **kwargs
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference-1.6.0#tooltip
+        available here: https://leafletjs.com/reference.html#tooltip
 
     """
     _template = Template(u"""
@@ -517,7 +517,7 @@ class CustomPane(MacroElement):
         determine which map elements lie over/under it. The default
         (625) corresponds to between markers and tooltips. Default
         panes and z-indexes can be found at
-        https://leafletjs.com/reference-1.6.0.html#map-pane
+        https://leafletjs.com/reference.html#map-pane
     pointer_events: bool, default False
         Whether or not layers in the pane should interact with the
         cursor. Setting to False will prevent interfering with
