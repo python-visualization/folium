@@ -1155,6 +1155,10 @@ class Choropleth(FeatureGroup):
         representation. Leaflet defaults to 1.0.
     highlight: boolean, default False
         Enable highlight functionality when hovering over a GeoJSON area.
+    use_jenks: bool, default False
+        Use jenkspy to calculate bins using "natural breaks"
+        (Fisher-Jenks algorithm). This is useful when your data is unevenly
+        distributed.
     name : string, optional
         The name of the layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -1193,6 +1197,7 @@ class Choropleth(FeatureGroup):
                  line_weight=1, line_opacity=1, name=None, legend_name='',
                  overlay=True, control=True, show=True,
                  topojson=None, smooth_factor=None, highlight=None,
+                 use_jenks=False,
                  **kwargs):
         super(Choropleth, self).__init__(name=name, overlay=overlay,
                                          control=control, show=show)
@@ -1231,7 +1236,17 @@ class Choropleth(FeatureGroup):
         if color_data is not None and key_on is not None:
             real_values = np.array(list(color_data.values()))
             real_values = real_values[~np.isnan(real_values)]
-            _, bin_edges = np.histogram(real_values, bins=bins)
+            if use_jenks:
+                from jenkspy import jenks_breaks
+
+                if not isinstance(bins, int):
+                    raise ValueError(
+                        f'bins value must be an integer when using Jenks.'
+                        f' Invalid value "{bins}" received.'
+                    )
+                bin_edges = np.array(jenks_breaks(real_values, bins), dtype=float)
+            else:
+                _, bin_edges = np.histogram(real_values, bins=bins)
 
             bins_min, bins_max = min(bin_edges), max(bin_edges)
             if np.any((real_values < bins_min) | (real_values > bins_max)):
