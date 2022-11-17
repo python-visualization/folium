@@ -1155,6 +1155,10 @@ class Choropleth(FeatureGroup):
         representation. Leaflet defaults to 1.0.
     highlight: boolean, default False
         Enable highlight functionality when hovering over a GeoJSON area.
+    use_jenks: bool, default False
+        Use jenkspy to calculate bins using "natural breaks"
+        (Fisher-Jenks algorithm). This is useful when your data is unevenly
+        distributed.
     name : string, optional
         The name of the layer, as it will appear in LayerControls
     overlay : bool, default True
