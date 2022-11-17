@@ -49,7 +49,7 @@ except ImportError:
     __version__ = "unknown"
 
 
-if tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
+if branca.__version__ != 'unknown' and tuple(int(x) for x in branca.__version__.split('.')[:2]) < (0, 3):
     raise ImportError('branca version 0.3.0 or higher is required. '
                       'Update branca with e.g. `pip install branca --upgrade`.')
 
