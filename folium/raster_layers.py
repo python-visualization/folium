@@ -254,6 +254,7 @@ class ImageOverlay(Layer):
         Used only for array-like image.  Transforms the data to
         project (longitude, latitude) coordinates to the Mercator projection.
         Beware that this will only work if `image` is an array-like object.
+        Note that if used the image will be clipped beyond latitude -85 and 85.
     pixelated: bool, default True
         Sharp sharp/crips (True) or aliased corners (False).
     name : string, default None
