@@ -77,3 +77,16 @@ Changelog
 ---------
 
 Check the `changelog <https://raw.githubusercontent.com/python-visualization/folium/main/CHANGES.txt>`_ for a detailed list of the latest changes.
+
+
+Packages and plugins
+--------------------
+
+Packages:
+
+- https://github.com/geopandas/xyzservices: a repository of raster basemap tilesets.
+- https://github.com/randyzwitch/streamlit-folium: run folium in a Streamlit app.
+
+Plugins:
+
+- https://github.com/onaci/folium-glify-layer: provide fast webgl rendering for large GeoJSON FeatureCollections
