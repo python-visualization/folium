@@ -32,20 +32,24 @@ class PolyLineOffset(JSCSSMixin, PolyLine):
 
     Examples
     --------
-    >>> plugins.PolyLineOffset([[58, -28], [53, -23]], color="#f00", opacity=1, offset=-5).add_to(m)
-    >>> plugins.PolyLineOffset([[58, -28], [53, -23]], color="#080", opacity=1, offset=10).add_to(m)
+    >>> plugins.PolyLineOffset(
+    ...     [[58, -28], [53, -23]], color="#f00", opacity=1, offset=-5
+    ... ).add_to(m)
+    >>> plugins.PolyLineOffset(
+    ...     [[58, -28], [53, -23]], color="#080", opacity=1, offset=10
+    ... ).add_to(m)
 
     """
 
     default_js = [
-        ('polylineoffset',
-         'https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js')
+        (
+            "polylineoffset",
+            "https://cdn.jsdelivr.net/npm/leaflet-polylineoffset@1.1.1/leaflet.polylineoffset.min.js",
+        )
     ]
 
     def __init__(self, locations, popup=None, tooltip=None, offset=0, **kwargs):
-        super(PolyLineOffset, self).__init__(
-            locations=locations, popup=popup, tooltip=tooltip, **kwargs
-        )
+        super().__init__(locations=locations, popup=popup, tooltip=tooltip, **kwargs)
         self._name = "PolyLineOffset"
         # Add PolyLineOffset offset.
         self.options.update({"offset": offset})

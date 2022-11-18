@@ -4,11 +4,10 @@ Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 """
 
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class LocateControl(JSCSSMixin, MacroElement):
@@ -37,15 +36,16 @@ class LocateControl(JSCSSMixin, MacroElement):
     # With some custom options
     >>> LocateControl(
     ...     position="bottomright",
-    ...     strings={"title": "See you current location",
-    ...              "popup": "Your position"}).add_to(m))
+    ...     strings={"title": "See you current location", "popup": "Your position"},
+    ... ).add_to(m)
 
     For more info check:
     https://github.com/domoritz/leaflet-locatecontrol
 
     """
 
-    _template = Template("""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.control.locate(
                 {{this.options | tojson}}
@@ -54,19 +54,24 @@ class LocateControl(JSCSSMixin, MacroElement):
                 {{this.get_name()}}.start();
             {% endif %}
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('Control_locate_min_js',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js')
+        (
+            "Control_locate_min_js",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js",
+        )
     ]
     default_css = [
-        ('Control_locate_min_css',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css')
+        (
+            "Control_locate_min_css",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css",
+        )
     ]
 
     def __init__(self, auto_start=False, **kwargs):
-        super(LocateControl, self).__init__()
-        self._name = 'LocateControl'
+        super().__init__()
+        self._name = "LocateControl"
         self.auto_start = auto_start
         self.options = parse_options(**kwargs)

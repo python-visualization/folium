@@ -1,7 +1,7 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.map import Layer
-
-from jinja2 import Template
 
 
 class VectorGridProtobuf(JSCSSMixin, Layer):
@@ -38,58 +38,58 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     ...         "layer_name_one": {
     ...             "fill": True,
     ...             "weight": 1,
-    ...             "fillColor": 'green',
-    ...             "color": 'black',
-    ...             "fillOpacity":0.6,
-    ...             "opacity":0.6
+    ...             "fillColor": "green",
+    ...             "color": "black",
+    ...             "fillOpacity": 0.6,
+    ...             "opacity": 0.6,
     ...         },
     ...         "layer_name_two": {
     ...             "fill": True,
     ...             "weight": 1,
-    ...             "fillColor": 'red',
-    ...             "color": 'black',
-    ...             "fillOpacity":0.6,
-    ...             "opacity":0.6
-    ...             }
-    ...         }
-    ...     }
+    ...             "fillColor": "red",
+    ...             "color": "black",
+    ...             "fillOpacity": 0.6,
+    ...             "opacity": 0.6,
+    ...         },
+    ...     },
+    ... }
 
-    >>> VectorGridProtobuf(url,"layer_name",options).add_to(m)
+    >>> VectorGridProtobuf(url, "layer_name", options).add_to(m)
 
     Options as string allows to pass functions
 
     >>> m = folium.Map()
     >>> url = "https://free-{s}.tilehosting.com/data/v3/{z}/{x}/{y}.pbf?token={token}"
     >>> options = '''{
-    ... "subdomain": "tilehosting",
-    ... "token": "af6P2G9dztAt1F75x7KYt0Hx2DJR052G",
-    ... "vectorTileLayerStyles": {
-    ...     all: function(f) {
-    ...         if (f.type === 'parks') {
-    ...             return {
-    ...                 "fill": true,
-    ...                 "weight": 1,
-    ...                 "fillColor": 'green',
-    ...                 "color": 'black',
-    ...                 "fillOpacity":0.6,
-    ...                 "opacity":0.6
-    ...             };
-    ...         }
-    ...         if (f.type === 'water') {
-    ...             return {
-    ...                 "fill": true,
-    ...                 "weight": 1,
-    ...                 "fillColor": 'purple',
-    ...                 "color": 'black',
-    ...                 "fillOpacity":0.6,
-    ...                 "opacity":0.6
-    ...             };
+    ...     "subdomain": "tilehosting",
+    ...     "token": "af6P2G9dztAt1F75x7KYt0Hx2DJR052G",
+    ...     "vectorTileLayerStyles": {
+    ...         all: function(f) {
+    ...             if (f.type === 'parks') {
+    ...                 return {
+    ...                     "fill": true,
+    ...                     "weight": 1,
+    ...                     "fillColor": 'green',
+    ...                     "color": 'black',
+    ...                     "fillOpacity":0.6,
+    ...                     "opacity":0.6
+    ...                 };
+    ...             }
+    ...             if (f.type === 'water') {
+    ...                 return {
+    ...                     "fill": true,
+    ...                     "weight": 1,
+    ...                     "fillColor": 'purple',
+    ...                     "color": 'black',
+    ...                     "fillOpacity":0.6,
+    ...                     "opacity":0.6
+    ...                 };
+    ...             }
     ...         }
     ...     }
-    ... }
-    }'''
+    ... }'''
 
-    >>> VectorGridProtobuf(url,"layer_name",options).add_to(m)
+    >>> VectorGridProtobuf(url, "layer_name", options).add_to(m)
 
 
     For more info, see: https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html#styling-vectorgrids.
@@ -108,7 +108,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
             {% endif %}
             {%- endmacro %}
             """
-    )  # noqa
+    )
 
     default_js = [
         (
@@ -120,7 +120,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     def __init__(self, url, layer_name, options=None):
         self.layer_name = layer_name if layer_name else "VectorGridProtobufLayer"
 
-        super(VectorGridProtobuf, self).__init__(name=self.layer_name)
+        super().__init__(name=self.layer_name)
 
         self.url = url
         self._name = "VectorGridProtobuf"

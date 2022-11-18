@@ -9,8 +9,9 @@ class JSCSSMixin(Element):
 
     def render(self, **kwargs):
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         for name, url in self.default_js:
             figure.header.add_child(JavascriptLink(url), name=name)

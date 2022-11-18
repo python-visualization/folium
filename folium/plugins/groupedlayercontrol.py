@@ -1,8 +1,8 @@
 from branca.element import MacroElement
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class GroupedLayerControl(JSCSSMixin, MacroElement):
@@ -26,16 +26,22 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         https://leafletjs.com/reference.html#control-layers
 
     """
+
     default_js = [
-        ('leaflet.groupedlayercontrol.min.js',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.js'),
+        (
+            "leaflet.groupedlayercontrol.min.js",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.js",  # noqa
+        ),
     ]
     default_css = [
-        ('leaflet.groupedlayercontrol.min.css',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.css')
+        (
+            "leaflet.groupedlayercontrol.min.css",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.css",  # noqa
+        )
     ]
 
-    _template = Template("""
+    _template = Template(
+        """
         {% macro script(this,kwargs) %}
 
             L.control.groupedLayers(
@@ -57,25 +63,23 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
             {%- endfor %}
 
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(
-        self,
-        groups,
-        exclusive_groups=True,
-        **kwargs
-    ):
+    def __init__(self, groups, exclusive_groups=True, **kwargs):
         super().__init__()
-        self._name = 'GroupedLayerControl'
+        self._name = "GroupedLayerControl"
         self.options = parse_options(**kwargs)
         if exclusive_groups:
-            self.options['exclusiveGroups'] = list(groups.keys())
+            self.options["exclusiveGroups"] = list(groups.keys())
         self.layers_untoggle = set()
         self.grouped_overlays = {}
         for group_name, sublist in groups.items():
             self.grouped_overlays[group_name] = {}
             for element in sublist:
-                self.grouped_overlays[group_name][element.layer_name] = element.get_name()
+                self.grouped_overlays[group_name][
+                    element.layer_name
+                ] = element.get_name()
                 if not element.show:
                     self.layers_untoggle.add(element.get_name())
                 # make sure the elements used in GroupedLayerControl

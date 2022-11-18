@@ -1,7 +1,6 @@
 import base64
 import collections
 import copy
-import io
 import json
 import math
 import os
@@ -13,8 +12,8 @@ import zlib
 from contextlib import contextmanager
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
-
 import numpy as np
+
 try:
     import pandas as pd
 except ImportError:
@@ -22,8 +21,8 @@ except ImportError:
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
-_VALID_URLS.discard('')
-_VALID_URLS.add('data')
+_VALID_URLS.discard("")
+_VALID_URLS.add("data")
 
 
 def validate_location(location):  # noqa: C901
@@ -41,31 +40,42 @@ def validate_location(location):  # noqa: C901
     list[float, float]
 
     """
-    if isinstance(location, np.ndarray) \
-            or (pd is not None and isinstance(location, pd.DataFrame)):
+    if isinstance(location, np.ndarray) or (
+        pd is not None and isinstance(location, pd.DataFrame)
+    ):
         location = np.squeeze(location).tolist()
-    if not hasattr(location, '__len__'):
-        raise TypeError('Location should be a sized variable, '
-                        'for example a list or a tuple, instead got '
-                        '{!r} of type {}.'.format(location, type(location)))
+    if not hasattr(location, "__len__"):
+        raise TypeError(
+            "Location should be a sized variable, "
+            "for example a list or a tuple, instead got "
+            "{!r} of type {}.".format(location, type(location))
+        )
     if len(location) != 2:
-        raise ValueError('Expected two (lat, lon) values for location, '
-                         'instead got: {!r}.'.format(location))
+        raise ValueError(
+            "Expected two (lat, lon) values for location, "
+            "instead got: {!r}.".format(location)
+        )
     try:
         coords = (location[0], location[1])
     except (TypeError, KeyError):
-        raise TypeError('Location should support indexing, like a list or '
-                        'a tuple does, instead got {!r} of type {}.'
-                        .format(location, type(location)))
+        raise TypeError(
+            "Location should support indexing, like a list or "
+            "a tuple does, instead got {!r} of type {}.".format(
+                location, type(location)
+            )
+        )
     for coord in coords:
         try:
             float(coord)
         except (TypeError, ValueError):
-            raise ValueError('Location should consist of two numerical values, '
-                             'but {!r} of type {} is not convertible to float.'
-                             .format(coord, type(coord)))
+            raise ValueError(
+                "Location should consist of two numerical values, "
+                "but {!r} of type {} is not convertible to float.".format(
+                    coord, type(coord)
+                )
+            )
         if math.isnan(float(coord)):
-            raise ValueError('Location values cannot contain NaNs.')
+            raise ValueError("Location values cannot contain NaNs.")
     return [float(x) for x in coords]
 
 
@@ -81,12 +91,14 @@ def validate_locations(locations):
     try:
         iter(locations)
     except TypeError:
-        raise TypeError('Locations should be an iterable with coordinate pairs,'
-                        ' but instead got {!r}.'.format(locations))
+        raise TypeError(
+            "Locations should be an iterable with coordinate pairs,"
+            " but instead got {!r}.".format(locations)
+        )
     try:
         next(iter(locations))
     except StopIteration:
-        raise ValueError('Locations is empty.')
+        raise ValueError("Locations is empty.")
     try:
         float(next(iter(next(iter(next(iter(locations)))))))
     except (TypeError, StopIteration):
@@ -109,7 +121,7 @@ def if_pandas_df_convert_to_numpy(obj):
         return obj
 
 
-def image_to_url(image, colormap=None, origin='upper'):
+def image_to_url(image, colormap=None, origin="upper"):
     """
     Infers the type of an image argument and transforms it into a URL.
 
@@ -133,18 +145,18 @@ def image_to_url(image, colormap=None, origin='upper'):
     """
     if isinstance(image, str) and not _is_url(image):
         fileformat = os.path.splitext(image)[-1][1:]
-        with io.open(image, 'rb') as f:
+        with open(image, "rb") as f:
             img = f.read()
-        b64encoded = base64.b64encode(img).decode('utf-8')
-        url = 'data:image/{};base64,{}'.format(fileformat, b64encoded)
-    elif 'ndarray' in image.__class__.__name__:
+        b64encoded = base64.b64encode(img).decode("utf-8")
+        url = f"data:image/{fileformat};base64,{b64encoded}"
+    elif "ndarray" in image.__class__.__name__:
         img = write_png(image, origin=origin, colormap=colormap)
-        b64encoded = base64.b64encode(img).decode('utf-8')
-        url = 'data:image/png;base64,{}'.format(b64encoded)
+        b64encoded = base64.b64encode(img).decode("utf-8")
+        url = f"data:image/png;base64,{b64encoded}"
     else:
         # Round-trip to ensure a nice formatted json.
         url = json.loads(json.dumps(image))
-    return url.replace('\n', ' ')
+    return url.replace("\n", " ")
 
 
 def _is_url(url):
@@ -155,14 +167,14 @@ def _is_url(url):
         return False
 
 
-def write_png(data, origin='upper', colormap=None):
+def write_png(data, origin="upper", colormap=None):
     """
     Transform an array of data into a PNG string.
     This can be written to disk using binary I/O, or encoded using base64
     for an inline PNG like this:
 
     >>> png_str = write_png(array)
-    >>> "data:image/png;base64,"+png_str.encode('base64')
+    >>> "data:image/png;base64," + png_str.encode("base64")
 
     Inspired from
     https://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
@@ -188,6 +200,7 @@ def write_png(data, origin='upper', colormap=None):
 
     """
     if colormap is None:
+
         def colormap(x):
             return (x, x, x, 1)
 
@@ -195,16 +208,16 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = arr.shape
 
     if nblayers not in [1, 3, 4]:
-        raise ValueError('Data must be NxM (mono), '
-                         'NxMx3 (RGB), or NxMx4 (RGBA)')
+        raise ValueError("Data must be NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)")
     assert arr.shape == (height, width, nblayers)
 
     if nblayers == 1:
         arr = np.array(list(map(colormap, arr.ravel())))
         nblayers = arr.shape[1]
         if nblayers not in [3, 4]:
-            raise ValueError('colormap must provide colors of r'
-                             'length 3 (RGB) or 4 (RGBA)')
+            raise ValueError(
+                "colormap must provide colors of length 3 (RGB) or 4 (RGBA)"
+            )
         arr = arr.reshape((height, width, nblayers))
     assert arr.shape == (height, width, nblayers)
 
@@ -215,34 +228,38 @@ def write_png(data, origin='upper', colormap=None):
     assert nblayers == 4
 
     # Normalize to uint8 if it isn't already.
-    if arr.dtype != 'uint8':
-        with np.errstate(divide='ignore', invalid='ignore'):
-            arr = arr * 255./arr.max(axis=(0, 1)).reshape((1, 1, 4))
+    if arr.dtype != "uint8":
+        with np.errstate(divide="ignore", invalid="ignore"):
+            arr = arr * 255.0 / arr.max(axis=(0, 1)).reshape((1, 1, 4))
             arr[~np.isfinite(arr)] = 0
-        arr = arr.astype('uint8')
+        arr = arr.astype("uint8")
 
     # Eventually flip the image.
-    if origin == 'lower':
+    if origin == "lower":
         arr = arr[::-1, :, :]
 
     # Transform the array to bytes.
-    raw_data = b''.join([b'\x00' + arr[i, :, :].tobytes()
-                         for i in range(height)])
+    raw_data = b"".join([b"\x00" + arr[i, :, :].tobytes() for i in range(height)])
 
     def png_pack(png_tag, data):
         chunk_head = png_tag + data
-        return (struct.pack('!I', len(data)) +
-                chunk_head +
-                struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
+        return (
+            struct.pack("!I", len(data))
+            + chunk_head
+            + struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head))
+        )
 
-    return b''.join([
-        b'\x89PNG\r\n\x1a\n',
-        png_pack(b'IHDR', struct.pack('!2I5B', width, height, 8, 6, 0, 0, 0)),
-        png_pack(b'IDAT', zlib.compress(raw_data, 9)),
-        png_pack(b'IEND', b'')])
+    return b"".join(
+        [
+            b"\x89PNG\r\n\x1a\n",
+            png_pack(b"IHDR", struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
+            png_pack(b"IDAT", zlib.compress(raw_data, 9)),
+            png_pack(b"IEND", b""),
+        ]
+    )
 
 
-def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
+def mercator_transform(data, lat_bounds, origin="upper", height_out=None):
     """
     Transforms an image computed in (longitude,latitude) coordinates into
     the a Mercator projection image.
@@ -272,7 +289,7 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
     import numpy as np
 
     def mercator(x):
-        return np.arcsinh(np.tan(x*np.pi/180.))*180./np.pi
+        return np.arcsinh(np.tan(x * np.pi / 180.0)) * 180.0 / np.pi
 
     array = np.atleast_3d(data).copy()
     height, width, nblayers = array.shape
@@ -283,22 +300,23 @@ def mercator_transform(data, lat_bounds, origin='upper', height_out=None):
         height_out = height
 
     # Eventually flip the image
-    if origin == 'upper':
+    if origin == "upper":
         array = array[::-1, :, :]
 
-    lats = (lat_min + np.linspace(0.5/height, 1.-0.5/height, height) *
-            (lat_max-lat_min))
-    latslats = (mercator(lat_min) +
-                np.linspace(0.5/height_out, 1.-0.5/height_out, height_out) *
-                (mercator(lat_max)-mercator(lat_min)))
+    lats = lat_min + np.linspace(0.5 / height, 1.0 - 0.5 / height, height) * (
+        lat_max - lat_min
+    )
+    latslats = mercator(lat_min) + np.linspace(
+        0.5 / height_out, 1.0 - 0.5 / height_out, height_out
+    ) * (mercator(lat_max) - mercator(lat_min))
 
     out = np.zeros((height_out, width, nblayers))
     for i in range(width):
         for j in range(nblayers):
-            out[:, i, j] = np.interp(latslats, mercator(lats),  array[:, i, j])
+            out[:, i, j] = np.interp(latslats, mercator(lats), array[:, i, j])
 
     # Eventually flip the image.
-    if origin == 'upper':
+    if origin == "upper":
         out = out[::-1, :, :]
     return out
 
@@ -328,21 +346,20 @@ def iter_coords(obj):
     """
     if isinstance(obj, (tuple, list)):
         coords = obj
-    elif 'features' in obj:
-        coords = [geom['geometry']['coordinates'] for geom in obj['features']]
-    elif 'geometry' in obj:
-        coords = obj['geometry']['coordinates']
-    elif 'geometries' in obj and 'coordinates' in obj['geometries'][0]:
-        coords = obj['geometries'][0]['coordinates']
+    elif "features" in obj:
+        coords = [geom["geometry"]["coordinates"] for geom in obj["features"]]
+    elif "geometry" in obj:
+        coords = obj["geometry"]["coordinates"]
+    elif "geometries" in obj and "coordinates" in obj["geometries"][0]:
+        coords = obj["geometries"][0]["coordinates"]
     else:
-        coords = obj.get('coordinates', obj)
+        coords = obj.get("coordinates", obj)
     for coord in coords:
         if isinstance(coord, (float, int)):
             yield tuple(coords)
             break
         else:
-            for f in iter_coords(coord):
-                yield f
+            yield from iter_coords(coord)
 
 
 def _locations_mirror(x):
@@ -353,8 +370,8 @@ def _locations_mirror(x):
     [[[2, 1], [4, 3]], [6, 5], [8, 7]]
 
     """
-    if hasattr(x, '__iter__'):
-        if hasattr(x[0], '__iter__'):
+    if hasattr(x, "__iter__"):
+        if hasattr(x[0], "__iter__"):
             return list(map(_locations_mirror, x))
         else:
             return list(x[::-1])
@@ -390,27 +407,26 @@ def camelize(key):
 
     Examples
     --------
-    >>> camelize('variable_name')
+    >>> camelize("variable_name")
     'variableName'
-    >>> camelize('variableName')
+    >>> camelize("variableName")
     'variableName'
     """
-    return ''.join(x.capitalize() if i > 0 else x
-                   for i, x in enumerate(key.split('_')))
+    return "".join(x.capitalize() if i > 0 else x for i, x in enumerate(key.split("_")))
 
 
 def _parse_size(value):
     try:
         if isinstance(value, (int, float)):
-            value_type = 'px'
+            value_type = "px"
             value = float(value)
             assert value > 0
         else:
-            value_type = '%'
-            value = float(value.strip('%'))
+            value_type = "%"
+            value = float(value.strip("%"))
             assert 0 <= value <= 100
     except Exception:
-        msg = 'Cannot parse value {!r} as {!r}'.format
+        msg = "Cannot parse value {!r} as {!r}".format
         raise ValueError(msg(value, value_type))
     return value, value_type
 
@@ -426,20 +442,18 @@ def compare_rendered(obj1, obj2):
 
 def normalize(rendered):
     """Return the input string without non-functional spaces or newlines."""
-    out = ''.join([line.strip()
-                   for line in rendered.splitlines()
-                   if line.strip()])
-    out = out.replace(', ', ',')
+    out = "".join([line.strip() for line in rendered.splitlines() if line.strip()])
+    out = out.replace(", ", ",")
     return out
 
 
 @contextmanager
 def temp_html_filepath(data):
     """Yields the path of a temporary HTML file containing data."""
-    filepath = ''
+    filepath = ""
     try:
-        fid, filepath = tempfile.mkstemp(suffix='.html', prefix='folium_')
-        os.write(fid, data.encode('utf8') if isinstance(data, str) else data)
+        fid, filepath = tempfile.mkstemp(suffix=".html", prefix="folium_")
+        os.write(fid, data.encode("utf8") if isinstance(data, str) else data)
         os.close(fid)
         yield filepath
     finally:
@@ -451,7 +465,7 @@ def deep_copy(item_original):
     """Return a recursive deep-copy of item where each copy has a new ID."""
     item = copy.copy(item_original)
     item._id = uuid.uuid4().hex
-    if hasattr(item, '_children') and len(item._children) > 0:
+    if hasattr(item, "_children") and len(item._children) > 0:
         children_new = collections.OrderedDict()
         for subitem_original in item._children.values():
             subitem = deep_copy(subitem_original)
@@ -463,9 +477,8 @@ def deep_copy(item_original):
 
 def get_obj_in_upper_tree(element, cls):
     """Return the first object in the parent tree of class `cls`."""
-    if not hasattr(element, '_parent'):
-        raise ValueError('The top of the tree was reached without finding a {}'
-                         .format(cls))
+    if not hasattr(element, "_parent"):
+        raise ValueError(f"The top of the tree was reached without finding a {cls}")
     parent = element._parent
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
@@ -474,11 +487,9 @@ def get_obj_in_upper_tree(element, cls):
 
 def parse_options(**kwargs):
     """Return a dict with lower-camelcase keys and non-None values.."""
-    return {camelize(key): value
-            for key, value in kwargs.items()
-            if value is not None}
+    return {camelize(key): value for key, value in kwargs.items() if value is not None}
 
 
 def escape_backticks(text):
     """Escape backticks so text can be used in a JS template."""
-    return re.sub(r"(?<!\\)`", r'\`', text)
+    return re.sub(r"(?<!\\)`", r"\`", text)

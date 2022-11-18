@@ -6,10 +6,14 @@ import warnings
 from collections import OrderedDict
 
 from branca.element import Element, Figure, Html, MacroElement
-
-from folium.utilities import camelize, parse_options, validate_location, escape_backticks
-
 from jinja2 import Template
+
+from folium.utilities import (
+    camelize,
+    escape_backticks,
+    parse_options,
+    validate_location,
+)
 
 
 class Layer(MacroElement):
@@ -28,8 +32,9 @@ class Layer(MacroElement):
     show: bool, default True
         Whether the layer will be shown on opening (only for overlays).
     """
+
     def __init__(self, name=None, overlay=False, control=True, show=True):
-        super(Layer, self).__init__()
+        super().__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
         self.control = control
@@ -60,19 +65,20 @@ class FeatureGroup(Layer):
         https://leafletjs.com/reference.html#featuregroup
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, name=None, overlay=True, control=True, show=True,
-                 **kwargs):
-        super(FeatureGroup, self).__init__(name=name, overlay=overlay,
-                                           control=control, show=show)
-        self._name = 'FeatureGroup'
+    def __init__(self, name=None, overlay=True, control=True, show=True, **kwargs):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
         self.options = parse_options(**kwargs)
 
@@ -106,7 +112,9 @@ class LayerControl(MacroElement):
         https://leafletjs.com/reference.html#control-layers
 
     """
-    _template = Template("""
+
+    _template = Template(
+        """
         {% macro script(this,kwargs) %}
             var {{ this.get_name() }} = {
                 base_layers : {
@@ -130,17 +138,14 @@ class LayerControl(MacroElement):
             {{ val }}.remove();
             {%- endfor %}
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, position='topright', collapsed=True, autoZIndex=True,
-                 **kwargs):
-        super(LayerControl, self).__init__()
-        self._name = 'LayerControl'
+    def __init__(self, position="topright", collapsed=True, autoZIndex=True, **kwargs):
+        super().__init__()
+        self._name = "LayerControl"
         self.options = parse_options(
-            position=position,
-            collapsed=collapsed,
-            autoZIndex=autoZIndex,
-            **kwargs
+            position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
@@ -165,7 +170,7 @@ class LayerControl(MacroElement):
                 self.overlays[key] = item.get_name()
                 if not item.show:
                     self.layers_untoggle[key] = item.get_name()
-        super(LayerControl, self).render()
+        super().render()
 
 
 class Icon(MacroElement):
@@ -200,34 +205,64 @@ class Icon(MacroElement):
     https://github.com/lvoogdt/Leaflet.awesome-markers
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojson }}
             );
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
-        """)
-    color_options = {'red', 'darkred',  'lightred', 'orange', 'beige',
-                     'green', 'darkgreen', 'lightgreen',
-                     'blue', 'darkblue', 'cadetblue', 'lightblue',
-                     'purple',  'darkpurple', 'pink',
-                     'white', 'gray', 'lightgray', 'black'}
+        """
+    )
+    color_options = {
+        "red",
+        "darkred",
+        "lightred",
+        "orange",
+        "beige",
+        "green",
+        "darkgreen",
+        "lightgreen",
+        "blue",
+        "darkblue",
+        "cadetblue",
+        "lightblue",
+        "purple",
+        "darkpurple",
+        "pink",
+        "white",
+        "gray",
+        "lightgray",
+        "black",
+    }
 
-    def __init__(self, color='blue', icon_color='white', icon='info-sign',
-                 angle=0, prefix='glyphicon', **kwargs):
-        super(Icon, self).__init__()
-        self._name = 'Icon'
+    def __init__(
+        self,
+        color="blue",
+        icon_color="white",
+        icon="info-sign",
+        angle=0,
+        prefix="glyphicon",
+        **kwargs,
+    ):
+        super().__init__()
+        self._name = "Icon"
         if color not in self.color_options:
-            warnings.warn('color argument of Icon should be one of: {}.'
-                          .format(self.color_options), stacklevel=2)
+            warnings.warn(
+                "color argument of Icon should be one of: {}.".format(
+                    self.color_options
+                ),
+                stacklevel=2,
+            )
         self.options = parse_options(
             marker_color=color,
             icon_color=icon_color,
             icon=icon,
             prefix=prefix,
-            extra_classes='fa-rotate-{}'.format(angle),
-            **kwargs
+            extra_classes=f"fa-rotate-{angle}",
+            **kwargs,
         )
 
 
@@ -256,40 +291,50 @@ class Marker(MacroElement):
 
     Examples
     --------
-    >>> Marker(location=[45.5, -122.3], popup='Portland, OR')
-    >>> Marker(location=[45.5, -122.3], popup=Popup('Portland, OR'))
+    >>> Marker(location=[45.5, -122.3], popup="Portland, OR")
+    >>> Marker(location=[45.5, -122.3], popup=Popup("Portland, OR"))
     # If the popup label has characters that need to be escaped in HTML
-    >>> Marker(location=[45.5, -122.3],
-    ...        popup=Popup('Mom & Pop Arrow Shop >>', parse_html=True))
+    >>> Marker(
+    ...     location=[45.5, -122.3],
+    ...     popup=Popup("Mom & Pop Arrow Shop >>", parse_html=True),
+    ... )
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.marker(
                 {{ this.location|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, location=None, popup=None, tooltip=None, icon=None,
-                 draggable=False, **kwargs):
-        super(Marker, self).__init__()
-        self._name = 'Marker'
+    def __init__(
+        self,
+        location=None,
+        popup=None,
+        tooltip=None,
+        icon=None,
+        draggable=False,
+        **kwargs,
+    ):
+        super().__init__()
+        self._name = "Marker"
         self.location = validate_location(location) if location is not None else None
         self.options = parse_options(
-            draggable=draggable or None,
-            autoPan=draggable or None,
-            **kwargs
+            draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
         if icon is not None:
             self.add_child(icon)
             self.icon = icon
         if popup is not None:
-            self.add_child(popup if isinstance(popup, Popup)
-                           else Popup(str(popup)))
+            self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
-            self.add_child(tooltip if isinstance(tooltip, Tooltip)
-                           else Tooltip(str(tooltip)))
+            self.add_child(
+                tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
+            )
 
     def _get_self_bounds(self):
         """Computes the bounds of the object itself.
@@ -300,8 +345,12 @@ class Marker(MacroElement):
 
     def render(self):
         if self.location is None:
-            raise ValueError("{} location must be assigned when added directly to map.".format(self._name))
-        super(Marker, self).render()
+            raise ValueError(
+                "{} location must be assigned when added directly to map.".format(
+                    self._name
+                )
+            )
+        super().render()
 
 
 class Popup(Element):
@@ -322,7 +371,9 @@ class Popup(Element):
     lazy: bool, default False
         True only loads the Popup content when clicking on the Marker.
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
         {% for name, element in this.html._children.items() %}
@@ -342,12 +393,21 @@ class Popup(Element):
         {% for name, element in this.script._children.items() %}
             {{element.render()}}
         {% endfor %}
-    """)  # noqa
+    """
+    )  # noqa
 
-    def __init__(self, html=None, parse_html=False, max_width='100%',
-                 show=False, sticky=False, lazy=False, **kwargs):
-        super(Popup, self).__init__()
-        self._name = 'Popup'
+    def __init__(
+        self,
+        html=None,
+        parse_html=False,
+        max_width="100%",
+        show=False,
+        sticky=False,
+        lazy=False,
+        **kwargs,
+    ):
+        super().__init__()
+        self._name = "Popup"
         self.header = Element()
         self.html = Element()
         self.script = Element()
@@ -370,7 +430,7 @@ class Popup(Element):
             max_width=max_width,
             autoClose=False if show or sticky else None,
             closeOnClick=False if sticky else None,
-            **kwargs
+            **kwargs,
         )
 
     def render(self, **kwargs):
@@ -379,12 +439,14 @@ class Popup(Element):
             child.render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
-        figure.script.add_child(Element(
-            self._template.render(this=self, kwargs=kwargs)),
-            name=self.get_name())
+        figure.script.add_child(
+            Element(self._template.render(this=self, kwargs=kwargs)),
+            name=self.get_name(),
+        )
 
 
 class Tooltip(MacroElement):
@@ -406,7 +468,9 @@ class Tooltip(MacroElement):
         available here: https://leafletjs.com/reference.html#tooltip
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.bindTooltip(
                 `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
@@ -415,31 +479,33 @@ class Tooltip(MacroElement):
                 {{ this.options|tojson }}
             );
         {% endmacro %}
-        """)
+        """
+    )
     valid_options = {
-        'pane': (str, ),
-        'offset': (tuple, ),
-        'direction': (str, ),
-        'permanent': (bool, ),
-        'sticky': (bool, ),
-        'interactive': (bool, ),
-        'opacity': (float, int),
-        'attribution': (str, ),
-        'className': (str, ),
+        "pane": (str,),
+        "offset": (tuple,),
+        "direction": (str,),
+        "permanent": (bool,),
+        "sticky": (bool,),
+        "interactive": (bool,),
+        "opacity": (float, int),
+        "attribution": (str,),
+        "className": (str,),
     }
 
     def __init__(self, text, style=None, sticky=True, **kwargs):
-        super(Tooltip, self).__init__()
-        self._name = 'Tooltip'
+        super().__init__()
+        self._name = "Tooltip"
 
         self.text = str(text)
 
-        kwargs.update({'sticky': sticky})
+        kwargs.update({"sticky": sticky})
         self.options = self.parse_options(kwargs)
 
         if style:
-            assert isinstance(style, str), \
-                'Pass a valid inline HTML style property string to style.'
+            assert isinstance(
+                style, str
+            ), "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
 
@@ -447,13 +513,15 @@ class Tooltip(MacroElement):
         """Validate the provided kwargs and return options as json string."""
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
-            assert key in self.valid_options, (
-                'The option {} is not in the available options: {}.'
-                .format(key, ', '.join(self.valid_options))
+            assert (
+                key in self.valid_options
+            ), "The option {} is not in the available options: {}.".format(
+                key, ", ".join(self.valid_options)
             )
-            assert isinstance(kwargs[key], self.valid_options[key]), (
-                'The option {} must be one of the following types: {}.'
-                .format(key, self.valid_options[key])
+            assert isinstance(
+                kwargs[key], self.valid_options[key]
+            ), "The option {} must be one of the following types: {}.".format(
+                key, self.valid_options[key]
             )
         return kwargs
 
@@ -478,19 +546,28 @@ class FitBounds(MacroElement):
     max_zoom: int, default None
         Maximum zoom to be used.
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.fitBounds(
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
             );
         {% endmacro %}
-        """)
+        """
+    )
 
-    def __init__(self, bounds, padding_top_left=None,
-                 padding_bottom_right=None, padding=None, max_zoom=None):
-        super(FitBounds, self).__init__()
-        self._name = 'FitBounds'
+    def __init__(
+        self,
+        bounds,
+        padding_top_left=None,
+        padding_bottom_right=None,
+        padding=None,
+        max_zoom=None,
+    ):
+        super().__init__()
+        self._name = "FitBounds"
         self.bounds = bounds
         self.options = parse_options(
             max_zoom=max_zoom,
@@ -523,7 +600,9 @@ class CustomPane(MacroElement):
         cursor. Setting to False will prevent interfering with
         pointer events associated with lower layers.
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
                 {{ this.name|tojson }});
@@ -532,11 +611,12 @@ class CustomPane(MacroElement):
                 {{ this.get_name() }}.style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
-        """)
+        """
+    )
 
     def __init__(self, name, z_index=625, pointer_events=False):
-        super(CustomPane, self).__init__()
-        self._name = 'Pane'
+        super().__init__()
+        self._name = "Pane"
         self.name = name
         self.z_index = z_index
         self.pointer_events = pointer_events

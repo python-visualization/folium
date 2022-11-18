@@ -1,10 +1,9 @@
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.raster_layers import TileLayer
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class MiniMap(JSCSSMixin, MacroElement):
@@ -57,10 +56,11 @@ class MiniMap(JSCSSMixin, MacroElement):
 
     Examples
     --------
-    >>> MiniMap(tile_layer='Stamen WaterColor', position='bottomleft')
+    >>> MiniMap(tile_layer="Stamen WaterColor", position="bottomleft")
     """
 
-    _template = Template("""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.tile_layer.get_name() }} = L.tileLayer(
                 {{ this.tile_layer.tiles|tojson }},
@@ -72,26 +72,42 @@ class MiniMap(JSCSSMixin, MacroElement):
             );
             {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
         {% endmacro %}
-    """)  # noqa
+    """
+    )  # noqa
 
     default_js = [
-        ('Control_MiniMap_js',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js')
+        (
+            "Control_MiniMap_js",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.js",
+        )
     ]
     default_css = [
-        ('Control_MiniMap_css',
-         'https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css'),
+        (
+            "Control_MiniMap_css",
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.6.1/Control.MiniMap.css",
+        ),
     ]
 
-    def __init__(self, tile_layer=None, position='bottomright', width=150,
-                 height=150, collapsed_width=25, collapsed_height=25,
-                 zoom_level_offset=-5, zoom_level_fixed=None,
-                 center_fixed=False, zoom_animation=False,
-                 toggle_display=False, auto_toggle_display=False,
-                 minimized=False, **kwargs):
+    def __init__(
+        self,
+        tile_layer=None,
+        position="bottomright",
+        width=150,
+        height=150,
+        collapsed_width=25,
+        collapsed_height=25,
+        zoom_level_offset=-5,
+        zoom_level_fixed=None,
+        center_fixed=False,
+        zoom_animation=False,
+        toggle_display=False,
+        auto_toggle_display=False,
+        minimized=False,
+        **kwargs
+    ):
 
-        super(MiniMap, self).__init__()
-        self._name = 'MiniMap'
+        super().__init__()
+        self._name = "MiniMap"
 
         if tile_layer is None:
             self.tile_layer = TileLayer()

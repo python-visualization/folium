@@ -3,22 +3,22 @@ Test HeatMapWithTime
 ------------
 """
 
+import numpy as np
+from jinja2 import Template
+
 import folium
 from folium import plugins
 from folium.utilities import normalize
 
-from jinja2 import Template
-
-import numpy as np
-
 
 def test_heat_map_with_time():
     np.random.seed(3141592)
-    initial_data = (np.random.normal(size=(100, 2)) * np.array([[1, 1]]) +
-                    np.array([[48, 5]]))
+    initial_data = np.random.normal(size=(100, 2)) * np.array([[1, 1]]) + np.array(
+        [[48, 5]]
+    )
     move_data = np.random.normal(size=(100, 2)) * 0.01
     data = [(initial_data + move_data * i).tolist() for i in range(100)]
-    m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=6)
+    m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
     hm = plugins.HeatMapWithTime(data).add_to(m)
 
     out = normalize(m._parent.render())
@@ -34,7 +34,8 @@ def test_heat_map_with_time():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template("""
+    tmpl = Template(
+        """
         var times = {{this.times}};
 
         {{this._parent.get_name()}}.timeDimension = L.timeDimension(
@@ -76,6 +77,7 @@ def test_heat_map_with_time():
                 }
             })
             .addTo({{this._parent.get_name()}});
-    """)
+    """
+    )
 
     assert normalize(tmpl.render(this=hm)) in out

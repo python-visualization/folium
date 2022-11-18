@@ -4,22 +4,21 @@ Folium Features Tests
 
 """
 
+import json
 import os
 import warnings
 
-import json
-
+import pytest
 from branca.element import Element
 
 import folium
-from folium import Map, Popup, GeoJson, ClickForMarker
-
-import pytest
+from folium import ClickForMarker, GeoJson, Map, Popup
 
 
 @pytest.fixture
 def tmpl():
-    yield ("""
+    yield (
+        """
     <!DOCTYPE html>
     <html>
     <head>
@@ -30,7 +29,8 @@ def tmpl():
     <script>
     </script>
     </html>
-    """)  # noqa
+    """
+    )  # noqa
 
 
 # Root path variable
@@ -60,7 +60,7 @@ def test_figure_html(tmpl):
     out = f.render()
     out = os.linesep.join([s.strip() for s in out.splitlines() if s.strip()])
     tmpl = os.linesep.join([s.strip() for s in tmpl.splitlines() if s.strip()])
-    assert out == tmpl, '\n' + out + '\n' + '-' * 80 + '\n' + tmpl
+    assert out == tmpl, "\n" + out + "\n" + "-" * 80 + "\n" + tmpl
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
@@ -78,13 +78,13 @@ def test_figure_double_rendering():
 
 def test_marker_popups():
     m = Map()
-    folium.Marker([45, -180], popup='-180').add_to(m)
-    folium.Marker([45, -120], popup=Popup('-120')).add_to(m)
-    folium.RegularPolygonMarker([45, -60], popup='-60').add_to(m)
-    folium.RegularPolygonMarker([45, 0], popup=Popup('0')).add_to(m)
-    folium.CircleMarker([45, 60], popup='60').add_to(m)
-    folium.CircleMarker([45, 120], popup=Popup('120')).add_to(m)
-    folium.CircleMarker([45, 90], popup=Popup('90'), weight=0).add_to(m)
+    folium.Marker([45, -180], popup="-180").add_to(m)
+    folium.Marker([45, -120], popup=Popup("-120")).add_to(m)
+    folium.RegularPolygonMarker([45, -60], popup="-60").add_to(m)
+    folium.RegularPolygonMarker([45, 0], popup=Popup("0")).add_to(m)
+    folium.CircleMarker([45, 60], popup="60").add_to(m)
+    folium.CircleMarker([45, 120], popup=Popup("120")).add_to(m)
+    folium.CircleMarker([45, 90], popup=Popup("90"), weight=0).add_to(m)
     m._repr_html_()
 
     bounds = m.get_bounds()
@@ -98,8 +98,8 @@ def test_divicon():
               </svg>"""  # noqa
     div = folium.DivIcon(html=html)
     assert isinstance(div, Element)
-    assert div.options['className'] == 'empty'
-    assert div.options['html'] == html
+    assert div.options["className"] == "empty"
+    assert div.options["html"] == html
 
 
 # ColorLine.
@@ -108,44 +108,37 @@ def test_color_line():
     color_line = folium.ColorLine(
         [[0, 0], [0, 45], [45, 45], [45, 0], [0, 0]],
         [0, 1, 2, 3],
-        colormap=['b', 'g', 'y', 'r'],
+        colormap=["b", "g", "y", "r"],
         nb_steps=4,
         weight=10,
-        opacity=1)
+        opacity=1,
+    )
     m.add_child(color_line)
     m._repr_html_()
 
 
 @pytest.fixture
 def vegalite_spec(version):
-    file_version = 'v1' if version == 1 else 'vlater'
-    file = os.path.join(rootpath, 'vegalite_data', f'vegalite_{file_version}.json')
+    file_version = "v1" if version == 1 else "vlater"
+    file = os.path.join(rootpath, "vegalite_data", f"vegalite_{file_version}.json")
 
     if not os.path.exists(file):
-        raise FileNotFoundError(f'The vegalite data {file} does not exist.')
+        raise FileNotFoundError(f"The vegalite data {file} does not exist.")
 
-    with open(file, 'r') as f:
+    with open(file) as f:
         spec = json.load(f)
 
-    if version is None or '$schema' in spec:
+    if version is None or "$schema" in spec:
         return spec
 
     # Sample versions that might show up
-    schema_version = {
-        2: 'v2.6.0',
-        3: 'v3.6.0',
-        4: 'v4.6.0',
-        5: 'v5.1.0'
-    }[version]
-    spec['$schema'] = f'https://vega.github.io/schema/vega-lite/{schema_version}.json'
+    schema_version = {2: "v2.6.0", 3: "v3.6.0", 4: "v4.6.0", 5: "v5.1.0"}[version]
+    spec["$schema"] = f"https://vega.github.io/schema/vega-lite/{schema_version}.json"
 
     return spec
 
 
-@pytest.mark.parametrize(
-    'version',
-    [1, 2, 3, 4, 5, None]
-)
+@pytest.mark.parametrize("version", [1, 2, 3, 4, 5, None])
 def test_vegalite_major_version(vegalite_spec, version):
     vegalite = folium.features.VegaLite(vegalite_spec)
 
@@ -158,13 +151,16 @@ def test_vegalite_major_version(vegalite_spec, version):
 # GeoJsonTooltip GeometryCollection
 def test_geojson_tooltip():
     m = folium.Map([30.5, -97.5], zoom_start=10)
-    folium.GeoJson(os.path.join(rootpath, 'kuntarajat.geojson'),
-                   tooltip=folium.GeoJsonTooltip(fields=['code', 'name'])
-                   ).add_to(m)
+    folium.GeoJson(
+        os.path.join(rootpath, "kuntarajat.geojson"),
+        tooltip=folium.GeoJsonTooltip(fields=["code", "name"]),
+    ).add_to(m)
     with warnings.catch_warnings(record=True) as w:
-        warnings.simplefilter('always')
+        warnings.simplefilter("always")
         m._repr_html_()
-        assert issubclass(w[-1].category, UserWarning), 'GeoJsonTooltip GeometryCollection test failed.'
+        assert issubclass(
+            w[-1].category, UserWarning
+        ), "GeoJsonTooltip GeometryCollection test failed."
 
 
 # GeoJsonMarker type validation.
@@ -172,61 +168,62 @@ def test_geojson_marker():
     m = folium.Map([30.4, -97.5], zoom_start=10)
     with pytest.raises(TypeError):
         folium.GeoJson(
-                os.path.join(rootpath, 'subwaystations.geojson'),
-                marker=ClickForMarker()
-            ).add_to(m)
+            os.path.join(rootpath, "subwaystations.geojson"), marker=ClickForMarker()
+        ).add_to(m)
 
 
 def test_geojson_find_identifier():
-
     def _create(*properties):
-        return {"type": "FeatureCollection", "features": [
-            {"type": "Feature", "properties": item}
-            for item in properties]}
+        return {
+            "type": "FeatureCollection",
+            "features": [
+                {"type": "Feature", "properties": item} for item in properties
+            ],
+        }
 
     def _assert_id_got_added(data):
         _geojson = GeoJson(data)
-        assert _geojson.find_identifier() == 'feature.id'
-        assert _geojson.data['features'][0]['id'] == '0'
+        assert _geojson.find_identifier() == "feature.id"
+        assert _geojson.data["features"][0]["id"] == "0"
 
     data_with_id = _create(None, None)
-    data_with_id['features'][0]['id'] = 'this-is-an-id'
-    data_with_id['features'][1]['id'] = 'this-is-another-id'
+    data_with_id["features"][0]["id"] = "this-is-an-id"
+    data_with_id["features"][1]["id"] = "this-is-another-id"
     geojson = GeoJson(data_with_id)
-    assert geojson.find_identifier() == 'feature.id'
-    assert geojson.data['features'][0]['id'] == 'this-is-an-id'
+    assert geojson.find_identifier() == "feature.id"
+    assert geojson.data["features"][0]["id"] == "this-is-an-id"
 
     data_with_unique_properties = _create(
-        {'property-key': 'some-value'},
-        {'property-key': 'another-value'},
+        {"property-key": "some-value"},
+        {"property-key": "another-value"},
     )
     geojson = GeoJson(data_with_unique_properties)
-    assert geojson.find_identifier() == 'feature.properties.property-key'
+    assert geojson.find_identifier() == "feature.properties.property-key"
 
     data_with_unique_properties = _create(
-        {'property-key': 42},
-        {'property-key': 43},
-        {'property-key': 'or a string'},
+        {"property-key": 42},
+        {"property-key": 43},
+        {"property-key": "or a string"},
     )
     geojson = GeoJson(data_with_unique_properties)
-    assert geojson.find_identifier() == 'feature.properties.property-key'
+    assert geojson.find_identifier() == "feature.properties.property-key"
 
     # The test cases below have no id field or unique property,
     # so an id will be added to the data.
 
     data_with_identical_ids = _create(None, None)
-    data_with_identical_ids['features'][0]['id'] = 'identical-ids'
-    data_with_identical_ids['features'][1]['id'] = 'identical-ids'
+    data_with_identical_ids["features"][0]["id"] = "identical-ids"
+    data_with_identical_ids["features"][1]["id"] = "identical-ids"
     _assert_id_got_added(data_with_identical_ids)
 
     data_with_some_missing_ids = _create(None, None)
-    data_with_some_missing_ids['features'][0]['id'] = 'this-is-an-id'
+    data_with_some_missing_ids["features"][0]["id"] = "this-is-an-id"
     # the second feature doesn't have an id
     _assert_id_got_added(data_with_some_missing_ids)
 
     data_with_identical_properties = _create(
-        {'property-key': 'identical-value'},
-        {'property-key': 'identical-value'},
+        {"property-key": "identical-value"},
+        {"property-key": "identical-value"},
     )
     _assert_id_got_added(data_with_identical_properties)
 
@@ -237,34 +234,45 @@ def test_geojson_find_identifier():
     _assert_id_got_added(data_empty_dict)
 
     data_without_properties = _create(None)
-    del data_without_properties['features'][0]['properties']
+    del data_without_properties["features"][0]["properties"]
     _assert_id_got_added(data_without_properties)
 
-    data_some_without_properties = _create({'key': 'value'}, 'will be deleted')
+    data_some_without_properties = _create({"key": "value"}, "will be deleted")
     # the first feature has properties, but the second doesn't
-    del data_some_without_properties['features'][1]['properties']
+    del data_some_without_properties["features"][1]["properties"]
     _assert_id_got_added(data_some_without_properties)
 
-    data_with_nested_properties = _create({
-        "summary": {"distance": 343.2},
-        "way_points": [3, 5],
-    })
+    data_with_nested_properties = _create(
+        {
+            "summary": {"distance": 343.2},
+            "way_points": [3, 5],
+        }
+    )
     _assert_id_got_added(data_with_nested_properties)
 
-    data_with_incompatible_properties = _create({
-        "summary": {"distances": [0, 6], "durations": None},
-        "way_points": [3, 5],
-    })
+    data_with_incompatible_properties = _create(
+        {
+            "summary": {"distances": [0, 6], "durations": None},
+            "way_points": [3, 5],
+        }
+    )
     _assert_id_got_added(data_with_incompatible_properties)
 
-    data_loose_geometry = {"type": "LineString", "coordinates": [
-        [3.961389, 43.583333], [3.968056, 43.580833], [3.974722, 43.578333],
-        [3.986389, 43.575278], [3.998333, 43.5725], [4.163333, 43.530556],
-    ]}
+    data_loose_geometry = {
+        "type": "LineString",
+        "coordinates": [
+            [3.961389, 43.583333],
+            [3.968056, 43.580833],
+            [3.974722, 43.578333],
+            [3.986389, 43.575278],
+            [3.998333, 43.5725],
+            [4.163333, 43.530556],
+        ],
+    }
     geojson = GeoJson(data_loose_geometry)
     geojson.convert_to_feature_collection()
-    assert geojson.find_identifier() == 'feature.id'
-    assert geojson.data['features'][0]['id'] == '0'
+    assert geojson.find_identifier() == "feature.id"
+    assert geojson.data["features"][0]["id"] == "0"
 
 
 def test_geojson_empty_features_with_styling():

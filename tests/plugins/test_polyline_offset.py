@@ -3,11 +3,11 @@ Test PolyLineOffset
 -------------------
 """
 
+import pytest
+
 import folium
 from folium import plugins
 from folium.utilities import normalize
-
-import pytest
 
 
 @pytest.mark.parametrize("offset", [0, 10, -10])

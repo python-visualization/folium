@@ -1,10 +1,9 @@
 from branca.element import Element, Figure
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.utilities import none_max, none_min
-
-from jinja2 import Template
 
 
 class HeatMapWithTime(JSCSSMixin, Layer):
@@ -59,7 +58,9 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         Whether the layer will be shown on opening (only for overlays).
 
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
 
             var times = {{this.times}};
@@ -105,54 +106,84 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 .addTo({{this._parent.get_name()}});
 
         {% endmacro %}
-        """)
+        """
+    )
 
     default_js = [
-        ('iso8601',
-         'https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js'),
-        ('leaflet.timedimension.min.js',
-         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js'),
-        ('heatmap.min.js',
-         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js'),
-        ('leaflet-heatmap.js',
-         'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js'),
+        (
+            "iso8601",
+            "https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js",
+        ),
+        (
+            "leaflet.timedimension.min.js",
+            "https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js",
+        ),
+        (
+            "heatmap.min.js",
+            "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js",
+        ),
+        (
+            "leaflet-heatmap.js",
+            "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_leaflet_hm.min.js",
+        ),
     ]
     default_css = [
-        ('leaflet.timedimension.control.min.css',
-         'https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css')
+        (
+            "leaflet.timedimension.control.min.css",
+            "https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css",
+        )
     ]
 
-    def __init__(self, data, index=None, name=None, radius=15, blur=0.8, min_opacity=0,
-                 max_opacity=0.6, scale_radius=False, gradient=None,
-                 use_local_extrema=False, auto_play=False,
-                 display_index=True, index_steps=1, min_speed=0.1,
-                 max_speed=10, speed_step=0.1, position='bottomleft',
-                 overlay=True, control=True, show=True):
-        super(HeatMapWithTime, self).__init__(name=name, overlay=overlay,
-                                              control=control, show=show)
-        self._name = 'HeatMap'
-        self._control_name = self.get_name() + 'Control'
+    def __init__(
+        self,
+        data,
+        index=None,
+        name=None,
+        radius=15,
+        blur=0.8,
+        min_opacity=0,
+        max_opacity=0.6,
+        scale_radius=False,
+        gradient=None,
+        use_local_extrema=False,
+        auto_play=False,
+        display_index=True,
+        index_steps=1,
+        min_speed=0.1,
+        max_speed=10,
+        speed_step=0.1,
+        position="bottomleft",
+        overlay=True,
+        control=True,
+        show=True,
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "HeatMap"
+        self._control_name = self.get_name() + "Control"
 
         # Input data.
         self.data = data
-        self.index = index if index is not None else [str(i) for i in
-                                                      range(1, len(data)+1)]
+        self.index = (
+            index if index is not None else [str(i) for i in range(1, len(data) + 1)]
+        )
         if len(self.data) != len(self.index):
-            raise ValueError('Input data and index are not of compatible lengths.')  # noqa
-        self.times = list(range(1, len(data)+1))
+            raise ValueError(
+                "Input data and index are not of compatible lengths."
+            )  # noqa
+        self.times = list(range(1, len(data) + 1))
 
         # Heatmap settings.
         self.radius = radius
         self.blur = blur
         self.min_opacity = min_opacity
         self.max_opacity = max_opacity
-        self.scale_radius = 'true' if scale_radius else 'false'
-        self.use_local_extrema = 'true' if use_local_extrema else 'false'
+        self.scale_radius = "true" if scale_radius else "false"
+        self.use_local_extrema = "true" if use_local_extrema else "false"
         self.gradient = gradient
 
         # Time dimension settings.
-        self.auto_play = 'true' if auto_play else 'false'
-        self.display_index = 'true' if display_index else 'false'
+        self.auto_play = "true" if auto_play else "false"
+        self.display_index = "true" if display_index else "false"
         self.min_speed = min_speed
         self.max_speed = max_speed
         self.position = position
@@ -160,24 +191,25 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         self.index_steps = index_steps
 
         # Hard coded defaults for simplicity.
-        self.backward_button = 'true'
-        self.forward_button = 'true'
-        self.limit_sliders = 'true'
+        self.backward_button = "true"
+        self.forward_button = "true"
+        self.limit_sliders = "true"
         self.limit_minimum_range = 5
-        self.loop_button = 'true'
-        self.speed_slider = 'true'
-        self.time_slider = 'true'
-        self.play_button = 'true'
-        self.play_reverse_button = 'true'
-        self.time_slider_drap_update = 'false'
-        self.style_NS = 'leaflet-control-timecontrol'
+        self.loop_button = "true"
+        self.speed_slider = "true"
+        self.time_slider = "true"
+        self.play_button = "true"
+        self.play_reverse_button = "true"
+        self.time_slider_drap_update = "false"
+        self.style_NS = "leaflet-control-timecontrol"
 
     def render(self, **kwargs):
-        super(HeatMapWithTime, self).render(**kwargs)
+        super().render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
 
         figure.header.add_child(
             Element(
@@ -262,7 +294,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
             });
             </script>
                 """,  # noqa
-                template_name='timeControlScript'
+                template_name="timeControlScript",
             )
         )
 

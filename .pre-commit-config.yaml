@@ -20,3 +20,40 @@ repos:
     - id: flake8
       exclude: docs/conf.py
       args: [--max-line-length=120]
+
+- repo: https://github.com/pycqa/isort
+  rev: 5.10.1
+  hooks:
+    - id: isort
+      additional_dependencies: [toml]
+      args: ["--profile", "black", "--filter-files"]
+
+- repo: https://github.com/psf/black
+  rev: 22.10.0
+  hooks:
+  - id: black
+    language_version: python3
+
+- repo: https://github.com/keewis/blackdoc
+  rev: v0.3.8
+  hooks:
+    - id: blackdoc
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.2.2
+  hooks:
+    - id: codespell
+      args:
+        - --ignore-words-list=thex
+      exclude: >
+        (?x)^(
+            .*\.csv |
+            .*\.json |
+        )$
+
+- repo: https://github.com/asottile/pyupgrade
+  rev: v3.2.0
+  hooks:
+    - id: pyupgrade
+      args:
+        - --py36-plus

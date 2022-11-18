@@ -1,11 +1,10 @@
 from branca.element import Figure, MacroElement
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.utilities import deep_copy
-
-from jinja2 import Template
 
 
 class DualMap(JSCSSMixin, MacroElement):
@@ -29,46 +28,61 @@ class DualMap(JSCSSMixin, MacroElement):
     Examples
     --------
     >>> # DualMap accepts the same arguments as Map:
-    >>> m = DualMap(location=(0, 0), tiles='cartodbpositron', zoom_start=5)
+    >>> m = DualMap(location=(0, 0), tiles="cartodbpositron", zoom_start=5)
     >>> # Add the same marker to both maps:
     >>> Marker((0, 0)).add_to(m)
     >>> # The individual maps are attributes called `m1` and `m2`:
     >>> Marker((0, 1)).add_to(m.m1)
     >>> LayerControl().add_to(m)
-    >>> m.save('map.html')
+    >>> m.save("map.html")
 
     """
 
-    _template = Template("""
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
             {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
         {% endmacro %}
-    """)
+    """
+    )
 
     default_js = [
-        ('Leaflet.Sync',
-         'https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js')
+        (
+            "Leaflet.Sync",
+            "https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js",
+        )
     ]
 
-    def __init__(self, location=None, layout='horizontal', **kwargs):
-        super(DualMap, self).__init__()
-        for key in ('width', 'height', 'left', 'top', 'position'):
-            assert key not in kwargs, ('Argument {} cannot be used with '
-                                       'DualMap.'.format(key))
-        if layout not in ('horizontal', 'vertical'):
-            raise ValueError('Undefined option for argument `layout`: {}. '
-                             'Use either \'horizontal\' or \'vertical\'.'
-                             .format(layout))
-        width = '50%' if layout == 'horizontal' else '100%'
-        height = '100%' if layout == 'horizontal' else '50%'
-        self.m1 = Map(location=location, width=width, height=height,
-                      left='0%', top='0%',
-                      position='absolute', **kwargs)
-        self.m2 = Map(location=location, width=width, height=height,
-                      left='50%' if layout == 'horizontal' else '0%',
-                      top='0%' if layout == 'horizontal' else '50%',
-                      position='absolute', **kwargs)
+    def __init__(self, location=None, layout="horizontal", **kwargs):
+        super().__init__()
+        for key in ("width", "height", "left", "top", "position"):
+            assert key not in kwargs, f"Argument {key} cannot be used with  DualMap."
+        if layout not in ("horizontal", "vertical"):
+            raise ValueError(
+                "Undefined option for argument `layout`: {}. "
+                "Use either 'horizontal' or 'vertical'.".format(layout)
+            )
+        width = "50%" if layout == "horizontal" else "100%"
+        height = "100%" if layout == "horizontal" else "50%"
+        self.m1 = Map(
+            location=location,
+            width=width,
+            height=height,
+            left="0%",
+            top="0%",
+            position="absolute",
+            **kwargs,
+        )
+        self.m2 = Map(
+            location=location,
+            width=width,
+            height=height,
+            left="50%" if layout == "horizontal" else "0%",
+            top="0%" if layout == "horizontal" else "50%",
+            position="absolute",
+            **kwargs,
+        )
         figure = Figure()
         figure.add_child(self.m1)
         figure.add_child(self.m2)
@@ -95,7 +109,7 @@ class DualMap(JSCSSMixin, MacroElement):
         self.children_for_m2.append((child, name, index))
 
     def render(self, **kwargs):
-        super(DualMap, self).render(**kwargs)
+        super().render(**kwargs)
 
         for child, name, index in self.children_for_m2:
             if child._id in self.children_for_m2_copied:

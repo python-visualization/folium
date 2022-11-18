@@ -1,8 +1,8 @@
+from jinja2 import Template
+
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import Layer
-
-from jinja2 import Template
 
 
 class TimeSliderChoropleth(JSCSSMixin, Layer):
@@ -30,7 +30,9 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         `styledict`. For example, use `-1` to initialize the slider to the
         latest timestamp.
     """
-    _template = Template(u"""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var timestamps = {{ this.timestamps|tojson }};
             var styledict = {{ this.styledict|tojson }};
@@ -130,24 +132,33 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
             onOverlayAdd(); // fill map as layer is loaded
         {% endmacro %}
-        """)
+        """
+    )
 
-    default_js = [
-        ('d3v4',
-         'https://d3js.org/d3.v4.min.js')
-    ]
+    default_js = [("d3v4", "https://d3js.org/d3.v4.min.js")]
 
-    def __init__(self, data, styledict, name=None, overlay=True, control=True,
-                 show=True, init_timestamp=0):
-        super(TimeSliderChoropleth, self).__init__(name=name, overlay=overlay,
-                                                   control=control, show=show)
+    def __init__(
+        self,
+        data,
+        styledict,
+        name=None,
+        overlay=True,
+        control=True,
+        show=True,
+        init_timestamp=0,
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
 
         if not isinstance(styledict, dict):
-            raise ValueError('styledict must be a dictionary, got {!r}'.format(styledict))  # noqa
+            raise ValueError(
+                f"styledict must be a dictionary, got {styledict!r}"
+            )  # noqa
         for val in styledict.values():
             if not isinstance(val, dict):
-                raise ValueError('Each item in styledict must be a dictionary, got {!r}'.format(val))  # noqa
+                raise ValueError(
+                    f"Each item in styledict must be a dictionary, got {val!r}"
+                )  # noqa
 
         # Make set of timestamps.
         timestamps = set()
@@ -160,9 +171,11 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
         self.timestamps = timestamps
         self.styledict = styledict
-        assert -len(timestamps) <= init_timestamp < len(timestamps), (
-            'init_timestamp must be in the range [-{}, {}) but got {}'.format(
-                len(timestamps), len(timestamps), init_timestamp))
+        assert (
+            -len(timestamps) <= init_timestamp < len(timestamps)
+        ), "init_timestamp must be in the range [-{}, {}) but got {}".format(
+            len(timestamps), len(timestamps), init_timestamp
+        )
         if init_timestamp < 0:
             init_timestamp = len(timestamps) + init_timestamp
         self.init_timestamp = init_timestamp

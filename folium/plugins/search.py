@@ -1,12 +1,11 @@
 from branca.element import MacroElement
+from jinja2 import Template
 
 from folium import Map
 from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
 from folium.utilities import parse_options
-
-from jinja2 import Template
 
 
 class Search(JSCSSMixin, MacroElement):
@@ -39,7 +38,9 @@ class Search(JSCSSMixin, MacroElement):
     See https://github.com/stefanocudini/leaflet-search for more information.
 
     """
-    _template = Template("""
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{this.layer.get_name()}}searchControl = new L.Control.Search({
                 layer: {{this.layer.get_name()}},
@@ -81,26 +82,39 @@ class Search(JSCSSMixin, MacroElement):
             {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
 
         {% endmacro %}
-        """)  # noqa
+        """  # noqa
+    )
 
     default_js = [
-        ('Leaflet.Search.js',
-         'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js')
+        (
+            "Leaflet.Search.js",
+            "https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.js",
+        )
     ]
     default_css = [
-        ('Leaflet.Search.css',
-         'https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css')
+        (
+            "Leaflet.Search.css",
+            "https://cdn.jsdelivr.net/npm/leaflet-search@2.9.7/dist/leaflet-search.min.css",
+        )
     ]
 
-    def __init__(self, layer, search_label=None, search_zoom=None,
-                 geom_type='Point', position='topleft', placeholder='Search',
-                 collapsed=False, **kwargs):
-        super(Search, self).__init__()
-        assert isinstance(layer,
-                          (GeoJson, MarkerCluster, FeatureGroup, TopoJson)
-                          ), 'Search can only index FeatureGroup, ' \
-                             'MarkerCluster, GeoJson, and TopoJson layers at ' \
-                             'this time.'
+    def __init__(
+        self,
+        layer,
+        search_label=None,
+        search_zoom=None,
+        geom_type="Point",
+        position="topleft",
+        placeholder="Search",
+        collapsed=False,
+        **kwargs
+    ):
+        super().__init__()
+        assert isinstance(layer, (GeoJson, MarkerCluster, FeatureGroup, TopoJson)), (
+            "Search can only index FeatureGroup, "
+            "MarkerCluster, GeoJson, and TopoJson layers at "
+            "this time."
+        )
         self.layer = layer
         self.search_label = search_label
         self.search_zoom = search_zoom
@@ -112,18 +126,25 @@ class Search(JSCSSMixin, MacroElement):
 
     def test_params(self, keys):
         if keys is not None and self.search_label is not None:
-            assert self.search_label in keys, "The label '{}' was not " \
-                                              "available in {}" \
-                                              "".format(self.search_label, keys)
-        assert isinstance(self._parent, Map), "Search can only be added to " \
-                                              "folium Map objects."
+            assert self.search_label in keys, (
+                "The label '{}' was not "
+                "available in {}"
+                "".format(self.search_label, keys)
+            )
+        assert isinstance(
+            self._parent, Map
+        ), "Search can only be added to folium Map objects."
 
     def render(self, **kwargs):
         if isinstance(self.layer, GeoJson):
-            keys = tuple(self.layer.data['features'][0]['properties'].keys())
+            keys = tuple(self.layer.data["features"][0]["properties"].keys())
         elif isinstance(self.layer, TopoJson):
-            obj_name = self.layer.object_path.split('.')[-1]
-            keys = tuple(self.layer.data['objects'][obj_name]['geometries'][0]['properties'].keys())  # noqa
+            obj_name = self.layer.object_path.split(".")[-1]
+            keys = tuple(
+                self.layer.data["objects"][obj_name]["geometries"][0][
+                    "properties"
+                ].keys()
+            )  # noqa
         else:
             keys = None
         self.test_params(keys=keys)
