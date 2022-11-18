@@ -71,28 +71,28 @@ The basic workflow for contributing is:
    pip install -r requirements.txt
    pip install -r requirements-dev.txt
    ```
-6. Install Chrome, download [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) and put it in the PATH.
-7. Make changes to your local copy of the folium repository
-8. Make sure the tests pass:
+6. In Python run `pre-commit install` to enable the commit hooks that run our linter.
+7. Install Chrome, download [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) and put it in the PATH.
+8. Make changes to your local copy of the folium repository
+9. Make sure the tests pass:
    * in the repository folder do `pip install -e . --no-deps`  (needed for notebook tests)
-   * run `flake8 folium --max-line-length=120`
    * run `python -m pytest tests --ignore=tests/selenium`
    * run `python -m pytest tests/selenium`
    * resolve all errors
-9. Commit those changes
-   ```
-   git add file1 file2 file3
-   git commit -m 'a descriptive commit message'
-   ```
-10. Push your updated branch to your fork
+10. Commit those changes
+    ```
+    git add file1 file2 file3
+    git commit -m 'a descriptive commit message'
+    ```
+11. Push your updated branch to your fork
    ```
    git push origin name-of-your-branch
    ```
-11. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
+12. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
 
 Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change.
 
-## Plugin acceptence criteria
+## Plugin acceptance criteria
 
 If you have a Leaflet plugin you would like to include in folium's plugins, please
 check these criteria to see if it's a good candidate.
