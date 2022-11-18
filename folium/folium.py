@@ -344,7 +344,7 @@ class Map(JSCSSMixin, MacroElement):
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                driver.maximize_window()
+                driver.fullscreen_window()
                 time.sleep(delay)
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
