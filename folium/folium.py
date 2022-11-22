@@ -190,6 +190,7 @@ class Map(JSCSSMixin, MacroElement):
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
+                .leaflet-container { font-size: 1rem; }
             </style>
         {% endmacro %}
 
