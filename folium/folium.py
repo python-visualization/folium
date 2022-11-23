@@ -24,7 +24,7 @@ ENV = Environment(loader=PackageLoader("folium", "templates"))
 
 
 _default_js = [
-    ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"),
+    ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
     ("jquery", "https://code.jquery.com/jquery-1.12.4.min.js"),
     (
         "bootstrap",
@@ -37,7 +37,7 @@ _default_js = [
 ]
 
 _default_css = [
-    ("leaflet_css", "https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"),
+    ("leaflet_css", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"),
     (
         "bootstrap_css",
         "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
@@ -190,6 +190,7 @@ class Map(JSCSSMixin, MacroElement):
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
+                .leaflet-container { font-size: 1rem; }
             </style>
         {% endmacro %}
 
