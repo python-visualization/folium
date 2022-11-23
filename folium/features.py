@@ -21,6 +21,7 @@ from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.utilities import (
     _parse_size,
     camelize,
+    escape_backticks,
     get_bounds,
     get_obj_in_upper_tree,
     image_to_url,
@@ -1899,3 +1900,39 @@ class ColorLine(FeatureGroup):
             self.add_child(
                 PolyLine(val, color=key, weight=weight, opacity=opacity)
             )  # noqa
+
+
+class CustomControl(MacroElement):
+    """Put any HTML on the map as a Leaflet Control."""
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+
+        L.Control.CustomControl = L.Control.extend({
+            onAdd: function(map) {
+                let div = L.DomUtil.create('div');
+                div.innerHTML = `{{ this.html }}`;
+                return div;
+            },
+            onRemove: function(map) {
+                // Nothing to do here
+            }
+        });
+
+        L.control.customControl = function(opts) {
+            return new L.Control.CustomControl(opts);
+        }
+
+        L.control.customControl(
+            { position: "{{ this.position }}" }
+        ).addTo({{ this._parent.get_name() }});
+
+        {% endmacro %}
+    """
+    )
+
+    def __init__(self, html, position="bottomleft"):
+        super().__init__()
+        self.html = escape_backticks(html)
+        self.position = position
