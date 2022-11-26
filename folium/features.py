@@ -24,6 +24,7 @@ from folium.utilities import (
     get_bounds,
     get_obj_in_upper_tree,
     image_to_url,
+    javascript_identifier_path_to_array_notation,
     none_max,
     none_min,
     parse_options,
@@ -901,7 +902,7 @@ class TopoJson(JSCSSMixin, Layer):
             var {{ this.get_name() }} = L.geoJson(
                 topojson.feature(
                     {{ this.get_name() }}_data,
-                    {{ this.get_name() }}_data.{{ this.object_path }}
+                    {{ this.get_name() }}_data{{ this._safe_object_path }}
                 ),
                 {
                 {%- if this.smooth_factor is not none %}
@@ -949,6 +950,9 @@ class TopoJson(JSCSSMixin, Layer):
             self.data = data
 
         self.object_path = object_path
+        self._safe_object_path = javascript_identifier_path_to_array_notation(
+            object_path
+        )
 
         if style_function is None:
 
