@@ -15,10 +15,10 @@ class SideBySideLayers(JSCSSMixin, Layer):
     ----------
     layer_left: Layer.
         The left Layer within the side by side control.
-        Must  be created and added to the map before being passed to this class.
+        Must be created and added to the map before being passed to this class.
     layer_right: Layer.
-        The left Layer within the side by side control.
-        Must  be created and added to the map before being passed to this class.
+        The right Layer within the side by side control.
+        Must be created and added to the map before being passed to this class.
 
     Examples
     --------
