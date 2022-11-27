@@ -7,8 +7,10 @@ from folium.utilities import (
     _is_url,
     camelize,
     deep_copy,
+    escape_double_quotes,
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
+    javascript_identifier_path_to_array_notation,
     parse_options,
     validate_location,
     validate_locations,
@@ -189,3 +191,27 @@ def test_parse_options():
 )
 def test_is_url(url):
     assert _is_url(url) is True
+
+
+@pytest.mark.parametrize(
+    "text,result",
+    [
+        ("bla", "bla"),
+        ('bla"bla', r"bla\"bla"),
+        ('"bla"bla"', r"\"bla\"bla\""),
+    ],
+)
+def test_escape_double_quotes(text, result):
+    assert escape_double_quotes(text) == result
+
+
+@pytest.mark.parametrize(
+    "text,result",
+    [
+        ("bla", '["bla"]'),
+        ("obj-1.obj2", '["obj-1"]["obj2"]'),
+        ('obj-1.obj"2', r'["obj-1"]["obj\"2"]'),
+    ],
+)
+def test_javascript_identifier_path_to_array_notation(text, result):
+    assert javascript_identifier_path_to_array_notation(text) == result

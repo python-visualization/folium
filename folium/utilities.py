@@ -493,3 +493,12 @@ def parse_options(**kwargs):
 def escape_backticks(text):
     """Escape backticks so text can be used in a JS template."""
     return re.sub(r"(?<!\\)`", r"\`", text)
+
+
+def escape_double_quotes(text):
+    return text.replace('"', r"\"")
+
+
+def javascript_identifier_path_to_array_notation(path):
+    """Convert a path like obj1.obj2 to array notation: ["obj1"]["obj2"]."""
+    return "".join(f'["{escape_double_quotes(x)}"]' for x in path.split("."))
