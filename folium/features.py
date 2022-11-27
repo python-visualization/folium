@@ -1514,6 +1514,7 @@ class Choropleth(FeatureGroup):
             # then we 'correct' the last edge for numpy digitize
             # (we add a very small amount to fake an inclusive right interval)
             increasing = bin_edges[0] <= bin_edges[-1]
+            bin_edges = bin_edges.astype(float)
             bin_edges[-1] = np.nextafter(
                 bin_edges[-1], (1 if increasing else -1) * np.inf
             )
