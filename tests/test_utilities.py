@@ -208,7 +208,7 @@ def test_escape_double_quotes(text, result):
 @pytest.mark.parametrize(
     "text,result",
     [
-        ("bla", "bla"),
+        ("bla", '["bla"]'),
         ("obj-1.obj2", '["obj-1"]["obj2"]'),
         ('obj-1.obj"2', r'["obj-1"]["obj\"2"]'),
     ],
