@@ -1,11 +1,11 @@
+from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import Layer
 from folium.utilities import parse_options
 
 
-class TagFilterButton(JSCSSMixin, Layer):
+class TagFilterButton(JSCSSMixin, MacroElement):
     """
     Creates a Tag Filter Button to filter markers based on criteria
     (https://github.com/maydemirx/leaflet-tag-filter-button)
@@ -14,8 +14,6 @@ class TagFilterButton(JSCSSMixin, Layer):
     ----------
     data: list, of strings.
         The tags to filter for this filter button.
-    name: string, default None
-        The name of the Layer, as it will appear in LayerControls.
     icon: string, default 'fa-filter'
         The icon for the filter button
     clear_text: string, default 'clear'
@@ -24,12 +22,6 @@ class TagFilterButton(JSCSSMixin, Layer):
         if True, the plugin will filter on every click event on checkbox.
     open_popup_on_hover: bool, default False
         if True, popup that contains tags will be open at mouse hover time
-    overlay : bool, default True
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls.
-    show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
 
     """
 
@@ -71,17 +63,13 @@ class TagFilterButton(JSCSSMixin, Layer):
     def __init__(
         self,
         data,
-        name=None,
         icon="fa-filter",
         clear_text="clear",
         filter_on_every_click=True,
         open_popup_on_hover=False,
-        overlay=True,
-        control=True,
-        show=True,
         **kwargs
     ):
-        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        super().__init__()
         self._name = "TagFilterButton"
         self.options = parse_options(
             data=data,
