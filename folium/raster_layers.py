@@ -205,6 +205,7 @@ class WmsTileLayer(Layer):
         transparent=False,
         version="1.1.1",
         attr="",
+        cql_filter=None,
         name=None,
         overlay=True,
         control=True,
@@ -222,6 +223,9 @@ class WmsTileLayer(Layer):
             attribution=attr,
             **kwargs
         )
+        if cql_filter:
+            # special parameter that shouldn't be camelized
+            self.options["cql_filter"] = cql_filter
 
 
 class ImageOverlay(Layer):
