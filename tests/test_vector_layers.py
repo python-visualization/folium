@@ -8,7 +8,14 @@ import json
 
 from folium import Map
 from folium.utilities import get_bounds, normalize
-from folium.vector_layers import Circle, CircleMarker, Polygon, PolyLine, Rectangle
+from folium.vector_layers import (
+    Circle,
+    CircleMarker,
+    Polygon,
+    PolyLine,
+    Rectangle,
+    path_options,
+)
 
 
 def test_circle():
@@ -406,3 +413,9 @@ def test_mulyipolyline():
     assert multipolyline.get_bounds() == get_bounds(locations)
     assert json.dumps(multipolyline.to_dict()) == multipolyline.to_json()
     assert multipolyline.options == expected_options
+
+
+def test_path_options_lower_camel_case():
+    options = path_options(fill_color="red", fillOpacity=0.3)
+    assert options["fillColor"] == "red"
+    assert options["fillOpacity"] == 0.3
