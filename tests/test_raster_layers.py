@@ -66,6 +66,7 @@ def test_wms():
 
     # verify this special case wasn't converted to lowerCamelCase
     assert '"cql_filter": "something",' in html
+    assert "cqlFilter" not in html
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds

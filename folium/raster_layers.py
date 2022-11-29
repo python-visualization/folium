@@ -205,7 +205,6 @@ class WmsTileLayer(Layer):
         transparent=False,
         version="1.1.1",
         attr="",
-        cql_filter=None,
         name=None,
         overlay=True,
         control=True,
@@ -215,6 +214,7 @@ class WmsTileLayer(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.url = url
         kwargs["format"] = fmt
+        cql_filter = kwargs.pop("cql_filter", None)
         self.options = parse_options(
             layers=layers,
             styles=styles,
