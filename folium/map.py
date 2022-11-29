@@ -158,6 +158,7 @@ class LayerControl(MacroElement):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
+        self.reset()
         for item in self._parent._children.values():
             if not isinstance(item, Layer) or not item.control:
                 continue
