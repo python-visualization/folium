@@ -7,7 +7,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import get_bounds, validate_locations
+from folium.utilities import camelize, get_bounds, validate_locations
 
 
 def path_options(line=False, radius=False, **kwargs):
@@ -59,21 +59,25 @@ def path_options(line=False, radius=False, **kwargs):
 
     Note that the presence of `fill_color` will override `fill=False`.
 
+    This function accepts both snake_case and lowerCamelCase equivalents.
+
     See https://leafletjs.com/reference.html#path
 
     """
 
+    kwargs = {camelize(key): value for key, value in kwargs.items()}
+
     extra_options = {}
     if line:
         extra_options = {
-            "smoothFactor": kwargs.pop("smooth_factor", 1.0),
-            "noClip": kwargs.pop("no_clip", False),
+            "smoothFactor": kwargs.pop("smoothFactor", 1.0),
+            "noClip": kwargs.pop("noClip", False),
         }
     if radius:
         extra_options.update({"radius": radius})
 
     color = kwargs.pop("color", "#3388ff")
-    fill_color = kwargs.pop("fill_color", False)
+    fill_color = kwargs.pop("fillColor", False)
     if fill_color:
         fill = True
     elif not fill_color:
@@ -89,15 +93,15 @@ def path_options(line=False, radius=False, **kwargs):
         "color": color,
         "weight": kwargs.pop("weight", 3),
         "opacity": kwargs.pop("opacity", 1.0),
-        "lineCap": kwargs.pop("line_cap", "round"),
-        "lineJoin": kwargs.pop("line_join", "round"),
-        "dashArray": kwargs.pop("dash_array", None),
-        "dashOffset": kwargs.pop("dash_offset", None),
+        "lineCap": kwargs.pop("lineCap", "round"),
+        "lineJoin": kwargs.pop("lineJoin", "round"),
+        "dashArray": kwargs.pop("dashArray", None),
+        "dashOffset": kwargs.pop("dashOffset", None),
         "fill": fill,
         "fillColor": fill_color,
-        "fillOpacity": kwargs.pop("fill_opacity", 0.2),
-        "fillRule": kwargs.pop("fill_rule", "evenodd"),
-        "bubblingMouseEvents": kwargs.pop("bubbling_mouse_events", True),
+        "fillOpacity": kwargs.pop("fillOpacity", 0.2),
+        "fillRule": kwargs.pop("fillRule", "evenodd"),
+        "bubblingMouseEvents": kwargs.pop("bubblingMouseEvents", True),
     }
     default.update(extra_options)
     return default
