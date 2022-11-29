@@ -214,6 +214,7 @@ class WmsTileLayer(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.url = url
         kwargs["format"] = fmt
+        cql_filter = kwargs.pop("cql_filter", None)
         self.options = parse_options(
             layers=layers,
             styles=styles,
@@ -222,6 +223,9 @@ class WmsTileLayer(Layer):
             attribution=attr,
             **kwargs
         )
+        if cql_filter:
+            # special parameter that shouldn't be camelized
+            self.options["cql_filter"] = cql_filter
 
 
 class ImageOverlay(Layer):

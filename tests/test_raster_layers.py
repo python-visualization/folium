@@ -59,9 +59,14 @@ def test_wms():
         layers="nexrad-n0r-900913",
         attr="Weather data © 2012 IEM Nexrad",
         transparent=True,
+        cql_filter="something",
     )
     w.add_to(m)
-    m._repr_html_()
+    html = m.get_root().render()
+
+    # verify this special case wasn't converted to lowerCamelCase
+    assert '"cql_filter": "something",' in html
+    assert "cqlFilter" not in html
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
