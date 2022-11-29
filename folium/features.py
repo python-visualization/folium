@@ -21,6 +21,7 @@ from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.utilities import (
     _parse_size,
     camelize,
+    escape_backticks,
     get_bounds,
     get_obj_in_upper_tree,
     image_to_url,
@@ -1699,9 +1700,16 @@ class ClickForMarker(MacroElement):
 
     Parameters
     ----------
-    popup: str, default None
+    popup: str or IFrame or Html, default None
         Text to display in the markers' popups.
+        This can also be an Element like IFrame or Html.
         If None, the popups will display the marker's latitude and longitude.
+        You can include the latitude and longitude with ${lat} and ${lng}.
+
+
+    Examples
+    --------
+    >>> ClickForMarker("<b>Lat:</b> ${lat}<br /><b>Lon:</b> ${lng}")
 
     """
 
@@ -1725,8 +1733,10 @@ class ClickForMarker(MacroElement):
         super().__init__()
         self._name = "ClickForMarker"
 
+        if isinstance(popup, Element):
+            popup = popup.render()
         if popup:
-            self.popup = "".join(['"', popup, '"'])
+            self.popup = "`" + escape_backticks(popup) + "`"
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
 
