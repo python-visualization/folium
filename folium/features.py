@@ -1903,30 +1903,30 @@ class ColorLine(FeatureGroup):
 
 
 class CustomControl(MacroElement):
-    """Put any HTML on the map as a Leaflet Control."""
+    """Display static html and switch together with parent layer."""
 
     _template = Template(
         """
         {% macro script(this, kwargs) %}
 
-        L.Control.CustomControl = L.Control.extend({
-            onAdd: function(map) {
-                let div = L.DomUtil.create('div');
-                div.innerHTML = `{{ this.html }}`;
-                return div;
-            },
-            onRemove: function(map) {
-                // Nothing to do here
-            }
+        {{ this.get_name() }} = L.control({
+            position: "{{ this.position }}",
         });
-
-        L.control.customControl = function(opts) {
-            return new L.Control.CustomControl(opts);
+        {{ this.get_name() }}.onAdd = function(map) {
+            let div = L.DomUtil.create('div');
+            div.innerHTML = `{{ this.html }}`;
+            return div;
         }
+        {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
 
-        L.control.customControl(
-            { position: "{{ this.position }}" }
-        ).addTo({{ this._parent.get_name() }});
+        {%- if this.switch %}
+        {{ this._parent.get_name() }}.on('add', function(e) {
+            {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+        });
+        {{ this._parent.get_name() }}.on('remove', function(e) {
+            e.target._map.removeControl({{ this.get_name() }});
+        });
+        {%- endif %}
 
         {% endmacro %}
     """
@@ -1934,5 +1934,13 @@ class CustomControl(MacroElement):
 
     def __init__(self, html, position="bottomleft"):
         super().__init__()
+        self._name = "custom_control"
         self.html = escape_backticks(html)
         self.position = position
+        self.parent_map = None
+        self.switch = None
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.switch = isinstance(self._parent, Layer) and self._parent.control
+        super().render(**kwargs)
