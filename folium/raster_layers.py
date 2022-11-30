@@ -308,7 +308,7 @@ class ImageOverlay(Layer):
         self.pixelated = pixelated
         if mercator_project:
             image = mercator_transform(
-                image, [bounds[0][0], bounds[1][0]], origin=origin
+                image, (bounds[0][0], bounds[1][0]), origin=origin
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)

@@ -7,6 +7,7 @@ import functools
 import json
 import operator
 import warnings
+from typing import Optional
 
 import numpy as np
 import requests
@@ -320,7 +321,7 @@ class VegaLite(Element):
         embed_vegalite(figure)
 
     @property
-    def vegalite_major_version(self) -> int:
+    def vegalite_major_version(self) -> Optional[int]:
         if "$schema" not in self.data:
             return None
 
