@@ -335,7 +335,7 @@ class Marker(MacroElement):
 
     def __init__(
         self,
-        location: Sequence[float],
+        location: Optional[Sequence[float]] = None,
         popup: Optional[Union[str, "Popup"]] = None,
         tooltip: Optional[Union[str, "Tooltip"]] = None,
         icon: Optional[Icon] = None,
