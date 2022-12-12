@@ -1,6 +1,13 @@
 name: Publish to PyPI
 
-on: ["push", "pull_request"]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
 
 defaults:
   run:
@@ -15,7 +22,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: 3.x
+        python-version: "3.x"
 
     - name: Get tags
       run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
@@ -38,7 +45,7 @@ jobs:
         python -m twine check *
 
     - name: Publish a Python distribution to PyPI
-      if: ${{ github.event_name == 'release' }}
+      if: success() && github.event_name == 'release'
       uses: pypa/gh-action-pypi-publish@v1.5.1
       with:
         user: __token__
