@@ -363,6 +363,7 @@ class Marker(MacroElement):
 
         Because a marker has only single coordinates, we repeat them.
         """
+        assert self.location is not None
         return [self.location, self.location]
 
     def render(self) -> None:
