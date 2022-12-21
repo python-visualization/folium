@@ -14,6 +14,14 @@ from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
 
+# import here for backwards compatibility
+from branca.utilities import (  # noqa F401
+    _locations_mirror,
+    _parse_size,
+    none_max,
+    none_min,
+)
+
 try:
     import pandas as pd
 except ImportError:
@@ -321,24 +329,6 @@ def mercator_transform(data, lat_bounds, origin="upper", height_out=None):
     return out
 
 
-def none_min(x, y):
-    if x is None:
-        return y
-    elif y is None:
-        return x
-    else:
-        return min(x, y)
-
-
-def none_max(x, y):
-    if x is None:
-        return y
-    elif y is None:
-        return x
-    else:
-        return max(x, y)
-
-
 def iter_coords(obj):
     """
     Returns all the coordinate tuples from a geometry or feature.
@@ -360,23 +350,6 @@ def iter_coords(obj):
             break
         else:
             yield from iter_coords(coord)
-
-
-def _locations_mirror(x):
-    """
-    Mirrors the points in a list-of-list-of-...-of-list-of-points.
-    For example:
-    >>> _locations_mirror([[[1, 2], [3, 4]], [5, 6], [7, 8]])
-    [[[2, 1], [4, 3]], [6, 5], [8, 7]]
-
-    """
-    if hasattr(x, "__iter__"):
-        if hasattr(x[0], "__iter__"):
-            return list(map(_locations_mirror, x))
-        else:
-            return list(x[::-1])
-    else:
-        return x
 
 
 def get_bounds(locations, lonlat=False):
@@ -413,22 +386,6 @@ def camelize(key):
     'variableName'
     """
     return "".join(x.capitalize() if i > 0 else x for i, x in enumerate(key.split("_")))
-
-
-def _parse_size(value):
-    try:
-        if isinstance(value, (int, float)):
-            value_type = "px"
-            value = float(value)
-            assert value > 0
-        else:
-            value_type = "%"
-            value = float(value.strip("%"))
-            assert 0 <= value <= 100
-    except Exception:
-        msg = "Cannot parse value {!r} as {!r}".format
-        raise ValueError(msg(value, value_type))
-    return value, value_type
 
 
 def compare_rendered(obj1, obj2):
