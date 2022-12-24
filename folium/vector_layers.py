@@ -7,7 +7,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import camelize, get_bounds, validate_locations
+from folium.utilities import camelize, get_bounds, validate_multi_locations
 
 
 def path_options(line=False, radius=False, **kwargs):
@@ -116,7 +116,7 @@ class BaseMultiLocation(MacroElement):
 
     def __init__(self, locations, popup=None, tooltip=None):
         super().__init__()
-        self.locations = validate_locations(locations)
+        self.locations = validate_multi_locations(locations)
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:

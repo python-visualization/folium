@@ -65,11 +65,6 @@ def validate_location(location: Sequence[float]) -> List[float]:
     * allows indexing (i.e. has an ordering)
     * where both values are floats (or convertible to float)
     * and both values are not NaN
-
-    Returns
-    -------
-    list[float, float]
-
     """
     if isinstance(location, np.ndarray) or (
         pd is not None and isinstance(location, pd.DataFrame)
@@ -110,17 +105,8 @@ def validate_location(location: Sequence[float]) -> List[float]:
     return [float(x) for x in coords]
 
 
-def validate_locations(
-    locations: TypeLine,
-) -> Union[List[List[float]], List[List[List[float]]]]:
-    """Validate an iterable with multiple lat/lon coordinate pairs.
-
-    Returns
-    -------
-    list[list[float, float]] or list[list[list[float, float]]]
-
-    """
-    locations = if_pandas_df_convert_to_numpy(locations)
+def _validate_locations_basics(locations: TypeMultiLine) -> None:
+    """Helper function that does basic validation of line and multi-line types."""
     try:
         iter(locations)
     except TypeError:
@@ -132,11 +118,26 @@ def validate_locations(
         next(iter(locations))
     except StopIteration:
         raise ValueError("Locations is empty.")
+
+
+def validate_locations(locations: TypeLine) -> List[List[float]]:
+    """Validate an iterable with lat/lon coordinate pairs."""
+    locations = if_pandas_df_convert_to_numpy(locations)
+    _validate_locations_basics(locations)
+    return [validate_location(coord_pair) for coord_pair in locations]
+
+
+def validate_multi_locations(
+    locations: TypeMultiLine,
+) -> Union[List[List[float]], List[List[List[float]]]]:
+    """Validate an iterable with possibly nested lists of coordinate pairs."""
+    locations = if_pandas_df_convert_to_numpy(locations)
+    _validate_locations_basics(locations)
     try:
         float(next(iter(next(iter(next(iter(locations)))))))  # type: ignore
     except (TypeError, StopIteration):
         # locations is a list of coordinate pairs
-        return [validate_location(coord_pair) for coord_pair in locations]
+        return [validate_location(coord_pair) for coord_pair in locations]  # type: ignore
     else:
         # locations is a list of a list of coordinate pairs, recurse
         return [validate_locations(lst) for lst in locations]  # type: ignore
