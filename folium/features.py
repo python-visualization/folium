@@ -93,12 +93,11 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "RegularPolygonMarker"
-        self.options = path_options(**kwargs)
+        self.options = path_options(line=False, radius=radius, **kwargs)
         self.options.update(
             parse_options(
                 number_of_sides=number_of_sides,
                 rotation=rotation,
-                radius=radius,
             )
         )
 
