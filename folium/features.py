@@ -87,8 +87,8 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         number_of_sides: int = 4,
         rotation: int = 0,
         radius: int = 15,
-        popup: Optional[Union[str, Popup]] = None,
-        tooltip: Optional[Union[str, Tooltip]] = None,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
@@ -143,8 +143,8 @@ class Vega(JSCSSMixin, Element):
     def __init__(
         self,
         data: Any,
-        width: Optional[Union[int, str]] = None,
-        height: Optional[Union[int, str]] = None,
+        width: Union[int, str, None] = None,
+        height: Union[int, str, None] = None,
         left: Union[int, str] = "0%",
         top: Union[int, str] = "0%",
         position: str = "relative",
@@ -260,8 +260,8 @@ class VegaLite(Element):
     def __init__(
         self,
         data: Any,
-        width: Optional[Union[int, str]] = None,
-        height: Optional[Union[int, str]] = None,
+        width: Union[int, str, None] = None,
+        height: Union[int, str, None] = None,
         left: Union[int, str] = "0%",
         top: Union[int, str] = "0%",
         position: str = "relative",

@@ -336,8 +336,8 @@ class Marker(MacroElement):
     def __init__(
         self,
         location: Optional[Sequence[float]] = None,
-        popup: Optional[Union[str, "Popup"]] = None,
-        tooltip: Optional[Union[str, "Tooltip"]] = None,
+        popup: Union["Popup", str, None] = None,
+        tooltip: Union["Tooltip", str, None] = None,
         icon: Optional[Icon] = None,
         draggable: bool = False,
         **kwargs: TypeJsonValue,
