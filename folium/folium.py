@@ -4,7 +4,6 @@ Make beautiful, interactive maps with Python and Leaflet.js
 """
 
 import time
-import warnings
 import webbrowser
 
 from branca.element import Element, Figure, MacroElement
@@ -456,21 +455,6 @@ class Map(JSCSSMixin, MacroElement):
                 max_zoom=max_zoom,
             )
         )
-
-    def choropleth(self, *args, **kwargs):
-        """Call the Choropleth class with the same arguments.
-
-        This method may be deleted after a year from now (Nov 2018).
-        """
-        warnings.warn(
-            "The choropleth  method has been deprecated. Instead use the new "
-            "Choropleth class, which has the same arguments. See the example "
-            "notebook 'GeoJSON_and_choropleth' for how to do this.",
-            FutureWarning,
-        )
-        from folium.features import Choropleth
-
-        self.add_child(Choropleth(*args, **kwargs))
 
     def keep_in_front(self, *args):
         """Pass one or multiple layers that must stay in front.
