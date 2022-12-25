@@ -325,7 +325,7 @@ class Circle(Marker):
 
     def __init__(
         self,
-        location: Sequence[float],
+        location: Optional[Sequence[float]] = None,
         radius: float = 50,
         popup: Union[Popup, str, None] = None,
         tooltip: Union[Tooltip, str, None] = None,

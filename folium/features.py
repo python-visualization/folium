@@ -1446,7 +1446,7 @@ class Choropleth(FeatureGroup):
         columns: Optional[Sequence[Any]] = None,
         key_on: Optional[str] = None,
         bins: Union[int, Sequence[float]] = 6,
-        fill_color: str = "blue",
+        fill_color: Optional[str] = None,
         nan_fill_color: str = "black",
         fill_opacity: float = 0.6,
         nan_fill_opacity: Optional[float] = None,
