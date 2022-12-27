@@ -86,6 +86,7 @@ Packages:
 
 - https://github.com/geopandas/xyzservices: a repository of raster basemap tilesets.
 - https://github.com/randyzwitch/streamlit-folium: run folium in a Streamlit app.
+- https://github.com/FEMlium/FEMlium: interactive visualization of finite element simulations on geographic maps with folium.
 
 Plugins:
 
