@@ -385,17 +385,6 @@ class TestFolium:
         assert '"fillColor":"a_random_color","fillOpacity":0.123454321' not in out_str
         assert '"fillOpacity":0.543212345' in out_str
 
-    def test_choropleth_warning(self):
-        """Test that the Map.choropleth method works and raises a warning."""
-        self.setup()
-        with open(os.path.join(rootpath, "us-counties.json")) as f:
-            geo_data = json.load(f)
-        with pytest.warns(FutureWarning):
-            self.m.choropleth(geo_data)
-        assert any(
-            [isinstance(child, Choropleth) for child in self.m._children.values()]
-        )
-
     def test_tile_attr_unicode(self):
         """Test tile attribution unicode"""
         m = folium.Map(location=[45.5236, -122.6750], tiles="test", attr="юникод")
