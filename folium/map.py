@@ -10,6 +10,7 @@ from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
 from folium.utilities import (
+    TypeBounds,
     TypeJsonValue,
     camelize,
     escape_backticks,
@@ -592,7 +593,7 @@ class FitBounds(MacroElement):
 
     def __init__(
         self,
-        bounds: Sequence[Sequence[float]],
+        bounds: TypeBounds,
         padding_top_left: Optional[Sequence[float]] = None,
         padding_bottom_right: Optional[Sequence[float]] = None,
         padding: Optional[Sequence[float]] = None,

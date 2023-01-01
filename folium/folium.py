@@ -14,6 +14,7 @@ from folium.elements import JSCSSMixin
 from folium.map import FitBounds, Layer
 from folium.raster_layers import TileLayer
 from folium.utilities import (
+    TypeBounds,
     TypeJsonValue,
     _parse_size,
     parse_options,
@@ -419,7 +420,7 @@ class Map(JSCSSMixin, MacroElement):
 
     def fit_bounds(
         self,
-        bounds: Sequence[Sequence[float]],
+        bounds: TypeBounds,
         padding_top_left: Optional[Sequence[float]] = None,
         padding_bottom_right: Optional[Sequence[float]] = None,
         padding: Optional[Sequence[float]] = None,
