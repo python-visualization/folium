@@ -4,11 +4,14 @@ Classes for drawing maps.
 """
 import warnings
 from collections import OrderedDict
+from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 
 from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
 from folium.utilities import (
+    TypeBounds,
+    TypeJsonValue,
     camelize,
     escape_backticks,
     parse_options,
@@ -33,7 +36,13 @@ class Layer(MacroElement):
         Whether the layer will be shown on opening (only for overlays).
     """
 
-    def __init__(self, name=None, overlay=False, control=True, show=True):
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        overlay: bool = False,
+        control: bool = True,
+        show: bool = True,
+    ):
         super().__init__()
         self.layer_name = name if name is not None else self.get_name()
         self.overlay = overlay
@@ -76,7 +85,14 @@ class FeatureGroup(Layer):
         """
     )
 
-    def __init__(self, name=None, overlay=True, control=True, show=True, **kwargs):
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
+        **kwargs: TypeJsonValue,
+    ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
@@ -141,22 +157,28 @@ class LayerControl(MacroElement):
         """
     )
 
-    def __init__(self, position="topright", collapsed=True, autoZIndex=True, **kwargs):
+    def __init__(
+        self,
+        position: str = "topright",
+        collapsed: bool = True,
+        autoZIndex: bool = True,
+        **kwargs: TypeJsonValue,
+    ):
         super().__init__()
         self._name = "LayerControl"
         self.options = parse_options(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
+        self.base_layers: OrderedDict[str, str] = OrderedDict()
+        self.overlays: OrderedDict[str, str] = OrderedDict()
+        self.layers_untoggle: OrderedDict[str, str] = OrderedDict()
+
+    def reset(self) -> None:
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
         self.layers_untoggle = OrderedDict()
 
-    def reset(self):
-        self.base_layers = OrderedDict()
-        self.overlays = OrderedDict()
-        self.layers_untoggle = OrderedDict()
-
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         self.reset()
         for item in self._parent._children.values():
@@ -241,12 +263,12 @@ class Icon(MacroElement):
 
     def __init__(
         self,
-        color="blue",
-        icon_color="white",
-        icon="info-sign",
-        angle=0,
-        prefix="glyphicon",
-        **kwargs,
+        color: str = "blue",
+        icon_color: str = "white",
+        icon: str = "info-sign",
+        angle: int = 0,
+        prefix: str = "glyphicon",
+        **kwargs: TypeJsonValue,
     ):
         super().__init__()
         self._name = "Icon"
@@ -314,12 +336,12 @@ class Marker(MacroElement):
 
     def __init__(
         self,
-        location=None,
-        popup=None,
-        tooltip=None,
-        icon=None,
-        draggable=False,
-        **kwargs,
+        location: Optional[Sequence[float]] = None,
+        popup: Union["Popup", str, None] = None,
+        tooltip: Union["Tooltip", str, None] = None,
+        icon: Optional[Icon] = None,
+        draggable: bool = False,
+        **kwargs: TypeJsonValue,
     ):
         super().__init__()
         self._name = "Marker"
@@ -337,14 +359,15 @@ class Marker(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> List[List[float]]:
         """Computes the bounds of the object itself.
 
         Because a marker has only single coordinates, we repeat them.
         """
+        assert self.location is not None
         return [self.location, self.location]
 
-    def render(self):
+    def render(self) -> None:
         if self.location is None:
             raise ValueError(
                 "{} location must be assigned when added directly to map.".format(
@@ -399,13 +422,13 @@ class Popup(Element):
 
     def __init__(
         self,
-        html=None,
-        parse_html=False,
-        max_width="100%",
-        show=False,
-        sticky=False,
-        lazy=False,
-        **kwargs,
+        html: Union[str, Element, None] = None,
+        parse_html: bool = False,
+        max_width: Union[str, int] = "100%",
+        show: bool = False,
+        sticky: bool = False,
+        lazy: bool = False,
+        **kwargs: TypeJsonValue,
     ):
         super().__init__()
         self._name = "Popup"
@@ -434,7 +457,7 @@ class Popup(Element):
             **kwargs,
         )
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
@@ -482,7 +505,7 @@ class Tooltip(MacroElement):
         {% endmacro %}
         """
     )
-    valid_options = {
+    valid_options: Dict[str, Tuple[Type, ...]] = {
         "pane": (str,),
         "offset": (tuple,),
         "direction": (str,),
@@ -494,7 +517,13 @@ class Tooltip(MacroElement):
         "className": (str,),
     }
 
-    def __init__(self, text, style=None, sticky=True, **kwargs):
+    def __init__(
+        self,
+        text: str,
+        style: Optional[str] = None,
+        sticky: bool = True,
+        **kwargs: TypeJsonValue,
+    ):
         super().__init__()
         self._name = "Tooltip"
 
@@ -510,7 +539,10 @@ class Tooltip(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    def parse_options(self, kwargs):
+    def parse_options(
+        self,
+        kwargs: Dict[str, TypeJsonValue],
+    ) -> Dict[str, TypeJsonValue]:
         """Validate the provided kwargs and return options as json string."""
         kwargs = {camelize(key): value for key, value in kwargs.items()}
         for key in kwargs.keys():
@@ -561,11 +593,11 @@ class FitBounds(MacroElement):
 
     def __init__(
         self,
-        bounds,
-        padding_top_left=None,
-        padding_bottom_right=None,
-        padding=None,
-        max_zoom=None,
+        bounds: TypeBounds,
+        padding_top_left: Optional[Sequence[float]] = None,
+        padding_bottom_right: Optional[Sequence[float]] = None,
+        padding: Optional[Sequence[float]] = None,
+        max_zoom: Optional[int] = None,
     ):
         super().__init__()
         self._name = "FitBounds"
@@ -615,7 +647,12 @@ class CustomPane(MacroElement):
         """
     )
 
-    def __init__(self, name, z_index=625, pointer_events=False):
+    def __init__(
+        self,
+        name: str,
+        z_index: Union[int, str] = 625,
+        pointer_events: bool = False,
+    ):
         super().__init__()
         self._name = "Pane"
         self.name = name

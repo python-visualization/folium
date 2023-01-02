@@ -1,13 +1,15 @@
+from typing import List, Tuple
+
 from branca.element import CssLink, Element, Figure, JavascriptLink
 
 
 class JSCSSMixin(Element):
     """Render links to external Javascript and CSS resources."""
 
-    default_js = []
-    default_css = []
+    default_js: List[Tuple[str, str]] = []
+    default_css: List[Tuple[str, str]] = []
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         figure = self.get_root()
         assert isinstance(
             figure, Figure

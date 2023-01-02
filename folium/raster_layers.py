@@ -2,12 +2,23 @@
 Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 
 """
+from typing import TYPE_CHECKING, Any, Callable, Optional, Union
 
 from branca.element import Element, Figure
 from jinja2 import Environment, PackageLoader, Template
 
 from folium.map import Layer
-from folium.utilities import image_to_url, mercator_transform, parse_options
+from folium.utilities import (
+    TypeBounds,
+    TypeJsonValue,
+    image_to_url,
+    mercator_transform,
+    parse_options,
+)
+
+if TYPE_CHECKING:
+    import xyzservices
+
 
 ENV = Environment(loader=PackageLoader("folium", "templates"))
 
@@ -78,30 +89,30 @@ class TileLayer(Layer):
 
     def __init__(
         self,
-        tiles="OpenStreetMap",
-        min_zoom=0,
-        max_zoom=18,
-        max_native_zoom=None,
-        attr=None,
-        detect_retina=False,
-        name=None,
-        overlay=False,
-        control=True,
-        show=True,
-        no_wrap=False,
-        subdomains="abc",
-        tms=False,
-        opacity=1,
+        tiles: Union[str, "xyzservices.TileProvider"] = "OpenStreetMap",
+        min_zoom: int = 0,
+        max_zoom: int = 18,
+        max_native_zoom: Optional[int] = None,
+        attr: Optional[str] = None,
+        detect_retina: bool = False,
+        name: Optional[str] = None,
+        overlay: bool = False,
+        control: bool = True,
+        show: bool = True,
+        no_wrap: bool = False,
+        subdomains: str = "abc",
+        tms: bool = False,
+        opacity: float = 1,
         **kwargs
     ):
 
         # check for xyzservices.TileProvider without importing it
         if isinstance(tiles, dict):
-            attr = attr if attr else tiles.html_attribution
+            attr = attr if attr else tiles.html_attribution  # type: ignore
             min_zoom = tiles.get("min_zoom", min_zoom)
             max_zoom = tiles.get("max_zoom", max_zoom)
             subdomains = tiles.get("subdomains", subdomains)
-            tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")
+            tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")  # type: ignore
 
         self.tile_name = (
             name if name is not None else "".join(tiles.lower().strip().split())
@@ -198,17 +209,17 @@ class WmsTileLayer(Layer):
 
     def __init__(
         self,
-        url,
-        layers,
-        styles="",
-        fmt="image/jpeg",
-        transparent=False,
-        version="1.1.1",
-        attr="",
-        name=None,
-        overlay=True,
-        control=True,
-        show=True,
+        url: str,
+        layers: str,
+        styles: str = "",
+        fmt: str = "image/jpeg",
+        transparent: bool = False,
+        version: str = "1.1.1",
+        attr: str = "",
+        name: Optional[str] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
         **kwargs
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
@@ -289,16 +300,16 @@ class ImageOverlay(Layer):
 
     def __init__(
         self,
-        image,
-        bounds,
-        origin="upper",
-        colormap=None,
-        mercator_project=False,
-        pixelated=True,
-        name=None,
-        overlay=True,
-        control=True,
-        show=True,
+        image: Any,
+        bounds: TypeBounds,
+        origin: str = "upper",
+        colormap: Optional[Callable] = None,
+        mercator_project: bool = False,
+        pixelated: bool = True,
+        name: Optional[str] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
         **kwargs
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
@@ -308,12 +319,12 @@ class ImageOverlay(Layer):
         self.pixelated = pixelated
         if mercator_project:
             image = mercator_transform(
-                image, [bounds[0][0], bounds[1][0]], origin=origin
+                image, (bounds[0][0], bounds[1][0]), origin=origin
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> None:
         super().render()
 
         figure = self.get_root()
@@ -338,7 +349,7 @@ class ImageOverlay(Layer):
                 Element(pixelated), name="leaflet-image-layer"
             )  # noqa
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> TypeBounds:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
@@ -388,15 +399,15 @@ class VideoOverlay(Layer):
 
     def __init__(
         self,
-        video_url,
-        bounds,
-        autoplay=True,
-        loop=True,
-        name=None,
-        overlay=True,
-        control=True,
-        show=True,
-        **kwargs
+        video_url: str,
+        bounds: TypeBounds,
+        autoplay: bool = True,
+        loop: bool = True,
+        name: Optional[str] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
+        **kwargs: TypeJsonValue
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "VideoOverlay"
@@ -405,7 +416,7 @@ class VideoOverlay(Layer):
         self.bounds = bounds
         self.options = parse_options(autoplay=autoplay, loop=loop, **kwargs)
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> TypeBounds:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]

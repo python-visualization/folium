@@ -2,15 +2,26 @@
 Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 
 """
+from typing import List, Optional, Sequence, Union
 
 from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import camelize, get_bounds, validate_locations
+from folium.utilities import (
+    TypeLine,
+    TypeMultiLine,
+    TypePathOptions,
+    camelize,
+    get_bounds,
+    validate_locations,
+    validate_multi_locations,
+)
 
 
-def path_options(line=False, radius=False, **kwargs):
+def path_options(
+    line: bool = False, radius: Optional[float] = None, **kwargs: TypePathOptions
+):
     """
     Contains options and constants shared between vector overlays
     (Polygon, Polyline, Circle, CircleMarker, and Rectangle).
@@ -82,7 +93,7 @@ def path_options(line=False, radius=False, **kwargs):
         fill = True
     elif not fill_color:
         fill_color = color
-        fill = kwargs.pop("fill", False)
+        fill = kwargs.pop("fill", False)  # type: ignore
 
     gradient = kwargs.pop("gradient", None)
     if gradient is not None:
@@ -114,9 +125,14 @@ class BaseMultiLocation(MacroElement):
 
     """
 
-    def __init__(self, locations, popup=None, tooltip=None):
+    def __init__(
+        self,
+        locations: TypeMultiLine,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
+    ):
         super().__init__()
-        self.locations = validate_locations(locations)
+        self.locations = validate_multi_locations(locations)
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
@@ -124,7 +140,7 @@ class BaseMultiLocation(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Compute the bounds of the object itself."""
         return get_bounds(self.locations)
 
@@ -138,6 +154,7 @@ class PolyLine(BaseMultiLocation):
     ----------
     locations: list of points (latitude, longitude)
         Latitude and Longitude of line (Northing, Easting)
+        Pass multiple sequences of coordinates for a multi-polyline.
     popup: str or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
     tooltip: str or folium.Tooltip, default None
@@ -179,7 +196,10 @@ class Polygon(BaseMultiLocation):
     Parameters
     ----------
     locations: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
+        - One list of coordinate pairs to define a polygon. You don't have to
+          add a last point equal to the first point.
+        - If you pass a list with multiple of those it will make a multi-
+          polygon.
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
     tooltip: str or folium.Tooltip, default None
@@ -201,21 +221,27 @@ class Polygon(BaseMultiLocation):
         """
     )
 
-    def __init__(self, locations, popup=None, tooltip=None, **kwargs):
+    def __init__(
+        self,
+        locations: TypeMultiLine,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
+        **kwargs: TypePathOptions
+    ):
         super().__init__(locations, popup=popup, tooltip=tooltip)
         self._name = "Polygon"
-        self.options = path_options(line=True, **kwargs)
+        self.options = path_options(line=True, radius=None, **kwargs)
 
 
-class Rectangle(BaseMultiLocation):
+class Rectangle(MacroElement):
     """Draw rectangle overlays on a map.
 
     See :func:`folium.vector_layers.path_options` for the `Path` options.
 
     Parameters
     ----------
-    bounds: list of points (latitude, longitude)
-        Latitude and Longitude of line (Northing, Easting)
+    bounds: [(lat1, lon1), (lat2, lon2)]
+        Two lat lon pairs marking the two corners of the rectangle.
     popup: string or folium.Popup, default None
         Input text or visualization for object displayed when clicking.
     tooltip: str or folium.Tooltip, default None
@@ -237,10 +263,28 @@ class Rectangle(BaseMultiLocation):
         """
     )
 
-    def __init__(self, bounds, popup=None, tooltip=None, **kwargs):
-        super().__init__(bounds, popup=popup, tooltip=tooltip)
+    def __init__(
+        self,
+        bounds: TypeLine,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
+        **kwargs: TypePathOptions
+    ):
+        super().__init__()
         self._name = "rectangle"
-        self.options = path_options(line=True, **kwargs)
+        self.options = path_options(line=True, radius=None, **kwargs)
+        self.locations = validate_locations(bounds)
+        assert len(self.locations) == 2, "Need two lat/lon pairs"
+        if popup is not None:
+            self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
+        if tooltip is not None:
+            self.add_child(
+                tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
+            )
+
+    def _get_self_bounds(self) -> List[List[Optional[float]]]:
+        """Compute the bounds of the object itself."""
+        return get_bounds(self.locations)
 
 
 class Circle(Marker):
@@ -279,7 +323,14 @@ class Circle(Marker):
         """
     )
 
-    def __init__(self, location=None, radius=50, popup=None, tooltip=None, **kwargs):
+    def __init__(
+        self,
+        location: Optional[Sequence[float]] = None,
+        radius: float = 50,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
+        **kwargs: TypePathOptions
+    ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "circle"
         self.options = path_options(line=False, radius=radius, **kwargs)
@@ -318,7 +369,14 @@ class CircleMarker(Marker):
         """
     )
 
-    def __init__(self, location=None, radius=10, popup=None, tooltip=None, **kwargs):
+    def __init__(
+        self,
+        location: Optional[Sequence[float]] = None,
+        radius: float = 10,
+        popup: Union[Popup, str, None] = None,
+        tooltip: Union[Tooltip, str, None] = None,
+        **kwargs: TypePathOptions
+    ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "CircleMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)

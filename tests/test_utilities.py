@@ -14,6 +14,7 @@ from folium.utilities import (
     parse_options,
     validate_location,
     validate_locations,
+    validate_multi_locations,
 )
 
 
@@ -82,8 +83,8 @@ def test_validate_locations(locations):
         [[(0, 5), (1, 6), (2, 7)], [(3, 8), (4, 9)]],
     ],
 )
-def test_validate_locations_multi(locations):
-    outcome = validate_locations(locations)
+def test_validate_multi_locations(locations):
+    outcome = validate_multi_locations(locations)
     assert outcome == [[[0, 5], [1, 6], [2, 7]], [[3, 8], [4, 9]]]
 
 
