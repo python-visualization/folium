@@ -1,10 +1,10 @@
+from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import Layer
 
 
-class SideBySideLayers(JSCSSMixin, Layer):
+class SideBySideLayers(JSCSSMixin, MacroElement):
     """
     Creates a SideBySideLayers that takes two Layers and adds a sliding
     control with the leaflet-side-by-side plugin.
@@ -44,7 +44,7 @@ class SideBySideLayers(JSCSSMixin, Layer):
     ]
 
     def __init__(self, layer_left, layer_right):
-        super().__init__(control=False)
+        super().__init__()
         self._name = "SideBySideLayers"
         self.layer_left = layer_left
         self.layer_right = layer_right
