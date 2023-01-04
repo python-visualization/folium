@@ -1,12 +1,12 @@
+from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import Layer
 from folium.raster_layers import WmsTileLayer
 from folium.utilities import parse_options
 
 
-class TimestampedWmsTileLayers(JSCSSMixin, Layer):
+class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
     """
     Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
     control with the Leaflet.TimeDimension plugin.
@@ -31,14 +31,6 @@ class TimestampedWmsTileLayers(JSCSSMixin, Layer):
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' -> 1/month, 'P1D' -> 1/day, 'PT1H' -> 1/hour, and 'PT1M' -> 1/minute
         Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.
-    name : string, default None
-        The name of the Layer, as it will appear in LayerControls.
-    overlay : bool, default True
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls.
-    show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
 
     Examples
     --------
@@ -134,9 +126,8 @@ class TimestampedWmsTileLayers(JSCSSMixin, Layer):
         auto_play=False,
         period="P1D",
         time_interval=False,
-        name=None,
     ):
-        super().__init__(name=name, overlay=True, control=False, show=True)
+        super().__init__()
         self._name = "TimestampedWmsTileLayers"
         self.options = parse_options(
             period=period,
