@@ -104,7 +104,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
             var {{ this.get_name() }} = L.geoJson(
                     {{ this.data|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
 
             {{ this.get_name() }}.setStyle(function(feature) {
                 if (feature.properties.style !== undefined){

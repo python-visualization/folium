@@ -54,7 +54,6 @@ class MarkerCluster(JSCSSMixin, Layer):
             {{ this.get_name() }}.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};
             {%- endif %}
-            {{ this._parent.get_name() }}.addLayer({{ this.get_name() }});
         {% endmacro %}
         """
     )

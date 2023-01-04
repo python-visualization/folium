@@ -104,7 +104,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
                 {{ this.options if this.options is string else this.options|tojson }})
                 .addTo({{ this._parent.get_name() }});
                 {% else %}
-                {{ this.options }}).addTo({{ this._parent.get_name() }});
+                {{ this.options }});
             {% endif %}
             {%- endmacro %}
             """

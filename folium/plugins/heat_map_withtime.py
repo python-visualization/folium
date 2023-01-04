@@ -102,8 +102,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                         defaultWeight: 1,
                         {% if this.gradient %}gradient: {{ this.gradient }}{% endif %}
                     }
-                })
-                .addTo({{this._parent.get_name()}});
+                });
 
         {% endmacro %}
         """

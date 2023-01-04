@@ -82,7 +82,7 @@ class TileLayer(Layer):
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )
@@ -202,7 +202,7 @@ class WmsTileLayer(Layer):
             var {{ this.get_name() }} = L.tileLayer.wms(
                 {{ this.url|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )  # noqa
@@ -293,7 +293,7 @@ class ImageOverlay(Layer):
                 {{ this.url|tojson }},
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )
@@ -392,7 +392,7 @@ class VideoOverlay(Layer):
                 {{ this.video_url|tojson }},
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )

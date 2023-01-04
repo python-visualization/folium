@@ -61,7 +61,6 @@ class FeatureGroupSubGroup(JSCSSMixin, Layer):
             var {{ this.get_name() }} = L.featureGroup.subGroup(
                 {{ this._group.get_name() }}
             );
-            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
     )

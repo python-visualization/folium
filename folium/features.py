@@ -608,8 +608,7 @@ class GeoJson(Layer):
 
         function {{ this.get_name() }}_add (data) {
             {{ this.get_name() }}
-                .addData(data)
-                .addTo({{ this._parent.get_name() }});
+                .addData(data);
         }
         {%- if this.embed %}
             {{ this.get_name() }}_add({{ this.data|tojson }});
