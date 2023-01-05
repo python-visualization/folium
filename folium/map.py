@@ -52,7 +52,7 @@ class Layer(MacroElement):
 
     def render(self, **kwargs):
         super().render(**kwargs)
-        if self.show and self.overlay:
+        if self.show:
             self._add_layer_to_map()
 
     def _add_layer_to_map(self, **kwargs):
