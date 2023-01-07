@@ -154,7 +154,7 @@ class LayerControl(MacroElement):
             {{ val }}.remove();
             {%- endfor %}
 
-            {%- if this.zoom_selected %}
+            {%- if this.fly_to_selected %}
             function customFlyToBounds() {
                 let bounds = L.latLngBounds([]);
                 {{ this._parent.get_name() }}.eachLayer(function(layer) {
@@ -179,7 +179,7 @@ class LayerControl(MacroElement):
         position: str = "topright",
         collapsed: bool = True,
         autoZIndex: bool = True,
-        zoom_selected: bool = True,
+        fly_to_selected: bool = True,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -187,7 +187,7 @@ class LayerControl(MacroElement):
         self.options = parse_options(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
-        self.zoom_selected = zoom_selected
+        self.fly_to_selected = fly_to_selected
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
         self.layers_untoggle: OrderedDict[str, str] = OrderedDict()
