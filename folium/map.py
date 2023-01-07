@@ -154,22 +154,6 @@ class LayerControl(MacroElement):
             {{ val }}.remove();
             {%- endfor %}
 
-            {%- if this.fly_to_selected %}
-            function customFlyToBounds() {
-                let bounds = L.latLngBounds([]);
-                {{ this._parent.get_name() }}.eachLayer(function(layer) {
-                    if (typeof layer.getBounds === 'function') {
-                        bounds.extend(layer.getBounds());
-                    }
-                });
-                if (bounds.isValid()) {
-                    {{ this._parent.get_name() }}.flyToBounds(bounds, {padding: [25, 25]});
-                }
-            }
-            {{ this._parent.get_name() }}.on('overlayadd', customFlyToBounds);
-            customFlyToBounds();
-            {%- endif %}
-
         {% endmacro %}
         """
     )
@@ -179,7 +163,6 @@ class LayerControl(MacroElement):
         position: str = "topright",
         collapsed: bool = True,
         autoZIndex: bool = True,
-        fly_to_selected: bool = True,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -187,7 +170,6 @@ class LayerControl(MacroElement):
         self.options = parse_options(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
-        self.fly_to_selected = fly_to_selected
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
         self.layers_untoggle: OrderedDict[str, str] = OrderedDict()
