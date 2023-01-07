@@ -616,7 +616,7 @@ class FitOverlays(MacroElement):
 
     Parameters
     ----------
-    padding: int, default 25
+    padding: int, default 0
         Amount of padding in pixels applied in the corners.
     max_zoom: int, optional
         The maximum possible zoom to use when fitting to the bounds.
@@ -650,7 +650,7 @@ class FitOverlays(MacroElement):
 
     def __init__(
         self,
-        padding: int = 25,
+        padding: int = 0,
         max_zoom: Optional[int] = None,
         fly: bool = False,
         fit_on_map_load: bool = True,
