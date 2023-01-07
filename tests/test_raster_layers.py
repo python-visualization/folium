@@ -103,7 +103,8 @@ def test_image_overlay():
             "{{ this.url }}",
             {{ this.bounds }},
             {{ this.options }}
-            ).addTo({{this._parent.get_name()}});
+        );
+        {{ this.get_name() }}.addTo({{this._parent.get_name()}});
     """
     )
     assert normalize(tmpl.render(this=io)) in normalize(out)
