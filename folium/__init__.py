@@ -34,6 +34,7 @@ from folium.folium import Map
 from folium.map import (
     FeatureGroup,
     FitBounds,
+    FitOverlays,
     Icon,
     LayerControl,
     Marker,
@@ -95,6 +96,7 @@ __all__ = [
     "FeatureGroup",
     "Figure",
     "FitBounds",
+    "FitOverlays",
     "GeoJson",
     "GeoJsonPopup",
     "GeoJsonTooltip",

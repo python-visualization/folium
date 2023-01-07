@@ -611,6 +611,57 @@ class FitBounds(MacroElement):
         )
 
 
+class FitOverlays(MacroElement):
+    """Fit the bounds of the maps to the enabled overlays.
+
+    Parameters
+    ----------
+    padding: int, default 25
+        Amount of padding in pixels applied in the corners.
+    max_zoom: int, optional
+        The maximum possible zoom to use when fitting to the bounds.
+    fly: bool, default False
+        Use a smoother, longer animation.
+    fit_on_map_load: bool, default True
+        Apply the fit when initially loading the map.
+    """
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+        function customFlyToBounds() {
+            let bounds = L.latLngBounds([]);
+            {{ this._parent.get_name() }}.eachLayer(function(layer) {
+                if (typeof layer.getBounds === 'function') {
+                    bounds.extend(layer.getBounds());
+                }
+            });
+            if (bounds.isValid()) {
+                {{ this._parent.get_name() }}.{{ this.method }}(bounds, {{ this.options|tojson }});
+            }
+        }
+        {{ this._parent.get_name() }}.on('overlayadd', customFlyToBounds);
+        {%- if this.fit_on_map_load %}
+        customFlyToBounds();
+        {%- endif %}
+        {% endmacro %}
+    """
+    )
+
+    def __init__(
+        self,
+        padding: int = 25,
+        max_zoom: Optional[int] = None,
+        fly: bool = False,
+        fit_on_map_load: bool = True,
+    ):
+        super().__init__()
+        self._name = "FitOverlays"
+        self.method = "flyToBounds" if fly else "fitBounds"
+        self.fit_on_map_load = fit_on_map_load
+        self.options = parse_options(padding=(padding, padding), max_zoom=max_zoom)
+
+
 class CustomPane(MacroElement):
     """
     Creates a custom pane to hold map elements.
