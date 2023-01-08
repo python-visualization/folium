@@ -262,4 +262,11 @@ intersphinx_mapping = {
         "https://xyzservices.readthedocs.io/en/latest/",
         "https://xyzservices.readthedocs.io/en/latest/objects.inv",
     ),
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
+    'show-inheritance': True,
+    'no-value': 'default_js,default_css',
+}
+
 }
