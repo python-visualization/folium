@@ -262,6 +262,12 @@ intersphinx_mapping = {
         "https://xyzservices.readthedocs.io/en/latest/",
         "https://xyzservices.readthedocs.io/en/latest/objects.inv",
     ),
+    "branca": (
+        "https://python-visualization.github.io/branca/",
+        "https://python-visualization.github.io/branca/objects.inv",
+    ),
+}
+
 autodoc_default_options = {
     'members': True,
     'undoc-members': True,
