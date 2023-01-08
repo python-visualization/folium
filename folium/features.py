@@ -802,7 +802,7 @@ TypeStyleMapping = Dict[str, Union[str, List[Union[str, int]]]]
 class GeoJsonStyleMapper:
     """Create dicts that map styling to GeoJson features.
 
-    Used in the GeoJson class. Users don't have to call this class directly.
+    :meta private:
     """
 
     def __init__(
@@ -1046,11 +1046,9 @@ class TopoJson(JSCSSMixin, Layer):
 
 
 class GeoJsonDetail(MacroElement):
+    """Base class for GeoJsonTooltip and GeoJsonPopup.
 
-    """
-    Base class for GeoJsonTooltip and GeoJsonPopup to inherit methods and
-    template structure from. Not for direct usage.
-
+    :meta private:
     """
 
     base_template = """
