@@ -36,3 +36,11 @@ Contents
    flask
    modules
    plugins
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
