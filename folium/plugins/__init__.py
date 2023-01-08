@@ -1,10 +1,4 @@
-"""
-Folium plugins
---------------
-
-Wrap some of the most popular leaflet external plugins.
-
-"""
+"""Wrap some of the most popular leaflet external plugins."""
 
 from folium.plugins.antpath import AntPath
 from folium.plugins.beautify_icon import BeautifyIcon
