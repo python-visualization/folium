@@ -62,7 +62,7 @@ class Layer(MacroElement):
             {%- macro script(this, kwargs) %}
                 {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
             {%- endmacro %}
-        """
+            """
         )
         script = template.module.__dict__["script"]
         figure = get_and_assert_figure_root(self)
