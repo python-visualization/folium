@@ -63,7 +63,7 @@ class TileLayer(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
     tms: bool, default False
@@ -187,7 +187,7 @@ class WmsTileLayer(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     **kwargs : additional keyword arguments
         Passed through to the underlying tileLayer.wms object and can be used
         for setting extra tileLayer.wms parameters or as extra parameters in
@@ -279,7 +279,7 @@ class ImageOverlay(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
 
     See https://leafletjs.com/reference.html#imageoverlay for more
     options.
@@ -378,7 +378,7 @@ class VideoOverlay(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     **kwargs:
         Other valid (possibly inherited) options. See:
         https://leafletjs.com/reference.html#videooverlay

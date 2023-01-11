@@ -24,7 +24,7 @@ class MarkerCluster(JSCSSMixin, Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     icon_create_function : string, default None
         Override the default behaviour, making possible to customize
         markers colors and sizes.
