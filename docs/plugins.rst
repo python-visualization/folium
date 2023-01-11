@@ -1,4 +1,4 @@
-:mod:`plugins`
---------------
+Plugins
+=======
 
 .. automodule:: folium.plugins

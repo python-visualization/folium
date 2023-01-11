@@ -29,12 +29,23 @@ Contents
 ==================================
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Contents:
+   :maxdepth: 1
+   :caption: Getting Started
 
    installing
+   overview
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents
+
    Quickstart.md
    flask
+
+.. toctree::
+   :maxdepth: 1
+   :caption: API reference
+
    modules
    plugins
 
