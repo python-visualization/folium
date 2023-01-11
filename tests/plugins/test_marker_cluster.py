@@ -49,7 +49,6 @@ def test_marker_cluster():
             {{ this.get_name() }}.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};
             {%- endif %}
-        {{this._parent.get_name()}}.addLayer({{this.get_name()}});
 
         {% for marker in this._children.values() %}
             var {{marker.get_name()}} = L.marker(
@@ -57,6 +56,8 @@ def test_marker_cluster():
                 {}
             ).addTo({{this.get_name()}});
         {% endfor %}
+
+        {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
     """
     )
     expected = normalize(tmpl.render(this=mc))

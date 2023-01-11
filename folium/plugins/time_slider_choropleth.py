@@ -23,7 +23,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     init_timestamp: int, default 0
         Initial time-stamp index on the slider. Must be in the range
         `[-L, L-1]`, where `L` is the maximum number of time stamps in
@@ -131,6 +131,10 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
             {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
 
             onOverlayAdd(); // fill map as layer is loaded
+
+            {%- if not this.show %}
+            {{ this.get_name() }}.remove();
+            {%- endif %}
         {% endmacro %}
         """
     )

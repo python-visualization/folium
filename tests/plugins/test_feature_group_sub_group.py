@@ -38,8 +38,11 @@ def test_feature_group_sub_group():
         var {{ this.get_name() }} = L.featureGroup.subGroup(
             {{ this._group.get_name() }}
         );
-        {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
     """
     )
+    assert normalize(tmpl.render(this=g1)) in out
+    assert normalize(tmpl.render(this=g2)) in out
+
+    tmpl = Template("{{ this.get_name() }}.addTo({{ this._parent.get_name() }});")
     assert normalize(tmpl.render(this=g1)) in out
     assert normalize(tmpl.render(this=g2)) in out

@@ -75,8 +75,8 @@ def test_heat_map_with_time():
                     defaultWeight: 1,
                     {% if this.gradient %}gradient: {{ this.gradient }}{% endif %}
                 }
-            })
-            .addTo({{this._parent.get_name()}});
+            });
+            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
     """
     )
 

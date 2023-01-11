@@ -14,6 +14,7 @@ from folium.utilities import (
     TypeJsonValue,
     camelize,
     escape_backticks,
+    get_and_assert_figure_root,
     parse_options,
     validate_location,
 )
@@ -33,7 +34,7 @@ class Layer(MacroElement):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     """
 
     def __init__(
@@ -48,6 +49,26 @@ class Layer(MacroElement):
         self.overlay = overlay
         self.control = control
         self.show = show
+
+    def render(self, **kwargs):
+        super().render(**kwargs)
+        if self.show:
+            self._add_layer_to_map()
+
+    def _add_layer_to_map(self, **kwargs):
+        """Show the layer on the map by adding it to its parent in JS."""
+        template = Template(
+            """
+            {%- macro script(this, kwargs) %}
+                {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+            {%- endmacro %}
+            """
+        )
+        script = template.module.__dict__["script"]
+        figure = get_and_assert_figure_root(self)
+        figure.script.add_child(
+            Element(script(self, kwargs)), name=self.get_name() + "_add"
+        )
 
 
 class FeatureGroup(Layer):
@@ -68,7 +89,7 @@ class FeatureGroup(Layer):
     control: bool, default True
         Whether the layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#featuregroup
@@ -80,7 +101,7 @@ class FeatureGroup(Layer):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )
@@ -150,10 +171,6 @@ class LayerControl(MacroElement):
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
 
-            {%- for val in this.layers_untoggle.values() %}
-            {{ val }}.remove();
-            {%- endfor %}
-
         {% endmacro %}
         """
     )
@@ -172,12 +189,10 @@ class LayerControl(MacroElement):
         )
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
-        self.layers_untoggle: OrderedDict[str, str] = OrderedDict()
 
     def reset(self) -> None:
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
-        self.layers_untoggle = OrderedDict()
 
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
@@ -188,12 +203,8 @@ class LayerControl(MacroElement):
             key = item.layer_name
             if not item.overlay:
                 self.base_layers[key] = item.get_name()
-                if len(self.base_layers) > 1:
-                    self.layers_untoggle[key] = item.get_name()
             else:
                 self.overlays[key] = item.get_name()
-                if not item.show:
-                    self.layers_untoggle[key] = item.get_name()
         super().render()
 
 

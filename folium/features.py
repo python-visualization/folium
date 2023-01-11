@@ -479,7 +479,7 @@ class GeoJson(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -608,8 +608,7 @@ class GeoJson(Layer):
 
         function {{ this.get_name() }}_add (data) {
             {{ this.get_name() }}
-                .addData(data)
-                .addTo({{ this._parent.get_name() }});
+                .addData(data);
         }
         {%- if this.embed %}
             {{ this.get_name() }}_add({{ this.data|tojson }});
@@ -890,7 +889,7 @@ class TopoJson(JSCSSMixin, Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     smooth_factor: float, default None
         How much to simplify the polyline on each zoom level. More means
         better performance and smoother look, and less means more accurate
@@ -1410,7 +1409,7 @@ class Choropleth(FeatureGroup):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
 
     Returns
     -------

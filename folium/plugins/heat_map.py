@@ -41,7 +41,7 @@ class HeatMap(JSCSSMixin, Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     """
 
     _template = Template(
@@ -50,7 +50,7 @@ class HeatMap(JSCSSMixin, Layer):
             var {{ this.get_name() }} = L.heatLayer(
                 {{ this.data|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )

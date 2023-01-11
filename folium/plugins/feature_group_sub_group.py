@@ -23,7 +23,7 @@ class FeatureGroupSubGroup(JSCSSMixin, Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
 
     Examples
     -------
@@ -61,7 +61,6 @@ class FeatureGroupSubGroup(JSCSSMixin, Layer):
             var {{ this.get_name() }} = L.featureGroup.subGroup(
                 {{ this._group.get_name() }}
             );
-            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
     )

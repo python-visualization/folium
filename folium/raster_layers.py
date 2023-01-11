@@ -63,7 +63,9 @@ class TileLayer(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
+        When adding multiple base layers, use this parameter to select which one
+        should be shown when opening the map, by not showing the others.
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
     tms: bool, default False
@@ -82,7 +84,7 @@ class TileLayer(Layer):
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )
@@ -187,7 +189,7 @@ class WmsTileLayer(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     **kwargs : additional keyword arguments
         Passed through to the underlying tileLayer.wms object and can be used
         for setting extra tileLayer.wms parameters or as extra parameters in
@@ -202,7 +204,7 @@ class WmsTileLayer(Layer):
             var {{ this.get_name() }} = L.tileLayer.wms(
                 {{ this.url|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )  # noqa
@@ -279,7 +281,7 @@ class ImageOverlay(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
 
     See https://leafletjs.com/reference.html#imageoverlay for more
     options.
@@ -293,7 +295,7 @@ class ImageOverlay(Layer):
                 {{ this.url|tojson }},
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )
@@ -378,7 +380,7 @@ class VideoOverlay(Layer):
     control : bool, default True
         Whether the Layer will be included in LayerControls.
     show: bool, default True
-        Whether the layer will be shown on opening (only for overlays).
+        Whether the layer will be shown on opening.
     **kwargs:
         Other valid (possibly inherited) options. See:
         https://leafletjs.com/reference.html#videooverlay
@@ -392,7 +394,7 @@ class VideoOverlay(Layer):
                 {{ this.video_url|tojson }},
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+            );
         {% endmacro %}
         """
     )

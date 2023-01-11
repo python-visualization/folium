@@ -26,7 +26,7 @@ from typing import (
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
-from branca.element import Element
+from branca.element import Element, Figure
 
 # import here for backwards compatibility
 from branca.utilities import (  # noqa F401
@@ -499,3 +499,12 @@ def escape_double_quotes(text: str) -> str:
 def javascript_identifier_path_to_array_notation(path: str) -> str:
     """Convert a path like obj1.obj2 to array notation: ["obj1"]["obj2"]."""
     return "".join(f'["{escape_double_quotes(x)}"]' for x in path.split("."))
+
+
+def get_and_assert_figure_root(obj: Element) -> Figure:
+    """Return the root element of the tree and assert it's a Figure."""
+    figure = obj.get_root()
+    assert isinstance(
+        figure, Figure
+    ), "You cannot render this Element if it is not in a Figure."
+    return figure

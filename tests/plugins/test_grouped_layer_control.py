@@ -3,7 +3,7 @@ from folium.plugins import groupedlayercontrol
 from folium.utilities import normalize
 
 
-def test_feature_group_sub_group():
+def test_grouped_layer_control():
     m = folium.Map([40.0, 70.0], zoom_start=6)
     fg1 = folium.FeatureGroup(name="g1")
     fg2 = folium.FeatureGroup(name="g2")
