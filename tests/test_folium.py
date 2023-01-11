@@ -64,7 +64,7 @@ def test_location_args():
 class TestFolium:
     """Test class for the Folium library."""
 
-    def setup(self):
+    def setup_method(self):
         """Setup Folium Map."""
         attr = "http://openstreetmap.org"
         self.m = folium.Map(
@@ -191,8 +191,6 @@ class TestFolium:
         It also tests that all parameters work as expected regarding
         nan and missing values.
         """
-        self.setup()
-
         with open(os.path.join(rootpath, "us-counties.json")) as f:
             geo_data = json.load(f)
         data = {"1001": -1}
@@ -263,8 +261,6 @@ class TestFolium:
         key_on field is dtype = str, while column 0 is dtype = int
         All geometries have matching values (no nan_fill_color allowed)
         """
-        self.setup()
-
         with open(os.path.join(rootpath, "geo_grid.json")) as f:
             geo_data = json.load(f)
 
@@ -296,8 +292,6 @@ class TestFolium:
         key_on field is dtype = str, while column 0 is dtype = object (mixed int and str)
         All geometries have matching values (no nan_fill_color allowed)
         """
-        self.setup()
-
         with open(os.path.join(rootpath, "geo_grid.json")) as f:
             geo_data = json.load(f)
 
@@ -344,8 +338,6 @@ class TestFolium:
         key_on field and column 0 from data are both strings.
         All geometries have matching values (no nan_fill_color allowed)
         """
-        self.setup()
-
         with open(os.path.join(rootpath, "geo_grid.json")) as f:
             geo_data = json.load(f)
 
@@ -393,8 +385,6 @@ class TestFolium:
     def test_fit_bounds(self):
         """Test fit_bounds."""
         bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
-
-        self.setup()
         self.m.fit_bounds(bounds)
         fitbounds = [
             val
@@ -414,7 +404,8 @@ class TestFolium:
 
         assert "".join(fit_bounds_rendered.split()) in "".join(out.split())
 
-        self.setup()
+    def test_fit_bounds_2(self):
+        bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
         self.m.fit_bounds(bounds, max_zoom=15, padding=(3, 3))
         fitbounds = [
             val
@@ -445,8 +436,6 @@ class TestFolium:
 
     def test_custom_icon(self):
         """Test CustomIcon."""
-        self.setup()
-
         icon_image = "http://leafletjs.com/docs/images/leaf-green.png"
         shadow_image = "http://leafletjs.com/docs/images/leaf-shadow.png"
 
@@ -496,7 +485,6 @@ class TestFolium:
         assert m.global_switches.no_touch
         assert m.global_switches.disable_3d
 
-    @pytest.mark.web
     def test_json_request(self):
         """Test requests for remote GeoJSON files."""
         self.m = folium.Map(zoom_start=4)

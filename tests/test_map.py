@@ -3,6 +3,8 @@ Folium map Tests
 ----------------
 
 """
+import warnings
+
 import numpy as np
 import pytest
 
@@ -128,10 +130,10 @@ def test_popup_backticks_already_escaped():
 
 def test_icon_valid_marker_colors():
     assert len(Icon.color_options) == 19
-    with pytest.warns(None) as record:
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
         for color in Icon.color_options:
             Icon(color=color)
-    assert len(record) == 0
 
 
 def test_custom_pane_show():
