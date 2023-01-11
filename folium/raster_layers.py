@@ -64,6 +64,8 @@ class TileLayer(Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening.
+        When adding multiple base layers, use this parameter to select which one
+        should be shown when opening the map, by not showing the others.
     subdomains: list of strings, default ['abc']
         Subdomains of the tile service.
     tms: bool, default False
