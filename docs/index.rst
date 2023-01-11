@@ -26,13 +26,14 @@ Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API ke
 
 
 Contents
-========
+==================================
 
 .. toctree::
    :maxdepth: 3
+   :caption: Contents:
 
    installing
-   quickstart.ipynb
+   Quickstart.md
    flask
    modules
    plugins

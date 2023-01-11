@@ -269,10 +269,12 @@ intersphinx_mapping = {
 }
 
 autodoc_default_options = {
-    'members': True,
-    'undoc-members': True,
-    'show-inheritance': True,
-    'no-value': 'default_js,default_css',
+    "members": True,
+    "undoc-members": True,
+    "show-inheritance": True,
+    "no-value": "default_js,default_css",
 }
 
+nbsphinx_custom_formats = {
+    ".md": ["jupytext.reads", {"fmt": "mystnb"}],
 }
