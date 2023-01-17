@@ -406,7 +406,7 @@ class Map(JSCSSMixin, MacroElement):
     def show_in_browser(self) -> None:
         """Display the Map in the default web browser."""
         with temp_html_filepath(self.get_root().render()) as fname:
-            webbrowser.open(fname)
+            webbrowser.open("file://" + fname)
             print(
                 "Your map should have been opened in your browser automatically."
                 "\nPress ctrl+c to return."
