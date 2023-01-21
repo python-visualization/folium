@@ -51,7 +51,7 @@ Folium also excepts objects from the [xyzservices package](https://github.com/ge
 Adding markers
 --------------
 
-There are various marker types, here we start with a simple `Marker`. You can add a popup and 
+There are various marker types, here we start with a simple `Marker`. You can add a popup and
 tooltip. You can also pick colors and icons.
 
 ```{code-cell} ipython3
