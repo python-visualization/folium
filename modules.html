@@ -3,14 +3,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>folium &#8212; Folium 0.12.1 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>folium &#8212; Folium 0.14.0 documentation</title>
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -32,7 +33,7 @@
         <li class="right" >
           <a href="flask.html" title="Using folium with flask"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.14.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">folium</span></code></a></li> 
       </ul>
     </div>
@@ -106,7 +107,8 @@ to Folium. Pass any of the following to the “tiles” keyword:</p>
 <li><p>“CartoDB” (positron and dark_matter)</p></li>
 </ul>
 </div></blockquote>
-<p>You can pass a custom tileset to Folium by passing a Leaflet-style
+<p>You can pass a custom tileset to Folium by passing a
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v0+untagged.171.g2c4e9d0.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">http://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 <p>You can find a list of free tile providers here:
 <code class="docutils literal notranslate"><span class="pre">http://leaflet-extras.github.io/leaflet-providers/preview/</span></code>.
@@ -118,8 +120,10 @@ with the <cite>attr</cite> keyword.</p>
 <li><p><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Map (Northing, Easting).</p></li>
 <li><p><strong>width</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Width of the map.</p></li>
 <li><p><strong>height</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Height of the map.</p></li>
-<li><p><strong>tiles</strong> (<em>str</em><em>, </em><em>default 'OpenStreetMap'</em>) – Map tileset to use. Can choose from a list of built-in tiles,
-pass a custom URL or pass <cite>None</cite> to create a map without tiles.
+<li><p><strong>tiles</strong> (str or TileLayer or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v0+untagged.171.g2c4e9d0.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – Map tileset to use. Can choose from a list of built-in tiles,
+pass a <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v0+untagged.171.g2c4e9d0.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>,
+pass a custom URL, pass a TileLayer object,
+or pass <cite>None</cite> to create a map without tiles.
 For more advanced tile layer options, use the <cite>TileLayer</cite> class.</p></li>
 <li><p><strong>min_zoom</strong> (<em>int</em><em>, </em><em>default 0</em>) – Minimum allowed zoom level for the tile layer that is created.</p></li>
 <li><p><strong>max_zoom</strong> (<em>int</em><em>, </em><em>default 18</em>) – Maximum allowed zoom level for the tile layer that is created.</p></li>
@@ -150,7 +154,7 @@ transforms for positioning (which may cause glitches in some
 rare environments) even if they’re supported.</p></li>
 <li><p><strong>zoom_control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Display zoom controls on the map.</p></li>
 <li><p><strong>**kwargs</strong> – Additional keyword arguments are passed to Leaflets Map class:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#map">https://leafletjs.com/reference-1.6.0.html#map</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#map">https://leafletjs.com/reference.html#map</a></p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -162,13 +166,13 @@ rare environments) even if they’re supported.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;cartodb positron&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;cartodb positron&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
-<span class="gp">... </span>   <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
-<span class="gp">... </span>   <span class="n">zoom_start</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;https://api.mapbox.com/v4/mapbox.streets/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">.png?access_token=mytoken&#39;</span><span class="p">,</span>
-<span class="gp">... </span>   <span class="n">attr</span><span class="o">=</span><span class="s1">&#39;Mapbox attribution&#39;</span>
-<span class="go">...)</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.523</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.675</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">zoom_start</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;https://api.mapbox.com/v4/mapbox.streets/</span><span class="si">{z}</span><span class="s2">/</span><span class="si">{x}</span><span class="s2">/</span><span class="si">{y}</span><span class="s2">.png?access_token=mytoken&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">attr</span><span class="o">=</span><span class="s2">&quot;Mapbox attribution&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -180,12 +184,12 @@ rare environments) even if they’re supported.</p></li>
 
 <dl class="py attribute">
 <dt id="folium.folium.Map.default_css">
-<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.6.0/dist/leaflet.css'), ('bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'), ('bootstrap_theme_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'), ('awesome_markers_font_css', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'), ('awesome_markers_css', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'), ('awesome_rotate_css', 'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css')]</em><a class="headerlink" href="#folium.folium.Map.default_css" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.9.3/dist/leaflet.css'), ('bootstrap_css', 'https://cdn.jsdelivr.net/npm/bootstrap&#64;5.2.2/dist/css/bootstrap.min.css'), ('glyphicons_css', 'https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css'), ('awesome_markers_font_css', 'https://cdn.jsdelivr.net/npm/&#64;fortawesome/fontawesome-free&#64;6.2.0/css/all.min.css'), ('awesome_markers_css', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'), ('awesome_rotate_css', 'https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css')]</em><a class="headerlink" href="#folium.folium.Map.default_css" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt id="folium.folium.Map.default_js">
-<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.6.0/dist/leaflet.js'), ('jquery', 'https://code.jquery.com/jquery-1.12.4.min.js'), ('bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'), ('awesome_markers', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js')]</em><a class="headerlink" href="#folium.folium.Map.default_js" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet', 'https://cdn.jsdelivr.net/npm/leaflet&#64;1.9.3/dist/leaflet.js'), ('jquery', 'https://code.jquery.com/jquery-1.12.4.min.js'), ('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap&#64;5.2.2/dist/js/bootstrap.bundle.min.js'), ('awesome_markers', 'https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js')]</em><a class="headerlink" href="#folium.folium.Map.default_js" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -233,6 +237,12 @@ Does not work with markers, for those use z_index_offset.</p>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="folium.folium.Map.show_in_browser">
+<code class="sig-name descname">show_in_browser</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map.show_in_browser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display the Map in the default web browser.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -255,7 +265,7 @@ them.</p></li>
 determine which map elements lie over/under it. The default
 (625) corresponds to between markers and tooltips. Default
 panes and z-indexes can be found at
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#map-pane">https://leafletjs.com/reference-1.6.0.html#map-pane</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#map-pane">https://leafletjs.com/reference.html#map-pane</a></p></li>
 <li><p><strong>pointer_events</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether or not layers in the pane should interact with the
 cursor. Setting to False will prevent interfering with
 pointer events associated with lower layers.</p></li>
@@ -282,7 +292,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be included in LayerControls.</p></li>
 <li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</p></li>
 <li><p><strong>**kwargs</strong> – Additional (possibly inherited) options. See
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#featuregroup">https://leafletjs.com/reference-1.6.0.html#featuregroup</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#featuregroup">https://leafletjs.com/reference.html#featuregroup</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -375,6 +385,11 @@ LayerControls.</p>
 <p>Creates a LayerControl object to be added on a folium map.</p>
 <p>This object should be added to a Map object. Only Layer children
 of Map are included in the layer control.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The LayerControl should be added last to the map.
+Otherwise, the LayerControl and/or the controlled layers may not appear.</p>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -386,7 +401,7 @@ mouse hover or touch.</p></li>
 <li><p><strong>autoZIndex</strong> (<em>bool</em><em>, </em><em>default True</em>) – If true the control assigns zIndexes in increasing order to all of
 its layers so that the order is preserved when switching them on/off.</p></li>
 <li><p><strong>**kwargs</strong> – Additional (possibly inherited) options. See
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#control-layers">https://leafletjs.com/reference-1.6.0.html#control-layers</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#control-layers">https://leafletjs.com/reference.html#control-layers</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -428,11 +443,13 @@ folium.Popup or a folium.Popup instance.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s1">&#39;Portland, OR&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s1">&#39;Portland, OR&#39;</span><span class="p">))</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="s2">&quot;Portland, OR&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span> <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s2">&quot;Portland, OR&quot;</span><span class="p">))</span>
 <span class="go"># If the popup label has characters that need to be escaped in HTML</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span>
-<span class="gp">... </span>       <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s1">&#39;Mom &amp; Pop Arrow Shop &gt;&gt;&#39;</span><span class="p">,</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">45.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.3</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">popup</span><span class="o">=</span><span class="n">Popup</span><span class="p">(</span><span class="s2">&quot;Mom &amp; Pop Arrow Shop &gt;&gt;&quot;</span><span class="p">,</span> <span class="n">parse_html</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -445,7 +462,7 @@ folium.Popup or a folium.Popup instance.</p></li>
 
 <dl class="py class">
 <dt id="folium.map.Popup">
-<em class="property">class </em><code class="sig-prename descclassname">folium.map.</code><code class="sig-name descname">Popup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">html</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_html</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_width</span><span class="o">=</span><span class="default_value">'100%'</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sticky</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Popup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.map.</code><code class="sig-name descname">Popup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">html</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_html</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">max_width</span><span class="o">=</span><span class="default_value">'100%'</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sticky</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">lazy</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Popup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></p>
 <p>Create a Popup instance that can be linked to a Layer.</p>
 <dl class="field-list simple">
@@ -456,6 +473,7 @@ folium.Popup or a folium.Popup instance.</p></li>
 <li><p><strong>max_width</strong> (<em>int for pixels</em><em> or </em><em>text for percentages</em><em>, </em><em>default '100%'</em>) – The maximal width of the popup.</p></li>
 <li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default False</em>) – True renders the popup open on page load.</p></li>
 <li><p><strong>sticky</strong> (<em>bool</em><em>, </em><em>default False</em>) – True prevents map and other popup clicks from closing.</p></li>
+<li><p><strong>lazy</strong> (<em>bool</em><em>, </em><em>default False</em>) – True only loads the Popup content when clicking on the Marker.</p></li>
 </ul>
 </dd>
 </dl>
@@ -481,7 +499,7 @@ different type it will be converted to str.</p></li>
 a div with the text in it.</p></li>
 <li><p><strong>sticky</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the tooltip should follow the mouse.</p></li>
 <li><p><strong>**kwargs</strong> – These values will map directly to the Leaflet Options. More info
-available here: <a class="reference external" href="https://leafletjs.com/reference-1.6.0#tooltip">https://leafletjs.com/reference-1.6.0#tooltip</a></p></li>
+available here: <a class="reference external" href="https://leafletjs.com/reference.html#tooltip">https://leafletjs.com/reference.html#tooltip</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -526,7 +544,7 @@ the poles (due to projection distortion).</p>
 <li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</p></li>
 <li><p><strong>radius</strong> (<em>float</em>) – Radius of the circle, in meters.</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#circle">https://leafletjs.com/reference-1.6.0.html#circle</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#circle">https://leafletjs.com/reference.html#circle</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -546,7 +564,7 @@ the poles (due to projection distortion).</p>
 <li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</p></li>
 <li><p><strong>radius</strong> (<em>float</em><em>, </em><em>default 10</em>) – Radius of the circle marker, in pixels.</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#circlemarker">https://leafletjs.com/reference-1.6.0.html#circlemarker</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#circlemarker">https://leafletjs.com/reference.html#circlemarker</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -569,7 +587,7 @@ More means better performance and smoother look,
 and less means more accurate representation.</p></li>
 <li><p><strong>no_clip</strong> (<em>Bool</em><em>, </em><em>default False</em>) – Disable polyline clipping.</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#polyline">https://leafletjs.com/reference-1.6.0.html#polyline</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#polyline">https://leafletjs.com/reference.html#polyline</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -588,7 +606,7 @@ and less means more accurate representation.</p></li>
 <li><p><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</p></li>
 <li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#polygon">https://leafletjs.com/reference-1.6.0.html#polygon</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#polygon">https://leafletjs.com/reference.html#polygon</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -607,7 +625,7 @@ and less means more accurate representation.</p></li>
 <li><p><strong>popup</strong> (<em>string</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</p></li>
 <li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>default None</em>) – Display a text when hovering over the object.</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#rectangle">https://leafletjs.com/reference-1.6.0.html#rectangle</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#rectangle">https://leafletjs.com/reference.html#rectangle</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -644,7 +662,10 @@ Set it to false to disable filling on polygons or circles.</p></li>
 <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule">https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/fill-rule</a></p></li>
 <li><p><strong>bubbling_mouse_events</strong> (<em>Bool</em><em>, </em><em>True</em><em> (</em><em>bubblingMouseEvents</em><em>)</em>) – When true a mouse event on this path will trigger the same event on the
 map (unless L.DomEvent.stopPropagation is used).</p></li>
+<li><p><strong>gradient</strong> (<em>bool</em><em>, </em><em>default None</em>) – When a gradient on the stroke and fill is available,
+allows turning it on or off.</p></li>
 <li><p><strong>that the presence of fill_color will override fill=False.</strong> (<em>Note</em>) – </p></li>
+<li><p><strong>function accepts both snake_case and lowerCamelCase equivalents.</strong> (<em>This</em>) – </p></li>
 <li><p><strong>https</strong> (<em>See</em>) – </p></li>
 </ul>
 </dd>
@@ -684,7 +705,8 @@ with values between 0 and 1.
 Hint: you can use colormaps from <cite>matplotlib.cm</cite>.</p></li>
 <li><p><strong>mercator_project</strong> (<em>bool</em><em>, </em><em>default False.</em>) – Used only for array-like image.  Transforms the data to
 project (longitude, latitude) coordinates to the Mercator projection.
-Beware that this will only work if <cite>image</cite> is an array-like object.</p></li>
+Beware that this will only work if <cite>image</cite> is an array-like object.
+Note that if used the image will be clipped beyond latitude -85 and 85.</p></li>
 <li><p><strong>pixelated</strong> (<em>bool</em><em>, </em><em>default True</em>) – Sharp sharp/crips (True) or aliased corners (False).</p></li>
 <li><p><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls</p></li>
 <li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</p></li>
@@ -711,7 +733,7 @@ Beware that this will only work if <cite>image</cite> is an array-like object.</
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tiles</strong> (<em>str</em><em>, </em><em>default 'OpenStreetMap'</em>) – <dl class="simple">
+<li><p><strong>tiles</strong> (str or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v0+untagged.171.g2c4e9d0.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – <dl class="simple">
 <dt>Map tileset to use. Can choose from this list of built-in tiles:</dt><dd><ul>
 <li><p>”OpenStreetMap”</p></li>
 <li><p>”Stamen Terrain”, “Stamen Toner”, “Stamen Watercolor”</p></li>
@@ -719,7 +741,8 @@ Beware that this will only work if <cite>image</cite> is an array-like object.</
 </ul>
 </dd>
 </dl>
-<p>You can pass a custom tileset to Folium by passing a Leaflet-style
+<p>You can pass a custom tileset to Folium by passing a
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v0+untagged.171.g2c4e9d0.dirty)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">http://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 <p>You can find a list of free tile providers here:
 <code class="docutils literal notranslate"><span class="pre">http://leaflet-extras.github.io/leaflet-providers/preview/</span></code>.
@@ -770,7 +793,7 @@ object.</p></li>
 <li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</p></li>
 <li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</p></li>
 <li><p><strong>**kwargs</strong> – Other valid (possibly inherited) options. See:
-<a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#videooverlay">https://leafletjs.com/reference-1.6.0.html#videooverlay</a></p></li>
+<a class="reference external" href="https://leafletjs.com/reference.html#videooverlay">https://leafletjs.com/reference.html#videooverlay</a></p></li>
 </ul>
 </dd>
 </dl>
@@ -811,7 +834,7 @@ the WMS request.</p></li>
 <p>Leaflet GeoJson and miscellaneous features.</p>
 <dl class="py class">
 <dt id="folium.features.Choropleth">
-<em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">Choropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geo_data</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_on</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">fill_color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_fill_color</span><span class="o">=</span><span class="default_value">'black'</span></em>, <em class="sig-param"><span class="n">fill_opacity</span><span class="o">=</span><span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">nan_fill_opacity</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">line_color</span><span class="o">=</span><span class="default_value">'black'</span></em>, <em class="sig-param"><span class="n">line_weight</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">line_opacity</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">topojson</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">smooth_factor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">highlight</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Choropleth" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">Choropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">geo_data</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">key_on</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bins</span><span class="o">=</span><span class="default_value">6</span></em>, <em class="sig-param"><span class="n">fill_color</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">nan_fill_color</span><span class="o">=</span><span class="default_value">'black'</span></em>, <em class="sig-param"><span class="n">fill_opacity</span><span class="o">=</span><span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">nan_fill_opacity</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">line_color</span><span class="o">=</span><span class="default_value">'black'</span></em>, <em class="sig-param"><span class="n">line_weight</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">line_opacity</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">legend_name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">topojson</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">smooth_factor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">highlight</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_jenks</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Choropleth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.FeatureGroup" title="folium.map.FeatureGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.FeatureGroup</span></code></a></p>
 <p>Apply a GeoJSON overlay to the map.</p>
 <p>Plot a GeoJSON overlay on the base map. There is no requirement
@@ -823,7 +846,7 @@ keywords must be included, the first to indicate which DataFrame
 columns to use, the second to indicate the layer in the GeoJSON
 on which to key the data. The ‘columns’ keyword does not need to be
 passed for a Pandas series.</p>
-<p>Colors are generated from color brewer (<a class="reference external" href="http://colorbrewer2.org/">http://colorbrewer2.org/</a>)
+<p>Colors are generated from color brewer (<a class="reference external" href="https://colorbrewer2.org/">https://colorbrewer2.org/</a>)
 sequential palettes. By default, linear binning is used between
 the min and the max of the values. Custom binning can be achieved
 with the <cite>bins</cite> parameter.</p>
@@ -865,6 +888,9 @@ keyword argument will enable conversion to GeoJSON.</p></li>
 better performance and smoother look, and less means more accurate
 representation. Leaflet defaults to 1.0.</p></li>
 <li><p><strong>highlight</strong> (<em>boolean</em><em>, </em><em>default False</em>) – Enable highlight functionality when hovering over a GeoJSON area.</p></li>
+<li><p><strong>use_jenks</strong> (<em>bool</em><em>, </em><em>default False</em>) – Use jenkspy to calculate bins using “natural breaks”
+(Fisher-Jenks algorithm). This is useful when your data is unevenly
+distributed.</p></li>
 <li><p><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – The name of the layer, as it will appear in LayerControls</p></li>
 <li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</p></li>
 <li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</p></li>
@@ -879,21 +905,25 @@ representation. Leaflet defaults to 1.0.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s1">&#39;us-states.json&#39;</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">line_weight</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s1">&#39;geo.json&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Data 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Data 2&#39;</span><span class="p">],</span>
-<span class="gp">... </span>           <span class="n">key_on</span><span class="o">=</span><span class="s1">&#39;feature.properties.myvalue&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">fill_color</span><span class="o">=</span><span class="s1">&#39;PuBu&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s1">&#39;countries.json&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">topojson</span><span class="o">=</span><span class="s1">&#39;objects.countries&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s1">&#39;geo.json&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Data 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Data 2&#39;</span><span class="p">],</span>
-<span class="gp">... </span>           <span class="n">key_on</span><span class="o">=</span><span class="s1">&#39;feature.properties.myvalue&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">fill_color</span><span class="o">=</span><span class="s1">&#39;PuBu&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>
-<span class="gp">... </span>           <span class="n">highlight</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;us-states.json&quot;</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">line_weight</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;geo.json&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Data 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Data 2&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">key_on</span><span class="o">=</span><span class="s2">&quot;feature.properties.myvalue&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fill_color</span><span class="o">=</span><span class="s2">&quot;PuBu&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;countries.json&quot;</span><span class="p">,</span> <span class="n">topojson</span><span class="o">=</span><span class="s2">&quot;objects.countries&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;geo.json&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Data 1&quot;</span><span class="p">,</span> <span class="s2">&quot;Data 2&quot;</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">key_on</span><span class="o">=</span><span class="s2">&quot;feature.properties.myvalue&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fill_color</span><span class="o">=</span><span class="s2">&quot;PuBu&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">bins</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">highlight</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -905,6 +935,25 @@ representation. Leaflet defaults to 1.0.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt id="folium.features.ClickForLatLng">
+<em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">ClickForLatLng</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">format_str</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">alert</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.ClickForLatLng" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>When one clicks on a Map that contains a ClickForLatLng,
+the coordinates of the pointer’s position are copied to clipboard.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format_str</strong> (<em>str</em><em>, </em><em>default 'lat + &quot;</em><em>,</em><em>&quot; + lng'</em>) – The javascript string used to format the text copied to clipboard.
+eg:
+format_str = ‘lat + “,” + lng’              &gt;&gt; 46.558860,3.397397
+format_str = ‘”[” + lat + “,” + lng + “]”’  &gt;&gt; [46.558860,3.397397]</p></li>
+<li><p><strong>alert</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether there should be an alert when something has been copied to clipboard.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt id="folium.features.ClickForMarker">
 <em class="property">class </em><code class="sig-prename descclassname">folium.features.</code><code class="sig-name descname">ClickForMarker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">popup</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.ClickForMarker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
@@ -912,10 +961,16 @@ representation. Leaflet defaults to 1.0.</p></li>
 a Marker is created at the pointer’s position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>popup</strong> (<em>str</em><em>, </em><em>default None</em>) – Text to display in the markers’ popups.
-If None, the popups will display the marker’s latitude and longitude.</p>
+<dd class="field-odd"><p><strong>popup</strong> (<em>str</em><em> or </em><em>IFrame</em><em> or </em><em>Html</em><em>, </em><em>default None</em>) – Text to display in the markers’ popups.
+This can also be an Element like IFrame or Html.
+If None, the popups will display the marker’s latitude and longitude.
+You can include the latitude and longitude with ${lat} and ${lng}.</p>
 </dd>
 </dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ClickForMarker</span><span class="p">(</span><span class="s2">&quot;&lt;b&gt;Lat:&lt;/b&gt; $</span><span class="si">{lat}</span><span class="s2">&lt;br /&gt;&lt;b&gt;Lon:&lt;/b&gt; $</span><span class="si">{lng}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -1033,7 +1088,7 @@ representation. Leaflet defaults to 1.0.</p></li>
 <li><p><strong>tooltip</strong> (<a class="reference internal" href="#folium.features.GeoJsonTooltip" title="folium.features.GeoJsonTooltip"><em>GeoJsonTooltip</em></a><em>, </em><a class="reference internal" href="#folium.map.Tooltip" title="folium.map.Tooltip"><em>Tooltip</em></a><em> or </em><em>str</em><em>, </em><em>default None</em>) – Display a text when hovering over the object. Can utilize the data,
 see folium.GeoJsonTooltip for info on how to do that.</p></li>
 <li><p><strong>popup</strong> (<a class="reference internal" href="#folium.features.GeoJsonPopup" title="folium.features.GeoJsonPopup"><em>GeoJsonPopup</em></a><em>, </em><em>optional</em>) – Show a different popup for each feature by passing a GeoJsonPopup object.</p></li>
-<li><p><strong>marker</strong> (<a class="reference internal" href="#folium.vector_layers.Circle" title="folium.vector_layers.Circle"><em>Circle</em></a><em>, </em><a class="reference internal" href="#folium.vector_layers.CircleMarker" title="folium.vector_layers.CircleMarker"><em>CircleMarker</em></a><em> or </em><a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><em>Marker</em></a><em>, </em><em>optional</em>) – If your data contains Point geometry, you can format the markers by passing a Cirle,
+<li><p><strong>marker</strong> (<a class="reference internal" href="#folium.vector_layers.Circle" title="folium.vector_layers.Circle"><em>Circle</em></a><em>, </em><a class="reference internal" href="#folium.vector_layers.CircleMarker" title="folium.vector_layers.CircleMarker"><em>CircleMarker</em></a><em> or </em><a class="reference internal" href="#folium.map.Marker" title="folium.map.Marker"><em>Marker</em></a><em>, </em><em>optional</em>) – If your data contains Point geometry, you can format the markers by passing a Circle,
 CircleMarker or Marker object with your wanted options. The <cite>style_function</cite> and
 <cite>highlight_function</cite> will also target the marker object you passed.</p></li>
 <li><p><strong>embed</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether to embed the data in the html file or not. Note that disabling
@@ -1044,19 +1099,21 @@ embedding is only supported if you provide a file link or URL.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing filename that shall be embedded.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing filename that shall not be embedded.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">,</span> <span class="n">embed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing dict.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">)))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">)))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing string.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Provide a style_function that color all states green but Alabama.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">style_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;#0000ff&#39;</span> <span class="k">if</span>
-<span class="gp">... </span>                            <span class="n">x</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Alabama&#39;</span> <span class="k">else</span>
-<span class="gp">... </span>                            <span class="s1">&#39;#00ff00&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">style_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="s2">&quot;#0000ff&quot;</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Alabama&quot;</span>
+<span class="gp">... </span>    <span class="k">else</span> <span class="s2">&quot;#00ff00&quot;</span>
+<span class="gp">... </span><span class="p">}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">GeoJson</span><span class="p">(</span><span class="n">geojson</span><span class="p">,</span> <span class="n">style_function</span><span class="o">=</span><span class="n">style_function</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1079,6 +1136,11 @@ or even null.</p></li>
 </dd>
 </dl>
 </dd></dl>
+
+<dl class="py method">
+<dt id="folium.features.GeoJson.get_geojson_from_web">
+<code class="sig-name descname">get_geojson_from_web</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.GeoJson.get_geojson_from_web" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="folium.features.GeoJson.process_data">
@@ -1136,7 +1198,7 @@ instead of the keys of <cite>fields</cite>.</p></li>
 <li><p><strong>localize</strong> (<em>bool</em><em>, </em><em>default False.</em>) – This will use JavaScript’s .toLocaleString() to format ‘clean’ values
 as strings for the user’s location; i.e. 1,000,000.00 comma separators,
 float truncation, etc.
-<a href="#id1"><span class="problematic" id="id2">*</span></a>Available for most of JavaScript’s primitive types (any data you’ll
+Available for most of JavaScript’s primitive types (any data you’ll
 serve into the template).</p></li>
 <li><p><strong>style</strong> (<em>str</em><em>, </em><em>default None.</em>) – HTML inline style properties like font and colors. Will be applied to
 a div with the text in it.</p></li>
@@ -1200,21 +1262,23 @@ serve into the template).</p></li>
 a div with the text in it.</p></li>
 <li><p><strong>sticky</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the tooltip should follow the mouse.</p></li>
 <li><p><strong>**kwargs</strong> (<em>Assorted.</em>) – These values will map directly to the Leaflet Options. More info
-available here: <a class="reference external" href="https://leafletjs.com/reference-1.6.0#tooltip">https://leafletjs.com/reference-1.6.0#tooltip</a></p></li>
+available here: <a class="reference external" href="https://leafletjs.com/reference.html#tooltip">https://leafletjs.com/reference.html#tooltip</a></p></li>
 </ul>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
 <p># Provide fields and aliases, with Style.
 &gt;&gt;&gt; GeoJsonTooltip(
-&gt;&gt;&gt;     fields=[‘CNTY_NM’, ‘census-pop-2015’, ‘census-md-income-2015’],
-&gt;&gt;&gt;     aliases=[‘County’, ‘2015 Census Population’, ‘2015 Median Income’],
-&gt;&gt;&gt;     localize=True,
-&gt;&gt;&gt;     style=(‘background-color: grey; color: white; font-family:’
-&gt;&gt;&gt;            ‘courier new; font-size: 24px; padding: 10px;’)
-&gt;&gt;&gt; )
+…     fields=[“CNTY_NM”, “census-pop-2015”, “census-md-income-2015”],
+…     aliases=[“County”, “2015 Census Population”, “2015 Median Income”],
+…     localize=True,
+…     style=(
+…         “background-color: grey; color: white; font-family:”
+…         “courier new; font-size: 24px; padding: 10px;”
+…     ),
+… )
 # Provide fields, with labels off and fixed tooltip positions.
-&gt;&gt;&gt; GeoJsonTooltip(fields=(‘CNTY_NM’,), labels=False, sticky=False)</p>
+&gt;&gt;&gt; GeoJsonTooltip(fields=(“CNTY_NM”,), labels=False, sticky=False)</p>
 </dd></dl>
 
 <dl class="py class">
@@ -1281,21 +1345,23 @@ see folium.GeoJsonTooltip for info on how to do that.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing file that shall be embeded.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">),</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing filename that shall not be embeded.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">,</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing file that shall be embedded.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">),</span> <span class="s2">&quot;object.myobject&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing filename that shall not be embedded.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">,</span> <span class="s2">&quot;object.myobject&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing dict.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">)),</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">)),</span> <span class="s2">&quot;object.myobject&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Providing string.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s1">&#39;foo.json&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s2">&quot;foo.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s2">&quot;object.myobject&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Provide a style_function that color all states green but Alabama.</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">style_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;#0000ff&#39;</span> <span class="k">if</span>
-<span class="gp">... </span>                            <span class="n">x</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;Alabama&#39;</span> <span class="k">else</span>
-<span class="gp">... </span>                            <span class="s1">&#39;#00ff00&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="n">topo_json</span><span class="p">,</span> <span class="s1">&#39;object.myobject&#39;</span><span class="p">,</span> <span class="n">style_function</span><span class="o">=</span><span class="n">style_function</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">style_function</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="s2">&quot;#0000ff&quot;</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;properties&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Alabama&quot;</span>
+<span class="gp">... </span>    <span class="k">else</span> <span class="s2">&quot;#00ff00&quot;</span>
+<span class="gp">... </span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TopoJson</span><span class="p">(</span><span class="n">topo_json</span><span class="p">,</span> <span class="s2">&quot;object.myobject&quot;</span><span class="p">,</span> <span class="n">style_function</span><span class="o">=</span><span class="n">style_function</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py attribute">
@@ -1395,6 +1461,11 @@ Ex: ‘relative’, ‘absolute’</p></li>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
+<dl class="py method">
+<dt id="folium.features.VegaLite.vegalite_major_version">
+<em class="property">property </em><code class="sig-name descname">vegalite_major_version</code><a class="headerlink" href="#folium.features.VegaLite.vegalite_major_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </div>
@@ -1421,13 +1492,13 @@ Ex: ‘relative’, ‘absolute’</p></li>
         <li class="right" >
           <a href="flask.html" title="Using folium with flask"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.14.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">folium</span></code></a></li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Rob Story.
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.4.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.1.0.Theme by <a href="http://github.com/vkvn">vkvn</a>
     </div>
   </body>
 </html>

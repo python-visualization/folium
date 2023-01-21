@@ -3,14 +3,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>plugins &#8212; Folium 0.12.1 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>plugins &#8212; Folium 0.14.0 documentation</title>
     <link rel="stylesheet" href="_static/f6.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,7 +29,7 @@
         <li class="right" >
           <a href="modules.html" title="folium"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.14.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugins</span></code></a></li> 
       </ul>
     </div>
@@ -121,14 +122,23 @@ available parameters.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Plugin Website: <a class="reference external" href="https://github.com/marslan390/BeautifyMarker">https://github.com/marslan390/BeautifyMarker</a>
-&gt;&gt;&gt; BeautifyIcon(text_color=’#000’, border_color=’transparent’,
-…              background_color=’#FFF’).add_to(marker)
-&gt;&gt;&gt; number_icon = BeautifyIcon(text_color=’#000’, border_color=’transparent’,
-…                            background_color=’#FFF’, number=10,
-…                            inner_icon_style=’font-size:12px;padding-top:-5px;’)
-&gt;&gt;&gt; Marker(location=[45.5, -122.3], popup=folium.Popup(‘Portland, OR’), icon=number_icon)
-&gt;&gt;&gt; BeautifyIcon(icon=’arrow-down’, icon_shape=’marker’).add_to(marker)</p>
+<p>Plugin Website: <a class="reference external" href="https://github.com/masajid390/BeautifyMarker">https://github.com/masajid390/BeautifyMarker</a>
+&gt;&gt;&gt; BeautifyIcon(
+…     text_color=”#000”, border_color=”transparent”, background_color=”#FFF”
+… ).add_to(marker)
+&gt;&gt;&gt; number_icon = BeautifyIcon(
+…     text_color=”#000”,
+…     border_color=”transparent”,
+…     background_color=”#FFF”,
+…     number=10,
+…     inner_icon_style=”font-size:12px;padding-top:-5px;”,
+… )
+&gt;&gt;&gt; Marker(
+…     location=[45.5, -122.3],
+…     popup=folium.Popup(“Portland, OR”),
+…     icon=number_icon,
+… )
+&gt;&gt;&gt; BeautifyIcon(icon=”arrow-down”, icon_shape=”marker”).add_to(marker)</p>
 <dl class="py attribute">
 <dt id="folium.plugins.BeautifyIcon.ICON_SHAPE_TYPES">
 <code class="sig-name descname">ICON_SHAPE_TYPES</code><em class="property"> = ['circle', 'circle-dot', 'doughnut', 'rectangle-dot', 'marker', None]</em><a class="headerlink" href="#folium.plugins.BeautifyIcon.ICON_SHAPE_TYPES" title="Permalink to this definition">¶</a></dt>
@@ -207,7 +217,7 @@ If None, then no wind is represented.</p></li>
 
 <dl class="py class">
 <dt id="folium.plugins.Draw">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">export</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'data.geojson'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topleft'</span></em>, <em class="sig-param"><span class="n">draw_options</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">edit_options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Draw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">export</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">filename</span><span class="o">=</span><span class="default_value">'data.geojson'</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'topleft'</span></em>, <em class="sig-param"><span class="n">show_geometry_on_click</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">draw_options</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">edit_options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Draw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Vector drawing and editing plugin for Leaflet.</p>
 <dl class="field-list simple">
@@ -216,7 +226,8 @@ If None, then no wind is represented.</p></li>
 <li><p><strong>export</strong> (<em>bool</em><em>, </em><em>default False</em>) – Add a small button that exports the drawn shapes as a geojson file.</p></li>
 <li><p><strong>filename</strong> (<em>string</em><em>, </em><em>default 'data.geojson'</em>) – Name of geojson file</p></li>
 <li><p><strong>position</strong> (<em>{'topleft'</em><em>, </em><em>'toprigth'</em><em>, </em><em>'bottomleft'</em><em>, </em><em>'bottomright'}</em>) – Position of control.
-See <a class="reference external" href="https://leafletjs.com/reference-1.6.0.html#control">https://leafletjs.com/reference-1.6.0.html#control</a></p></li>
+See <a class="reference external" href="https://leafletjs.com/reference.html#control">https://leafletjs.com/reference.html#control</a></p></li>
+<li><p><strong>show_geometry_on_click</strong> (<em>bool</em><em>, </em><em>default True</em>) – When True, opens an alert with the geometry description on click.</p></li>
 <li><p><strong>draw_options</strong> (<em>dict</em><em>, </em><em>optional</em>) – The options used to configure the draw toolbar. See
 <a class="reference external" href="http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions">http://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#drawoptions</a></p></li>
 <li><p><strong>edit_options</strong> (<em>dict</em><em>, </em><em>optional</em>) – The options used to configure the edit toolbar. See
@@ -228,10 +239,10 @@ See <a class="reference external" href="https://leafletjs.com/reference-1.6.0.ht
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Draw</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">export</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;my_data.geojson&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">position</span><span class="o">=</span><span class="s1">&#39;topleft&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="n">draw_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;polyline&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;allowIntersection&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}},</span>
-<span class="gp">... </span>    <span class="n">edit_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;poly&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;allowIntersection&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}}</span>
+<span class="gp">... </span>    <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;my_data.geojson&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topleft&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">draw_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;polyline&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;allowIntersection&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}},</span>
+<span class="gp">... </span>    <span class="n">edit_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;poly&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;allowIntersection&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}},</span>
 <span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -275,13 +286,13 @@ and right) or vertical (top and bottom).</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># DualMap accepts the same arguments as Map:</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">DualMap</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">tiles</span><span class="o">=</span><span class="s1">&#39;cartodbpositron&#39;</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">DualMap</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;cartodbpositron&quot;</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add the same marker to both maps:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># The individual maps are attributes called `m1` and `m2`:</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Marker</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">m1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;map.html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;map.html&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
@@ -367,25 +378,27 @@ or cluster markers from multiple overlays. From [0].</p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">FeatureGroup</span><span class="p">()</span>                          <span class="c1"># Main group</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s1">&#39;g1&#39;</span><span class="p">)</span>  <span class="c1"># First subgroup of fg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s1">&#39;g2&#39;</span><span class="p">)</span>  <span class="c1"># Second subgroup of fg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">FeatureGroup</span><span class="p">()</span>  <span class="c1"># Main group</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s2">&quot;g1&quot;</span><span class="p">)</span>  <span class="c1"># First subgroup of fg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">fg</span><span class="p">,</span> <span class="s2">&quot;g2&quot;</span><span class="p">)</span>  <span class="c1"># Second subgroup of fg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">fg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mcg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">MarkerCluster</span><span class="p">(</span><span class="n">control</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>   <span class="c1"># Marker Cluster, hidden in controls</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s1">&#39;g1&#39;</span><span class="p">)</span> <span class="c1"># First group, in mcg</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s1">&#39;g2&#39;</span><span class="p">)</span> <span class="c1"># Second group, in mcg</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mcg</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">MarkerCluster</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">control</span><span class="o">=</span><span class="kc">False</span>
+<span class="gp">... </span><span class="p">)</span>  <span class="c1"># Marker Cluster, hidden in controls</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s2">&quot;g1&quot;</span><span class="p">)</span>  <span class="c1"># First group, in mcg</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">FeatureGroupSubGroup</span><span class="p">(</span><span class="n">mcg</span><span class="p">,</span> <span class="s2">&quot;g2&quot;</span><span class="p">)</span>  <span class="c1"># Second group, in mcg</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">mcg</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g1</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">m</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">g2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -398,9 +411,21 @@ or cluster markers from multiple overlays. From [0].</p>
 
 <dl class="py class">
 <dt id="folium.plugins.FloatImage">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">FloatImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">bottom</span><span class="o">=</span><span class="default_value">75</span></em>, <em class="sig-param"><span class="n">left</span><span class="o">=</span><span class="default_value">75</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FloatImage" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">FloatImage</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em>, <em class="sig-param"><span class="n">bottom</span><span class="o">=</span><span class="default_value">75</span></em>, <em class="sig-param"><span class="n">left</span><span class="o">=</span><span class="default_value">75</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.FloatImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Adds a floating image in HTML canvas on top of the map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> (<em>str</em>) – Url to image location. Can also be an inline image using a data URI
+or a local file using <cite>file://</cite>.</p></li>
+<li><p><strong>bottom</strong> (<em>int</em><em>, </em><em>default 75</em>) – Vertical position from the bottom, as a percentage of screen height.</p></li>
+<li><p><strong>left</strong> (<em>int</em><em>, </em><em>default 75</em>) – Horizontal position from the left, as a percentage of screen width.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments are applied as CSS properties.
+For example: <cite>width=’300px’</cite>.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -418,7 +443,7 @@ default: ‘topleft’</p></li>
 default: ‘Full Screen’</p></li>
 <li><p><strong>title_cancel</strong> (<em>str</em>) – change the title of the button when fullscreen is on,
 default: ‘Exit Full Screen’</p></li>
-<li><p><strong>force_separate_button</strong> (<em>bool</em><em>, </em><em>default False</em>) – force seperate button to detach from zoom buttons,</p></li>
+<li><p><strong>force_separate_button</strong> (<em>bool</em><em>, </em><em>default False</em>) – force separate button to detach from zoom buttons,</p></li>
 <li><p><strong>https</strong> (<em>See</em>) – </p></li>
 </ul>
 </dd>
@@ -465,6 +490,44 @@ default: ‘Exit Full Screen’</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt id="folium.plugins.GroupedLayerControl">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">GroupedLayerControl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">groups</span></em>, <em class="sig-param"><span class="n">exclusive_groups</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.GroupedLayerControl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Create a Layer Control with groups of overlays.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>groups</strong> (<em>dict</em>) – <p>A dictionary where the keys are group names and the values are lists
+of layer objects.
+e.g. {</p>
+<blockquote>
+<div><blockquote>
+<div><p>”Group 1”: [layer1, layer2],
+“Group 2”: [layer3, layer4]</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+</p></li>
+<li><p><strong>exclusive_groups</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether to use radio buttons (default) or checkboxes.
+If you want to use both, use two separate instances of this class.</p></li>
+<li><p><strong>**kwargs</strong> – Additional (possibly inherited) options. See
+<a class="reference external" href="https://leafletjs.com/reference.html#control-layers">https://leafletjs.com/reference.html#control-layers</a></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="folium.plugins.GroupedLayerControl.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('leaflet.groupedlayercontrol.min.css', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.css')]</em><a class="headerlink" href="#folium.plugins.GroupedLayerControl.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.GroupedLayerControl.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet.groupedlayercontrol.min.js', 'https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.js')]</em><a class="headerlink" href="#folium.plugins.GroupedLayerControl.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="folium.plugins.HeatMap">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">max_zoom</span><span class="o">=</span><span class="default_value">18</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">25</span></em>, <em class="sig-param"><span class="n">blur</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
@@ -489,14 +552,14 @@ scales with zoom), equals maxZoom of the map by default</p></li>
 </dl>
 <dl class="py attribute">
 <dt id="folium.plugins.HeatMap.default_js">
-<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet-heat.js', 'https://cdn.jsdelivr.net/gh/python-visualization/folium&#64;master/folium/templates/leaflet_heat.min.js')]</em><a class="headerlink" href="#folium.plugins.HeatMap.default_js" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet-heat.js', 'https://cdn.jsdelivr.net/gh/python-visualization/folium&#64;main/folium/templates/leaflet_heat.min.js')]</em><a class="headerlink" href="#folium.plugins.HeatMap.default_js" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt id="folium.plugins.HeatMapWithTime">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMapWithTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_opacity</span><span class="o">=</span><span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">scale_radius</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_local_extrema</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display_index</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">index_steps</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">speed_step</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'bottomleft'</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">HeatMapWithTime</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">radius</span><span class="o">=</span><span class="default_value">15</span></em>, <em class="sig-param"><span class="n">blur</span><span class="o">=</span><span class="default_value">0.8</span></em>, <em class="sig-param"><span class="n">min_opacity</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">max_opacity</span><span class="o">=</span><span class="default_value">0.6</span></em>, <em class="sig-param"><span class="n">scale_radius</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">gradient</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_local_extrema</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">display_index</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">index_steps</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">speed_step</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">position</span><span class="o">=</span><span class="default_value">'bottomleft'</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.HeatMapWithTime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Create a HeatMapWithTime layer</p>
 <dl class="field-list simple">
@@ -508,6 +571,7 @@ not specified for a point)</p></li>
 <li><p><strong>index</strong> (<em>Index giving the label</em><em> (or </em><em>timestamp</em><em>) </em><em>of the elements of data. Should have</em>) – the same length as data, or is replaced by a simple count if not specified.</p></li>
 <li><p><strong>name</strong> (<em>string</em><em>, </em><em>default None</em>) – The name of the Layer, as it will appear in LayerControls.</p></li>
 <li><p><strong>radius</strong> (<em>default 15.</em>) – The radius used around points for the heatmap.</p></li>
+<li><p><strong>blur</strong> (<em>default 0.8.</em>) – Blur strength used for the heatmap. Must be between 0 and 1.</p></li>
 <li><p><strong>min_opacity</strong> (<em>default 0</em>) – The minimum opacity for the heatmap.</p></li>
 <li><p><strong>max_opacity</strong> (<em>default 0.6</em>) – The maximum opacity for the heatmap.</p></li>
 <li><p><strong>scale_radius</strong> (<em>default False</em>) – Scale the radius of the points based on the zoom level.</p></li>
@@ -573,8 +637,8 @@ Once user location is founded, the map will automatically centered in using user
 <p># With some custom options
 &gt;&gt;&gt; LocateControl(
 …     position=”bottomright”,
-…     strings={“title”: “See you current location”,
-…              “popup”: “Your position”}).add_to(m))</p>
+…     strings={“title”: “See you current location”, “popup”: “Your position”},
+… ).add_to(m)</p>
 <p>For more info check:
 <a class="reference external" href="https://github.com/domoritz/leaflet-locatecontrol">https://github.com/domoritz/leaflet-locatecontrol</a></p>
 <dl class="py attribute">
@@ -702,7 +766,7 @@ Especially useful when ‘zoomLevelFixed’ is set.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MiniMap</span><span class="p">(</span><span class="n">tile_layer</span><span class="o">=</span><span class="s1">&#39;Stamen WaterColor&#39;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;bottomleft&#39;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MiniMap</span><span class="p">(</span><span class="n">tile_layer</span><span class="o">=</span><span class="s2">&quot;Stamen WaterColor&quot;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;bottomleft&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py attribute">
@@ -742,8 +806,13 @@ longitude and latitude decimal degree values.</p></li>
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fmtr</span> <span class="o">=</span> <span class="s2">&quot;function(num) {return L.Util.formatNum(num, 3) + &#39; º &#39;;};&quot;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">MousePosition</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;topright&#39;</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s1">&#39; | &#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;Mouse:&quot;</span><span class="p">,</span>
-<span class="gp">... </span>              <span class="n">lat_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">,</span> <span class="n">lng_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MousePosition</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">position</span><span class="o">=</span><span class="s2">&quot;topright&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">separator</span><span class="o">=</span><span class="s2">&quot; | &quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;Mouse:&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lat_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">lng_formatter</span><span class="o">=</span><span class="n">fmtr</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py attribute">
@@ -774,7 +843,7 @@ and remains constant across zoom levels.</p>
 <li><p><strong>locations</strong> (<em>list of points</em><em> (</em><em>latitude</em><em>, </em><em>longitude</em><em>)</em>) – Latitude and Longitude of line (Northing, Easting)</p></li>
 <li><p><strong>popup</strong> (<em>str</em><em> or </em><em>folium.Popup</em><em>, </em><em>default None</em>) – Input text or visualization for object displayed when clicking.</p></li>
 <li><p><strong>tooltip</strong> (<em>str</em><em> or </em><em>folium.Tooltip</em><em>, </em><em>optional</em>) – Display a text when hovering over the object.</p></li>
-<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>default 0</em>) – Relative pixel offset to draw a line parallel to an existant one,
+<li><p><strong>offset</strong> (<em>int</em><em>, </em><em>default 0</em>) – Relative pixel offset to draw a line parallel to an existent one,
 at a fixed distance.</p></li>
 <li><p><strong>**kwargs</strong> – Polyline options. See their Github page for the
 available parameters.</p></li>
@@ -783,8 +852,12 @@ available parameters.</p></li>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">PolyLineOffset</span><span class="p">([[</span><span class="mi">58</span><span class="p">,</span> <span class="o">-</span><span class="mi">28</span><span class="p">],</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span> <span class="o">-</span><span class="mi">23</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f00&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=-</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">PolyLineOffset</span><span class="p">([[</span><span class="mi">58</span><span class="p">,</span> <span class="o">-</span><span class="mi">28</span><span class="p">],</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span> <span class="o">-</span><span class="mi">23</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#080&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">PolyLineOffset</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[[</span><span class="mi">58</span><span class="p">,</span> <span class="o">-</span><span class="mi">28</span><span class="p">],</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span> <span class="o">-</span><span class="mi">23</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#f00&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=-</span><span class="mi">5</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plugins</span><span class="o">.</span><span class="n">PolyLineOffset</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[[</span><span class="mi">58</span><span class="p">,</span> <span class="o">-</span><span class="mi">28</span><span class="p">],</span> <span class="p">[</span><span class="mi">53</span><span class="p">,</span> <span class="o">-</span><span class="mi">23</span><span class="p">]],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#080&quot;</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">10</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py attribute">
@@ -811,7 +884,7 @@ available parameters.</p></li>
 <li><p><strong>orientation</strong> (<em>int</em><em>, </em><em>default 0</em>) – Rotate text to a specified angle.</p></li>
 <li><p><strong>attributes</strong> (<em>dict</em>) – Object containing the attributes applied to the text tag.
 Check valid attributes here:
-<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes">https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#Attributes</a>
+<a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#attributes">https://developer.mozilla.org/en-US/docs/Web/SVG/Element/text#attributes</a>
 Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size’: ‘24’}</p></li>
 <li><p><strong>https</strong> (<em>See</em>) – </p></li>
 </ul>
@@ -908,6 +981,35 @@ Use the same way as vector layer arguments.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt id="folium.plugins.SideBySideLayers">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">SideBySideLayers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">layer_left</span></em>, <em class="sig-param"><span class="n">layer_right</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.SideBySideLayers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Creates a SideBySideLayers that takes two Layers and adds a sliding
+control with the leaflet-side-by-side plugin.</p>
+<p>Uses the Leaflet leaflet-side-by-side plugin <a class="reference external" href="https://github.com/digidem/leaflet-side-by-side">https://github.com/digidem/leaflet-side-by-side</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>layer_left</strong> (<em>Layer.</em>) – The left Layer within the side by side control.
+Must be created and added to the map before being passed to this class.</p></li>
+<li><p><strong>layer_right</strong> (<em>Layer.</em>) – The right Layer within the side by side control.
+Must be created and added to the map before being passed to this class.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sidebyside</span> <span class="o">=</span> <span class="n">SideBySideLayers</span><span class="p">(</span><span class="n">layer_left</span><span class="p">,</span> <span class="n">layer_right</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sidebyside</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt id="folium.plugins.SideBySideLayers.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('leaflet.sidebyside', 'https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side&#64;gh-pages/leaflet-side-by-side.min.js')]</em><a class="headerlink" href="#folium.plugins.SideBySideLayers.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="folium.plugins.StripePattern">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">StripePattern</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">angle</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">weight</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">space_weight</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">color</span><span class="o">=</span><span class="default_value">'#000000'</span></em>, <em class="sig-param"><span class="n">space_color</span><span class="o">=</span><span class="default_value">'#ffffff'</span></em>, <em class="sig-param"><span class="n">opacity</span><span class="o">=</span><span class="default_value">0.75</span></em>, <em class="sig-param"><span class="n">space_opacity</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.StripePattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
@@ -941,6 +1043,35 @@ Use the same way as vector layer arguments.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt id="folium.plugins.TagFilterButton">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TagFilterButton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">icon</span><span class="o">=</span><span class="default_value">'fa-filter'</span></em>, <em class="sig-param"><span class="n">clear_text</span><span class="o">=</span><span class="default_value">'clear'</span></em>, <em class="sig-param"><span class="n">filter_on_every_click</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">open_popup_on_hover</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TagFilterButton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
+<p>Creates a Tag Filter Button to filter markers based on criteria
+(<a class="reference external" href="https://github.com/maydemirx/leaflet-tag-filter-button">https://github.com/maydemirx/leaflet-tag-filter-button</a>)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list</em><em>, </em><em>of strings.</em>) – The tags to filter for this filter button.</p></li>
+<li><p><strong>icon</strong> (<em>string</em><em>, </em><em>default 'fa-filter'</em>) – The icon for the filter button</p></li>
+<li><p><strong>clear_text</strong> (<em>string</em><em>, </em><em>default 'clear'</em>) – Text of the clear button</p></li>
+<li><p><strong>filter_on_every_click</strong> (<em>bool</em><em>, </em><em>default True</em>) – if True, the plugin will filter on every click event on checkbox.</p></li>
+<li><p><strong>open_popup_on_hover</strong> (<em>bool</em><em>, </em><em>default False</em>) – if True, popup that contains tags will be open at mouse hover time</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="folium.plugins.TagFilterButton.default_css">
+<code class="sig-name descname">default_css</code><em class="property"> = [('tag-filter-button.css', 'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.css'), ('easy-button.css', 'https://cdn.jsdelivr.net/npm/leaflet-easybutton&#64;2/src/easy-button.css'), ('ripples.min.css', 'https://cdn.jsdelivr.net/npm/css-ripple-effect&#64;1.0.5/dist/ripple.min.css')]</em><a class="headerlink" href="#folium.plugins.TagFilterButton.default_css" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="folium.plugins.TagFilterButton.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('tag-filter-button.js', 'https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.js'), ('easy-button.js', 'https://cdn.jsdelivr.net/npm/leaflet-easybutton&#64;2/src/easy-button.js')]</em><a class="headerlink" href="#folium.plugins.TagFilterButton.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt id="folium.plugins.Terminator">
 <em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">Terminator</code><a class="headerlink" href="#folium.plugins.Terminator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
@@ -955,7 +1086,7 @@ overlay day and night regions on maps.</p>
 
 <dl class="py class">
 <dt id="folium.plugins.TimeSliderChoropleth">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimeSliderChoropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">styledict</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimeSliderChoropleth</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">styledict</span></em>, <em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overlay</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">control</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">init_timestamp</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimeSliderChoropleth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
 <p>Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.</p>
 <dl class="field-list simple">
@@ -968,6 +1099,10 @@ dicts of <cite>{time: style_options_dict}</cite></p></li>
 <li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default False</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</p></li>
 <li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</p></li>
 <li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening (only for overlays).</p></li>
+<li><p><strong>init_timestamp</strong> (<em>int</em><em>, </em><em>default 0</em>) – Initial time-stamp index on the slider. Must be in the range
+<cite>[-L, L-1]</cite>, where <cite>L</cite> is the maximum number of time stamps in
+<cite>styledict</cite>. For example, use <cite>-1</cite> to initialize the slider to the
+latest timestamp.</p></li>
 </ul>
 </dd>
 </dl>
@@ -980,7 +1115,7 @@ dicts of <cite>{time: style_options_dict}</cite></p></li>
 
 <dl class="py class">
 <dt id="folium.plugins.TimestampedGeoJson">
-<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimestampedGeoJson</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">transition_time</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">add_last_point</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">'P1D'</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">loop_button</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">date_options</span><span class="o">=</span><span class="default_value">'YYYY-MM-DD HH:mm:ss'</span></em>, <em class="sig-param"><span class="n">time_slider_drag_update</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">TimestampedGeoJson</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">transition_time</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">loop</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">auto_play</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">add_last_point</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">period</span><span class="o">=</span><span class="default_value">'P1D'</span></em>, <em class="sig-param"><span class="n">min_speed</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">max_speed</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">loop_button</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">date_options</span><span class="o">=</span><span class="default_value">'YYYY-MM-DD HH:mm:ss'</span></em>, <em class="sig-param"><span class="n">time_slider_drag_update</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">duration</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">speed_slider</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></p>
 <p>Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
 into a map with Map.add_child.</p>
@@ -1022,21 +1157,24 @@ ex: ‘P1M’ 1/month, ‘P1D’ 1/day, ‘PT1H’ 1/hour, and ‘PT1M’ 1/minu
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TimestampedGeoJson</span><span class="p">({</span>
-<span class="gp">... </span>    <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;FeatureCollection&#39;</span><span class="p">,</span>
-<span class="gp">... </span>    <span class="s1">&#39;features&#39;</span><span class="p">:</span> <span class="p">[</span>
-<span class="gp">... </span>      <span class="p">{</span>
-<span class="gp">... </span>        <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;Feature&#39;</span><span class="p">,</span>
-<span class="gp">... </span>        <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">{</span>
-<span class="gp">... </span>          <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;LineString&#39;</span><span class="p">,</span>
-<span class="gp">... </span>          <span class="s1">&#39;coordinates&#39;</span><span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="o">-</span><span class="mi">25</span><span class="p">],[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="mi">35</span><span class="p">],[</span><span class="mi">70</span><span class="p">,</span><span class="mi">35</span><span class="p">]],</span>
-<span class="gp">... </span>          <span class="p">},</span>
-<span class="gp">... </span>        <span class="s1">&#39;properties&#39;</span><span class="p">:</span> <span class="p">{</span>
-<span class="gp">... </span>          <span class="s1">&#39;times&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1435708800000</span><span class="p">,</span> <span class="mi">1435795200000</span><span class="p">,</span> <span class="mi">1435881600000</span><span class="p">]</span>
-<span class="gp">... </span>          <span class="p">}</span>
-<span class="gp">... </span>        <span class="p">}</span>
-<span class="gp">... </span>      <span class="p">]</span>
-<span class="gp">... </span>    <span class="p">})</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">TimestampedGeoJson</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">[</span>
+<span class="gp">... </span>            <span class="p">{</span>
+<span class="gp">... </span>                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;LineString&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="o">-</span><span class="mi">25</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span> <span class="mi">35</span><span class="p">],</span> <span class="p">[</span><span class="mi">70</span><span class="p">,</span> <span class="mi">35</span><span class="p">]],</span>
+<span class="gp">... </span>                <span class="p">},</span>
+<span class="gp">... </span>                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>                    <span class="s2">&quot;times&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1435708800000</span><span class="p">,</span> <span class="mi">1435795200000</span><span class="p">,</span> <span class="mi">1435881600000</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="s2">&quot;tooltip&quot;</span><span class="p">:</span> <span class="s2">&quot;my tooltip text&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="p">},</span>
+<span class="gp">... </span>            <span class="p">}</span>
+<span class="gp">... </span>        <span class="p">],</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
 <p>See <a class="reference external" href="https://github.com/socib/Leaflet.TimeDimension">https://github.com/socib/Leaflet.TimeDimension</a> for more information.</p>
@@ -1088,24 +1226,24 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
 </dl>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w0</span> <span class="o">=</span> <span class="n">WmsTileLayer</span><span class="p">(</span>
-<span class="gp">... </span>         <span class="s1">&#39;http://this.wms.server/ncWMS/wms&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Test WMS Data&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">styles</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;image/png&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">layers</span><span class="o">=</span><span class="s1">&#39;test_data&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s1">&#39;0,10&#39;</span><span class="p">,</span>
-<span class="go">...)</span>
+<span class="gp">... </span>    <span class="s2">&quot;http://this.wms.server/ncWMS/wms&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test WMS Data&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">styles</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;test_data&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s2">&quot;0,10&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w0</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w1</span> <span class="o">=</span> <span class="n">WmsTileLayer</span><span class="p">(</span>
-<span class="gp">... </span>         <span class="s1">&#39;http://this.wms.server/ncWMS/wms&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Test WMS Data&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">styles</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;image/png&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">layers</span><span class="o">=</span><span class="s1">&#39;test_data_2&#39;</span><span class="p">,</span>
-<span class="gp">... </span>         <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s1">&#39;0,5&#39;</span><span class="p">,</span>
-<span class="go">...)</span>
+<span class="gp">... </span>    <span class="s2">&quot;http://this.wms.server/ncWMS/wms&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Test WMS Data&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">styles</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">layers</span><span class="o">=</span><span class="s2">&quot;test_data_2&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s2">&quot;0,5&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w1</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Add WmsTileLayers to time control.</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">time</span> <span class="o">=</span> <span class="n">TimestampedWmsTileLayers</span><span class="p">([</span><span class="n">w0</span><span class="p">,</span> <span class="n">w1</span><span class="p">])</span>
@@ -1121,6 +1259,100 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
 <dl class="py attribute">
 <dt id="folium.plugins.TimestampedWmsTileLayers.default_js">
 <code class="sig-name descname">default_js</code><em class="property"> = [('jquery2.0.0', 'https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js'), ('jqueryui1.10.2', 'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js'), ('iso8601', 'https://cdn.jsdelivr.net/npm/iso8601-js-period&#64;0.2.1/iso8601.min.js'), ('leaflet.timedimension', 'https://cdn.jsdelivr.net/npm/leaflet-timedimension&#64;1.1.1/dist/leaflet.timedimension.min.js')]</em><a class="headerlink" href="#folium.plugins.TimestampedWmsTileLayers.default_js" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="folium.plugins.VectorGridProtobuf">
+<em class="property">class </em><code class="sig-prename descclassname">folium.plugins.</code><code class="sig-name descname">VectorGridProtobuf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">url</span></em>, <em class="sig-param"><span class="n">layer_name</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.VectorGridProtobuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">folium.elements.JSCSSMixin</span></code>, <a class="reference internal" href="modules.html#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">folium.map.Layer</span></code></a></p>
+<p>Add vector tile layers based on <a class="reference external" href="https://github.com/Leaflet/Leaflet.VectorGrid">https://github.com/Leaflet/Leaflet.VectorGrid</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>url to tile provider</em>) – e.g. <a class="reference external" href="https://free">https://free</a>-{s}.tilehosting.com/data/v3/{z}/{x}/{y}.pbf?token={token}</p></li>
+<li><p><strong>layer_name</strong> (<em>string</em><em>, </em><em>default &quot;VectorGridLayer&quot;</em>) – name of the layer</p></li>
+<li><p><strong>options</strong> (<em>dict</em><em> or </em><em>str</em><em>, </em><em>VectorGrid.protobuf options</em>) – <p>For convenience you can pass VectorGrid.protobuf options as python dictionary or string.
+Strings allow plain JavaScript to be passed, therefore allow for conditional styling (see examples).</p>
+<p>Additionally the url might contain any string literals like {token}, or {key}
+that can be passed as attribute to the options dict and will be substituted.</p>
+<p>Every layer inside the tile layer has to be styled separately.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Options as dict:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://free-</span><span class="si">{s}</span><span class="s2">.tilehosting.com/data/v3/</span><span class="si">{z}</span><span class="s2">/</span><span class="si">{x}</span><span class="s2">/</span><span class="si">{y}</span><span class="s2">.pbf?token=</span><span class="si">{token}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>    <span class="s2">&quot;subdomain&quot;</span><span class="p">:</span> <span class="s2">&quot;tilehosting&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;token&quot;</span><span class="p">:</span> <span class="s2">&quot;af6P2G9dztAt1F75x7KYt0Hx2DJR052G&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s2">&quot;vectorTileLayerStyles&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s2">&quot;layer_name_one&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;fillOpacity&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;opacity&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">},</span>
+<span class="gp">... </span>        <span class="s2">&quot;layer_name_two&quot;</span><span class="p">:</span> <span class="p">{</span>
+<span class="gp">... </span>            <span class="s2">&quot;fill&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;fillColor&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;fillOpacity&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+<span class="gp">... </span>            <span class="s2">&quot;opacity&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">},</span>
+<span class="gp">... </span>    <span class="p">},</span>
+<span class="gp">... </span><span class="p">}</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">VectorGridProtobuf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;layer_name&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Options as string allows to pass functions</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://free-</span><span class="si">{s}</span><span class="s2">.tilehosting.com/data/v3/</span><span class="si">{z}</span><span class="s2">/</span><span class="si">{x}</span><span class="s2">/</span><span class="si">{y}</span><span class="s2">.pbf?token=</span><span class="si">{token}</span><span class="s2">&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">options</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;{</span>
+<span class="gp">... </span><span class="s1">    &quot;subdomain&quot;: &quot;tilehosting&quot;,</span>
+<span class="gp">... </span><span class="s1">    &quot;token&quot;: &quot;af6P2G9dztAt1F75x7KYt0Hx2DJR052G&quot;,</span>
+<span class="gp">... </span><span class="s1">    &quot;vectorTileLayerStyles&quot;: {</span>
+<span class="gp">... </span><span class="s1">        all: function(f) {</span>
+<span class="gp">... </span><span class="s1">            if (f.type === &#39;parks&#39;) {</span>
+<span class="gp">... </span><span class="s1">                return {</span>
+<span class="gp">... </span><span class="s1">                    &quot;fill&quot;: true,</span>
+<span class="gp">... </span><span class="s1">                    &quot;weight&quot;: 1,</span>
+<span class="gp">... </span><span class="s1">                    &quot;fillColor&quot;: &#39;green&#39;,</span>
+<span class="gp">... </span><span class="s1">                    &quot;color&quot;: &#39;black&#39;,</span>
+<span class="gp">... </span><span class="s1">                    &quot;fillOpacity&quot;:0.6,</span>
+<span class="gp">... </span><span class="s1">                    &quot;opacity&quot;:0.6</span>
+<span class="gp">... </span><span class="s1">                };</span>
+<span class="gp">... </span><span class="s1">            }</span>
+<span class="gp">... </span><span class="s1">            if (f.type === &#39;water&#39;) {</span>
+<span class="gp">... </span><span class="s1">                return {</span>
+<span class="gp">... </span><span class="s1">                    &quot;fill&quot;: true,</span>
+<span class="gp">... </span><span class="s1">                    &quot;weight&quot;: 1,</span>
+<span class="gp">... </span><span class="s1">                    &quot;fillColor&quot;: &#39;purple&#39;,</span>
+<span class="gp">... </span><span class="s1">                    &quot;color&quot;: &#39;black&#39;,</span>
+<span class="gp">... </span><span class="s1">                    &quot;fillOpacity&quot;:0.6,</span>
+<span class="gp">... </span><span class="s1">                    &quot;opacity&quot;:0.6</span>
+<span class="gp">... </span><span class="s1">                };</span>
+<span class="gp">... </span><span class="s1">            }</span>
+<span class="gp">... </span><span class="s1">        }</span>
+<span class="gp">... </span><span class="s1">    }</span>
+<span class="gp">... </span><span class="s1">}&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">VectorGridProtobuf</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="s2">&quot;layer_name&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more info, see: <a class="reference external" href="https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html#styling-vectorgrids">https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html#styling-vectorgrids</a>.</p>
+<dl class="py attribute">
+<dt id="folium.plugins.VectorGridProtobuf.default_js">
+<code class="sig-name descname">default_js</code><em class="property"> = [('vectorGrid', 'https://unpkg.com/leaflet.vectorgrid&#64;latest/dist/Leaflet.VectorGrid.bundled.js')]</em><a class="headerlink" href="#folium.plugins.VectorGridProtobuf.default_js" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1147,13 +1379,13 @@ Note: this seems to be overridden by the WMS Tile Layer GetCapabilities.</p></li
         <li class="right" >
           <a href="modules.html" title="folium"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Folium 0.14.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plugins</span></code></a></li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Rob Story.
-    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.4.3.Theme by <a href="http://github.com/vkvn">vkvn</a>
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 3.1.0.Theme by <a href="http://github.com/vkvn">vkvn</a>
     </div>
   </body>
 </html>
