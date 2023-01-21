@@ -19,7 +19,6 @@ Dependencies
 Folium has the following dependencies, all of which are installed automatically
 with the above installation commands:
 
-- python 3.6 or newer
 - branca
 - Jinja2
 - Numpy

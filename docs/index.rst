@@ -33,13 +33,13 @@ Contents
    :caption: Getting Started
 
    installing
-   overview
+   quickstart.md
+
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents
+   :caption: User guide
 
-   Quickstart.md
    flask
 
 .. toctree::
