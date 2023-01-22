@@ -5,10 +5,8 @@ import json
 import math
 import os
 import re
-import struct
 import tempfile
 import uuid
-import zlib
 from contextlib import contextmanager
 from typing import (
     Any,
@@ -34,6 +32,7 @@ from branca.utilities import (  # noqa F401
     _parse_size,
     none_max,
     none_min,
+    write_png,
 )
 
 try:
@@ -205,99 +204,6 @@ def _is_url(url: str) -> bool:
         return urlparse(url).scheme in _VALID_URLS
     except Exception:
         return False
-
-
-def write_png(
-    data: Any,
-    origin: str = "upper",
-    colormap: Optional[Callable] = None,
-) -> bytes:
-    """
-    Transform an array of data into a PNG string.
-    This can be written to disk using binary I/O, or encoded using base64
-    for an inline PNG like this:
-
-    >>> png_str = write_png(array)
-    >>> "data:image/png;base64," + png_str.encode("base64")
-
-    Inspired from
-    https://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
-
-    Parameters
-    ----------
-    data: numpy array or equivalent list-like object.
-         Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
-
-    origin : ['upper' | 'lower'], optional, default 'upper'
-        Place the [0,0] index of the array in the upper left or lower left
-        corner of the axes.
-
-    colormap : callable, used only for `mono` image.
-        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-        for transforming a mono image into RGB.
-        It must output iterables of length 3 or 4, with values between
-        0. and 1.  Hint: you can use colormaps from `matplotlib.cm`.
-
-    Returns
-    -------
-    PNG formatted byte string
-
-    """
-    colormap = colormap or (lambda x: (x, x, x, 1))
-
-    arr = np.atleast_3d(data)
-    height, width, nblayers = arr.shape
-
-    if nblayers not in [1, 3, 4]:
-        raise ValueError("Data must be NxM (mono), NxMx3 (RGB), or NxMx4 (RGBA)")
-    assert arr.shape == (height, width, nblayers)
-
-    if nblayers == 1:
-        arr = np.array(list(map(colormap, arr.ravel())))
-        nblayers = arr.shape[1]
-        if nblayers not in [3, 4]:
-            raise ValueError(
-                "colormap must provide colors of length 3 (RGB) or 4 (RGBA)"
-            )
-        arr = arr.reshape((height, width, nblayers))
-    assert arr.shape == (height, width, nblayers)
-
-    if nblayers == 3:
-        arr = np.concatenate((arr, np.ones((height, width, 1))), axis=2)
-        nblayers = 4
-    assert arr.shape == (height, width, nblayers)
-    assert nblayers == 4
-
-    # Normalize to uint8 if it isn't already.
-    if arr.dtype != "uint8":
-        with np.errstate(divide="ignore", invalid="ignore"):
-            arr = arr * 255.0 / arr.max(axis=(0, 1)).reshape((1, 1, 4))
-            arr[~np.isfinite(arr)] = 0
-        arr = arr.astype("uint8")
-
-    # Eventually flip the image.
-    if origin == "lower":
-        arr = arr[::-1, :, :]
-
-    # Transform the array to bytes.
-    raw_data = b"".join([b"\x00" + arr[i, :, :].tobytes() for i in range(height)])
-
-    def png_pack(png_tag, data):
-        chunk_head = png_tag + data
-        return (
-            struct.pack("!I", len(data))
-            + chunk_head
-            + struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head))
-        )
-
-    return b"".join(
-        [
-            b"\x89PNG\r\n\x1a\n",
-            png_pack(b"IHDR", struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
-            png_pack(b"IDAT", zlib.compress(raw_data, 9)),
-            png_pack(b"IEND", b""),
-        ]
-    )
 
 
 def mercator_transform(
