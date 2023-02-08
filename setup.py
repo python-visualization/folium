@@ -6,7 +6,7 @@ from setuptools import setup
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 if sys.version_info < (3, 5):
-    error = """
+    error = f"""
     folium 0.9+ supports Python 3.5 and above.
     When using Python 2.7, please install folium 0.8.*.
 
@@ -14,12 +14,10 @@ if sys.version_info < (3, 5):
 
     https://github.com/python-visualization/folium/blob/main/README.rst
 
-    Python {py} detected.
+    Python {'.'.join([str(v) for v in sys.version_info[:3]])} detected.
 
     Try upgrading pip and retry.
-    """.format(
-        py=".".join([str(v) for v in sys.version_info[:3]])
-    )
+    """
     print(error, file=sys.stderr)
     sys.exit(1)
 
@@ -64,7 +62,7 @@ setup(
     name="folium",
     description="Make beautiful maps with Leaflet.js & Python",
     license="MIT",
-    long_description="{}".format(read("README.rst")),
+    long_description=f"{read('README.rst')}",
     long_description_content_type="text/x-rst",
     author="Rob Story",
     author_email="wrobstory@gmail.com",

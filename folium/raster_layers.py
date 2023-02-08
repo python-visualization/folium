@@ -8,13 +8,8 @@ from branca.element import Element, Figure
 from jinja2 import Environment, PackageLoader, Template
 
 from folium.map import Layer
-from folium.utilities import (
-    TypeBounds,
-    TypeJsonValue,
-    image_to_url,
-    mercator_transform,
-    parse_options,
-)
+from folium.utilities import (TypeBounds, TypeJsonValue, image_to_url,
+                              mercator_transform, parse_options)
 
 if TYPE_CHECKING:
     import xyzservices

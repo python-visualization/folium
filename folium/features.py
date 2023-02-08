@@ -7,34 +7,26 @@ import functools
 import json
 import operator
 import warnings
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import (Any, Callable, Dict, Iterable, List, Optional, Sequence,
+                    Tuple, Union)
 
 import numpy as np
 import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement
+from branca.element import (Element, Figure, Html, IFrame, JavascriptLink,
+                            MacroElement)
 from branca.utilities import color_brewer
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
-from folium.utilities import (
-    TypeJsonValue,
-    TypeLine,
-    TypePathOptions,
-    _parse_size,
-    camelize,
-    escape_backticks,
-    get_bounds,
-    get_obj_in_upper_tree,
-    image_to_url,
-    javascript_identifier_path_to_array_notation,
-    none_max,
-    none_min,
-    parse_options,
-    validate_locations,
-)
+from folium.utilities import (TypeJsonValue, TypeLine, TypePathOptions,
+                              _parse_size, camelize, escape_backticks,
+                              get_bounds, get_obj_in_upper_tree, image_to_url,
+                              javascript_identifier_path_to_array_notation,
+                              none_max, none_min, parse_options,
+                              validate_locations)
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
 
@@ -700,8 +692,7 @@ class GeoJson(Layer):
             return json.loads(json.dumps(data.__geo_interface__))
         else:
             raise ValueError(
-                "Cannot render objects with any missing geometries"
-                ": {!r}".format(data)
+                f"Cannot render objects with any missing geometries: {data!r}"
             )
 
     def get_geojson_from_web(self, url: str) -> dict:
@@ -966,7 +957,7 @@ class TopoJson(JSCSSMixin, Layer):
         if "read" in dir(data):
             self.embed = True
             self.data = json.load(data)
-        elif type(data) is dict:
+        elif isinstance(data, dict):
             self.embed = True
             self.data = data
         else:
@@ -1148,9 +1139,7 @@ class GeoJsonDetail(MacroElement):
         for value in self.fields:
             assert (
                 value in keys
-            ), "The field {} is not available in the data. Choose from: {}.".format(
-                value, keys
-            )
+            ), f"The field {value} is not available in the data. Choose from: {keys}."
         figure.header.add_child(
             Element(
                 Template(

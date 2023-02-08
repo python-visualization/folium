@@ -2,47 +2,19 @@ import sys
 
 import branca
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import (
-    CssLink,
-    Div,
-    Element,
-    Figure,
-    Html,
-    IFrame,
-    JavascriptLink,
-    Link,
-    MacroElement,
-)
+from branca.element import (CssLink, Div, Element, Figure, Html, IFrame,
+                            JavascriptLink, Link, MacroElement)
 
-from folium.features import (
-    Choropleth,
-    ClickForLatLng,
-    ClickForMarker,
-    ColorLine,
-    CustomIcon,
-    DivIcon,
-    GeoJson,
-    GeoJsonPopup,
-    GeoJsonTooltip,
-    LatLngPopup,
-    RegularPolygonMarker,
-    TopoJson,
-    Vega,
-    VegaLite,
-)
+from folium.features import (Choropleth, ClickForLatLng, ClickForMarker,
+                             ColorLine, CustomIcon, DivIcon, GeoJson,
+                             GeoJsonPopup, GeoJsonTooltip, LatLngPopup,
+                             RegularPolygonMarker, TopoJson, Vega, VegaLite)
 from folium.folium import Map
-from folium.map import (
-    FeatureGroup,
-    FitBounds,
-    FitOverlays,
-    Icon,
-    LayerControl,
-    Marker,
-    Popup,
-    Tooltip,
-)
+from folium.map import (FeatureGroup, FitBounds, FitOverlays, Icon,
+                        LayerControl, Marker, Popup, Tooltip)
 from folium.raster_layers import TileLayer, WmsTileLayer
-from folium.vector_layers import Circle, CircleMarker, Polygon, PolyLine, Rectangle
+from folium.vector_layers import (Circle, CircleMarker, Polygon, PolyLine,
+                                  Rectangle)
 
 try:
     from ._version import __version__
@@ -61,7 +33,7 @@ if branca.__version__ != "unknown" and tuple(
 
 if sys.version_info < (3, 0):
     raise ImportError(
-        """You are running folium {} on Python 2
+        f"""You are running folium {__version__} on Python 2
 
     folium 0.9 and above are no longer compatible with Python 2, but somehow
     you got this version anyway. Make sure you have pip >= 9.0 to avoid this
@@ -77,9 +49,7 @@ if sys.version_info < (3, 0):
 
      $ pip install 'folium<0.9.0'
 
-    """.format(
-            __version__
-        )
+    """
     )  # noqa
 
 __all__ = [

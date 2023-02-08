@@ -58,10 +58,10 @@ def test_vectorgrid_str_options():
     assert '"subdomain": "test"' in out
 
     for k, v in dict_options["vectorTileLayerStyles"]["all"].items():
-        if type(v) == bool:
+        if isinstance(v, bool):
             assert f'"{k}": {str(v).lower()}' in out
             continue
-        if type(v) == str:
+        if isinstance(v, str):
             assert f'"{k}": "{v}"' in out
             continue
 
@@ -99,10 +99,10 @@ def test_vectorgrid_dict_options():
     assert '"subdomain": "test"' in out
 
     for k, v in options["vectorTileLayerStyles"]["all"].items():
-        if type(v) == bool:
+        if isinstance(v, bool):
             assert f'"{k}": {str(v).lower()}' in out
             continue
-        if type(v) == str:
+        if isinstance(v, str):
             assert f'"{k}": "{v}"' in out
             continue
 

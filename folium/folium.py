@@ -13,14 +13,9 @@ from jinja2 import Environment, PackageLoader, Template
 from folium.elements import JSCSSMixin
 from folium.map import FitBounds, Layer
 from folium.raster_layers import TileLayer
-from folium.utilities import (
-    TypeBounds,
-    TypeJsonValue,
-    _parse_size,
-    parse_options,
-    temp_html_filepath,
-    validate_location,
-)
+from folium.utilities import (TypeBounds, TypeJsonValue, _parse_size,
+                              parse_options, temp_html_filepath,
+                              validate_location)
 
 ENV = Environment(loader=PackageLoader("folium", "templates"))
 

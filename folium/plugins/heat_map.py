@@ -5,13 +5,8 @@ from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import Layer
-from folium.utilities import (
-    if_pandas_df_convert_to_numpy,
-    none_max,
-    none_min,
-    parse_options,
-    validate_location,
-)
+from folium.utilities import (if_pandas_df_convert_to_numpy, none_max,
+                              none_min, parse_options, validate_location)
 
 
 class HeatMap(JSCSSMixin, Layer):

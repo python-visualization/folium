@@ -3,19 +3,12 @@ import pandas as pd
 import pytest
 
 from folium import FeatureGroup, Map, Marker, Popup
-from folium.utilities import (
-    _is_url,
-    camelize,
-    deep_copy,
-    escape_double_quotes,
-    get_obj_in_upper_tree,
-    if_pandas_df_convert_to_numpy,
-    javascript_identifier_path_to_array_notation,
-    parse_options,
-    validate_location,
-    validate_locations,
-    validate_multi_locations,
-)
+from folium.utilities import (_is_url, camelize, deep_copy,
+                              escape_double_quotes, get_obj_in_upper_tree,
+                              if_pandas_df_convert_to_numpy,
+                              javascript_identifier_path_to_array_notation,
+                              parse_options, validate_location,
+                              validate_locations, validate_multi_locations)
 
 
 @pytest.mark.parametrize(

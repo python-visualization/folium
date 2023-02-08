@@ -8,15 +8,9 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
-from folium.utilities import (
-    TypeLine,
-    TypeMultiLine,
-    TypePathOptions,
-    camelize,
-    get_bounds,
-    validate_locations,
-    validate_multi_locations,
-)
+from folium.utilities import (TypeLine, TypeMultiLine, TypePathOptions,
+                              camelize, get_bounds, validate_locations,
+                              validate_multi_locations)
 
 
 def path_options(

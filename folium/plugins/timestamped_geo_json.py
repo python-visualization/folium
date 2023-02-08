@@ -200,7 +200,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         if "read" in dir(data):
             self.embed = True
             self.data = data.read()
-        elif type(data) is dict:
+        elif isinstance(data, dict):
             self.embed = True
             self.data = json.dumps(data)
         else:

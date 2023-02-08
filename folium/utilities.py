@@ -8,32 +8,15 @@ import re
 import tempfile
 import uuid
 from contextlib import contextmanager
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
-)
+from typing import (Any, Callable, Dict, Iterable, Iterator, List, Optional,
+                    Sequence, Tuple, Type, Union)
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
 from branca.element import Element, Figure
-
 # import here for backwards compatibility
-from branca.utilities import (  # noqa F401
-    _locations_mirror,
-    _parse_size,
-    none_max,
-    none_min,
-    write_png,
-)
+from branca.utilities import (_locations_mirror, _parse_size,  # noqa F401
+                              none_max, none_min, write_png)
 
 try:
     import pandas as pd
@@ -79,8 +62,7 @@ def validate_location(location: Sequence[float]) -> List[float]:
         )
     if len(location) != 2:
         raise ValueError(
-            "Expected two (lat, lon) values for location, "
-            "instead got: {!r}.".format(location)
+            f"Expected two (lat, lon) values for location, instead got: {location!r}."
         )
     try:
         coords = (location[0], location[1])

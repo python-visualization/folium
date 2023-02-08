@@ -49,7 +49,7 @@ def test_figure_creation():
 def test_figure_rendering():
     f = folium.Figure()
     out = f.render()
-    assert type(out) is str
+    assert isinstance(out, str)
 
     bounds = f.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds

@@ -127,9 +127,7 @@ class Search(JSCSSMixin, MacroElement):
     def test_params(self, keys):
         if keys is not None and self.search_label is not None:
             assert self.search_label in keys, (
-                "The label '{}' was not "
-                "available in {}"
-                "".format(self.search_label, keys)
+                f"The label '{self.search_label}' was not available in {keys}"
             )
         assert isinstance(
             self._parent, Map

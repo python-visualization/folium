@@ -9,15 +9,9 @@ from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
-from folium.utilities import (
-    TypeBounds,
-    TypeJsonValue,
-    camelize,
-    escape_backticks,
-    get_and_assert_figure_root,
-    parse_options,
-    validate_location,
-)
+from folium.utilities import (TypeBounds, TypeJsonValue, camelize,
+                              escape_backticks, get_and_assert_figure_root,
+                              parse_options, validate_location)
 
 
 class Layer(MacroElement):
@@ -286,9 +280,7 @@ class Icon(MacroElement):
         self._name = "Icon"
         if color not in self.color_options:
             warnings.warn(
-                "color argument of Icon should be one of: {}.".format(
-                    self.color_options
-                ),
+                f"color argument of Icon should be one of: {self.color_options}.",
                 stacklevel=2,
             )
         self.options = parse_options(
@@ -382,9 +374,7 @@ class Marker(MacroElement):
     def render(self) -> None:
         if self.location is None:
             raise ValueError(
-                "{} location must be assigned when added directly to map.".format(
-                    self._name
-                )
+                f"{self._name} location must be assigned when added directly to map."
             )
         super().render()
 
