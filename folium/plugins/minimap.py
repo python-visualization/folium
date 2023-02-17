@@ -105,7 +105,6 @@ class MiniMap(JSCSSMixin, MacroElement):
         minimized=False,
         **kwargs
     ):
-
         super().__init__()
         self._name = "MiniMap"
 

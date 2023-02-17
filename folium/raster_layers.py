@@ -107,7 +107,6 @@ class TileLayer(Layer):
         opacity: float = 1,
         **kwargs
     ):
-
         # check for xyzservices.TileProvider without importing it
         if isinstance(tiles, dict):
             attr = attr if attr else tiles.html_attribution  # type: ignore
