@@ -5,7 +5,6 @@ from setuptools import setup
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
-
 def read(*parts):
     return open(os.path.join(rootpath, *parts)).read()
 

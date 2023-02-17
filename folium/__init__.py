@@ -1,4 +1,3 @@
-
 import branca
 from branca.colormap import ColorMap, LinearColormap, StepColormap
 from branca.element import (
@@ -56,7 +55,6 @@ if branca.__version__ != "unknown" and tuple(
         "branca version 0.3.0 or higher is required. "
         "Update branca with e.g. `pip install branca --upgrade`."
     )
-
 
 
 __all__ = [
