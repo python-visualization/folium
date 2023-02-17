@@ -19,7 +19,12 @@ color = true
 ignore_missing_imports = true
 
 [tool.ruff]
-target-version = "py310"
+select = [
+    "F", # flakes
+    "I", # import sorting
+    "U", # upgrade
+]
+target-version = "py37"
 line-length = 120
 
 [tool.ruff.per-file-ignores]
