@@ -55,7 +55,6 @@ class MeasureControl(JSCSSMixin, MacroElement):
         secondary_area_unit="acres",
         **kwargs
     ):
-
         super().__init__()
         self._name = "MeasureControl"
 

@@ -85,7 +85,6 @@ class MousePosition(JSCSSMixin, MacroElement):
         lng_formatter=None,
         **kwargs
     ):
-
         super().__init__()
         self._name = "MousePosition"
 

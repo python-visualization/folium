@@ -1,27 +1,8 @@
 import os
-import sys
 
 from setuptools import setup
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
-
-if sys.version_info < (3, 5):
-    error = """
-    folium 0.9+ supports Python 3.5 and above.
-    When using Python 2.7, please install folium 0.8.*.
-
-    See folium `README.rst` file for more information:
-
-    https://github.com/python-visualization/folium/blob/main/README.rst
-
-    Python {py} detected.
-
-    Try upgrading pip and retry.
-    """.format(
-        py=".".join([str(v) for v in sys.version_info[:3]])
-    )
-    print(error, file=sys.stderr)
-    sys.exit(1)
 
 
 def read(*parts):

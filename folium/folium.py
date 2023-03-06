@@ -65,7 +65,6 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
-
     _template = Template(
         """
         <script>
