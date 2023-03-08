@@ -160,6 +160,8 @@ def image_to_url(
     image: Any,
     colormap: Optional[Callable] = None,
     origin: str = "upper",
+    vmin: Optional[float] = None,
+    vmax: Optional[float] = None,
 ) -> str:
     """
     Infers the type of an image argument and transforms it into a URL.
@@ -180,7 +182,12 @@ def image_to_url(
         for transforming a mono image into RGB.
         It must output iterables of length 3 or 4, with values between
         0. and 1.  You can use colormaps from `matplotlib.cm`.
-
+    vmin: float, optional
+        The minimum value to use for the colormap. If not provided, the
+        minimum value in the image will be used.
+    vmax: float, optional
+        The maximum value to use for the colormap. If not provided, the
+        maximum value in the image will be used.
     """
     if isinstance(image, str) and not _is_url(image):
         fileformat = os.path.splitext(image)[-1][1:]
@@ -189,7 +196,7 @@ def image_to_url(
         b64encoded = base64.b64encode(img).decode("utf-8")
         url = f"data:image/{fileformat};base64,{b64encoded}"
     elif "ndarray" in image.__class__.__name__:
-        img = write_png(image, origin=origin, colormap=colormap)
+        img = write_png(image, origin=origin, colormap=colormap, vmin=vmin, vmax=vmax)
         b64encoded = base64.b64encode(img).decode("utf-8")
         url = f"data:image/png;base64,{b64encoded}"
     else:

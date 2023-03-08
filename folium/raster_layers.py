@@ -307,6 +307,8 @@ class ImageOverlay(Layer):
         colormap: Optional[Callable] = None,
         mercator_project: bool = False,
         pixelated: bool = True,
+        vmin: Optional[float] = None,
+        vmax: Optional[float] = None,
         name: Optional[str] = None,
         overlay: bool = True,
         control: bool = True,
@@ -323,7 +325,7 @@ class ImageOverlay(Layer):
                 image, (bounds[0][0], bounds[1][0]), origin=origin
             )
 
-        self.url = image_to_url(image, origin=origin, colormap=colormap)
+        self.url = image_to_url(image, origin=origin, colormap=colormap, vmin=vmin, vmax=vmax)
 
     def render(self, **kwargs) -> None:
         super().render()
