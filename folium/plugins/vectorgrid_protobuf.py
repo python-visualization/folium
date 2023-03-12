@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
@@ -10,19 +12,26 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
 
     Parameters
     ----------
-    url: url to tile provider
+    url: str
+        url to tile provider
         e.g. https://free-{s}.tilehosting.com/data/v3/{z}/{x}/{y}.pbf?token={token}
-    layer_name: string, default "VectorGridLayer"
-        name of the layer
-    options: dict or str, VectorGrid.protobuf options
-
-        For convenience you can pass VectorGrid.protobuf options as python dictionary or string.
+    name: str, optional
+        Name of the layer that will be displayed in LayerControl
+    options: dict or str, optional
+        VectorGrid.protobuf options, which you can pass as python dictionary or string.
         Strings allow plain JavaScript to be passed, therefore allow for conditional styling (see examples).
 
         Additionally the url might contain any string literals like {token}, or {key}
         that can be passed as attribute to the options dict and will be substituted.
 
         Every layer inside the tile layer has to be styled separately.
+    overlay : bool, default True
+        Whether your layer will be an overlay (ticked with a check box in
+        LayerControls) or a base layer (ticked with a radio button).
+    control: bool, default True
+        Whether the layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening.
 
     Examples
     --------
@@ -100,12 +109,10 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
             {% macro script(this, kwargs) -%}
             var {{ this.get_name() }} = L.vectorGrid.protobuf(
                 '{{ this.url }}',
-                {% if this.options is defined %}
-                {{ this.options if this.options is string else this.options|tojson }})
-                .addTo({{ this._parent.get_name() }});
-                {% else %}
-                {{ this.options }});
-            {% endif %}
+                {%- if this.options is defined %}
+                    {{ this.options if this.options is string else this.options|tojson }}
+                {%- endif %}
+            );
             {%- endmacro %}
             """
     )
@@ -117,13 +124,17 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
         )
     ]
 
-    def __init__(self, url, layer_name, options=None):
-        self.layer_name = layer_name if layer_name else "VectorGridProtobufLayer"
-
-        super().__init__(name=self.layer_name)
-
-        self.url = url
+    def __init__(
+            self,
+            url: str,
+            name: Optional[str] = None,
+            options: Union[str, dict, None] = None,
+            overlay: bool = True,
+            control: bool = True,
+            show: bool = True,
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "VectorGridProtobuf"
-
+        self.url = url
         if options is not None:
             self.options = options
