@@ -39,7 +39,7 @@ class SideBySideLayers(JSCSSMixin, MacroElement):
     default_js = [
         (
             "leaflet.sidebyside",
-            "https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side@gh-pages/leaflet-side-by-side.min.js",
+            "https://cdn.jsdelivr.net/gh/digidem/leaflet-side-by-side@2.0.0/leaflet-side-by-side.min.js",
         ),
     ]
 
