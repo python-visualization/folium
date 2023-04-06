@@ -45,7 +45,7 @@ and pass the url and attribution. For example:
 folium.Map(tiles='http://{s}.tiles.example.com/{z}/{x}/{y}.png', attr='My Data Attribution')
 ```
 
-Folium also excepts objects from the [xyzservices package](https://github.com/geopandas/xyzservices).
+Folium also accepts objects from the [xyzservices package](https://github.com/geopandas/xyzservices).
 
 
 Adding markers
@@ -69,12 +69,6 @@ folium.Marker(
     tooltip="Click me!",
     popup="Timberline Lodge",
     icon=folium.Icon(color="green"),
-).add_to(m)
-
-folium.Marker(
-    location=[45.3300, -121.6823],
-    popup="Some Other Location",
-    icon=folium.Icon(color="red", icon="info-sign"),
 ).add_to(m)
 
 m
