@@ -41,6 +41,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
             let slider_body = d3.select("body").insert("div", "div.folium-map")
                 .attr("id", "slider_{{ this.get_name() }}");
+            $("#slider_{{ this.get_name() }}").hide();
             // insert time slider label
             slider_body.append("output")
                 .attr("width", "100")
@@ -118,6 +119,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
             {%- if this.show %}
             {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
+            $("#slider_{{ this.get_name() }}").show();
             {%- endif %}
         }
         {% endmacro %}
