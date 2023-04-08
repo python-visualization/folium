@@ -34,32 +34,34 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            var timestamps = {{ this.timestamps|tojson }};
-            var styledict = {{ this.styledict|tojson }};
-            var current_timestamp = timestamps[{{ this.init_timestamp }}];
+        {
+            let timestamps = {{ this.timestamps|tojson }};
+            let styledict = {{ this.styledict|tojson }};
+            let current_timestamp = timestamps[{{ this.init_timestamp }}];
+
+            let slider_body = d3.select("body").insert("div", "div.folium-map")
+                .attr("id", "slider_{{ this.get_name() }}");
+            // insert time slider label
+            slider_body.append("output")
+                .attr("width", "100")
+                .style('font-size', '18px')
+                .style('text-align', 'center')
+                .style('font-weight', '500%')
+                .style('margin', '5px');
             // insert time slider
-            d3.select("body").insert("p", ":first-child").append("input")
+            slider_body.append("input")
                 .attr("type", "range")
                 .attr("width", "100px")
                 .attr("min", 0)
                 .attr("max", timestamps.length - 1)
                 .attr("value", {{ this.init_timestamp }})
-                .attr("id", "slider")
                 .attr("step", "1")
                 .style('align', 'center');
 
-            // insert time slider output BEFORE time slider (text on top of slider)
-            d3.select("body").insert("p", ":first-child").append("output")
-                .attr("width", "100")
-                .attr("id", "slider-value")
-                .style('font-size', '18px')
-                .style('text-align', 'center')
-                .style('font-weight', '500%');
+            let datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+            d3.select("#slider_{{ this.get_name() }} > output").text(datestring);
 
-            var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
-            d3.select("output#slider-value").text(datestring);
-
-            fill_map = function(){
+            let fill_map = function(){
                 for (var feature_id in styledict){
                     let style = styledict[feature_id]//[current_timestamp];
                     var fillColor = 'white';
@@ -67,44 +69,23 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                     if (current_timestamp in style){
                         fillColor = style[current_timestamp]['color'];
                         opacity = style[current_timestamp]['opacity'];
-                        d3.selectAll('#feature-'+feature_id
+                        d3.selectAll('#{{ this.get_name() }}-feature-'+feature_id
                         ).attr('fill', fillColor)
                         .style('fill-opacity', opacity);
                     }
                 }
             }
 
-            d3.select("#slider").on("input", function() {
+            d3.select("#slider_{{ this.get_name() }} > input").on("input", function() {
                 current_timestamp = timestamps[this.value];
                 var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
-                d3.select("output#slider-value").text(datestring);
+                d3.select("#slider_{{ this.get_name() }} > output").text(datestring);
                 fill_map();
             });
 
-            {% if this.highlight %}
-                {{this.get_name()}}_onEachFeature = function onEachFeature(feature, layer) {
-                    layer.on({
-                        mouseout: function(e) {
-                        if (current_timestamp in styledict[e.target.feature.id]){
-                            var opacity = styledict[e.target.feature.id][current_timestamp]['opacity'];
-                            d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', opacity);
-                        }
-                    },
-                        mouseover: function(e) {
-                        if (current_timestamp in styledict[e.target.feature.id]){
-                            d3.selectAll('#feature-'+e.target.feature.id).style('fill-opacity', 1);
-                        }
-                    },
-                        click: function(e) {
-                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());
-                    }
-                    });
-                };
-            {% endif %}
-
             var {{ this.get_name() }} = L.geoJson(
-                    {{ this.data|tojson }}
-            ).addTo({{ this._parent.get_name() }});
+                {{ this.data|tojson }}
+            );
 
             {{ this.get_name() }}.setStyle(function(feature) {
                 if (feature.properties.style !== undefined){
@@ -115,10 +96,12 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 }
             });
 
-            function onOverlayAdd(e) {
+            let onOverlayAdd = function(e) {
                 {{ this.get_name() }}.eachLayer(function (layer) {
-                    layer._path.id = 'feature-' + layer.feature.id;
+                    layer._path.id = '{{ this.get_name() }}-feature-' + layer.feature.id;
                 });
+
+                $("#slider_{{ this.get_name() }}").show();
 
                 d3.selectAll('path')
                 .attr('stroke', 'white')
@@ -128,13 +111,15 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
                 fill_map();
             }
-            {{ this._parent.get_name() }}.on('overlayadd', onOverlayAdd);
+            {{ this.get_name() }}.on('add', onOverlayAdd);
+            {{ this.get_name() }}.on('remove', function() {
+                $("#slider_{{ this.get_name() }}").hide();
+            })
 
-            onOverlayAdd(); // fill map as layer is loaded
-
-            {%- if not this.show %}
-            {{ this.get_name() }}.remove();
+            {%- if this.show %}
+            {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
             {%- endif %}
+        }
         {% endmacro %}
         """
     )
