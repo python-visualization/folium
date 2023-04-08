@@ -16,6 +16,8 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     styledict: dict
         A dictionary where the keys are the geojson feature ids and the values are
         dicts of `{time: style_options_dict}`
+    highlight: bool, default False
+        Whether to show a visual effect on mouse hover and click.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls.
     overlay : bool, default False
@@ -84,8 +86,31 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 fill_map();
             });
 
+            let onEachFeature;
+            {% if this.highlight %}
+                 onEachFeature = function(feature, layer) {
+                    layer.on({
+                        mouseout: function(e) {
+                        if (current_timestamp in styledict[e.target.feature.id]){
+                            var opacity = styledict[e.target.feature.id][current_timestamp]['opacity'];
+                            d3.selectAll('#{{ this.get_name() }}-feature-'+e.target.feature.id).style('fill-opacity', opacity);
+                        }
+                    },
+                        mouseover: function(e) {
+                        if (current_timestamp in styledict[e.target.feature.id]){
+                            d3.selectAll('#{{ this.get_name() }}-feature-'+e.target.feature.id).style('fill-opacity', 1);
+                        }
+                    },
+                        click: function(e) {
+                            {{this._parent.get_name()}}.fitBounds(e.target.getBounds());
+                    }
+                    });
+                };
+            {% endif %}
+
             var {{ this.get_name() }} = L.geoJson(
-                {{ this.data|tojson }}
+                {{ this.data|tojson }},
+                {onEachFeature: onEachFeature}
             );
 
             {{ this.get_name() }}.setStyle(function(feature) {
@@ -132,6 +157,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         self,
         data,
         styledict,
+        highlight: bool = False,
         name=None,
         overlay=True,
         control=True,
@@ -140,6 +166,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
+        self.highlight = highlight
 
         if not isinstance(styledict, dict):
             raise ValueError(
