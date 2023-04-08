@@ -28,6 +28,21 @@ class MeasureControl(JSCSSMixin, MacroElement):
                 {{ this.options|tojson }});
             {{this._parent.get_name()}}.addControl({{this.get_name()}});
 
+            // Workaround for using this plugin with Leaflet>=1.8.0
+            // https://github.com/ljagis/leaflet-measure/issues/171
+            L.Control.Measure.include({
+                _setCaptureMarkerIcon: function () {
+                    // disable autopan
+                    this._captureMarker.options.autoPanOnFocus = false;
+                    // default function
+                    this._captureMarker.setIcon(
+                        L.divIcon({
+                            iconSize: this._map.getSize().multiplyBy(2)
+                        })
+                    );
+                },
+            });
+
         {% endmacro %}
         """
     )  # noqa
