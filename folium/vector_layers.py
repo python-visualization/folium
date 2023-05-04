@@ -186,6 +186,11 @@ class PolyLine(BaseMultiLocation):
         super().__init__(locations, popup=popup, tooltip=tooltip)
         self._name = "PolyLine"
         self.options = path_options(line=True, **kwargs)
+        self.options.update(
+            {
+                "tags": kwargs.pop("tags", None),
+            }
+        )
 
 
 class Polygon(BaseMultiLocation):
