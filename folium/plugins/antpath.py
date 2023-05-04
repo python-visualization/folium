@@ -65,5 +65,6 @@ class AntPath(JSCSSMixin, BaseMultiLocation):
                 "opacity": kwargs.pop("opacity", 0.5),
                 "color": kwargs.pop("color", "#0000FF"),
                 "pulseColor": kwargs.pop("pulse_color", "#FFFFFF"),
+                "tags": kwargs.pop("tags", None),
             }
         )
