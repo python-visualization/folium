@@ -179,13 +179,13 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 )  # noqa
 
         # Make set of timestamps.
-        timestamps = set()
+        timestamps_set = set()
         for feature in styledict.values():
-            timestamps.update(set(feature.keys()))
+            timestamps_set.update(set(feature.keys()))
         try:
-            timestamps = sorted(timestamps, key=int)
+            timestamps = sorted(timestamps_set, key=int)
         except (TypeError, ValueError):
-            timestamps = sorted(timestamps)
+            timestamps = sorted(timestamps_set)
 
         self.timestamps = timestamps
         self.styledict = styledict
