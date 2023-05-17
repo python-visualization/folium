@@ -144,6 +144,9 @@ class LayerControl(MacroElement):
     autoZIndex : bool, default True
           If true the control assigns zIndexes in increasing order to all of
           its layers so that the order is preserved when switching them on/off.
+    draggable: bool, default False
+          By default the layer control has a fixed position. Set this argument
+          to True to allow dragging the control around.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#control-layers
