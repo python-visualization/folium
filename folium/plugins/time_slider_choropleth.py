@@ -7,7 +7,10 @@ from folium.map import Layer
 
 class TimeSliderChoropleth(JSCSSMixin, Layer):
     """
-    Creates a TimeSliderChoropleth plugin to append into a map with Map.add_child.
+    Create a choropleth with a timeslider for timestamped data.
+
+    Visualize timestamped data, allowing users to view the choropleth at
+    different timestamps using a slider.
 
     Parameters
     ----------
