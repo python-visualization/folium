@@ -601,9 +601,6 @@ class GeoJson(Layer):
             {% if this.style %}
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
-            {% if this.tags %}
-                "tags": {{this.tags}},
-            {%- endif %}
             {%- if this.marker %}
                 pointToLayer: {{ this.get_name() }}_pointToLayer
             {%- endif %}
@@ -639,7 +636,6 @@ class GeoJson(Layer):
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         marker: Union[Circle, CircleMarker, Marker, None] = None,
-        tags: List = None,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "GeoJson"
@@ -651,7 +647,6 @@ class GeoJson(Layer):
         self.style = style_function is not None
         self.highlight = highlight_function is not None
         self.zoom_on_click = zoom_on_click
-        self.tags = tags
         if marker:
             if not isinstance(marker, (Circle, CircleMarker, Marker)):
                 raise TypeError(
