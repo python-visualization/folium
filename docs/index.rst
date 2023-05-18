@@ -5,8 +5,7 @@ Folium
 
 .. image:: _static/folium_logo.jpg
 
-Python data, leaflet.js maps
-****************************
+**Python data, leaflet.js maps**
 
 ``folium`` builds on the data wrangling strengths of the Python ecosystem and
 the mapping strengths of the ``leaflet.js`` library.
@@ -25,29 +24,13 @@ Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API ke
 ``folium`` supports both Image, Video, GeoJSON and TopoJSON overlays.
 
 
-Contents
-==================================
-
 .. toctree::
-   :maxdepth: 1
-   :caption: Getting Started
+   :hidden:
 
-   installing
-   quickstart.md
+   Home <self>
+   Getting started <getting_started>
+   API reference <reference>
 
-
-.. toctree::
-   :maxdepth: 1
-   :caption: User guide
-
-   flask
-
-.. toctree::
-   :maxdepth: 1
-   :caption: API reference
-
-   modules
-   plugins
 
 
 Indices and tables

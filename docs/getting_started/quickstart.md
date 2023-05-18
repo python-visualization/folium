@@ -1,9 +1,5 @@
 Quickstart
-==========
-
-Folium is a geographical visualization library for Python, based on
-[Leaflet.js](https://leafletjs.com/).
-
+===============
 
 Creating a map
 ---------------

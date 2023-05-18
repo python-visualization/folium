@@ -1,5 +1,16 @@
+Getting started
+===============
+
+.. toctree::
+   :hidden:
+
+   Quickstart <getting_started/quickstart.md>
+
+
+
 Installation
-============
+------------
+
 Folium can be installed using
 
 ::
@@ -14,7 +25,7 @@ $ conda install folium -c conda-forge
 
 
 Dependencies
-============
+^^^^^^^^^^^^
 
 Folium has the following dependencies, all of which are installed automatically
 with the above installation commands:
@@ -26,3 +37,9 @@ with the above installation commands:
 
 Additional packages may be necessary for some functionality. It will say so in
 the documentation where that's the case.
+
+
+What's next
+-----------
+
+Check out the :doc:`Quickstart <getting_started/quickstart>`

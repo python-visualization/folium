@@ -1,4 +1,0 @@
-Plugins
-=======
-
-.. automodule:: folium.plugins
