@@ -31,20 +31,6 @@ color_line.add_to(m)
 m
 ```
 
-### Marker, Icon, Popup
-
-```{code-cell} ipython3
-m = folium.Map([0, 0], zoom_start=1)
-mk = features.Marker([0, 0])
-pp = folium.Popup("hello")
-ic = features.Icon(color="red")
-
-mk.add_child(ic)
-mk.add_child(pp)
-m.add_child(mk)
-
-m
-```
 
 ### Vega popup
 
@@ -280,15 +266,88 @@ d2.add_child(folium.Map([46, 3], tiles="OpenStreetMap", zoom_start=5))
 f
 ```
 
-### LayerControl
+
+### Click-related classes
+
+#### ClickForMarker
+
+`ClickForMarker` lets you create markers on each click.
 
 ```{code-cell} ipython3
-m = folium.Map(tiles=None)
+folium.Map().add_child(
+    folium.ClickForMarker()
+)
+```
 
-folium.raster_layers.TileLayer("OpenStreetMap").add_to(m)
-folium.raster_layers.TileLayer("stamentoner", show=False).add_to(m)
+*Click on the map to see the effects*
 
-folium.LayerControl(collapsed=False).add_to(m)
+You can customize the popup by providing a string, an IFrame object or an Html object. You can include the latitude and longitude of the marker by using `${lat}` and `${lng}`.
+
+```{code-cell} ipython3
+folium.Map().add_child(
+    folium.ClickForMarker("<b>Lat:</b> ${lat}<br /><b>Lon:</b> ${lng}")
+)
+```
+
+*Click on the map to see the effects*
+
+
+#### LatLngPopup
+
+`LatLngPopup` lets you create a simple popup at each click.
+
+```{code-cell} ipython3
+folium.Map().add_child(
+    folium.LatLngPopup()
+)
+```
+
+*Click on the map to see the effects*
+
++++
+
+#### ClickForLatLng
+
+`ClickForLatLng` lets you copy coordinates to your browser clipboard.
+
+```{code-cell} ipython3
+folium.Map().add_child(
+    folium.ClickForLatLng(format_str='"[" + lat + "," + lng + "]"', alert=True)
+)
+```
+
+*Click on the map to see the effects*
+
+If you want to collect back the information in python, you may (install and) import the [clipboard](https://github.com/terryyin/clipboard) library:
+
+```
+>>> import clipboard
+>>> clipboard.paste()
+[-43.580391,-123.824467]
+```
+
+### Custom icon
+
+```{code-cell} ipython3
+m = folium.Map(location=[45.372, -121.6972], zoom_start=12, tiles="Stamen Terrain")
+
+url = "https://leafletjs.com/examples/custom-icons/{}".format
+icon_image = url("leaf-red.png")
+shadow_image = url("leaf-shadow.png")
+
+icon = folium.features.CustomIcon(
+    icon_image,
+    icon_size=(38, 95),
+    icon_anchor=(22, 94),
+    shadow_image=shadow_image,
+    shadow_size=(50, 64),
+    shadow_anchor=(4, 62),
+    popup_anchor=(-3, -76),
+)
+
+folium.Marker(
+    location=[45.3288, -121.6625], icon=icon, popup="Mt. Hood Meadows"
+).add_to(m)
 
 m
 ```

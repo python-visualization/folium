@@ -4,4 +4,5 @@ Plugins
 .. toctree::
   :maxdepth: 2
 
-  Heatmap <plugins/heatmap>
+  plugins/heatmap
+  plugins/float_image
