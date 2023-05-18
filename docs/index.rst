@@ -29,6 +29,8 @@ Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API ke
 
    Home <self>
    Getting started <getting_started>
+   User guide <user_guide>
+   Advanced guide <advanced_guide>
    API reference <reference>
 
 
