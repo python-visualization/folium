@@ -12,6 +12,7 @@ from branca.element import (
     MacroElement,
 )
 
+from folium import example_data
 from folium.features import (
     Choropleth,
     ClickForLatLng,
@@ -101,4 +102,5 @@ __all__ = [
     "PolyLine",
     "Polygon",
     "Rectangle",
+    "example_data",
 ]
