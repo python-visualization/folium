@@ -1,3 +1,10 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 ## Using `GeoJson`
 
 ### Loading data
@@ -5,16 +12,7 @@
 Let us load a GeoJSON file representing the US states.
 
 ```{code-cell} ipython3
-import json
-
-import requests
-
-url = (
-    "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-)
-us_states = f"{url}/us-states.json"
-
-geo_json_data = json.loads(requests.get(us_states).text)
+geo_json_data = folium.example_data.us_states_geojson()
 ```
 
 It is a classical GeoJSON `FeatureCollection` (see https://en.wikipedia.org/wiki/GeoJSON) of the form :
@@ -44,14 +42,9 @@ It is a classical GeoJSON `FeatureCollection` (see https://en.wikipedia.org/wiki
             ]
         }
 
-+++
-
 A first way of drawing it on a map, is simply to use `folium.GeoJson` :
 
 ```{code-cell} ipython3
-import folium
-
-
 m = folium.Map([43, -100], zoom_start=4)
 
 folium.GeoJson(geo_json_data).add_to(m)
@@ -64,7 +57,9 @@ Note that you can avoid loading the file on yourself ; in simply providing a fil
 ```{code-cell} ipython3
 m = folium.Map([43, -100], zoom_start=4)
 
-folium.GeoJson(us_states).add_to(m)
+filepath = folium.example_data.get_path("us_states.json")
+
+folium.GeoJson(filepath).add_to(m)
 
 m
 ```
@@ -74,7 +69,7 @@ You can pass a geopandas object.
 ```{code-cell} ipython3
 import geopandas
 
-gdf = geopandas.read_file(us_states)
+gdf = geopandas.read_file(filepath)
 
 m = folium.Map([43, -100], zoom_start=4)
 
@@ -153,10 +148,7 @@ Let's imagine we want to draw a choropleth of unemployment in the US.
 First, we may load the data:
 
 ```{code-cell} ipython3
-import pandas as pd
-
-US_Unemployment_Oct2012 = f"{url}/US_Unemployment_Oct2012.csv"
-unemployment = pd.read_csv(US_Unemployment_Oct2012)
+unemployment = folium.example_data.us_unemployment_pandas_dataframe()
 
 unemployment.head(5)
 ```

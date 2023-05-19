@@ -1,3 +1,10 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # Using GeoPandas.GeoDataFrame in folium
 
 GeoPandas is a project to add support for geographic data to [pandas](http://pandas.pydata.org) objects.
@@ -6,19 +13,11 @@ GeoPandas is a project to add support for geographic data to [pandas](http://pan
 It provides (among other cool things) a `GeoDataFrame` object that represents a Feature collection.
 When you have one, you may be willing to use it on a folium map. Here's the simplest way to do so.
 
-+++
-
 In this example, we'll use the same file as GeoPandas demo ; it's containing
 [the boroughs of New York City](http://www.nyc.gov/html/dcp/download/bytes/nybb_14aav.zip).
 
 ```{code-cell} ipython3
-import geopandas
-
-url = (
-    "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-)
-nybb = f"{url}/nybb.zip"
-boros = geopandas.read_file(nybb)
+boros = folium.example_data.new_york_boroughs_geodataframe()
 
 boros
 ```
@@ -26,9 +25,6 @@ boros
 To create a map with these features, simply put them in a `GeoJson`:
 
 ```{code-cell} ipython3
-import folium
-
-
 m = folium.Map([40.7, -74], zoom_start=10, tiles="cartodbpositron")
 
 folium.GeoJson(boros).add_to(m)
@@ -70,7 +66,7 @@ Folium should work with any object that implements the `__geo_interface__` but b
 import fiona
 import shapely
 
-fname = f"{url}/2014_08_05_farol.gpx"
+fname = folium.example_data.get_path("route_farol.gpx")
 with fiona.open(fname, "r", layer="tracks") as records:
     tracks = [shapely.geometry.shape(record["geometry"]) for record in records]
 

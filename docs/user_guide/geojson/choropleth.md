@@ -1,5 +1,3 @@
-## Using `Choropleth`
-
 ```{code-cell} ipython3
 ---
 nbsphinx: hidden
@@ -7,14 +5,16 @@ nbsphinx: hidden
 import folium
 ```
 
+## Using `Choropleth`
+
 Now if you want to get faster, you can use the `Choropleth` class. Have a look at it's docstring, it has several styling options.
 
 Just like the `GeoJson` class you can provide it a filename, a dict, or a geopandas object.
 
 ```{code-cell} ipython3
-us_states = "../../data/us-states.json"
-
 m = folium.Map([43, -100], zoom_start=4)
+
+us_states = folium.example_data.us_states_geojson()
 
 folium.Choropleth(
     geo_data=us_states,
@@ -28,9 +28,7 @@ m
 Then, in playing with keyword arguments, you can get a choropleth in a few lines:
 
 ```{code-cell} ipython3
-import pandas as pd
-
-state_data = pd.read_csv("../../data/US_Unemployment_Oct2012.csv")
+state_data = folium.example_data.us_unemployment_pandas_dataframe()
 
 m = folium.Map([43, -100], zoom_start=4)
 

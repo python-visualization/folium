@@ -15,20 +15,10 @@ import requests
 ```
 
 ```{code-cell} ipython3
-url = (
-    "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-)
-us_states = f"{url}/us-states.json"
+geo_json_data = folium.example_data.us_states_geojson()
 
-geo_json_data = json.loads(requests.get(us_states).text)
-
-county_data = pd.read_csv(f"{url}/us_county_data.csv")
 clf = 'Civilian_labor_force_2011'
-labor_force = county_data[['State', clf]][
-    (county_data[clf].str.strip()!='') & (~county_data['State'].isin(['PR', 'US']))
-]
-labor_force[clf] = labor_force[clf].astype(int)
-labor_force = labor_force.groupby('State').sum().reset_index()
+labor_force = folium.example_data.us_labor_force_pandas_dataframe()
 
 labor_force.head()
 ```

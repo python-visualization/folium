@@ -1,3 +1,10 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # Panes and CustomPane
 
 Panes are used to control the ordering of layers on the map. You can customise
@@ -8,16 +15,7 @@ For more info on the panes Leaflet has, see https://leafletjs.com/reference.html
 First we'll load geojson data to use in the examples:
 
 ```{code-cell} ipython3
-import json
-
-import folium
-import requests
-
-url = (
-    "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-)
-us_states = f"{url}/us-states.json"
-geo_json_data = json.loads(requests.get(us_states).text)
+geo_json_data = folium.example_data.us_states_geojson()
 
 style_function = lambda x: {"fillOpacity": 0.8}
 ```

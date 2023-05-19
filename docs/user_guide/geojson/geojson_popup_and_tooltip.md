@@ -1,3 +1,10 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # GeoJSON popup and tooltip
 
 ```{code-cell} ipython3
@@ -16,13 +23,9 @@ income.head()
 ```
 
 ```{code-cell} ipython3
-import json
-
 import geopandas
 
-with open("../../data/us-states.json") as f:
-    data = json.load(f)
-
+data = folium.example_data.us_states_geojson()
 states = geopandas.GeoDataFrame.from_features(data, crs="EPSG:4326")
 
 states.head()
@@ -87,13 +90,9 @@ colormap = branca.colormap.LinearColormap(
 ```
 
 ```{code-cell} ipython3
-import folium
-from folium.features import GeoJsonPopup, GeoJsonTooltip
-
-
 m = folium.Map(location=[35.3, -97.6], zoom_start=4)
 
-popup = GeoJsonPopup(
+popup = folium.GeoJsonPopup(
     fields=["name", "change"],
     aliases=["State", "% Change"],
     localize=True,
@@ -101,7 +100,7 @@ popup = GeoJsonPopup(
     style="background-color: yellow;",
 )
 
-tooltip = GeoJsonTooltip(
+tooltip = folium.GeoJsonTooltip(
     fields=["name", "medianincome", "change"],
     aliases=["State:", "2015 Median Income(USD):", "Median % Change:"],
     localize=True,

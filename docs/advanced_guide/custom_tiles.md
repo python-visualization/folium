@@ -1,25 +1,24 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # Custom tiles
 
 ## No tiles
 
 ```{code-cell} ipython3
-import os
-import json
-
-with open("../data/us-states.json") as f:
-    states = json.load(f)
+states = folium.example_data.us_states_geojson()
 
 kw = {"location": [48, -102], "zoom_start": 3}
 ```
 
 ```{code-cell} ipython3
-import folium
-from folium import GeoJson
-
-
 m = folium.Map(tiles=None, **kw)
 
-GeoJson(states).add_to(m)
+folium.GeoJson(states).add_to(m)
 
 m
 ```
@@ -35,7 +34,7 @@ white_tile = branca.utilities.image_to_url([[1, 1], [1, 1]])
 # Create a map using this url for each tile.
 m = folium.Map(tiles=white_tile, attr="white tile", **kw)
 
-GeoJson(states).add_to(m)
+folium.GeoJson(states).add_to(m)
 
 m
 ```
@@ -49,7 +48,7 @@ tiles = branca.utilities.image_to_url(images)
 
 m = folium.Map(tiles=tiles, attr="Just because we can", **kw)
 
-GeoJson(states).add_to(m)
+folium.GeoJson(states).add_to(m)
 
 m
 ```
@@ -61,7 +60,7 @@ tiles = branca.utilities.image_to_url(images)
 
 m = folium.Map(tiles=tiles, attr="Just because we can", **kw)
 
-GeoJson(states).add_to(m)
+folium.GeoJson(states).add_to(m)
 
 m
 ```

@@ -1,3 +1,10 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # Piechart icons
 
 In this example we show how you can make mini-charts on several locations.
@@ -5,16 +12,7 @@ We'll make little piecharts showing the number of consonants and vowels in
 a couple of languages. Those piecharts will be included as icons on the map.
 
 ```{code-cell} ipython3
-import os
-import ast
-
-import pandas
-
-data = pandas.read_csv(
-    "../data/consonants_vowels.csv",
-    # To ensure that tuples are read as tuples
-    converters={"coordinates": ast.literal_eval},
-)
+data = folium.example_data.language_coordinates_and_stats_pandas_dataframe()
 
 data.head()
 ```
@@ -88,9 +86,6 @@ legend._template = branca.element.Template(legend_html)
 ## Map
 
 ```{code-cell} ipython3
-import folium
-
-
 m = folium.Map(location=(0, 0), zoom_start=2)
 
 for i, coord in enumerate(data.coordinates):
@@ -103,5 +98,6 @@ for i, coord in enumerate(data.coordinates):
     marker.add_child(popup)
     m.add_child(marker)
 m.get_root().add_child(legend)
+
 m
 ```

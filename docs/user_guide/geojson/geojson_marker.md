@@ -1,16 +1,16 @@
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
+
 # GeoJSON point features with markers
 
-```{code-cell} ipython3
-import os
-import folium
-import geopandas as gpd
-```
 
 ```{code-cell} ipython3
-gdf = gpd.read_file("../../data/subwaystations.geojson")
-```
+gdf = folium.example_data.subway_stations_geodataframe()
 
-```{code-cell} ipython3
 gdf.head()
 ```
 

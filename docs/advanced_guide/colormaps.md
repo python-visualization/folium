@@ -1,25 +1,19 @@
-# Using `folium.colormap`
+```{code-cell} ipython3
+---
+nbsphinx: hidden
+---
+import folium
+```
 
-**A few examples of how to use `folium.colormap` in choropleths.**
+# Using colormaps
+
+A few examples of how to use `folium.colormap` in choropleths.
 
 Let's load a GeoJSON file, and try to choropleth it.
 
 ```{code-cell} ipython3
-import json
-
-import folium
-import pandas as pd
-import requests
-
-
-url = (
-    "https://raw.githubusercontent.com/python-visualization/folium/main/examples/data"
-)
-us_states = f"{url}/us-states.json"
-US_Unemployment_Oct2012 = f"{url}/US_Unemployment_Oct2012.csv"
-
-geo_json_data = json.loads(requests.get(us_states).text)
-unemployment = pd.read_csv(US_Unemployment_Oct2012)
+geo_json_data = folium.example_data.us_states_geojson()
+unemployment = folium.example_data.us_unemployment_pandas_dataframe()
 
 unemployment_dict = unemployment.set_index("State")["Unemployment"]
 ```
