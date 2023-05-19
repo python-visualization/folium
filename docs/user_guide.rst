@@ -12,6 +12,8 @@ Advanced topics can be found in the :doc:`Advanced Guide <advanced_guide>` and f
 
   user_guide/map
   user_guide/ui_elements
+  user_guide/raster_layers
+  user_guide/vector_layers
   user_guide/geojson
-  Features <user_guide/features>
-  Plugins <user_guide/plugins>
+  user_guide/features
+  user_guide/plugins

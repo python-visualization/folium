@@ -24,14 +24,17 @@ Mapbox, and Stamen, and supports custom tilesets with Mapbox or Cloudmade API ke
 ``folium`` supports both Image, Video, GeoJSON and TopoJSON overlays.
 
 
+Contents
+========
+
 .. toctree::
-   :hidden:
+   :maxdepth: 1
 
    Home <self>
-   Getting started <getting_started>
-   User guide <user_guide>
-   Advanced guide <advanced_guide>
-   API reference <reference>
+   getting_started
+   user_guide
+   advanced_guide
+   reference
 
 
 

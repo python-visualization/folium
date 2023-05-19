@@ -1,4 +1,4 @@
-## Using `Choropleth` class
+## Using `Choropleth`
 
 ```{code-cell} ipython3
 ---

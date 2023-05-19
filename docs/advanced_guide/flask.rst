@@ -8,4 +8,4 @@ or extract the map components and use those.
 
 Below is a script containing examples for all three use cases:
 
-.. literalinclude:: ../examples/flask_example.py
+.. literalinclude:: /_static/flask_example.py
