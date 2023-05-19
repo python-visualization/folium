@@ -193,7 +193,7 @@ my_envelope_map
 ```
 
 ## Concave hull (alpha shape)
-In some cases the convex hull does not yield good results - this is when the shape of the polygon should be concave instead of convex. The solution is a concave hull that is also called alpha shape. Yet, there is no ready to go, off the shelve solution for this but there are great resources (see: http://blog.thehumangeo.com/2014/05/12/drawing-boundaries-in-python/, accessed 04.01.2019 or https://towardsdatascience.com/the-concave-hull-c649795c0f0f, accessed 29.12.2018).
+In some cases the convex hull does not yield good results - this is when the shape of the polygon should be concave instead of convex. The solution is a concave hull that is also called alpha shape. Yet, there is no ready to go, off-the-shelve solution for this but there are great resources.
 
 
 ## Putting it together
@@ -256,17 +256,3 @@ draw_points(
 folium.LayerControl(collapsed=False).add_to(my_map_global)
 my_map_global
 ```
-
-## Sources:
-
-* http://blog.yhat.com/posts/interactive-geospatial-analysis.html, accessed 28.12.2018
-
-* https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.spatial.ConvexHull.html, accessed 29.12.2018
-
-* https://www.oreilly.com/ideas/an-elegant-solution-to-the-convex-hull-problem, accessed 29.12.2018
-
-* https://medium.com/@vworri/simple-geospacial-mapping-with-geopandas-and-the-usual-suspects-77f46d40e807, accessed 29.12.2018
-
-* https://towardsdatascience.com/the-concave-hull-c649795c0f0f, accessed 29.12.2018
-
-* http://blog.thehumangeo.com/2014/05/12/drawing-boundaries-in-python/, accessed 04.01.2019
