@@ -9,20 +9,22 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup Micromamba
-      uses: mamba-org/provision-with-micromamba@v15
+    - name: Setup Micromamba env
+      uses:
       with:
-        environment-file: false
+        environment-name: TEST
+        create-args: >-
+          python=${{ matrix.python-version }}
+          --file requirements.txt
+          --file requirements-dev.txt
+        # conda-forge is the default channel now and does not need to be specified
 
     - name: Create env
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Selenium tests
       shell: bash -l {0}
       run: |
-        micromamba activate TEST
         mypy folium
