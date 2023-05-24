@@ -7,14 +7,13 @@ import folium
 
 # Using GeoPandas.GeoDataFrame in folium
 
-GeoPandas is a project to add support for geographic data to [pandas](http://pandas.pydata.org) objects.
+GeoPandas is a project to add support for geographic data to [pandas](https://pandas.pydata.org) objects.
 (See https://github.com/geopandas/geopandas)
 
 It provides (among other cool things) a `GeoDataFrame` object that represents a Feature collection.
 When you have one, you may be willing to use it on a folium map. Here's the simplest way to do so.
 
-In this example, we'll use the same file as GeoPandas demo ; it's containing
-[the boroughs of New York City](http://www.nyc.gov/html/dcp/download/bytes/nybb_14aav.zip).
+In this example, we'll use the same file as GeoPandas demo ; it's containing the boroughs of New York City.
 
 ```{code-cell} ipython3
 boros = folium.example_data.new_york_boroughs_geodataframe()

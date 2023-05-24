@@ -9,8 +9,7 @@ import folium.plugins
 ## LocateControl
 
 Adds a control button that when clicked, the user device geolocation is displayed.
-For list of all possible keyword options see:
-https://github.com/domoritz/leaflet-locatecontrol#possible-options
+For list of all possible keyword options see 'Possible options' on https://github.com/domoritz/leaflet-locatecontrol.
 
 To work properly in production, the connection needs to be encrypted (HTTPS),
 otherwise the browser will not allow users to share their location.

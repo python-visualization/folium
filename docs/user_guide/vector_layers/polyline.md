@@ -8,9 +8,7 @@ import folium
 # PolyLine
 
 ```{code-cell} ipython3
-# Coordinates are 15 points on the great circle from Boston to
-# San Francisco.
-# Reference: http://williams.best.vwh.net/avform.htm#Intermediate
+# Coordinates are 15 points on the great circle from Boston to San Francisco.
 coordinates = [
     [42.3581, -71.0636],
     [42.82995815, -74.78991444],

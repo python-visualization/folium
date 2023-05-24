@@ -56,7 +56,7 @@ mean = round(states["density"].mean(), 2)
 print(f"minimum: {minimum}", f"maximum: {maximum}", f"Mean: {mean}", sep="\n\n")
 ```
 
-This looks better. Our min and max values for the colorscale are much closer to the mean value now. Let's run with these values, and make a colorscale. I'm just going to use a sequential light-to-dark color palette from the [ColorBrewer](https://colorbrewer2.org/#type=sequential&scheme=Purples&n=5).
+This looks better. Our min and max values for the colorscale are much closer to the mean value now. Let's run with these values, and make a colorscale. I'm just going to use a sequential light-to-dark color palette from the [ColorBrewer](https://colorbrewer2.org/?type=sequential&scheme=Purples&n=5).
 
 ```{code-cell} ipython3
 import branca

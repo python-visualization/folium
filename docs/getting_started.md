@@ -68,7 +68,7 @@ You can also pass any tileset as a url template. Choose one from https://leaflet
 and pass the url and attribution. For example:
 
 ```
-folium.Map(tiles='http://{s}.tiles.example.com/{z}/{x}/{y}.png', attr='My Data Attribution')
+folium.Map(tiles='https://{s}.tiles.example.com/{z}/{x}/{y}.png', attr='My Data Attribution')
 ```
 
 Folium also accepts objects from the [xyzservices package](https://github.com/geopandas/xyzservices).

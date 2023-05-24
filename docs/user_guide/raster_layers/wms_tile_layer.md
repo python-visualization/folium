@@ -11,7 +11,7 @@ import folium
 m = folium.Map(location=[41, -70], zoom_start=5, tiles="cartodb positron")
 
 folium.WmsTileLayer(
-    url="http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
+    url="https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi",
     name="test",
     fmt="image/png",
     layers="nexrad-n0r-900913",
