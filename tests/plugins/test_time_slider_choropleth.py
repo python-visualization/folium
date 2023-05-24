@@ -81,9 +81,9 @@ def test_timedynamic_geo_json():
 
     # We verify that data has been inserted correctly
     expected_timestamps = sorted(dt_index, key=int)  # numeric sort
-    expected_timestamps = f"var timestamps = {expected_timestamps};"
+    expected_timestamps = f"let timestamps = {expected_timestamps};"
     expected_timestamps = expected_timestamps.split(";")[0].strip().replace("'", '"')
-    rendered_timestamps = rendered.split(";")[0].strip()
+    rendered_timestamps = rendered.strip(" \n{").split(";")[0].strip()
     assert expected_timestamps == rendered_timestamps
 
     expected_styledict = normalize(json.dumps(styledict, sort_keys=True))
