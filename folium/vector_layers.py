@@ -99,6 +99,9 @@ def path_options(
     if gradient is not None:
         extra_options.update({"gradient": gradient})
 
+    if kwargs.get("tags"):
+        extra_options["tags"] = kwargs.pop("tags")
+
     default = {
         "stroke": kwargs.pop("stroke", True),
         "color": color,
