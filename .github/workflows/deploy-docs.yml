@@ -36,17 +36,26 @@ jobs:
         make clean html linkcheck
         popd
 
-    - name: GitHub Pages action
+    - name: Publish to Github Pages on main
+      if: ${{ github.ref == 'refs/heads/main' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/
+        destination_dir: latest
+        keep_files: false
+
+    - name: Publish to Github Pages on release
       if: ${{ github.event_name == 'release' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
 
-    - name: Publish to Github Pages on main
+    - name: Publish to Github Pages on release to version folder
+      if: ${{ github.event_name == 'release' }}
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
-        destination_dir: dev
-        keep_files: false
+        destination_dir: ${{ github.ref_name }}
