@@ -7,8 +7,11 @@ from folium.utilities import parse_options
 
 class TagFilterButton(JSCSSMixin, MacroElement):
     """
-    Creates a Tag Filter Button to filter markers based on criteria
+    Creates a Tag Filter Button to filter elements based on criteria
     (https://github.com/maydemirx/leaflet-tag-filter-button)
+
+    This plugin works for multiple element types like Marker, GeoJson
+    and vector layers like PolyLine.
 
     Parameters
     ----------

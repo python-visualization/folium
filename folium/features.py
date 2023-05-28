@@ -498,6 +498,8 @@ class GeoJson(Layer):
         embedding is only supported if you provide a file link or URL.
     zoom_on_click: bool, default False
         Set to True to enable zooming in on a geometry when clicking on it.
+    **kwargs
+        Keyword arguments are passed to the geoJson object as extra options.
 
     Examples
     --------
@@ -602,8 +604,11 @@ class GeoJson(Layer):
                 style: {{ this.get_name() }}_styler,
             {%- endif %}
             {%- if this.marker %}
-                pointToLayer: {{ this.get_name() }}_pointToLayer
+                pointToLayer: {{ this.get_name() }}_pointToLayer,
             {%- endif %}
+            {%- for key, value in this.options.items() %}
+                {{ key }}: {{ value|tojson }},
+            {%- endfor %}
         });
 
         function {{ this.get_name() }}_add (data) {
@@ -636,6 +641,7 @@ class GeoJson(Layer):
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         marker: Union[Circle, CircleMarker, Marker, None] = None,
+        **kwargs: TypeJsonValue,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "GeoJson"
@@ -653,6 +659,7 @@ class GeoJson(Layer):
                     "Only Marker, Circle, and CircleMarker are supported as GeoJson marker types."
                 )
         self.marker = marker
+        self.options = parse_options(**kwargs)
 
         self.data = self.process_data(data)
 

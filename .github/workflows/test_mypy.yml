@@ -9,20 +9,21 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup Micromamba
-      uses: mamba-org/provision-with-micromamba@v15
+    - name: Setup Micromamba env
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
+        environment-name: TEST
+        create-args: >-
+          python=3
+          --file requirements.txt
+          --file requirements-dev.txt
 
-    - name: Create env
+    - name: Install folium from source
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=${{ matrix.python-version }} --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
         python -m pip install -e . --no-deps --force-reinstall
 
-    - name: Selenium tests
+    - name: Mypy test
       shell: bash -l {0}
       run: |
-        micromamba activate TEST
         mypy folium
