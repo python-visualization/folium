@@ -108,14 +108,21 @@ html_theme = "pydata_sphinx_theme"
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-# html_theme_options = {}
+html_theme_options = {
+    "switcher": {
+        "json_url": "https://python-visualization.github.io/folium/latest/_static/switcher.json",
+        "version_match": "latest" if ".dev+" in version else version,
+    },
+    "navbar_start": ["navbar-logo", "version-switcher"],
+    "footer_items": ["version", "copyright", "sphinx-version", "theme-version"],
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 # html_theme_path = ["_themes"]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-# html_title = None
+html_title = "Folium documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
