@@ -1554,7 +1554,7 @@ class Choropleth(FeatureGroup):
 
             def get_by_key(obj, key):
                 return (
-                    (obj[int(key)] if key.isdigit() else obj.get(key, None))
+                    (obj[int(key)] if key.isdigit() else obj.get(key, None) )
                     if len(key.split(".")) <= 1
                     else get_by_key(
                         obj.get(key.split(".")[0], None), ".".join(key.split(".")[1:])
