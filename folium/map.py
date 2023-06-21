@@ -144,6 +144,9 @@ class LayerControl(MacroElement):
     autoZIndex : bool, default True
           If true the control assigns zIndexes in increasing order to all of
           its layers so that the order is preserved when switching them on/off.
+    draggable: bool, default False
+          By default the layer control has a fixed position. Set this argument
+          to True to allow dragging the control around.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#control-layers
@@ -153,7 +156,7 @@ class LayerControl(MacroElement):
     _template = Template(
         """
         {% macro script(this,kwargs) %}
-            var {{ this.get_name() }} = {
+            var {{ this.get_name() }}_layers = {
                 base_layers : {
                     {%- for key, val in this.base_layers.items() %}
                     {{ key|tojson }} : {{val}},
@@ -165,11 +168,15 @@ class LayerControl(MacroElement):
                     {%- endfor %}
                 },
             };
-            L.control.layers(
-                {{ this.get_name() }}.base_layers,
-                {{ this.get_name() }}.overlays,
+            let {{ this.get_name() }} = L.control.layers(
+                {{ this.get_name() }}_layers.base_layers,
+                {{ this.get_name() }}_layers.overlays,
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
+
+            {%- if this.draggable %}
+            new L.Draggable({{ this.get_name() }}.getContainer()).enable();
+            {%- endif %}
 
         {% endmacro %}
         """
@@ -180,6 +187,7 @@ class LayerControl(MacroElement):
         position: str = "topright",
         collapsed: bool = True,
         autoZIndex: bool = True,
+        draggable: bool = False,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -187,6 +195,7 @@ class LayerControl(MacroElement):
         self.options = parse_options(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
+        self.draggable = draggable
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
 

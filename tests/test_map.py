@@ -8,8 +8,8 @@ import warnings
 import numpy as np
 import pytest
 
-from folium import Map
-from folium.map import CustomPane, Icon, Marker, Popup
+from folium import GeoJson, Map, TileLayer
+from folium.map import CustomPane, Icon, LayerControl, Marker, Popup
 from folium.utilities import normalize
 
 tmpl = """
@@ -17,6 +17,56 @@ tmpl = """
                 style="width: {width}; height: {height};">
                 {text}</div>
 """.format
+
+
+def test_layer_control_initialization():
+    layer_control = LayerControl()
+    assert layer_control._name == "LayerControl"
+    assert layer_control.options["position"] == "topright"
+    assert layer_control.options["collapsed"] is True
+    assert layer_control.options["autoZIndex"] is True
+    assert layer_control.draggable is False
+    assert layer_control.base_layers == {}
+    assert layer_control.overlays == {}
+
+
+def test_layer_control_reset():
+    layer_control = LayerControl()
+    layer_control.base_layers = {"Layer1": "layer1"}
+    layer_control.overlays = {"Layer2": "layer2"}
+    layer_control.reset()
+    assert layer_control.base_layers == {}
+    assert layer_control.overlays == {}
+
+
+def test_layer_control_render():
+    m = Map(tiles=None)
+    layer1 = TileLayer().add_to(m)
+    layer2 = Marker([0, 0]).add_to(m)
+    layer3 = GeoJson({}).add_to(m)
+    layer1.control = True
+    layer2.control = False
+    layer3.control = True
+    layer1.layer_name = "Layer1"
+    layer2.layer_name = "Layer2"
+    layer3.layer_name = "Layer3"
+    layer1.get_name = lambda: "layer1"
+    layer2.get_name = lambda: "layer2"
+    layer3.get_name = lambda: "layer3"
+
+    layer_control = LayerControl().add_to(m)
+    layer_control.render()
+
+    assert layer_control.base_layers == {"Layer1": "layer1"}
+    assert layer_control.overlays == {"Layer3": "layer3"}
+
+
+def test_layer_control_draggable():
+    m = Map(tiles=None)
+    layer_control = LayerControl(draggable=True).add_to(m)
+    expected = f"new L.Draggable({ layer_control.get_name() }.getContainer()).enable();"
+    rendered = m.get_root().render()
+    assert normalize(expected) in normalize(rendered)
 
 
 def test_popup_ascii():
