@@ -1552,17 +1552,8 @@ class Choropleth(FeatureGroup):
 
             key_on = key_on[8:] if key_on.startswith("feature.") else key_on
 
-            def get_by_key(obj, key):
-                return (
-                    (obj[int(key)] if key.isdigit() else obj.get(key, None) )
-                    if len(key.split(".")) <= 1
-                    else get_by_key(
-                        obj.get(key.split(".")[0], None), ".".join(key.split(".")[1:])
-                    )
-                )
-
             def color_scale_fun(x):
-                key_of_x = get_by_key(x, key_on)
+                key_of_x = self._get_by_key(x, key_on)
                 if key_of_x is None:
                     raise ValueError(f"key_on `{key_on!r}` not found in GeoJSON.")
 
@@ -1622,6 +1613,15 @@ class Choropleth(FeatureGroup):
         self.add_child(self.geojson)
         if self.color_scale:
             self.add_child(self.color_scale)
+    
+    def _get_by_key(self, obj, key):
+        return (
+            (obj[int(key)] if key.isdigit() else obj.get(key, None))
+            if len(key.split(".")) <= 1
+            else self._get_by_key(
+                (obj[int(key.split(".")[0])] if key.split(".")[0].isdigit() else obj.get(key.split(".")[0], None)), ".".join(key.split(".")[1:])
+            )
+        )
 
     def render(self, **kwargs) -> None:
         """Render the GeoJson/TopoJson and color scale objects."""
