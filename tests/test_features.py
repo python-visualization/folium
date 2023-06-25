@@ -348,4 +348,7 @@ def test_get_by_key():
         fill_color=fill_color,
         columns=columns,
     )
-    assert f._get_by_key(geojson_data,"geometry.coordinates.0.0" ) == [479978.6866107661, 6676603.690234357]
+    assert f._get_by_key(geojson_data, "geometry.coordinates.0.0") == [
++        479978.6866107661,
++        6676603.690234357,
++    ]
