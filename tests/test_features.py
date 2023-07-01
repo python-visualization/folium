@@ -8,6 +8,7 @@ import json
 import os
 import warnings
 
+import pandas as pd
 import pytest
 from branca.element import Element
 
@@ -303,40 +304,38 @@ def test_geometry_collection_get_bounds():
     }
     assert folium.GeoJson(geojson_data).get_bounds() == [[0, -3], [4, 2]]
 
+
 def test_get_by_key():
     geojson_data = {
-        "id": "0", 
-        "type": "Feature", 
-        "properties": {
-            "idx": 0, 
-            "value": 78.0
-        }, 
+        "id": "0",
+        "type": "Feature",
+        "properties": {"idx": 0, "value": 78.0},
         "geometry": {
-            "type": "Polygon", 
+            "type": "Polygon",
             "coordinates": [
                 [
-                    [479978.6866107661, 6676603.690234357], 
-                    [491978.6866107661, 6676603.690234357], 
-                    [491978.6866107661, 6664603.690234357], 
-                    [479978.6866107661, 6664603.690234357], 
-                    [479978.6866107661, 6676603.690234357]
+                    [479978.6866107661, 6676603.690234357],
+                    [491978.6866107661, 6676603.690234357],
+                    [491978.6866107661, 6664603.690234357],
+                    [479978.6866107661, 6664603.690234357],
+                    [479978.6866107661, 6676603.690234357],
                 ]
-            ]
-        }
+            ],
+        },
     }
     data = pd.DataFrame(
-            {
-                "idx": {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5"},
-                "value": {
-                    "0": 78.0,
-                    "1": 39.0,
-                    "2": 0.0,
-                    "3": 81.0,
-                    "4": 42.0,
-                    "5": 68.0,
-                },
-            }
-        )
+        {
+            "idx": {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5"},
+            "value": {
+                "0": 78.0,
+                "1": 39.0,
+                "2": 0.0,
+                "3": 81.0,
+                "4": 42.0,
+                "5": 68.0,
+            },
+        }
+    )
     fill_color = "BuPu"
     columns = ["idx", "value"]
     key_on = "geometry.coordinates.0.0.0"
@@ -349,6 +348,6 @@ def test_get_by_key():
         columns=columns,
     )
     assert f._get_by_key(geojson_data, "geometry.coordinates.0.0") == [
-+        479978.6866107661,
-+        6676603.690234357,
-+    ]
+        +479978.6866107661,
+        +6676603.690234357,
+    ]
