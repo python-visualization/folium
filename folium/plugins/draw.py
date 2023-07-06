@@ -51,10 +51,10 @@ class Draw(JSCSSMixin, MacroElement):
               edit: {{ this.edit_options|tojson }},
             }
             // FeatureGroup is to store editable layers.
-            var drawnItems = new L.featureGroup().addTo(
+            var drawnItems_{{ this.get_name() }} = new L.featureGroup().addTo(
                 {{ this._parent.get_name() }}
             );
-            options.edit.featureGroup = drawnItems;
+            options.edit.featureGroup = drawnItems_{{ this.get_name() }};
             var {{ this.get_name() }} = new L.Control.Draw(
                 options
             ).addTo( {{this._parent.get_name()}} );
@@ -68,14 +68,14 @@ class Draw(JSCSSMixin, MacroElement):
                     console.log(coords);
                 });
                 {%- endif %}
-                drawnItems.addLayer(layer);
+                drawnItems_{{ this.get_name() }}.addLayer(layer);
              });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
-                drawnItems.addLayer(e.layer);
+                drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
             {% if this.export %}
             document.getElementById('export').onclick = function(e) {
-                var data = drawnItems.toGeoJSON();
+                var data = drawnItems_{{ this.get_name() }}.toGeoJSON();
                 var convertedData = 'text/json;charset=utf-8,'
                     + encodeURIComponent(JSON.stringify(data));
                 document.getElementById('export').setAttribute(
