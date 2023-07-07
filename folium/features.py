@@ -1621,7 +1621,7 @@ class Choropleth(FeatureGroup):
         if first_key_part.isdigit():
             value = obj[int(first_key_part)]
         else:
-            value = obj.get(first_key_part, None)
+            value = obj.get(first_key_part, None)  # type: ignore
         if len(key_parts) > 1:
             new_key = ".".join(key_parts[1:])
             return cls._get_by_key(value, new_key)
