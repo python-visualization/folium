@@ -8,12 +8,11 @@ import json
 import os
 import warnings
 
-import pandas as pd
 import pytest
 from branca.element import Element
 
 import folium
-from folium import ClickForMarker, GeoJson, Map, Popup
+from folium import Choropleth, ClickForMarker, GeoJson, Map, Popup
 
 
 @pytest.fixture
@@ -305,7 +304,7 @@ def test_geometry_collection_get_bounds():
     assert folium.GeoJson(geojson_data).get_bounds() == [[0, -3], [4, 2]]
 
 
-def test_get_by_key():
+def test_choropleth_get_by_key():
     geojson_data = {
         "id": "0",
         "type": "Feature",
@@ -314,40 +313,16 @@ def test_get_by_key():
             "type": "Polygon",
             "coordinates": [
                 [
-                    [479978.6866107661, 6676603.690234357],
-                    [491978.6866107661, 6676603.690234357],
-                    [491978.6866107661, 6664603.690234357],
-                    [479978.6866107661, 6664603.690234357],
-                    [479978.6866107661, 6676603.690234357],
+                    [1, 2],
+                    [3, 4],
                 ]
             ],
         },
     }
-    data = pd.DataFrame(
-        {
-            "idx": {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5"},
-            "value": {
-                "0": 78.0,
-                "1": 39.0,
-                "2": 0.0,
-                "3": 81.0,
-                "4": 42.0,
-                "5": 68.0,
-            },
-        }
-    )
-    fill_color = "BuPu"
-    columns = ["idx", "value"]
-    key_on = "geometry.coordinates.0.0.0"
 
-    f = folium.features.Choropleth(
-        geo_data=geojson_data,
-        data=data,
-        key_on=key_on,
-        fill_color=fill_color,
-        columns=columns,
-    )
-    assert f._get_by_key(geojson_data, "geometry.coordinates.0.0") == [
-        +479978.6866107661,
-        +6676603.690234357,
-    ]
+    # Test with string path in key_on
+    assert Choropleth._get_by_key(geojson_data, "properties.idx") == 0
+    assert Choropleth._get_by_key(geojson_data, "properties.value") == 78.0
+
+    # Test with combined string path and numerical index in key_on
+    assert Choropleth._get_by_key(geojson_data, "geometry.coordinates.0.0") == [1, 2]

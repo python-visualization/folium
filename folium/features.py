@@ -1614,19 +1614,19 @@ class Choropleth(FeatureGroup):
         if self.color_scale:
             self.add_child(self.color_scale)
 
-    def _get_by_key(self, obj, key):
-        return (
-            (obj[int(key)] if key.isdigit() else obj.get(key, None))
-            if len(key.split(".")) <= 1
-            else self._get_by_key(
-                (
-                    obj[int(key.split(".")[0])]
-                    if key.split(".")[0].isdigit()
-                    else obj.get(key.split(".")[0], None)
-                ),
-                ".".join(key.split(".")[1:]),
-            )
-        )
+    @classmethod
+    def _get_by_key(cls, obj: Union[dict, list], key: str) -> Union[float, str, None]:
+        key_parts = key.split(".")
+        first_key_part = key_parts[0]
+        if first_key_part.isdigit():
+            value = obj[int(first_key_part)]
+        else:
+            value = obj.get(first_key_part, None)
+        if len(key_parts) > 1:
+            new_key = ".".join(key_parts[1:])
+            return cls._get_by_key(value, new_key)
+        else:
+            return value
 
     def render(self, **kwargs) -> None:
         """Render the GeoJson/TopoJson and color scale objects."""
