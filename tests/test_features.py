@@ -12,7 +12,7 @@ import pytest
 from branca.element import Element
 
 import folium
-from folium import ClickForMarker, GeoJson, Map, Popup
+from folium import Choropleth, ClickForMarker, GeoJson, Map, Popup
 
 
 @pytest.fixture
@@ -302,3 +302,27 @@ def test_geometry_collection_get_bounds():
         "type": "GeometryCollection",
     }
     assert folium.GeoJson(geojson_data).get_bounds() == [[0, -3], [4, 2]]
+
+
+def test_choropleth_get_by_key():
+    geojson_data = {
+        "id": "0",
+        "type": "Feature",
+        "properties": {"idx": 0, "value": 78.0},
+        "geometry": {
+            "type": "Polygon",
+            "coordinates": [
+                [
+                    [1, 2],
+                    [3, 4],
+                ]
+            ],
+        },
+    }
+
+    # Test with string path in key_on
+    assert Choropleth._get_by_key(geojson_data, "properties.idx") == 0
+    assert Choropleth._get_by_key(geojson_data, "properties.value") == 78.0
+
+    # Test with combined string path and numerical index in key_on
+    assert Choropleth._get_by_key(geojson_data, "geometry.coordinates.0.0") == [1, 2]
