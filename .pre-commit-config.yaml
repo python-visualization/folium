@@ -15,12 +15,12 @@ repos:
       files: requirements-dev.txt
 
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.0.247
+  rev: v0.0.277
   hooks:
     - id: ruff
 
 - repo: https://github.com/psf/black
-  rev: 23.1.0
+  rev: 23.7.0
   hooks:
   - id: black
     language_version: python3
@@ -31,13 +31,24 @@ repos:
     - id: blackdoc
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.2
+  rev: v2.2.5
   hooks:
     - id: codespell
       args:
-        - --ignore-words-list=thex,nd,fo,som,nam,tha
+        - --ignore-words-list=thex,nd,fo,som,nam,tha,caf
       exclude: >
         (?x)^(
             .*\.csv |
             .*\.json |
         )$
+
+ci:
+    autofix_commit_msg: |
+        [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+        for more information, see https://pre-commit.ci
+    autofix_prs: false
+    autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+    autoupdate_schedule: monthly
+    skip: []
+    submodules: false

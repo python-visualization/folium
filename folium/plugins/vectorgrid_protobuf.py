@@ -125,13 +125,13 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     ]
 
     def __init__(
-            self,
-            url: str,
-            name: Optional[str] = None,
-            options: Union[str, dict, None] = None,
-            overlay: bool = True,
-            control: bool = True,
-            show: bool = True,
+        self,
+        url: str,
+        name: Optional[str] = None,
+        options: Union[str, dict, None] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "VectorGridProtobuf"
