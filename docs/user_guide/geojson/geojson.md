@@ -56,7 +56,7 @@ folium.GeoJson(geo_json_data).add_to(m)
 m
 ```
 
-Note that you can avoid loading the file on yourself, 
+Note that you can avoid loading the file on yourself,
 by providing a (local) file path or a url.
 
 ```{code-cell} ipython3
