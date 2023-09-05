@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>TimestampedWmsTileLayers &#8212; Folium documentation</title>
   
@@ -29,16 +28,16 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/documentation_options.js?v=c7e0629b"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -450,11 +449,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="TimestampedWmsTileLayers">
-<h1>TimestampedWmsTileLayers<a class="headerlink" href="#TimestampedWmsTileLayers" title="Permalink to this heading">#</a></h1>
+<h1>TimestampedWmsTileLayers<a class="headerlink" href="#TimestampedWmsTileLayers" title="Link to this heading">#</a></h1>
 <p>Add a time dimension to a WMS tile layer.</p>
 <p>Note that we don’t render the output in this example, because the web service used here is not always available.</p>
 <section id="Exploring-the-WMS-with-OWSLib">
-<h2>Exploring the WMS with OWSLib<a class="headerlink" href="#Exploring-the-WMS-with-OWSLib" title="Permalink to this heading">#</a></h2>
+<h2>Exploring the WMS with OWSLib<a class="headerlink" href="#Exploring-the-WMS-with-OWSLib" title="Link to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from owslib.wms import WebMapService
 
 
@@ -467,7 +466,7 @@ print(&quot;\n&quot;.join(web_map_services.contents.keys()))
 </div>
 </section>
 <section id="Layer-metadata">
-<h2>Layer metadata<a class="headerlink" href="#Layer-metadata" title="Permalink to this heading">#</a></h2>
+<h2>Layer metadata<a class="headerlink" href="#Layer-metadata" title="Link to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>layer = &quot;CRW_SST&quot;
 wms = web_map_services.contents[layer]
 
@@ -488,7 +487,7 @@ if style not in wms.styles:
 </div>
 </section>
 <section id="Map-with-WmsTileLayer-and-TimestampedWmsTileLayers">
-<h2>Map with WmsTileLayer and TimestampedWmsTileLayers<a class="headerlink" href="#Map-with-WmsTileLayer-and-TimestampedWmsTileLayers" title="Permalink to this heading">#</a></h2>
+<h2>Map with WmsTileLayer and TimestampedWmsTileLayers<a class="headerlink" href="#Map-with-WmsTileLayer-and-TimestampedWmsTileLayers" title="Link to this heading">#</a></h2>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>m = folium.Map(location=[-40, -50], zoom_start=5)
 
 wms_tile_layer = folium.WmsTileLayer(
@@ -599,7 +598,7 @@ m
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.14.1.dev31.dev+gcf5f834</div>
+Folium version 0.1.dev1.dev+g3cabb5a</div>
       
         <div class="footer-item">
   <p class="copyright">
@@ -612,7 +611,7 @@ Folium version 0.14.1.dev31.dev+gcf5f834</div>
       
         <div class="footer-item">
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.5.
     <br/>
   </p>
 </div>

@@ -7,17 +7,17 @@ The class needs at least two arguments to be instantiated.
 1. A string-serielized geojson containing all the features (i.e., the areas)
 2. A dictionary with the following structure:
 
-```python
+```
 styledict = {
     '0': {
-        '2017-1-1': {'color': 'ffffff', 'opacity': 1}
-        '2017-1-2': {'color': 'fffff0', 'opacity': 1}
+        '2017-1-1': {'color': 'ffffff', 'opacity': 1},
+        '2017-1-2': {'color': 'fffff0', 'opacity': 1},
         ...
         },
     ...,
     'n': {
-        '2017-1-1': {'color': 'ffffff', 'opacity': 1}
-        '2017-1-2': {'color': 'fffff0', 'opacity': 1}
+        '2017-1-1': {'color': 'ffffff', 'opacity': 1},
+        '2017-1-2': {'color': 'fffff0', 'opacity': 1},
         ...
         }
 }
