@@ -35,7 +35,7 @@ Then, in playing with keyword arguments, you can get a choropleth in a few lines
 import pandas
 
 state_data = pandas.read_csv(
-    "https://github.com/python-visualization/folium-example-data/raw/main/us_unemployment_oct_2012.csv"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_unemployment_oct_2012.csv"
 )
 
 m = folium.Map([43, -100], zoom_start=4)

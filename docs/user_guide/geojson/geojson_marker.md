@@ -12,7 +12,7 @@ import folium
 import geopandas
 
 gdf = geopandas.read_file(
-    "https://github.com/python-visualization/folium-example-data/raw/main/subway_stations.geojson"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson"
 )
 
 gdf.head()

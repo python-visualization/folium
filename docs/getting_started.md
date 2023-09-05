@@ -181,7 +181,7 @@ state_geo = requests.get(
     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
 ).json()
 state_data = pandas.read_csv(
-    "https://github.com/python-visualization/folium-example-data/raw/main/us_unemployment_oct_2012.csv"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_unemployment_oct_2012.csv"
 )
 
 m = folium.Map(location=[48, -102], zoom_start=3)

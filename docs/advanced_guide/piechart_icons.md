@@ -12,10 +12,11 @@ We'll make little piecharts showing the number of consonants and vowels in
 a couple of languages. Those piecharts will be included as icons on the map.
 
 ```{code-cell} ipython3
+import ast
 import pandas
 
 data = pandas.read_csv(
-    "https://github.com/python-visualization/folium-example-data/blob/main/consonants_vowels.csv",
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/consonants_vowels.csv",
     # To ensure that tuples are read as tuples
     converters={"coordinates": ast.literal_eval},
 )

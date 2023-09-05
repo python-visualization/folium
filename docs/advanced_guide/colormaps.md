@@ -19,7 +19,7 @@ geo_json_data = requests.get(
     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
 ).json()
 unemployment = pandas.read_csv(
-    "https://github.com/python-visualization/folium-example-data/raw/main/us_unemployment_oct_2012.csv"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_unemployment_oct_2012.csv"
 )
 
 unemployment_dict = unemployment.set_index("State")["Unemployment"]

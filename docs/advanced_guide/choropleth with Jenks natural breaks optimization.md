@@ -21,7 +21,7 @@ geo_json_data = requests.get(
 
 clf = 'Civilian_labor_force_2011'
 labor_force = pd.read_csv(
-    "https://github.com/python-visualization/folium-example-data/raw/main/us_labor_force_2011.csv"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_labor_force_2011.csv"
 )
 
 labor_force.head()

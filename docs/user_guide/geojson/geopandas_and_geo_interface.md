@@ -19,7 +19,7 @@ In this example, we'll use the same file as GeoPandas demo ; it's containing the
 import geopandas
 
 boros = geopandas.read_file(
-    "https://github.com/python-visualization/folium-example-data/raw/main/new_york_boroughs.zip"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/new_york_boroughs.zip"
 )
 
 boros
@@ -69,7 +69,7 @@ Folium should work with any object that implements the `__geo_interface__` but b
 import fiona
 import shapely
 
-url = "https://github.com/python-visualization/folium-example-data/raw/main/route_farol.gpx"
+url = "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/route_farol.gpx"
 with fiona.open(url, "r", layer="tracks") as records:
     tracks = [shapely.geometry.shape(record["geometry"]) for record in records]
 

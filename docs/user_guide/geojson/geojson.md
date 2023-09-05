@@ -74,7 +74,7 @@ You can pass a geopandas object.
 ```{code-cell} ipython3
 import geopandas
 
-gdf = geopandas.read_file(filepath)
+gdf = geopandas.read_file(url)
 
 m = folium.Map([43, -100], zoom_start=4)
 
@@ -156,7 +156,7 @@ First, we may load the data:
 import pandas
 
 unemployment = pandas.read_csv(
-    "https://github.com/python-visualization/folium-example-data/raw/main/us_unemployment_oct_2012.csv"
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_unemployment_oct_2012.csv"
 )
 
 unemployment.head(5)
