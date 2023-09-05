@@ -124,7 +124,7 @@ def path_options(
 class BaseMultiLocation(MacroElement):
     """Base class for vector classes with multiple coordinates.
 
-    Not for direct consumption
+    :meta private:
 
     """
 
