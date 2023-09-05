@@ -9,7 +9,11 @@ import folium
 
 
 ```{code-cell} ipython3
-gdf = folium.example_data.subway_stations_geodataframe()
+import geopandas
+
+gdf = geopandas.read_file(
+    "https://github.com/python-visualization/folium-example-data/raw/main/subway_stations.geojson"
+)
 
 gdf.head()
 ```

@@ -10,7 +10,11 @@ import folium
 ## No tiles
 
 ```{code-cell} ipython3
-states = folium.example_data.us_states_geojson()
+import requests
+
+states = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
 
 kw = {"location": [48, -102], "zoom_start": 3}
 ```

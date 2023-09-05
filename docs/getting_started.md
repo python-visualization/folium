@@ -153,9 +153,13 @@ Folium supports both GeoJSON and TopoJSON data in various formats, such as urls,
 file paths and dictionaries.
 
 ```{code-cell} ipython3
+import requests
+
 m = folium.Map(tiles="cartodbpositron")
 
-geojson_data = folium.example_data.world_countries_geojson()
+geojson_data = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/world_countries.json"
+).json()
 
 folium.GeoJson(geojson_data, name="hello world").add_to(m)
 
@@ -171,8 +175,14 @@ Choropleth maps
 Choropleth can be created by binding the data between Pandas DataFrames/Series and Geo/TopoJSON geometries.
 
 ```{code-cell} ipython3
-state_geo = folium.example_data.us_states_geojson()
-state_data = folium.example_data.us_unemployment_pandas_dataframe()
+import pandas
+
+state_geo = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
+state_data = pandas.read_csv(
+    "https://github.com/python-visualization/folium-example-data/raw/main/us_unemployment_oct_2012.csv"
+)
 
 m = folium.Map(location=[48, -102], zoom_start=3)
 

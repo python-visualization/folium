@@ -10,9 +10,13 @@ import folium
 The level of smoothing of the geometry can be determined by passing `smooth_factor` as an argument when initialising GeoJson, TopoJson and Choropleth objects. There are no upper or lower bounds to the smoothing level; Leaflet's default is 1.
 
 ```{code-cell} ipython3
+import requests
+
 m = folium.Map(location=[-59.1759, -11.6016], tiles="cartodbpositron", zoom_start=2)
 
-topo = folium.example_data.antarctic_ice_shelf_topojson()
+topo = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/antarctic_ice_shelf_topo.json"
+).json()
 
 folium.TopoJson(
     data=topo,
