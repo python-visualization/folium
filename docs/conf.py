@@ -114,7 +114,7 @@ html_theme_options = {
         "version_match": "latest" if ".dev+" in version else version,
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
-    "footer_items": ["version", "copyright", "sphinx-version", "theme-version"],
+    "footer_start": ["version", "copyright", "sphinx-version", "theme-version"],
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
