@@ -190,13 +190,11 @@ def test_custom_pane_show():
     m = Map()
     pane = CustomPane("test-name", z_index=625, pointer_events=False).add_to(m)
     rendered = pane._template.module.script(this=pane, kwargs={})
-    expected = """
-    var {pane_name} = {map_name}.createPane("test-name");
-    {pane_name}.style.zIndex = 625;
-    {pane_name}.style.pointerEvents = 'none';
-    """.format(
-        pane_name=pane.get_name(), map_name=m.get_name()
-    )
+    expected = f"""
+    var {pane.get_name()} = {m.get_name()}.createPane("test-name");
+    {pane.get_name()}.style.zIndex = 625;
+    {pane.get_name()}.style.pointerEvents = 'none';
+    """
     assert normalize(rendered) == normalize(expected)
 
 

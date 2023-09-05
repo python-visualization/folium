@@ -60,8 +60,8 @@ class DualMap(JSCSSMixin, MacroElement):
             assert key not in kwargs, f"Argument {key} cannot be used with  DualMap."
         if layout not in ("horizontal", "vertical"):
             raise ValueError(
-                "Undefined option for argument `layout`: {}. "
-                "Use either 'horizontal' or 'vertical'.".format(layout)
+                f"Undefined option for argument `layout`: {layout}. "
+                "Use either 'horizontal' or 'vertical'."
             )
         width = "50%" if layout == "horizontal" else "100%"
         height = "100%" if layout == "horizontal" else "50%"

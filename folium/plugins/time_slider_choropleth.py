@@ -194,9 +194,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         self.styledict = styledict
         assert (
             -len(timestamps) <= init_timestamp < len(timestamps)
-        ), "init_timestamp must be in the range [-{}, {}) but got {}".format(
-            len(timestamps), len(timestamps), init_timestamp
-        )
+        ), f"init_timestamp must be in the range [-{len(timestamps)}, {len(timestamps)}) but got {init_timestamp}"
         if init_timestamp < 0:
             init_timestamp = len(timestamps) + init_timestamp
         self.init_timestamp = init_timestamp

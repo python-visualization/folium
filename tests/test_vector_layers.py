@@ -54,8 +54,8 @@ def test_circle():
     }
 
     m._repr_html_()
-    expected_rendered = """
-    var {name} = L.circle(
+    expected_rendered = f"""
+    var {circle.get_name()} = L.circle(
     {location},
     {{
     "bubblingMouseEvents": true,
@@ -74,10 +74,8 @@ def test_circle():
     "weight": 2
     }}
     )
-    .addTo({map});
-    """.format(
-        name=circle.get_name(), location=location, radius=radius, map=m.get_name()
-    )  # noqa
+    .addTo({m.get_name()});
+    """  # noqa
 
     rendered = circle._template.module.script(circle)
     assert normalize(rendered) == normalize(expected_rendered)
@@ -124,8 +122,8 @@ def test_circle_marker():
 
     m._repr_html_()
     expected_bounds = [location, location]
-    expected_rendered = """
-    var {name} = L.circleMarker(
+    expected_rendered = f"""
+    var {circle_marker.get_name()} = L.circleMarker(
     {location},
     {{
     "bubblingMouseEvents": true,
@@ -144,13 +142,8 @@ def test_circle_marker():
     "weight": 2
     }}
     )
-    .addTo({map});
-    """.format(
-        name=circle_marker.get_name(),
-        location=location,
-        radius=radius,
-        map=m.get_name(),
-    )  # noqa
+    .addTo({m.get_name()});
+    """  # noqa
 
     rendered = circle_marker._template.module.script(circle_marker)
     assert normalize(rendered) == normalize(expected_rendered)
@@ -194,8 +187,8 @@ def test_rectangle():
     }
 
     m._repr_html_()
-    expected_rendered = """
-    var {name} = L.rectangle(
+    expected_rendered = f"""
+    var {rectangle.get_name()} = L.rectangle(
     {location},
     {{
     "bubblingMouseEvents": true,
@@ -215,10 +208,8 @@ def test_rectangle():
     "weight": 2
     }}
     )
-    .addTo({map});
-    """.format(
-        name=rectangle.get_name(), location=location, map=m.get_name()
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = rectangle._template.module.script(rectangle)
     assert normalize(rendered) == normalize(expected_rendered)
@@ -261,8 +252,8 @@ def test_polygon_marker():
     }
 
     m._repr_html_()
-    expected_rendered = """
-    var {name} = L.polygon(
+    expected_rendered = f"""
+    var {polygon.get_name()} = L.polygon(
     {locations},
     {{
     "bubblingMouseEvents": true,
@@ -282,10 +273,8 @@ def test_polygon_marker():
     "weight": 3
     }}
     )
-    .addTo({map});
-    """.format(
-        locations=locations, name=polygon.get_name(), map=m.get_name()
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = polygon._template.module.script(polygon)
     assert normalize(rendered) == normalize(expected_rendered)
@@ -319,8 +308,8 @@ def test_polyline():
     }
 
     m._repr_html_()
-    expected_rendered = """
-    var {name} = L.polyline(
+    expected_rendered = f"""
+    var {polyline.get_name()} = L.polyline(
     {locations},
     {{
     "bubblingMouseEvents": true,
@@ -340,10 +329,8 @@ def test_polyline():
     "weight": 3
     }}
     )
-    .addTo({map});
-    """.format(
-        locations=locations, name=polyline.get_name(), map=m.get_name()
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = polyline._template.module.script(polyline)
     assert normalize(rendered) == normalize(expected_rendered)
@@ -382,8 +369,8 @@ def test_mulyipolyline():
     }
 
     m._repr_html_()
-    expected_rendered = """
-    var {name} = L.polyline(
+    expected_rendered = f"""
+    var {multipolyline.get_name()} = L.polyline(
     {locations},
     {{
     "bubblingMouseEvents": true,
@@ -403,10 +390,8 @@ def test_mulyipolyline():
     "weight": 3
     }}
     )
-    .addTo({map});
-    """.format(
-        locations=locations, name=multipolyline.get_name(), map=m.get_name()
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = multipolyline._template.module.script(multipolyline)
     assert normalize(rendered) == normalize(expected_rendered)
