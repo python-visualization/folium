@@ -15,10 +15,8 @@ from folium.utilities import temp_html_filepath
 def find_notebooks():
     """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
-    pattern = os.path.join(path, "..", "..", "examples", "*.ipynb")
+    pattern = os.path.join(path, "..", "..", "docs", "*.md")
     files = glob.glob(pattern)
-    files = [f for f in files if not f.endswith(".nbconvert.ipynb")]
-    files.extend(glob.glob(os.path.join(path, "..", "..", "docs", "*.md")))
     if files:
         return files
     else:
@@ -42,30 +40,17 @@ def test_notebook(filepath, driver):
 
 
 def get_notebook_html(filepath_notebook):
-    """Store iframes from a notebook in html files, remove them when done."""
-    if filepath_notebook.endswith(".ipynb"):
-        subprocess.run(
-            [
-                "jupyter",
-                "nbconvert",
-                "--to",
-                "notebook",
-                "--execute",
-                filepath_notebook,
-            ]
-        )
-        filepath_notebook = filepath_notebook.replace(".ipynb", ".nbconvert.ipynb")
-    else:
-        subprocess.run(
-            [
-                "jupytext",
-                "--to",
-                "notebook",
-                "--execute",
-                filepath_notebook,
-            ]
-        )
-        filepath_notebook = filepath_notebook.replace(".md", ".ipynb")
+    """Convert markdown to notebook to html files, remove them when done."""
+    subprocess.run(
+        [
+            "jupytext",
+            "--to",
+            "notebook",
+            "--execute",
+            filepath_notebook,
+        ]
+    )
+    filepath_notebook = filepath_notebook.replace(".md", ".ipynb")
 
     html_exporter = nbconvert.HTMLExporter()
     body, _ = html_exporter.from_filename(filepath_notebook)
