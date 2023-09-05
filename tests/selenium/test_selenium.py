@@ -16,7 +16,7 @@ def find_notebooks():
     """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
     pattern = os.path.join(path, "..", "..", "docs", "**", "*.md")
-    files = glob.glob(pattern)
+    files = glob.glob(pattern, recursive=True)
     if files:
         return files
     else:
