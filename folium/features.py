@@ -707,8 +707,7 @@ class GeoJson(Layer):
             return json.loads(json.dumps(data.__geo_interface__))
         else:
             raise ValueError(
-                "Cannot render objects with any missing geometries"
-                ": {!r}".format(data)
+                "Cannot render objects with any missing geometries" f": {data!r}"
             )
 
     def get_geojson_from_web(self, url: str) -> dict:
@@ -744,8 +743,8 @@ class GeoJson(Layer):
         test_feature = self.data["features"][0]
         if not callable(func) or not isinstance(func(test_feature), dict):
             raise ValueError(
-                "{} should be a function that accepts items from "
-                "data['features'] and returns a dictionary.".format(name)
+                f"{name} should be a function that accepts items from "
+                "data['features'] and returns a dictionary."
             )
 
     def find_identifier(self) -> str:
@@ -1146,16 +1145,14 @@ class GeoJsonDetail(MacroElement):
             )
         else:
             raise TypeError(
-                "You cannot add a {} to anything other than a "
-                "GeoJson or TopoJson object.".format(self._name)
+                f"You cannot add a {self._name} to anything other than a "
+                "GeoJson or TopoJson object."
             )
         keys = tuple(x for x in keys if x not in ("style", "highlight"))
         for value in self.fields:
             assert (
                 value in keys
-            ), "The field {} is not available in the data. Choose from: {}.".format(
-                value, keys
-            )
+            ), f"The field {value} is not available in the data. Choose from: {keys}."
         figure.header.add_child(
             Element(
                 Template(

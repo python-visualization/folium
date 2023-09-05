@@ -44,8 +44,8 @@ def test_polylineoffset(offset):
     assert script in out
 
     # We verify that the script part is correct.
-    expected_rendered = """
-    var {name} = L.polyline(
+    expected_rendered = f"""
+    var {polylineoffset.get_name()} = L.polyline(
     {locations},
     {{
     "bubblingMouseEvents": true,
@@ -66,13 +66,8 @@ def test_polylineoffset(offset):
     "weight": 3
     }}
     )
-    .addTo({map});
-    """.format(
-        locations=locations,
-        name=polylineoffset.get_name(),
-        offset=offset,
-        map=m.get_name(),
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = polylineoffset._template.module.script(polylineoffset)
     assert normalize(expected_rendered) == normalize(rendered)
@@ -94,8 +89,8 @@ def test_polylineoffset_without_offset():
     assert script in out
 
     # We verify that the script part is correct.
-    expected_rendered = """
-    var {name} = L.polyline(
+    expected_rendered = f"""
+    var {polylineoffset.get_name()} = L.polyline(
     {locations},
     {{
     "bubblingMouseEvents": true,
@@ -116,10 +111,8 @@ def test_polylineoffset_without_offset():
     "weight": 3
     }}
     )
-    .addTo({map});
-    """.format(
-        locations=locations, name=polylineoffset.get_name(), map=m.get_name()
-    )
+    .addTo({m.get_name()});
+    """
 
     rendered = polylineoffset._template.module.script(polylineoffset)
     assert normalize(expected_rendered) == normalize(rendered)

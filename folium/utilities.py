@@ -75,21 +75,19 @@ def validate_location(location: Sequence[float]) -> List[float]:
         raise TypeError(
             "Location should be a sized variable, "
             "for example a list or a tuple, instead got "
-            "{!r} of type {}.".format(location, type(location))
+            f"{location!r} of type {type(location)}."
         )
     if len(location) != 2:
         raise ValueError(
             "Expected two (lat, lon) values for location, "
-            "instead got: {!r}.".format(location)
+            f"instead got: {location!r}."
         )
     try:
         coords = (location[0], location[1])
     except (TypeError, KeyError):
         raise TypeError(
             "Location should support indexing, like a list or "
-            "a tuple does, instead got {!r} of type {}.".format(
-                location, type(location)
-            )
+            f"a tuple does, instead got {location!r} of type {type(location)}."
         )
     for coord in coords:
         try:
@@ -97,9 +95,7 @@ def validate_location(location: Sequence[float]) -> List[float]:
         except (TypeError, ValueError):
             raise ValueError(
                 "Location should consist of two numerical values, "
-                "but {!r} of type {} is not convertible to float.".format(
-                    coord, type(coord)
-                )
+                f"but {coord!r} of type {type(coord)} is not convertible to float."
             )
         if math.isnan(float(coord)):
             raise ValueError("Location values cannot contain NaNs.")
@@ -113,7 +109,7 @@ def _validate_locations_basics(locations: TypeMultiLine) -> None:
     except TypeError:
         raise TypeError(
             "Locations should be an iterable with coordinate pairs,"
-            " but instead got {!r}.".format(locations)
+            f" but instead got {locations!r}."
         )
     try:
         next(iter(locations))

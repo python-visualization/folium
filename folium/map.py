@@ -295,9 +295,7 @@ class Icon(MacroElement):
         self._name = "Icon"
         if color not in self.color_options:
             warnings.warn(
-                "color argument of Icon should be one of: {}.".format(
-                    self.color_options
-                ),
+                f"color argument of Icon should be one of: {self.color_options}.",
                 stacklevel=2,
             )
         self.options = parse_options(
@@ -391,9 +389,7 @@ class Marker(MacroElement):
     def render(self) -> None:
         if self.location is None:
             raise ValueError(
-                "{} location must be assigned when added directly to map.".format(
-                    self._name
-                )
+                f"{self._name} location must be assigned when added directly to map."
             )
         super().render()
 
@@ -574,9 +570,7 @@ class Tooltip(MacroElement):
             )
             assert isinstance(
                 kwargs[key], self.valid_options[key]
-            ), "The option {} must be one of the following types: {}.".format(
-                key, self.valid_options[key]
-            )
+            ), f"The option {key} must be one of the following types: {self.valid_options[key]}."
         return kwargs
 
 
