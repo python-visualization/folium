@@ -1,10 +1,14 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>Heatmap &#8212; Folium documentation</title>
   
   
@@ -15,28 +19,27 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -49,88 +52,102 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="HeatMapWithTime Plugin" href="heatmap_with_time.html" />
     <link rel="prev" title="GroupedLayerControl" href="grouped_layer_control.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
-
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
 <a class="navbar-brand logo" href="../../index.html">
-
   
   
   
-  
-  
-  
-  
-
   
   
     <p class="title logo__title">Folium documentation</p>
   
-</a>
+</a></div>
     
-    <div class="version-switcher__container dropdown">
-    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
-        latest  <!-- this text may get changed later by javascript -->
-        <span class="caret"></span>
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
     <!-- dropdown will be populated by javascript on page load -->
     </div>
-</div>
+  </div>
+`);
+</script></div>
     
   </div>
-
+  
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../index.html">
                         Home
@@ -165,76 +182,83 @@
                       </a>
                     </li>
                 
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
-
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
         </div>
       
       
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
+  </button>
+`);
+</script></div>
       
     </div>
+    
   </div>
-
-
   
   
     <div class="navbar-persistent--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
     </div>
   
 
   
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-  </label>
+    </label>
   
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../index.html">
                         Home
@@ -269,42 +293,35 @@
                       </a>
                     </li>
                 
-    </ul>
-</nav>
+  </ul>
+</nav></div>
+        
       </div>
-      
-      </div>
-    
-
     
     
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
+  </button>
+`);
+</script></div>
+        
       </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
     
   </div>
-
   
-  <div class="sidebar-start-items sidebar-primary__section">
-    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">
-    Section Navigation
-  </p>
-  <div class="bd-toc-item navbar-nav">
-    <ul class="current nav bd-sidenav">
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../map.html">Map</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ui_elements.html">UI elements</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ui_elements/layer_control.html">LayerControl</a></li>
@@ -374,293 +391,66 @@
 </ul>
 </li>
 </ul>
-
-  </div>
-</nav>
+</div>
+</nav></div>
     </div>
-  </div>
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
-
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
 
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
 
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-.jp-RenderedHTMLCommon table,
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-.jp-RenderedHTMLCommon thead,
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-.jp-RenderedHTMLCommon tr,
-.jp-RenderedHTMLCommon th,
-.jp-RenderedHTMLCommon td,
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-.jp-RenderedHTMLCommon th,
-div.rendered_html th {
-  font-weight: bold;
-}
-.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-.jp-RenderedHTMLCommon tbody tr:hover,
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<div class="section" id="Heatmap">
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../plugins.html" class="nav-link">Plugins</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Heatmap</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="Heatmap">
 <h1>Heatmap<a class="headerlink" href="#Heatmap" title="Permalink to this heading">#</a></h1>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -721,7 +511,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_55fd289687b1a5f40a22d58e237171ed {
+                #map_2b754a9b9744d20de723658eaf3aa3e7 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -736,14 +526,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_55fd289687b1a5f40a22d58e237171ed&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_2b754a9b9744d20de723658eaf3aa3e7&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_55fd289687b1a5f40a22d58e237171ed = L.map(
-                &quot;map_55fd289687b1a5f40a22d58e237171ed&quot;,
+            var map_2b754a9b9744d20de723658eaf3aa3e7 = L.map(
+                &quot;map_2b754a9b9744d20de723658eaf3aa3e7&quot;,
                 {
                     center: [48.0, 5.0],
                     crs: L.CRS.EPSG3857,
@@ -757,132 +547,132 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_1e05cf2115596275ae5467dbee1b0dc1 = L.tileLayer(
+            var tile_layer_85bd83c7f7be81daee2b7ab428fcbe8e = L.tileLayer(
                 &quot;https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Map tiles by \u003ca target=\&quot;_blank\&quot; href=\&quot;http://stamen.com\&quot;\u003eStamen Design\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://creativecommons.org/licenses/by/3.0\&quot;\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_1e05cf2115596275ae5467dbee1b0dc1.addTo(map_55fd289687b1a5f40a22d58e237171ed);
+                tile_layer_85bd83c7f7be81daee2b7ab428fcbe8e.addTo(map_2b754a9b9744d20de723658eaf3aa3e7);
 
-            var heat_map_f1a56eebccec61706996704d0c8a310b = L.heatLayer(
-                [[47.995772446132996, 3.9388801504383784, 1.5142009244947143], [49.77229238065283, 4.233457101545349, 0.27329833828979666], [46.600632084476054, 7.943379808571093, -0.6052265787355684], [48.46500229028427, 3.273055764907335, 0.7225558306493411], [47.884090454006646, 6.017641005731971, 1.6898626350831516], [48.80353003291816, 6.064981923116682, -0.31520053690345606], [46.36975142843493, 5.486320359727068, 1.0026638514488329], [49.74575146472273, 3.6312238339487415, 0.3004383777371268], [47.53757564712607, 4.277289748423473, 2.3238330147950457], [47.692676626322545, 4.966112778352558, 1.602680291390092], [48.284892682675654, 5.498707226566024, 0.012527103359720626], [48.50821164071198, 5.622733993759655, 1.0672466049483147], [48.72212121252726, 6.839639882598476, 0.03648505186076667], [48.70946263332781, 3.9908204702771366, 2.4417157020561073], [48.68443795089009, 3.5015003388308923, 2.315055424195201], [47.19249008179534, 4.83469042649632, 1.192331816968298], [47.73952560589656, 6.111831704199558, 0.4582887067614919], [49.033654810066984, 4.445786230238896, 1.2755781475353472], [49.165026141062626, 4.532162304175344, 0.5509939156441805], [46.56774401578462, 7.04174175571155, 1.835645426243488], [48.332488869774146, 5.2613711623179, 0.716765815748261], [47.569946845952636, 6.347016713742533, 1.2611380758244188], [47.312703605518216, 5.995583032202337, 0.23332319279953773], [49.58441599521131, 5.629647863113839, 1.7269695725071799], [47.3473517672612, 5.6000530262322075, 1.7980343988912448], [48.121230946932826, 3.3695437485497606, -0.16880440814276465], [48.51612723807782, 5.494028759070814, 1.6166458976260203], [47.404926259191996, 4.202989906374832, 0.4371093992820412], [48.18253743812062, 5.185909472675161, 1.0354470393294246], [50.070930782787265, 5.244204462228797, 2.153557378549692], [48.20649373340823, 6.337160702323868, 1.1234762537220426], [49.594654196468056, 5.347722372738116, 0.5828703556764463], [49.83862715379454, 4.934348821724152, 2.5681437389189563], [48.28591345922807, 4.944332872557955, 2.9101378862627407], [47.75898967104751, 6.043463592003796, 0.39073703608546606], [47.878354331013995, 5.854130980919216, 1.969093402577033], [47.12893338421959, 4.362064466597069, -0.9007530032001891], [47.46423158820183, 4.886274112143912, -0.07972167159277888], [48.259929014106625, 4.613485092715444, 1.078244169589889], [48.668049399900816, 4.482939927009706, -0.8783878018602578], [47.673157013111286, 4.319823978095684, -0.5611900508308589], [47.39183473101073, 5.1076105290965685, 0.61451983233923], [48.403353955646814, 5.236098416162971, 1.4753358198063382], [48.61619470291726, 7.071852314741012, 1.9740622660797662], [48.89405921432496, 5.649292245583506, 0.8735651076273745], [48.81332512106353, 4.149321792007684, -0.20805272651807982], [47.53186356228224, 4.411942205964705, 2.2367421214452357], [48.69498259552571, 6.624399992023005, 0.39507045532403484], [47.74610600132692, 3.604086500258913, 1.1138285655427498], [47.84321403859911, 5.233201122653112, 2.0258470294124677], [47.47747400126897, 6.933029774976302, 0.9368908105459879], [48.43185543735802, 4.968013918537158, 0.9529374864845047], [48.052641681430764, 4.352829159752702, -0.029145044928380326], [49.67917639808497, 5.045846658032316, -0.2760778826531818], [47.917856894521464, 4.845065608991315, 0.7813111689449339], [47.18437719522471, 3.421370875439856, 0.9293317114674011], [48.4042567065144, 5.571404004669728, 1.6451753360270633], [48.439940638186776, 4.177909989342274, 0.9628124881820388], [48.36588022288121, 4.188508258531352, 0.7987832532944834], [46.89585184207351, 5.881269426925977, 1.7014473577631102], [47.86965392948984, 7.376565146046447, 1.3556826777356346], [48.82928908114026, 6.353672271761942, -0.39730475776937246], [47.18887982624459, 4.721542146042799, 0.9576951903578084], [48.15175515875185, 4.181339686259728, 2.0888204307210008], [47.89687741498828, 3.182324275671848, 1.8704283794139371], [47.3455343419019, 4.524619202339891, 0.35055576501254404], [48.42123107532148, 4.137502366188279, 0.1477121865776777], [48.17240003699632, 6.849274365280578, 0.9755314974103094], [47.890449439066565, 5.205995119053949, 0.9110648882973221], [48.625904057339575, 6.465861356986249, 0.7006895988750124], [47.796704726214195, 3.266431188735645, 0.48952158798743295], [47.95321052891026, 4.633100151190151, -0.514678180105332], [47.238895545538426, 5.027748330640688, 2.061192026493951], [47.708282700577094, 3.945240334104387, 0.9841392231444287], [49.085080614232666, 5.391523076192292, 1.9281067182695621], [47.49420094689424, 5.533638834162428, 1.8573013051560334], [48.63318707958701, 5.746201439128553, 0.7033370107831666], [45.47354419234515, 6.555740488107498, 0.2730776078357109], [48.65740824399014, 5.5071868207687915, 0.032350904693466465], [48.91521773691503, 5.78431218050818, 2.3944998000224746], [47.11275449754173, 4.7133053033477035, 1.9608236080107129], [46.05538473726216, 3.9251206433393246, -0.07802144679942358], [48.33948113921026, 5.674514881071, -0.2783235499512511], [49.48184416149477, 5.662302229271453, 1.2870013893672758], [48.82549225436463, 5.023041322119467, -0.19672265973211323], [47.89734085973546, 6.524574041367709, 0.9839396410363466], [46.459517088654245, 6.377360353475924, 0.29907744747332055], [49.01096346970386, 5.193225552129929, 0.7056321853777106], [48.71252491660891, 3.991159173439503, 1.0116880217592608], [46.90213837090185, 4.69015781006169, 1.2317104308532856], [47.57449015793636, 2.8107139043472467, 0.5487192179551297], [48.97533032834163, 4.7298152950914005, -0.948478245612032], [47.172460892142865, 4.847688827069307, 1.5677085911147204], [46.778258713175305, 5.369555281058347, 1.5454615869697506], [49.08798551643812, 4.478206699334114, 0.5154127110208897], [47.73594379621087, 5.893677928768941, 0.7150003418237496], [49.890371658552176, 6.77219572613489, 1.6466096361815863], [46.47797283113855, 3.4144876832820836, -0.269287334124646], [47.5993484743366, 3.6901954759470375, -0.5692238244257859], [47.69765582703542, 5.3526673602516714, 1.096910368250683]],
+            var heat_map_7e261b5d5f4b8ad58f86f50e1b15d513 = L.heatLayer(
+                [[49.45434289510758, 4.206486114907143, 0.9726877829173964], [48.442216555178305, 4.025951502651901, -1.064146074669483], [47.98488124564147, 3.934166016421308, 1.2307371493813826], [48.154984982199935, 4.458708958197573, 2.107224387356725], [47.99359203084304, 5.17802497420827, 1.9606313279027987], [48.129738958569085, 4.449509604205105, 0.6331915944209392], [47.66040299581993, 4.504051034598332, 2.342133515754723], [47.522668621525284, 2.5991579284391744, 1.1686594551739649], [46.23534746566208, 2.727456535843627, 0.18460209057297428], [46.12618955649329, 5.4338115695348685, 1.0194644484815774], [47.285523345952726, 6.615231168124688, 0.31466871451431055], [49.221786925474454, 5.85311418971581, 0.23061201988793434], [48.12490791793347, 5.4846500477869515, 1.818629477152643], [48.58183620655889, 4.826558042291744, 0.6560141013669654], [45.81806026491427, 4.454404650409582, 2.924394173584985], [50.344087931653235, 5.520008625929562, 2.5320323017553052], [49.14586172112396, 5.7858821684375785, 2.6376180251898447], [47.726259062723926, 5.91118536278168, 1.1952270440352222], [47.752063512969336, 4.866757121874552, 1.374535076376826], [48.62366742074298, 6.747291376560575, 1.46515445912725], [47.24401303205006, 5.624656624395945, 1.9381465000123566], [45.30555580841154, 3.511070329198545, 1.036053693291159], [49.46418012225782, 5.447156255815492, -0.8477333113498065], [47.480096351018354, 5.842803057225361, 1.6467633429325312], [47.44138941391184, 2.9629720248420255, -0.03855682478980671], [47.40690814229406, 3.1591415796685296, 0.6523778031500916], [48.16185243760082, 5.353261878847634, 1.8897874313995202], [48.54876176928181, 5.099882356736472, 0.41921301456187954], [48.54286227228251, 4.449828012930225, 1.0816512552273092], [49.18114623295671, 4.1482007357178174, 0.41260109509988085], [48.420958443796316, 6.542399908600874, 0.15500572818143965], [47.052612814357666, 5.876295428640992, 2.222539569775366], [50.638730122394826, 4.258224904500335, 0.09948160541562612], [47.8588916812383, 5.044667829798168, 0.9186450126793706], [47.434981292112155, 4.751513508102451, -0.8205756939603108], [48.655557115569174, 4.861662595213682, -0.5153857276305334], [47.62244011054886, 5.576008994131345, 2.0214951105910637], [48.17773383729051, 4.570153826336033, 1.8583112792432415], [49.05877174164466, 4.485736279815871, 0.6175055552824722], [46.52174377871946, 4.663153215190341, 0.8669346228286414], [48.108860611863705, 5.580670546712172, 0.6743763162739013], [48.012872733357646, 5.703520243830066, 1.3136067070247137], [46.627248464021946, 3.336355915789457, 0.5462807284883946], [45.54932380242574, 5.177203587451884, 1.8149228473202876], [48.993078473341896, 3.466792569816222, 0.8107620800820241], [48.70099626994766, 3.2192470114569947, 2.231759268970051], [46.261389876182506, 5.677712293553184, 1.011257167164756], [46.75986459034488, 3.3331474137212735, 1.8735743112258114], [47.487573735909464, 4.68946933116477, 0.05242383854714361], [46.84364257536683, 4.5393149329127285, 0.3600695484340821], [48.727585880282625, 5.802890247303383, 1.6386606101884706], [47.703454007045245, 4.588484236852229, 0.7846464130563988], [47.57515509141561, 6.434658710506594, -0.16596037737390978], [46.394069468814855, 4.578497855373344, 0.7402246426555984], [48.04683552992763, 3.2824329697721106, 2.3081736595416236], [48.80567084673712, 4.5149831521752635, 1.1910289058708472], [48.88070527142681, 6.451399215477363, 2.5719231724615486], [46.328101073230485, 5.898457540612949, 1.6753713457505715], [46.96470420503448, 6.97450483636806, 2.455825163772265], [48.796103680335435, 6.067755308858133, -1.5970821519090044], [46.75912389601714, 4.960846348239546, 2.106568035203911], [49.702552747998254, 3.93564711769774, 1.5883615553949768], [46.747577893714855, 7.109131011090085, 0.5099844089558341], [50.121054587338854, 6.218859080420816, -0.24816490172130767], [47.95220022710862, 4.794030363696294, 0.018328558802760186], [47.43484128271862, 2.913472576733576, 0.3269154326989343], [47.991325024274474, 4.573597807028808, 1.8562038412903354], [48.1774112682094, 4.412443283803167, 0.6450688068022365], [47.493885148111524, 3.026236111679456, 1.7859679561328887], [48.626181280425804, 5.337526049939323, 2.3348440207715155], [48.63705596092275, 4.429252202046367, 0.9163792647575856], [45.55257465197048, 3.3723055678215026, 1.746592162754937], [48.590287255720675, 5.324086779671717, 1.3282716931078258], [49.80514670699044, 3.677323756544081, 0.6283688957531335], [46.427751362487086, 4.845779601218207, -0.3319077686860308], [47.90473689164301, 3.3752615937846477, 1.9567194383127289], [49.36083413481678, 4.234791714704853, 0.7036408057921302], [47.847511407938576, 6.165554693430027, 0.4999289889008337], [48.26402231990516, 3.285628263974592, 2.0696807828629664], [48.45955570144821, 4.256239692287747, 0.5555697065424845], [47.822513480208734, 4.781228256240217, -0.04467090615797442], [46.18150079865903, 5.8182398430804705, 0.6087812171973948], [49.9254376783681, 3.5057312490275256, 0.23887436355156944], [47.897885398470684, 3.7408125771571377, -0.47898576718636865], [48.227292935184096, 5.1765994411927965, 0.22065796194653275], [48.070856585185574, 3.950055884913017, 0.195967808971794], [46.59539381535268, 5.086268680914596, -1.1148251352795806], [48.00924885090076, 4.448385484570165, 1.4562761459525102], [46.96190762934388, 4.417064034263618, 1.9410420149421543], [48.173332063667324, 4.138100838066886, 2.0956748222957593], [48.02892069878499, 4.839910498898833, 0.9259368686357267], [48.94871739040471, 4.830779544678967, 2.5127348290931235], [48.44448799192103, 5.373293514598504, 0.006563271032972717], [49.1834655016881, 6.045441230234619, 0.47904697933923523], [47.421052860558, 3.192812427172045, 0.45752494779470076], [47.419246759823906, 3.196456662903654, 0.9410534103075828], [48.745641519417894, 6.786704837639526, 1.834901563932678], [49.79819208968062, 5.50408509883485, -0.24608167695961836], [49.31470021074507, 5.232726575412805, 0.48166331268340834], [49.41944469631567, 4.314161805325539, -0.11494947411253364]],
                 {&quot;blur&quot;: 15, &quot;maxZoom&quot;: 18, &quot;minOpacity&quot;: 0.5, &quot;radius&quot;: 25}
             );
 
 
-                heat_map_f1a56eebccec61706996704d0c8a310b.addTo(map_55fd289687b1a5f40a22d58e237171ed);
+                heat_map_7e261b5d5f4b8ad58f86f50e1b15d513.addTo(map_2b754a9b9744d20de723658eaf3aa3e7);
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
+</section>
 
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="grouped_layer_control.html" title="previous page">
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="grouped_layer_control.html"
+       title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">GroupedLayerControl</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">GroupedLayerControl</p>
       </div>
-  </a>
-  <a class='right-next' id="next-link" href="heatmap_with_time.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">HeatMapWithTime Plugin</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
-</div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
-              
-<div class="toc-item">
-  
-<div id="searchbox"></div>
-</div>
-
-<div class="toc-item">
-  
-</div>
-
-<div class="toc-item">
-  
-<div class="tocsection sourcelink">
-    <a href="../../_sources/user_guide/plugins/heatmap.md.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
+    <a class="right-next"
+       href="heatmap_with_time.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">HeatMapWithTime Plugin</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
 </div>
 
-</div>
-
+                </footer>
+              
             </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user_guide/plugins/heatmap.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
-    <!-- This will display the version of the docs -->
-Folium version 0.14.1.dev66.dev+gfb78f3e
-  </div>
-  
-  <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Folium version 0.14.1.dev31.dev+gcf5f834</div>
+      
+        <div class="footer-item">
+  <p class="copyright">
     
-<p class="copyright">
-
-    &copy; Copyright 2013, Rob Story.<br>
-
-</p>
-
-  </div>
-  
-  <div class="footer-item">
+      © Copyright 2013, Rob Story.
+      <br/>
     
-<p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
-</p>
-
-  </div>
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
-  <div class="footer-item">
-    <p class="theme-version">
-    Built with the
-    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
-        PyData Sphinx Theme
-    </a>
-    0.12.0.
-</p>
-  </div>
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>

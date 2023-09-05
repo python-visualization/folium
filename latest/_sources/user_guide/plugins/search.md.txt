@@ -9,7 +9,6 @@ Let's get some JSON data from the web - both a point layer and a polygon GeoJson
 ```{code-cell} ipython3
 import geopandas
 
-
 states = geopandas.read_file(
     "https://raw.githubusercontent.com/PublicaMundi/MappingAPI/master/data/geojson/us-states.json",
     driver="GeoJSON",

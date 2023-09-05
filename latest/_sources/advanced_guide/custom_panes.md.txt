@@ -15,7 +15,11 @@ For more info on the panes Leaflet has, see https://leafletjs.com/reference.html
 First we'll load geojson data to use in the examples:
 
 ```{code-cell} ipython3
-geo_json_data = folium.example_data.us_states_geojson()
+import requests
+
+geo_json_data = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
 
 style_function = lambda x: {"fillOpacity": 0.8}
 ```

@@ -24,8 +24,11 @@ income.head()
 
 ```{code-cell} ipython3
 import geopandas
+import requests
 
-data = folium.example_data.us_states_geojson()
+data = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
 states = geopandas.GeoDataFrame.from_features(data, crs="EPSG:4326")
 
 states.head()

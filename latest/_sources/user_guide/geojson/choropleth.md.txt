@@ -12,9 +12,13 @@ Now if you want to get faster, you can use the `Choropleth` class. Have a look a
 Just like the `GeoJson` class you can provide it a filename, a dict, or a geopandas object.
 
 ```{code-cell} ipython3
+import requests
+
 m = folium.Map([43, -100], zoom_start=4)
 
-us_states = folium.example_data.us_states_geojson()
+us_states = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
 
 folium.Choropleth(
     geo_data=us_states,
@@ -28,7 +32,11 @@ m
 Then, in playing with keyword arguments, you can get a choropleth in a few lines:
 
 ```{code-cell} ipython3
-state_data = folium.example_data.us_unemployment_pandas_dataframe()
+import pandas
+
+state_data = pandas.read_csv(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_unemployment_oct_2012.csv"
+)
 
 m = folium.Map([43, -100], zoom_start=4)
 

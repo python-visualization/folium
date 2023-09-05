@@ -1,10 +1,14 @@
 
+
 <!DOCTYPE html>
 
-<html lang="en">
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>MiniMap &#8212; Folium documentation</title>
   
   
@@ -15,28 +19,27 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link href="../../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -49,88 +52,102 @@
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="MeasureControl" href="measure_control.html" />
     <link rel="prev" title="MarkerCluster" href="marker_cluster.html" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="docsearch:language" content="en">
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
   
   
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
   <label class="overlay overlay-primary" for="__primary"></label>
-
   
-  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
   <label class="overlay overlay-secondary" for="__secondary"></label>
-
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
     <div class="search-button__search-container">
-      
-<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-    </div>
+</form></div>
   </div>
-
   
-  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
   <label class="sidebar-toggle primary-toggle" for="__primary">
-      <span class="fa-solid fa-bars"></span>
+    <span class="fa-solid fa-bars"></span>
   </label>
-  <div id="navbar-start">
-    
-    
   
-
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
 
 <a class="navbar-brand logo" href="../../index.html">
-
   
   
   
-  
-  
-  
-  
-
   
   
     <p class="title logo__title">Folium documentation</p>
   
-</a>
+</a></div>
     
-    <div class="version-switcher__container dropdown">
-    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
-        latest  <!-- this text may get changed later by javascript -->
-        <span class="caret"></span>
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown">
+      latest  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
     </button>
     <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
     <!-- dropdown will be populated by javascript on page load -->
     </div>
-</div>
+  </div>
+`);
+</script></div>
     
   </div>
-
+  
   
   <div class="col-lg-9 navbar-header-items">
-    <div id="navbar-center" class="mr-auto">
+    
+    <div class="me-auto navbar-header-items__center">
       
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
-        
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../index.html">
                         Home
@@ -165,76 +182,83 @@
                       </a>
                     </li>
                 
-    </ul>
-</nav>
-      </div>
+  </ul>
+</nav></div>
       
     </div>
-
-    <div id="navbar-end">
+    
+    
+    <div class="navbar-header-items__end">
       
-        <div class="navbar-end-item navbar-persistent--container">
+        <div class="navbar-item navbar-persistent--container">
           
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
         </div>
       
       
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
-      </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
+  </button>
+`);
+</script></div>
       
     </div>
+    
   </div>
-
-
   
   
     <div class="navbar-persistent--mobile">
-<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
-  <i class="fa-solid fa-magnifying-glass"></i>
-</button>
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
     </div>
   
 
   
-  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
       <span class="fa-solid fa-outdent"></span>
-  </label>
+    </label>
   
-
 </div>
-  </nav>
-  
 
+    </nav>
+  
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
       
       <div class="bd-sidebar-primary bd-sidebar">
         
+
   
   <div class="sidebar-header-items sidebar-primary__section">
     
     
       <div class="sidebar-header-items__center">
-      
-      <div class="navbar-center-item">
-        <nav class="navbar-nav">
-    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
-        Site Navigation
-    </p>
-    <ul id="navbar-main-elements" class="navbar-nav">
         
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
                     <li class="nav-item">
                       <a class="nav-link nav-internal" href="../../index.html">
                         Home
@@ -269,42 +293,35 @@
                       </a>
                     </li>
                 
-    </ul>
-</nav>
+  </ul>
+</nav></div>
+        
       </div>
-      
-      </div>
-    
-
     
     
-    <div class="sidebar-header-items__end">
-      
-      <div class="navbar-end-item">
-        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
     <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
     <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
-</button>
+  </button>
+`);
+</script></div>
+        
       </div>
-      
-      <div class="navbar-end-item">
-        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
-      </ul>
-      </div>
-      
-    </div>
     
   </div>
-
   
-  <div class="sidebar-start-items sidebar-primary__section">
-    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
-  <p class="bd-links__title" role="heading" aria-level="1">
-    Section Navigation
-  </p>
-  <div class="bd-toc-item navbar-nav">
-    <ul class="current nav bd-sidenav">
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../map.html">Map</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ui_elements.html">UI elements</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ui_elements/layer_control.html">LayerControl</a></li>
@@ -374,293 +391,66 @@
 </ul>
 </li>
 </ul>
-
-  </div>
-</nav>
+</div>
+</nav></div>
     </div>
-  </div>
   
-
   
-  <div class="sidebar-end-items sidebar-primary__section">
-    <div class="sidebar-end-items__item">
-    </div>
+  <div class="sidebar-primary-items__end sidebar-primary__section">
   </div>
-
   
   <div id="rtd-footer-container"></div>
 
+
       </div>
+      
       <main id="main-content" class="bd-main">
         
         
-        <div class="bd-content">
-          <div class="bd-article-container">
-            
-            <div class="bd-header-article">
-                
-            </div>
-            
-            
-            <article class="bd-article" role="main">
+          <div class="bd-content">
+            <div class="bd-article-container">
               
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
   
-<style>
-/* CSS for nbsphinx extension */
-
-/* remove conflicting styling from Sphinx themes */
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt *,
-div.nbinput.container div.input_area pre,
-div.nboutput.container div.output_area pre,
-div.nbinput.container div.input_area .highlight,
-div.nboutput.container div.output_area .highlight {
-    border: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-}
-
-div.nbinput.container > div[class*=highlight],
-div.nboutput.container > div[class*=highlight] {
-    margin: 0;
-}
-
-div.nbinput.container div.prompt *,
-div.nboutput.container div.prompt * {
-    background: none;
-}
-
-div.nboutput.container div.output_area .highlight,
-div.nboutput.container div.output_area pre {
-    background: unset;
-}
-
-div.nboutput.container div.output_area div.highlight {
-    color: unset;  /* override Pygments text color */
-}
-
-/* avoid gaps between output lines */
-div.nboutput.container div[class*=highlight] pre {
-    line-height: normal;
-}
-
-/* input/output containers */
-div.nbinput.container,
-div.nboutput.container {
-    display: -webkit-flex;
-    display: flex;
-    align-items: flex-start;
-    margin: 0;
-    width: 100%;
-}
-@media (max-width: 540px) {
-    div.nbinput.container,
-    div.nboutput.container {
-        flex-direction: column;
-    }
-}
-
-/* input container */
-div.nbinput.container {
-    padding-top: 5px;
-}
-
-/* last container */
-div.nblast.container {
-    padding-bottom: 5px;
-}
-
-/* input prompt */
-div.nbinput.container div.prompt pre {
-    color: #307FC1;
-}
-
-/* output prompt */
-div.nboutput.container div.prompt pre {
-    color: #BF5B3D;
-}
-
-/* all prompts */
-div.nbinput.container div.prompt,
-div.nboutput.container div.prompt {
-    width: 4.5ex;
-    padding-top: 5px;
-    position: relative;
-    user-select: none;
-}
-
-div.nbinput.container div.prompt > div,
-div.nboutput.container div.prompt > div {
-    position: absolute;
-    right: 0;
-    margin-right: 0.3ex;
-}
-
-@media (max-width: 540px) {
-    div.nbinput.container div.prompt,
-    div.nboutput.container div.prompt {
-        width: unset;
-        text-align: left;
-        padding: 0.4em;
-    }
-    div.nboutput.container div.prompt.empty {
-        padding: 0;
-    }
-
-    div.nbinput.container div.prompt > div,
-    div.nboutput.container div.prompt > div {
-        position: unset;
-    }
-}
-
-/* disable scrollbars on prompts */
-div.nbinput.container div.prompt pre,
-div.nboutput.container div.prompt pre {
-    overflow: hidden;
-}
-
-/* input/output area */
-div.nbinput.container div.input_area,
-div.nboutput.container div.output_area {
-    -webkit-flex: 1;
-    flex: 1;
-    overflow: auto;
-}
-@media (max-width: 540px) {
-    div.nbinput.container div.input_area,
-    div.nboutput.container div.output_area {
-        width: 100%;
-    }
-}
-
-/* input area */
-div.nbinput.container div.input_area {
-    border: 1px solid #e0e0e0;
-    border-radius: 2px;
-    /*background: #f5f5f5;*/
-}
-
-/* override MathJax center alignment in output cells */
-div.nboutput.container div[class*=MathJax] {
-    text-align: left !important;
-}
-
-/* override sphinx.ext.imgmath center alignment in output cells */
-div.nboutput.container div.math p {
-    text-align: left;
-}
-
-/* standard error */
-div.nboutput.container div.output_area.stderr {
-    background: #fdd;
-}
-
-/* ANSI colors */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-default-inverse-fg { color: #FFFFFF; }
-.ansi-default-inverse-bg { background-color: #000000; }
-
-.ansi-bold { font-weight: bold; }
-.ansi-underline { text-decoration: underline; }
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
 
 
-div.nbinput.container div.input_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight] > pre,
-div.nboutput.container div.output_area div[class*=highlight].math,
-div.nboutput.container div.output_area.rendered_html,
-div.nboutput.container div.output_area > div.output_javascript,
-div.nboutput.container div.output_area:not(.rendered_html) > img{
-    padding: 5px;
-    margin: 0;
-}
 
-/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
-div.nbinput.container div.input_area > div[class^='highlight'],
-div.nboutput.container div.output_area > div[class^='highlight']{
-    overflow-y: hidden;
-}
-
-/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
-.prompt .copybtn {
-    display: none;
-}
-
-/* Some additional styling taken form the Jupyter notebook CSS */
-.jp-RenderedHTMLCommon table,
-div.rendered_html table {
-  border: none;
-  border-collapse: collapse;
-  border-spacing: 0;
-  color: black;
-  font-size: 12px;
-  table-layout: fixed;
-}
-.jp-RenderedHTMLCommon thead,
-div.rendered_html thead {
-  border-bottom: 1px solid black;
-  vertical-align: bottom;
-}
-.jp-RenderedHTMLCommon tr,
-.jp-RenderedHTMLCommon th,
-.jp-RenderedHTMLCommon td,
-div.rendered_html tr,
-div.rendered_html th,
-div.rendered_html td {
-  text-align: right;
-  vertical-align: middle;
-  padding: 0.5em 0.5em;
-  line-height: normal;
-  white-space: normal;
-  max-width: none;
-  border: none;
-}
-.jp-RenderedHTMLCommon th,
-div.rendered_html th {
-  font-weight: bold;
-}
-.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
-div.rendered_html tbody tr:nth-child(odd) {
-  background: #f5f5f5;
-}
-.jp-RenderedHTMLCommon tbody tr:hover,
-div.rendered_html tbody tr:hover {
-  background: rgba(66, 165, 245, 0.2);
-}
-</style>
-<div class="section" id="MiniMap">
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../plugins.html" class="nav-link">Plugins</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">MiniMap</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="MiniMap">
 <h1>MiniMap<a class="headerlink" href="#MiniMap" title="Permalink to this heading">#</a></h1>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -709,7 +499,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_fde32870ca7042ccf5e8d9bf0d1854c6 {
+                #map_e818795131cf6bebd765f386c146e8f8 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -725,14 +515,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_fde32870ca7042ccf5e8d9bf0d1854c6&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_e818795131cf6bebd765f386c146e8f8&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_fde32870ca7042ccf5e8d9bf0d1854c6 = L.map(
-                &quot;map_fde32870ca7042ccf5e8d9bf0d1854c6&quot;,
+            var map_e818795131cf6bebd765f386c146e8f8 = L.map(
+                &quot;map_e818795131cf6bebd765f386c146e8f8&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -746,28 +536,28 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_a54339610b3619edec7fa627c488cde0 = L.tileLayer(
+            var tile_layer_b29c8aa9c87a7e1c41172a59cdb0b655 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_a54339610b3619edec7fa627c488cde0.addTo(map_fde32870ca7042ccf5e8d9bf0d1854c6);
+                tile_layer_b29c8aa9c87a7e1c41172a59cdb0b655.addTo(map_e818795131cf6bebd765f386c146e8f8);
 
-            var tile_layer_5f20ebdb63aec974373ed2b6abb72101 = L.tileLayer(
+            var tile_layer_6d36ab434629fedf1a9d161f503fd21e = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_9c0b81aa0ae3ce401092b5d3636de127 = new L.Control.MiniMap(
-                tile_layer_5f20ebdb63aec974373ed2b6abb72101,
+            var mini_map_147497f674343a090c7f6ab37fd26a7e = new L.Control.MiniMap(
+                tile_layer_6d36ab434629fedf1a9d161f503fd21e,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 150, &quot;minimized&quot;: false, &quot;position&quot;: &quot;bottomright&quot;, &quot;toggleDisplay&quot;: false, &quot;width&quot;: 150, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -5}
             );
-            map_fde32870ca7042ccf5e8d9bf0d1854c6.addControl(mini_map_9c0b81aa0ae3ce401092b5d3636de127);
+            map_e818795131cf6bebd765f386c146e8f8.addControl(mini_map_147497f674343a090c7f6ab37fd26a7e);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-<div class="section" id="Make-the-minimap-collapsible">
+<section id="Make-the-minimap-collapsible">
 <h2>Make the minimap collapsible<a class="headerlink" href="#Make-the-minimap-collapsible" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -811,7 +601,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_ad260c026f50bd5c541fd75c177f9b7e {
+                #map_c7ff8a51654160c9041b4afe79aa17af {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -827,14 +617,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_ad260c026f50bd5c541fd75c177f9b7e&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c7ff8a51654160c9041b4afe79aa17af&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_ad260c026f50bd5c541fd75c177f9b7e = L.map(
-                &quot;map_ad260c026f50bd5c541fd75c177f9b7e&quot;,
+            var map_c7ff8a51654160c9041b4afe79aa17af = L.map(
+                &quot;map_c7ff8a51654160c9041b4afe79aa17af&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -848,29 +638,29 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_ddd388cb56d23157114e738fa7e779d0 = L.tileLayer(
+            var tile_layer_fdf2f683838b8c0e5828488e581caa5c = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_ddd388cb56d23157114e738fa7e779d0.addTo(map_ad260c026f50bd5c541fd75c177f9b7e);
+                tile_layer_fdf2f683838b8c0e5828488e581caa5c.addTo(map_c7ff8a51654160c9041b4afe79aa17af);
 
-            var tile_layer_46b5cc3542530db75d036328e2c1c9e5 = L.tileLayer(
+            var tile_layer_4ffcf8a85a1c2a405a9ff07f09746653 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_a7ca9a1e9d7dfe4d8e1029059f522bfe = new L.Control.MiniMap(
-                tile_layer_46b5cc3542530db75d036328e2c1c9e5,
+            var mini_map_34adbed6fbbe133bc29e2fdffab7448d = new L.Control.MiniMap(
+                tile_layer_4ffcf8a85a1c2a405a9ff07f09746653,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 150, &quot;minimized&quot;: false, &quot;position&quot;: &quot;bottomright&quot;, &quot;toggleDisplay&quot;: true, &quot;width&quot;: 150, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -5}
             );
-            map_ad260c026f50bd5c541fd75c177f9b7e.addControl(mini_map_a7ca9a1e9d7dfe4d8e1029059f522bfe);
+            map_c7ff8a51654160c9041b4afe79aa17af.addControl(mini_map_34adbed6fbbe133bc29e2fdffab7448d);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
-<div class="section" id="Change-the-minimap-tile-layer">
+</section>
+<section id="Change-the-minimap-tile-layer">
 <h2>Change the minimap tile layer<a class="headerlink" href="#Change-the-minimap-tile-layer" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
@@ -914,7 +704,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_a179f2b7d645242958dbef227ba33374 {
+                #map_ee1ef534f0f9d4a6d23d8df0daae69ab {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -930,14 +720,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_a179f2b7d645242958dbef227ba33374&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ee1ef534f0f9d4a6d23d8df0daae69ab&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_a179f2b7d645242958dbef227ba33374 = L.map(
-                &quot;map_a179f2b7d645242958dbef227ba33374&quot;,
+            var map_ee1ef534f0f9d4a6d23d8df0daae69ab = L.map(
+                &quot;map_ee1ef534f0f9d4a6d23d8df0daae69ab&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -951,29 +741,29 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_5502bf03f5762979cfbb87a8455b3f93 = L.tileLayer(
+            var tile_layer_f18f59b0067b694f593e96e055311ecf = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_5502bf03f5762979cfbb87a8455b3f93.addTo(map_a179f2b7d645242958dbef227ba33374);
+                tile_layer_f18f59b0067b694f593e96e055311ecf.addTo(map_ee1ef534f0f9d4a6d23d8df0daae69ab);
 
-            var tile_layer_262d213e0e3019df7881baa851619fc9 = L.tileLayer(
+            var tile_layer_e9f7e4acbc6fb0379d21701c645c4944 = L.tileLayer(
                 &quot;https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Map tiles by \u003ca target=\&quot;_blank\&quot; href=\&quot;http://stamen.com\&quot;\u003eStamen Design\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://creativecommons.org/licenses/by/3.0\&quot;\u003eCC BY 3.0\u003c/a\u003e. Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_978a8e0a11c85bbcf2476815d50f77e7 = new L.Control.MiniMap(
-                tile_layer_262d213e0e3019df7881baa851619fc9,
+            var mini_map_0d5ccad04eea7f5befc65179fa5c8d1c = new L.Control.MiniMap(
+                tile_layer_e9f7e4acbc6fb0379d21701c645c4944,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 150, &quot;minimized&quot;: false, &quot;position&quot;: &quot;bottomright&quot;, &quot;toggleDisplay&quot;: false, &quot;width&quot;: 150, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -5}
             );
-            map_a179f2b7d645242958dbef227ba33374.addControl(mini_map_978a8e0a11c85bbcf2476815d50f77e7);
+            map_ee1ef534f0f9d4a6d23d8df0daae69ab.addControl(mini_map_0d5ccad04eea7f5befc65179fa5c8d1c);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
-<div class="section" id="Change-the-minimap-position">
+</section>
+<section id="Change-the-minimap-position">
 <h2>Change the minimap position<a class="headerlink" href="#Change-the-minimap-position" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -1017,7 +807,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_735542c395f31c7cfe346df0b34a5572 {
+                #map_b39a272c77ccb6b9b866863579d7bc98 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1033,14 +823,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_735542c395f31c7cfe346df0b34a5572&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_b39a272c77ccb6b9b866863579d7bc98&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_735542c395f31c7cfe346df0b34a5572 = L.map(
-                &quot;map_735542c395f31c7cfe346df0b34a5572&quot;,
+            var map_b39a272c77ccb6b9b866863579d7bc98 = L.map(
+                &quot;map_b39a272c77ccb6b9b866863579d7bc98&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -1054,29 +844,29 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_1545ae1753910c39ec52b670e7160680 = L.tileLayer(
+            var tile_layer_768357d1ad6c03e173e2905ff21dbc21 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_1545ae1753910c39ec52b670e7160680.addTo(map_735542c395f31c7cfe346df0b34a5572);
+                tile_layer_768357d1ad6c03e173e2905ff21dbc21.addTo(map_b39a272c77ccb6b9b866863579d7bc98);
 
-            var tile_layer_88d94ccaf4d162517cae9b3206004231 = L.tileLayer(
+            var tile_layer_675021ebd01ba4bbd83208e2cede6fc3 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_0c78dac2730bd69924a6e6f1f90101fd = new L.Control.MiniMap(
-                tile_layer_88d94ccaf4d162517cae9b3206004231,
+            var mini_map_2fd88269fafc3fe7d6ab755530d227b3 = new L.Control.MiniMap(
+                tile_layer_675021ebd01ba4bbd83208e2cede6fc3,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 150, &quot;minimized&quot;: false, &quot;position&quot;: &quot;topleft&quot;, &quot;toggleDisplay&quot;: false, &quot;width&quot;: 150, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -5}
             );
-            map_735542c395f31c7cfe346df0b34a5572.addControl(mini_map_0c78dac2730bd69924a6e6f1f90101fd);
+            map_b39a272c77ccb6b9b866863579d7bc98.addControl(mini_map_2fd88269fafc3fe7d6ab755530d227b3);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
-<div class="section" id="Change-the-minimap-size">
+</section>
+<section id="Change-the-minimap-size">
 <h2>Change the minimap size<a class="headerlink" href="#Change-the-minimap-size" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
@@ -1120,7 +910,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_f9b77dd8d416e87a3c49f0aefc6eb73f {
+                #map_64286fa8d8f8912565d7bd68b198a7b4 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1136,14 +926,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_f9b77dd8d416e87a3c49f0aefc6eb73f&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_64286fa8d8f8912565d7bd68b198a7b4&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_f9b77dd8d416e87a3c49f0aefc6eb73f = L.map(
-                &quot;map_f9b77dd8d416e87a3c49f0aefc6eb73f&quot;,
+            var map_64286fa8d8f8912565d7bd68b198a7b4 = L.map(
+                &quot;map_64286fa8d8f8912565d7bd68b198a7b4&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -1157,29 +947,29 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_ce5d9885c35572f4c1680c782f21f69d = L.tileLayer(
+            var tile_layer_675cd0294926f3301af46ee67c41cf51 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_ce5d9885c35572f4c1680c782f21f69d.addTo(map_f9b77dd8d416e87a3c49f0aefc6eb73f);
+                tile_layer_675cd0294926f3301af46ee67c41cf51.addTo(map_64286fa8d8f8912565d7bd68b198a7b4);
 
-            var tile_layer_be982c7c6aacbfdae1c6369a3e4176fc = L.tileLayer(
+            var tile_layer_b6db558c4e368c4f18129a774f3496cf = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_e1a45d22094d4b6cffbace62b15b714a = new L.Control.MiniMap(
-                tile_layer_be982c7c6aacbfdae1c6369a3e4176fc,
+            var mini_map_aaa65f9031fe20f6124066dc442f6496 = new L.Control.MiniMap(
+                tile_layer_b6db558c4e368c4f18129a774f3496cf,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 100, &quot;minimized&quot;: false, &quot;position&quot;: &quot;bottomright&quot;, &quot;toggleDisplay&quot;: false, &quot;width&quot;: 400, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -5}
             );
-            map_f9b77dd8d416e87a3c49f0aefc6eb73f.addControl(mini_map_e1a45d22094d4b6cffbace62b15b714a);
+            map_64286fa8d8f8912565d7bd68b198a7b4.addControl(mini_map_aaa65f9031fe20f6124066dc442f6496);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
-<div class="section" id="Change-the-zoom-offset">
+</section>
+<section id="Change-the-zoom-offset">
 <h2>Change the zoom offset<a class="headerlink" href="#Change-the-zoom-offset" title="Permalink to this heading">#</a></h2>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
@@ -1223,7 +1013,7 @@ div.rendered_html tbody tr:hover {
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_a942204086411d98f66dfc488af4e77a {
+                #map_4a1fe28bfbff85617c670b1673b487df {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1239,14 +1029,14 @@ div.rendered_html tbody tr:hover {
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_a942204086411d98f66dfc488af4e77a&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_4a1fe28bfbff85617c670b1673b487df&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_a942204086411d98f66dfc488af4e77a = L.map(
-                &quot;map_a942204086411d98f66dfc488af4e77a&quot;,
+            var map_4a1fe28bfbff85617c670b1673b487df = L.map(
+                &quot;map_4a1fe28bfbff85617c670b1673b487df&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -1260,173 +1050,150 @@ div.rendered_html tbody tr:hover {
 
 
 
-            var tile_layer_7fd568bc3dca719a58a0e840032f7759 = L.tileLayer(
+            var tile_layer_729f347a6727f23fcb372bb31d3395e0 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_7fd568bc3dca719a58a0e840032f7759.addTo(map_a942204086411d98f66dfc488af4e77a);
+                tile_layer_729f347a6727f23fcb372bb31d3395e0.addTo(map_4a1fe28bfbff85617c670b1673b487df);
 
-            var tile_layer_571ce2fcc788fd25a36fea025fc86577 = L.tileLayer(
+            var tile_layer_a465fb98208279bbfa25e6f4f746ccf1 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
-            var mini_map_d3f5d467d5da954c309433909aa20849 = new L.Control.MiniMap(
-                tile_layer_571ce2fcc788fd25a36fea025fc86577,
+            var mini_map_c757d959ea727b485c1a8c3569332e5e = new L.Control.MiniMap(
+                tile_layer_a465fb98208279bbfa25e6f4f746ccf1,
                 {&quot;autoToggleDisplay&quot;: false, &quot;centerFixed&quot;: false, &quot;collapsedHeight&quot;: 25, &quot;collapsedWidth&quot;: 25, &quot;height&quot;: 150, &quot;minimized&quot;: false, &quot;position&quot;: &quot;bottomright&quot;, &quot;toggleDisplay&quot;: false, &quot;width&quot;: 150, &quot;zoomAnimation&quot;: false, &quot;zoomLevelOffset&quot;: -8}
             );
-            map_a942204086411d98f66dfc488af4e77a.addControl(mini_map_d3f5d467d5da954c309433909aa20849);
+            map_4a1fe28bfbff85617c670b1673b487df.addControl(mini_map_c757d959ea727b485c1a8c3569332e5e);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
-            </article>
-            
-            
-            
-            <footer class="bd-footer-article">
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-  <a class='left-prev' id="prev-link" href="marker_cluster.html" title="previous page">
+                </article>
+              
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="marker_cluster.html"
+       title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
-          <p class="prev-next-subtitle">previous</p>
-          <p class="prev-next-title">MarkerCluster</p>
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">MarkerCluster</p>
       </div>
-  </a>
-  <a class='right-next' id="next-link" href="measure_control.html" title="next page">
-  <div class="prev-next-info">
-      <p class="prev-next-subtitle">next</p>
-      <p class="prev-next-title">MeasureControl</p>
-  </div>
-  <i class="fa-solid fa-angle-right"></i>
-  </a>
-</div>
-            </footer>
-            
-          </div>
-          
-          
-          
-            <div class="bd-sidebar-secondary bd-toc">
-              
-<div class="toc-item">
-  
-<div class="tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-</div>
-<nav id="bd-toc-nav" class="page-toc">
-    <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Make-the-minimap-collapsible">
-   Make the minimap collapsible
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Change-the-minimap-tile-layer">
-   Change the minimap tile layer
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Change-the-minimap-position">
-   Change the minimap position
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Change-the-minimap-size">
-   Change the minimap size
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#Change-the-zoom-offset">
-   Change the zoom offset
-  </a>
- </li>
-</ul>
-
-</nav>
-</div>
-
-<div class="toc-item">
-  
-<div id="searchbox"></div>
-</div>
-
-<div class="toc-item">
-  
-</div>
-
-<div class="toc-item">
-  
-<div class="tocsection sourcelink">
-    <a href="../../_sources/user_guide/plugins/mini_map.md.txt">
-        <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
+    <a class="right-next"
+       href="measure_control.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">MeasureControl</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
 </div>
 
-</div>
-
+                </footer>
+              
             </div>
-          
-          
-        </div>
-        <footer class="bd-footer-content">
-          <div class="bd-footer-content__inner">
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Make-the-minimap-collapsible">Make the minimap collapsible</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Change-the-minimap-tile-layer">Change the minimap tile layer</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Change-the-minimap-position">Change the minimap position</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Change-the-minimap-size">Change the minimap size</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Change-the-zoom-offset">Change the zoom offset</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user_guide/plugins/mini_map.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
             
           </div>
-        </footer>
+          <footer class="bd-footer-content">
+            
+          </footer>
         
       </main>
     </div>
   </div>
-
   
-    
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
 
-  <footer class="bd-footer"><div class="bd-footer__inner container">
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
   
-  <div class="footer-item">
-    <!-- This will display the version of the docs -->
-Folium version 0.14.1.dev66.dev+gfb78f3e
-  </div>
-  
-  <div class="footer-item">
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Folium version 0.14.1.dev31.dev+gcf5f834</div>
+      
+        <div class="footer-item">
+  <p class="copyright">
     
-<p class="copyright">
-
-    &copy; Copyright 2013, Rob Story.<br>
-
-</p>
-
-  </div>
-  
-  <div class="footer-item">
+      © Copyright 2013, Rob Story.
+      <br/>
     
-<p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br>
-</p>
-
-  </div>
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
-  <div class="footer-item">
-    <p class="theme-version">
-    Built with the
-    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
-        PyData Sphinx Theme
-    </a>
-    0.12.0.
-</p>
-  </div>
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.3.
+</p></div>
+      
+    </div>
   
 </div>
+
   </footer>
   </body>
 </html>

@@ -11,6 +11,8 @@ import folium.plugins
 We have two pattern plugin classes: `StripePattern` and `CirclePattern`.
 
 ```{code-cell} ipython3
+import requests
+
 m = folium.Map([40.0, -105.0], zoom_start=6)
 
 stripes = folium.plugins.pattern.StripePattern(angle=-45).add_to(m)
@@ -38,9 +40,12 @@ def style_function(feature):
 
     return default_style
 
+us_states = requests.get(
+    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/us_states.json"
+).json()
 
 folium.GeoJson(
-    folium.example_data.us_states_geojson(),
+    us_states,
     smooth_factor=0.5,
      style_function=style_function,
 ).add_to(m)
