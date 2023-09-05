@@ -15,7 +15,7 @@ from folium.utilities import temp_html_filepath
 def find_notebooks():
     """Return a list of filenames of the example notebooks."""
     path = os.path.dirname(__file__)
-    pattern = os.path.join(path, "..", "..", "docs", "*.md")
+    pattern = os.path.join(path, "..", "..", "docs", "**", "*.md")
     files = glob.glob(pattern)
     if files:
         return files
