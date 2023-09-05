@@ -22,7 +22,8 @@
 folium
 ======
 
-|folium|
+.. image:: https://github.com/python-visualization/folium/blob/main/docs/_static/folium_logo.jpg
+
 
 Python Data, Leaflet.js Maps
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,18 +48,8 @@ or
 Documentation
 -------------
 
-https://python-visualization.github.io/folium/
+https://python-visualization.github.io/folium/latest/
 
-
-Gallery
--------
-
-There are two galleries of Jupyter notebooks with examples, which you can see
-using Jupyter's nbviewer:
-
-https://nbviewer.jupyter.org/github/python-visualization/folium/tree/main/examples/
-
-https://nbviewer.org/github/python-visualization/folium_contrib/tree/main/notebooks/
 
 Contributing
 ------------
@@ -67,10 +58,6 @@ We love contributions!  folium is open source, built on open source,
 and we'd love to have you hang out in our community.
 
 See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/main/.github/CONTRIBUTING.md>`_ for more info.
-
-
-.. |folium| image:: http://python-visualization.github.io/folium/_images/folium_logo.jpg
-
 
 
 Changelog
