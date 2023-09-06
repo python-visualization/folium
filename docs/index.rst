@@ -17,7 +17,7 @@ Manipulate your data in Python, then visualize it in a Leaflet map via Folium.
 Concepts
 ========
 
-Folilum makes it easy to visualize data that's been manipulated in Python on an interactive leaflet map.
+Folium makes it easy to visualize data that's been manipulated in Python on an interactive leaflet map.
 It enables both the binding of data to a map for choropleth visualizations
 as well as passing rich vector/raster/HTML visualizations as markers on the map.
 
