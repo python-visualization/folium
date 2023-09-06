@@ -115,6 +115,14 @@ html_theme_options = {
     },
     "navbar_start": ["navbar-logo", "version-switcher"],
     "footer_start": ["version", "copyright", "sphinx-version", "theme-version"],
+    "icon_links": [
+        {
+            "name": "GitHub",
+            "url": "https://github.com/python-visualization/folium",
+            "icon": "fa-brands fa-square-github",
+            "type": "fontawesome",
+        }
+    ],
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
