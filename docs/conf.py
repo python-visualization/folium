@@ -123,6 +123,9 @@ html_theme_options = {
             "type": "fontawesome",
         }
     ],
+    "logo": {
+        "text": "Folium",
+    },
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -130,7 +133,7 @@ html_theme_options = {
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Folium documentation"
+# html_title = "Folium documentation"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 # html_short_title = None
