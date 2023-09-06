@@ -22,7 +22,7 @@
 folium
 ======
 
-.. image:: https://github.com/python-visualization/folium/blob/main/docs/_static/folium_logo.jpg
+.. image:: https://github.com/python-visualization/folium/blob/main/docs/_static/folium_logo.png
 
 
 Python Data, Leaflet.js Maps

@@ -3,7 +3,7 @@
 Folium
 ######
 
-.. image:: _static/folium_logo.jpg
+.. image:: _static/folium_logo.png
 
 **Python data, leaflet.js maps**
 
