@@ -6,7 +6,9 @@ Folium
 .. image:: _static/folium_logo.png
    :height: 100px
 
-**Python data, leaflet.js maps**
+
+Python data, leaflet.js maps
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``folium`` builds on the data wrangling strengths of the Python ecosystem and
 the mapping strengths of the ``leaflet.js`` library.
