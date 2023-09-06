@@ -236,3 +236,24 @@ colormap.add_to(m)
 
 m
 ```
+
+### Highlight function
+
+The `GeoJson` class provides a `highlight_function` argument, which works similarly
+to `style_function`, but applies on mouse events. In the following example
+the fill color will change when you hover your mouse over a feature.
+
+```{code-cell} ipython3
+m = folium.Map([43, -100], zoom_start=4)
+
+folium.GeoJson(
+    geo_json_data,
+    highlight_function=lambda feature: {
+        "fillColor": (
+            "green" if "e" in feature["properties"]["name"].lower() else "#ffff00"
+        ),
+    },
+).add_to(m)
+
+m
+```
