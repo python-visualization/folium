@@ -68,7 +68,7 @@ def test_timedynamic_geo_json():
         for country, data in styledata.items()
     }
 
-    m = folium.Map((0, 0), tiles="Stamen Watercolor", zoom_start=2)
+    m = folium.Map((0, 0), zoom_start=2)
 
     time_slider_choropleth = TimeSliderChoropleth(gdf.to_json(), styledict)
     time_slider_choropleth.add_to(m)

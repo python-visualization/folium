@@ -18,7 +18,7 @@ def test_heat_map_with_time():
     )
     move_data = np.random.normal(size=(100, 2)) * 0.01
     data = [(initial_data + move_data * i).tolist() for i in range(100)]
-    m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+    m = folium.Map([48.0, 5.0], zoom_start=6)
     hm = plugins.HeatMapWithTime(data).add_to(m)
 
     out = normalize(m._parent.render())

@@ -15,7 +15,7 @@ from folium.utilities import normalize
 def test_heat_map():
     np.random.seed(3141592)
     data = np.random.normal(size=(100, 2)) * np.array([[1, 1]]) + np.array([[48, 5]])
-    m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+    m = folium.Map([48.0, 5.0], zoom_start=6)
     hm = HeatMap(data)
     m.add_child(hm)
     m._repr_html_()

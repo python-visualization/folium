@@ -23,7 +23,7 @@ m
 
 ```{code-cell} ipython3
 m = folium.Map(location=(30, 20), zoom_start=4)
-MiniMap(tile_layer="Stamen Toner").add_to(m)
+MiniMap().add_to(m)
 m
 ```
 

@@ -25,7 +25,7 @@ def test_tag_filter_button():
     categories = [f"category{i + 1}" for i in range(n)]
     category_column = [random.choice(categories) for i in range(len(initial_data))]
     # Create map and add the data with additional parameter tags as the segmentation
-    m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+    m = folium.Map([48.0, 5.0], zoom_start=6)
     for i, latlng in enumerate(initial_data):
         category = category_column[i]
         folium.Marker(tuple(latlng), tags=[category]).add_to(m)

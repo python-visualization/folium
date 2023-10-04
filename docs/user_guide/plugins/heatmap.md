@@ -12,7 +12,7 @@ data = (
 import folium
 from folium.plugins import HeatMap
 
-m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+m = folium.Map([48.0, 5.0], zoom_start=6)
 
 HeatMap(data).add_to(m)
 

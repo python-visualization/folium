@@ -56,7 +56,7 @@ class MiniMap(JSCSSMixin, MacroElement):
 
     Examples
     --------
-    >>> MiniMap(tile_layer="Stamen WaterColor", position="bottomleft")
+    >>> MiniMap(position="bottomleft")
     """
 
     _template = Template(

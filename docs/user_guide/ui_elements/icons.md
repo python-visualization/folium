@@ -32,7 +32,7 @@ m
 ## Custom icon
 
 ```{code-cell} ipython3
-m = folium.Map(location=[45.3288, -121.6625], zoom_start=12, tiles="Stamen Terrain")
+m = folium.Map(location=[45.3288, -121.6625], zoom_start=12)
 
 url = "https://leafletjs.com/examples/custom-icons/{}".format
 icon_image = url("leaf-red.png")
