@@ -345,12 +345,17 @@ class Map(JSCSSMixin, MacroElement):
                 self.add_child(child, name = key) 
         else: # Initialize the tiles
             if isinstance(tiles, TileLayer):
-                self.add_child(tiles, index = 0)
+                self.add_child(tiles)
             elif tiles:
                 tile_layer = TileLayer(
-                    tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom, index = 0
+                    tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom
                 )
                 self.add_child(tile_layer, name=tile_layer.tile_name)
+
+    def set_parent_for_children(self) -> None:
+        for _, child in self._children.items():
+            child._parent = self
+        return None
 
     def _repr_html_(self, **kwargs) -> str:
         """Displays the HTML Map in a Jupyter notebook."""
@@ -516,7 +521,7 @@ class Map(JSCSSMixin, MacroElement):
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
 
-def map_reduce(map_instance):
+def map_pickler(map_instance):
     return (Map, (
         map_instance.location,
         map_instance.width,
@@ -544,4 +549,4 @@ def map_reduce(map_instance):
         map_instance._children,
     ))
 
-copyreg.pickle(Map, map_reduce)
+copyreg.pickle(Map, map_pickler)
