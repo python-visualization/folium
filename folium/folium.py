@@ -2,9 +2,11 @@
 Make beautiful, interactive maps with Python and Leaflet.js
 
 """
-
+import copyreg
+import re
 import time
 import webbrowser
+from collections import OrderedDict
 from typing import Any, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure, MacroElement
@@ -16,7 +18,6 @@ from folium.raster_layers import TileLayer
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
-    _parse_size,
     parse_options,
     temp_html_filepath,
     validate_location,
@@ -24,6 +25,26 @@ from folium.utilities import (
 
 ENV = Environment(loader=PackageLoader("folium", "templates"))
 
+def _parse_size(value):
+    if isinstance(value, (int, float)):
+        return float(value), "px"
+    elif isinstance(value, str):
+        # match digits or a point, possibly followed by a space,
+        # followed by a unit: either 1 to 5 letters or a percent sign
+        match = re.fullmatch(r"([\d.]+)\s?(\w{1,5}|%)", value.strip())
+        if match:
+            return float(match.group(1)), match.group(2)
+        else:
+            raise ValueError(
+                f"Cannot parse {value!r}, it should be a number followed by a unit.",
+            )
+    elif isinstance(value, tuple) and isinstance(value[0], (int, float)) and isinstance(value[1], str):
+        # value had been already parsed
+        return value
+    else:
+        raise TypeError(
+            f"Cannot parse {value!r}, it should be a number or a string containing a number and a unit.",
+        )
 
 _default_js = [
     ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
@@ -258,9 +279,26 @@ class Map(JSCSSMixin, MacroElement):
         disable_3d: bool = False,
         png_enabled: bool = False,
         zoom_control: bool = True,
+        _children: OrderedDict = OrderedDict(),
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
+        self.tiles = tiles
+        self.attr = attr
+        self.min_zoom = min_zoom
+        self.max_zoom = max_zoom
+        self.zoom_start = zoom_start
+        self.min_lat = min_lat 
+        self.max_lat = max_lat
+        self.min_lon = min_lon
+        self.max_lon = max_lon
+        self.max_bounds = max_bounds
+        self.prefer_canvas = prefer_canvas
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
+        self.zoom_control = zoom_control
+        self._children = _children
+
         self._name = "Map"
         self._env = ENV
 
@@ -301,14 +339,18 @@ class Map(JSCSSMixin, MacroElement):
         self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front: List[Layer] = []
-
-        if isinstance(tiles, TileLayer):
-            self.add_child(tiles)
-        elif tiles:
-            tile_layer = TileLayer(
-                tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom
-            )
-            self.add_child(tile_layer, name=tile_layer.tile_name)
+  
+        if len(self._children) > 0: # Add already prepared childrens
+            for key, child in self._children.items(): # add the missing ones (key is a safety)
+                self.add_child(child, name = key) 
+        else: # Initialize the tiles
+            if isinstance(tiles, TileLayer):
+                self.add_child(tiles, index = 0)
+            elif tiles:
+                tile_layer = TileLayer(
+                    tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom, index = 0
+                )
+                self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs) -> str:
         """Displays the HTML Map in a Jupyter notebook."""
@@ -473,3 +515,33 @@ class Map(JSCSSMixin, MacroElement):
         """
         for obj in args:
             self.objects_to_stay_in_front.append(obj)
+
+def map_reduce(map_instance):
+    return (Map, (
+        map_instance.location,
+        map_instance.width,
+        map_instance.height,
+        map_instance.left,
+        map_instance.top,
+        map_instance.position,
+        map_instance.tiles,
+        map_instance.attr,
+        map_instance.min_zoom,
+        map_instance.max_zoom,
+        map_instance.zoom_start,
+        map_instance.min_lat,
+        map_instance.max_lat,
+        map_instance.min_lon,
+        map_instance.max_lon,
+        map_instance.max_bounds,
+        map_instance.crs,
+        map_instance.control_scale,
+        map_instance.prefer_canvas,
+        map_instance.no_touch,
+        map_instance.disable_3d,
+        map_instance.png_enabled,
+        map_instance.zoom_control,
+        map_instance._children,
+    ))
+
+copyreg.pickle(Map, map_reduce)
