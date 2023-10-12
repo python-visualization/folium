@@ -188,10 +188,6 @@ class PolyLine(BaseMultiLocation):
         self._name = "PolyLine"
         self.options = path_options(line=True, **kwargs)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Polygon(BaseMultiLocation):
     """Draw polygon overlays on a map.
@@ -236,10 +232,6 @@ class Polygon(BaseMultiLocation):
         self._name = "Polygon"
         self.options = path_options(line=True, radius=None, **kwargs)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
         
 class Rectangle(MacroElement):
     """Draw rectangle overlays on a map.
@@ -288,11 +280,6 @@ class Rectangle(MacroElement):
             self.add_child(
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
-            
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Compute the bounds of the object itself."""
@@ -347,10 +334,6 @@ class Circle(Marker):
         self._name = "circle"
         self.options = path_options(line=False, radius=radius, **kwargs)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class CircleMarker(Marker):
     """
@@ -394,8 +377,3 @@ class CircleMarker(Marker):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "CircleMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)

@@ -117,10 +117,6 @@ class FeatureGroup(Layer):
         self.tile_name = name if name is not None else self.get_name()
         self.options = parse_options(**kwargs)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class LayerControl(MacroElement):
     """
@@ -199,11 +195,6 @@ class LayerControl(MacroElement):
         self.draggable = draggable
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def reset(self) -> None:
         self.base_layers = OrderedDict()
@@ -312,10 +303,6 @@ class Icon(MacroElement):
             **kwargs,
         )
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Marker(MacroElement):
     """
@@ -385,11 +372,6 @@ class Marker(MacroElement):
             self.add_child(
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> List[List[float]]:
         """Computes the bounds of the object itself.
@@ -486,11 +468,6 @@ class Popup(Element):
             **kwargs,
         )
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
@@ -571,11 +548,6 @@ class Tooltip(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
     def parse_options(
         self,
         kwargs: Dict[str, TypeJsonValue],
@@ -642,11 +614,6 @@ class FitBounds(MacroElement):
             padding_bottom_right=padding_bottom_right,
             padding=padding,
         )
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
         
 
 class FitOverlays(MacroElement):
@@ -697,10 +664,6 @@ class FitOverlays(MacroElement):
         self.fit_on_map_load = fit_on_map_load
         self.options = parse_options(padding=(padding, padding), max_zoom=max_zoom)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class CustomPane(MacroElement):
     """
@@ -748,8 +711,3 @@ class CustomPane(MacroElement):
         self.name = name
         self.z_index = z_index
         self.pointer_events = pointer_events
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)

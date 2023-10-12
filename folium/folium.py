@@ -78,10 +78,6 @@ class GlobalSwitches(Element):
         self.no_touch = no_touch
         self.disable_3d = disable_3d
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Map(JSCSSMixin, MacroElement):
     """Create a Map with Folium and Leaflet.js
@@ -316,16 +312,6 @@ class Map(JSCSSMixin, MacroElement):
                 )
                 self.add_child(tile_layer, name=tile_layer.tile_name)
 
-    def __getstate__(self):
-        """Modify object state when pickling the object.
-        jinja2 Environment cannot be pickled, so set
-        the ._env attribute to None. This will be added back
-        when unpickling (see __setstate__)
-        """
-        state = super().__getstate__()
-        state["_png_image"] = None
-        return state
-
     def __setstate__(self, state: dict):
         """Re-add ._env attribute when unpickling"""
         super().__setstate__(state)
@@ -345,9 +331,6 @@ class Map(JSCSSMixin, MacroElement):
             self.max_lat = max_bounds_array[1][0]
             self.min_lon = max_bounds_array[0][1]
             self.max_lon = max_bounds_array[1][1]
-
-        self._template = Template(self._template_str)
-
 
     def _repr_html_(self, **kwargs) -> str:
         """Displays the HTML Map in a Jupyter notebook."""

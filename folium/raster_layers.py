@@ -158,10 +158,6 @@ class TileLayer(Layer):
             **kwargs
         )
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class WmsTileLayer(Layer):
     """
@@ -241,10 +237,6 @@ class WmsTileLayer(Layer):
             # special parameter that shouldn't be camelized
             self.options["cql_filter"] = cql_filter
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class ImageOverlay(Layer):
     """
@@ -329,11 +321,6 @@ class ImageOverlay(Layer):
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
-
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def render(self, **kwargs) -> None:
         super().render()
@@ -425,11 +412,6 @@ class VideoOverlay(Layer):
 
         self.bounds = bounds
         self.options = parse_options(autoplay=autoplay, loop=loop, **kwargs)
-
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> TypeBounds:
         """

@@ -99,10 +99,6 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
             )
         )
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Vega(JSCSSMixin, Element):
     """
@@ -169,10 +165,6 @@ class Vega(JSCSSMixin, Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
@@ -292,11 +284,6 @@ class VegaLite(Element):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
-
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
@@ -694,11 +681,6 @@ class GeoJson(Layer):
         if isinstance(popup, (GeoJsonPopup, Popup)):
             self.add_child(popup)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
     def process_data(self, data: Any) -> dict:
         """Convert an unknown data input into a geojson dictionary."""
         if isinstance(data, dict):
@@ -1009,11 +991,6 @@ class TopoJson(JSCSSMixin, Layer):
         elif tooltip is not None:
             self.add_child(Tooltip(tooltip))
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
     def style_data(self) -> None:
         """Applies self.style_function to each feature of self.data."""
 
@@ -1279,11 +1256,6 @@ class GeoJsonTooltip(GeoJsonDetail):
         kwargs.update({"sticky": sticky, "class_name": class_name})
         self.tooltip_options = {camelize(key): kwargs[key] for key in kwargs.keys()}
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
 
 class GeoJsonPopup(GeoJsonDetail):
     """
@@ -1352,10 +1324,6 @@ class GeoJsonPopup(GeoJsonDetail):
         kwargs.update({"class_name": self.class_name})
         self.popup_options = {camelize(key): value for key, value in kwargs.items()}
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Choropleth(FeatureGroup):
     """Apply a GeoJSON overlay to the map.
@@ -1720,11 +1688,6 @@ class DivIcon(MacroElement):
             class_name=class_name,
         )
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
 
 class LatLngPopup(MacroElement):
     """
@@ -1752,10 +1715,6 @@ class LatLngPopup(MacroElement):
         super().__init__()
         self._name = "LatLngPopup"
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class ClickForMarker(MacroElement):
     """
@@ -1803,11 +1762,6 @@ class ClickForMarker(MacroElement):
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
 
 class ClickForLatLng(MacroElement):
     """
@@ -1845,10 +1799,6 @@ class ClickForLatLng(MacroElement):
         self.format_str = format_str or 'lat + "," + lng'
         self.alert = alert
 
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class CustomIcon(Icon):
     """
@@ -1913,11 +1863,6 @@ class CustomIcon(Icon):
             shadow_anchor=shadow_anchor,
             popup_anchor=popup_anchor,
         )
-
-    def __setstate__(self, state: dict):
-        """Re-add ._template attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 
 class ColorLine(FeatureGroup):
