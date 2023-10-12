@@ -95,16 +95,14 @@ class FeatureGroup(Layer):
         https://leafletjs.com/reference.html#featuregroup
 
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
                 {{ this.options|tojson }}
             );
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -119,6 +117,10 @@ class FeatureGroup(Layer):
         self.tile_name = name if name is not None else self.get_name()
         self.options = parse_options(**kwargs)
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class LayerControl(MacroElement):
     """
@@ -153,8 +155,7 @@ class LayerControl(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this,kwargs) %}
             var {{ this.get_name() }}_layers = {
                 base_layers : {
@@ -180,7 +181,7 @@ class LayerControl(MacroElement):
 
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -198,6 +199,11 @@ class LayerControl(MacroElement):
         self.draggable = draggable
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def reset(self) -> None:
         self.base_layers = OrderedDict()
@@ -250,8 +256,7 @@ class Icon(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojson }}
@@ -259,7 +264,7 @@ class Icon(MacroElement):
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
     color_options = {
         "red",
         "darkred",
@@ -307,6 +312,10 @@ class Icon(MacroElement):
             **kwargs,
         )
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class Marker(MacroElement):
     """
@@ -342,8 +351,7 @@ class Marker(MacroElement):
     ... )
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.marker(
                 {{ this.location|tojson }},
@@ -351,7 +359,7 @@ class Marker(MacroElement):
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -377,6 +385,11 @@ class Marker(MacroElement):
             self.add_child(
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> List[List[float]]:
         """Computes the bounds of the object itself.
@@ -413,8 +426,7 @@ class Popup(Element):
         True only loads the Popup content when clicking on the Marker.
     """
 
-    _template = Template(
-        """
+    _template_str = """
         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
         {% for name, element in this.html._children.items() %}
@@ -434,8 +446,8 @@ class Popup(Element):
         {% for name, element in this.script._children.items() %}
             {{element.render()}}
         {% endfor %}
-    """
-    )  # noqa
+    """ # noqa 
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -474,6 +486,11 @@ class Popup(Element):
             **kwargs,
         )
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
+
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
@@ -509,9 +526,7 @@ class Tooltip(MacroElement):
         available here: https://leafletjs.com/reference.html#tooltip
 
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.bindTooltip(
                 `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
@@ -521,7 +536,7 @@ class Tooltip(MacroElement):
             );
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
     valid_options: Dict[str, Tuple[Type, ...]] = {
         "pane": (str,),
         "offset": (tuple,),
@@ -555,6 +570,11 @@ class Tooltip(MacroElement):
             ), "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def parse_options(
         self,
@@ -595,8 +615,7 @@ class FitBounds(MacroElement):
         Maximum zoom to be used.
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.fitBounds(
                 {{ this.bounds|tojson }},
@@ -604,7 +623,7 @@ class FitBounds(MacroElement):
             );
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -624,6 +643,11 @@ class FitBounds(MacroElement):
             padding=padding,
         )
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
+        
 
 class FitOverlays(MacroElement):
     """Fit the bounds of the maps to the enabled overlays.
@@ -639,9 +663,7 @@ class FitOverlays(MacroElement):
     fit_on_map_load: bool, default True
         Apply the fit when initially loading the map.
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
         function customFlyToBounds() {
             let bounds = L.latLngBounds([]);
@@ -660,8 +682,8 @@ class FitOverlays(MacroElement):
         {%- endif %}
         {% endmacro %}
     """
-    )
-
+    _template = Template(_template_str)
+        
     def __init__(
         self,
         padding: int = 0,
@@ -675,6 +697,10 @@ class FitOverlays(MacroElement):
         self.fit_on_map_load = fit_on_map_load
         self.options = parse_options(padding=(padding, padding), max_zoom=max_zoom)
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class CustomPane(MacroElement):
     """
@@ -699,9 +725,7 @@ class CustomPane(MacroElement):
         cursor. Setting to False will prevent interfering with
         pointer events associated with lower layers.
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
                 {{ this.name|tojson }});
@@ -710,9 +734,9 @@ class CustomPane(MacroElement):
                 {{ this.get_name() }}.style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
-        """
-    )
-
+        """ 
+    _template = Template(_template_str)
+        
     def __init__(
         self,
         name: str,
@@ -724,3 +748,8 @@ class CustomPane(MacroElement):
         self.name = name
         self.z_index = z_index
         self.pointer_events = pointer_events
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)

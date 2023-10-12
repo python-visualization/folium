@@ -173,9 +173,7 @@ class PolyLine(BaseMultiLocation):
         https://leafletjs.com/reference.html#polyline
 
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polyline(
                 {{ this.locations|tojson }},
@@ -183,13 +181,17 @@ class PolyLine(BaseMultiLocation):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super().__init__(locations, popup=popup, tooltip=tooltip)
         self._name = "PolyLine"
         self.options = path_options(line=True, **kwargs)
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class Polygon(BaseMultiLocation):
     """Draw polygon overlays on a map.
@@ -212,9 +214,8 @@ class Polygon(BaseMultiLocation):
         https://leafletjs.com/reference.html#polygon
 
     """
-
-    _template = Template(
-        """
+    
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polygon(
                 {{ this.locations|tojson }},
@@ -222,7 +223,7 @@ class Polygon(BaseMultiLocation):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -235,7 +236,11 @@ class Polygon(BaseMultiLocation):
         self._name = "Polygon"
         self.options = path_options(line=True, radius=None, **kwargs)
 
-
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
+        
 class Rectangle(MacroElement):
     """Draw rectangle overlays on a map.
 
@@ -255,8 +260,7 @@ class Rectangle(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.rectangle(
                 {{ this.locations|tojson }},
@@ -264,7 +268,7 @@ class Rectangle(MacroElement):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -284,6 +288,11 @@ class Rectangle(MacroElement):
             self.add_child(
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
+            
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Compute the bounds of the object itself."""
@@ -314,8 +323,7 @@ class Circle(Marker):
         https://leafletjs.com/reference.html#circle
 
     """
-
-    _template = Template(
+    _template_str = (
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circle(
@@ -325,6 +333,7 @@ class Circle(Marker):
         {% endmacro %}
         """
     )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -338,6 +347,10 @@ class Circle(Marker):
         self._name = "circle"
         self.options = path_options(line=False, radius=radius, **kwargs)
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class CircleMarker(Marker):
     """
@@ -360,9 +373,7 @@ class CircleMarker(Marker):
         https://leafletjs.com/reference.html#circlemarker
 
     """
-
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circleMarker(
                 {{ this.location|tojson }},
@@ -370,7 +381,7 @@ class CircleMarker(Marker):
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -383,3 +394,8 @@ class CircleMarker(Marker):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "CircleMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)

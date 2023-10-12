@@ -78,8 +78,7 @@ class TileLayer(Layer):
         object.
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
@@ -87,7 +86,7 @@ class TileLayer(Layer):
             );
         {% endmacro %}
         """
-    )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -159,6 +158,10 @@ class TileLayer(Layer):
             **kwargs
         )
 
+    def __setstate__(self, state: dict):
+        """Re-add ._template attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class WmsTileLayer(Layer):
     """
@@ -197,8 +200,7 @@ class WmsTileLayer(Layer):
     See https://leafletjs.com/reference.html#tilelayer-wms
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer.wms(
                 {{ this.url|tojson }},
@@ -206,8 +208,8 @@ class WmsTileLayer(Layer):
             );
         {% endmacro %}
         """
-    )  # noqa
-
+    _template = Template(_template_str)
+    
     def __init__(
         self,
         url: str,
@@ -239,6 +241,10 @@ class WmsTileLayer(Layer):
             # special parameter that shouldn't be camelized
             self.options["cql_filter"] = cql_filter
 
+    def __setstate__(self, state: dict):
+        """Re-add ._template attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class ImageOverlay(Layer):
     """
@@ -287,8 +293,7 @@ class ImageOverlay(Layer):
 
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
@@ -297,8 +302,8 @@ class ImageOverlay(Layer):
             );
         {% endmacro %}
         """
-    )
-
+    _template = Template(_template_str)
+    
     def __init__(
         self,
         image: Any,
@@ -324,6 +329,11 @@ class ImageOverlay(Layer):
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
+
+    def __setstate__(self, state: dict):
+        """Re-add ._template attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def render(self, **kwargs) -> None:
         super().render()
@@ -386,8 +396,7 @@ class VideoOverlay(Layer):
 
     """
 
-    _template = Template(
-        """
+    _template_str = """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.videoOverlay(
                 {{ this.video_url|tojson }},
@@ -396,8 +405,8 @@ class VideoOverlay(Layer):
             );
         {% endmacro %}
         """
-    )
-
+    _template = Template(_template_str)
+    
     def __init__(
         self,
         video_url: str,
@@ -416,6 +425,11 @@ class VideoOverlay(Layer):
 
         self.bounds = bounds
         self.options = parse_options(autoplay=autoplay, loop=loop, **kwargs)
+
+    def __setstate__(self, state: dict):
+        """Re-add ._template attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def _get_self_bounds(self) -> TypeBounds:
         """
