@@ -2,6 +2,7 @@
 Make beautiful, interactive maps with Python and Leaflet.js
 
 """
+
 import time
 import webbrowser
 from typing import Any, List, Optional, Sequence, Union
@@ -64,13 +65,14 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
-    _template_str = """
+    _template = Template(
+        """
         <script>
             L_NO_TOUCH = {{ this.no_touch |tojson}};
             L_DISABLE_3D = {{ this.disable_3d|tojson }};
         </script>
     """
-    _template = Template(_template_str)
+    )
 
     def __init__(self, no_touch=False, disable_3d=False):
         super().__init__()
@@ -176,7 +178,8 @@ class Map(JSCSSMixin, MacroElement):
 
     """  # noqa
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -224,7 +227,7 @@ class Map(JSCSSMixin, MacroElement):
 
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     # use the module variables for backwards compatibility
     default_js = _default_js
@@ -258,7 +261,6 @@ class Map(JSCSSMixin, MacroElement):
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
-
         self._name = "Map"
         self._env = ENV
 
@@ -299,38 +301,14 @@ class Map(JSCSSMixin, MacroElement):
         self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front: List[Layer] = []
-  
-        if len(self._children) > 0: # Add already prepared childrens
-            for key, child in self._children.items(): # add the missing ones (key is a safety)
-                self.add_child(child, name = key) 
-        else: # Initialize the tiles
-            if isinstance(tiles, TileLayer):
-                self.add_child(tiles)
-            elif tiles:
-                tile_layer = TileLayer(
-                    tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom
-                )
-                self.add_child(tile_layer, name=tile_layer.tile_name)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self.zoom_start = state["options"]["zoom"]
-        self.zoom_control = state["options"]["zoomControl"]
-        self.prefer_canvas = state["options"]["preferCanvas"]
-        max_bounds_array = state["options"].get("maxBounds")
-        if max_bounds_array is None:
-            self.max_bounds = False
-            self.min_lat = -90
-            self.max_lat = 90
-            self.min_lon = -180
-            self.max_lon = 180
-        else: # max_bounds_array = [[min_lat, min_lon], [max_lat, max_lon]]
-            self.max_bounds = True
-            self.min_lat = max_bounds_array[0][0] 
-            self.max_lat = max_bounds_array[1][0]
-            self.min_lon = max_bounds_array[0][1]
-            self.max_lon = max_bounds_array[1][1]
+        if isinstance(tiles, TileLayer):
+            self.add_child(tiles)
+        elif tiles:
+            tile_layer = TileLayer(
+                tiles=tiles, attr=attr, min_zoom=min_zoom, max_zoom=max_zoom
+            )
+            self.add_child(tile_layer, name=tile_layer.tile_name)
 
     def _repr_html_(self, **kwargs) -> str:
         """Displays the HTML Map in a Jupyter notebook."""

@@ -78,7 +78,8 @@ class TileLayer(Layer):
         object.
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
@@ -86,7 +87,7 @@ class TileLayer(Layer):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -196,7 +197,8 @@ class WmsTileLayer(Layer):
     See https://leafletjs.com/reference.html#tilelayer-wms
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer.wms(
                 {{ this.url|tojson }},
@@ -204,8 +206,8 @@ class WmsTileLayer(Layer):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
-    
+    )  # noqa
+
     def __init__(
         self,
         url: str,
@@ -285,7 +287,8 @@ class ImageOverlay(Layer):
 
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
@@ -294,8 +297,8 @@ class ImageOverlay(Layer):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
-    
+    )
+
     def __init__(
         self,
         image: Any,
@@ -383,7 +386,8 @@ class VideoOverlay(Layer):
 
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.videoOverlay(
                 {{ this.video_url|tojson }},
@@ -392,8 +396,8 @@ class VideoOverlay(Layer):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
-    
+    )
+
     def __init__(
         self,
         video_url: str,

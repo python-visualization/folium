@@ -95,14 +95,16 @@ class FeatureGroup(Layer):
         https://leafletjs.com/reference.html#featuregroup
 
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
                 {{ this.options|tojson }}
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -151,7 +153,8 @@ class LayerControl(MacroElement):
 
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this,kwargs) %}
             var {{ this.get_name() }}_layers = {
                 base_layers : {
@@ -177,7 +180,7 @@ class LayerControl(MacroElement):
 
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -247,7 +250,8 @@ class Icon(MacroElement):
 
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojson }}
@@ -255,7 +259,7 @@ class Icon(MacroElement):
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
     color_options = {
         "red",
         "darkred",
@@ -338,7 +342,8 @@ class Marker(MacroElement):
     ... )
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.marker(
                 {{ this.location|tojson }},
@@ -346,7 +351,7 @@ class Marker(MacroElement):
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -408,7 +413,8 @@ class Popup(Element):
         True only loads the Popup content when clicking on the Marker.
     """
 
-    _template_str = """
+    _template = Template(
+        """
         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
 
         {% for name, element in this.html._children.items() %}
@@ -428,8 +434,8 @@ class Popup(Element):
         {% for name, element in this.script._children.items() %}
             {{element.render()}}
         {% endfor %}
-    """ # noqa 
-    _template = Template(_template_str)
+    """
+    )  # noqa
 
     def __init__(
         self,
@@ -503,7 +509,9 @@ class Tooltip(MacroElement):
         available here: https://leafletjs.com/reference.html#tooltip
 
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.bindTooltip(
                 `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
@@ -513,7 +521,7 @@ class Tooltip(MacroElement):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
     valid_options: Dict[str, Tuple[Type, ...]] = {
         "pane": (str,),
         "offset": (tuple,),
@@ -587,7 +595,8 @@ class FitBounds(MacroElement):
         Maximum zoom to be used.
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.fitBounds(
                 {{ this.bounds|tojson }},
@@ -595,7 +604,7 @@ class FitBounds(MacroElement):
             );
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -614,7 +623,7 @@ class FitBounds(MacroElement):
             padding_bottom_right=padding_bottom_right,
             padding=padding,
         )
-        
+
 
 class FitOverlays(MacroElement):
     """Fit the bounds of the maps to the enabled overlays.
@@ -630,7 +639,9 @@ class FitOverlays(MacroElement):
     fit_on_map_load: bool, default True
         Apply the fit when initially loading the map.
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
         function customFlyToBounds() {
             let bounds = L.latLngBounds([]);
@@ -649,8 +660,8 @@ class FitOverlays(MacroElement):
         {%- endif %}
         {% endmacro %}
     """
-    _template = Template(_template_str)
-        
+    )
+
     def __init__(
         self,
         padding: int = 0,
@@ -688,7 +699,9 @@ class CustomPane(MacroElement):
         cursor. Setting to False will prevent interfering with
         pointer events associated with lower layers.
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
                 {{ this.name|tojson }});
@@ -697,9 +710,9 @@ class CustomPane(MacroElement):
                 {{ this.get_name() }}.style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
-        """ 
-    _template = Template(_template_str)
-        
+        """
+    )
+
     def __init__(
         self,
         name: str,

@@ -173,7 +173,9 @@ class PolyLine(BaseMultiLocation):
         https://leafletjs.com/reference.html#polyline
 
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polyline(
                 {{ this.locations|tojson }},
@@ -181,7 +183,7 @@ class PolyLine(BaseMultiLocation):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super().__init__(locations, popup=popup, tooltip=tooltip)
@@ -210,8 +212,9 @@ class Polygon(BaseMultiLocation):
         https://leafletjs.com/reference.html#polygon
 
     """
-    
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polygon(
                 {{ this.locations|tojson }},
@@ -219,7 +222,7 @@ class Polygon(BaseMultiLocation):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -232,7 +235,7 @@ class Polygon(BaseMultiLocation):
         self._name = "Polygon"
         self.options = path_options(line=True, radius=None, **kwargs)
 
-        
+
 class Rectangle(MacroElement):
     """Draw rectangle overlays on a map.
 
@@ -252,7 +255,8 @@ class Rectangle(MacroElement):
 
     """
 
-    _template_str = """
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.rectangle(
                 {{ this.locations|tojson }},
@@ -260,7 +264,7 @@ class Rectangle(MacroElement):
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
@@ -310,7 +314,8 @@ class Circle(Marker):
         https://leafletjs.com/reference.html#circle
 
     """
-    _template_str = (
+
+    _template = Template(
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circle(
@@ -320,7 +325,6 @@ class Circle(Marker):
         {% endmacro %}
         """
     )
-    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -356,7 +360,9 @@ class CircleMarker(Marker):
         https://leafletjs.com/reference.html#circlemarker
 
     """
-    _template_str = """
+
+    _template = Template(
+        """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circleMarker(
                 {{ this.location|tojson }},
@@ -364,7 +370,7 @@ class CircleMarker(Marker):
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
-    _template = Template(_template_str)
+    )
 
     def __init__(
         self,
