@@ -119,7 +119,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         ),
         (
             "heatmap.min.js",
-            "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/pa7_hm.min.js",
+            "https://cdn.jsdelivr.net/gh/wind111-lang/folium@main/folium/templates/pa7_hm.min.js",
         ),
         (
             "leaflet-heatmap.js",
