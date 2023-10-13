@@ -262,7 +262,6 @@ class Map(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Map"
-        self._env = ENV
 
         self._png_image: Optional[bytes] = None
         self.png_enabled = png_enabled
