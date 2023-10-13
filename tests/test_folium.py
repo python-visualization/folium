@@ -19,7 +19,7 @@ from jinja2.utils import htmlsafe_json_dumps
 import folium
 from folium import TileLayer
 from folium.features import Choropleth, GeoJson
-from folium.folium import ENV
+from folium.raster_layers import ENV
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 

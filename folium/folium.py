@@ -22,8 +22,6 @@ from folium.utilities import (
     validate_location,
 )
 
-ENV = Environment(loader=PackageLoader("folium", "templates"))
-
 
 _default_js = [
     ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
