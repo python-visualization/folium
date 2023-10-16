@@ -8,7 +8,7 @@ import webbrowser
 from typing import Any, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure, MacroElement
-from jinja2 import Environment, PackageLoader, Template
+from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import FitBounds, Layer
@@ -21,9 +21,6 @@ from folium.utilities import (
     temp_html_filepath,
     validate_location,
 )
-
-ENV = Environment(loader=PackageLoader("folium", "templates"))
-
 
 _default_js = [
     ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
@@ -262,7 +259,6 @@ class Map(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Map"
-        self._env = ENV
 
         self._png_image: Optional[bytes] = None
         self.png_enabled = png_enabled

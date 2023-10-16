@@ -19,6 +19,7 @@ from jinja2.utils import htmlsafe_json_dumps
 import folium
 from folium import TileLayer
 from folium.features import Choropleth, GeoJson
+from folium.raster_layers import ENV
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -120,8 +121,8 @@ class TestFolium:
             tiles = "".join(tiles.lower().strip().split())
             url = "tiles/{}/tiles.txt".format
             attr = "tiles/{}/attr.txt".format
-            url = m._env.get_template(url(tiles)).render()
-            attr = m._env.get_template(attr(tiles)).render()
+            url = ENV.get_template(url(tiles)).render()
+            attr = ENV.get_template(attr(tiles)).render()
 
             assert m._children[tiles].tiles == url
             assert htmlsafe_json_dumps(attr) in m._parent.render()

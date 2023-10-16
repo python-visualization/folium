@@ -122,7 +122,6 @@ class TileLayer(Layer):
             name=self.tile_name, overlay=overlay, control=control, show=show
         )
         self._name = "TileLayer"
-        self._env = ENV
 
         tiles_flat = "".join(tiles.lower().strip().split())
         if tiles_flat in {"cloudmade", "mapbox", "mapboxbright", "mapboxcontrolroom"}:
@@ -133,14 +132,14 @@ class TileLayer(Layer):
                 "argument. See the documentation of the `TileLayer` class."
             )
         templates = list(
-            self._env.list_templates(filter_func=lambda x: x.startswith("tiles/"))
+            ENV.list_templates(filter_func=lambda x: x.startswith("tiles/"))
         )
         tile_template = "tiles/" + tiles_flat + "/tiles.txt"
         attr_template = "tiles/" + tiles_flat + "/attr.txt"
 
         if tile_template in templates and attr_template in templates:
-            self.tiles = self._env.get_template(tile_template).render()
-            attr = self._env.get_template(attr_template).render()
+            self.tiles = ENV.get_template(tile_template).render()
+            attr = ENV.get_template(attr_template).render()
         else:
             self.tiles = tiles
             if not attr:
