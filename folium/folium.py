@@ -22,7 +22,6 @@ from folium.utilities import (
     validate_location,
 )
 
-
 _default_js = [
     ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
     ("jquery", "https://code.jquery.com/jquery-1.12.4.min.js"),
