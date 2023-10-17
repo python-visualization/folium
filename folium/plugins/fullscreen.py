@@ -40,13 +40,13 @@ class Fullscreen(JSCSSMixin, MacroElement):
     default_js = [
         (
             "Control.Fullscreen.js",
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.js",
+            "https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.min.js",
         )
     ]
     default_css = [
         (
             "Control.FullScreen.css",
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet.fullscreen/1.4.2/Control.FullScreen.min.css",
+            "https://cdn.jsdelivr.net/npm/leaflet.fullscreen@3.0.0/Control.FullScreen.css",
         )
     ]
 
