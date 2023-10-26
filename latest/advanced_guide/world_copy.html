@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Scrolling beyond the world edge &#8212; Folium 0.1.dev1+g3715bad documentation</title>
+    <title>Scrolling beyond the world edge &#8212; Folium 0.1.dev1+ga838646 documentation</title>
   
   
   
@@ -18,12 +18,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -33,11 +33,11 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=924e9346" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
 
-    <script src="../_static/documentation_options.js?v=dd1f7f1f"></script>
+    <script src="../_static/documentation_options.js?v=ada1b9fa"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -45,7 +45,7 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'advanced_guide/world_copy';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/latest/_static/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'latest';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
@@ -124,13 +124,14 @@
   
   
   
+  
     
     
       
     
     
-    <img src="../_static/folium_logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/folium_logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/folium_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/folium_logo.png" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">Folium</p>
@@ -141,12 +142,21 @@
 <script>
 document.write(`
   <div class="version-switcher__container dropdown">
-    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
       Choose version  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
-    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
-    <!-- dropdown will be populated by javascript on page load -->
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
     </div>
   </div>
 `);
@@ -497,7 +507,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_c5c15820afa7ef9af3f94f4d8336f408 {
+                #map_49d3048187b87572ca5a38e1e54fc9a9 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -511,14 +521,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_c5c15820afa7ef9af3f94f4d8336f408&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_49d3048187b87572ca5a38e1e54fc9a9&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_c5c15820afa7ef9af3f94f4d8336f408 = L.map(
-                &quot;map_c5c15820afa7ef9af3f94f4d8336f408&quot;,
+            var map_49d3048187b87572ca5a38e1e54fc9a9 = L.map(
+                &quot;map_49d3048187b87572ca5a38e1e54fc9a9&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -533,30 +543,30 @@ document.write(`
 
 
 
-            var tile_layer_5ca0c9f8d651364cb41038a178b2ec7d = L.tileLayer(
+            var tile_layer_2e20736a9c0f83576ed641b58b442be3 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_5ca0c9f8d651364cb41038a178b2ec7d.addTo(map_c5c15820afa7ef9af3f94f4d8336f408);
+                tile_layer_2e20736a9c0f83576ed641b58b442be3.addTo(map_49d3048187b87572ca5a38e1e54fc9a9);
 
-            var marker_f5fc8fee15d84180d0120d5ddd6048c9 = L.marker(
+            var marker_c93fd509684e3504982e9cf3ec777117 = L.marker(
                 [0.0, 0.0],
                 {}
-            ).addTo(map_c5c15820afa7ef9af3f94f4d8336f408);
+            ).addTo(map_49d3048187b87572ca5a38e1e54fc9a9);
 
 
-        var popup_c9485d6c6c9ba2f8476a50ff450d731e = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
-
-
-
-                var html_9d25dacbd857166d75f62345fbd6ac7c = $(`&lt;div id=&quot;html_9d25dacbd857166d75f62345fbd6ac7c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will disappear when moved outside the  map domain.&lt;/div&gt;`)[0];
-                popup_c9485d6c6c9ba2f8476a50ff450d731e.setContent(html_9d25dacbd857166d75f62345fbd6ac7c);
+        var popup_13ca634acc05e7b5df403e59774593c5 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
 
 
 
-        marker_f5fc8fee15d84180d0120d5ddd6048c9.bindPopup(popup_c9485d6c6c9ba2f8476a50ff450d731e)
+                var html_098e1a48f7f41213940f26f392fa7682 = $(`&lt;div id=&quot;html_098e1a48f7f41213940f26f392fa7682&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will disappear when moved outside the  map domain.&lt;/div&gt;`)[0];
+                popup_13ca634acc05e7b5df403e59774593c5.setContent(html_098e1a48f7f41213940f26f392fa7682);
+
+
+
+        marker_c93fd509684e3504982e9cf3ec777117.bindPopup(popup_13ca634acc05e7b5df403e59774593c5)
         ;
 
 
@@ -614,7 +624,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_5526b5f63d44489575b506800ed2c4d7 {
+                #map_72c850c08000478b4e7748ac4585d4d8 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -628,14 +638,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_5526b5f63d44489575b506800ed2c4d7&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_72c850c08000478b4e7748ac4585d4d8&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_5526b5f63d44489575b506800ed2c4d7 = L.map(
-                &quot;map_5526b5f63d44489575b506800ed2c4d7&quot;,
+            var map_72c850c08000478b4e7748ac4585d4d8 = L.map(
+                &quot;map_72c850c08000478b4e7748ac4585d4d8&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -650,30 +660,30 @@ document.write(`
 
 
 
-            var tile_layer_58aca7e9fad22d84643610291a657a77 = L.tileLayer(
+            var tile_layer_d8726d28629754e063e3e28cb0b0d7d0 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_58aca7e9fad22d84643610291a657a77.addTo(map_5526b5f63d44489575b506800ed2c4d7);
+                tile_layer_d8726d28629754e063e3e28cb0b0d7d0.addTo(map_72c850c08000478b4e7748ac4585d4d8);
 
-            var marker_d85bd9c9fef6215098ae5b0976745ef7 = L.marker(
+            var marker_8b44d1bd6c3ed4ea92ef4846f0d149b3 = L.marker(
                 [0.0, 0.0],
                 {}
-            ).addTo(map_5526b5f63d44489575b506800ed2c4d7);
+            ).addTo(map_72c850c08000478b4e7748ac4585d4d8);
 
 
-        var popup_43a14b45a6cef670d685ca0592bc02dc = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
-
-
-
-                var html_1c7c402b7325cc0e850f1406a6c5ef8c = $(`&lt;div id=&quot;html_1c7c402b7325cc0e850f1406a6c5ef8c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will magically reappear when moved outside the map domain.&lt;/div&gt;`)[0];
-                popup_43a14b45a6cef670d685ca0592bc02dc.setContent(html_1c7c402b7325cc0e850f1406a6c5ef8c);
+        var popup_420a868dacfcb7a504fee5a0150cdcfa = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
 
 
 
-        marker_d85bd9c9fef6215098ae5b0976745ef7.bindPopup(popup_43a14b45a6cef670d685ca0592bc02dc)
+                var html_c998f2f4bec3e63d2fd65703b7b387d8 = $(`&lt;div id=&quot;html_c998f2f4bec3e63d2fd65703b7b387d8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will magically reappear when moved outside the map domain.&lt;/div&gt;`)[0];
+                popup_420a868dacfcb7a504fee5a0150cdcfa.setContent(html_c998f2f4bec3e63d2fd65703b7b387d8);
+
+
+
+        marker_8b44d1bd6c3ed4ea92ef4846f0d149b3.bindPopup(popup_420a868dacfcb7a504fee5a0150cdcfa)
         ;
 
 
@@ -730,7 +740,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_28ca7e8d6a736e57939c2ff351a9a8f6 {
+                #map_990d053b96779a50036ffcb06210b762 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -744,14 +754,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_28ca7e8d6a736e57939c2ff351a9a8f6&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_990d053b96779a50036ffcb06210b762&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_28ca7e8d6a736e57939c2ff351a9a8f6 = L.map(
-                &quot;map_28ca7e8d6a736e57939c2ff351a9a8f6&quot;,
+            var map_990d053b96779a50036ffcb06210b762 = L.map(
+                &quot;map_990d053b96779a50036ffcb06210b762&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -765,30 +775,30 @@ document.write(`
 
 
 
-            var tile_layer_7a1a1850bc8637c8eb31b7115f8cf455 = L.tileLayer(
+            var tile_layer_7d68282d64b8614bfb91f9e9e1892739 = L.tileLayer(
                 &quot;https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;Data by \u0026copy; \u003ca target=\&quot;_blank\&quot; href=\&quot;http://openstreetmap.org\&quot;\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\&quot;_blank\&quot; href=\&quot;http://www.openstreetmap.org/copyright\&quot;\u003eODbL\u003c/a\u003e.&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 18, &quot;maxZoom&quot;: 18, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: true, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-                tile_layer_7a1a1850bc8637c8eb31b7115f8cf455.addTo(map_28ca7e8d6a736e57939c2ff351a9a8f6);
+                tile_layer_7d68282d64b8614bfb91f9e9e1892739.addTo(map_990d053b96779a50036ffcb06210b762);
 
-            var marker_2945770c19c2d8b3eeed1e923975b278 = L.marker(
+            var marker_ffbf0b16e3d141adf504abc8a400bd44 = L.marker(
                 [0.0, 0.0],
                 {}
-            ).addTo(map_28ca7e8d6a736e57939c2ff351a9a8f6);
+            ).addTo(map_990d053b96779a50036ffcb06210b762);
 
 
-        var popup_c228649ab3b89c2b4b09205d16ef07e5 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
-
-
-
-                var html_6dace468c04d70c03e2c43f7fd444291 = $(`&lt;div id=&quot;html_6dace468c04d70c03e2c43f7fd444291&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;The map domain here is not wrapped.&lt;/div&gt;`)[0];
-                popup_c228649ab3b89c2b4b09205d16ef07e5.setContent(html_6dace468c04d70c03e2c43f7fd444291);
+        var popup_21d621f079dbd4d0c4127e6aeb70e72f = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
 
 
 
-        marker_2945770c19c2d8b3eeed1e923975b278.bindPopup(popup_c228649ab3b89c2b4b09205d16ef07e5)
+                var html_ad3ff42587c895eeea164e699a52b8bc = $(`&lt;div id=&quot;html_ad3ff42587c895eeea164e699a52b8bc&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;The map domain here is not wrapped.&lt;/div&gt;`)[0];
+                popup_21d621f079dbd4d0c4127e6aeb70e72f.setContent(html_ad3ff42587c895eeea164e699a52b8bc);
+
+
+
+        marker_ffbf0b16e3d141adf504abc8a400bd44.bindPopup(popup_21d621f079dbd4d0c4127e6aeb70e72f)
         ;
 
 
@@ -869,8 +879,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -878,7 +888,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+g3715bad</div>
+Folium version 0.1.dev1.dev+ga838646</div>
       
         <div class="footer-item">
   <p class="copyright">
@@ -897,7 +907,7 @@ Folium version 0.1.dev1.dev+g3715bad</div>
 </div>
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>
@@ -907,7 +917,7 @@ Folium version 0.1.dev1.dev+g3715bad</div>
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
 </p></div>
       
     </div>

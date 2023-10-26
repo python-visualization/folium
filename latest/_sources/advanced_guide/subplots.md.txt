@@ -20,7 +20,7 @@ subplot1 = fig.add_subplot(1, 2, 1)
 subplot2 = fig.add_subplot(1, 2, 2)
 
 subplot1.add_child(
-    folium.Map([0, 0], tiles="stamenwatercolor", zoom_start=1)
+    folium.Map([0, 0], zoom_start=1)
 )
 subplot2.add_child(
     folium.Map([46, 3], tiles="OpenStreetMap", zoom_start=5)
@@ -54,7 +54,6 @@ f = branca.element.Figure()
 # Create two maps.
 m = folium.Map(
     location=[0, 0],
-    tiles="stamenwatercolor",
     zoom_start=1,
     position="absolute",
     left="0%",

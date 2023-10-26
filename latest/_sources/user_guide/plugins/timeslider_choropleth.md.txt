@@ -155,7 +155,7 @@ import folium
 from folium.plugins import TimeSliderChoropleth
 
 
-m = folium.Map([0, 0], tiles="Stamen Toner", zoom_start=2)
+m = folium.Map([0, 0], zoom_start=2)
 
 TimeSliderChoropleth(
     gdf.to_json(),
@@ -170,7 +170,7 @@ m
 By default the timeslider starts at the beginning. You can also select another timestamp to begin with using the `init_timestamp` parameter. Note that it expects an index to the list of timestamps. In this example we use `-1` to select the last timestamp.
 
 ```{code-cell} ipython3
-m = folium.Map([0, 0], tiles="Stamen Toner", zoom_start=2)
+m = folium.Map([0, 0], zoom_start=2)
 
 TimeSliderChoropleth(
     gdf.to_json(),

@@ -115,7 +115,7 @@ lat = +38.89399
 lon = -77.03659
 zoom_start = 17
 
-m = folium.Map(location=[lat, lon], tiles="stamen toner", zoom_start=zoom_start)
+m = folium.Map(location=[lat, lon], zoom_start=zoom_start)
 
 kw = {"color": "red", "fill": True, "radius": 20}
 

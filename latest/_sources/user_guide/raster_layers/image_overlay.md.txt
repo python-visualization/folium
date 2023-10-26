@@ -11,7 +11,7 @@ If you have a static image file on your disk, you can simply draw it on the map.
 import os
 import folium
 
-m = folium.Map([37, 0], zoom_start=1, tiles="stamentoner")
+m = folium.Map([37, 0], zoom_start=1)
 merc = os.path.join("data", "Mercator_projection_SW.png")
 
 
@@ -46,7 +46,7 @@ A few remarks:
 You can also provide simply URL. In this case, the image will not be embedded in folium's output.
 
 ```{code-cell} ipython3
-m = folium.Map([37, 0], zoom_start=1, tiles="stamentoner")
+m = folium.Map([37, 0], zoom_start=1)
 
 folium.raster_layers.ImageOverlay(
     image="https://upload.wikimedia.org/wikipedia/commons/f/f4/Mercator_projection_SW.jpg",

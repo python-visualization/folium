@@ -58,7 +58,7 @@ m.save("index.html")
 Choosing a tileset
 ------------------
 
-The default tiles are set to `OpenStreetMap`, but a selection of tilesets from Stamen and CartoDB are also built in.
+The default tiles are set to `OpenStreetMap`, but a selection of tilesets are also built in.
 
 ```{code-cell} ipython3
 folium.Map((45.5236, -122.6750), tiles="cartodb positron")
@@ -81,7 +81,7 @@ There are various marker types, here we start with a simple `Marker`. You can ad
 tooltip. You can also pick colors and icons.
 
 ```{code-cell} ipython3
-m = folium.Map([45.35, -121.6972], zoom_start=12, tiles="Stamen Terrain")
+m = folium.Map([45.35, -121.6972], zoom_start=12)
 
 folium.Marker(
     location=[45.3288, -121.6625],

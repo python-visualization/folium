@@ -44,7 +44,7 @@ for time_entry in data:
 ```
 
 ```{code-cell} ipython3
-m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+m = folium.Map([48.0, 5.0], zoom_start=6)
 
 hm = folium.plugins.HeatMapWithTime(data)
 
@@ -55,7 +55,7 @@ m
 
 ### Options
 
-Now we show that the time index can be specified, allowing a more meaningful representation of what the time steps mean. We also enable the 'auto_play' option and change the maximum opacity. See the docmentation for a full list of options that can be used.
+Now we show that the time index can be specified, allowing a more meaningful representation of what the time steps mean. We also enable the 'auto_play' option and change the maximum opacity. See the documentation for a full list of options that can be used.
 
 ```{code-cell} ipython3
 from datetime import datetime, timedelta
@@ -66,7 +66,7 @@ time_index = [
 ```
 
 ```{code-cell} ipython3
-m = folium.Map([48.0, 5.0], tiles="stamentoner", zoom_start=6)
+m = folium.Map([48.0, 5.0], zoom_start=6)
 
 hm = folium.plugins.HeatMapWithTime(data, index=time_index, auto_play=True, max_opacity=0.3)
 
