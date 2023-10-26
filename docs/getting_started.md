@@ -58,7 +58,7 @@ m.save("index.html")
 Choosing a tileset
 ------------------
 
-The default tiles are set to `OpenStreetMap`, but a selection of tilesets also built in.
+The default tiles are set to `OpenStreetMap`, but a selection of tilesets are also built in.
 
 ```{code-cell} ipython3
 folium.Map((45.5236, -122.6750), tiles="cartodb positron")
