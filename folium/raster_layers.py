@@ -32,7 +32,6 @@ class TileLayer(Layer):
     tiles: str or :class:`xyzservices.TileProvider`, default 'OpenStreetMap'
         Map tileset to use. Can choose from this list of built-in tiles:
             - "OpenStreetMap"
-            - "Stamen Terrain", "Stamen Toner", "Stamen Watercolor"
             - "CartoDB positron", "CartoDB dark_matter"
 
         You can pass a custom tileset to Folium by passing a

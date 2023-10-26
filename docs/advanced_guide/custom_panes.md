@@ -30,7 +30,7 @@ We'll make an example to show how the GeoJson we add hides any labels
 underneath.
 
 ```{code-cell} ipython3
-m = folium.Map([43, -100], zoom_start=4, tiles="stamentoner")
+m = folium.Map([43, -100], zoom_start=4)
 
 folium.GeoJson(geo_json_data, style_function=style_function).add_to(m)
 
@@ -43,14 +43,14 @@ Now we'll create a custom pane and add a tile layer that contains only labels.
 The labels will show on top off the geojson.
 
 ```{code-cell} ipython3
-m = folium.Map([43, -100], zoom_start=4, tiles="stamentonerbackground")
+m = folium.Map([43, -100], zoom_start=4, tiles="cartodbpositronnolabels")
 
 folium.GeoJson(geo_json_data, style_function=style_function).add_to(m)
 
 folium.map.CustomPane("labels").add_to(m)
 
 # Final layer associated to custom pane via the appropriate kwarg
-folium.TileLayer("stamentonerlabels", pane="labels").add_to(m)
+folium.TileLayer("cartodbpositrononlylabels", pane="labels").add_to(m)
 
 m
 ```

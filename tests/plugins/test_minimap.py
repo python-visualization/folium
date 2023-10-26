@@ -19,10 +19,10 @@ def test_minimap():
     # Verify that a new minimap is getting created.
     assert "new L.Control.MiniMap" in out
 
-    m = folium.Map(location=(30, 20), zoom_start=4)
-    minimap = plugins.MiniMap(tile_layer="Stamen Toner")
+    m = folium.Map(tiles=None, location=(30, 20), zoom_start=4)
+    minimap = plugins.MiniMap()
     minimap.add_to(m)
 
     out = normalize(m._parent.render())
-    # verify that Stamen Toner tiles are being used
-    assert "https://stamen-tiles" in out
+    # verify that tiles are being used
+    assert r"https://{s}.tile.openstreetmap.org" in out

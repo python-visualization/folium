@@ -25,7 +25,7 @@ Then, create the `TagFilterButton` object and let it know which tags you want to
 from folium.plugins import TagFilterButton
 
 # Create map and add the data with additional parameter tags as the segmentation
-m = folium.Map([48., 5.], tiles='stamentoner', zoom_start=7)
+m = folium.Map([48., 5.], zoom_start=7)
 for i, latlng in enumerate(data):
     category = category_column[i]
     folium.Marker(

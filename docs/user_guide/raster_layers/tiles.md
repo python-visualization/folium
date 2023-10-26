@@ -16,18 +16,6 @@ folium.Map(location=[lat, lon], tiles="OpenStreetMap", zoom_start=zoom_start)
 ```
 
 ```{code-cell} ipython3
-folium.Map(location=[lat, lon], tiles="Stamen Terrain", zoom_start=zoom_start)
-```
-
-```{code-cell} ipython3
-folium.Map(location=[lat, lon], tiles="Stamen Toner", zoom_start=zoom_start)
-```
-
-```{code-cell} ipython3
-folium.Map(location=[lat, lon], tiles="Stamen Watercolor", zoom_start=zoom_start)
-```
-
-```{code-cell} ipython3
 folium.Map(location=[lat, lon], tiles="Cartodb Positron", zoom_start=zoom_start)
 ```
 

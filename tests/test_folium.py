@@ -111,8 +111,6 @@ class TestFolium:
 
         default_tiles = [
             "OpenStreetMap",
-            "Stamen Terrain",
-            "Stamen Toner",
             "CartoDB positron",
             "CartoDB dark_matter",
         ]

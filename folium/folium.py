@@ -88,7 +88,6 @@ class Map(JSCSSMixin, MacroElement):
         - "OpenStreetMap"
         - "Mapbox Bright" (Limited levels of zoom for free tiles)
         - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-        - "Stamen" (Terrain, Toner, and Watercolor)
         - "Cloudmade" (Must pass API key)
         - "Mapbox" (Must pass API key)
         - "CartoDB" (positron and dark_matter)
