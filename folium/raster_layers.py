@@ -128,8 +128,12 @@ class TileLayer(Layer):
                 name = tiles.name.replace(".", "").lower()
             tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")  # type: ignore
 
-        self.tile_name = name if name is not None else "".join(tiles.lower().strip().split())
-        super().__init__(name=self.tile_name, overlay=overlay, control=control, show=show)
+        self.tile_name = (
+            name if name is not None else "".join(tiles.lower().strip().split())
+        )
+        super().__init__(
+            name=self.tile_name, overlay=overlay, control=control, show=show
+        )
         self._name = "TileLayer"
 
         self.tiles = tiles
@@ -146,7 +150,7 @@ class TileLayer(Layer):
             detect_retina=detect_retina,
             tms=tms,
             opacity=opacity,
-            **kwargs
+            **kwargs,
         )
 
 
@@ -211,7 +215,7 @@ class WmsTileLayer(Layer):
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.url = url
@@ -223,7 +227,7 @@ class WmsTileLayer(Layer):
             transparent=transparent,
             version=version,
             attribution=attr,
-            **kwargs
+            **kwargs,
         )
         if cql_filter:
             # special parameter that shouldn't be camelized
@@ -301,7 +305,7 @@ class ImageOverlay(Layer):
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "ImageOverlay"
@@ -398,7 +402,7 @@ class VideoOverlay(Layer):
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        **kwargs: TypeJsonValue
+        **kwargs: TypeJsonValue,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "VideoOverlay"

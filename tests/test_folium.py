@@ -20,7 +20,6 @@ from jinja2.utils import htmlsafe_json_dumps
 import folium
 from folium import TileLayer
 from folium.features import Choropleth, GeoJson
-from folium.raster_layers import ENV
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -107,7 +106,14 @@ class TestFolium:
             },
         }
 
-    @pytest.mark.parametrize("tiles,provider", [("OpenStreetMap", xyz.OpenStreetMap.Mapnik), ("CartoDB positron", xyz.CartoDB.Positron), ("CartoDB dark_matter", xyz.CartoDB.DarkMatter)])
+    @pytest.mark.parametrize(
+        "tiles,provider",
+        [
+            ("OpenStreetMap", xyz.OpenStreetMap.Mapnik),
+            ("CartoDB positron", xyz.CartoDB.Positron),
+            ("CartoDB dark_matter", xyz.CartoDB.DarkMatter),
+        ],
+    )
     def test_builtin_tile(self, tiles, provider):
         """Test custom maptiles."""
 
