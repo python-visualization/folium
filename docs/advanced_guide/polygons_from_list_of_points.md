@@ -48,7 +48,7 @@ def draw_points(map_object, list_of_points, layer_name, line_color, fill_color, 
 The convex hull is probably the most common approach - its goal is to create the smallest polygon that contains all points from a given list. The scipy.spatial package provides this algorithm (https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.spatial.ConvexHull.html, accessed 29.12.2018).
 
 ```{code-cell} ipython3
-# Function that takes a map and a list of points (LON,LAT tupels) and
+# Function that takes a map and a list of points (LON,LAT tuples) and
 # returns a map with the convex hull polygon from the points as a new layer
 
 
