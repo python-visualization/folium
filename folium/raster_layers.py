@@ -109,7 +109,7 @@ class TileLayer(Layer):
         **kwargs,
     ):
         if isinstance(tiles, str):
-            if tiles == "OpenStreetMap":
+            if tiles.lower() == "openstreetmap":
                 tiles = "OpenStreetMap Mapnik"
                 if name is None:
                     name = "openstreetmap"
