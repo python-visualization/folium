@@ -24,7 +24,7 @@ from folium.utilities import (
 
 _default_js = [
     ("leaflet", "https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"),
-    ("jquery", "https://code.jquery.com/jquery-1.12.4.min.js"),
+    ("jquery", "https://code.jquery.com/jquery-3.7.1.min.js"),
     (
         "bootstrap",
         "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",

@@ -146,8 +146,8 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
 
     default_js = [
         (
-            "jquery2.0.0",
-            "https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js",
+            "jquery3.7.1",
+            "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js",
         ),
         (
             "jqueryui1.10.2",

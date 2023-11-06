@@ -102,7 +102,7 @@ def test_timestamped_geo_json():
 
     # Verify the imports.
     assert (
-        '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>'
+        '<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>'
         in out
     )
     assert (
