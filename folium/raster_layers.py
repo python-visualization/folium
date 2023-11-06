@@ -2,8 +2,9 @@
 Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 
 """
-from typing import TYPE_CHECKING, Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union
 
+import xyzservices
 from branca.element import Element, Figure
 from jinja2 import Environment, PackageLoader, Template
 
@@ -16,10 +17,6 @@ from folium.utilities import (
     parse_options,
 )
 
-if TYPE_CHECKING:
-    import xyzservices
-
-
 ENV = Environment(loader=PackageLoader("folium", "templates"))
 
 
@@ -30,9 +27,14 @@ class TileLayer(Layer):
     Parameters
     ----------
     tiles: str or :class:`xyzservices.TileProvider`, default 'OpenStreetMap'
-        Map tileset to use. Can choose from this list of built-in tiles:
+        Map tileset to use. Folium has built-in all tilesets
+        available in the ``xyzservices`` package. For example, you can pass
+        any of the following to the "tiles" keyword:
+
             - "OpenStreetMap"
-            - "CartoDB positron", "CartoDB dark_matter"
+            - "CartoDB Positron"
+            - "CartoBD Voyager"
+            - "NASAGIBS Blue Marble"
 
         You can pass a custom tileset to Folium by passing a
         :class:`xyzservices.TileProvider` or a Leaflet-style
@@ -90,7 +92,7 @@ class TileLayer(Layer):
 
     def __init__(
         self,
-        tiles: Union[str, "xyzservices.TileProvider"] = "OpenStreetMap",
+        tiles: Union[str, xyzservices.TileProvider] = "OpenStreetMap",
         min_zoom: int = 0,
         max_zoom: int = 18,
         max_native_zoom: Optional[int] = None,
@@ -104,45 +106,35 @@ class TileLayer(Layer):
         subdomains: str = "abc",
         tms: bool = False,
         opacity: float = 1,
-        **kwargs
+        **kwargs,
     ):
-        # check for xyzservices.TileProvider without importing it
-        if isinstance(tiles, dict):
+        if isinstance(tiles, str):
+            if tiles == "OpenStreetMap":
+                tiles = "OpenStreetMap Mapnik"
+                if name is None:
+                    name = "openstreetmap"
+            try:
+                tiles = xyzservices.providers.query_name(tiles)
+            except ValueError:
+                # no match, likely a custom URL
+                pass
+
+        if isinstance(tiles, xyzservices.TileProvider):
             attr = attr if attr else tiles.html_attribution  # type: ignore
             min_zoom = tiles.get("min_zoom", min_zoom)
             max_zoom = tiles.get("max_zoom", max_zoom)
             subdomains = tiles.get("subdomains", subdomains)
+            if name is None:
+                name = tiles.name.replace(".", "").lower()
             tiles = tiles.build_url(fill_subdomain=False, scale_factor="{r}")  # type: ignore
 
-        self.tile_name = (
-            name if name is not None else "".join(tiles.lower().strip().split())
-        )
-        super().__init__(
-            name=self.tile_name, overlay=overlay, control=control, show=show
-        )
+        self.tile_name = name if name is not None else "".join(tiles.lower().strip().split())
+        super().__init__(name=self.tile_name, overlay=overlay, control=control, show=show)
         self._name = "TileLayer"
 
-        tiles_flat = "".join(tiles.lower().strip().split())
-        if tiles_flat in {"cloudmade", "mapbox", "mapboxbright", "mapboxcontrolroom"}:
-            # added in May 2020 after v0.11.0, remove in a future release
-            raise ValueError(
-                "Built-in templates for Mapbox and Cloudmade have been removed. "
-                "You can still use these providers by passing a URL to the `tiles` "
-                "argument. See the documentation of the `TileLayer` class."
-            )
-        templates = list(
-            ENV.list_templates(filter_func=lambda x: x.startswith("tiles/"))
-        )
-        tile_template = "tiles/" + tiles_flat + "/tiles.txt"
-        attr_template = "tiles/" + tiles_flat + "/attr.txt"
-
-        if tile_template in templates and attr_template in templates:
-            self.tiles = ENV.get_template(tile_template).render()
-            attr = ENV.get_template(attr_template).render()
-        else:
-            self.tiles = tiles
-            if not attr:
-                raise ValueError("Custom tiles must have an attribution.")
+        self.tiles = tiles
+        if not attr:
+            raise ValueError("Custom tiles must have an attribution.")
 
         self.options = parse_options(
             min_zoom=min_zoom,
