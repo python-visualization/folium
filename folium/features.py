@@ -137,7 +137,7 @@ class Vega(JSCSSMixin, Element):
     default_js = [
         ("d3", "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
         ("vega", "https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js"),
-        ("jquery", "https://code.jquery.com/jquery-2.1.0.min.js"),
+        ("jquery", "https://code.jquery.com/jquery-3.7.1.min.js"),
     ]
 
     def __init__(
