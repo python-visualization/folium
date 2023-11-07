@@ -25,4 +25,4 @@ def test_minimap():
 
     out = normalize(m._parent.render())
     # verify that tiles are being used
-    assert r"https://{s}.tile.openstreetmap.org" in out
+    assert r"https://tile.openstreetmap.org" in out

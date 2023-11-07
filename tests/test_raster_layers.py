@@ -3,6 +3,7 @@ Test raster_layers
 ------------------
 
 """
+import pytest
 import xyzservices
 from jinja2 import Template
 
@@ -113,10 +114,11 @@ def test_image_overlay():
     assert bounds == [[0, -180], [90, 180]], bounds
 
 
-def test_xyzservices():
-    m = folium.Map(
-        [48.0, 5.0], tiles=xyzservices.providers.CartoDB.DarkMatter, zoom_start=6
-    )
+@pytest.mark.parametrize(
+    "tiles", ["CartoDB DarkMatter", xyzservices.providers.CartoDB.DarkMatter]
+)
+def test_xyzservices(tiles):
+    m = folium.Map([48.0, 5.0], tiles=tiles, zoom_start=6)
 
     folium.raster_layers.TileLayer(
         tiles=xyzservices.providers.CartoDB.Positron,

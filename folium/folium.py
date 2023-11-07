@@ -82,15 +82,14 @@ class Map(JSCSSMixin, MacroElement):
     """Create a Map with Folium and Leaflet.js
 
     Generate a base map of given width and height with either default
-    tilesets or a custom tileset URL. The following tilesets are built-in
-    to Folium. Pass any of the following to the "tiles" keyword:
+    tilesets or a custom tileset URL. Folium has built-in all tilesets
+    available in the ``xyzservices`` package. For example, you can pass
+    any of the following to the "tiles" keyword:
 
         - "OpenStreetMap"
-        - "Mapbox Bright" (Limited levels of zoom for free tiles)
-        - "Mapbox Control Room" (Limited levels of zoom for free tiles)
-        - "Cloudmade" (Must pass API key)
-        - "Mapbox" (Must pass API key)
-        - "CartoDB" (positron and dark_matter)
+        - "CartoDB Positron"
+        - "CartoBD Voyager"
+        - "NASAGIBS Blue Marble"
 
     You can pass a custom tileset to Folium by passing a
     :class:`xyzservices.TileProvider` or a Leaflet-style

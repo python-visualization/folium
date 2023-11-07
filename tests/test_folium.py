@@ -13,13 +13,13 @@ import jinja2
 import numpy as np
 import pandas as pd
 import pytest
+import xyzservices.providers as xyz
 from jinja2 import Environment, PackageLoader
 from jinja2.utils import htmlsafe_json_dumps
 
 import folium
 from folium import TileLayer
 from folium.features import Choropleth, GeoJson
-from folium.raster_layers import ENV
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -106,24 +106,24 @@ class TestFolium:
             },
         }
 
-    def test_builtin_tile(self):
+    @pytest.mark.parametrize(
+        "tiles,provider",
+        [
+            ("OpenStreetMap", xyz.OpenStreetMap.Mapnik),
+            ("CartoDB positron", xyz.CartoDB.Positron),
+            ("CartoDB dark_matter", xyz.CartoDB.DarkMatter),
+        ],
+    )
+    def test_builtin_tile(self, tiles, provider):
         """Test custom maptiles."""
 
-        default_tiles = [
-            "OpenStreetMap",
-            "CartoDB positron",
-            "CartoDB dark_matter",
-        ]
-        for tiles in default_tiles:
-            m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
-            tiles = "".join(tiles.lower().strip().split())
-            url = "tiles/{}/tiles.txt".format
-            attr = "tiles/{}/attr.txt".format
-            url = ENV.get_template(url(tiles)).render()
-            attr = ENV.get_template(attr(tiles)).render()
+        m = folium.Map(location=[45.5236, -122.6750], tiles=tiles)
+        tiles = "".join(tiles.lower().strip().split())
+        url = provider.build_url(fill_subdomain=False, scale_factor="{r}")
+        attr = provider.html_attribution
 
-            assert m._children[tiles].tiles == url
-            assert htmlsafe_json_dumps(attr) in m._parent.render()
+        assert m._children[tiles.replace("_", "")].tiles == url
+        assert htmlsafe_json_dumps(attr) in m._parent.render()
 
         bounds = m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
