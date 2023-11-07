@@ -6,7 +6,7 @@ from typing import Any, Callable, Optional, Union
 
 import xyzservices
 from branca.element import Element, Figure
-from jinja2 import Environment, PackageLoader, Template
+from jinja2 import Template
 
 from folium.map import Layer
 from folium.utilities import (
@@ -16,8 +16,6 @@ from folium.utilities import (
     mercator_transform,
     parse_options,
 )
-
-ENV = Environment(loader=PackageLoader("folium", "templates"))
 
 
 class TileLayer(Layer):
