@@ -468,6 +468,7 @@ class GeoJson(Layer):
         * If `__geo_interface__` is available, the `__geo_interface__`
         dictionary will be serialized to JSON and
         reprojected if `to_crs` is available.
+
     style_function: function, default None
         Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
@@ -883,6 +884,7 @@ class TopoJson(JSCSSMixin, Layer):
         * If dict, then data will be converted to JSON and embedded
         in the JavaScript.
         * If str, then data will be passed to the JavaScript as-is.
+
     object_path: str
         The path of the desired object into the TopoJson structure.
         Ex: 'objects.myobject'.
@@ -1818,6 +1820,7 @@ class CustomIcon(Icon):
         output file.
         * If array-like, it will be converted to PNG base64 string
         and embedded in the output.
+
     icon_size : tuple of 2 int, optional
         Size of the icon image in pixels.
     icon_anchor : tuple of 2 int, optional
