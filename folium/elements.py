@@ -1,8 +1,7 @@
 from typing import List, Tuple
 
-from jinja2 import Template
-
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from jinja2 import Template
 
 
 class JSCSSMixin(Element):
