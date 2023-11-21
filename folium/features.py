@@ -569,7 +569,7 @@ class GeoJson(Layer):
 
         function {{this.get_name()}}_onEachFeature(feature, layer) {
             layer.on({
-                {%- if this.highlight %}
+                {%- if this.highlight and not this.popup_keep_highlighted %}
                 mouseout: function(e) {
                     if(typeof e.target.setStyle === "function"){
                         {{ this.get_name() }}.resetStyle(e.target);
@@ -582,6 +582,34 @@ class GeoJson(Layer):
                     }
                 },
                 {%- endif %}
+
+                {%- if this.highlight and this.popup_keep_highlighted %}
+                mouseout: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        if(!{{ this.get_name() }}.isPopupOpen()){
+                            {{ this.get_name() }}.resetStyle(e.target);
+                        }
+                    }
+                },
+                mouseover: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
+                        e.target.setStyle(highlightStyle);
+                    }
+                },
+                popupopen: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
+                        e.target.setStyle(highlightStyle);
+                    }
+                },
+                popupclose: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        {{ this.get_name() }}.resetStyle(e.target);
+                    }
+                },
+                {%- endif %}
+
                 {%- if this.zoom_on_click %}
                 click: function(e) {
                     if (typeof e.target.getBounds === 'function') {
@@ -632,6 +660,7 @@ class GeoJson(Layer):
         data: Any,
         style_function: Optional[Callable] = None,
         highlight_function: Optional[Callable] = None,
+        popup_keep_highlighted: bool = False,
         name: Optional[str] = None,
         overlay: bool = True,
         control: bool = True,
@@ -659,6 +688,14 @@ class GeoJson(Layer):
                 raise TypeError(
                     "Only Marker, Circle, and CircleMarker are supported as GeoJson marker types."
                 )
+
+        if popup_keep_highlighted:
+            if popup is None:
+                raise NameError(
+                    "A popup is needed to use the popup_keep_highlighted feature"
+                )
+        self.popup_keep_highlighted = popup_keep_highlighted
+
         self.marker = marker
         self.options = parse_options(**kwargs)
 
