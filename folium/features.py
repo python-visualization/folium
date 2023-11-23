@@ -473,6 +473,8 @@ class GeoJson(Layer):
         Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
         Function mapping a GeoJson Feature to a style dict for mouse events.
+    popup_keep_highlighted: bool, default False
+        Whether to keep the highlighting active while the popup is open
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -569,26 +571,13 @@ class GeoJson(Layer):
 
         function {{this.get_name()}}_onEachFeature(feature, layer) {
             layer.on({
-                {%- if this.highlight and not this.popup_keep_highlighted %}
+                {%- if this.highlight %}
                 mouseout: function(e) {
                     if(typeof e.target.setStyle === "function"){
-                        {{ this.get_name() }}.resetStyle(e.target);
-                    }
-                },
-                mouseover: function(e) {
-                    if(typeof e.target.setStyle === "function"){
-                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
-                        e.target.setStyle(highlightStyle);
-                    }
-                },
-                {%- endif %}
-
-                {%- if this.highlight and this.popup_keep_highlighted %}
-                mouseout: function(e) {
-                    if(typeof e.target.setStyle === "function"){
-                        if(!{{ this.get_name() }}.isPopupOpen()){
+                        {%- if this.popup_keep_highlighted %}
+                        if (!{{ this.get_name() }}.isPopupOpen())
+                        {%- endif %}
                             {{ this.get_name() }}.resetStyle(e.target);
-                        }
                     }
                 },
                 mouseover: function(e) {
@@ -597,6 +586,7 @@ class GeoJson(Layer):
                         e.target.setStyle(highlightStyle);
                     }
                 },
+                {%- if this.popup_keep_highlighted %}
                 popupopen: function(e) {
                     if(typeof e.target.setStyle === "function"){
                         const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
@@ -609,7 +599,7 @@ class GeoJson(Layer):
                     }
                 },
                 {%- endif %}
-
+                {%- endif %}
                 {%- if this.zoom_on_click %}
                 click: function(e) {
                     if (typeof e.target.getBounds === 'function') {
@@ -690,9 +680,9 @@ class GeoJson(Layer):
                 )
 
         if popup_keep_highlighted and popup is None:
-                raise NameError(
-                    "A popup is needed to use the popup_keep_highlighted feature"
-                )
+            raise ValueError(
+                "A popup is needed to use the popup_keep_highlighted feature"
+            )
         self.popup_keep_highlighted = popup_keep_highlighted
 
         self.marker = marker
