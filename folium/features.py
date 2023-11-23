@@ -689,8 +689,7 @@ class GeoJson(Layer):
                     "Only Marker, Circle, and CircleMarker are supported as GeoJson marker types."
                 )
 
-        if popup_keep_highlighted:
-            if popup is None:
+        if popup_keep_highlighted and popup is None:
                 raise NameError(
                     "A popup is needed to use the popup_keep_highlighted feature"
                 )
