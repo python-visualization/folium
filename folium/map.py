@@ -57,7 +57,7 @@ class Layer(MacroElement):
                     element_name=self.get_name(),
                     element_parent_name=self._parent.get_name(),
                 ),
-                name=self.get_name() + "_add"
+                name=self.get_name() + "_add",
             )
         super().render(**kwargs)
 
