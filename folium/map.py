@@ -9,12 +9,12 @@ from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
+from folium.elements import ElementAddToElement
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
     camelize,
     escape_backticks,
-    get_and_assert_figure_root,
     parse_options,
     validate_location,
 )
@@ -51,24 +51,15 @@ class Layer(MacroElement):
         self.show = show
 
     def render(self, **kwargs):
-        super().render(**kwargs)
         if self.show:
-            self._add_layer_to_map()
-
-    def _add_layer_to_map(self, **kwargs):
-        """Show the layer on the map by adding it to its parent in JS."""
-        template = Template(
-            """
-            {%- macro script(this, kwargs) %}
-                {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
-            {%- endmacro %}
-            """
-        )
-        script = template.module.__dict__["script"]
-        figure = get_and_assert_figure_root(self)
-        figure.script.add_child(
-            Element(script(self, kwargs)), name=self.get_name() + "_add"
-        )
+            self.add_child(
+                ElementAddToElement(
+                    element_name=self.get_name(),
+                    element_parent_name=self._parent.get_name(),
+                ),
+                name=self.get_name() + "_add",
+            )
+        super().render(**kwargs)
 
 
 class FeatureGroup(Layer):
