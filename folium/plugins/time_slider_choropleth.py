@@ -169,7 +169,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         init_timestamp=0,
         stroke_opacity=1,
         stroke_width=0.8,
-        stroke_color='#FFFFFF',
+        stroke_color="#FFFFFF",
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
