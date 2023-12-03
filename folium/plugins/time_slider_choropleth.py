@@ -133,9 +133,10 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 $("#slider_{{ this.get_name() }}").show();
 
                 d3.selectAll('path')
-                .attr('stroke', 'white')
-                .attr('stroke-width', 0.8)
+                .attr('stroke', '{{ this.stroke_color }}')
+                .attr('stroke-width', {{ this.stroke_width }})
                 .attr('stroke-dasharray', '5,5')
+                .attr('stroke-opacity', {{ this.stroke_opacity }})
                 .attr('fill-opacity', 0);
 
                 fill_map();
@@ -166,10 +167,17 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         control=True,
         show=True,
         init_timestamp=0,
+        stroke_opacity=1,
+        stroke_width=0.8,
+        stroke_color="#FFFFFF",
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
         self.highlight = highlight
+
+        self.stroke_opacity = stroke_opacity
+        self.stroke_width = stroke_width
+        self.stroke_color = stroke_color
 
         if not isinstance(styledict, dict):
             raise ValueError(
