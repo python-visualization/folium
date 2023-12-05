@@ -575,7 +575,7 @@ class GeoJson(Layer):
                 mouseout: function(e) {
                     if(typeof e.target.setStyle === "function"){
                         {%- if this.popup_keep_highlighted %}
-                        if (!{{ this.get_name() }}.isPopupOpen())
+                        if (!e.target.isPopupOpen())
                         {%- endif %}
                             {{ this.get_name() }}.resetStyle(e.target);
                     }
@@ -591,11 +591,13 @@ class GeoJson(Layer):
                     if(typeof e.target.setStyle === "function"){
                         const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
                         e.target.setStyle(highlightStyle);
+                        e.target.bindPopup(e.popup)
                     }
                 },
                 popupclose: function(e) {
                     if(typeof e.target.setStyle === "function"){
                         {{ this.get_name() }}.resetStyle(e.target);
+                        e.target.unbindPopup()
                     }
                 },
                 {%- endif %}
