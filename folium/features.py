@@ -1230,9 +1230,11 @@ class GeoJsonTooltip(GeoJsonDetail):
     _template = Template(
         """
     {% macro script(this, kwargs) %}
-    {{ this._parent.get_name() }}.bindTooltip("""
+    {{ this._parent.get_name() }}.eachLayer(function(layer) {
+        layer.bindTooltip("""
         + GeoJsonDetail.base_template
         + """,{{ this.tooltip_options | tojson | safe }});
+    });
                      {% endmacro %}
                      """
     )
@@ -1298,9 +1300,11 @@ class GeoJsonPopup(GeoJsonDetail):
     _template = Template(
         """
     {% macro script(this, kwargs) %}
-    {{ this._parent.get_name() }}.bindPopup("""
+    {{ this._parent.get_name() }}.eachLayer(function(layer) {
+        layer.bindPopup("""
         + GeoJsonDetail.base_template
         + """,{{ this.popup_options | tojson | safe }});
+    });
                      {% endmacro %}
                      """
     )
