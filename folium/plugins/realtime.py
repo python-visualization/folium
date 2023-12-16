@@ -2,7 +2,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options, JsCode
+from folium.utilities import JsCode, parse_options
 
 
 class Realtime(JSCSSMixin, MacroElement):
@@ -37,9 +37,11 @@ class Realtime(JSCSSMixin, MacroElement):
     --------
     >>> from folium.utilities import JsCode
     >>> m = folium.Map()
-    >>> rt = Realtime("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_geography_regions_elevation_points.geojson",
-    ...                getFeatureId=JsCode("function(f) { return f.properties.name; }"),
-    ...                interval=10000)
+    >>> rt = Realtime(
+    ...     "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_geography_regions_elevation_points.geojson",
+    ...     getFeatureId=JsCode("function(f) { return f.properties.name; }"),
+    ...     interval=10000,
+    ... )
     >>> rt.add_to(m)
     """
 
