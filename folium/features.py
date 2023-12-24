@@ -473,6 +473,8 @@ class GeoJson(Layer):
         Function mapping a GeoJson Feature to a style dict.
     highlight_function: function, default None
         Function mapping a GeoJson Feature to a style dict for mouse events.
+    popup_keep_highlighted: bool, default False
+        Whether to keep the highlighting active while the popup is open
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
     overlay : bool, default True
@@ -572,7 +574,10 @@ class GeoJson(Layer):
                 {%- if this.highlight %}
                 mouseout: function(e) {
                     if(typeof e.target.setStyle === "function"){
-                        {{ this.get_name() }}.resetStyle(e.target);
+                        {%- if this.popup_keep_highlighted %}
+                        if (!e.target.isPopupOpen())
+                        {%- endif %}
+                            {{ this.get_name() }}.resetStyle(e.target);
                     }
                 },
                 mouseover: function(e) {
@@ -581,6 +586,21 @@ class GeoJson(Layer):
                         e.target.setStyle(highlightStyle);
                     }
                 },
+                {%- if this.popup_keep_highlighted %}
+                popupopen: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        const highlightStyle = {{ this.get_name() }}_highlighter(e.target.feature)
+                        e.target.setStyle(highlightStyle);
+                        e.target.bindPopup(e.popup)
+                    }
+                },
+                popupclose: function(e) {
+                    if(typeof e.target.setStyle === "function"){
+                        {{ this.get_name() }}.resetStyle(e.target);
+                        e.target.unbindPopup()
+                    }
+                },
+                {%- endif %}
                 {%- endif %}
                 {%- if this.zoom_on_click %}
                 click: function(e) {
@@ -632,6 +652,7 @@ class GeoJson(Layer):
         data: Any,
         style_function: Optional[Callable] = None,
         highlight_function: Optional[Callable] = None,
+        popup_keep_highlighted: bool = False,
         name: Optional[str] = None,
         overlay: bool = True,
         control: bool = True,
@@ -659,6 +680,13 @@ class GeoJson(Layer):
                 raise TypeError(
                     "Only Marker, Circle, and CircleMarker are supported as GeoJson marker types."
                 )
+
+        if popup_keep_highlighted and popup is None:
+            raise ValueError(
+                "A popup is needed to use the popup_keep_highlighted feature"
+            )
+        self.popup_keep_highlighted = popup_keep_highlighted
+
         self.marker = marker
         self.options = parse_options(**kwargs)
 
