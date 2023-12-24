@@ -19,6 +19,10 @@ class Geocoder(JSCSSMixin, MacroElement):
         Choose from 'topleft', 'topright', 'bottomleft' or 'bottomright'.
     add_marker: bool, default True
         If True, adds a marker on the found location.
+    geocode_provider: str, default 'nominatim'
+        Defaults to "nominatim", see https://github.com/perliedman/leaflet-control-geocoder/tree/2.4.0/src/geocoders for other built-in providers.
+    geocode_provider_options: dict, default {}
+        For use with specific providers that may require api keys or other parameters.
 
     For all options see https://github.com/perliedman/leaflet-control-geocoder
 
@@ -27,8 +31,19 @@ class Geocoder(JSCSSMixin, MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
+
+            var geocoderOpts_{{ this.get_name() }} = {{ this.options|tojson }};
+
+            // note: geocoder name should start with lowercase
+            var geocoderName_{{ this.get_name() }} = geocoderOpts_{{ this.get_name() }}["geocodeProvider"];
+
+            var customGeocoder_{{ this.get_name() }} = L.Control.Geocoder[ geocoderName_{{ this.get_name() }} ](
+                geocoderOpts_{{ this.get_name() }}['geocodeProviderOptions']
+            );
+            geocoderOpts_{{ this.get_name() }}["geocoder"] = customGeocoder_{{ this.get_name() }};
+
             L.Control.geocoder(
-                {{ this.options|tojson }}
+                geocoderOpts_{{ this.get_name() }}
             ).on('markgeocode', function(e) {
                 {{ this._parent.get_name() }}.setView(e.geocode.center, 11);
             }).addTo({{ this._parent.get_name() }});
@@ -50,12 +65,22 @@ class Geocoder(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(self, collapsed=False, position="topright", add_marker=True, **kwargs):
+    def __init__(
+        self,
+        collapsed: bool = False,
+        position: str = "topright",
+        add_marker: bool = True,
+        geocode_provider: str = "nominatim",
+        geocode_provider_options: dict = {},
+        **kwargs
+    ):
         super().__init__()
         self._name = "Geocoder"
         self.options = parse_options(
             collapsed=collapsed,
             position=position,
-            defaultMarkGeocode=add_marker,
+            default_mark_geocode=add_marker,
+            geocode_provider=geocode_provider,
+            geocode_provider_options=geocode_provider_options,
             **kwargs
         )
