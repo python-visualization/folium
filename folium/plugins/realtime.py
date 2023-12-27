@@ -2,7 +2,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import JsCode, parse_options
+from folium.utilities import JsCode, camelize, parse_options
 
 
 class Realtime(JSCSSMixin, MacroElement):
@@ -13,33 +13,45 @@ class Realtime(JSCSSMixin, MacroElement):
 
     Parameters
     ----------
+    source :
+        The source can be one of:
+        * a string with the URL to get data from
+        * a dict that is passed to javascript's `fetch` function
+          for fetching the data
+        * a folium.utilities.JsCode object in case you need more freedom.
     start : bool, default True
         Should automatic updates be enabled when layer is added
         on the map and stopped when layer is removed from the map
     interval : int, default 60000
         Automatic update interval, in milliseconds
-    getFeatureId : function, default returns `feature.properties.id`
+    get_feature_id : folium.utilities.JsCode
+        A function with a geojson `feature` as parameter
+        default returns `feature.properties.id`
         Function to get an identifier uniquely identify a feature over time
-    updateFeature : function
+    update_feature : folium.utilities.JsCode
+        A function with a geojson `feature` as parameter
         Used to update an existing feature's layer;
         by default, points (markers) are updated, other layers are discarded
         and replaced with a new, updated layer.
         Allows to create more complex transitions,
         for example, when a feature is updated
-    removeMissing : bool, default False
+    remove_missing : bool, default False
         Should missing features between updates been automatically
         removed from the layer
 
     Other parameters are passed to the GeoJson layer, so you can pass
-        `style`, `pointToLayer` and/or `onEachFeature`.
+        `style`, `point_to_layer` and/or `on_each_feature`.
 
     Examples
     --------
     >>> from folium.utilities import JsCode
-    >>> m = folium.Map()
+    >>> m = folium.Map(location=[40.73, -73.94], zoom_start=12)
     >>> rt = Realtime(
-    ...     "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_geography_regions_elevation_points.geojson",
-    ...     getFeatureId=JsCode("function(f) { return f.properties.name; }"),
+    ...     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson",
+    ...     get_feature_id=JsCode("(f) => { return f.properties.objectid; }"),
+    ...     point_to_layer=JsCode(
+    ...         "(f, latlng) => { return L.circleMarker(latlng, {radius: 8, fillOpacity: 0.2})}"
+    ...     ),
     ...     interval=10000,
     ... )
     >>> rt.add_to(m)
@@ -52,8 +64,13 @@ class Realtime(JSCSSMixin, MacroElement):
             {% for key, value in this.functions.items() %}
             options["{{key}}"] = {{ value }};
             {% endfor %}
+
             var {{ this.get_name() }} = new L.realtime(
+            {% if this.src is string or this.src is mapping -%}
                 {{ this.src|tojson }},
+            {% else -%}
+                {{ this.src.js_code }},
+            {% endif -%}
                 options
             );
             {{ this._parent.get_name() }}.addLayer(
@@ -69,22 +86,36 @@ class Realtime(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(self, src, **kwargs):
+    def __init__(
+        self,
+        source,
+        start=None,
+        interval=None,
+        get_feature_id=None,
+        update_feature=None,
+        remove_missing=None,
+        **kwargs
+    ):
         super().__init__()
         self._name = "Realtime"
-        self.src = src
+        self.src = source
+
+        if start is not None:
+            kwargs["start"] = start
+        if interval is not None:
+            kwargs["interval"] = interval
+        if get_feature_id is not None:
+            kwargs["get_feature_id"] = get_feature_id
+        if update_feature is not None:
+            kwargs["update_feature"] = update_feature
+        if remove_missing is not None:
+            kwargs["remove_missing"] = remove_missing
 
         # extract JsCode objects
         self.functions = {}
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             if isinstance(value, JsCode):
-                self.functions[key] = value.js_code
+                self.functions[camelize(key)] = value.js_code
+                kwargs.pop(key)
 
-        # and remove them from kwargs
-        for key in self.functions:
-            kwargs.pop(key)
-
-        # the container is special, as we
-        # do not allow it to be set (yet)
-        # from python
-        self.options = parse_options(container=None, **kwargs)
+        self.options = parse_options(**kwargs)
