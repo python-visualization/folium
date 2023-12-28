@@ -24,15 +24,19 @@ source :
   * a dict that is passed to javascript's `fetch` function
     for fetching the data
   * a folium.utilities.JsCode object in case you need more freedom.
+
 start : bool, default True
   Should automatic updates be enabled when layer is added
   on the map and stopped when layer is removed from the map
+
 interval : int, default 60000
   Automatic update interval, in milliseconds
+
 get_feature_id : folium.utilities.JsCode
   A function with a geojson `feature` as parameter
   default returns `feature.properties.id`
   Function to get an identifier uniquely identify a feature over time
+
 update_feature : folium.utilities.JsCode
   A function with a geojson `feature` as parameter
   Used to update an existing feature's layer;
@@ -40,6 +44,7 @@ update_feature : folium.utilities.JsCode
   and replaced with a new, updated layer.
   Allows to create more complex transitions,
   for example, when a feature is updated
+
 remove_missing : bool, default False
   Should missing features between updates been automatically
           removed from the layer
