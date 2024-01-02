@@ -21,6 +21,7 @@ from folium.plugins.mouse_position import MousePosition
 from folium.plugins.pattern import CirclePattern, StripePattern
 from folium.plugins.polyline_offset import PolyLineOffset
 from folium.plugins.polyline_text_path import PolyLineTextPath
+from folium.plugins.realtime import Realtime
 from folium.plugins.scroll_zoom_toggler import ScrollZoomToggler
 from folium.plugins.search import Search
 from folium.plugins.semicircle import SemiCircle
@@ -54,6 +55,7 @@ __all__ = [
     "MousePosition",
     "PolyLineTextPath",
     "PolyLineOffset",
+    "Realtime",
     "ScrollZoomToggler",
     "Search",
     "SemiCircle",

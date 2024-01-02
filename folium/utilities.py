@@ -410,3 +410,10 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
         figure, Figure
     ), "You cannot render this Element if it is not in a Figure."
     return figure
+
+
+class JsCode:
+    """Wrapper around Javascript code."""
+
+    def __init__(self, js_code: str):
+        self.js_code = js_code
