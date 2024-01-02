@@ -60,9 +60,9 @@ class Realtime(JSCSSMixin, MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            var options = {{this.options|tojson}};
+            var {{ this.get_name() }}_options = {{ this.options|tojson }};
             {% for key, value in this.functions.items() %}
-            options["{{key}}"] = {{ value }};
+            {{ this.get_name() }}_options["{{key}}"] = {{ value }};
             {% endfor %}
 
             var {{ this.get_name() }} = new L.realtime(
@@ -71,7 +71,7 @@ class Realtime(JSCSSMixin, MacroElement):
             {% else -%}
                 {{ this.src.js_code }},
             {% endif -%}
-                options
+                {{ this.get_name() }}_options
             );
             {{ this._parent.get_name() }}.addLayer(
                 {{ this.get_name() }}._container);
