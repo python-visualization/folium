@@ -23,7 +23,7 @@ In this example we use a static geojson, whereas normally you would have a
 url that actually updates in real time.
 
 ```{code-cell} ipython3
-from folium.utilities import JsCode
+from folium import JsCode
 m = folium.Map(location=[40.73, -73.94], zoom_start=12)
 rt = folium.plugins.Realtime(
     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson",
@@ -44,12 +44,11 @@ International Space Station using a public API.
 
 ```{code-cell} ipython3
 import folium
-from folium.utilities import JsCode
 from folium.plugins import Realtime
 
 m = folium.Map()
 
-source = JsCode("""
+source = folium.JsCode("""
     function(responseHandler, errorHandler) {
         var url = 'https://api.wheretheiss.at/v1/satellites/25544';
 
@@ -94,7 +93,7 @@ means that you can also pass parameters which you would typically pass to an
 
 ```{code-cell} ipython3
 import folium
-from folium.utilities import JsCode
+from folium import JsCode
 from folium.plugins import Realtime
 
 m = folium.Map(location=[40.73, -73.94], zoom_start=12)

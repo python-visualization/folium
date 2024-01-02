@@ -21,7 +21,7 @@ class Realtime(JSCSSMixin, MacroElement):
         * a string with the URL to get data from
         * a dict that is passed to javascript's `fetch` function
           for fetching the data
-        * a `folium.utilities.JsCode` object in case you need more freedom.
+        * a `folium.JsCode` object in case you need more freedom.
     start: bool, default True
         Should automatic updates be enabled when layer is added
         on the map and stopped when layer is removed from the map
@@ -48,7 +48,7 @@ class Realtime(JSCSSMixin, MacroElement):
 
     Examples
     --------
-    >>> from folium.utilities import JsCode
+    >>> from folium import JsCode
     >>> m = folium.Map(location=[40.73, -73.94], zoom_start=12)
     >>> rt = Realtime(
     ...     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson",

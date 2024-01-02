@@ -40,6 +40,7 @@ from folium.map import (
     Tooltip,
 )
 from folium.raster_layers import TileLayer, WmsTileLayer
+from folium.utilities import JsCode
 from folium.vector_layers import Circle, CircleMarker, Polygon, PolyLine, Rectangle
 
 try:
@@ -79,6 +80,7 @@ __all__ = [
     "IFrame",
     "Icon",
     "JavascriptLink",
+    "JsCode",
     "LatLngPopup",
     "LayerControl",
     "LinearColormap",
