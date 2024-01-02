@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from branca.element import MacroElement
 from jinja2 import Template
 
@@ -13,34 +15,36 @@ class Realtime(JSCSSMixin, MacroElement):
 
     Parameters
     ----------
-    source :
+    source: str, dict, JsCode
         The source can be one of:
+
         * a string with the URL to get data from
         * a dict that is passed to javascript's `fetch` function
           for fetching the data
-        * a folium.utilities.JsCode object in case you need more freedom.
-    start : bool, default True
+        * a `folium.utilities.JsCode` object in case you need more freedom.
+    start: bool, default True
         Should automatic updates be enabled when layer is added
         on the map and stopped when layer is removed from the map
-    interval : int, default 60000
+    interval: int, default 60000
         Automatic update interval, in milliseconds
-    get_feature_id : folium.utilities.JsCode
-        A function with a geojson `feature` as parameter
+    get_feature_id: JsCode, optional
+        A JS function with a geojson `feature` as parameter
         default returns `feature.properties.id`
-        Function to get an identifier uniquely identify a feature over time
-    update_feature : folium.utilities.JsCode
-        A function with a geojson `feature` as parameter
+        Function to get an identifier to uniquely identify a feature over time
+    update_feature: JsCode, optional
+        A JS function with a geojson `feature` as parameter
         Used to update an existing feature's layer;
         by default, points (markers) are updated, other layers are discarded
         and replaced with a new, updated layer.
         Allows to create more complex transitions,
         for example, when a feature is updated
-    remove_missing : bool, default False
+    remove_missing: bool, default False
         Should missing features between updates been automatically
         removed from the layer
 
-    Other parameters are passed to the GeoJson layer, so you can pass
-        `style`, `point_to_layer` and/or `on_each_feature`.
+
+    Other keyword arguments are passed to the GeoJson layer, so you can pass
+    `style`, `point_to_layer` and/or `on_each_feature`.
 
     Examples
     --------
@@ -88,28 +92,25 @@ class Realtime(JSCSSMixin, MacroElement):
 
     def __init__(
         self,
-        source,
-        start=None,
-        interval=None,
-        get_feature_id=None,
-        update_feature=None,
-        remove_missing=None,
+        source: Union[str, dict, JsCode],
+        start: bool = True,
+        interval: int = 60000,
+        get_feature_id: Optional[JsCode] = None,
+        update_feature: Optional[JsCode] = None,
+        remove_missing: bool = False,
         **kwargs
     ):
         super().__init__()
         self._name = "Realtime"
         self.src = source
 
-        if start is not None:
-            kwargs["start"] = start
-        if interval is not None:
-            kwargs["interval"] = interval
+        kwargs["start"] = start
+        kwargs["interval"] = interval
         if get_feature_id is not None:
             kwargs["get_feature_id"] = get_feature_id
         if update_feature is not None:
             kwargs["update_feature"] = update_feature
-        if remove_missing is not None:
-            kwargs["remove_missing"] = remove_missing
+        kwargs["remove_missing"] = remove_missing
 
         # extract JsCode objects
         self.functions = {}
