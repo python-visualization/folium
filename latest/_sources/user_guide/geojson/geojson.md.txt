@@ -257,3 +257,29 @@ folium.GeoJson(
 
 m
 ```
+
+#### Keep highlighted while popup is open
+
+The `GeoJson` class provides a `popup_keep_highlighted` boolean argument.
+Whenever a GeoJson layer is associated with a popup and a highlight function
+is defined, this argument allows you to decide if the highlighting should remain
+active while the popup is open.
+
+```{code-cell} ipython3
+m = folium.Map([43, -100], zoom_start=4)
+
+popup = folium.GeoJsonPopup(fields=["name"])
+
+folium.GeoJson(
+    geo_json_data,
+    highlight_function=lambda feature: {
+        "fillColor": (
+            "green" if "e" in feature["properties"]["name"].lower() else "#ffff00"
+        ),
+    },
+    popup=popup,
+    popup_keep_highlighted=True,
+).add_to(m)
+
+m
+```
