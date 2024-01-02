@@ -412,13 +412,8 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
     return figure
 
 
-# See:
-# https://github.com/andfanilo/streamlit-echarts/blob/master/streamlit_echarts/frontend/src/utils.js
-# Thanks andfanilo
 class JsCode:
+    """Wrapper around Javascript code."""
+
     def __init__(self, js_code: str):
-        """Wrapper around a js function
-        Args:
-            js_code (str): javascript function code as str
-        """
         self.js_code = js_code
