@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.1.dev1+gb4982e4 documentation</title>
+    <title>API reference &#8212; Folium 0.1.dev1+gb8f1373 documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="_static/documentation_options.js?v=45f0082d"></script>
+    <script src="_static/documentation_options.js?v=0190a5bf"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -1784,6 +1784,16 @@ Ex: ‘relative’, ‘absolute’</p></li>
 </dd></dl>
 
 </section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Link to this heading">#</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.utilities.JsCode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.utilities.</span></span><span class="sig-name descname"><span class="pre">JsCode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">js_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.utilities.JsCode" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Wrapper around Javascript code.</p>
+</dd></dl>
+
+</section>
 <section id="module-folium.plugins">
 <span id="plugins"></span><h2>Plugins<a class="headerlink" href="#module-folium.plugins" title="Link to this heading">#</a></h2>
 <p>Wrap some of the most popular leaflet external plugins.</p>
@@ -2615,6 +2625,64 @@ Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.Realtime">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">Realtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><span class="pre">JsCode</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">60000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_feature_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><span class="pre">JsCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_feature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><span class="pre">JsCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remove_missing</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Realtime" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>Put realtime data on a Leaflet map: live tracking GPS units,
+sensor data or just about anything.</p>
+<p>Based on: <a class="github reference external" href="https://github.com/perliedman/leaflet-realtime">perliedman/leaflet-realtime</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source</strong> (<em>str</em><em>, </em><em>dict</em><em>, </em><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><em>JsCode</em></a>) – <p>The source can be one of:</p>
+<ul>
+<li><p>a string with the URL to get data from</p></li>
+<li><p>a dict that is passed to javascript’s <cite>fetch</cite> function
+for fetching the data</p></li>
+<li><p>a <cite>folium.JsCode</cite> object in case you need more freedom.</p></li>
+</ul>
+</p></li>
+<li><p><strong>start</strong> (<em>bool</em><em>, </em><em>default True</em>) – Should automatic updates be enabled when layer is added
+on the map and stopped when layer is removed from the map</p></li>
+<li><p><strong>interval</strong> (<em>int</em><em>, </em><em>default 60000</em>) – Automatic update interval, in milliseconds</p></li>
+<li><p><strong>get_feature_id</strong> (<a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><em>JsCode</em></a><em>, </em><em>optional</em>) – A JS function with a geojson <cite>feature</cite> as parameter
+default returns <cite>feature.properties.id</cite>
+Function to get an identifier to uniquely identify a feature over time</p></li>
+<li><p><strong>update_feature</strong> (<a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><em>JsCode</em></a><em>, </em><em>optional</em>) – A JS function with a geojson <cite>feature</cite> as parameter
+Used to update an existing feature’s layer;
+by default, points (markers) are updated, other layers are discarded
+and replaced with a new, updated layer.
+Allows to create more complex transitions,
+for example, when a feature is updated</p></li>
+<li><p><strong>remove_missing</strong> (<em>bool</em><em>, </em><em>default False</em>) – Should missing features between updates been automatically
+removed from the layer</p></li>
+</ul>
+</dd>
+</dl>
+<p>Other keyword arguments are passed to the GeoJson layer, so you can pass
+<cite>style</cite>, <cite>point_to_layer</cite> and/or <cite>on_each_feature</cite>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">JsCode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">40.73</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.94</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rt</span> <span class="o">=</span> <span class="n">Realtime</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">get_feature_id</span><span class="o">=</span><span class="n">JsCode</span><span class="p">(</span><span class="s2">&quot;(f) =&gt; { return f.properties.objectid; }&quot;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">point_to_layer</span><span class="o">=</span><span class="n">JsCode</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s2">&quot;(f, latlng) =&gt; { return L.circleMarker(latlng, {radius: 8, fillOpacity: 0.2})}&quot;</span>
+<span class="gp">... </span>    <span class="p">),</span>
+<span class="gp">... </span>    <span class="n">interval</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rt</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="folium.plugins.Realtime.default_js">
+<span class="sig-name descname"><span class="pre">default_js</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#folium.plugins.Realtime.default_js" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="folium.plugins.ScrollZoomToggler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">ScrollZoomToggler</span></span><a class="headerlink" href="#folium.plugins.ScrollZoomToggler" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
@@ -3227,6 +3295,10 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 </li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#utilities">Utilities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.utilities.JsCode"><code class="docutils literal notranslate"><span class="pre">JsCode</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-folium.plugins">Plugins</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.AntPath"><code class="docutils literal notranslate"><span class="pre">AntPath</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.AntPath.default_js"><code class="docutils literal notranslate"><span class="pre">AntPath.default_js</span></code></a></li>
@@ -3325,6 +3397,10 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolyLineTextPath.default_js"><code class="docutils literal notranslate"><span class="pre">PolyLineTextPath.default_js</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Realtime"><code class="docutils literal notranslate"><span class="pre">Realtime</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Realtime.default_js"><code class="docutils literal notranslate"><span class="pre">Realtime.default_js</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.ScrollZoomToggler"><code class="docutils literal notranslate"><span class="pre">ScrollZoomToggler</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Search"><code class="docutils literal notranslate"><span class="pre">Search</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Search.default_css"><code class="docutils literal notranslate"><span class="pre">Search.default_css</span></code></a></li>
@@ -3410,7 +3486,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+gb4982e4</div>
+Folium version 0.1.dev1.dev+gb8f1373</div>
       
         <div class="footer-item">
 

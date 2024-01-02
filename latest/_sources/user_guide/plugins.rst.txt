@@ -23,6 +23,7 @@ Plugins
   plugins/pattern
   plugins/polyline_offset
   plugins/polyline_textpath_and_antpath
+  plugins/realtime
   plugins/scroll_zoom_toggler
   plugins/search
   plugins/semi_circle
