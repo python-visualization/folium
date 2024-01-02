@@ -82,7 +82,7 @@ class Realtime(JSCSSMixin, MacroElement):
     default_js = [
         (
             "Leaflet_Realtime_js",
-            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-realtime/2.2.0/leaflet-realtime.js",  # NoQA
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet-realtime/2.2.0/leaflet-realtime.js",
         )
     ]
 
