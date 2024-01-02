@@ -260,8 +260,10 @@ m
 
 #### Keep highlighted while popup is open
 
-The `GeoJson` class provides a `popup_keep_highlighted` boolean argument. \
-Whenever a GeoJson layer is associated with a popup and a highlight function is defined, this argument allows you to decide if the highlighting should remain active while the popup is open.
+The `GeoJson` class provides a `popup_keep_highlighted` boolean argument.
+Whenever a GeoJson layer is associated with a popup and a highlight function
+is defined, this argument allows you to decide if the highlighting should remain
+active while the popup is open.
 
 ```{code-cell} ipython3
 m = folium.Map([43, -100], zoom_start=4)
