@@ -412,8 +412,19 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
     return figure
 
 
-class JsCode:
+class JsCode(str):
     """Wrapper around Javascript code."""
 
-    def __init__(self, js_code: str):
-        self.js_code = js_code
+    @staticmethod
+    def optional_create(value: "TypeJsFunctionArg") -> Optional["JsCode"]:
+        """Return a JsCode object if value is not None."""
+        if value is None:
+            return None
+        elif value is JsCode:
+            return value
+        else:
+            assert isinstance(value, str)
+            return JsCode(value)
+
+
+TypeJsFunctionArg = Union[None, str, JsCode]

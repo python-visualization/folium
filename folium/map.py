@@ -7,10 +7,11 @@ from collections import OrderedDict
 from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 
 from branca.element import Element, Figure, Html, MacroElement
-from jinja2 import Template
 
 from folium.elements import ElementAddToElement
+from folium.template import Template
 from folium.utilities import (
+    JsCode,
     TypeBounds,
     TypeJsonValue,
     camelize,
@@ -108,7 +109,7 @@ class FeatureGroup(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
-        self.options = parse_options(**kwargs)
+        self.options = kwargs
 
 
 class LayerControl(MacroElement):
@@ -147,21 +148,9 @@ class LayerControl(MacroElement):
     _template = Template(
         """
         {% macro script(this,kwargs) %}
-            var {{ this.get_name() }}_layers = {
-                base_layers : {
-                    {%- for key, val in this.base_layers.items() %}
-                    {{ key|tojson }} : {{val}},
-                    {%- endfor %}
-                },
-                overlays :  {
-                    {%- for key, val in this.overlays.items() %}
-                    {{ key|tojson }} : {{val}},
-                    {%- endfor %}
-                },
-            };
             let {{ this.get_name() }} = L.control.layers(
-                {{ this.get_name() }}_layers.base_layers,
-                {{ this.get_name() }}_layers.overlays,
+                {{ this.base_layers|tojavascript }},
+                {{ this.overlays|tojavascript }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
 
@@ -187,8 +176,8 @@ class LayerControl(MacroElement):
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.draggable = draggable
-        self.base_layers: OrderedDict[str, str] = OrderedDict()
-        self.overlays: OrderedDict[str, str] = OrderedDict()
+        self.base_layers: OrderedDict[str, JsCode] = OrderedDict()
+        self.overlays: OrderedDict[str, JsCode] = OrderedDict()
 
     def reset(self) -> None:
         self.base_layers = OrderedDict()
@@ -202,9 +191,9 @@ class LayerControl(MacroElement):
                 continue
             key = item.layer_name
             if not item.overlay:
-                self.base_layers[key] = item.get_name()
+                self.base_layers[key] = JsCode(item.get_name())
             else:
-                self.overlays[key] = item.get_name()
+                self.overlays[key] = JsCode(item.get_name())
         super().render()
 
 
