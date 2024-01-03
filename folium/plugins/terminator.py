@@ -1,7 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.template import Template
 
 
 class Terminator(JSCSSMixin, MacroElement):

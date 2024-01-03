@@ -5,9 +5,9 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 from typing import List, Optional, Sequence, Union
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
+from folium.template import Template
 from folium.utilities import (
     TypeLine,
     TypeMultiLine,

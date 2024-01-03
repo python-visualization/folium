@@ -1,7 +1,8 @@
 from typing import List, Tuple
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
-from jinja2 import Template
+
+from folium.template import Template
 
 
 class JSCSSMixin(Element):

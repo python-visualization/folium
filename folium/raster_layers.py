@@ -6,9 +6,9 @@ from typing import Any, Callable, Optional, Union
 
 import xyzservices
 from branca.element import Element, Figure
-from jinja2 import Template
 
 from folium.map import Layer
+from folium.template import Template
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
