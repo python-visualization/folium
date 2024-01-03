@@ -420,7 +420,7 @@ class JsCode(str):
         """Return a JsCode object if value is not None."""
         if value is None:
             return None
-        elif value is JsCode:
+        elif isinstance(value, JsCode):
             return value
         else:
             assert isinstance(value, str)
