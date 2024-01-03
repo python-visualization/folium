@@ -3,7 +3,7 @@ from typing import Union
 
 import jinja2
 
-from folium.utilities import JsCode, TypeJsonValueNoNone, camelize
+from folium.utilities import JsCode, camelize
 
 
 def tojavascript(obj: Union[str, JsCode, dict]) -> str:
@@ -18,22 +18,18 @@ def tojavascript(obj: Union[str, JsCode, dict]) -> str:
             if isinstance(value, JsCode):
                 out.append(value)
             else:
-                out.append(_to_escaped_json(value))
+                out.append(
+                    json.dumps(obj)
+                    .replace("<", "\\u003c")
+                    .replace(">", "\\u003e")
+                    .replace("&", "\\u0026")
+                    .replace("'", "\\u0027")
+                )
             out.append(",\n")
         out.append("}")
         return "".join(out)
     else:
         raise TypeError(f"Unsupported type: {type(obj)}")
-
-
-def _to_escaped_json(obj: TypeJsonValueNoNone) -> str:
-    return (
-        json.dumps(obj)
-        .replace("<", "\\u003c")
-        .replace(">", "\\u003e")
-        .replace("&", "\\u0026")
-        .replace("'", "\\u0027")
-    )
 
 
 class Environment(jinja2.Environment):
