@@ -109,7 +109,7 @@ class FeatureGroup(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
-        self.options = kwargs
+        self.options = parse_options(**kwargs)
 
 
 class LayerControl(MacroElement):
