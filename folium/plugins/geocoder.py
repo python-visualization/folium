@@ -19,6 +19,8 @@ class Geocoder(JSCSSMixin, MacroElement):
         Choose from 'topleft', 'topright', 'bottomleft' or 'bottomright'.
     add_marker: bool, default True
         If True, adds a marker on the found location.
+    geocode_zoom: int, default 11
+        Set zoom level used for displaying the geocode result, note that this only has an effect when add_marker is set to False. Set this to None to preserve the current map zoom level.
     geocode_provider: str, default 'nominatim'
         Defaults to "nominatim", see https://github.com/perliedman/leaflet-control-geocoder/tree/2.4.0/src/geocoders for other built-in providers.
     geocode_provider_options: dict, default {}
@@ -45,7 +47,8 @@ class Geocoder(JSCSSMixin, MacroElement):
             L.Control.geocoder(
                 geocoderOpts_{{ this.get_name() }}
             ).on('markgeocode', function(e) {
-                {{ this._parent.get_name() }}.setView(e.geocode.center, 11);
+                var zoom = geocoderOpts_{{ this.get_name() }}['geocodeZoom'] || {{ this._parent.get_name() }}.getZoom();
+                {{ this._parent.get_name() }}.setView(e.geocode.center, zoom);
             }).addTo({{ this._parent.get_name() }});
 
         {% endmacro %}
@@ -70,6 +73,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         collapsed: bool = False,
         position: str = "topright",
         add_marker: bool = True,
+        geocode_zoom: int | None = 11,
         geocode_provider: str = "nominatim",
         geocode_provider_options: dict = {},
         **kwargs
@@ -80,6 +84,7 @@ class Geocoder(JSCSSMixin, MacroElement):
             collapsed=collapsed,
             position=position,
             default_mark_geocode=add_marker,
+            geocode_zoom=geocode_zoom,
             geocode_provider=geocode_provider,
             geocode_provider_options=geocode_provider_options,
             **kwargs
