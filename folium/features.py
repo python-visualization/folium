@@ -1120,7 +1120,8 @@ class GeoJsonDetail(MacroElement):
         geom_collections = [
             feature.get("properties") if feature.get("properties") is not None else key
             for key, feature in enumerate(self._parent.data["features"])
-            if feature["geometry"]["type"] == "GeometryCollection"
+            if feature["geometry"]
+            and feature["geometry"]["type"] == "GeometryCollection"
         ]
         if any(geom_collections):
             warnings.warn(
