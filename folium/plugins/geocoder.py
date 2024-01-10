@@ -1,10 +1,10 @@
+from typing import Optional
+
 from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
-
-from typing import Optional
 
 
 class Geocoder(JSCSSMixin, MacroElement):
