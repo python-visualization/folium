@@ -4,6 +4,8 @@ from jinja2 import Template
 from folium.elements import JSCSSMixin
 from folium.utilities import parse_options
 
+from typing import Optional
+
 
 class Geocoder(JSCSSMixin, MacroElement):
     """A simple geocoder for Leaflet that by default uses OSM/Nominatim.
@@ -19,7 +21,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         Choose from 'topleft', 'topright', 'bottomleft' or 'bottomright'.
     add_marker: bool, default True
         If True, adds a marker on the found location.
-    geocode_zoom: int, default 11
+    geocode_zoom: int, default 11, optional
         Set zoom level used for displaying the geocode result, note that this only has an effect when add_marker is set to False. Set this to None to preserve the current map zoom level.
     geocode_provider: str, default 'nominatim'
         Defaults to "nominatim", see https://github.com/perliedman/leaflet-control-geocoder/tree/2.4.0/src/geocoders for other built-in providers.
@@ -73,7 +75,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         collapsed: bool = False,
         position: str = "topright",
         add_marker: bool = True,
-        geocode_zoom: int | None = 11,
+        geocode_zoom: Optional[int] = 11,
         geocode_provider: str = "nominatim",
         geocode_provider_options: dict = {},
         **kwargs
