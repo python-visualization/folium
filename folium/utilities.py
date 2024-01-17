@@ -425,3 +425,6 @@ class JsCode:
 
     def __init__(self, js_code: str):
         self.js_code = js_code
+
+    def __str__(self):
+        return self.js_code
