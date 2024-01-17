@@ -1137,7 +1137,11 @@ class GeoJsonDetail(MacroElement):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         if isinstance(self._parent, GeoJson):
-            keys = tuple(self._parent.data["features"][0]["properties"].keys())
+            keys = tuple(
+                self._parent.data["features"][0]["properties"].keys()
+                if self._parent.data["features"]
+                else []
+            )
             self.warn_for_geometry_collections()
         elif isinstance(self._parent, TopoJson):
             obj_name = self._parent.object_path.split(".")[-1]
