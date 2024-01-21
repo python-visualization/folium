@@ -420,6 +420,11 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
     return figure
 
 
-class JsCode(str):
+class JsCode:
     """Wrapper around Javascript code."""
-    pass
+
+    def __init__(self, js_code: Union[str, 'JsCode']):
+        if isinstance(js_code, JsCode):
+            self.js_code: str = js_code.js_code
+        else:
+            self.js_code = js_code

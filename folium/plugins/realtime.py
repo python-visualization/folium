@@ -117,7 +117,7 @@ class Realtime(JSCSSMixin, MacroElement):
         self.functions = {}
         for key, value in list(kwargs.items()):
             if isinstance(value, JsCode):
-                self.functions[camelize(key)] = value
+                self.functions[camelize(key)] = value.js_code
                 kwargs.pop(key)
 
         self.options = parse_options(**kwargs)
