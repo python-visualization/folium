@@ -220,13 +220,13 @@ def test_javascript_identifier_path_to_array_notation(text, result):
 
 
 def test_js_code_init_str():
-    js_code = JsCode('hi')
+    js_code = JsCode("hi")
     assert isinstance(js_code, JsCode)
     assert isinstance(js_code.js_code, str)
 
 
 def test_js_code_init_js_code():
-    js_code = JsCode('hi')
+    js_code = JsCode("hi")
     js_code_2 = JsCode(js_code)
     assert isinstance(js_code_2, JsCode)
     assert isinstance(js_code_2.js_code, str)
