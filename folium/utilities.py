@@ -420,8 +420,6 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
     return figure
 
 
-class JsCode:
+class JsCode(str):
     """Wrapper around Javascript code."""
-
-    def __init__(self, js_code: str):
-        self.js_code = js_code
+    pass
