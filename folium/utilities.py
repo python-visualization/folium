@@ -276,10 +276,18 @@ def iter_coords(obj: Any) -> Iterator[Tuple[float, ...]]:
     if isinstance(obj, (tuple, list)):
         coords = obj
     elif "features" in obj:
-        coords = [geom["geometry"]["coordinates"] for geom in obj["features"]]
+        coords = [
+            geom["geometry"]["coordinates"]
+            for geom in obj["features"]
+            if geom["geometry"]
+        ]
     elif "geometry" in obj:
-        coords = obj["geometry"]["coordinates"]
-    elif "geometries" in obj and "coordinates" in obj["geometries"][0]:
+        coords = obj["geometry"]["coordinates"] if obj["geometry"] else []
+    elif (
+        "geometries" in obj
+        and obj["geometries"][0]
+        and "coordinates" in obj["geometries"][0]
+    ):
         coords = obj["geometries"][0]["coordinates"]
     else:
         coords = obj.get("coordinates", obj)
