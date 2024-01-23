@@ -436,6 +436,8 @@ class Popup(Element):
         show: bool = False,
         sticky: bool = False,
         lazy: bool = False,
+        linked_marker: Optional[Marker] = None,
+        linked_marker_name: str = "",
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -464,6 +466,8 @@ class Popup(Element):
             closeOnClick=False if sticky else None,
             **kwargs,
         )
+        self.linked_marker = linked_marker
+        self.linked_marker_name =linked_marker_name
 
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
@@ -479,6 +483,22 @@ class Popup(Element):
             Element(self._template.render(this=self, kwargs=kwargs)),
             name=self.get_name(),
         )
+
+        if self.linked_marker is not None:
+            linking_script = f"""
+                var linkElement = document.createElement('a');
+                linkElement.href = '#';
+                linkElement.innerHTML = '{'Open ' + self.linked_marker_name if self.linked_marker_name else 'Open Another Popup'}';
+                linkElement.addEventListener('click', function() {{
+                    {self._parent.get_name()}.closePopup();
+                    {self.linked_marker.get_name()}.openPopup();
+                    {self.linked_marker.get_name()}._map.flyTo({self.linked_marker.get_name()}.getLatLng());
+                }});
+                var popupContent = {self.get_name()}.getContent();
+                popupContent.appendChild(linkElement);
+                {self.get_name()}.setContent(popupContent);
+            """
+            figure.script.add_child(Element(linking_script))
 
 
 class Tooltip(MacroElement):
