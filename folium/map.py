@@ -488,7 +488,7 @@ class Popup(Element):
             linking_script = f"""
                 var linkElement = document.createElement('a');
                 linkElement.href = '#';
-                linkElement.innerHTML = '{'Open ' + self.linked_marker_name if self.linked_marker_name else 'Open Another Popup'}';
+                linkElement.innerHTML = '{'Open ' + self.linked_marker_name if self.linked_marker_name else 'Open another popup'}';
                 linkElement.addEventListener('click', function() {{
                     {self._parent.get_name()}.closePopup();
                     {self.linked_marker.get_name()}.openPopup();
