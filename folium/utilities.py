@@ -276,10 +276,18 @@ def iter_coords(obj: Any) -> Iterator[Tuple[float, ...]]:
     if isinstance(obj, (tuple, list)):
         coords = obj
     elif "features" in obj:
-        coords = [geom["geometry"]["coordinates"] for geom in obj["features"]]
+        coords = [
+            geom["geometry"]["coordinates"]
+            for geom in obj["features"]
+            if geom["geometry"]
+        ]
     elif "geometry" in obj:
-        coords = obj["geometry"]["coordinates"]
-    elif "geometries" in obj and "coordinates" in obj["geometries"][0]:
+        coords = obj["geometry"]["coordinates"] if obj["geometry"] else []
+    elif (
+        "geometries" in obj
+        and obj["geometries"][0]
+        and "coordinates" in obj["geometries"][0]
+    ):
         coords = obj["geometries"][0]["coordinates"]
     else:
         coords = obj.get("coordinates", obj)
@@ -410,3 +418,10 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
         figure, Figure
     ), "You cannot render this Element if it is not in a Figure."
     return figure
+
+
+class JsCode:
+    """Wrapper around Javascript code."""
+
+    def __init__(self, js_code: str):
+        self.js_code = js_code

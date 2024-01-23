@@ -79,3 +79,4 @@ Packages:
 Plugins:
 
 - https://github.com/onaci/folium-glify-layer: provide fast webgl rendering for large GeoJSON FeatureCollections
+- https://github.com/carlosign/Folium.ControlCredits-Plugin: displaying credits in the corner. Display an image/logo, clicking it will expand to show a brief message with credits and links.

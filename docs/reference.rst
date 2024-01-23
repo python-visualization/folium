@@ -31,6 +31,12 @@ Other map features
 .. automodule:: folium.features
 
 
+Utilities
+---------------------
+
+.. autoclass:: folium.utilities.JsCode
+
+
 Plugins
 --------------------
 .. automodule:: folium.plugins
