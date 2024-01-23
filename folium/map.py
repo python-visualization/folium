@@ -467,7 +467,7 @@ class Popup(Element):
             **kwargs,
         )
         self.linked_marker = linked_marker
-        self.linked_marker_name =linked_marker_name
+        self.linked_marker_name = linked_marker_name
 
     def render(self, **kwargs) -> None:
         """Renders the HTML representation of the element."""
