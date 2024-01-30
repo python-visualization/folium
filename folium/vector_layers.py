@@ -205,12 +205,14 @@ class PolyLine(BaseMultiLocation):
         """
     )
 
-    def __init__(self, locations, popup=None, tooltip=None, highlight_color=None, **kwargs):
+    def __init__(
+        self, locations, popup=None, tooltip=None, highlight_color=None, **kwargs
+    ):
         super().__init__(locations, popup=popup, tooltip=tooltip)
         self._name = "PolyLine"
         self.options = path_options(line=True, **kwargs)
         if highlight_color is not None:
-            self.options['highlight_color'] = highlight_color
+            self.options["highlight_color"] = highlight_color
 
 
 class Polygon(BaseMultiLocation):
@@ -276,8 +278,8 @@ class Polygon(BaseMultiLocation):
         self._name = "Polygon"
         self.options = path_options(line=True, radius=None, **kwargs)
         if highlight_color is not None:
-            self.options['highlight_color'] = highlight_color
-        
+            self.options["highlight_color"] = highlight_color
+
 
 class Rectangle(MacroElement):
     """Draw rectangle overlays on a map.
@@ -347,7 +349,7 @@ class Rectangle(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
         if highlight_color is not None:
-            self.options['highlight_color'] = highlight_color
+            self.options["highlight_color"] = highlight_color
 
     def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Compute the bounds of the object itself."""
@@ -421,7 +423,7 @@ class Circle(Marker):
         self._name = "circle"
         self.options = path_options(line=False, radius=radius, **kwargs)
         if highlight_color is not None:
-            self.options['highlight_color'] = highlight_color
+            self.options["highlight_color"] = highlight_color
 
 
 class CircleMarker(Marker):
@@ -488,4 +490,4 @@ class CircleMarker(Marker):
         self._name = "CircleMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)
         if highlight_color is not None:
-            self.options['highlight_color'] = highlight_color
+            self.options["highlight_color"] = highlight_color
