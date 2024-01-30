@@ -143,7 +143,6 @@ class BaseMultiLocation(MacroElement):
             self.add_child(
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
-        self.options = path_options(line=True, **kwargs)
 
     def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Compute the bounds of the object itself."""
