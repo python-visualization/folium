@@ -133,32 +133,65 @@ def test_timestamped_geo_json():
     # Verify that the script is okay.
     tmpl = Template(
         """
-            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
-                  _getDisplayDateFormat: {{ this._getDisplayDateFormat.js_code }}
-              });
-              {{this._parent.get_name()}}.timeDimension = L.timeDimension(
-                  {
-                      period: {{ this.period|tojson }},
-                  }
-              );
-              var {{this.get_name()}}_timeDimensionControl = new L.Control.TimeDimensionCustom(
-                  {{ this.get_name() }}_options
-              );
-              {{this._parent.get_name()}}.addControl({{this.get_name()}}_timeDimensionControl);
+        L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+            _getDisplayDateFormat: function(date){
+                var newdate = new moment(date);
+                console.log(newdate)
+                return newdate.format("{{this.date_options}}");
+            }
+        });
+        {{this._parent.get_name()}}.timeDimension = L.timeDimension(
+            {
+                period: {{ this.period|tojson }},
+            }
+        );
+        var timeDimensionControl = new L.Control.TimeDimensionCustom(
+            {{ this.options|tojson }}
+        );
+        {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
-              var {{this.get_name()}}_geoJsonLayer = L.geoJson({{this.data}},
-                  {{ this.get_name() }}_options
-              })
+        var geoJsonLayer = L.geoJson({{this.data}}, {
+                pointToLayer: function (feature, latLng) {
+                    if (feature.properties.icon == 'marker') {
+                        if(feature.properties.iconstyle){
+                            return new L.Marker(latLng, {
+                                icon: L.icon(feature.properties.iconstyle)});
+                        }
+                        //else
+                        return new L.Marker(latLng);
+                    }
+                    if (feature.properties.icon == 'circle') {
+                        if (feature.properties.iconstyle) {
+                            return new L.circleMarker(latLng, feature.properties.iconstyle)
+                            };
+                        //else
+                        return new L.circleMarker(latLng);
+                    }
+                    //else
 
-              var {{this.get_name()}} = L.timeDimension.layer.geoJson(
-                  {{this.get_name()}}_geoJsonLayer,
-                  {
-                      updateTimeDimension: true,
-                      addlastPoint: {{ this.add_last_point|tojson }},
-                      duration: {{ this.duration }},
-                  }
-              ).addTo({{this._parent.get_name()}});
+                    return new L.Marker(latLng);
+                },
+                style: function (feature) {
+                    return feature.properties.style;
+                },
+                onEachFeature: function(feature, layer) {
+                    if (feature.properties.popup) {
+                    layer.bindPopup(feature.properties.popup);
+                    }
+                    if (feature.properties.tooltip) {
+                        layer.bindTooltip(feature.properties.tooltip);
+                    }
+                }
+            })
 
+        var {{this.get_name()}} = L.timeDimension.layer.geoJson(
+            geoJsonLayer,
+            {
+                updateTimeDimension: true,
+                addlastPoint: {{ this.add_last_point|tojson }},
+                duration: {{ this.duration }},
+            }
+        ).addTo({{this._parent.get_name()}});
     """
     )  # noqa
     expected = normalize(tmpl.render(this=tgj))
