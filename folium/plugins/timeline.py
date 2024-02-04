@@ -84,7 +84,7 @@ class Timeline(GeoJson):
     ...     auto_play=False,
     ...     enable_keyboard_controls=True,
     ...     playback_duration=60000,
-    ... ).addTimelines(timeline).add_to(m)
+    ... ).add_timelines(timeline).add_to(m)
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
       `style`, `point_to_layer` and/or `on_each_feature`.
