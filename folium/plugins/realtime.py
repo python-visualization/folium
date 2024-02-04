@@ -4,6 +4,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.map import Layer
 from folium.utilities import JsCode, camelize, parse_options
 
 
@@ -69,6 +70,11 @@ class Realtime(JSCSSMixin, MacroElement):
             {{ this.get_name() }}_options["{{key}}"] = {{ value }};
             {% endfor %}
 
+            {% if this.container -%}
+                {{ this.get_name() }}_options["container"]
+                    = {{ this.container.get_name() }};
+            {% endif -%}
+
             var {{ this.get_name() }} = new L.realtime(
             {% if this.src is string or this.src is mapping -%}
                 {{ this.src|tojson }},
@@ -98,11 +104,13 @@ class Realtime(JSCSSMixin, MacroElement):
         get_feature_id: Optional[JsCode] = None,
         update_feature: Optional[JsCode] = None,
         remove_missing: bool = False,
+        container: Optional[Layer] = None,
         **kwargs
     ):
         super().__init__()
         self._name = "Realtime"
         self.src = source
+        self.container = container
 
         kwargs["start"] = start
         kwargs["interval"] = interval
