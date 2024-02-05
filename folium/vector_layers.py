@@ -2,6 +2,7 @@
 Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 
 """
+
 from typing import List, Optional, Sequence, Union
 
 from branca.element import MacroElement

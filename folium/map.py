@@ -2,6 +2,7 @@
 Classes for drawing maps.
 
 """
+
 import warnings
 from collections import OrderedDict
 from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
