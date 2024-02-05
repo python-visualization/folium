@@ -517,9 +517,9 @@ class GeoJson(Layer):
 
     >>> # Provide a style_function that color all states green but Alabama.
     >>> style_function = lambda x: {
-    ...     "fillColor": "#0000ff"
-    ...     if x["properties"]["name"] == "Alabama"
-    ...     else "#00ff00"
+    ...     "fillColor": (
+    ...         "#0000ff" if x["properties"]["name"] == "Alabama" else "#00ff00"
+    ...     )
     ... }
     >>> GeoJson(geojson, style_function=style_function)
 
@@ -947,9 +947,9 @@ class TopoJson(JSCSSMixin, Layer):
 
     >>> # Provide a style_function that color all states green but Alabama.
     >>> style_function = lambda x: {
-    ...     "fillColor": "#0000ff"
-    ...     if x["properties"]["name"] == "Alabama"
-    ...     else "#00ff00"
+    ...     "fillColor": (
+    ...         "#0000ff" if x["properties"]["name"] == "Alabama" else "#00ff00"
+    ...     )
     ... }
     >>> TopoJson(topo_json, "object.myobject", style_function=style_function)
 
