@@ -23,7 +23,7 @@ m
 
 ```{code-cell} ipython3
 m = folium.Map(location=(30, 20), zoom_start=4)
-MiniMap().add_to(m)
+MiniMap(tile_layer="Cartodb dark_matter").add_to(m)
 m
 ```
 
