@@ -15,7 +15,7 @@ from folium.utilities import (
     validate_location,
     validate_locations,
     validate_multi_locations,
-    parse_font_size
+    parse_font_size,
 )
 
 
@@ -230,11 +230,13 @@ def test_javascript_identifier_path_to_array_notation(text, result):
 def test_parse_font_size_valid(value, expected):
     assert parse_font_size(value) == expected
 
-invalid_values = [
-    "10px",
-    "1"
+
+invalid_values = ["10px", "1"]
+expected_errors = [
+    "The font size must be expressed in rem.",
+    "The font size must be expressed in rem.",
 ]
-expected_errors = ["The font size must be expressed in rem.", "The font size must be expressed in rem."]
+
 
 @pytest.mark.parametrize("value,error_message", zip(invalid_values, expected_errors))
 def test_parse_font_size_invalid(value, error_message):
