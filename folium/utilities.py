@@ -425,3 +425,13 @@ class JsCode:
 
     def __init__(self, js_code: str):
         self.js_code = js_code
+
+
+def parse_font_size(value:Union[str, int, float]) ->str:
+    """Parse a font size value."""
+    if isinstance(value, (int, float)):
+        return f"{value}rem"
+
+    if 'rem' not in value:
+        raise ValueError("The font size must be expressed in rem.")
+    return value
