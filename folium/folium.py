@@ -17,6 +17,7 @@ from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
     _parse_size,
+    parse_font_size,
     parse_options,
     temp_html_filepath,
     validate_location,
@@ -186,7 +187,7 @@ class Map(JSCSSMixin, MacroElement):
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
-                .leaflet-container { font-size: 1rem; }
+                .leaflet-container { font-size: {{this.font_size}}; }
             </style>
         {% endmacro %}
 
@@ -235,6 +236,7 @@ class Map(JSCSSMixin, MacroElement):
         height: Union[str, float] = "100%",
         left: Union[str, float] = "0%",
         top: Union[str, float] = "0%",
+        font_size: str = "1rem",
         position: str = "relative",
         tiles: Union[str, TileLayer, None] = "OpenStreetMap",
         attr: Optional[str] = None,
@@ -276,6 +278,7 @@ class Map(JSCSSMixin, MacroElement):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
+        self.font_size = parse_font_size(font_size)
 
         max_bounds_array = (
             [[min_lat, min_lon], [max_lat, max_lon]] if max_bounds else None
