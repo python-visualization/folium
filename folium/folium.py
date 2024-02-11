@@ -153,6 +153,9 @@ class Map(JSCSSMixin, MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    font_size : int or float or string (default: '1rem')
+        The font size to use for Leaflet, can either be a number of a
+        string ending in 'rem'
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
         https://leafletjs.com/reference.html#map
@@ -236,7 +239,6 @@ class Map(JSCSSMixin, MacroElement):
         height: Union[str, float] = "100%",
         left: Union[str, float] = "0%",
         top: Union[str, float] = "0%",
-        font_size: str = "1rem",
         position: str = "relative",
         tiles: Union[str, TileLayer, None] = "OpenStreetMap",
         attr: Optional[str] = None,
@@ -255,6 +257,7 @@ class Map(JSCSSMixin, MacroElement):
         disable_3d: bool = False,
         png_enabled: bool = False,
         zoom_control: bool = True,
+        font_size: str = "1rem",
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
