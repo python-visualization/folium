@@ -11,11 +11,11 @@ from folium.utilities import (
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
     javascript_identifier_path_to_array_notation,
+    parse_font_size,
     parse_options,
     validate_location,
     validate_locations,
     validate_multi_locations,
-    parse_font_size,
 )
 
 
