@@ -46,6 +46,10 @@ or
 
     $ conda install -c conda-forge folium
 
+###### *** In case the system is required the update pip *****
+```
+python -m pip install --upgrade pip
+```
 Documentation
 -------------
 
