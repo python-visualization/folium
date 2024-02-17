@@ -32,7 +32,7 @@ class TileLayer(Layer):
 
             - "OpenStreetMap"
             - "CartoDB Positron"
-            - "CartoBD Voyager"
+            - "CartoDB Voyager"
             - "NASAGIBS Blue Marble"
 
         You can pass a custom tileset to Folium by passing a
