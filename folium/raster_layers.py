@@ -33,7 +33,7 @@ class TileLayer(Layer):
             - "OpenStreetMap"
             - "CartoDB Positron"
             - "CartoBD Voyager"
-            - "NASAGIBS Blue Marble"
+            - "NASAGIBS BlueMarble3413"
 
         You can pass a custom tileset to Folium by passing a
         :class:`xyzservices.TileProvider` or a Leaflet-style
