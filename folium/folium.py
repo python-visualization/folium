@@ -154,7 +154,7 @@ class Map(JSCSSMixin, MacroElement):
     zoom_control : bool, default True
         Display zoom controls on the map.
     font_size : int or float or string (default: '1rem')
-        The font size to use for Leaflet, can either be a number of a
+        The font size to use for Leaflet, can either be a number or a
         string ending in 'rem'
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
