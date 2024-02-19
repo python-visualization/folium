@@ -428,10 +428,11 @@ class JsCode:
 
 
 def parse_font_size(value: Union[str, int, float]) -> str:
-    """Parse a font size value."""
+    """Parse a font size value, if number set as px"""
     if isinstance(value, (int, float)):
-        return f"{value}rem"
+        return f"{value}px"
 
-    if "rem" not in value:
-        raise ValueError("The font size must be expressed in rem.")
+    if (value[-3:] != 'rem') and (value[-2:] not in ['em','px']):
+        raise ValueError("The font size must be expressed in rem, em, or px.")
     return value
+

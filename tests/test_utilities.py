@@ -222,21 +222,18 @@ def test_javascript_identifier_path_to_array_notation(text, result):
 @pytest.mark.parametrize(
     "value,expected",
     [
-        (10, "10rem"),
-        (12.5, "12.5rem"),
+        (10, "10px"),
+        (12.5, "12.5px"),
         ("1rem", "1rem"),
+        ("1em", "1em"),
     ],
 )
 def test_parse_font_size_valid(value, expected):
     assert parse_font_size(value) == expected
 
 
-invalid_values = ["10px", "1"]
-expected_errors = [
-    "The font size must be expressed in rem.",
-    "The font size must be expressed in rem.",
-]
-
+invalid_values = ["1", "1unit"]
+expected_errors = "The font size must be expressed in rem, em, or px."
 
 @pytest.mark.parametrize("value,error_message", zip(invalid_values, expected_errors))
 def test_parse_font_size_invalid(value, error_message):
