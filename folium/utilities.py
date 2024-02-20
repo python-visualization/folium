@@ -432,7 +432,6 @@ def parse_font_size(value: Union[str, int, float]) -> str:
     if isinstance(value, (int, float)):
         return f"{value}px"
 
-    if (value[-3:] != 'rem') and (value[-2:] not in ['em','px']):
+    if (value[-3:] != "rem") and (value[-2:] not in ["em", "px"]):
         raise ValueError("The font size must be expressed in rem, em, or px.")
     return value
-
