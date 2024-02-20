@@ -235,6 +235,7 @@ def test_parse_font_size_valid(value, expected):
 invalid_values = ["1", "1unit"]
 expected_errors = "The font size must be expressed in rem, em, or px."
 
+
 @pytest.mark.parametrize("value,error_message", zip(invalid_values, expected_errors))
 def test_parse_font_size_invalid(value, error_message):
     with pytest.raises(ValueError, match=error_message):
