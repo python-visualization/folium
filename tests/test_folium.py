@@ -75,7 +75,7 @@ class TestFolium:
             max_zoom=20,
             zoom_start=4,
             max_bounds=True,
-            font_size=1.5,
+            font_size="1.5rem",
             attr=attr,
         )
         self.env = Environment(loader=PackageLoader("folium", "templates"))
