@@ -150,8 +150,8 @@ class Map(JSCSSMixin, MacroElement):
         Forces Leaflet to not use hardware-accelerated CSS 3D
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
-    zoom_control : bool, default True
-        Display zoom controls on the map.
+    zoom_control : bool or position string, default True
+        Display zoom controls on the map, eventually specifying its position.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
         https://leafletjs.com/reference.html#map
@@ -210,6 +210,10 @@ class Map(JSCSSMixin, MacroElement):
             L.control.scale().addTo({{ this.get_name() }});
             {%- endif %}
 
+            {%- if this.zoom_control_position %}
+            L.control.zoom( { position: {{ this.zoom_control|tojson }} } ).addTo({{ this.get_name() }});
+            {%- endif %}
+
             {% if this.objects_to_stay_in_front %}
             function objects_in_front() {
                 {%- for obj in this.objects_to_stay_in_front %}
@@ -252,7 +256,7 @@ class Map(JSCSSMixin, MacroElement):
         no_touch: bool = False,
         disable_3d: bool = False,
         png_enabled: bool = False,
-        zoom_control: bool = True,
+        zoom_control: Union[bool, str] = True,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -284,10 +288,17 @@ class Map(JSCSSMixin, MacroElement):
         self.crs = crs
         self.control_scale = control_scale
 
+        # Zoom control position specified ?
+        if isinstance(zoom_control, str):
+            self.zoom_control_position = True
+            self.zoom_control = zoom_control
+        else:
+            self.zoom_control_position = False
+
         self.options = parse_options(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
-            zoom_control=zoom_control,
+            zoom_control=False if self.zoom_control_position else zoom_control,
             prefer_canvas=prefer_canvas,
             **kwargs,
         )
