@@ -14,11 +14,11 @@ import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
 from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement
 from branca.utilities import color_brewer
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
+from folium.template import Template
 from folium.utilities import (
     TypeJsonValue,
     TypeLine,

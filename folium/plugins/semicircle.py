@@ -1,7 +1,6 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.map import Marker
+from folium.template import Template
 from folium.utilities import parse_options
 from folium.vector_layers import path_options
 

@@ -1,10 +1,10 @@
 import warnings
 
 import numpy as np
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import Layer
+from folium.template import Template
 from folium.utilities import (
     if_pandas_df_convert_to_numpy,
     none_max,

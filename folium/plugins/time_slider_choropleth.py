@@ -1,8 +1,7 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import Layer
+from folium.template import Template
 
 
 class TimeSliderChoropleth(JSCSSMixin, Layer):

@@ -1,6 +1,5 @@
-from jinja2 import Template
-
 from folium.plugins.marker_cluster import MarkerCluster
+from folium.template import Template
 from folium.utilities import if_pandas_df_convert_to_numpy, validate_location
 
 

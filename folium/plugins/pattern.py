@@ -1,8 +1,8 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
+from folium.template import Template
 from folium.utilities import get_obj_in_upper_tree, parse_options
 
 

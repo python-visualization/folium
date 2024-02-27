@@ -1,10 +1,10 @@
-from typing import Optional, Union
+from typing import Union
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import JsCode, camelize, parse_options
+from folium.template import Template
+from folium.utilities import JsCode, TypeJsFunctionArg
 
 
 class Realtime(JSCSSMixin, MacroElement):
@@ -27,11 +27,11 @@ class Realtime(JSCSSMixin, MacroElement):
         on the map and stopped when layer is removed from the map
     interval: int, default 60000
         Automatic update interval, in milliseconds
-    get_feature_id: JsCode, optional
+    get_feature_id: str or JsCode, optional
         A JS function with a geojson `feature` as parameter
         default returns `feature.properties.id`
         Function to get an identifier to uniquely identify a feature over time
-    update_feature: JsCode, optional
+    update_feature: str or JsCode, optional
         A JS function with a geojson `feature` as parameter
         Used to update an existing feature's layer;
         by default, points (markers) are updated, other layers are discarded
@@ -44,7 +44,8 @@ class Realtime(JSCSSMixin, MacroElement):
 
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
-    `style`, `point_to_layer` and/or `on_each_feature`.
+    `style`, `point_to_layer` and/or `on_each_feature`. Make sure to wrap
+    Javascript functions in the JsCode class.
 
     Examples
     --------
@@ -52,7 +53,7 @@ class Realtime(JSCSSMixin, MacroElement):
     >>> m = folium.Map(location=[40.73, -73.94], zoom_start=12)
     >>> rt = Realtime(
     ...     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson",
-    ...     get_feature_id=JsCode("(f) => { return f.properties.objectid; }"),
+    ...     get_feature_id="(f) => { return f.properties.objectid; }",
     ...     point_to_layer=JsCode(
     ...         "(f, latlng) => { return L.circleMarker(latlng, {radius: 8, fillOpacity: 0.2})}"
     ...     ),
@@ -64,18 +65,9 @@ class Realtime(JSCSSMixin, MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            var {{ this.get_name() }}_options = {{ this.options|tojson }};
-            {% for key, value in this.functions.items() %}
-            {{ this.get_name() }}_options["{{key}}"] = {{ value }};
-            {% endfor %}
-
             var {{ this.get_name() }} = new L.realtime(
-            {% if this.src is string or this.src is mapping -%}
-                {{ this.src|tojson }},
-            {% else -%}
-                {{ this.src.js_code }},
-            {% endif -%}
-                {{ this.get_name() }}_options
+                {{ this.src|tojavascript }},
+                {{ this.options|tojavascript }}
             );
             {{ this._parent.get_name() }}.addLayer(
                 {{ this.get_name() }}._container);
@@ -95,28 +87,19 @@ class Realtime(JSCSSMixin, MacroElement):
         source: Union[str, dict, JsCode],
         start: bool = True,
         interval: int = 60000,
-        get_feature_id: Optional[JsCode] = None,
-        update_feature: Optional[JsCode] = None,
+        get_feature_id: TypeJsFunctionArg = None,
+        update_feature: TypeJsFunctionArg = None,
         remove_missing: bool = False,
         **kwargs
     ):
         super().__init__()
         self._name = "Realtime"
         self.src = source
-
-        kwargs["start"] = start
-        kwargs["interval"] = interval
-        if get_feature_id is not None:
-            kwargs["get_feature_id"] = get_feature_id
-        if update_feature is not None:
-            kwargs["update_feature"] = update_feature
-        kwargs["remove_missing"] = remove_missing
-
-        # extract JsCode objects
-        self.functions = {}
-        for key, value in list(kwargs.items()):
-            if isinstance(value, JsCode):
-                self.functions[camelize(key)] = value.js_code
-                kwargs.pop(key)
-
-        self.options = parse_options(**kwargs)
+        self.options = dict(
+            start=start,
+            interval=interval,
+            get_feature_id=JsCode.optional_create(get_feature_id),
+            update_feature=JsCode.optional_create(update_feature),
+            remove_missing=remove_missing,
+            **kwargs
+        )

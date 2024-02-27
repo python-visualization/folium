@@ -1,9 +1,8 @@
 from typing import Optional, Union
 
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer
+from folium.template import Template
 
 
 class VectorGridProtobuf(JSCSSMixin, Layer):

@@ -1,5 +1,6 @@
 from branca.element import MacroElement
-from jinja2 import Template
+
+from folium.template import Template
 
 
 class ScrollZoomToggler(MacroElement):

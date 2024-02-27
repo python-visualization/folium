@@ -20,7 +20,7 @@ m
 ```{code-cell} ipython3
 m = folium.Map()
 
-formatter = "function(num) {return L.Util.formatNum(num, 3) + ' &deg; ';};"
+formatter = "function(num) {return L.Util.formatNum(num, 3) + ' &deg; '}"
 
 MousePosition(
     position="topright",

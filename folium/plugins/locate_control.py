@@ -4,9 +4,9 @@ Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 """
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.template import Template
 from folium.utilities import parse_options
 
 

@@ -1,8 +1,8 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
+from folium.utilities import JsCode, TypeJsFunctionArg
 
 
 class MousePosition(JSCSSMixin, MacroElement):
@@ -27,14 +27,14 @@ class MousePosition(JSCSSMixin, MacroElement):
         longitude and latitude decimal degree values.
     prefix : str, default ''
         A string to be prepended to the coordinates.
-    lat_formatter : str, default None
+    lat_formatter : str or JsCode, optional
         Custom Javascript function to format the latitude value.
-    lng_formatter : str, default None
+    lng_formatter : str or JsCode, optional
         Custom Javascript function to format the longitude value.
 
     Examples
     --------
-    >>> fmtr = "function(num) {return L.Util.formatNum(num, 3) + ' º ';};"
+    >>> fmtr = "function(num) {return L.Util.formatNum(num, 3) + ' º '}"
     >>> MousePosition(
     ...     position="topright",
     ...     separator=" | ",
@@ -49,12 +49,8 @@ class MousePosition(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.Control.MousePosition(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
-            {{ this.get_name() }}.options["latFormatter"] =
-                {{ this.lat_formatter }};
-            {{ this.get_name() }}.options["lngFormatter"] =
-                {{ this.lng_formatter }};
             {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
         {% endmacro %}
     """
@@ -81,21 +77,21 @@ class MousePosition(JSCSSMixin, MacroElement):
         lng_first=False,
         num_digits=5,
         prefix="",
-        lat_formatter=None,
-        lng_formatter=None,
+        lat_formatter: TypeJsFunctionArg = None,
+        lng_formatter: TypeJsFunctionArg = None,
         **kwargs
     ):
         super().__init__()
         self._name = "MousePosition"
 
-        self.options = parse_options(
+        self.options = dict(
             position=position,
             separator=separator,
             empty_string=empty_string,
             lng_first=lng_first,
             num_digits=num_digits,
             prefix=prefix,
+            lat_formatter=JsCode.optional_create(lat_formatter),
+            lng_formatter=JsCode.optional_create(lng_formatter),
             **kwargs
         )
-        self.lat_formatter = lat_formatter or "undefined"
-        self.lng_formatter = lng_formatter or "undefined"

@@ -8,11 +8,11 @@ import webbrowser
 from typing import Any, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure, MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import FitBounds, Layer
 from folium.raster_layers import TileLayer
+from folium.template import Template
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
