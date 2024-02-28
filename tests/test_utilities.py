@@ -219,6 +219,7 @@ def test_escape_double_quotes(text, result):
 def test_javascript_identifier_path_to_array_notation(text, result):
     assert javascript_identifier_path_to_array_notation(text) == result
 
+
 def test_js_code_init_str():
     js_code = JsCode("hi")
     assert isinstance(js_code, JsCode)
