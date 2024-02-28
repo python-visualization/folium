@@ -12,6 +12,7 @@ from folium.utilities import (
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
     javascript_identifier_path_to_array_notation,
+    parse_font_size,
     parse_options,
     validate_location,
     validate_locations,
@@ -230,3 +231,26 @@ def test_js_code_init_js_code():
     js_code_2 = JsCode(js_code)
     assert isinstance(js_code_2, JsCode)
     assert isinstance(js_code_2.js_code, str)
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        (10, "10px"),
+        (12.5, "12.5px"),
+        ("1rem", "1rem"),
+        ("1em", "1em"),
+    ],
+)
+def test_parse_font_size_valid(value, expected):
+    assert parse_font_size(value) == expected
+
+
+invalid_values = ["1", "1unit"]
+expected_errors = "The font size must be expressed in rem, em, or px."
+
+
+@pytest.mark.parametrize("value,error_message", zip(invalid_values, expected_errors))
+def test_parse_font_size_invalid(value, error_message):
+    with pytest.raises(ValueError, match=error_message):
+        parse_font_size(value)
