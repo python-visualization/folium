@@ -17,6 +17,7 @@ from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
     _parse_size,
+    parse_font_size,
     parse_options,
     temp_html_filepath,
     validate_location,
@@ -152,6 +153,9 @@ class Map(JSCSSMixin, MacroElement):
         rare environments) even if they're supported.
     zoom_control : bool, default True
         Display zoom controls on the map.
+    font_size : int or float or string (default: '1rem')
+        The font size to use for Leaflet, can either be a number or a
+        string ending in 'rem', 'em', or 'px'.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
         https://leafletjs.com/reference.html#map
@@ -186,7 +190,7 @@ class Map(JSCSSMixin, MacroElement):
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
-                .leaflet-container { font-size: 1rem; }
+                .leaflet-container { font-size: {{this.font_size}}; }
             </style>
         {% endmacro %}
 
@@ -253,6 +257,7 @@ class Map(JSCSSMixin, MacroElement):
         disable_3d: bool = False,
         png_enabled: bool = False,
         zoom_control: bool = True,
+        font_size: str = "1rem",
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -276,6 +281,7 @@ class Map(JSCSSMixin, MacroElement):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
+        self.font_size = parse_font_size(font_size)
 
         max_bounds_array = (
             [[min_lat, min_lon], [max_lat, max_lon]] if max_bounds else None

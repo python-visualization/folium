@@ -423,5 +423,18 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
 class JsCode:
     """Wrapper around Javascript code."""
 
-    def __init__(self, js_code: str):
-        self.js_code = js_code
+    def __init__(self, js_code: Union[str, "JsCode"]):
+        if isinstance(js_code, JsCode):
+            self.js_code: str = js_code.js_code
+        else:
+            self.js_code = js_code
+
+
+def parse_font_size(value: Union[str, int, float]) -> str:
+    """Parse a font size value, if number set as px"""
+    if isinstance(value, (int, float)):
+        return f"{value}px"
+
+    if (value[-3:] != "rem") and (value[-2:] not in ["em", "px"]):
+        raise ValueError("The font size must be expressed in rem, em, or px.")
+    return value

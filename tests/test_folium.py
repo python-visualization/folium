@@ -75,6 +75,7 @@ class TestFolium:
             max_zoom=20,
             zoom_start=4,
             max_bounds=True,
+            font_size="1.5rem",
             attr=attr,
         )
         self.env = Environment(loader=PackageLoader("folium", "templates"))
@@ -94,6 +95,7 @@ class TestFolium:
         assert self.m.top == (0, "%")
         assert self.m.global_switches.no_touch is False
         assert self.m.global_switches.disable_3d is False
+        assert self.m.font_size == "1.5rem"
         assert self.m.to_dict() == {
             "name": "Map",
             "id": self.m._id,
