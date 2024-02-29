@@ -6,9 +6,6 @@ import folium
 import folium.plugins
 ```
 
-# PolylineTextPath and AntPath
-
-
 ## PolyLineTextPath
 
 ```{code-cell} ipython3
@@ -89,20 +86,6 @@ folium.plugins.PolyLineTextPath(line_to_new_delhi, "To New Delhi", offset=-5).ad
 
 
 folium.plugins.PolyLineTextPath(line_to_hanoi, "To Hanoi", offset=-5).add_to(m)
-
-m
-```
-
-## Antpath
-
-```{code-cell} ipython3
-m = folium.Map()
-
-folium.plugins.AntPath(
-    locations=wind_locations, reverse="True", dash_array=[20, 30]
-).add_to(m)
-
-m.fit_bounds(m.get_bounds())
 
 m
 ```
