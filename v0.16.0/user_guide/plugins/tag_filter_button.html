@@ -1,0 +1,1368 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>TagFilterButton &#8212; Folium 0.16.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../_static/documentation_options.js?v=7de89ed4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/plugins/tag_filter_button';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/latest/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.16.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Terminator" href="terminator.html" />
+    <link rel="prev" title="SideBySideLayers" href="side_by_side_layers.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/folium_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/folium_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Folium</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        Home
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../advanced_guide.html">
+                        Advanced guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../index.html">
+                        Home
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../user_guide.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../advanced_guide.html">
+                        Advanced guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../reference.html">
+                        API reference
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../map.html">Map</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui_elements.html">UI elements</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui_elements/layer_control.html">LayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui_elements/popups.html">Popups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui_elements/icons.html">Icons</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../raster_layers.html">Raster layers</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../raster_layers/tiles.html">Tiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../raster_layers/image_overlay.html">ImageOverlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../raster_layers/video_overlay.html">VideoOverlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../raster_layers/wms_tile_layer.html">WmsTileLayer</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../vector_layers.html">Vector layers</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../vector_layers/circle_and_circle_marker.html">Circle and CircleMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vector_layers/polyline.html">PolyLine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vector_layers/rectangle.html">Rectangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vector_layers/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../vector_layers/colorline.html">ColorLine</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../geojson.html">GeoJSON and choropleth</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson.html">Using <code class="docutils literal notranslate"><span class="pre">GeoJson</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../features.html">Features</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../features/fit_overlays.html">FitOverlays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../features/click_related_classes.html">Click-related classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../plugins.html">Plugins</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="boat_marker.html">BoatMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="beautify_icon.html">BeautifyIcon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="draw.html">Draw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dual_map.html">DualMap plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="featuregroup_subgroup.html">FeatureGroupSubGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="float_image.html">FloatImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fullscreen.html">Fullscreen</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geocoder.html">Geocoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="grouped_layer_control.html">GroupedLayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heatmap.html">Heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heatmap_with_time.html">HeatMapWithTime Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="locate_control.html">LocateControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marker_cluster.html">MarkerCluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mini_map.html">MiniMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_textpath_and_antpath.html">PolylineTextPath and AntPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll_zoom_toggler.html">ScrollZoomToggler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="search.html">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="semi_circle.html">SemiCircle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="side_by_side_layers.html">SideBySideLayers</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">TagFilterButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="terminator.html">Terminator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeslider_choropleth.html">TimeSliderChoropleth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timestamped_geojson.html">TimestampedGeoJson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_tiles.html">Vector tiles using VectorGridProtobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="WmsTimeDimension.html">TimestampedWmsTileLayers</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../user_guide.html" class="nav-link">User guide</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../plugins.html" class="nav-link">Plugins</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">TagFilterButton</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="TagFilterButton">
+<h1>TagFilterButton<a class="headerlink" href="#TagFilterButton" title="Link to this heading">#</a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">folium</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="c1"># Generate base data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span> <span class="o">+</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]))</span>
+<span class="c1"># Generate the data to segment by (levels of another pandas column in practical usage)</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">category_column</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
+</pre></div>
+</div>
+</div>
+<p>Create markers, and add tags to each marker. There can be multiple tags per marker, but in this example we add just one.</p>
+<p>Then, create the <code class="docutils literal notranslate"><span class="pre">TagFilterButton</span></code> object and let it know which tags you want to filter on.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">folium.plugins</span> <span class="kn">import</span> <span class="n">TagFilterButton</span>
+
+<span class="c1"># Create map and add the data with additional parameter tags as the segmentation</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">48.</span><span class="p">,</span> <span class="mf">5.</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">latlng</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="n">category</span> <span class="o">=</span> <span class="n">category_column</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">Marker</span><span class="p">(</span>
+        <span class="nb">tuple</span><span class="p">(</span><span class="n">latlng</span><span class="p">),</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="n">category</span><span class="p">]</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">TagFilterButton</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+
+        &lt;script&gt;
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        &lt;/script&gt;
+
+    &lt;style&gt;html, body {width: 100%;height: 100%;margin: 0;padding: 0;}&lt;/style&gt;
+    &lt;style&gt;#map {position:absolute;top:0;bottom:0;right:0;left:0;}&lt;/style&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_5a0a9bb8635f9d6a6d82b75f6db16727 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/css-ripple-effect@1.0.5/dist/ripple.min.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_5a0a9bb8635f9d6a6d82b75f6db16727&quot; &gt;&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;script&gt;
+
+
+            var map_5a0a9bb8635f9d6a6d82b75f6db16727 = L.map(
+                &quot;map_5a0a9bb8635f9d6a6d82b75f6db16727&quot;,
+                {
+                    center: [48.0, 5.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 7,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+
+
+
+
+            var tile_layer_81d9dd6ad97a7cb5b469ba3f56fc2a2b = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            );
+
+
+            tile_layer_81d9dd6ad97a7cb5b469ba3f56fc2a2b.addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_78b1ab8f684ec624d88a09ab26fc0b30 = L.marker(
+                [46.673583491597384, 4.587175558721372],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_07cb42a73c7f1d79b6d0fb67b8d8cd46 = L.marker(
+                [47.90724428758455, 6.372625863193132],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0505913a1bc1d0098c90420d6861ac8e = L.marker(
+                [46.95408010642593, 4.05423316820086],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_980c8e9c88a80d4e0ba204b385cb3af3 = L.marker(
+                [47.66826742911176, 4.3883175967362185],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_7314fae29f33c53404e0befd4554d9fe = L.marker(
+                [49.00774318166965, 5.015174568139635],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_37d9b2245e7265a88d97d9a883f85108 = L.marker(
+                [47.778135511669525, 5.658624061742999],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ff83077a5af8667535f829ee4bf03004 = L.marker(
+                [49.88849974215421, 4.185568488896391],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f98fc2212e2d597a21f230735c9b19da = L.marker(
+                [48.445280469230866, 5.897008031744482],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_19b4509e758244056e61118f8d7292a6 = L.marker(
+                [46.09409606033966, 4.516819438279297],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_b64dada007fa87abe12697945a738979 = L.marker(
+                [47.27656064446902, 4.205602397368832],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e751734d3b0ba4bb5329cfaec333b946 = L.marker(
+                [46.332222312052075, 4.5145424324498435],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0308d323a3a710393e7307f4c7cce856 = L.marker(
+                [49.34626916436539, 5.610612671519629],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0c7ecbb494e490c17ab33c141fba60d4 = L.marker(
+                [49.32419983526535, 4.259775088056137],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_6c8f237df0164ebc288c8e944cd0b569 = L.marker(
+                [47.84650193184006, 6.751040736369146],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_6386fb2cda3d9ead4284a62575da9c34 = L.marker(
+                [46.99261921711781, 4.677243808942145],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_cd262401595578a3de39140e05b79efc = L.marker(
+                [49.64812543435886, 6.659257900318812],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_1f15063e792161a092fe91046614daa7 = L.marker(
+                [47.58531662277676, 4.419697684807301],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_8e5a7b6389cfa920062eed63b865a9a9 = L.marker(
+                [47.099772932420876, 5.624762106245049],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_3d7f7ac9a4b15e9388db1437292c4575 = L.marker(
+                [46.919948057668485, 4.172649020746551],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_6ca7d47caea04acef310cdecb37e1fb0 = L.marker(
+                [47.52409463437263, 5.462592015196273],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ea25b1d2c4c302e45efe3bdd8ad4d144 = L.marker(
+                [47.73320377673922, 3.506318191514687],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_d4b2f931c31b6ffa1946384ed6762e04 = L.marker(
+                [47.60328706302358, 4.427444273753951],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_9d72cadaacaae22396d9b5ff0257483d = L.marker(
+                [49.46771176176328, 3.734514239281154],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ff93ff872a8d2f5cdeedf67f4f041caf = L.marker(
+                [47.048369174938365, 5.311266275317002],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_b92b345b5243942c4110c072b17ef8c7 = L.marker(
+                [48.89642808659916, 3.6003486447669775],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_35ecbda08d13e700a484a0fbcd9affa9 = L.marker(
+                [47.62378750862735, 4.591415202162041],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_13cc9421186f5438acaef7913a78e445 = L.marker(
+                [47.21452337346997, 4.116926076219732],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_3cd0062c6803df45a8442c4a3cd5a9ad = L.marker(
+                [48.86992815492579, 5.903805427455017],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_7a4e9dac13e27fa9bc7309c78f48d1df = L.marker(
+                [47.6151583794223, 4.013887345469689],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ba0d6beb6810efb727dfb98e2bb5465f = L.marker(
+                [49.06655914921784, 6.99825142488821],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_570d17ecaa663341408fa7fa9ebc7279 = L.marker(
+                [48.10430169435428, 5.8714228363963015],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_5a84b86c9f1f5a00cd08b3404c752ae4 = L.marker(
+                [49.67459469212643, 4.981338734679923],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_5e503e55361fecd4f30d28380733f8ca = L.marker(
+                [47.86713414549292, 5.081144158233619],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e77a8acad902dea66031f145c9f2ce5a = L.marker(
+                [45.87323890322705, 7.17282036675984],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e57947eef1c050eb7af02001df80551a = L.marker(
+                [47.242904857318536, 4.257642591627186],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_96ef234953f15b191f5b1176fb2268eb = L.marker(
+                [46.43593646189227, 5.310537661421706],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_360e4d014b9cf592ab1f44fa2753b819 = L.marker(
+                [47.43604041681543, 3.2453441672746246],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_33d1999bde36d82c912f6889eb48541a = L.marker(
+                [48.70956128166391, 5.199150947942775],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0aee224cb4b8626c8f2a65d157f318d1 = L.marker(
+                [48.43955124837555, 4.866788187440299],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_15ccb15a90488ea99af0be1f9cd8ceaf = L.marker(
+                [48.12427434276182, 4.110074264066316],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_a05b06d037a0844388d32ac70af77ab4 = L.marker(
+                [48.94086043689135, 4.48103803446949],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ecca7f45840627ecf27d6fc2b7a20544 = L.marker(
+                [48.01674840856932, 5.495371477996259],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_9b70ede0e6926e461edf9e3dcae7478c = L.marker(
+                [47.58986761725409, 5.872774564751652],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_c30c1a4700da56deac8f96ba3206e1e6 = L.marker(
+                [48.92990620768832, 5.505440950516785],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0addf8489bde8ce904bbd0015180c463 = L.marker(
+                [47.32819644979087, 6.975772290917913],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e0daea4286ea8f6d654403a1eb12d002 = L.marker(
+                [47.324866307725, 5.684960898000322],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_a1ebe6a4960ee1a723062f7983a3eb4f = L.marker(
+                [44.58593976032931, 2.049352459869668],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f5dcf92f04f242fb5eb5abd720d81646 = L.marker(
+                [49.07883471305306, 5.274550639704722],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_49deff644898b9edb2a6038c3133084f = L.marker(
+                [47.543777011283304, 2.9463685432487083],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f672fd9ce5e80454c3837af8cea9b872 = L.marker(
+                [47.78017701030698, 5.951799181605207],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f2f694a472b097856bc88f24fd9ad45d = L.marker(
+                [47.03402367881788, 6.334807682626814],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_c912a1e191ec81700c3b5f8e91117052 = L.marker(
+                [49.333438122378716, 5.285424784258478],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_3c05418f94e2affef0f04a5b330f3548 = L.marker(
+                [48.0912507199278, 5.623678810492766],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_912349ec5909f51ca17892cceabc5fbf = L.marker(
+                [45.504576978233644, 5.170096411493199],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_2f50c1fe616c61243ed01e3814ac098b = L.marker(
+                [48.99810863674188, 3.839816681673498],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_67aa04fa0f3bebbeed1e1ca2af79e6dc = L.marker(
+                [48.744366310754, 4.828756609803643],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_a74d2b1c8a5434224fcdbdaa5c83e825 = L.marker(
+                [49.53409542554318, 6.110968664769913],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_11b28ab21abcfc2794346338be4193fe = L.marker(
+                [47.836880044047874, 5.440312492104022],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_3e4a252a018ef4cb978a0955db1596a3 = L.marker(
+                [47.4250617963523, 4.213437248265432],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_99ced83528b1b6a7a29ae500d3ce30c8 = L.marker(
+                [48.931552106020476, 4.081944413506333],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_7504712eef14db35013dc6ede9c3e7f4 = L.marker(
+                [47.61363075297302, 4.948702925117884],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_84b7f50f6dd183f09c12bb27dd44deef = L.marker(
+                [49.31809110855905, 5.798700934244467],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_2c558bf1229cca3c478f06e9632e4665 = L.marker(
+                [50.39822827753909, 4.591273328170618],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_cfff39c7464a800135ef79d281e50c02 = L.marker(
+                [47.12836259792819, 3.38413066619026],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e6bcb425f039d70adc8bc773ebcb7c8b = L.marker(
+                [47.87939934208258, 5.495131483494515],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_12f3cb7e2139c03453500a2159423aab = L.marker(
+                [47.16748218906024, 5.831820578670018],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_d03682e7d5136f1243454bdeb2fbdc4c = L.marker(
+                [49.045710182849575, 4.062884605341511],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_2087af0cabb41b95314a4ee8fe9b3dd9 = L.marker(
+                [48.554807353003184, 5.330105692416569],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_8fed41a47477e43b21b406e5bb117599 = L.marker(
+                [48.44277254310451, 3.615573343305127],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_eb33793f533ca762523c98ef24ebd3f4 = L.marker(
+                [47.960413468211335, 4.735061135601691],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_879f6a4e91645ff939cf6dfd32884058 = L.marker(
+                [48.31811296866053, 5.822815873227666],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_da96592084377b76e92d0edb15da0792 = L.marker(
+                [47.928898728612985, 4.119178099898603],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_edad512f76899d618704be3f0a1ed40a = L.marker(
+                [50.456032217132886, 6.016145465772267],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_e2d33d67b37877e3e88c94e516827f8f = L.marker(
+                [46.68478588303747, 4.382471829007508],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_beb7194222990c5e33f565a443df8945 = L.marker(
+                [51.25539728864658, 6.110922685420373],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f8106f10ec540494ce4a71b7baa22294 = L.marker(
+                [48.18715397115977, 4.942599010398303],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_aa163da11aeb9b2d3010c55653be58d0 = L.marker(
+                [48.093658397031525, 5.895552338751151],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_8d20078c57bdb444752d25a941a78d17 = L.marker(
+                [47.10577975814484, 4.774676398037763],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_eed930bd5bb69311970ad36d08667cfc = L.marker(
+                [48.13963695857246, 4.156671285464962],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_646937c8b8934668ae5836f1866ea2bd = L.marker(
+                [50.83409199357168, 3.814650876972132],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f1e8a751d9d0fc33274747ce37715258 = L.marker(
+                [48.303150701725166, 5.316700744220219],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_04e55ab56bc445711856558c60a2fe25 = L.marker(
+                [47.99840616857974, 5.581454448482121],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f0ca276d74b5f4409d618916c5142ef7 = L.marker(
+                [49.062327350444, 6.834902242166239],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_52c424c2bf89f0d66942c410c23f8b0b = L.marker(
+                [49.13541493070376, 5.499523660831989],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_11aa20a0e72dba3510edf046308d7976 = L.marker(
+                [48.929171802624836, 3.354378264316619],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_265dd971e1922f4fb6b34600d46531ac = L.marker(
+                [49.50903231666071, 4.544294615788279],
+                {&quot;tags&quot;: [&quot;category4&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_b6420a384503e79725c2238782837bcb = L.marker(
+                [49.18033426978401, 6.767488390108301],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_f0b72cb2b0545fe0a19f0d74794ad020 = L.marker(
+                [49.3888918638851, 4.943430220909328],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_ac0bba5964397b8b0df4b66fccc34b26 = L.marker(
+                [50.413722069034094, 6.909630258009302],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_02264ba30d7b2b2bbe129d29a0a08c15 = L.marker(
+                [49.40838370975513, 5.051877371355611],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_513a732698bafd062d88a3d7252b146d = L.marker(
+                [47.749271113334345, 5.29911822165853],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_66dd9da76977ef1f2f27a8cbeb98ae1b = L.marker(
+                [47.39127273702174, 4.725887987057044],
+                {&quot;tags&quot;: [&quot;category1&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0a697d41a713c53b516757d728228d05 = L.marker(
+                [47.03029543465957, 3.200108465689336],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_d8be8a7c568bab9b4b3cd4fe384784cb = L.marker(
+                [49.031767526487016, 3.9799335517150576],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_4cecac902c4045b41920838512efa522 = L.marker(
+                [48.500706464768456, 4.5133959116686775],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_4a6430f594a4479323f7280ebb6fca0a = L.marker(
+                [47.647954045311465, 5.201384752879872],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_0cdd5c54bd14630dbb3937217741a861 = L.marker(
+                [48.647065047825606, 4.5768836548803264],
+                {&quot;tags&quot;: [&quot;category3&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_95d97a85113504c494ae64caaa8e1f19 = L.marker(
+                [48.09621424879994, 5.857219700928815],
+                {&quot;tags&quot;: [&quot;category2&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_9d3fa45151ac036e7516cd31c53ed053 = L.marker(
+                [49.073181639285835, 4.919627389943887],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var marker_b2096681b501db5c3c6f7f51210c46ec = L.marker(
+                [49.92876519815058, 5.273018004185697],
+                {&quot;tags&quot;: [&quot;category5&quot;]}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+
+            var tag_filter_button_6590a4b31768c3f53eda395033eb656c = L.control.tagFilterButton(
+                {&quot;clearText&quot;: &quot;clear&quot;, &quot;data&quot;: [&quot;category1&quot;, &quot;category2&quot;, &quot;category3&quot;, &quot;category4&quot;, &quot;category5&quot;], &quot;filterOnEveryClick&quot;: true, &quot;icon&quot;: &quot;fa-filter&quot;, &quot;openPopupOnHover&quot;: false}
+            ).addTo(map_5a0a9bb8635f9d6a6d82b75f6db16727);
+
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="side_by_side_layers.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SideBySideLayers</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="terminator.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Terminator</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user_guide/plugins/tag_filter_button.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Folium version 0.16.0</div>
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013, Rob Story.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
