@@ -64,7 +64,8 @@ See `our complete contributor's guide <https://github.com/python-visualization/f
 Changelog
 ---------
 
-Check the `changelog <https://raw.githubusercontent.com/python-visualization/folium/main/CHANGES.txt>`_ for a detailed list of the latest changes.
+- Release notes of v0.16.0 and higher: https://github.com/python-visualization/folium/releases
+- Older `changelog <https://raw.githubusercontent.com/python-visualization/folium/main/CHANGES.txt>`_
 
 
 Packages and plugins
