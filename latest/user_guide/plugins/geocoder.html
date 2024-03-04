@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geocoder &#8212; Folium 0.1.dev1+g0950a52 documentation</title>
+    <title>Geocoder &#8212; Folium 0.1.dev1+ga00c3c3 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=bc28a326"></script>
+    <script src="../../_static/documentation_options.js?v=19de88f2"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -422,6 +422,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../plugins.html">Plugins</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="antpath.html">Antpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boat_marker.html">BoatMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="beautify_icon.html">BeautifyIcon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="draw.html">Draw</a></li>
@@ -440,7 +441,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="polyline_textpath_and_antpath.html">PolylineTextPath and AntPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_textpath.html">PolyLineTextPath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime plugin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scroll_zoom_toggler.html">ScrollZoomToggler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search.html">Search</a></li>
@@ -562,7 +563,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_191280e65cbaefae2aae94e0491bd7ea {
+                #map_71723ed5a6b1bd2969e8daa336447e95 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -578,14 +579,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_191280e65cbaefae2aae94e0491bd7ea&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_71723ed5a6b1bd2969e8daa336447e95&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_191280e65cbaefae2aae94e0491bd7ea = L.map(
-                &quot;map_191280e65cbaefae2aae94e0491bd7ea&quot;,
+            var map_71723ed5a6b1bd2969e8daa336447e95 = L.map(
+                &quot;map_71723ed5a6b1bd2969e8daa336447e95&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -599,32 +600,32 @@ document.write(`
 
 
 
-            var tile_layer_6f7187f639397be5e5c8485862d88b2a = L.tileLayer(
+            var tile_layer_088e8d512eeeb75f20b024808f2b6497 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-            tile_layer_6f7187f639397be5e5c8485862d88b2a.addTo(map_191280e65cbaefae2aae94e0491bd7ea);
+            tile_layer_088e8d512eeeb75f20b024808f2b6497.addTo(map_71723ed5a6b1bd2969e8daa336447e95);
 
 
 
-            var geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d = {&quot;collapsed&quot;: false, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topright&quot;, &quot;provider&quot;: &quot;nominatim&quot;, &quot;providerOptions&quot;: {}, &quot;zoom&quot;: 11};
+            var geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5 = {&quot;collapsed&quot;: false, &quot;defaultMarkGeocode&quot;: true, &quot;position&quot;: &quot;topright&quot;, &quot;provider&quot;: &quot;nominatim&quot;, &quot;providerOptions&quot;: {}, &quot;zoom&quot;: 11};
 
             // note: geocoder name should start with lowercase
-            var geocoderName_geocoder_49ae6bb1bf65110aaace62f2c405267d = geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d[&quot;provider&quot;];
+            var geocoderName_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5 = geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5[&quot;provider&quot;];
 
-            var customGeocoder_geocoder_49ae6bb1bf65110aaace62f2c405267d = L.Control.Geocoder[ geocoderName_geocoder_49ae6bb1bf65110aaace62f2c405267d ](
-                geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d[&#x27;providerOptions&#x27;]
+            var customGeocoder_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5 = L.Control.Geocoder[ geocoderName_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5 ](
+                geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5[&#x27;providerOptions&#x27;]
             );
-            geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d[&quot;geocoder&quot;] = customGeocoder_geocoder_49ae6bb1bf65110aaace62f2c405267d;
+            geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5[&quot;geocoder&quot;] = customGeocoder_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5;
 
             L.Control.geocoder(
-                geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d
+                geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5
             ).on(&#x27;markgeocode&#x27;, function(e) {
-                var zoom = geocoderOpts_geocoder_49ae6bb1bf65110aaace62f2c405267d[&#x27;zoom&#x27;] || map_191280e65cbaefae2aae94e0491bd7ea.getZoom();
-                map_191280e65cbaefae2aae94e0491bd7ea.setView(e.geocode.center, zoom);
-            }).addTo(map_191280e65cbaefae2aae94e0491bd7ea);
+                var zoom = geocoderOpts_geocoder_4aa31698747f9dfe8a0b7e99682d3ce5[&#x27;zoom&#x27;] || map_71723ed5a6b1bd2969e8daa336447e95.getZoom();
+                map_71723ed5a6b1bd2969e8daa336447e95.setView(e.geocode.center, zoom);
+            }).addTo(map_71723ed5a6b1bd2969e8daa336447e95);
 
 
 &lt;/script&gt;
@@ -701,7 +702,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+g0950a52</div>
+Folium version 0.1.dev1.dev+ga00c3c3</div>
       
         <div class="footer-item">
 

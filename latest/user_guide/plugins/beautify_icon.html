@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>BeautifyIcon &#8212; Folium 0.1.dev1+g0950a52 documentation</title>
+    <title>BeautifyIcon &#8212; Folium 0.1.dev1+ga00c3c3 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=bc28a326"></script>
+    <script src="../../_static/documentation_options.js?v=19de88f2"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -422,6 +422,7 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../plugins.html">Plugins</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="antpath.html">Antpath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="boat_marker.html">BoatMarker</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">BeautifyIcon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="draw.html">Draw</a></li>
@@ -440,7 +441,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="polyline_textpath_and_antpath.html">PolylineTextPath and AntPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_textpath.html">PolyLineTextPath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime plugin</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scroll_zoom_toggler.html">ScrollZoomToggler</a></li>
 <li class="toctree-l2"><a class="reference internal" href="search.html">Search</a></li>
@@ -573,7 +574,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_b4d1392ce468a849c1c08fc26b8824ed {
+                #map_66f09e3c657b5dff0a62f54b4863653c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -589,14 +590,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_b4d1392ce468a849c1c08fc26b8824ed&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_66f09e3c657b5dff0a62f54b4863653c&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_b4d1392ce468a849c1c08fc26b8824ed = L.map(
-                &quot;map_b4d1392ce468a849c1c08fc26b8824ed&quot;,
+            var map_66f09e3c657b5dff0a62f54b4863653c = L.map(
+                &quot;map_66f09e3c657b5dff0a62f54b4863653c&quot;,
                 {
                     center: [45.5, -122.0],
                     crs: L.CRS.EPSG3857,
@@ -610,64 +611,64 @@ document.write(`
 
 
 
-            var tile_layer_20dda2ba5a3b1bfd5a004aa283f3e836 = L.tileLayer(
+            var tile_layer_cea36156bfc5cdccbeb2261a9493993b = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-            tile_layer_20dda2ba5a3b1bfd5a004aa283f3e836.addTo(map_b4d1392ce468a849c1c08fc26b8824ed);
+            tile_layer_cea36156bfc5cdccbeb2261a9493993b.addTo(map_66f09e3c657b5dff0a62f54b4863653c);
 
 
-            var marker_a348feed1ff4442a77975a31367b1512 = L.marker(
+            var marker_2aadb19c55dd116425c2f963feb735b8 = L.marker(
                 [46.0, -122.0],
                 {}
-            ).addTo(map_b4d1392ce468a849c1c08fc26b8824ed);
+            ).addTo(map_66f09e3c657b5dff0a62f54b4863653c);
 
 
-            var beautify_icon_c40230ebc9cec254b6b24e96433d01c9 = new L.BeautifyIcon.icon(
+            var beautify_icon_52e748b92b9e368f9f0856c2cc2523fa = new L.BeautifyIcon.icon(
                 {&quot;backgroundColor&quot;: &quot;#FFF&quot;, &quot;borderColor&quot;: &quot;#b3334f&quot;, &quot;borderWidth&quot;: 3, &quot;icon&quot;: &quot;plane&quot;, &quot;iconShape&quot;: &quot;triangle&quot;, &quot;innerIconStyle&quot;: &quot;&quot;, &quot;isAlphaNumericIcon&quot;: false, &quot;spin&quot;: false, &quot;textColor&quot;: &quot;#b3334f&quot;}
             )
-            marker_a348feed1ff4442a77975a31367b1512.setIcon(beautify_icon_c40230ebc9cec254b6b24e96433d01c9);
+            marker_2aadb19c55dd116425c2f963feb735b8.setIcon(beautify_icon_52e748b92b9e368f9f0856c2cc2523fa);
 
 
-        var popup_f6d06210703fe4d01245baf69178787c = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
-
-
-
-                var html_6924815b2633d4ac213183821a3f3b02 = $(`&lt;div id=&quot;html_6924815b2633d4ac213183821a3f3b02&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Portland, OR&lt;/div&gt;`)[0];
-                popup_f6d06210703fe4d01245baf69178787c.setContent(html_6924815b2633d4ac213183821a3f3b02);
+        var popup_716939803e093da8fa5cab506369abc9 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
 
 
 
-        marker_a348feed1ff4442a77975a31367b1512.bindPopup(popup_f6d06210703fe4d01245baf69178787c)
+                var html_b47ef6b759b126fa82dd3bbfa74afc93 = $(`&lt;div id=&quot;html_b47ef6b759b126fa82dd3bbfa74afc93&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Portland, OR&lt;/div&gt;`)[0];
+                popup_716939803e093da8fa5cab506369abc9.setContent(html_b47ef6b759b126fa82dd3bbfa74afc93);
+
+
+
+        marker_2aadb19c55dd116425c2f963feb735b8.bindPopup(popup_716939803e093da8fa5cab506369abc9)
         ;
 
 
 
 
-            var marker_fb38629e3910d3b8d5a072527bff2b7f = L.marker(
+            var marker_e743102ad079e11a08211752f4f3321e = L.marker(
                 [50.0, -122.0],
                 {}
-            ).addTo(map_b4d1392ce468a849c1c08fc26b8824ed);
+            ).addTo(map_66f09e3c657b5dff0a62f54b4863653c);
 
 
-            var beautify_icon_19d8be834bfa2ef4ae9057b324944f81 = new L.BeautifyIcon.icon(
+            var beautify_icon_55a71cbca6221fbc0ab9ec698d42b0b5 = new L.BeautifyIcon.icon(
                 {&quot;backgroundColor&quot;: &quot;#FFF&quot;, &quot;borderColor&quot;: &quot;#00ABDC&quot;, &quot;borderWidth&quot;: 3, &quot;innerIconStyle&quot;: &quot;margin-top:0;&quot;, &quot;isAlphaNumericIcon&quot;: true, &quot;spin&quot;: false, &quot;text&quot;: 10, &quot;textColor&quot;: &quot;#00ABDC&quot;}
             )
-            marker_fb38629e3910d3b8d5a072527bff2b7f.setIcon(beautify_icon_19d8be834bfa2ef4ae9057b324944f81);
+            marker_e743102ad079e11a08211752f4f3321e.setIcon(beautify_icon_55a71cbca6221fbc0ab9ec698d42b0b5);
 
 
-        var popup_b950c106b9b3d2e0161f0a5a771d5585 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
-
-
-
-                var html_208857ab3ed6c150a2b123329239454a = $(`&lt;div id=&quot;html_208857ab3ed6c150a2b123329239454a&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Portland, OR&lt;/div&gt;`)[0];
-                popup_b950c106b9b3d2e0161f0a5a771d5585.setContent(html_208857ab3ed6c150a2b123329239454a);
+        var popup_2edeb4935cd74594b637eceeabcf6635 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
 
 
 
-        marker_fb38629e3910d3b8d5a072527bff2b7f.bindPopup(popup_b950c106b9b3d2e0161f0a5a771d5585)
+                var html_1ee6459f1207472989b666100feb0ba5 = $(`&lt;div id=&quot;html_1ee6459f1207472989b666100feb0ba5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Portland, OR&lt;/div&gt;`)[0];
+                popup_2edeb4935cd74594b637eceeabcf6635.setContent(html_1ee6459f1207472989b666100feb0ba5);
+
+
+
+        marker_e743102ad079e11a08211752f4f3321e.bindPopup(popup_2edeb4935cd74594b637eceeabcf6635)
         ;
 
 
@@ -746,7 +747,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+g0950a52</div>
+Folium version 0.1.dev1.dev+ga00c3c3</div>
       
         <div class="footer-item">
 
