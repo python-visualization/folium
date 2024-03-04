@@ -152,7 +152,8 @@ class Map(JSCSSMixin, MacroElement):
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
     zoom_control : bool or position string, default True
-        Display zoom controls on the map, eventually specifying its position.
+        Display zoom controls on the map. The default `True` places it in the top left corner.
+        Other options are 'topleft', 'topright', 'bottomleft' or 'bottomright'.
     font_size : int or float or string (default: '1rem')
         The font size to use for Leaflet, can either be a number or a
         string ending in 'rem', 'em', or 'px'.
@@ -297,6 +298,10 @@ class Map(JSCSSMixin, MacroElement):
         # Zoom control position specified ?
         if isinstance(zoom_control, str):
             self.zoom_control_position = True
+            if zoom_control not in {"topleft", "topright", "bottomleft", "bottomright"}:
+                raise ValueError(
+                    "Incorrect value for `zoom_control`, choose from 'topleft', 'topright', 'bottomleft' or 'bottomright'."
+                )
             self.zoom_control = zoom_control
         else:
             self.zoom_control_position = False
