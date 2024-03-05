@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 from branca.element import MacroElement
 from jinja2 import Template
@@ -27,11 +27,11 @@ class Realtime(JSCSSMixin, MacroElement):
         on the map and stopped when layer is removed from the map
     interval: int, default 60000
         Automatic update interval, in milliseconds
-    get_feature_id: JsCode, optional
+    get_feature_id: str or JsCode, optional
         A JS function with a geojson `feature` as parameter
         default returns `feature.properties.id`
         Function to get an identifier to uniquely identify a feature over time
-    update_feature: JsCode, optional
+    update_feature: str or JsCode, optional
         A JS function with a geojson `feature` as parameter
         Used to update an existing feature's layer;
         by default, points (markers) are updated, other layers are discarded
@@ -44,7 +44,8 @@ class Realtime(JSCSSMixin, MacroElement):
 
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
-    `style`, `point_to_layer` and/or `on_each_feature`.
+    `style`, `point_to_layer` and/or `on_each_feature`. Make sure to wrap
+    Javascript functions in the JsCode class.
 
     Examples
     --------
@@ -95,8 +96,8 @@ class Realtime(JSCSSMixin, MacroElement):
         source: Union[str, dict, JsCode],
         start: bool = True,
         interval: int = 60000,
-        get_feature_id: Optional[JsCode] = None,
-        update_feature: Optional[JsCode] = None,
+        get_feature_id: Union[JsCode, str, None] = None,
+        update_feature: Union[JsCode, str, None] = None,
         remove_missing: bool = False,
         **kwargs
     ):
@@ -107,9 +108,9 @@ class Realtime(JSCSSMixin, MacroElement):
         kwargs["start"] = start
         kwargs["interval"] = interval
         if get_feature_id is not None:
-            kwargs["get_feature_id"] = get_feature_id
+            kwargs["get_feature_id"] = JsCode(get_feature_id)
         if update_feature is not None:
-            kwargs["update_feature"] = update_feature
+            kwargs["update_feature"] = JsCode(update_feature)
         kwargs["remove_missing"] = remove_missing
 
         # extract JsCode objects
