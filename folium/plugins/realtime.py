@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Optional, Union
 
 from branca.element import MacroElement
 from jinja2 import Template
