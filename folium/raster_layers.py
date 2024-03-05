@@ -2,6 +2,7 @@
 Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOverlay
 
 """
+
 from typing import Any, Callable, Optional, Union
 
 import xyzservices
@@ -31,7 +32,7 @@ class TileLayer(Layer):
 
             - "OpenStreetMap"
             - "CartoDB Positron"
-            - "CartoBD Voyager"
+            - "CartoDB Voyager"
             - "NASAGIBS Blue Marble"
 
         You can pass a custom tileset to Folium by passing a

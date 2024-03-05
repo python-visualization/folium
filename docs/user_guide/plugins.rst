@@ -2,8 +2,9 @@ Plugins
 -------
 
 .. toctree::
-  :maxdepth: 1
+  :hidden:
 
+  plugins/antpath
   plugins/boat_marker
   plugins/beautify_icon
   plugins/draw
@@ -22,7 +23,7 @@ Plugins
   plugins/mouse_position
   plugins/pattern
   plugins/polyline_offset
-  plugins/polyline_textpath_and_antpath
+  plugins/polyline_textpath
   plugins/realtime
   plugins/scroll_zoom_toggler
   plugins/search
@@ -34,3 +35,72 @@ Plugins
   plugins/timestamped_geojson
   plugins/vector_tiles
   plugins/WmsTimeDimension
+
+.. list-table::
+    :widths: 25 75
+    :header-rows: 1
+
+    * - Plugin
+      - Description
+    * - :doc:`Ant Path <plugins/antpath>`
+      - A flux animation (like walking of ants) along a polyline.
+    * - :doc:`Boat Marker <plugins/boat_marker>`
+      - A boat marker using HTML canvas for displaying yachts and sailboats with heading and optional wind information.
+    * - :doc:`Beautify Icon <plugins/beautify_icon>`
+      - Lightweight plugin that adds colorful iconic markers without image and gives full control of style to end user (i.e. Unlimited colors and CSS styling).
+    * - :doc:`Draw <plugins/draw>`
+      - Enables drawing features like polylines, polygons, rectangles, circles and markers through a very nice user-friendly interface with icons and hints.
+    * - :doc:`Dual Map <plugins/dual_map>`
+      - Synchronized view of two maps in the same window.
+    * - :doc:`FeatureGroup Subgroup <plugins/featuregroup_subgroup>`
+      - Create Feature Groups that add their child layers into a parent group.
+    * - :doc:`Float Image <plugins/float_image>`
+      - Add a floating image in the HTML canvas on top of the map.
+    * - :doc:`Fullscreen <plugins/fullscreen>`
+      - A fullscreen button control for modern browsers, using HTML Fullscreen API.
+    * - :doc:`Geocoder <plugins/geocoder>`
+      - A clean and extensible control for both geocoding and reverse geocoding using different geocoding providers.
+    * - :doc:`Grouped Layer Control <plugins/grouped_layer_control>`
+      - Create layer control with support for grouping overlays together.
+    * - :doc:`Heatmap <plugins/heatmap>`
+      - A tiny, simple and fast heatmap plugin.
+    * - :doc:`Heatmap with Time <plugins/heatmap_with_time>`
+      - Create a time-aware heatmap.
+    * - :doc:`Locate Control <plugins/locate_control>`
+      - Geolocate a user over an encrypted connection.
+    * - :doc:`Marker Cluster <plugins/marker_cluster>`
+      - Beautiful, sophisticated, high performance marker clustering solution with smooth animations.
+    * - :doc:`Measure Control <plugins/measure_control>`
+      - Coordinate, linear, and area measure control.
+    * - :doc:`Mini Map <plugins/mini_map>`
+      - A small minimap showing the map at a different scale to aid navigation.
+    * - :doc:`Mouse Position <plugins/mouse_position>`
+      - A control that displays geographic coordinates of the mouse pointer, as it is moved over the map.
+    * - :doc:`Pattern <plugins/pattern>`
+      - Add support for pattern fills on Paths.
+    * - :doc:`Polyline Offset <plugins/polyline_offset>`
+      - Shift relative pixel offset, without actually changing the actual latitude longitude values.
+    * - :doc:`Polyline Textpath <plugins/polyline_textpath>`
+      - Write text along polylines.
+    * - :doc:`Realtime <plugins/realtime>`
+      - Put realtime data (like live tracking, GPS information) on a map.
+    * - :doc:`Scroll Zoom Toggler <plugins/scroll_zoom_toggler>`
+      - Enable/Disable zooming via a button.
+    * - :doc:`Search <plugins/search>`
+      - A control for search Markers/Features location by custom property in LayerGroup/GeoJSON.
+    * - :doc:`Semi Circle <plugins/semi_circle>`
+      - Add a marker in the shape of a semicircle, similar to the Circle class.
+    * - :doc:`Side by Side Layers <plugins/side_by_side_layers>`
+      - A control to add a split screen to compare two map overlays.
+    * - :doc:`Tag Filter Button <plugins/tag_filter_button>`
+      - Creates a Tag Filter Button to filter elements based on different criteria.
+    * - :doc:`Terminator <plugins/terminator>`
+      - Overlay day and night regions on a map.
+    * - :doc:`Timeslider Choropleth <plugins/timeslider_choropleth>`
+      - Create a choropleth with a timeslider for timestamped data.
+    * - :doc:`Timestamped GeoJSON <plugins/timestamped_geojson>`
+      - Add time-aware GeoJSON into the map.
+    * - :doc:`Vector Tiles using VectorGridProtobuf <plugins/vector_tiles>`
+      - Display gridded vector data (GeoJSON or TopoJSON sliced with geojson-vt, or protobuf vector tiles).
+    * - :doc:`WMS Time Dimension <plugins/WmsTimeDimension>`
+      - Create a time-aware WmsTileLayer.

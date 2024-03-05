@@ -3,6 +3,7 @@ Folium map Tests
 ----------------
 
 """
+
 import warnings
 
 import numpy as np

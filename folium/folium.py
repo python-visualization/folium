@@ -17,6 +17,7 @@ from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
     _parse_size,
+    parse_font_size,
     parse_options,
     temp_html_filepath,
     validate_location,
@@ -88,7 +89,7 @@ class Map(JSCSSMixin, MacroElement):
 
         - "OpenStreetMap"
         - "CartoDB Positron"
-        - "CartoBD Voyager"
+        - "CartoDB Voyager"
         - "NASAGIBS Blue Marble"
 
     You can pass a custom tileset to Folium by passing a
@@ -150,8 +151,12 @@ class Map(JSCSSMixin, MacroElement):
         Forces Leaflet to not use hardware-accelerated CSS 3D
         transforms for positioning (which may cause glitches in some
         rare environments) even if they're supported.
-    zoom_control : bool, default True
-        Display zoom controls on the map.
+    zoom_control : bool or position string, default True
+        Display zoom controls on the map. The default `True` places it in the top left corner.
+        Other options are 'topleft', 'topright', 'bottomleft' or 'bottomright'.
+    font_size : int or float or string (default: '1rem')
+        The font size to use for Leaflet, can either be a number or a
+        string ending in 'rem', 'em', or 'px'.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
         https://leafletjs.com/reference.html#map
@@ -186,7 +191,7 @@ class Map(JSCSSMixin, MacroElement):
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
-                .leaflet-container { font-size: 1rem; }
+                .leaflet-container { font-size: {{this.font_size}}; }
             </style>
         {% endmacro %}
 
@@ -208,6 +213,10 @@ class Map(JSCSSMixin, MacroElement):
 
             {%- if this.control_scale %}
             L.control.scale().addTo({{ this.get_name() }});
+            {%- endif %}
+
+            {%- if this.zoom_control_position %}
+            L.control.zoom( { position: {{ this.zoom_control|tojson }} } ).addTo({{ this.get_name() }});
             {%- endif %}
 
             {% if this.objects_to_stay_in_front %}
@@ -252,7 +261,8 @@ class Map(JSCSSMixin, MacroElement):
         no_touch: bool = False,
         disable_3d: bool = False,
         png_enabled: bool = False,
-        zoom_control: bool = True,
+        zoom_control: Union[bool, str] = True,
+        font_size: str = "1rem",
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -276,6 +286,7 @@ class Map(JSCSSMixin, MacroElement):
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
+        self.font_size = parse_font_size(font_size)
 
         max_bounds_array = (
             [[min_lat, min_lon], [max_lat, max_lon]] if max_bounds else None
@@ -284,10 +295,21 @@ class Map(JSCSSMixin, MacroElement):
         self.crs = crs
         self.control_scale = control_scale
 
+        # Zoom control position specified ?
+        if isinstance(zoom_control, str):
+            self.zoom_control_position = True
+            if zoom_control not in {"topleft", "topright", "bottomleft", "bottomright"}:
+                raise ValueError(
+                    "Incorrect value for `zoom_control`, choose from 'topleft', 'topright', 'bottomleft' or 'bottomright'."
+                )
+            self.zoom_control = zoom_control
+        else:
+            self.zoom_control_position = False
+
         self.options = parse_options(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
-            zoom_control=zoom_control,
+            zoom_control=False if self.zoom_control_position else zoom_control,
             prefer_canvas=prefer_canvas,
             **kwargs,
         )
