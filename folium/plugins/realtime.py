@@ -4,7 +4,7 @@ from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import LayerGroup
+from folium.map import Layer
 from folium.utilities import JsCode, camelize, parse_options
 
 
@@ -42,8 +42,10 @@ class Realtime(JSCSSMixin, MacroElement):
     remove_missing: bool, default False
         Should missing features between updates been automatically
         removed from the layer
-    container: LayerGroup, default GeoJson
-        Anything that in javascript implements the methods
+    container: Layer, default GeoJson
+        The container will typically be a `FeatureGroup`, `MarkerCluster` or
+        `GeoJson`, but it can be anything that generates a javascript
+        L.LayerGroup object, i.e. something that has the methods
         `addLayer` and `removeLayer`.
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
@@ -106,7 +108,7 @@ class Realtime(JSCSSMixin, MacroElement):
         get_feature_id: Optional[JsCode] = None,
         update_feature: Optional[JsCode] = None,
         remove_missing: bool = False,
-        container: Optional[LayerGroup] = None,
+        container: Optional[Layer] = None,
         **kwargs
     ):
         super().__init__()
