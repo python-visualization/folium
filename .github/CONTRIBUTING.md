@@ -72,23 +72,22 @@ The basic workflow for contributing is:
    pip install -r requirements-dev.txt
    ```
 6. In Python run `pre-commit install` to enable the commit hooks that run our linter.
-7. Install Chrome, download [chromedriver](https://sites.google.com/a/chromium.org/chromedriver/) and put it in the PATH.
-8. Make changes to your local copy of the folium repository
-9. Make sure the tests pass:
+7. Make changes to your local copy of the folium repository
+8. Make sure the tests pass:
    * in the repository folder do `pip install -e . --no-deps`  (needed for notebook tests)
    * run `python -m pytest tests --ignore=tests/selenium`
    * run `python -m pytest tests/selenium`
    * resolve all errors
-10. Commit those changes
+9. Commit those changes
     ```
     git add file1 file2 file3
     git commit -m 'a descriptive commit message'
     ```
-11. Push your updated branch to your fork
+10. Push your updated branch to your fork
    ```
    git push origin name-of-your-branch
    ```
-12. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
+11. [Open a pull request](https://help.github.com/articles/creating-a-pull-request/) to the python-visualization/folium
 
 Since we're all volunteers please help us by making your PR easy to review. That means having a clear description and only touching code that's necessary for your change.
 
@@ -117,8 +116,8 @@ The *final* PR should contain:
 - a new module in `folium/plugins` with the plugin class, with docstring
 - importing that class in `folium/plugins/__init__.py`
 - a test in `tests/plugins/test_[new plugin module].py`
-- an entry in the plugins gallery notebook `examples/Plugins.ipynb`
-- optionally, a separate example notebook to show more usage examples
+- listing the plugin in `docs/user_guide/plugins.rst`
+- a documentation module with examples in `docs/user_guide/plugins`
 
 Before doing all this work it's a good idea to open a PR with just the plugin
 to discuss whether it's something to include in folium.
