@@ -108,3 +108,27 @@ Realtime(
 
 m
 ```
+
+## Using a MarkerCluster as a container
+
+The subway stations in the previous example are not easy to distinguish at lower zoom levels.
+It is possible to use a custom container for the GeoJson. In this example we use a MarkerCluster.
+```{code-cell} ipython3
+import folium
+from folium import JsCode
+from folium.plugins import Realtime, MarkerCluster
+
+m = folium.Map(location=[40.73, -73.94], zoom_start=12)
+source = "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/subway_stations.geojson"
+
+container = MarkerCluster().add_to(m)
+Realtime(
+    source,
+    get_feature_id=JsCode("(f) => { return f.properties.objectid }"),
+    point_to_layer=JsCode("(f, latlng) => { return L.circleMarker(latlng, {radius: 8, fillOpacity: 0.2})}"),
+    container=container,
+    interval=10000,
+).add_to(m)
+
+m
+```
