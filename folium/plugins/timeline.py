@@ -19,7 +19,6 @@ class Timeline(GeoJson):
       * Add a 'start' and 'end' property to each feature. The start and end
         can be any comparable item.
 
-
       Alternatively, you can provide
       a `get_interval` function.
 
@@ -34,9 +33,6 @@ class Timeline(GeoJson):
       ----------
       data: file, dict or str.
           The geojson data you want to plot.
-
-      auto_play: bool, default True
-          Whether the animation shall start automatically at startup.
 
       get_interval: JsCode
           Called for each feature, and should return either a time range for the
@@ -122,19 +118,11 @@ class Timeline(GeoJson):
     def __init__(
         self,
         data: Union[dict, str, TextIO],
-        date_options: str = "YYYY-MM-DD HH:mm:ss",
-        point_to_layer: Optional[JsCode] = None,
-        style: Optional[JsCode] = None,
-        on_each_feature: Optional[JsCode] = None,
         get_interval: Optional[JsCode] = None,
         **kwargs
     ):
         super().__init__(data)
         self._name = "Timeline"
-
-        kwargs["point_to_layer"] = point_to_layer
-        kwargs["on_each_feature"] = on_each_feature
-        kwargs["style"] = style
 
         if get_interval is not None:
             kwargs["get_interval"] = get_interval
@@ -147,12 +135,6 @@ class Timeline(GeoJson):
                 kwargs.pop(key)
 
         self.options = parse_options(**kwargs)
-
-    def render(self, **kwargs):
-        assert isinstance(
-            self._parent, Map
-        ), "Timeline can only be added to a Map object."
-        super().render(**kwargs)
 
     def _get_self_bounds(self):
         """
@@ -237,7 +219,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
     default_js = [
         (
             "timeline",
-            "https://skeate.dev/Leaflet.timeline/examples/leaflet.timeline.js",
+            "https://cdn.jsdelivr.net/npm/leaflet.timeline@1.6.0/dist/leaflet.timeline.min.js",
         ),
         (
             "moment",
@@ -257,7 +239,6 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         show_ticks: bool = True,
         steps: int = 1000,
         playback_duration: int = 10000,
-        speed_slider: bool = True,
         **kwargs
     ):
         super().__init__()
