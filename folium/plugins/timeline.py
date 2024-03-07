@@ -46,40 +46,35 @@ class Timeline(GeoJson):
 
     Examples
     --------
+    >>> from folium.plugins import Timeline, TimelineSlider
+    >>> m = folium.Map()
 
     >>> data = requests.get(
-    ...     "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/borders.json"
+    ...     "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson"
     ... ).json()
+
     >>> timeline = Timeline(
     ...     data,
-    ...     style=JsCode(
+    ...     get_interval=JsCode(
     ...         '''
-    ...        function (data) {
-    ...            function getColorFor(str) {
-    ...                // java String#hashCode
-    ...                var hash = 0;
-    ...                for (var i = 0; i < str.length; i++) {
-    ...                    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    ...                }
-    ...                var red = (hash >> 24) & 0xff;
-    ...                var grn = (hash >> 16) & 0xff;
-    ...                var blu = (hash >> 8) & 0xff;
-    ...                return "rgb(" + red + "," + grn + "," + blu + ")";
-    ...            }
+    ...         function (quake) {
+    ...            // earthquake data only has a time, so we\'ll use that as a "start"
+    ...            // and the "end" will be that + some value based on magnitude
+    ...            // 18000000 = 30 minutes, so a quake of magnitude 5 would show on the
+    ...            // map for 150 minutes or 2.5 hours
     ...            return {
-    ...                stroke: false,
-    ...                color: getColorFor(data.properties.name),
-    ...                fillOpacity: 0.5,
+    ...                start: quake.properties.time,
+    ...                end: quake.properties.time + quake.properties.mag * 1800000,
     ...            };
-    ...        }
-    ...    '''
+    ...         };
+    ...     '''
     ...     ),
     ... ).add_to(m)
-    >>> GeoJsonPopup(fields=["name"], labels=True).add_to(timeline)
     >>> TimelineSlider(
     ...     auto_play=False,
+    ...     show_ticks=True,
     ...     enable_keyboard_controls=True,
-    ...     playback_duration=60000,
+    ...     playback_duration=30000,
     ... ).add_timelines(timeline).add_to(m)
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
