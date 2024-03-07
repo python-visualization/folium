@@ -38,7 +38,7 @@ import requests
 m = folium.Map()
 
 data = requests.get(
-    "https://raw.githubusercontent.com/python-visualization/folium-example-data/main/borders.json"
+    "https://github.com/skeate/Leaflet.timeline/blob/master/docs/examples/borders.json"
 ).json()
 
 timeline = Timeline(
