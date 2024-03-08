@@ -429,6 +429,9 @@ class JsCode:
         else:
             self.js_code = js_code
 
+    def __str__(self):
+        return self.js_code
+
 
 def parse_font_size(value: Union[str, int, float]) -> str:
     """Parse a font size value, if number set as px"""
