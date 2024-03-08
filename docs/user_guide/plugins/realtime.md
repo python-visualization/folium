@@ -6,7 +6,7 @@ import folium
 import folium.plugins
 ```
 
-# Realtime plugin
+# Realtime
 
 Put realtime data on a Leaflet map: live tracking GPS units,
 sensor data or just about anything.
