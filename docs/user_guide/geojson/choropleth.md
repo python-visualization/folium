@@ -118,7 +118,7 @@ choropleth = folium.Choropleth(
     columns=["State", "Unemployment"],
     key_on="feature.id",
     fill_color="YlGn",
-    name="Unenployment",
+    name="Unemployment",
     show=False,
 ).add_to(m)
 
