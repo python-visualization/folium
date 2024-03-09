@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Literal, Tuple
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from jinja2 import Template
@@ -23,6 +23,25 @@ class JSCSSMixin(Element):
             figure.header.add_child(CssLink(url), name=name)
 
         super().render(**kwargs)
+
+    def change_link(self, what: Literal["css", "js"], name: str, url: str):
+        """Modify a css or js link.
+
+        If `name` does not exist, the defaults will be unchanged
+        """
+
+        def update(default_list):
+            return [(n, url if n == name else u) for (n, u) in default_list]
+
+        if what == "css":
+            self.default_css = update(self.default_css)
+        elif what == "js":
+            self.default_js = update(self.default_js)
+        else:
+            raise ValueError(
+                f"""Unknown value: {what}. Must be either
+            'js' or 'css'"""
+            )
 
 
 class ElementAddToElement(MacroElement):
