@@ -1,4 +1,4 @@
-from typing import List, Literal, Tuple
+from typing import List, Literal, Sequence, Tuple
 
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from jinja2 import Template
@@ -24,24 +24,33 @@ class JSCSSMixin(Element):
 
         super().render(**kwargs)
 
-    def change_link(self, what: Literal["css", "js"], name: str, url: str):
+    def add_link(self, what: Literal["css", "js"], name: str, url: str):
         """Modify a css or js link.
 
-        If `name` does not exist, the defaults will be unchanged
+        If `name` does not exist, the link will be appended
         """
 
         def update(default_list):
-            return [(n, url if n == name else u) for (n, u) in default_list]
+            for i, pair in enumerate(default_list):
+                if pair[0] == name:
+                    default_list[i] = (name, url)
+                    break
+            else:
+                default_list.append((name, url))
 
         if what == "css":
-            self.default_css = update(self.default_css)
+            update(self.default_css)
         elif what == "js":
-            self.default_js = update(self.default_js)
+            update(self.default_js)
         else:
-            raise ValueError(
-                f"""Unknown value: {what}. Must be either
-            'js' or 'css'"""
-            )
+            raise ValueError(f"""Unknown value: {what}. Must be either 'js' or 'css'""")
+
+    def add_links(
+        self, what: Literal["css", "js"], defaults: Sequence[Tuple[str, str]]
+    ):
+        """Add multiple css or js links in a single call"""
+        for name, url in defaults:
+            self.add_link(what, name, url)
 
 
 class ElementAddToElement(MacroElement):
