@@ -1990,6 +1990,18 @@ class ColorLine(FeatureGroup):
 class Control(MacroElement):
     """
     Add a Leaflet Control object to the map
+
+    Examples
+    --------
+
+    >>> import folium
+    >>> from folium.features import Control, Marker
+    >>> from folium.plugins import Geocoder
+
+    >>> m = folium.Map(
+    ...     location=[46.603354, 1.8883335], attr=None, zoom_control=False, zoom_start=5
+    ... )
+    >>> Control("Zoom", position="topleft").add_to(m)
     """
 
     _template = Template(
@@ -2028,3 +2040,55 @@ class Control(MacroElement):
                 kwargs.pop(key)
 
         self.options = parse_options(**kwargs)
+
+
+class CustomControl(Control):
+    """Display static html and switch together with parent layer.
+
+    Examples
+    --------
+    >>> m = folium.Map(
+    ...     location=[46.603354, 1.8883335], zoom_control=False, zoom_start=5
+    ... )
+    >>> CustomControl("This is my custom control", position="topleft").add_to(m)
+    """
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+
+        var {{ this.get_name() }} = L.control({
+            position: "{{ this.position }}",
+        });
+        {{ this.get_name() }}.onAdd = function(map) {
+            let div = L.DomUtil.create('div', class_{{this.get_name}});
+            div.innerHTML = `{{ this.html }}`;
+            return div;
+        }
+        {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+
+        {%- if this.switch %}
+        {{ this._parent.get_name() }}.on('add', function(e) {
+            {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+        });
+        {{ this._parent.get_name() }}.on('remove', function(e) {
+            e.target._map.removeControl({{ this.get_name() }});
+        });
+        {%- endif %}
+
+        {% endmacro %}
+    """
+    )
+
+    def __init__(self, html, css=None, position="bottomleft"):
+        super().__init__()
+        self._name = "custom_control"
+        self.html = escape_backticks(html)
+        self.position = position
+        self.parent_map = None
+        self.switch = None
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.switch = isinstance(self._parent, Layer) and self._parent.control
+        super().render(**kwargs)
