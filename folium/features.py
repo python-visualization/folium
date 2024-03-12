@@ -1989,6 +1989,13 @@ class Control(MacroElement):
     """
     Add a Leaflet Control object to the map
 
+    Parameters
+    ----------
+    control: str
+        The javascript class name of the control to be rendered.
+    position: str
+        One of "bottomright", "bottomleft", "topright", "topleft"
+
     Examples
     --------
 
@@ -2019,10 +2026,10 @@ class Control(MacroElement):
 
     def __init__(
         self,
-        control: str = None,
+        control: Optional[str] = None,
         position: Literal[
             "bottomright", "bottomleft", "topright", "topleft"
-        ] = "bottomright",
+        ] = "bottomleft",
         **kwargs,
     ):
         super().__init__()
@@ -2043,6 +2050,15 @@ class Control(MacroElement):
 class CustomControl(Control):
     """Display static html and switch together with parent layer.
 
+    Parameters
+    ----------
+    html: str
+        The html to be rendered
+    style: str
+        The css style to be applied to this element
+    position: str
+        One of "bottomright", "bottomleft", "topright", "topleft"
+
     Examples
     --------
     >>> m = folium.Map(
@@ -2053,13 +2069,21 @@ class CustomControl(Control):
 
     _template = Template(
         """
+        {% macro header(this,kwargs) %}
+        {%- if this.style %}
+        <style>
+            .class_{{this.get_name()}} {{ "{" }}  {{this.style}} {{ "}" }}
+        </style>
+        {%- endif %}
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
 
         var {{ this.get_name() }} = L.control({
             position: "{{ this.position }}",
         });
         {{ this.get_name() }}.onAdd = function(map) {
-            let div = L.DomUtil.create('div', class_{{this.get_name}});
+            let div = L.DomUtil.create('div', 'class_{{this.get_name()}}');
             div.innerHTML = `{{ this.html }}`;
             return div;
         }
@@ -2078,9 +2102,10 @@ class CustomControl(Control):
     """
     )
 
-    def __init__(self, html, css=None, position="bottomleft"):
+    def __init__(self, html, style=None, position="bottomleft"):
         super().__init__()
         self._name = "custom_control"
+        self.style = style
         self.html = escape_backticks(html)
         self.position = position
         self.parent_map = None
