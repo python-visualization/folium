@@ -7,7 +7,18 @@ import functools
 import json
 import operator
 import warnings
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 import numpy as np
 import requests
@@ -20,6 +31,7 @@ from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.utilities import (
+    JsCode,
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
@@ -1971,3 +1983,135 @@ class ColorLine(FeatureGroup):
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
             self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))
+
+
+class Control(MacroElement):
+    """
+    Add a Leaflet Control object to the map
+
+    Parameters
+    ----------
+    control: str
+        The javascript class name of the control to be rendered.
+    position: str
+        One of "bottomright", "bottomleft", "topright", "topleft"
+
+    Examples
+    --------
+
+    >>> import folium
+    >>> from folium.features import Control, Marker
+    >>> from folium.plugins import Geocoder
+
+    >>> m = folium.Map(
+    ...     location=[46.603354, 1.8883335], attr=None, zoom_control=False, zoom_start=5
+    ... )
+    >>> Control("Zoom", position="topleft").add_to(m)
+    """
+
+    _template = Template(
+        """
+      {% macro script(this, kwargs) %}
+          var {{ this.get_name() }}_options = {{ this.options|tojson }};
+          {% for key, value in this.functions.items() %}
+          {{ this.get_name() }}_options["{{key}}"] = {{ value }};
+          {% endfor %}
+
+          var {{ this.get_name() }} = new L.Control.{{this._name}}(
+              {{ this.get_name() }}_options
+          ).addTo({{ this._parent.get_name() }});
+      {% endmacro %}
+    """
+    )
+
+    def __init__(
+        self,
+        control: Optional[str] = None,
+        position: Literal[
+            "bottomright", "bottomleft", "topright", "topleft"
+        ] = "bottomleft",
+        **kwargs,
+    ):
+        super().__init__()
+        if control:
+            self._name = control
+        kwargs["position"] = position
+
+        # extract JsCode objects
+        self.functions = {}
+        for key, value in list(kwargs.items()):
+            if isinstance(value, JsCode):
+                self.functions[camelize(key)] = value.js_code
+                kwargs.pop(key)
+
+        self.options = parse_options(**kwargs)
+
+
+class CustomControl(Control):
+    """Display static html and switch together with parent layer.
+
+    Parameters
+    ----------
+    html: str
+        The html to be rendered
+    style: str
+        The css style to be applied to this element
+    position: str
+        One of "bottomright", "bottomleft", "topright", "topleft"
+
+    Examples
+    --------
+    >>> m = folium.Map(
+    ...     location=[46.603354, 1.8883335], zoom_control=False, zoom_start=5
+    ... )
+    >>> CustomControl("This is my custom control", position="topleft").add_to(m)
+    """
+
+    _template = Template(
+        """
+        {% macro header(this,kwargs) %}
+        {%- if this.style %}
+        <style>
+            .class_{{this.get_name()}} {{ "{" }}  {{this.style}} {{ "}" }}
+        </style>
+        {%- endif %}
+        {% endmacro %}
+
+        {% macro script(this, kwargs) %}
+
+        var {{ this.get_name() }} = L.control({
+            position: "{{ this.position }}",
+        });
+        {{ this.get_name() }}.onAdd = function(map) {
+            let div = L.DomUtil.create('div', 'class_{{this.get_name()}}');
+            div.innerHTML = `{{ this.html }}`;
+            return div;
+        }
+        {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+
+        {%- if this.switch %}
+        {{ this._parent.get_name() }}.on('add', function(e) {
+            {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
+        });
+        {{ this._parent.get_name() }}.on('remove', function(e) {
+            e.target._map.removeControl({{ this.get_name() }});
+        });
+        {%- endif %}
+
+        {% endmacro %}
+    """
+    )
+
+    def __init__(self, html, style=None, position="bottomleft"):
+        super().__init__()
+        self._name = "custom_control"
+        self.style = style
+        self.html = escape_backticks(html)
+        self.position = position
+        self.parent_map = None
+        self.switch = None
+
+    def render(self, **kwargs):
+        self.parent_map = get_obj_in_upper_tree(self, Map)
+        self.switch = isinstance(self._parent, Layer) and self._parent.control
+        super().render(**kwargs)

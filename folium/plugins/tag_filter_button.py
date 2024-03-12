@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class TagFilterButton(JSCSSMixin, MacroElement):
+class TagFilterButton(JSCSSMixin, Control):
     """
     Creates a Tag Filter Button to filter elements based on criteria
     (https://github.com/maydemirx/leaflet-tag-filter-button)
