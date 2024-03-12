@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class GroupedLayerControl(JSCSSMixin, MacroElement):
+class GroupedLayerControl(JSCSSMixin, Control):
     """
     Create a Layer Control with groups of overlays.
 

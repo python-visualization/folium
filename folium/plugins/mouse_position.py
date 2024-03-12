@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class MousePosition(JSCSSMixin, MacroElement):
+class MousePosition(JSCSSMixin, Control):
     """Add a field that shows the coordinates of the mouse position.
 
     Uses the Leaflet plugin by Ardhi Lukianto under MIT license.

@@ -1,10 +1,11 @@
-from branca.element import Element, Figure, MacroElement
+from branca.element import Element, Figure
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 
 
-class Draw(JSCSSMixin, MacroElement):
+class Draw(JSCSSMixin, Control):
     """
     Vector drawing and editing plugin for Leaflet.
 

@@ -1,14 +1,13 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium import Map
 from folium.elements import JSCSSMixin
-from folium.features import FeatureGroup, GeoJson, TopoJson
+from folium.features import Control, FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
 from folium.utilities import parse_options
 
 
-class Search(JSCSSMixin, MacroElement):
+class Search(JSCSSMixin, Control):
     """
     Adds a search tool to your map.
 
