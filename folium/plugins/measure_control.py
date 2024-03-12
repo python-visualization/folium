@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class MeasureControl(JSCSSMixin, MacroElement):
+class MeasureControl(JSCSSMixin, Control):
     """Add a measurement widget on the map.
 
     Parameters

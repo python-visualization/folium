@@ -1,12 +1,12 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.raster_layers import TileLayer
 from folium.utilities import parse_options
 
 
-class MiniMap(JSCSSMixin, MacroElement):
+class MiniMap(JSCSSMixin, Control):
     """Add a minimap (locator) to an existing map.
 
     Uses the Leaflet plugin by Norkart under BSD 2-Clause "Simplified" License.

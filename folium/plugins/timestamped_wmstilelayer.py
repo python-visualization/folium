@@ -1,12 +1,12 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.raster_layers import WmsTileLayer
 from folium.utilities import parse_options
 
 
-class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
+class TimestampedWmsTileLayers(JSCSSMixin, Control):
     """
     Creates a TimestampedWmsTileLayer that takes a WmsTileLayer and adds time
     control with the Leaflet.TimeDimension plugin.

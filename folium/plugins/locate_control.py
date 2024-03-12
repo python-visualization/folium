@@ -3,14 +3,14 @@
 Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 """
 
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class LocateControl(JSCSSMixin, MacroElement):
+class LocateControl(JSCSSMixin, Control):
     """Control plugin to geolocate the user.
 
     This plugins adds a button to the map, and when it's clicked shows the current
