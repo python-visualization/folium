@@ -3,6 +3,8 @@ from typing import List, Tuple
 from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
 from jinja2 import Template
 
+from folium.utilities import JsCode
+
 
 class JSCSSMixin(Element):
     """Render links to external Javascript and CSS resources."""
@@ -44,6 +46,87 @@ class JSCSSMixin(Element):
                 break
         else:
             default_list.append((name, url))
+
+
+class EventTargetMixin(Element):
+    '''Add Event Handlers to an element.
+
+    Examples
+    --------
+    >>> import folium
+    >>> from folium.utilities import JsCode
+
+    >>> m = folium.Map()
+
+    >>> geo_json_data = {
+    ...     "type": "FeatureCollection",
+    ...     "features": [
+    ...         {
+    ...             "type": "Feature",
+    ...             "geometry": {
+    ...                 "type": "Polygon",
+    ...                 "coordinates": [
+    ...                     [
+    ...                         [100.0, 0.0],
+    ...                         [101.0, 0.0],
+    ...                         [101.0, 1.0],
+    ...                         [100.0, 1.0],
+    ...                         [100.0, 0.0],
+    ...                     ]
+    ...                 ],
+    ...             },
+    ...             "properties": {"prop1": {"title": "Somewhere on Sumatra"}},
+    ...         }
+    ...     ],
+    ... }
+
+    >>> g = folium.GeoJson(geo_json_data).add_to(m)
+    >>> highlight = JsCode(
+    ...     """
+    ...    function highlight(e) {
+    ...    e.target.original_color = e.layer.options.color;
+    ...    e.target.setStyle({ color: "green" });
+    ... }
+    ... """
+    ... )
+    >>> reset = JsCode(
+    ...     """
+    ... function reset(e) {
+    ...    e.target.setStyle({ color: e.target.original_color });
+    ... }
+    ... """
+    ... )
+    >>> g.on(mouseover=highlight, mouseout=reset)
+    '''
+
+    def on(self, **kwargs: JsCode):
+        for event, handler in kwargs.items():
+            self.add_child(EventHandler(event, handler))
+        return self
+
+    def render(self, **kwargs) -> None:
+        super().render(**kwargs)
+
+
+class EventHandler(MacroElement):
+    """Render Event Handlers."""
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+            {{ this._parent.get_name()}}.on(
+                {{ this.event|tojson}},
+                {{ this.handler.js_code }}
+            );
+        {% endmacro %}
+        """
+    )
+
+    def __init__(self, event: str, handler: JsCode):
+        super().__init__()
+        self._name = "EventHandler"
+        self.event = event
+        self.handler = handler
 
 
 class ElementAddToElement(MacroElement):
