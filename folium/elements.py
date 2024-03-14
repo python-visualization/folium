@@ -78,7 +78,7 @@ class EventTargetMixin(Element):
     >>> g.on(mouseover=highlight, mouseout=reset)
     '''
 
-    def on(self, **kwargs: dict[str, JsCode]):
+    def on(self, **kwargs: JsCode):
         for event, handler in kwargs.items():
             self.add_child(EventHandler(event, handler))
         return self
