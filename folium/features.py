@@ -1153,11 +1153,9 @@ class GeoJsonDetail(MacroElement):
         ]
         if any(geom_collections):
             warnings.warn(
-                "{} is not configured to render for GeoJson GeometryCollection geometries. "
-                "Please consider reworking these features: {} to MultiPolygon for full functionality.\n"
-                "https://tools.ietf.org/html/rfc7946#page-9".format(
-                    self._name, geom_collections
-                ),
+                f"{self._name} is not configured to render for GeoJson GeometryCollection geometries. "
+                f"Please consider reworking these features: {geom_collections} to MultiPolygon for full functionality.\n"
+                "https://tools.ietf.org/html/rfc7946#page-9",
                 UserWarning,
             )
 
