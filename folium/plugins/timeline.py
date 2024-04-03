@@ -154,6 +154,8 @@ class TimelineSlider(JSCSSMixin, MacroElement):
       end: str, int or float, default latest 'end' in GeoJSON
           The end/maximum value of the timeline.
 
+      date_options: str, default "YYYY-MM-DD HH:mm:ss"
+          A format string to render the currently active time in the control.
       enable_playback: bool, default True
           Show playback controls (i.e. prev/play/pause/next).
       enable_keyboard_controls: bool, default False
@@ -238,16 +240,6 @@ class TimelineSlider(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "TimelineSlider"
-        self._getDisplayDateFormat = JsCode(
-            """
-            function(date) {
-                var newdate = new moment(date);
-                return newdate.format(\""""
-            + date_options
-            + """\");
-            }
-        """
-        )
 
         kwargs["auto_play"] = auto_play
         kwargs["start"] = start
@@ -257,7 +249,17 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         kwargs["show_ticks"] = show_ticks
         kwargs["steps"] = steps
         kwargs["duration"] = playback_duration
-        kwargs["format_output"] = self._getDisplayDateFormat
+
+        kwargs["format_output"] = JsCode(
+            """
+            function(date) {
+                var newdate = new moment(date);
+                return newdate.format(\""""
+            + date_options
+            + """\");
+            }
+        """
+        )
 
         # extract JsCode objects
         self.functions = {}
@@ -279,11 +281,3 @@ class TimelineSlider(JSCSSMixin, MacroElement):
             self._parent, Map
         ), "TimelineSlider can only be added to a Map object."
         super().render(**kwargs)
-
-    def _get_self_bounds(self):
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]].
-
-        """
-        return get_bounds(self.data, lonlat=True)
