@@ -6,7 +6,7 @@ import folium
 import folium.plugins
 ```
 
-# HeatMapWithTime Plugin
+# HeatMapWithTime
 
 In this example we show the basic usage of the HeatMapWithTime plugin.
 
