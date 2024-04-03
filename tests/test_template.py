@@ -1,30 +1,68 @@
-import folium
-from folium.template import tojavascript
-from folium.utilities import JsCode
+from branca.element import Element
+
+from folium import JsCode
+from folium.template import Environment, Template, _to_escaped_json, tojavascript
 
 
-def test_tojavascript():
-    trail_coordinates = [
-        (-71.351871840295871, -73.655963711222626),
-        (-71.374144382613707, -73.719861619751498),
-        (-71.391042575973145, -73.784922248007007),
-        (-71.400964450973134, -73.851042243124397),
-        (-71.402411391077322, -74.050048183880477),
-    ]
+def test_tojavascript_with_jscode():
+    js_code = JsCode("console.log('Hello, World!')")
+    assert tojavascript(js_code) == "console.log('Hello, World!')"
 
-    trail = folium.PolyLine(trail_coordinates, tooltip="Coast")
-    d = {
-        "label": "Base Layers",
-        "children": [
-            {
-                "label": "World &#x1f5fa;",
-                "children": [
-                    {"label": "trail", "layer": trail},
-                    {"jscode": JsCode('function(){return "hi"}')},
-                ],
-            }
-        ],
+
+def test_tojavascript_with_element():
+    element = Element()
+    assert tojavascript(element) == element.get_name()
+
+
+def test_tojavascript_with_dict():
+    dict_obj = {"key": "value"}
+    assert tojavascript(dict_obj) == '{\n  "key": "value",\n}'
+
+
+def test_tojavascript_with_list():
+    list_obj = ["value1", "value2"]
+    assert tojavascript(list_obj) == '[\n"value1",\n"value2",\n]'
+
+
+def test_tojavascript_with_string():
+    assert tojavascript("Hello, World!") == _to_escaped_json("Hello, World!")
+
+
+def test_tojavascript_with_combined_elements():
+    js_code = JsCode("console.log('Hello, World!')")
+    element = Element()
+    combined_dict = {
+        "key": "value",
+        "list": ["value1", "value2", element, js_code],
+        "nested_dict": {"nested_key": "nested_value"},
     }
-    js = tojavascript(d)
-    assert "poly_line" in js
-    assert 'return "hi"' in js
+    result = tojavascript(combined_dict)
+    expected_lines = [
+        "{",
+        '  "key": "value",',
+        '  "list": [',
+        '"value1",',
+        '"value2",',
+        element.get_name() + ",",
+        "console.log('Hello, World!'),",
+        "],",
+        '  "nestedDict": {',
+        '  "nestedKey": "nested_value",',
+        "},",
+        "}",
+    ]
+    for result_line, expected_line in zip(result.splitlines(), expected_lines):
+        assert result_line == expected_line
+
+
+def test_to_escaped_json():
+    assert _to_escaped_json("hi<>&'") == '"hi\\u003c\\u003e\\u0026\\u0027"'
+
+
+def test_environment_filter():
+    env = Environment()
+    assert "tojavascript" in env.filters
+
+
+def test_template_environment_class():
+    assert Template.environment_class == Environment
