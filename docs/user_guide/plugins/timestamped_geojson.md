@@ -16,8 +16,8 @@ show geospatial information that changes over time.
 The main difference between the two is the input format.
 
 In the `TimestampedGeojson` each `Feature` has an array of start times. Each start time in
-In the `Timeline` plugin each `Feature` has its own `start` and `end` time among its properties.
 the array corresponds to a part of the `Geometry` of that `Feature`.
+In the `Timeline` plugin each `Feature` has its own `start` and `end` time among its properties.
 
 Also `TimestampedGeoJson` has a global `duration` property that is valid for all `Features`.
 In the `Timeline` plugin each `Feature` has its own `end` time property.
