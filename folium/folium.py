@@ -45,7 +45,7 @@ _default_css = [
     # glyphicons came from Bootstrap 3 and are used for Awesome Markers
     (
         "glyphicons_css",
-        "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css",
+        "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css",
     ),
     (
         "awesome_markers_font_css",
