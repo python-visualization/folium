@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.1.dev1+g5c2f3d1 documentation</title>
+    <title>API reference &#8212; Folium 0.1.dev1+g007fa8c documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="_static/documentation_options.js?v=a9661f8e"></script>
+    <script src="_static/documentation_options.js?v=484dc715"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -2916,6 +2916,140 @@ latest timestamp.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.Timeline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">Timeline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">TextIO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">get_interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><span class="pre">JsCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.Timeline" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#folium.features.GeoJson" title="folium.features.GeoJson"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeoJson</span></code></a></p>
+<blockquote>
+<div><p>Creates a layer from GeoJSON with time data to append
+into a map with Map.add_child.</p>
+<p>To add time data, you need to do one of the following:</p>
+<ul class="simple">
+<li><p>Add a ‘start’ and ‘end’ property to each feature. The start and end
+can be any comparable item.</p></li>
+</ul>
+<p>Alternatively, you can provide
+a <cite>get_interval</cite> function.</p>
+<ul class="simple">
+<li><p>This function should be a JsCode object and take as parameter
+a GeoJson feature and return a dict containing values for
+‘start’, ‘end’, ‘startExclusive’ and ‘endExcusive’ (or false if no
+data could be extracted from the feature).</p></li>
+<li><p>‘start’ and ‘end’ can be any comparable items</p></li>
+<li><p>‘startExclusive’ and ‘endExclusive’ should be boolean values.</p></li>
+</ul>
+<dl>
+<dt>data: file, dict or str.</dt><dd><p>The geojson data you want to plot.</p>
+</dd>
+<dt>get_interval: JsCode, optional</dt><dd><p>Called for each feature, and should return either a time range for the
+feature or <cite>false</cite>, indicating that it should not be included in the
+timeline. The time range object should have ‘start’ and ‘end’ properties.
+Optionally, the boolean keys ‘startExclusive’ and ‘endExclusive’ allow the
+interval to be considered exclusive.</p>
+<p>If <cite>get_interval</cite> is not provided, ‘start’ and ‘end’ properties are
+assumed to be present on each feature.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium.plugins</span> <span class="kn">import</span> <span class="n">Timeline</span><span class="p">,</span> <span class="n">TimelineSlider</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="s2">&quot;https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson&quot;</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">timeline</span> <span class="o">=</span> <span class="n">Timeline</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">data</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">get_interval</span><span class="o">=</span><span class="n">JsCode</span><span class="p">(</span>
+<span class="gp">... </span><span class="w">        </span><span class="sd">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="sd">        function (quake) {</span>
+<span class="gp">... </span><span class="sd">           // earthquake data only has a time, so we&#39;ll use that as a &quot;start&quot;</span>
+<span class="gp">... </span><span class="sd">           // and the &quot;end&quot; will be that + some value based on magnitude</span>
+<span class="gp">... </span><span class="sd">           // 18000000 = 30 minutes, so a quake of magnitude 5 would show on the</span>
+<span class="gp">... </span><span class="sd">           // map for 150 minutes or 2.5 hours</span>
+<span class="gp">... </span><span class="sd">           return {</span>
+<span class="gp">... </span><span class="sd">               start: quake.properties.time,</span>
+<span class="gp">... </span><span class="sd">               end: quake.properties.time + quake.properties.mag * 1800000,</span>
+<span class="gp">... </span><span class="sd">           };</span>
+<span class="gp">... </span><span class="sd">        };</span>
+<span class="gp">... </span><span class="sd">    &#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">TimelineSlider</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">auto_play</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">show_ticks</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">enable_keyboard_controls</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">playback_duration</span><span class="o">=</span><span class="mi">30000</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">add_timelines</span><span class="p">(</span><span class="n">timeline</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="simple">
+<dt>Other keyword arguments are passed to the GeoJson layer, so you can pass</dt><dd><p><cite>style</cite>, <cite>point_to_layer</cite> and/or <cite>on_each_feature</cite>.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="folium.plugins.Timeline.default_js">
+<span class="sig-name descname"><span class="pre">default_js</span></span><a class="headerlink" href="#folium.plugins.Timeline.default_js" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.TimelineSlider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">TimelineSlider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">auto_play</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'YYYY-MM-DD</span> <span class="pre">HH:mm:ss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_playback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enable_keyboard_controls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">playback_duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimelineSlider" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.7.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<blockquote>
+<div><p>Creates a timeline slider for timeline layers.</p>
+<dl class="simple">
+<dt>auto_play: bool, default True</dt><dd><p>Whether the animation shall start automatically at startup.</p>
+</dd>
+<dt>start: str, int or float, default earliest ‘start’ in GeoJson</dt><dd><p>The beginning/minimum value of the timeline.</p>
+</dd>
+<dt>end: str, int or float, default latest ‘end’ in GeoJSON</dt><dd><p>The end/maximum value of the timeline.</p>
+</dd>
+<dt>date_options: str, default “YYYY-MM-DD HH:mm:ss”</dt><dd><p>A format string to render the currently active time in the control.</p>
+</dd>
+<dt>enable_playback: bool, default True</dt><dd><p>Show playback controls (i.e. prev/play/pause/next).</p>
+</dd>
+<dt>enable_keyboard_controls: bool, default False</dt><dd><p>Allow playback to be controlled using the spacebar (play/pause) and
+right/left arrow keys (next/previous).</p>
+</dd>
+<dt>show_ticks: bool, default True</dt><dd><p>Show tick marks on the slider</p>
+</dd>
+<dt>steps: int, default 1000</dt><dd><p>How many steps to break the timeline into.
+Each step will then be (end-start) / steps. Only affects playback.</p>
+</dd>
+<dt>playback_duration: int, default 10000</dt><dd><p>Minimum time, in ms, for the playback to take. Will almost certainly
+actually take at least a bit longer – after each frame, the next
+one displays in playback_duration/steps ms, so each frame really
+takes frame processing time PLUS step time.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p class="rubric">Examples</p>
+<p>See the documentation for Timeline</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="folium.plugins.TimelineSlider.add_timelines">
+<span class="sig-name descname"><span class="pre">add_timelines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimelineSlider.add_timelines" title="Link to this definition">#</a></dt>
+<dd><p>Add timelines to the control</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="folium.plugins.TimelineSlider.default_js">
+<span class="sig-name descname"><span class="pre">default_js</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#folium.plugins.TimelineSlider.default_js" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="folium.plugins.TimelineSlider.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimelineSlider.render" title="Link to this definition">#</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="folium.plugins.TimestampedGeoJson">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">TimestampedGeoJson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transition_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_play</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_last_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">period</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'P1D'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop_button</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'YYYY-MM-DD</span> <span class="pre">HH:mm:ss'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_slider_drag_update</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speed_slider</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.TimestampedGeoJson" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.7.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
@@ -3561,6 +3695,16 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimeSliderChoropleth.default_js"><code class="docutils literal notranslate"><span class="pre">TimeSliderChoropleth.default_js</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Timeline"><code class="docutils literal notranslate"><span class="pre">Timeline</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Timeline.default_js"><code class="docutils literal notranslate"><span class="pre">Timeline.default_js</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimelineSlider"><code class="docutils literal notranslate"><span class="pre">TimelineSlider</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimelineSlider.add_timelines"><code class="docutils literal notranslate"><span class="pre">TimelineSlider.add_timelines()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimelineSlider.default_js"><code class="docutils literal notranslate"><span class="pre">TimelineSlider.default_js</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimelineSlider.render"><code class="docutils literal notranslate"><span class="pre">TimelineSlider.render()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimestampedGeoJson"><code class="docutils literal notranslate"><span class="pre">TimestampedGeoJson</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimestampedGeoJson.default_css"><code class="docutils literal notranslate"><span class="pre">TimestampedGeoJson.default_css</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.TimestampedGeoJson.default_js"><code class="docutils literal notranslate"><span class="pre">TimestampedGeoJson.default_js</span></code></a></li>
@@ -3617,7 +3761,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+g5c2f3d1</div>
+Folium version 0.1.dev1.dev+g007fa8c</div>
       
         <div class="footer-item">
 

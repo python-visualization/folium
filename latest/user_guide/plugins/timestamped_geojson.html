@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TimestampedGeoJson &#8212; Folium 0.1.dev1+g5c2f3d1 documentation</title>
+    <title>TimestampedGeoJson &#8212; Folium 0.1.dev1+g007fa8c documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=a9661f8e"></script>
+    <script src="../../_static/documentation_options.js?v=484dc715"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -517,6 +517,19 @@ document.write(`
                   
   <section id="TimestampedGeoJson">
 <h1>TimestampedGeoJson<a class="headerlink" href="#TimestampedGeoJson" title="Link to this heading">#</a></h1>
+<p>Show changing geospatial data over time.</p>
+<section id="Relation-to-Timeline">
+<h2>Relation to Timeline<a class="headerlink" href="#Relation-to-Timeline" title="Link to this heading">#</a></h2>
+<p>This is a plugin with a similar purpose to <code class="docutils literal notranslate"><span class="pre">Timeline</span></code>. They both show geospatial information that changes over time.</p>
+<p>The main difference between the two is the input format.</p>
+<p>In the <code class="docutils literal notranslate"><span class="pre">TimestampedGeojson</span></code> each <code class="docutils literal notranslate"><span class="pre">Feature</span></code> has an array of start times. Each start time in the array corresponds to a part of the <code class="docutils literal notranslate"><span class="pre">Geometry</span></code> of that <code class="docutils literal notranslate"><span class="pre">Feature</span></code>. In the <code class="docutils literal notranslate"><span class="pre">Timeline</span></code> plugin each <code class="docutils literal notranslate"><span class="pre">Feature</span></code> has its own <code class="docutils literal notranslate"><span class="pre">start</span></code> and <code class="docutils literal notranslate"><span class="pre">end</span></code> time among its properties.</p>
+<p>Also <code class="docutils literal notranslate"><span class="pre">TimestampedGeoJson</span></code> has a global <code class="docutils literal notranslate"><span class="pre">duration</span></code> property that is valid for all <code class="docutils literal notranslate"><span class="pre">Features</span></code>. In the <code class="docutils literal notranslate"><span class="pre">Timeline</span></code> plugin each <code class="docutils literal notranslate"><span class="pre">Feature</span></code> has its own <code class="docutils literal notranslate"><span class="pre">end</span></code> time property.</p>
+<p>Depending on your input geojson, one plugin may be more convenient than the other.</p>
+</section>
+<section id="Relation-to-Realtime">
+<h2>Relation to Realtime<a class="headerlink" href="#Relation-to-Realtime" title="Link to this heading">#</a></h2>
+<p>This plugin can only show data from the past. If you want live updates, you need the <code class="docutils literal notranslate"><span class="pre">Realtime</span></code> plugin.</p>
+</section>
 <section id="Example-1">
 <h2>Example 1<a class="headerlink" href="#Example-1" title="Link to this heading">#</a></h2>
 <div class="nbinput docutils container">
@@ -625,7 +638,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_f4aa81e56bd663577351f3e061e3de6a {
+                #map_2318412b9b34da150aa5255589df3fa1 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -646,14 +659,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_f4aa81e56bd663577351f3e061e3de6a&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_2318412b9b34da150aa5255589df3fa1&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_f4aa81e56bd663577351f3e061e3de6a = L.map(
-                &quot;map_f4aa81e56bd663577351f3e061e3de6a&quot;,
+            var map_2318412b9b34da150aa5255589df3fa1 = L.map(
+                &quot;map_2318412b9b34da150aa5255589df3fa1&quot;,
                 {
                     center: [35.68159659061569, 139.76451516151428],
                     crs: L.CRS.EPSG3857,
@@ -667,13 +680,13 @@ document.write(`
 
 
 
-            var tile_layer_c5dc22cb4a2ed69efa60f65e0272490c = L.tileLayer(
+            var tile_layer_4e3bce0dd4bdafce1d2774f719a2a0a6 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-            tile_layer_c5dc22cb4a2ed69efa60f65e0272490c.addTo(map_f4aa81e56bd663577351f3e061e3de6a);
+            tile_layer_4e3bce0dd4bdafce1d2774f719a2a0a6.addTo(map_2318412b9b34da150aa5255589df3fa1);
 
 
             L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
@@ -683,7 +696,7 @@ document.write(`
                     return newdate.format(&quot;YYYY-MM-DD HH:mm:ss&quot;);
                 }
             });
-            map_f4aa81e56bd663577351f3e061e3de6a.timeDimension = L.timeDimension(
+            map_2318412b9b34da150aa5255589df3fa1.timeDimension = L.timeDimension(
                 {
                     period: &quot;PT1M&quot;,
                 }
@@ -691,7 +704,7 @@ document.write(`
             var timeDimensionControl = new L.Control.TimeDimensionCustom(
                 {&quot;autoPlay&quot;: true, &quot;loopButton&quot;: false, &quot;maxSpeed&quot;: 10, &quot;minSpeed&quot;: 0.1, &quot;playerOptions&quot;: {&quot;loop&quot;: true, &quot;startOver&quot;: true, &quot;transitionTime&quot;: 200}, &quot;position&quot;: &quot;bottomleft&quot;, &quot;speedSlider&quot;: true, &quot;timeSliderDragUpdate&quot;: false}
             );
-            map_f4aa81e56bd663577351f3e061e3de6a.addControl(this.timeDimensionControl);
+            map_2318412b9b34da150aa5255589df3fa1.addControl(this.timeDimensionControl);
 
             var geoJsonLayer = L.geoJson({&quot;type&quot;: &quot;FeatureCollection&quot;, &quot;features&quot;: [{&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[139.76451516151428, 35.68159659061569], [139.75964426994324, 35.682590062684206]]}, &quot;properties&quot;: {&quot;times&quot;: [&quot;2017-06-02T00:00:00&quot;, &quot;2017-06-02T00:10:00&quot;], &quot;style&quot;: {&quot;color&quot;: &quot;red&quot;, &quot;weight&quot;: 5}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[139.75964426994324, 35.682590062684206], [139.7575843334198, 35.679505030038506]]}, &quot;properties&quot;: {&quot;times&quot;: [&quot;2017-06-02T00:10:00&quot;, &quot;2017-06-02T00:20:00&quot;], &quot;style&quot;: {&quot;color&quot;: &quot;blue&quot;, &quot;weight&quot;: 5}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[139.7575843334198, 35.679505030038506], [139.76337790489197, 35.678040905014065]]}, &quot;properties&quot;: {&quot;times&quot;: [&quot;2017-06-02T00:20:00&quot;, &quot;2017-06-02T00:30:00&quot;], &quot;style&quot;: {&quot;color&quot;: &quot;green&quot;, &quot;weight&quot;: 15}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[139.76337790489197, 35.678040905014065], [139.76451516151428, 35.68159659061569]]}, &quot;properties&quot;: {&quot;times&quot;: [&quot;2017-06-02T00:30:00&quot;, &quot;2017-06-02T00:40:00&quot;], &quot;style&quot;: {&quot;color&quot;: &quot;#FFFFFF&quot;, &quot;weight&quot;: 5}}}]}, {
                     pointToLayer: function (feature, latLng) {
@@ -727,14 +740,14 @@ document.write(`
                     }
                 })
 
-            var timestamped_geo_json_af570ac32ea543016624025453e31c76 = L.timeDimension.layer.geoJson(
+            var timestamped_geo_json_be33b0d05b22cfc7a5baa0e9f956b17e = L.timeDimension.layer.geoJson(
                 geoJsonLayer,
                 {
                     updateTimeDimension: true,
                     addlastPoint: true,
                     duration: undefined,
                 }
-            ).addTo(map_f4aa81e56bd663577351f3e061e3de6a);
+            ).addTo(map_2318412b9b34da150aa5255589df3fa1);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -901,7 +914,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_a6fae1f6e9f122d4481b992caa73b1de {
+                #map_fd07155e605b47fcb34eb9472e2d61c1 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -922,14 +935,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_a6fae1f6e9f122d4481b992caa73b1de&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_fd07155e605b47fcb34eb9472e2d61c1&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_a6fae1f6e9f122d4481b992caa73b1de = L.map(
-                &quot;map_a6fae1f6e9f122d4481b992caa73b1de&quot;,
+            var map_fd07155e605b47fcb34eb9472e2d61c1 = L.map(
+                &quot;map_fd07155e605b47fcb34eb9472e2d61c1&quot;,
                 {
                     center: [56.096555, -3.64746],
                     crs: L.CRS.EPSG3857,
@@ -943,13 +956,13 @@ document.write(`
 
 
 
-            var tile_layer_58ca0cc38efa65606039d4c0322e942c = L.tileLayer(
+            var tile_layer_00b7468c7fe4c77b5be7aba8dc42b41d = L.tileLayer(
                 &quot;https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png&quot;,
                 {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\&quot;https://carto.com/attributions\&quot;\u003eCARTO\u003c/a\u003e&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 20, &quot;maxZoom&quot;: 20, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abcd&quot;, &quot;tms&quot;: false}
             );
 
 
-            tile_layer_58ca0cc38efa65606039d4c0322e942c.addTo(map_a6fae1f6e9f122d4481b992caa73b1de);
+            tile_layer_00b7468c7fe4c77b5be7aba8dc42b41d.addTo(map_fd07155e605b47fcb34eb9472e2d61c1);
 
 
             L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
@@ -959,7 +972,7 @@ document.write(`
                     return newdate.format(&quot;YYYY/MM/DD&quot;);
                 }
             });
-            map_a6fae1f6e9f122d4481b992caa73b1de.timeDimension = L.timeDimension(
+            map_fd07155e605b47fcb34eb9472e2d61c1.timeDimension = L.timeDimension(
                 {
                     period: &quot;P1M&quot;,
                 }
@@ -967,7 +980,7 @@ document.write(`
             var timeDimensionControl = new L.Control.TimeDimensionCustom(
                 {&quot;autoPlay&quot;: false, &quot;loopButton&quot;: true, &quot;maxSpeed&quot;: 1, &quot;minSpeed&quot;: 0.1, &quot;playerOptions&quot;: {&quot;loop&quot;: false, &quot;startOver&quot;: true, &quot;transitionTime&quot;: 200}, &quot;position&quot;: &quot;bottomleft&quot;, &quot;speedSlider&quot;: true, &quot;timeSliderDragUpdate&quot;: true}
             );
-            map_a6fae1f6e9f122d4481b992caa73b1de.addControl(this.timeDimensionControl);
+            map_fd07155e605b47fcb34eb9472e2d61c1.addControl(this.timeDimensionControl);
 
             var geoJsonLayer = L.geoJson({&quot;type&quot;: &quot;FeatureCollection&quot;, &quot;features&quot;: [{&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [-2.548828, 51.467697]}, &quot;properties&quot;: {&quot;time&quot;: &quot;2017-06-02&quot;, &quot;popup&quot;: &quot;&lt;h1&gt;address1&lt;/h1&gt;&quot;, &quot;id&quot;: &quot;house&quot;, &quot;icon&quot;: &quot;marker&quot;, &quot;iconstyle&quot;: {&quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/geojson/baseball-marker.png&quot;, &quot;iconSize&quot;: [20, 20]}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [-0.087891, 51.536086]}, &quot;properties&quot;: {&quot;time&quot;: &quot;2017-07-02&quot;, &quot;popup&quot;: &quot;&lt;h2 style=&#x27;color:blue;&#x27;&gt;address2&lt;h2&gt;&quot;, &quot;id&quot;: &quot;house&quot;, &quot;icon&quot;: &quot;marker&quot;, &quot;iconstyle&quot;: {&quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/geojson/baseball-marker.png&quot;, &quot;iconSize&quot;: [20, 20]}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [-6.240234, 53.383328]}, &quot;properties&quot;: {&quot;time&quot;: &quot;2017-08-02&quot;, &quot;popup&quot;: &quot;&lt;h2 style=&#x27;color:orange;&#x27;&gt;address3&lt;h2&gt;&quot;, &quot;id&quot;: &quot;house&quot;, &quot;icon&quot;: &quot;marker&quot;, &quot;iconstyle&quot;: {&quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/geojson/baseball-marker.png&quot;, &quot;iconSize&quot;: [20, 20]}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [-1.40625, 60.261617]}, &quot;properties&quot;: {&quot;time&quot;: &quot;2017-09-02&quot;, &quot;popup&quot;: &quot;&lt;h2 style=&#x27;color:green;&#x27;&gt;address4&lt;h2&gt;&quot;, &quot;id&quot;: &quot;house&quot;, &quot;icon&quot;: &quot;marker&quot;, &quot;iconstyle&quot;: {&quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/geojson/baseball-marker.png&quot;, &quot;iconSize&quot;: [20, 20]}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;Point&quot;, &quot;coordinates&quot;: [-1.516113, 53.800651]}, &quot;properties&quot;: {&quot;time&quot;: &quot;2017-10-02&quot;, &quot;popup&quot;: &quot;&lt;table style=&#x27;width:100%&#x27;&gt;\n  &lt;tr&gt;\n    &lt;th&gt;Firstname&lt;/th&gt;\n    &lt;th&gt;Lastname&lt;/th&gt;\n    &lt;th&gt;Age&lt;/th&gt;\n  &lt;/tr&gt;\n  &lt;tr&gt;\n    &lt;td&gt;Jill&lt;/td&gt;\n    &lt;td&gt;Smith&lt;/td&gt;\n    &lt;td&gt;50&lt;/td&gt;\n  &lt;/tr&gt;\n  &lt;tr&gt;\n    &lt;td&gt;Eve&lt;/td&gt;\n    &lt;td&gt;Jackson&lt;/td&gt;\n    &lt;td&gt;94&lt;/td&gt;\n  &lt;/tr&gt;\n&lt;/table&gt;\n&quot;, &quot;id&quot;: &quot;house&quot;, &quot;icon&quot;: &quot;marker&quot;, &quot;iconstyle&quot;: {&quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/geojson/baseball-marker.png&quot;, &quot;iconSize&quot;: [20, 20]}}}, {&quot;type&quot;: &quot;Feature&quot;, &quot;geometry&quot;: {&quot;type&quot;: &quot;LineString&quot;, &quot;coordinates&quot;: [[-2.548828, 51.467697], [-0.087891, 51.536086], [-6.240234, 53.383328], [-1.40625, 60.261617], [-1.516113, 53.800651]]}, &quot;properties&quot;: {&quot;popup&quot;: &quot;Current address&quot;, &quot;times&quot;: [&quot;2017-06-02&quot;, &quot;2017-07-02&quot;, &quot;2017-08-02&quot;, &quot;2017-09-02&quot;, &quot;2017-10-02&quot;], &quot;icon&quot;: &quot;circle&quot;, &quot;iconstyle&quot;: {&quot;fillColor&quot;: &quot;green&quot;, &quot;fillOpacity&quot;: 0.6, &quot;stroke&quot;: &quot;false&quot;, &quot;radius&quot;: 13}, &quot;style&quot;: {&quot;weight&quot;: 0}, &quot;id&quot;: &quot;man&quot;}}]}, {
                     pointToLayer: function (feature, latLng) {
@@ -1003,14 +1016,14 @@ document.write(`
                     }
                 })
 
-            var timestamped_geo_json_92327da54f723500aaff66c5a271d407 = L.timeDimension.layer.geoJson(
+            var timestamped_geo_json_22c3162d7c636cd5155d8cd84d8c8cfc = L.timeDimension.layer.geoJson(
                 geoJsonLayer,
                 {
                     updateTimeDimension: true,
                     addlastPoint: true,
                     duration: &quot;P2M&quot;,
                 }
-            ).addTo(map_a6fae1f6e9f122d4481b992caa73b1de);
+            ).addTo(map_fd07155e605b47fcb34eb9472e2d61c1);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1064,6 +1077,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Relation-to-Timeline">Relation to Timeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Relation-to-Realtime">Relation to Realtime</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Example-1">Example 1</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Example-2">Example 2</a></li>
 </ul>
@@ -1100,7 +1115,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+g5c2f3d1</div>
+Folium version 0.1.dev1.dev+g007fa8c</div>
       
         <div class="footer-item">
 

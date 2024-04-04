@@ -7,6 +7,27 @@ import folium.plugins
 ```
 
 ##  TimestampedGeoJson
+Show changing geospatial data over time.
+
+### Relation to Timeline
+This is a plugin with a similar purpose to `Timeline`. They both
+show geospatial information that changes over time.
+
+The main difference between the two is the input format.
+
+In the `TimestampedGeojson` each `Feature` has an array of start times. Each start time in
+the array corresponds to a part of the `Geometry` of that `Feature`.
+In the `Timeline` plugin each `Feature` has its own `start` and `end` time among its properties.
+
+Also `TimestampedGeoJson` has a global `duration` property that is valid for all `Features`.
+In the `Timeline` plugin each `Feature` has its own `end` time property.
+
+Depending on your input geojson, one plugin may be more convenient than the other.
+
+### Relation to Realtime
+This plugin can only show data from the past. If you want live updates,
+you need the `Realtime` plugin.
+
 
 ### Example 1
 
