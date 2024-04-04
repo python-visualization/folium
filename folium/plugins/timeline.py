@@ -34,7 +34,7 @@ class Timeline(GeoJson):
       data: file, dict or str.
           The geojson data you want to plot.
 
-      get_interval: JsCode
+      get_interval: JsCode, optional
           Called for each feature, and should return either a time range for the
           feature or `false`, indicating that it should not be included in the
           timeline. The time range object should have 'start' and 'end' properties.
