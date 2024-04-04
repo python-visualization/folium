@@ -29,6 +29,7 @@ from folium.plugins.side_by_side import SideBySideLayers
 from folium.plugins.tag_filter_button import TagFilterButton
 from folium.plugins.terminator import Terminator
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
+from folium.plugins.timeline import Timeline, TimelineSlider
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 from folium.plugins.treelayercontrol import TreeLayerControl
@@ -65,6 +66,8 @@ __all__ = [
     "TagFilterButton",
     "Terminator",
     "TimeSliderChoropleth",
+    "Timeline",
+    "TimelineSlider",
     "TimestampedGeoJson",
     "TimestampedWmsTileLayers",
     "TreeLayerControl",
