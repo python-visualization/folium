@@ -24,10 +24,12 @@ class JSCSSMixin(Element):
 
         super().render(**kwargs)
 
-    def add_css_link(self, name, url):
+    def add_css_link(self, name: str, url: str):
+        """Add or update css resource link."""
         self._add_link(name, url, self.default_css)
 
-    def add_js_link(self, name, url):
+    def add_js_link(self, name: str, url: str):
+        """Add or update JS resource link."""
         self._add_link(name, url, self.default_js)
 
     def _add_link(self, name: str, url: str, default_list: List[Tuple[str, str]]):
