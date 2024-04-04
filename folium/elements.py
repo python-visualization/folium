@@ -24,6 +24,27 @@ class JSCSSMixin(Element):
 
         super().render(**kwargs)
 
+    def add_css_link(self, name: str, url: str):
+        """Add or update css resource link."""
+        self._add_link(name, url, self.default_css)
+
+    def add_js_link(self, name: str, url: str):
+        """Add or update JS resource link."""
+        self._add_link(name, url, self.default_js)
+
+    def _add_link(self, name: str, url: str, default_list: List[Tuple[str, str]]):
+        """Modify a css or js link.
+
+        If `name` does not exist, the link will be appended
+        """
+
+        for i, pair in enumerate(default_list):
+            if pair[0] == name:
+                default_list[i] = (name, url)
+                break
+        else:
+            default_list.append((name, url))
+
 
 class ElementAddToElement(MacroElement):
     """Abstract class to add an element to another element."""
