@@ -28,6 +28,8 @@ Depending on your input geojson, one plugin may be more convenient than the othe
 The `Timeline` plugin can only show data from the past. If you want live updates,
 you need the `Realtime` plugin.
 
+### Example of Timeline and TimelineSlider
+
 ```{code-cell} ipython3
 import folium
 from folium.utilities import JsCode
