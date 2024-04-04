@@ -17,7 +17,7 @@ from folium.utilities import normalize
 def test_timeline():
     m = folium.Map()
 
-    data = json.load(open("./examples/data/borders.json"))
+    data = json.load(open("./examples/data/historical_country_borders.json"))
     timeline = plugins.Timeline(
         data,
     ).add_to(m)
