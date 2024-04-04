@@ -33,14 +33,13 @@ class TileLayer(Layer):
             - "OpenStreetMap"
             - "CartoDB Positron"
             - "CartoDB Voyager"
-            - "NASAGIBS Blue Marble"
 
         You can pass a custom tileset to Folium by passing a
         :class:`xyzservices.TileProvider` or a Leaflet-style
         URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
 
         You can find a list of free tile providers here:
-        ``http://leaflet-extras.github.io/leaflet-providers/preview/``.
+        http://leaflet-extras.github.io/leaflet-providers/preview/.
         Be sure to check their terms and conditions and to provide attribution
         with the `attr` keyword.
     min_zoom: int, default 0
