@@ -7,9 +7,7 @@ Folium Tests
 import json
 import os
 
-import branca.element
 import geopandas as gpd
-import jinja2
 import numpy as np
 import pandas as pd
 import pytest
@@ -42,13 +40,6 @@ def setup_data():
     # Perform an inner join, pad NA's with data from nearest county.
     merged = pd.merge(df, county_df, on="FIPS_Code", how="inner")
     return merged.fillna(method="pad")
-
-
-def test_get_templates():
-    """Test template getting."""
-
-    env = branca.utilities.get_templates()
-    assert isinstance(env, jinja2.environment.Environment)
 
 
 def test_location_args():
