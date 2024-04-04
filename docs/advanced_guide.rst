@@ -14,3 +14,4 @@ Advanced guide
   advanced_guide/custom_tiles
   advanced_guide/piechart_icons
   advanced_guide/polygons_from_list_of_points
+  advanced_guide/customize_javascript_and_css
