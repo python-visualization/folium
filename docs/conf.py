@@ -57,7 +57,7 @@ copyright = "2013, Rob Story"
 
 version = subprocess.check_output(["git", "describe", "--tags"]).decode().strip()
 if "-" in version:
-    version.replace("-", ".dev", 1)
+    version = version.replace("-", ".dev", 1)
 release = version
 
 print(f"Version: {version}")
