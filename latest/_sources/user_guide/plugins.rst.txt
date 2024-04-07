@@ -31,8 +31,10 @@ Plugins
   plugins/side_by_side_layers
   plugins/tag_filter_button
   plugins/terminator
+  plugins/timeline
   plugins/timeslider_choropleth
   plugins/timestamped_geojson
+  plugins/treelayercontrol
   plugins/vector_tiles
   plugins/WmsTimeDimension
 
@@ -96,10 +98,14 @@ Plugins
       - Creates a Tag Filter Button to filter elements based on different criteria.
     * - :doc:`Terminator <plugins/terminator>`
       - Overlay day and night regions on a map.
+    * - :doc:`Timeline <plugins/timeline>`
+      - Create a timeline with a time slider for geojson data with start and end times.
     * - :doc:`Timeslider Choropleth <plugins/timeslider_choropleth>`
       - Create a choropleth with a timeslider for timestamped data.
     * - :doc:`Timestamped GeoJSON <plugins/timestamped_geojson>`
-      - Add time-aware GeoJSON into the map.
+      - Add GeoJSON data with timestamps to a map.
+    * - :doc:`TreeLayerControl <plugins/treelayercontrol>`
+      - Add a control for a tree of layers with checkboxes for visibility control.
     * - :doc:`Vector Tiles using VectorGridProtobuf <plugins/vector_tiles>`
       - Display gridded vector data (GeoJSON or TopoJSON sliced with geojson-vt, or protobuf vector tiles).
     * - :doc:`WMS Time Dimension <plugins/WmsTimeDimension>`

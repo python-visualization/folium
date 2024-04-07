@@ -20,7 +20,6 @@ from folium.plugins.treelayercontrol import TreeLayerControl
 from folium.features import Marker
 
 m = folium.Map(location=[46.603354, 1.8883335], zoom_start=5)
-osm = folium.TileLayer("openstreetmap").add_to(m)
 
 overlay_tree = {
     "label": "Points of Interest",
@@ -71,5 +70,7 @@ overlay_tree = {
     ]
 }
 
-control = TreeLayerControl(overlay_tree=overlay_tree).add_to(m)
+TreeLayerControl(overlay_tree=overlay_tree).add_to(m)
+
+m
 ```
