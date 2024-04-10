@@ -47,7 +47,7 @@ class PolyLineFromEncoded(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(self, encoded, **kwargs):
+    def __init__(self, encoded: str, **kwargs):
         super().__init__()
         self._name = "PolyLineFromEncoded"
         self.encoded = encoded
