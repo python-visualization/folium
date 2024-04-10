@@ -3,7 +3,7 @@
 nbsphinx: hidden
 ---
 import folium
-import folium.plugins
+from folium import plugins
 ```
 
 # PolyLineFromEncoded
