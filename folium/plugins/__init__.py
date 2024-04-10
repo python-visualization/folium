@@ -19,6 +19,7 @@ from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
 from folium.plugins.pattern import CirclePattern, StripePattern
+from folium.plugins.polyline_encoded import PolyLineFromEncoded
 from folium.plugins.polyline_offset import PolyLineOffset
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.realtime import Realtime
@@ -55,6 +56,7 @@ __all__ = [
     "MeasureControl",
     "MiniMap",
     "MousePosition",
+    "PolyLineFromEncoded",
     "PolyLineTextPath",
     "PolyLineOffset",
     "Realtime",
