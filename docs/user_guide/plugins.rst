@@ -22,6 +22,7 @@ Plugins
   plugins/measure_control
   plugins/mouse_position
   plugins/pattern
+  plugins/polygon_encoded
   plugins/polyline_encoded
   plugins/polyline_offset
   plugins/polyline_textpath
@@ -81,6 +82,8 @@ Plugins
       - A control that displays geographic coordinates of the mouse pointer, as it is moved over the map.
     * - :doc:`Pattern <plugins/pattern>`
       - Add support for pattern fills on Paths.
+    * - :doc:`Polygon Encoded <plugins/polygon_encoded>`
+      - Draw a polygon directly from an encoded string.
     * - :doc:`Polyline Encoded <plugins/polyline_encoded>`
       - Draw a polyline directly from an encoded string.
     * - :doc:`Polyline Offset <plugins/polyline_offset>`

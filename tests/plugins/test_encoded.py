@@ -1,7 +1,7 @@
 """Test PolyLineFromEncoded Plugin."""
 
 from folium import Map
-from folium.plugins import PolyLineFromEncoded
+from folium.plugins import PolygonFromEncoded, PolyLineFromEncoded
 from folium.utilities import normalize
 
 
@@ -34,5 +34,35 @@ def test_polyline_from_encoded():
     """
 
     actual_render = polyline._template.module.script(polyline)
+
+    assert normalize(expected_render) == normalize(actual_render)
+
+
+def test_polygon_from_encoded():
+    """Test `PolygonFromEncoded` plugin.
+
+    The test ensures:
+        - The original JS script is present in the HTML file.
+        - The rendering from `PolygonFromEncoded` and the original plugin gives the
+            same output.
+    """
+
+    m = Map([40.0, -80.0], zoom_start=3)
+
+    encoded = r"w`j~FpxivO}jz@qnnCd}~Bsa{@~f`C`lkH"
+    polygon = PolygonFromEncoded(encoded=encoded)
+
+    polygon.add_to(m)
+
+    out = normalize(m._parent.render())
+
+    script = '<script src="https://cdn.jsdelivr.net/npm/polyline-encoded@0.0.9/Polyline.encoded.js"></script>'
+    assert script in out
+
+    expected_render = f"""
+    var {polygon.get_name()} = L.Polygon.fromEncoded("{encoded}", {{}}).addTo({m.get_name()});
+    """
+
+    actual_render = polygon._template.module.script(polygon)
 
     assert normalize(expected_render) == normalize(actual_render)
