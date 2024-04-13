@@ -5,6 +5,7 @@ from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
 from folium.plugins.draw import Draw
 from folium.plugins.dual_map import DualMap
+from folium.plugins.encoded import PolygonFromEncoded, PolyLineFromEncoded
 from folium.plugins.fast_marker_cluster import FastMarkerCluster
 from folium.plugins.feature_group_sub_group import FeatureGroupSubGroup
 from folium.plugins.float_image import FloatImage
@@ -19,7 +20,6 @@ from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
 from folium.plugins.pattern import CirclePattern, StripePattern
-from folium.plugins.polyline_encoded import PolyLineFromEncoded
 from folium.plugins.polyline_offset import PolyLineOffset
 from folium.plugins.polyline_text_path import PolyLineTextPath
 from folium.plugins.realtime import Realtime
@@ -56,6 +56,7 @@ __all__ = [
     "MeasureControl",
     "MiniMap",
     "MousePosition",
+    "PolygonFromEncoded",
     "PolyLineFromEncoded",
     "PolyLineTextPath",
     "PolyLineOffset",
