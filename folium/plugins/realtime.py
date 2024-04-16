@@ -80,7 +80,7 @@ class Realtime(JSCSSMixin, MacroElement):
                     = {{ this.container.get_name() }};
             {% endif -%}
 
-            var {{ this.get_name() }} = new L.realtime(
+            var {{ this.get_name() }} = L.realtime(
             {% if this.src is string or this.src is mapping -%}
                 {{ this.src|tojson }},
             {% else -%}
