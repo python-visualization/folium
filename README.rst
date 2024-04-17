@@ -81,3 +81,4 @@ Plugins:
 
 - https://github.com/onaci/folium-glify-layer: provide fast webgl rendering for large GeoJSON FeatureCollections
 - https://github.com/carlosign/Folium.ControlCredits-Plugin: displaying credits in the corner. Display an image/logo, clicking it will expand to show a brief message with credits and links.
+- https://github.com/JohnyCarrot/folium-geocoder-own-locations: a geocoder that accepts a list of suggestions at creation time.
