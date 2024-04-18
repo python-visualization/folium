@@ -113,6 +113,20 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
                     {{ this.options if this.options is string else this.options|tojson }}
                 {%- endif %}
             );
+            // Attach popup event
+            {{ this.get_name() }}.on('click', function (e) {
+                const properties = e.layer.properties;
+                var popupContent = "";
+                for (var property in properties) {
+                    if (properties.hasOwnProperty(property)) {
+                        popupContent += "<b>" + property + ":</b> " + properties[property] + "<br>";
+                    }
+                }
+                L.popup()
+                    .setContent(popupContent)
+                    .setLatLng(e.latlng)
+                    .openOn(map);
+            });
             {%- endmacro %}
             """
     )
