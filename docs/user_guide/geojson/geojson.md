@@ -237,6 +237,23 @@ colormap.add_to(m)
 m
 ```
 
+>
+> **Caveat**
+>
+> When using `style_function` in a loop you may encounter Python's 'Late Binding Closure' gotcha!
+> See https://docs.python-guide.org/writing/gotchas/#late-binding-closures for more info.
+> There are a few ways around it from using a GeoPandas object instead,
+> to "hacking" your `style_function` to force early closure, like:
+> ```python
+> for geom, my_style in zip(geoms, my_styles):
+>     style = my_style
+>     style_function = lambda x, style=style: style
+>     folium.GeoJson(
+>         data=geom,
+>         style_function=style_function,
+>     ).add_to(m)
+> ```
+
 ### Highlight function
 
 The `GeoJson` class provides a `highlight_function` argument, which works similarly
