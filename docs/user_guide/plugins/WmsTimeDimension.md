@@ -2,12 +2,9 @@
 
 Add a time dimension to a WMS tile layer.
 
-Note that we don't render the output in this example, because the web service
-used here is not always available.
-
 ### Exploring the WMS with OWSLib
 
-```
+```{code-cell} ipython3
 from owslib.wms import WebMapService
 
 
@@ -20,7 +17,7 @@ print("\n".join(web_map_services.contents.keys()))
 
 ### Layer metadata
 
-```
+```{code-cell} ipython3
 layer = "CRW_SST"
 wms = web_map_services.contents[layer]
 
@@ -41,7 +38,10 @@ if style not in wms.styles:
 
 ### Map with WmsTileLayer and TimestampedWmsTileLayers
 
-```
+```{code-cell} ipython3
+import folium
+import folium.plugins
+
 m = folium.Map(location=[-40, -50], zoom_start=5)
 
 wms_tile_layer = folium.WmsTileLayer(

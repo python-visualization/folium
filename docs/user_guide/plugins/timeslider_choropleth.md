@@ -7,7 +7,8 @@ The class needs at least two arguments to be instantiated.
 1. A string-serielized geojson containing all the features (i.e., the areas)
 2. A dictionary with the following structure:
 
-```
+
+```ipython3
 styledict = {
     '0': {
         '2017-1-1': {'color': 'ffffff', 'opacity': 1},
@@ -32,11 +33,11 @@ Using both color and opacity gives us the ability to simultaneously visualize tw
 We use `geopandas` to load a dataset containing the boundaries of all the countries in the world.
 
 ```{code-cell} ipython3
-import geopandas as gpd
+import geodatasets
+import geopandas
 
-assert "naturalearth_lowres" in gpd.datasets.available
-datapath = gpd.datasets.get_path("naturalearth_lowres")
-gdf = gpd.read_file(datapath)
+datapath = geodatasets.get_path("naturalearth land")
+gdf = geopandas.read_file(datapath)
 ```
 
 ```{code-cell} ipython3
@@ -66,7 +67,7 @@ n_periods, n_sample = 48, 40
 
 assert n_sample < n_periods
 
-datetime_index = pd.date_range("2016-1-1", periods=n_periods, freq="M")
+datetime_index = pd.date_range("2016-1-1", periods=n_periods, freq="ME")
 dt_index_epochs = datetime_index.astype("int64") // 10 ** 9
 dt_index = dt_index_epochs.astype("U10")
 
