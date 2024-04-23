@@ -5,6 +5,7 @@ Folium
 
 .. image:: _static/folium_logo.png
    :height: 100px
+   :class: dark-light
 
 
 Python data, leaflet.js maps

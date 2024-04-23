@@ -11,38 +11,36 @@ from folium.utilities import JsCode, camelize, get_bounds, parse_options
 
 class Timeline(GeoJson):
     """
-      Creates a layer from GeoJSON with time data to append
-      into a map with Map.add_child.
+    Create a layer from GeoJSON with time data to add to a map.
 
-      To add time data, you need to do one of the following:
+    To add time data, you need to do one of the following:
 
-      * Add a 'start' and 'end' property to each feature. The start and end
-        can be any comparable item.
+    * Add a 'start' and 'end' property to each feature. The start and end
+      can be any comparable item.
 
-      Alternatively, you can provide
-      a `get_interval` function.
+    Alternatively, you can provide a `get_interval` function.
 
-      * This function should be a JsCode object and take as parameter
-        a GeoJson feature and return a dict containing values for
-        'start', 'end', 'startExclusive' and 'endExcusive' (or false if no
-        data could be extracted from the feature).
-      * 'start' and 'end' can be any comparable items
-      * 'startExclusive' and 'endExclusive' should be boolean values.
+    * This function should be a JsCode object and take as parameter
+      a GeoJson feature and return a dict containing values for
+      'start', 'end', 'startExclusive' and 'endExcusive' (or false if no
+      data could be extracted from the feature).
+    * 'start' and 'end' can be any comparable items
+    * 'startExclusive' and 'endExclusive' should be boolean values.
 
-      Parameters
-      ----------
-      data: file, dict or str.
-          The geojson data you want to plot.
+    Parameters
+    ----------
+    data: file, dict or str.
+        The geojson data you want to plot.
 
-      get_interval: JsCode, optional
-          Called for each feature, and should return either a time range for the
-          feature or `false`, indicating that it should not be included in the
-          timeline. The time range object should have 'start' and 'end' properties.
-          Optionally, the boolean keys 'startExclusive' and 'endExclusive' allow the
-          interval to be considered exclusive.
+    get_interval: JsCode, optional
+        Called for each feature, and should return either a time range for the
+        feature or `false`, indicating that it should not be included in the
+        timeline. The time range object should have 'start' and 'end' properties.
+        Optionally, the boolean keys 'startExclusive' and 'endExclusive' allow the
+        interval to be considered exclusive.
 
-          If `get_interval` is not provided, 'start' and 'end' properties are
-          assumed to be present on each feature.
+        If `get_interval` is not provided, 'start' and 'end' properties are
+        assumed to be present on each feature.
 
     Examples
     --------
@@ -142,35 +140,33 @@ class Timeline(GeoJson):
 
 class TimelineSlider(JSCSSMixin, MacroElement):
     """
-      Creates a timeline slider for timeline layers.
+    Creates a timeline slider for timeline layers.
 
-      Parameters
-      ----------
-      auto_play: bool, default True
-          Whether the animation shall start automatically at startup.
-
-      start: str, int or float, default earliest 'start' in GeoJson
-          The beginning/minimum value of the timeline.
-      end: str, int or float, default latest 'end' in GeoJSON
-          The end/maximum value of the timeline.
-
-      date_options: str, default "YYYY-MM-DD HH:mm:ss"
-          A format string to render the currently active time in the control.
-      enable_playback: bool, default True
-          Show playback controls (i.e. prev/play/pause/next).
-      enable_keyboard_controls: bool, default False
-          Allow playback to be controlled using the spacebar (play/pause) and
-          right/left arrow keys (next/previous).
-      show_ticks: bool, default True
-          Show tick marks on the slider
-      steps: int, default 1000
-          How many steps to break the timeline into.
-          Each step will then be (end-start) / steps. Only affects playback.
-      playback_duration: int, default 10000
-          Minimum time, in ms, for the playback to take. Will almost certainly
-          actually take at least a bit longer -- after each frame, the next
-          one displays in playback_duration/steps ms, so each frame really
-          takes frame processing time PLUS step time.
+    Parameters
+    ----------
+    auto_play: bool, default True
+        Whether the animation shall start automatically at startup.
+    start: str, int or float, default earliest 'start' in GeoJson
+        The beginning/minimum value of the timeline.
+    end: str, int or float, default latest 'end' in GeoJSON
+        The end/maximum value of the timeline.
+    date_options: str, default "YYYY-MM-DD HH:mm:ss"
+        A format string to render the currently active time in the control.
+    enable_playback: bool, default True
+        Show playback controls (i.e. prev/play/pause/next).
+    enable_keyboard_controls: bool, default False
+        Allow playback to be controlled using the spacebar (play/pause) and
+        right/left arrow keys (next/previous).
+    show_ticks: bool, default True
+        Show tick marks on the slider
+    steps: int, default 1000
+        How many steps to break the timeline into.
+        Each step will then be (end-start) / steps. Only affects playback.
+    playback_duration: int, default 10000
+        Minimum time, in ms, for the playback to take. Will almost certainly
+        actually take at least a bit longer -- after each frame, the next
+        one displays in playback_duration/steps ms, so each frame really
+        takes frame processing time PLUS step time.
 
     Examples
     --------
