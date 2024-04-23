@@ -51,7 +51,7 @@ import datetime
 
 year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
 project = "Folium"
-copyright = f"{year}, Rob Story"
+copyright = f"2013-{year}, Rob Story"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
