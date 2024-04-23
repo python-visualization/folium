@@ -28,7 +28,7 @@ lon -= 180
 
 import matplotlib
 
-cm = matplotlib.cm.get_cmap("cubehelix")
+cm = matplotlib.colormaps["cubehelix"]
 
 normed_data = (data - data.min()) / (data.max() - data.min())
 colored_data = cm(normed_data)

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TimestampedWmsTileLayers &#8212; Folium 0.1.dev1+gae827c1 documentation</title>
+    <title>TimestampedWmsTileLayers &#8212; Folium 0.1.dev1+g4b860c0 documentation</title>
   
   
   
@@ -29,6 +29,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -36,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=80188001"></script>
+    <script src="../../_static/documentation_options.js?v=cf1791ab"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -519,66 +520,233 @@ document.write(`
   <section id="TimestampedWmsTileLayers">
 <h1>TimestampedWmsTileLayers<a class="headerlink" href="#TimestampedWmsTileLayers" title="Link to this heading">#</a></h1>
 <p>Add a time dimension to a WMS tile layer.</p>
-<p>Note that we don’t render the output in this example, because the web service used here is not always available.</p>
 <section id="Exploring-the-WMS-with-OWSLib">
 <h2>Exploring the WMS with OWSLib<a class="headerlink" href="#Exploring-the-WMS-with-OWSLib" title="Link to this heading">#</a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>from owslib.wms import WebMapService
-
-
-url = &quot;https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS&quot;
-
-web_map_services = WebMapService(url)
-
-print(&quot;\n&quot;.join(web_map_services.contents.keys()))
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">owslib.wms</span> <span class="kn">import</span> <span class="n">WebMapService</span>
+
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS&quot;</span>
+
+<span class="n">web_map_services</span> <span class="o">=</span> <span class="n">WebMapService</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">web_map_services</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+CRW_DHW
+CRW_DHW_mask
+CRW_HOTSPOT
+CRW_HOTSPOT_mask
+CRW_SSTANOMALY
+CRW_SSTANOMALY_mask
+CRW_BAA
+CRW_BAA_mask
+CRW_BAA_7D_MAX
+CRW_BAA_7D_MAX_mask
+CRW_SEAICE
+CRW_SST
+</pre></div></div>
 </div>
 </section>
 <section id="Layer-metadata">
 <h2>Layer metadata<a class="headerlink" href="#Layer-metadata" title="Link to this heading">#</a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>layer = &quot;CRW_SST&quot;
-wms = web_map_services.contents[layer]
-
-name = wms.title
-
-lon = (wms.boundingBox[0] + wms.boundingBox[2]) / 2.0
-lat = (wms.boundingBox[1] + wms.boundingBox[3]) / 2.0
-center = lat, lon
-
-time_interval = &quot;{0}/{1}&quot;.format(
-    wms.timepositions[0].strip(), wms.timepositions[-1].strip()
-)
-style = &quot;boxfill/sst_36&quot;
-
-if style not in wms.styles:
-    style = None
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="s2">&quot;CRW_SST&quot;</span>
+<span class="n">wms</span> <span class="o">=</span> <span class="n">web_map_services</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="n">wms</span><span class="o">.</span><span class="n">title</span>
+
+<span class="n">lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+<span class="n">center</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span>
+
+<span class="n">time_interval</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="n">wms</span><span class="o">.</span><span class="n">timepositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">wms</span><span class="o">.</span><span class="n">timepositions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;boxfill/sst_36&quot;</span>
+
+<span class="k">if</span> <span class="n">style</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wms</span><span class="o">.</span><span class="n">styles</span><span class="p">:</span>
+    <span class="n">style</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
 </div>
 </section>
 <section id="Map-with-WmsTileLayer-and-TimestampedWmsTileLayers">
 <h2>Map with WmsTileLayer and TimestampedWmsTileLayers<a class="headerlink" href="#Map-with-WmsTileLayer-and-TimestampedWmsTileLayers" title="Link to this heading">#</a></h2>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>m = folium.Map(location=[-40, -50], zoom_start=5)
-
-wms_tile_layer = folium.WmsTileLayer(
-    url=url,
-    name=name,
-    styles=style,
-    fmt=&quot;image/png&quot;,
-    transparent=True,
-    layers=layer,
-    overlay=True,
-    COLORSCALERANGE=&quot;1.2,28&quot;,
-).add_to(m)
-
-folium.plugins.TimestampedWmsTileLayers(
-    wms_tile_layer,
-    period=&quot;PT1H&quot;,
-    time_interval=time_interval,
-).add_to(m)
-
-folium.LayerControl().add_to(m)
-
-m
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">folium</span>
+<span class="kn">import</span> <span class="nn">folium.plugins</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">40</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">wms_tile_layer</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">WmsTileLayer</span><span class="p">(</span>
+    <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+    <span class="n">styles</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+    <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">layers</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
+    <span class="n">overlay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s2">&quot;1.2,28&quot;</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">TimestampedWmsTileLayers</span><span class="p">(</span>
+    <span class="n">wms_tile_layer</span><span class="p">,</span>
+    <span class="n">period</span><span class="o">=</span><span class="s2">&quot;PT1H&quot;</span><span class="p">,</span>
+    <span class="n">time_interval</span><span class="o">=</span><span class="n">time_interval</span><span class="p">,</span>
+<span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+
+        &lt;script&gt;
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        &lt;/script&gt;
+
+    &lt;style&gt;html, body {width: 100%;height: 100%;margin: 0;padding: 0;}&lt;/style&gt;
+    &lt;style&gt;#map {position:absolute;top:0;bottom:0;right:0;left:0;}&lt;/style&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_b5ef15103959feb31fb2bf7ba8109476 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/iso8601-js-period@0.2.1/iso8601.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet-timedimension@1.1.1/dist/leaflet.timedimension.control.css&quot;/&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_b5ef15103959feb31fb2bf7ba8109476&quot; &gt;&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;script&gt;
+
+
+            var map_b5ef15103959feb31fb2bf7ba8109476 = L.map(
+                &quot;map_b5ef15103959feb31fb2bf7ba8109476&quot;,
+                {
+                    center: [-40.0, -50.0],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 5,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+
+
+
+
+
+            var tile_layer_f1d8c42833140ab4f269aa95d86cebff = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+            );
+
+
+            tile_layer_f1d8c42833140ab4f269aa95d86cebff.addTo(map_b5ef15103959feb31fb2bf7ba8109476);
+
+
+            var macro_element_61791103e935c18ca67e6adb382c4730 = L.tileLayer.wms(
+                &quot;https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS&quot;,
+                {&quot;COLORSCALERANGE&quot;: &quot;1.2,28&quot;, &quot;attribution&quot;: &quot;&quot;, &quot;format&quot;: &quot;image/png&quot;, &quot;layers&quot;: &quot;CRW_SST&quot;, &quot;styles&quot;: &quot;boxfill/sst_36&quot;, &quot;transparent&quot;: true, &quot;version&quot;: &quot;1.1.1&quot;}
+            );
+
+
+            macro_element_61791103e935c18ca67e6adb382c4730.addTo(map_b5ef15103959feb31fb2bf7ba8109476);
+
+
+            map_b5ef15103959feb31fb2bf7ba8109476.timeDimension = L.timeDimension(
+                {&quot;period&quot;: &quot;PT1H&quot;, &quot;timeInterval&quot;: &quot;2021-04-22T12:00:00.000Z/2024-04-21T12:00:00.000Z&quot;}
+            );
+            map_b5ef15103959feb31fb2bf7ba8109476.timeDimensionControl =
+                L.control.timeDimension(
+                    {&quot;autoPlay&quot;: false, &quot;playerOptions&quot;: {&quot;loop&quot;: false, &quot;transitionTime&quot;: 200}, &quot;position&quot;: &quot;bottomleft&quot;}
+                );
+            map_b5ef15103959feb31fb2bf7ba8109476.addControl(
+                map_b5ef15103959feb31fb2bf7ba8109476.timeDimensionControl
+            );
+
+
+            var macro_element_61791103e935c18ca67e6adb382c4730 = L.timeDimension.layer.wms(
+                macro_element_61791103e935c18ca67e6adb382c4730,
+                {
+                    updateTimeDimension: false,
+                    wmsVersion: &quot;1.1.1&quot;,
+                }
+            ).addTo(map_b5ef15103959feb31fb2bf7ba8109476);
+
+
+
+            var layer_control_fbe80346321059fe7a4a53074911a1be_layers = {
+                base_layers : {
+                    &quot;openstreetmap&quot; : tile_layer_f1d8c42833140ab4f269aa95d86cebff,
+                },
+                overlays :  {
+                    &quot;sea_surface_temperature&quot; : macro_element_61791103e935c18ca67e6adb382c4730,
+                },
+            };
+            let layer_control_fbe80346321059fe7a4a53074911a1be = L.control.layers(
+                layer_control_fbe80346321059fe7a4a53074911a1be_layers.base_layers,
+                layer_control_fbe80346321059fe7a4a53074911a1be_layers.overlays,
+                {&quot;autoZIndex&quot;: true, &quot;collapsed&quot;: true, &quot;position&quot;: &quot;topright&quot;}
+            ).addTo(map_b5ef15103959feb31fb2bf7ba8109476);
+
+
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
 </section>
 </section>
@@ -666,13 +834,13 @@ m
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.1.dev1.dev+gae827c1</div>
+Folium version 0.1.dev1.dev+g4b860c0</div>
       
         <div class="footer-item">
 
   <p class="copyright">
     
-      © Copyright 2013, Rob Story.
+      © Copyright 2013-2024, Rob Story.
       <br/>
     
   </p>
@@ -681,7 +849,7 @@ Folium version 0.1.dev1.dev+gae827c1</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     <br/>
   </p>
 </div>

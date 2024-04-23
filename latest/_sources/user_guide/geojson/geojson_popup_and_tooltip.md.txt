@@ -35,13 +35,14 @@ states.head()
 ```
 
 ```{code-cell} ipython3
+import io
 import requests
 
 response = requests.get(
     "https://gist.githubusercontent.com/tvpmb/4734703/raw/"
     "b54d03154c339ed3047c66fefcece4727dfc931a/US%2520State%2520List"
 )
-abbrs = pd.read_json(response.text)
+abbrs = pd.read_json(io.StringIO(response.text))
 
 abbrs.head(3)
 ```
