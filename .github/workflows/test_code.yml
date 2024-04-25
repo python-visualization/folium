@@ -37,7 +37,7 @@ jobs:
       run: python -m pytest -vv --ignore=tests/selenium
 
     - name: Install nightly versions of dependencies
-      run: python -m pip install --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple numpy pandas -U
+      run: python -m pip install --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple numpy pandas shapely -U
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
 
     - name: Code tests with nightly dependencies
