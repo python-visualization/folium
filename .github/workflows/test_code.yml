@@ -38,8 +38,8 @@ jobs:
 
     - name: Install nightly version of numpy
       run: python -m pip install --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple numpy -U
-      if: runner.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
 
     - name: Code tests with nightly numpy
       run: python -m pytest -vv --ignore=tests/selenium
-      if: runner.os == 'ubuntu-latest' && matrix.python-version == '3.12'
+      if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
