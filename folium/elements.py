@@ -55,9 +55,9 @@ class EventTargetMixin(Element):
     --------
     >>> import folium
     >>> from folium.utilities import JsCode
-
+    >>>
     >>> m = folium.Map()
-
+    >>>
     >>> geo_json_data = {
     ...     "type": "FeatureCollection",
     ...     "features": [
@@ -79,8 +79,9 @@ class EventTargetMixin(Element):
     ...         }
     ...     ],
     ... }
-
+    >>>
     >>> g = folium.GeoJson(geo_json_data).add_to(m)
+    >>>
     >>> highlight = JsCode(
     ...     """
     ...    function highlight(e) {
@@ -89,6 +90,7 @@ class EventTargetMixin(Element):
     ... }
     ... """
     ... )
+    >>>
     >>> reset = JsCode(
     ...     """
     ... function reset(e) {
@@ -96,6 +98,7 @@ class EventTargetMixin(Element):
     ... }
     ... """
     ... )
+    >>>
     >>> g.on(mouseover=highlight, mouseout=reset)
     '''
 
