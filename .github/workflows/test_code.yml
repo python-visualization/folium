@@ -36,10 +36,10 @@ jobs:
     - name: Code tests
       run: python -m pytest -vv --ignore=tests/selenium
 
-    - name: Install nightly version of numpy
-      run: python -m pip install --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple numpy -U
+    - name: Install nightly versions of dependencies
+      run: python -m pip install --pre --index-url https://pypi.anaconda.org/scientific-python-nightly-wheels/simple --extra-index-url https://pypi.org/simple numpy pandas -U
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
 
-    - name: Code tests with nightly numpy
+    - name: Code tests with nightly dependencies
       run: python -m pytest -vv --ignore=tests/selenium
       if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'
