@@ -4,7 +4,7 @@ from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.features import MacroElement
-from folium.utilities import parse_options
+from folium.vector_layers import path_options
 
 
 class _BaseFromEncoded(JSCSSMixin, MacroElement, ABC):
@@ -42,10 +42,9 @@ class _BaseFromEncoded(JSCSSMixin, MacroElement, ABC):
         )
     ]
 
-    def __init__(self, encoded: str, **kwargs):
+    def __init__(self, encoded: str):
         super().__init__()
         self.encoded = encoded
-        self.options = parse_options(**kwargs)
 
     @property
     @abstractmethod
@@ -79,7 +78,8 @@ class PolyLineFromEncoded(_BaseFromEncoded):
 
     def __init__(self, encoded: str, **kwargs):
         self._name = "PolyLineFromEncoded"
-        super().__init__(encoded=encoded, **kwargs)
+        super().__init__(encoded=encoded)
+        path_options(line=True, **kwargs)
 
     @property
     def _encoding_type(self) -> str:
@@ -112,7 +112,10 @@ class PolygonFromEncoded(_BaseFromEncoded):
 
     def __init__(self, encoded: str, **kwargs):
         self._name = "PolygonFromEncoded"
-        super().__init__(encoded, **kwargs)
+        super().__init__(
+            encoded,
+        )
+        path_options(line=True, radius=None, **kwargs)
 
     @property
     def _encoding_type(self) -> str:
