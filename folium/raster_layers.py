@@ -34,14 +34,12 @@ class TileLayer(Layer):
             - "CartoDB Positron"
             - "CartoDB Voyager"
 
-        You can pass a custom tileset to Folium by passing a
-        :class:`xyzservices.TileProvider` or a Leaflet-style
-        URL to the tiles parameter: ``http://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+        Explore more provider names available in ``xyzservices`` here:
+        https://leaflet-extras.github.io/leaflet-providers/preview/.
 
-        You can find a list of free tile providers here:
-        http://leaflet-extras.github.io/leaflet-providers/preview/.
-        Be sure to check their terms and conditions and to provide attribution
-        with the `attr` keyword.
+        You can also pass a custom tileset by passing a
+        :class:`xyzservices.TileProvider` or a Leaflet-style
+        URL to the tiles parameter: ``https://{s}.yourtiles.com/{z}/{x}/{y}.png``.
     min_zoom: int, default 0
         Minimum allowed zoom level for this tile layer.
     max_zoom: int, default 18
