@@ -30,6 +30,18 @@ class TagFilterButton(JSCSSMixin, MacroElement):
 
     _template = Template(
         """
+        {% macro header(this,kwargs) %}
+            <style>
+                .easy-button-button {
+                  display: block !important;
+                }
+
+                .tag-filter-tags-container {
+                  left: 30px;
+                }
+            </style>
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.control.tagFilterButton(
                 {{ this.options|tojson }}
