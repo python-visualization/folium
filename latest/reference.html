@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.16.1.dev64+g55a758aa documentation</title>
+    <title>API reference &#8212; Folium 0.16.1.dev65+g5086929b documentation</title>
   
   
   
@@ -36,7 +36,7 @@
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="_static/documentation_options.js?v=34cddd53"></script>
+    <script src="_static/documentation_options.js?v=9e6bd150"></script>
     <script src="_static/doctools.js?v=9a2dae69"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -2554,6 +2554,32 @@ longitude and latitude decimal degree values.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.PolyLineFromEncoded">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">PolyLineFromEncoded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineFromEncoded" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseFromEncoded</span></code></p>
+<p>Create PolyLines directly from the encoded string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoded</strong> (<em>str</em>) – The raw encoded string from the Polyline Encoding Algorithm. See:
+<a class="reference external" href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm">https://developers.google.com/maps/documentation/utilities/polylinealgorithm</a></p></li>
+<li><p><strong>**kwargs</strong> – Polyline options as accepted by leaflet. See:
+<a class="reference external" href="https://leafletjs.com/reference.html#polyline">https://leafletjs.com/reference.html#polyline</a></p></li>
+<li><p><strong>https</strong> (<em>Adapted from</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">Map</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium.plugins</span> <span class="kn">import</span> <span class="n">PolyLineFromEncoded</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoded</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;_p~iF~cn~U_ulLn{vA_mqNvxq`@&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PolyLineFromEncoded</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="n">encoded</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="folium.plugins.PolyLineOffset">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">PolyLineOffset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">locations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tooltip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolyLineOffset" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference internal" href="#folium.vector_layers.PolyLine" title="folium.vector_layers.PolyLine"><code class="xref py py-class docutils literal notranslate"><span class="pre">PolyLine</span></code></a></p>
@@ -2621,6 +2647,32 @@ Example: {‘fill’: ‘#007DEF’, ‘font-weight’: ‘bold’, ‘font-size
 <span class="sig-name descname"><span class="pre">default_js</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#folium.plugins.PolyLineTextPath.default_js" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.PolygonFromEncoded">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">PolygonFromEncoded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">encoded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.PolygonFromEncoded" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_BaseFromEncoded</span></code></p>
+<p>Create Polygons directly from the encoded string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>encoded</strong> (<em>str</em>) – The raw encoded string from the Polyline Encoding Algorithm. See:
+<a class="reference external" href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm">https://developers.google.com/maps/documentation/utilities/polylinealgorithm</a></p></li>
+<li><p><strong>**kwargs</strong> – Polygon options as accepted by leaflet. See:
+<a class="reference external" href="https://leafletjs.com/reference.html#polygon">https://leafletjs.com/reference.html#polygon</a></p></li>
+<li><p><strong>https</strong> (<em>Adapted from</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium</span> <span class="kn">import</span> <span class="n">Map</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">folium.plugins</span> <span class="kn">import</span> <span class="n">PolygonFromEncoded</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">encoded</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;w`j~FpxivO}jz@qnnCd}~Bsa{@~f`C`lkH&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PolygonFromEncoded</span><span class="p">(</span><span class="n">encoded</span><span class="o">=</span><span class="n">encoded</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py class">
@@ -3635,6 +3687,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.MousePosition.default_js"><code class="docutils literal notranslate"><span class="pre">MousePosition.default_js</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolyLineFromEncoded"><code class="docutils literal notranslate"><span class="pre">PolyLineFromEncoded</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolyLineOffset"><code class="docutils literal notranslate"><span class="pre">PolyLineOffset</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolyLineOffset.default_js"><code class="docutils literal notranslate"><span class="pre">PolyLineOffset.default_js</span></code></a></li>
 </ul>
@@ -3643,6 +3696,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolyLineTextPath.default_js"><code class="docutils literal notranslate"><span class="pre">PolyLineTextPath.default_js</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.PolygonFromEncoded"><code class="docutils literal notranslate"><span class="pre">PolygonFromEncoded</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Realtime"><code class="docutils literal notranslate"><span class="pre">Realtime</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.Realtime.default_js"><code class="docutils literal notranslate"><span class="pre">Realtime.default_js</span></code></a></li>
 </ul>
@@ -3747,7 +3801,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.16.1.dev64+g55a758aa</div>
+Folium version 0.16.1.dev65+g5086929b</div>
       
         <div class="footer-item">
 

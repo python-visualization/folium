@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>LocateControl &#8212; Folium 0.16.1.dev64+g55a758aa documentation</title>
+    <title>LocateControl &#8212; Folium 0.16.1.dev65+g5086929b documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=34cddd53"></script>
+    <script src="../../_static/documentation_options.js?v=9e6bd150"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -440,6 +440,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_textpath.html">PolyLineTextPath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime</a></li>
@@ -568,7 +570,7 @@ document.write(`
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_9a6f823f04205bfcc85adbbe1471606e {
+                #map_1764cce91ba67d9dc226b2b8d1f21178 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -584,14 +586,14 @@ document.write(`
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_9a6f823f04205bfcc85adbbe1471606e&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_1764cce91ba67d9dc226b2b8d1f21178&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_9a6f823f04205bfcc85adbbe1471606e = L.map(
-                &quot;map_9a6f823f04205bfcc85adbbe1471606e&quot;,
+            var map_1764cce91ba67d9dc226b2b8d1f21178 = L.map(
+                &quot;map_1764cce91ba67d9dc226b2b8d1f21178&quot;,
                 {
                     center: [41.97, 2.81],
                     crs: L.CRS.EPSG3857,
@@ -605,24 +607,24 @@ document.write(`
 
 
 
-            var tile_layer_8bd6a5bedd97a517a65a806110b4037d = L.tileLayer(
+            var tile_layer_fed6c23a62cd6b86dc8f93faa02447da = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
             );
 
 
-            tile_layer_8bd6a5bedd97a517a65a806110b4037d.addTo(map_9a6f823f04205bfcc85adbbe1471606e);
+            tile_layer_fed6c23a62cd6b86dc8f93faa02447da.addTo(map_1764cce91ba67d9dc226b2b8d1f21178);
 
 
-            var locate_control_d1a22e554c64383e5eac2144615aad45 = L.control.locate(
+            var locate_control_fe3e5099049611d2c8aa20dab0faa885 = L.control.locate(
                 {}
-            ).addTo(map_9a6f823f04205bfcc85adbbe1471606e);
+            ).addTo(map_1764cce91ba67d9dc226b2b8d1f21178);
 
 
 
-            var locate_control_cb28f1ab040809d726a9e123215c5003 = L.control.locate(
+            var locate_control_cc1063a4de3530074a074e665e564c63 = L.control.locate(
                 {}
-            ).addTo(map_9a6f823f04205bfcc85adbbe1471606e);
+            ).addTo(map_1764cce91ba67d9dc226b2b8d1f21178);
 
 
 &lt;/script&gt;
@@ -699,7 +701,7 @@ document.write(`
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.16.1.dev64+g55a758aa</div>
+Folium version 0.16.1.dev65+g5086929b</div>
       
         <div class="footer-item">
 
