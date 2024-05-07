@@ -79,7 +79,7 @@ class PolyLineFromEncoded(_BaseFromEncoded):
     def __init__(self, encoded: str, **kwargs):
         self._name = "PolyLineFromEncoded"
         super().__init__(encoded=encoded)
-        path_options(line=True, **kwargs)
+        self.options = path_options(line=True, **kwargs)
 
     @property
     def _encoding_type(self) -> str:
@@ -112,10 +112,8 @@ class PolygonFromEncoded(_BaseFromEncoded):
 
     def __init__(self, encoded: str, **kwargs):
         self._name = "PolygonFromEncoded"
-        super().__init__(
-            encoded,
-        )
-        path_options(line=True, radius=None, **kwargs)
+        super().__init__(encoded)
+        self.options = path_options(line=True, radius=None, **kwargs)
 
     @property
     def _encoding_type(self) -> str:

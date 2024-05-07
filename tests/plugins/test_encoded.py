@@ -1,5 +1,7 @@
 """Test PolyLineFromEncoded Plugin."""
 
+from jinja2 import Template
+
 from folium import Map
 from folium.plugins import PolygonFromEncoded, PolyLineFromEncoded
 from folium.utilities import normalize
@@ -27,12 +29,16 @@ def test_polyline_from_encoded():
     script = '<script src="https://cdn.jsdelivr.net/npm/polyline-encoded@0.0.9/Polyline.encoded.js"></script>'
     assert script in out
 
-    expected_render = f"""
-    var {polyline.get_name()} = L.Polyline.fromEncoded(
-        "{encoded}", {{"color": "green"}}
-    ).addTo({m.get_name()});
-    """
+    tmpl = Template(
+        """
+        var {{this.get_name()}} = L.Polyline.fromEncoded(
+                        {{ this.encoded|tojson }},
+                        {{ this.options|tojson }}
+        ).addTo({{this._parent.get_name()}});
+        """
+    )
 
+    expected_render = tmpl.render(this=polyline)
     actual_render = polyline._template.module.script(polyline)
 
     assert normalize(expected_render) == normalize(actual_render)
@@ -50,7 +56,7 @@ def test_polygon_from_encoded():
     m = Map([40.0, -80.0], zoom_start=3)
 
     encoded = r"w`j~FpxivO}jz@qnnCd}~Bsa{@~f`C`lkH"
-    polygon = PolygonFromEncoded(encoded=encoded)
+    polygon = PolygonFromEncoded(encoded=encoded, kwargs={})
 
     polygon.add_to(m)
 
@@ -59,9 +65,17 @@ def test_polygon_from_encoded():
     script = '<script src="https://cdn.jsdelivr.net/npm/polyline-encoded@0.0.9/Polyline.encoded.js"></script>'
     assert script in out
 
-    expected_render = f"""
-    var {polygon.get_name()} = L.Polygon.fromEncoded("{encoded}", {{}}).addTo({m.get_name()});
-    """
+    tmpl = Template(
+        """
+        var {{this.get_name()}} = L.Polygon.fromEncoded(
+                            {{ this.encoded|tojson }},
+                            {{ this.options|tojson }}
+        )
+        .addTo({{this._parent.get_name()}});
+        """
+    )
+
+    expected_render = tmpl.render(this=polygon)
 
     actual_render = polygon._template.module.script(polygon)
 
