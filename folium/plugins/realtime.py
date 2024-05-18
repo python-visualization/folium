@@ -1,5 +1,6 @@
 from typing import Optional, Union
 
+from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
@@ -7,7 +8,7 @@ from folium.map import Layer
 from folium.utilities import JsCode, camelize, parse_options
 
 
-class Realtime(JSCSSMixin, Layer):
+class Realtime(JSCSSMixin, MacroElement):
     """Put realtime data on a Leaflet map: live tracking GPS units,
     sensor data or just about anything.
 
