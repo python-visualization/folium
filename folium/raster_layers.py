@@ -40,13 +40,15 @@ class TileLayer(Layer):
         You can also pass a custom tileset by passing a
         :class:`xyzservices.TileProvider` or a Leaflet-style
         URL to the tiles parameter: ``https://{s}.yourtiles.com/{z}/{x}/{y}.png``.
-    min_zoom: int, default 0
-        Minimum allowed zoom level for this tile layer.
-    max_zoom: int, default 18
-        Maximum allowed zoom level for this tile layer.
+    min_zoom: int, optional, default 0
+        Minimum allowed zoom level for this tile layer. Filled by xyzservices by default.
+    max_zoom: int, optional, default 18
+        Maximum allowed zoom level for this tile layer. Filled by xyzservices by default.
     max_native_zoom: int, default None
         The highest zoom level at which the tile server can provide tiles.
-        If provided you can zoom in past this level. Else tiles will turn grey.
+        Filled by xyzservices by default.
+        By setting max_zoom higher than max_native_zoom, you can zoom in
+        past max_native_zoom, tiles will be autoscaled.
     attr: string, default None
         Map tile attribution; only required if passing custom tile URL.
     detect_retina: bool, default False
@@ -89,8 +91,8 @@ class TileLayer(Layer):
     def __init__(
         self,
         tiles: Union[str, xyzservices.TileProvider] = "OpenStreetMap",
-        min_zoom: int = 0,
-        max_zoom: int = 18,
+        min_zoom: Optional[int] = None,
+        max_zoom: Optional[int] = None,
         max_native_zoom: Optional[int] = None,
         attr: Optional[str] = None,
         detect_retina: bool = False,
@@ -117,8 +119,9 @@ class TileLayer(Layer):
 
         if isinstance(tiles, xyzservices.TileProvider):
             attr = attr if attr else tiles.html_attribution  # type: ignore
-            min_zoom = tiles.get("min_zoom", min_zoom)
-            max_zoom = tiles.get("max_zoom", max_zoom)
+            min_zoom = min_zoom or tiles.get("min_zoom")
+            max_zoom = max_zoom or tiles.get("max_zoom")
+            max_native_zoom = max_native_zoom or tiles.get("max_zoom")
             subdomains = tiles.get("subdomains", subdomains)
             if name is None:
                 name = tiles.name.replace(".", "").lower()
@@ -137,9 +140,9 @@ class TileLayer(Layer):
             raise ValueError("Custom tiles must have an attribution.")
 
         self.options = parse_options(
-            min_zoom=min_zoom,
-            max_zoom=max_zoom,
-            max_native_zoom=max_native_zoom or max_zoom,
+            min_zoom=min_zoom or 0,
+            max_zoom=max_zoom or 18,
+            max_native_zoom=max_native_zoom,
             no_wrap=no_wrap,
             attribution=attr,
             subdomains=subdomains,

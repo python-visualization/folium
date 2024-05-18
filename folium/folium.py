@@ -112,10 +112,12 @@ class Map(JSCSSMixin, MacroElement):
         pass a custom URL, pass a TileLayer object,
         or pass `None` to create a map without tiles.
         For more advanced tile layer options, use the `TileLayer` class.
-    min_zoom: int, default 0
+    min_zoom: int, optional, default 0
         Minimum allowed zoom level for the tile layer that is created.
-    max_zoom: int, default 18
+        Filled by xyzservices by default.
+    max_zoom: int, optional, default 18
         Maximum allowed zoom level for the tile layer that is created.
+        Filled by xyzservices by default.
     zoom_start: int, default 10
         Initial zoom level for the map.
     attr: string, default None
@@ -244,8 +246,8 @@ class Map(JSCSSMixin, MacroElement):
         position: str = "relative",
         tiles: Union[str, TileLayer, None] = "OpenStreetMap",
         attr: Optional[str] = None,
-        min_zoom: int = 0,
-        max_zoom: int = 18,
+        min_zoom: Optional[int] = None,
+        max_zoom: Optional[int] = None,
         zoom_start: int = 10,
         min_lat: int = -90,
         max_lat: int = 90,
