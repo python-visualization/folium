@@ -10,7 +10,7 @@ from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
-from folium.elements import ElementAddToElement, EventTargetMixin
+from folium.elements import ElementAddToElement
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
@@ -21,7 +21,7 @@ from folium.utilities import (
 )
 
 
-class Layer(EventTargetMixin, MacroElement):
+class Layer(MacroElement):
     """An abstract class for everything that is a Layer on the map.
     It will be used to define whether an object will be included in
     LayerControls.

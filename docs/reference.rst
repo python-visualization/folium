@@ -35,7 +35,7 @@ Utilities
 ---------------------
 
 .. autoclass:: folium.utilities.JsCode
-.. autoclass:: folium.elements.EventTargetMixin
+.. autoclass:: folium.elements.EventHandler
 
 
 Plugins

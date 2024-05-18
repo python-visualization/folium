@@ -48,9 +48,8 @@ class JSCSSMixin(Element):
             default_list.append((name, url))
 
 
-class EventTargetMixin(Element):
-    '''Add Event Handlers to an element.
-
+class EventHandler(MacroElement):
+    '''
     Examples
     --------
     >>> import folium
@@ -85,34 +84,23 @@ class EventTargetMixin(Element):
     >>> highlight = JsCode(
     ...     """
     ...    function highlight(e) {
-    ...    e.target.original_color = e.layer.options.color;
-    ...    e.target.setStyle({ color: "green" });
-    ... }
+    ...        e.target.original_color = e.layer.options.color;
+    ...        e.target.setStyle({ color: "green" });
+    ...    }
     ... """
     ... )
     >>>
     >>> reset = JsCode(
     ...     """
-    ... function reset(e) {
-    ...    e.target.setStyle({ color: e.target.original_color });
-    ... }
+    ...    function reset(e) {
+    ...       e.target.setStyle({ color: e.target.original_color });
+    ...    }
     ... """
     ... )
     >>>
-    >>> g.on(mouseover=highlight, mouseout=reset)
+    >>> g.add_child(EventHandler("mouseover", highlight))
+    >>> g.add_child(EventHandler("mouseout", reset))
     '''
-
-    def on(self, **kwargs: JsCode):
-        for event, handler in kwargs.items():
-            self.add_child(EventHandler(event, handler))
-        return self
-
-    def render(self, **kwargs) -> None:
-        super().render(**kwargs)
-
-
-class EventHandler(MacroElement):
-    """Render Event Handlers."""
 
     _template = Template(
         """

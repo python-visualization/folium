@@ -13,6 +13,7 @@ from branca.element import Element
 
 import folium
 from folium import Choropleth, ClickForMarker, GeoJson, Map, Popup
+from folium.elements import EventHandler
 from folium.utilities import JsCode
 
 
@@ -296,7 +297,7 @@ def test_geojson_event_handler():
         }
     """
     )
-    geojson.on(mouseover=fn)
+    geojson.add_child(EventHandler("mouseover", fn))
     rendered = m.get_root().render()
     assert fn.js_code in rendered
 
