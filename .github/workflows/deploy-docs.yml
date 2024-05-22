@@ -12,10 +12,17 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+
+    permissions:
+      # Give the GITHUB_TOKEN write permission to commit and push the
+      # changes made to switcher.json.
+      contents: write
+
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        ref: ${{ github.head_ref }} # Checkout branch to allow pushing changes
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v1
@@ -43,7 +50,7 @@ jobs:
       run: |
         python docs/update_switcher.py --version ${{ github.ref_name }}
 
-    # TODO: push the changes to the repo
+    - uses: stefanzweifel/git-auto-commit-action@v5
 
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
