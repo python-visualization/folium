@@ -38,13 +38,20 @@ jobs:
         make clean html linkcheck
         popd
 
+    - name: Update switcher and latest version
+      if: ${{ github.event_name == 'release' }}
+      run: |
+        python docs/update_switcher.py --version ${{ github.ref_name }}
+
+    # TODO: push the changes to the repo
+
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
-        destination_dir: latest
+        destination_dir: dev
         keep_files: false
 
     - name: Publish to Github Pages on release
