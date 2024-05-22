@@ -51,6 +51,10 @@ jobs:
         python docs/update_switcher.py --version ${{ github.ref_name }}
 
     - uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Update switcher.json to ${{ github.ref_name }}
+        branch: ${{ github.head_ref }}
+        
 
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
