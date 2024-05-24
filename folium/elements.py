@@ -50,6 +50,8 @@ class JSCSSMixin(Element):
 
 class EventHandler(MacroElement):
     '''
+    Add javascript event handlers.
+
     Examples
     --------
     >>> import folium
