@@ -13,6 +13,10 @@ jobs:
   run:
     runs-on: ubuntu-latest
 
+    env:
+      # Define the reviewers that will be assigned to the PR.
+      REVIEWERS: "Conengmo,ocefpaf"
+
     permissions:
       # Give the GITHUB_TOKEN write permission to commit and push the
       # changes made to switcher.json.
@@ -50,12 +54,6 @@ jobs:
       run: |
         python docs/update_switcher.py --version ${{ github.ref_name }}
 
-    - uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        commit_message: Update switcher.json to ${{ github.ref_name }}
-        branch: ${{ github.head_ref }}
-        
-
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v4
@@ -72,3 +70,13 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
         destination_dir: ${{ github.ref_name }}
+
+    - name: Create pull request
+      if: ${{ github.event_name == 'release' }}
+      run: |
+        gh pr create \
+          --title "Docs release for ${{ github.ref_name }}" \
+          --body "This PR updates the switcher.json for the ${{ github.ref_name }} release." \
+          --reviewer ${{ env.REVIEWERS }}
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
