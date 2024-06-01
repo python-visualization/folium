@@ -9,19 +9,21 @@ on:
     types:
       - published
 
+permissions:
+  # Give the GITHUB_TOKEN write permission to commit and push the
+  # changes made to switcher.json.
+  contents: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
-
-    env:
-      # Define the reviewers that will be assigned to the automatically created PR.
-      REVIEWERS: "Conengmo,ocefpaf"
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
         ref: main
+        token: ${{ secrets.PAT }}
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v1
@@ -50,6 +52,7 @@ jobs:
         python docs/update_switcher.py --version ${{ github.ref_name }}
 
     - uses: stefanzweifel/git-auto-commit-action@v5
+      if: ${{ github.event_name == 'release' }}
       with:
         commit_message: Update switcher.json to ${{ github.ref_name }}
         branch: ${{ github.head_ref }}
