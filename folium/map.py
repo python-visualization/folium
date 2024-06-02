@@ -12,6 +12,7 @@ from jinja2 import Template
 
 from folium.elements import ElementAddToElement, EventHandler
 from folium.utilities import (
+    JsCode,
     TypeBounds,
     TypeJsonValue,
     camelize,
