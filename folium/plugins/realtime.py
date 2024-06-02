@@ -110,7 +110,7 @@ class Realtime(JSCSSMixin, FeatureGroup):
         update_feature: Union[JsCode, str, None] = None,
         remove_missing: bool = False,
         container: Optional[Union[FeatureGroup, GeoJson]] = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "Realtime"

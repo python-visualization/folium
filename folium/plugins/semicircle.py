@@ -68,7 +68,7 @@ class SemiCircle(JSCSSMixin, Marker):
         stop_angle=None,
         popup=None,
         tooltip=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "SemiCircle"

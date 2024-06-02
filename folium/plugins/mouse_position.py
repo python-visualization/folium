@@ -1,8 +1,6 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.features import Control
-from folium.utilities import parse_options
+from folium.utilities import JsCode
 
 
 class MousePosition(JSCSSMixin, Control):
@@ -45,34 +43,6 @@ class MousePosition(JSCSSMixin, Control):
 
     """
 
-    _template = Template(
-        """
-        {% macro script(this, kwargs) %}
-            var {{ this.get_name() }} = new L.Control.MousePosition(
-                {{ this.options|tojson }}
-            );
-            {{ this.get_name() }}.options["latFormatter"] =
-                {{ this.lat_formatter }};
-            {{ this.get_name() }}.options["lngFormatter"] =
-                {{ this.lng_formatter }};
-            {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
-        {% endmacro %}
-    """
-    )
-
-    default_js = [
-        (
-            "Control_MousePosition_js",
-            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js",
-        )
-    ]
-    default_css = [
-        (
-            "Control_MousePosition_css",
-            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css",
-        )
-    ]
-
     def __init__(
         self,
         position="bottomright",
@@ -83,19 +53,25 @@ class MousePosition(JSCSSMixin, Control):
         prefix="",
         lat_formatter=None,
         lng_formatter=None,
-        **kwargs
+        **kwargs,
     ):
-        super().__init__()
-        self._name = "MousePosition"
-
-        self.options = parse_options(
+        super().__init__(
+            control="MousePosition",
             position=position,
             separator=separator,
             empty_string=empty_string,
             lng_first=lng_first,
             num_digits=num_digits,
             prefix=prefix,
-            **kwargs
+            lat_formatter=JsCode(lat_formatter) if lat_formatter else None,
+            lng_formatter=JsCode(lng_formatter) if lng_formatter else None,
+            **kwargs,
         )
-        self.lat_formatter = lat_formatter or "undefined"
-        self.lng_formatter = lng_formatter or "undefined"
+        self.add_js_link(
+            "Control_MousePosition_js",
+            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js",
+        )
+        self.add_css_link(
+            "Control_MousePosition_css",
+            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css",
+        )

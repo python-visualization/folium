@@ -56,7 +56,7 @@ class Fullscreen(JSCSSMixin, Control):
         title="Full Screen",
         title_cancel="Exit Full Screen",
         force_separate_button=False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "Fullscreen"
@@ -65,5 +65,5 @@ class Fullscreen(JSCSSMixin, Control):
             title=title,
             title_cancel=title_cancel,
             force_separate_button=force_separate_button,
-            **kwargs
+            **kwargs,
         )
