@@ -4,11 +4,11 @@ from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
-from folium.map import FeatureGroup
+from folium.map import Layer
 from folium.utilities import JsCode, camelize, parse_options
 
 
-class Realtime(JSCSSMixin, FeatureGroup):
+class Realtime(JSCSSMixin, Layer):
     """Put realtime data on a Leaflet map: live tracking GPS units,
     sensor data or just about anything.
 
@@ -109,7 +109,7 @@ class Realtime(JSCSSMixin, FeatureGroup):
         get_feature_id: Union[JsCode, str, None] = None,
         update_feature: Union[JsCode, str, None] = None,
         remove_missing: bool = False,
-        container: Optional[Union[FeatureGroup, GeoJson]] = None,
+        container: Optional[GeoJson] = None,
         **kwargs,
     ):
         super().__init__()
