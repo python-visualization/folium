@@ -32,7 +32,7 @@ class Evented(MacroElement):
     method using python keyword arguments.
     """
 
-    def on(self, **event_map):
+    def on(self, **event_map: JsCode):
         for event_type, handler in event_map.items():
             self.add_child(EventHandler(event_type, handler))
 
