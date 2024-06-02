@@ -13,6 +13,8 @@ from branca.element import Element
 
 import folium
 from folium import Choropleth, ClickForMarker, GeoJson, Map, Popup
+from folium.elements import EventHandler
+from folium.utilities import JsCode
 
 
 @pytest.fixture
@@ -281,6 +283,23 @@ def test_geojson_empty_features_with_styling():
     data = {"type": "FeatureCollection", "features": []}
     GeoJson(data, style_function=lambda x: {}).add_to(m)
     m.get_root().render()
+
+
+def test_geojson_event_handler():
+    """Test that event handlers are properly generated"""
+    m = Map()
+    data = {"type": "FeatureCollection", "features": []}
+    geojson = GeoJson(data, style_function=lambda x: {}).add_to(m)
+    fn = JsCode(
+        """
+        function f(e) {
+            console.log("only for testing")
+        }
+    """
+    )
+    geojson.add_child(EventHandler("mouseover", fn))
+    rendered = m.get_root().render()
+    assert fn.js_code in rendered
 
 
 def test_geometry_collection_get_bounds():
