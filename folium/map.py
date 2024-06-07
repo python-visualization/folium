@@ -10,8 +10,9 @@ from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
 from branca.element import Element, Figure, Html, MacroElement
 from jinja2 import Template
 
-from folium.elements import ElementAddToElement
+from folium.elements import ElementAddToElement, EventHandler
 from folium.utilities import (
+    JsCode,
     TypeBounds,
     TypeJsonValue,
     camelize,
@@ -21,7 +22,23 @@ from folium.utilities import (
 )
 
 
-class Layer(MacroElement):
+class Evented(MacroElement):
+    """The base class for Layer and Map
+
+    Adds the `on` method for event handling capabilities.
+
+    See https://leafletjs.com/reference.html#evented for
+    more in depth documentation. Please note that we have
+    only added the `on(<Object> eventMap)` variant of this
+    method using python keyword arguments.
+    """
+
+    def on(self, **event_map: JsCode):
+        for event_type, handler in event_map.items():
+            self.add_child(EventHandler(event_type, handler))
+
+
+class Layer(Evented):
     """An abstract class for everything that is a Layer on the map.
     It will be used to define whether an object will be included in
     LayerControls.

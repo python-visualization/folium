@@ -7,11 +7,11 @@ import time
 import webbrowser
 from typing import Any, List, Optional, Sequence, Union
 
-from branca.element import Element, Figure, MacroElement
+from branca.element import Element, Figure
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import FitBounds, Layer
+from folium.map import Evented, FitBounds, Layer
 from folium.raster_layers import TileLayer
 from folium.utilities import (
     TypeBounds,
@@ -79,7 +79,7 @@ class GlobalSwitches(Element):
         self.disable_3d = disable_3d
 
 
-class Map(JSCSSMixin, MacroElement):
+class Map(JSCSSMixin, Evented):
     """Create a Map with Folium and Leaflet.js
 
     Generate a base map of given width and height with either default
