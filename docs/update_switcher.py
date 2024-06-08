@@ -11,7 +11,9 @@ import os
 def main():
     # Define CLI arguments
     parser = argparse.ArgumentParser(description="Update switcher.json")
-    parser.add_argument("--version", "-v", required=True, type=str, help="The new version to add")
+    parser.add_argument(
+        "--version", "-v", required=True, type=str, help="The new version to add"
+    )
     args = parser.parse_args()
 
     # Setup path to switcher.json (relative to this script) and load it
@@ -39,7 +41,9 @@ def main():
 
     # Make sure version is unique
     if any(version["version"] == args.version for version in switcher):
-        print(f"Version {args.version} already exists in switcher.json. Not adding it again.")
+        print(
+            f"Version {args.version} already exists in switcher.json. Not adding it again."
+        )
     else:
         switcher.insert(latest_index + 1, new_version)
 
