@@ -5,9 +5,11 @@ tests TimeSliderChoropleth
 """
 
 import json
+import sys
 
 import numpy as np
 import pandas as pd
+import pytest
 from branca.colormap import linear
 
 import folium
@@ -15,14 +17,15 @@ from folium.plugins import TimeSliderChoropleth
 from folium.utilities import normalize
 
 
+@pytest.mark.xfail(sys.version_info[0:2] == (3, 8), reason="too modern for py38")
 def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeSliderChoropleth
     """
+    import geodatasets
     import geopandas as gpd
 
-    assert "naturalearth_lowres" in gpd.datasets.available
-    datapath = gpd.datasets.get_path("naturalearth_lowres")
+    datapath = geodatasets.get_path("naturalearth land")
     gdf = gpd.read_file(datapath)
 
     """
@@ -32,7 +35,7 @@ def test_timedynamic_geo_json():
     datetime.strftime('%s') on Windows just generates date and not timestamp so avoid.
     """
     n_periods = 3
-    dt_range = pd.Series(pd.date_range("2001-08-1", periods=n_periods, freq="M"))
+    dt_range = pd.Series(pd.date_range("2001-08-1", periods=n_periods, freq="ME"))
     dt_index = [f"{dt.timestamp():.0f}" for dt in dt_range]
 
     styledata = {}
