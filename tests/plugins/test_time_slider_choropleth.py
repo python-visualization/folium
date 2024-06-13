@@ -32,7 +32,7 @@ def test_timedynamic_geo_json():
     datetime.strftime('%s') on Windows just generates date and not timestamp so avoid.
     """
     n_periods = 3
-    dt_range = pd.Series(pd.date_range("2001-08-1", periods=n_periods, freq="M"))
+    dt_range = pd.Series(pd.date_range("2001-08-1", periods=n_periods, freq="ME"))
     dt_index = [f"{dt.timestamp():.0f}" for dt in dt_range]
 
     styledata = {}
