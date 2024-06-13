@@ -5,9 +5,11 @@ tests TimeSliderChoropleth
 """
 
 import json
+import sys
 
 import numpy as np
 import pandas as pd
+import pytest
 from branca.colormap import linear
 
 import folium
@@ -15,6 +17,7 @@ from folium.plugins import TimeSliderChoropleth
 from folium.utilities import normalize
 
 
+@pytest.mark.xfail(sys.version_info[0:2] == (3, 8), reason="too modern for py38")
 def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeSliderChoropleth
