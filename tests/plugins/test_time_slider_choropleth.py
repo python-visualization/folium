@@ -22,10 +22,10 @@ def test_timedynamic_geo_json():
     """
     tests folium.plugins.TimeSliderChoropleth
     """
+    import geodatasets
     import geopandas as gpd
 
-    assert "naturalearth_lowres" in gpd.datasets.available
-    datapath = gpd.datasets.get_path("naturalearth_lowres")
+    datapath = geodatasets.get_path("naturalearth land")
     gdf = gpd.read_file(datapath)
 
     """
