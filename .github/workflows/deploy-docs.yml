@@ -9,13 +9,20 @@ on:
     types:
       - published
 
+permissions:
+  # Give the GITHUB_TOKEN write permission to open a PR with the changes to the switcher.json file.
+  contents: write
+  pull-requests: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        ref: main
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v1
@@ -38,13 +45,29 @@ jobs:
         make clean html linkcheck
         popd
 
+    - name: Update switcher and latest version
+      if: ${{ github.event_name == 'release' }}
+      run: |
+        python docs/update_switcher.py --version ${{ github.ref_name }}
+
+    - name: Create PR
+      if: ${{ github.event_name == 'release' }}
+      uses: peter-evans/create-pull-request@v3
+      with:
+        commit-message: "docs: Update switcher.json for ${{ github.ref_name }}"
+        title: "docs: Update switcher.json for ${{ github.ref_name }}"
+        body: "This PR updates the switcher.json file."
+        branch: "docs/update-switcher-${{ github.ref_name }}"
+        base: "main"
+        labels: "documentation"
+
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
-        destination_dir: latest
+        destination_dir: dev
         keep_files: false
 
     - name: Publish to Github Pages on release
