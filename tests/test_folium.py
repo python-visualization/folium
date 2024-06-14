@@ -271,7 +271,7 @@ class TestFolium:
             geo_data = json.load(f)
 
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data["features"])
-        geo_data_frame.crs = {"init": "epsg:4326"}
+        geo_data_frame = geo_data_frame.set_crs("epsg: 4326")
         fill_color = "BuPu"
         key_on = "feature.id"
 
@@ -302,7 +302,7 @@ class TestFolium:
             geo_data = json.load(f)
 
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data["features"])
-        geo_data_frame.crs = {"init": "epsg:4326"}
+        geo_data_frame = geo_data_frame.set_crs("epsg: 4326")
         data = pd.DataFrame(
             {
                 "idx": {"0": 0, "1": "1", "2": 2, "3": 3, "4": 4, "5": 5},
@@ -348,7 +348,7 @@ class TestFolium:
             geo_data = json.load(f)
 
         geo_data_frame = gpd.GeoDataFrame.from_features(geo_data["features"])
-        geo_data_frame.crs = {"init": "epsg:4326"}
+        geo_data_frame = geo_data_frame.set_crs("epsg: 4326")
         data = pd.DataFrame(
             {
                 "idx": {"0": "0", "1": "1", "2": "2", "3": "3", "4": "4", "5": "5"},
