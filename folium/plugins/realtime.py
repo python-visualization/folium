@@ -42,7 +42,7 @@ class Realtime(JSCSSMixin, FeatureGroup):
     remove_missing: bool, default False
         Should missing features between updates been automatically
         removed from the layer
-    container: Layer, default GeoJson
+    container: FeatureGroup or GeoJson, default GeoJson
         The container will typically be a `FeatureGroup`, `MarkerCluster` or
         `GeoJson`, but it can be anything that generates a javascript
         L.LayerGroup object, i.e. something that has the methods
