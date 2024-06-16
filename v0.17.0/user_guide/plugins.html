@@ -1,0 +1,758 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Plugins &#8212; Folium 0.17.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=924e9346" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
+
+    <script src="../_static/documentation_options.js?v=0c3dd48d"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/plugins';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.3';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.17.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Antpath" href="plugins/antpath.html" />
+    <link rel="prev" title="Click-related classes" href="features/click_related_classes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/folium_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/folium_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Folium</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../advanced_guide.html">
+    Advanced guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../advanced_guide.html">
+    Advanced guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="map.html">Map</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="ui_elements.html">UI elements</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements/layer_control.html">LayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements/popups.html">Popups</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ui_elements/icons.html">Icons</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="raster_layers.html">Raster layers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="raster_layers/tiles.html">Tiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raster_layers/image_overlay.html">ImageOverlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raster_layers/video_overlay.html">VideoOverlay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="raster_layers/wms_tile_layer.html">WmsTileLayer</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="vector_layers.html">Vector layers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="vector_layers/circle_and_circle_marker.html">Circle and CircleMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_layers/polyline.html">PolyLine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_layers/rectangle.html">Rectangle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_layers/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector_layers/colorline.html">ColorLine</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="geojson.html">GeoJSON and choropleth</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="geojson/geojson.html">Using <code class="docutils literal notranslate"><span class="pre">GeoJson</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/smoothing.html">Smoothing</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="features.html">Features</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="features/fit_overlays.html">FitOverlays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="features/click_related_classes.html">Click-related classes</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Plugins</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plugins/antpath.html">Antpath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/boat_marker.html">BoatMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/beautify_icon.html">BeautifyIcon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/draw.html">Draw</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/dual_map.html">DualMap plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/featuregroup_subgroup.html">FeatureGroupSubGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/float_image.html">FloatImage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/fullscreen.html">Fullscreen</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/geocoder.html">Geocoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/grouped_layer_control.html">GroupedLayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/heatmap.html">Heatmap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/heatmap_with_time.html">HeatMapWithTime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/locate_control.html">LocateControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/marker_cluster.html">MarkerCluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/mini_map.html">MiniMap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/measure_control.html">MeasureControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/pattern.html">Pattern plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/polygon_encoded.html">PolygonFromEncoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/polyline_encoded.html">PolyLineFromEncoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/polyline_offset.html">PolylineOffset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/polyline_textpath.html">PolyLineTextPath</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/realtime.html">Realtime</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/scroll_zoom_toggler.html">ScrollZoomToggler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/search.html">Search</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/semi_circle.html">SemiCircle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/side_by_side_layers.html">SideBySideLayers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/tag_filter_button.html">TagFilterButton</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/terminator.html">Terminator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/timeline.html">Timeline and TimelineSlider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/timeslider_choropleth.html">TimeSliderChoropleth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/timestamped_geojson.html">TimestampedGeoJson</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/treelayercontrol.html">TreeLayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/vector_tiles.html">Vector tiles using VectorGridProtobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plugins/WmsTimeDimension.html">TimestampedWmsTileLayers</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../user_guide.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Plugins</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="plugins">
+<h1>Plugins<a class="headerlink" href="#plugins" title="Link to this heading">#</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 75.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Plugin</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/antpath.html"><span class="doc">Ant Path</span></a></p></td>
+<td><p>A flux animation (like walking of ants) along a polyline.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/boat_marker.html"><span class="doc">Boat Marker</span></a></p></td>
+<td><p>A boat marker using HTML canvas for displaying yachts and sailboats with heading and optional wind information.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/beautify_icon.html"><span class="doc">Beautify Icon</span></a></p></td>
+<td><p>Lightweight plugin that adds colorful iconic markers without image and gives full control of style to end user (i.e. Unlimited colors and CSS styling).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/draw.html"><span class="doc">Draw</span></a></p></td>
+<td><p>Enables drawing features like polylines, polygons, rectangles, circles and markers through a very nice user-friendly interface with icons and hints.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/dual_map.html"><span class="doc">Dual Map</span></a></p></td>
+<td><p>Synchronized view of two maps in the same window.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/featuregroup_subgroup.html"><span class="doc">FeatureGroup Subgroup</span></a></p></td>
+<td><p>Create Feature Groups that add their child layers into a parent group.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/float_image.html"><span class="doc">Float Image</span></a></p></td>
+<td><p>Add a floating image in the HTML canvas on top of the map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/fullscreen.html"><span class="doc">Fullscreen</span></a></p></td>
+<td><p>A fullscreen button control for modern browsers, using HTML Fullscreen API.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/geocoder.html"><span class="doc">Geocoder</span></a></p></td>
+<td><p>A clean and extensible control for both geocoding and reverse geocoding using different geocoding providers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/grouped_layer_control.html"><span class="doc">Grouped Layer Control</span></a></p></td>
+<td><p>Create layer control with support for grouping overlays together.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/heatmap.html"><span class="doc">Heatmap</span></a></p></td>
+<td><p>A tiny, simple and fast heatmap plugin.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/heatmap_with_time.html"><span class="doc">Heatmap with Time</span></a></p></td>
+<td><p>Create a time-aware heatmap.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/locate_control.html"><span class="doc">Locate Control</span></a></p></td>
+<td><p>Geolocate a user over an encrypted connection.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/marker_cluster.html"><span class="doc">Marker Cluster</span></a></p></td>
+<td><p>Beautiful, sophisticated, high performance marker clustering solution with smooth animations.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/measure_control.html"><span class="doc">Measure Control</span></a></p></td>
+<td><p>Coordinate, linear, and area measure control.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/mini_map.html"><span class="doc">Mini Map</span></a></p></td>
+<td><p>A small minimap showing the map at a different scale to aid navigation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/mouse_position.html"><span class="doc">Mouse Position</span></a></p></td>
+<td><p>A control that displays geographic coordinates of the mouse pointer, as it is moved over the map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/pattern.html"><span class="doc">Pattern</span></a></p></td>
+<td><p>Add support for pattern fills on Paths.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/polygon_encoded.html"><span class="doc">Polygon Encoded</span></a></p></td>
+<td><p>Draw a polygon directly from an encoded string.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/polyline_encoded.html"><span class="doc">Polyline Encoded</span></a></p></td>
+<td><p>Draw a polyline directly from an encoded string.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/polyline_offset.html"><span class="doc">Polyline Offset</span></a></p></td>
+<td><p>Shift relative pixel offset, without actually changing the actual latitude longitude values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/polyline_textpath.html"><span class="doc">Polyline Textpath</span></a></p></td>
+<td><p>Write text along polylines.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/realtime.html"><span class="doc">Realtime</span></a></p></td>
+<td><p>Put realtime data (like live tracking, GPS information) on a map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/scroll_zoom_toggler.html"><span class="doc">Scroll Zoom Toggler</span></a></p></td>
+<td><p>Enable/Disable zooming via a button.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/search.html"><span class="doc">Search</span></a></p></td>
+<td><p>A control for search Markers/Features location by custom property in LayerGroup/GeoJSON.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/semi_circle.html"><span class="doc">Semi Circle</span></a></p></td>
+<td><p>Add a marker in the shape of a semicircle, similar to the Circle class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/side_by_side_layers.html"><span class="doc">Side by Side Layers</span></a></p></td>
+<td><p>A control to add a split screen to compare two map overlays.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/tag_filter_button.html"><span class="doc">Tag Filter Button</span></a></p></td>
+<td><p>Creates a Tag Filter Button to filter elements based on different criteria.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/terminator.html"><span class="doc">Terminator</span></a></p></td>
+<td><p>Overlay day and night regions on a map.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/timeline.html"><span class="doc">Timeline</span></a></p></td>
+<td><p>Create a timeline with a time slider for geojson data with start and end times.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/timeslider_choropleth.html"><span class="doc">Timeslider Choropleth</span></a></p></td>
+<td><p>Create a choropleth with a timeslider for timestamped data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/timestamped_geojson.html"><span class="doc">Timestamped GeoJSON</span></a></p></td>
+<td><p>Add GeoJSON data with timestamps to a map.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/treelayercontrol.html"><span class="doc">TreeLayerControl</span></a></p></td>
+<td><p>Add a control for a tree of layers with checkboxes for visibility control.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="plugins/vector_tiles.html"><span class="doc">Vector Tiles using VectorGridProtobuf</span></a></p></td>
+<td><p>Display gridded vector data (GeoJSON or TopoJSON sliced with geojson-vt, or protobuf vector tiles).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="plugins/WmsTimeDimension.html"><span class="doc">WMS Time Dimension</span></a></p></td>
+<td><p>Create a time-aware WmsTileLayer.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="features/click_related_classes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Click-related classes</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plugins/antpath.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Antpath</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/user_guide/plugins.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Folium version 0.17.0</div>
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2024, Rob Story.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
