@@ -7,7 +7,18 @@ import functools
 import json
 import operator
 import warnings
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    Literal,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,
+)
 
 import numpy as np
 import requests
@@ -20,6 +31,7 @@ from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.utilities import (
+    JsCode,
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
@@ -1973,3 +1985,65 @@ class ColorLine(FeatureGroup):
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
             self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))
+
+
+class Control(MacroElement):
+    """
+    Add a Leaflet Control object to the map
+
+    Parameters
+    ----------
+    control: str
+        The javascript class name of the control to be rendered.
+    position: str
+        One of "bottomright", "bottomleft", "topright", "topleft"
+
+    Examples
+    --------
+
+    >>> import folium
+    >>> from folium.features import Control, Marker
+    >>> from folium.plugins import Geocoder
+
+    >>> m = folium.Map(
+    ...     location=[46.603354, 1.8883335], attr=None, zoom_control=False, zoom_start=5
+    ... )
+    >>> Control("Zoom", position="topleft").add_to(m)
+    """
+
+    _template = Template(
+        """
+      {% macro script(this, kwargs) %}
+          var {{ this.get_name() }}_options = {{ this.options|tojson }};
+          {% for key, value in this.functions.items() %}
+          {{ this.get_name() }}_options["{{key}}"] = {{ value }};
+          {% endfor %}
+
+          var {{ this.get_name() }} = new L.Control.{{this._name}}(
+              {{ this.get_name() }}_options
+          ).addTo({{ this._parent.get_name() }});
+      {% endmacro %}
+    """
+    )
+
+    def __init__(
+        self,
+        control: Optional[str] = None,
+        position: Literal[
+            "bottomright", "bottomleft", "topright", "topleft"
+        ] = "bottomleft",
+        **kwargs,
+    ):
+        super().__init__()
+        if control:
+            self._name = control
+        kwargs["position"] = position
+
+        # extract JsCode objects
+        self.functions = {}
+        for key, value in list(kwargs.items()):
+            if isinstance(value, JsCode):
+                self.functions[camelize(key)] = value.js_code
+                kwargs.pop(key)
+
+        self.options = parse_options(**kwargs)

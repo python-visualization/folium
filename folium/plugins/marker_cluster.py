@@ -87,7 +87,7 @@ class MarkerCluster(JSCSSMixin, Layer):
         show=True,
         icon_create_function=None,
         options=None,
-        **kwargs
+        **kwargs,
     ):
         if options is not None:
             kwargs.update(options)  # options argument is legacy

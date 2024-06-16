@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class Fullscreen(JSCSSMixin, MacroElement):
+class Fullscreen(JSCSSMixin, Control):
     """
     Adds a fullscreen button to your map.
 
@@ -56,7 +56,7 @@ class Fullscreen(JSCSSMixin, MacroElement):
         title="Full Screen",
         title_cancel="Exit Full Screen",
         force_separate_button=False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "Fullscreen"
@@ -65,5 +65,5 @@ class Fullscreen(JSCSSMixin, MacroElement):
             title=title,
             title_cancel=title_cancel,
             force_separate_button=force_separate_button,
-            **kwargs
+            **kwargs,
         )

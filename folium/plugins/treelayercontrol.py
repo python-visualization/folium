@@ -146,7 +146,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         collapse_all: str = "",
         expand_all: str = "",
         label_is_selector: str = "both",
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "TreeLayerControl"

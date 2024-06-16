@@ -1,14 +1,14 @@
 import json
 
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.folium import Map
 from folium.utilities import get_bounds, parse_options
 
 
-class TimestampedGeoJson(JSCSSMixin, MacroElement):
+class TimestampedGeoJson(JSCSSMixin, Control):
     """
     Creates a TimestampedGeoJson plugin from timestamped GeoJSONs to append
     into a map with Map.add_child.

@@ -1,13 +1,13 @@
 from typing import Optional
 
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class Geocoder(JSCSSMixin, MacroElement):
+class Geocoder(JSCSSMixin, Control):
     """A simple geocoder for Leaflet that by default uses OSM/Nominatim.
 
     Please respect the Nominatim usage policy:
@@ -78,7 +78,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         zoom: Optional[int] = 11,
         provider: str = "nominatim",
         provider_options: dict = {},
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "Geocoder"
@@ -89,5 +89,5 @@ class Geocoder(JSCSSMixin, MacroElement):
             zoom=zoom,
             provider=provider,
             provider_options=provider_options,
-            **kwargs
+            **kwargs,
         )

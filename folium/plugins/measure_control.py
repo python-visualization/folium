@@ -1,11 +1,11 @@
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
+from folium.features import Control
 from folium.utilities import parse_options
 
 
-class MeasureControl(JSCSSMixin, MacroElement):
+class MeasureControl(JSCSSMixin, Control):
     """Add a measurement widget on the map.
 
     Parameters
@@ -68,7 +68,7 @@ class MeasureControl(JSCSSMixin, MacroElement):
         secondary_length_unit="miles",
         primary_area_unit="sqmeters",
         secondary_area_unit="acres",
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "MeasureControl"
@@ -79,5 +79,5 @@ class MeasureControl(JSCSSMixin, MacroElement):
             secondary_length_unit=secondary_length_unit,
             primary_area_unit=primary_area_unit,
             secondary_area_unit=secondary_area_unit,
-            **kwargs
+            **kwargs,
         )
