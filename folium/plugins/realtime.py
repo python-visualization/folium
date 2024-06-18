@@ -1,14 +1,14 @@
 from typing import Optional, Union
 
-from branca.element import MacroElement
 from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.map import Layer
+from folium.features import GeoJson
+from folium.map import FeatureGroup
 from folium.utilities import JsCode, camelize, parse_options
 
 
-class Realtime(JSCSSMixin, MacroElement):
+class Realtime(JSCSSMixin, FeatureGroup):
     """Put realtime data on a Leaflet map: live tracking GPS units,
     sensor data or just about anything.
 
@@ -42,7 +42,7 @@ class Realtime(JSCSSMixin, MacroElement):
     remove_missing: bool, default False
         Should missing features between updates been automatically
         removed from the layer
-    container: Layer, default GeoJson
+    container: FeatureGroup or GeoJson, default GeoJson
         The container will typically be a `FeatureGroup`, `MarkerCluster` or
         `GeoJson`, but it can be anything that generates a javascript
         L.LayerGroup object, i.e. something that has the methods
@@ -109,7 +109,7 @@ class Realtime(JSCSSMixin, MacroElement):
         get_feature_id: Union[JsCode, str, None] = None,
         update_feature: Union[JsCode, str, None] = None,
         remove_missing: bool = False,
-        container: Optional[Layer] = None,
+        container: Optional[Union[FeatureGroup, GeoJson]] = None,
         **kwargs
     ):
         super().__init__()
