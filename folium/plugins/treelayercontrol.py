@@ -151,7 +151,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "TreeLayerControl"
         kwargs["closed_symbol"] = closed_symbol
-        kwargs["openened_symbol"] = opened_symbol
+        kwargs["opened_symbol"] = opened_symbol
         kwargs["space_symbol"] = space_symbol
         kwargs["selector_back"] = selector_back
         kwargs["named_toggle"] = named_toggle
