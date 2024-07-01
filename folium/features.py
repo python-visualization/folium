@@ -720,28 +720,27 @@ class GeoJson(Layer):
         if isinstance(data, dict):
             self.embed = True
             return data
-        elif isinstance(data, str):
+        if isinstance(data, str):
             if data.lower().startswith(("http:", "ftp:", "https:")):
                 if not self.embed:
                     self.embed_link = data
                 return self.get_geojson_from_web(data)
-            elif data.lstrip()[0] in "[{":  # This is a GeoJSON inline string
+            if data.lstrip()[0] in "[{":  # This is a GeoJSON inline string
                 self.embed = True
                 return json.loads(data)
-            else:  # This is a filename
-                if not self.embed:
-                    self.embed_link = data
-                with open(data) as f:
-                    return json.loads(f.read())
-        elif hasattr(data, "__geo_interface__"):
+            # This is a filename
+            if not self.embed:
+                self.embed_link = data
+            with open(data) as f:
+                return json.loads(f.read())
+        if hasattr(data, "__geo_interface__"):
             self.embed = True
             if hasattr(data, "to_crs"):
                 data = data.to_crs("EPSG:4326")
             return json.loads(json.dumps(data.__geo_interface__))
-        else:
-            raise ValueError(
-                "Cannot render objects with any missing geometries" f": {data!r}"
-            )
+        raise ValueError(
+            "Cannot render objects with any missing geometries" f": {data!r}"
+        )
 
     def get_geojson_from_web(self, url: str) -> dict:
         return requests.get(url).json()
@@ -1033,8 +1032,7 @@ class TopoJson(JSCSSMixin, Layer):
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
-            else:
-                return data
+            return data
 
         geometries = recursive_get(self.data, self.object_path.split("."))[
             "geometries"
@@ -1657,8 +1655,7 @@ class Choropleth(FeatureGroup):
         if len(key_parts) > 1:
             new_key = ".".join(key_parts[1:])
             return cls._get_by_key(value, new_key)
-        else:
-            return value
+        return value
 
     def render(self, **kwargs) -> None:
         """Render the GeoJson/TopoJson and color scale objects."""
