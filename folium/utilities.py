@@ -135,9 +135,7 @@ def validate_multi_locations(
     except (TypeError, StopIteration):
         # locations is a list of coordinate pairs
         return [validate_location(coord_pair) for coord_pair in locations]  # type: ignore
-    else:
-        # locations is a list of a list of coordinate pairs, recurse
-        return [validate_locations(lst) for lst in locations]  # type: ignore
+    return [validate_locations(lst) for lst in locations]  # type: ignore
 
 
 def if_pandas_df_convert_to_numpy(obj: Any) -> Any:
@@ -148,8 +146,7 @@ def if_pandas_df_convert_to_numpy(obj: Any) -> Any:
     """
     if pd is not None and isinstance(obj, pd.DataFrame):
         return obj.values
-    else:
-        return obj
+    return obj
 
 
 def image_to_url(

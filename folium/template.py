@@ -10,9 +10,9 @@ from folium.utilities import JsCode, TypeJsonValue, camelize
 def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
     if isinstance(obj, JsCode):
         return obj.js_code
-    elif isinstance(obj, Element):
+    if isinstance(obj, Element):
         return obj.get_name()
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         out = ["{\n"]
         for key, value in obj.items():
             out.append(f'  "{camelize(key)}": ')
@@ -20,15 +20,14 @@ def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
             out.append(",\n")
         out.append("}")
         return "".join(out)
-    elif isinstance(obj, list):
+    if isinstance(obj, list):
         out = ["[\n"]
         for value in obj:
             out.append(tojavascript(value))
             out.append(",\n")
         out.append("]")
         return "".join(out)
-    else:
-        return _to_escaped_json(obj)
+    return _to_escaped_json(obj)
 
 
 def _to_escaped_json(obj: TypeJsonValue) -> str:
