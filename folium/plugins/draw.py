@@ -5,7 +5,7 @@ from folium.elements import JSCSSMixin
 
 
 class Draw(JSCSSMixin, MacroElement):
-    """
+    '''
     Vector drawing and editing plugin for Leaflet.
 
     Parameters
@@ -25,6 +25,9 @@ class Draw(JSCSSMixin, MacroElement):
     edit_options : dict, optional
         The options used to configure the edit toolbar. See
         https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#editpolyoptions
+    on : dict, optional
+        Event handlers to attach to the created layer. Pass a mapping from the
+        names of the events to their `JsCode` handlers.
 
     Examples
     --------
@@ -32,15 +35,25 @@ class Draw(JSCSSMixin, MacroElement):
     >>> Draw(
     ...     export=True,
     ...     filename="my_data.geojson",
+    ...     show_geometry_on_click=False,
     ...     position="topleft",
     ...     draw_options={"polyline": {"allowIntersection": False}},
     ...     edit_options={"poly": {"allowIntersection": False}},
+    ...     on={
+    ...         "click": JsCode(
+    ...             """
+    ...         function(event) {
+    ...            alert(JSON.stringify(this.toGeoJSON()));
+    ...         }
+    ...     """
+    ...         )
+    ...     },
     ... ).add_to(m)
 
     For more info please check
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
 
-    """
+    '''
 
     _template = Template(
         """
@@ -68,11 +81,15 @@ class Draw(JSCSSMixin, MacroElement):
                     console.log(coords);
                 });
                 {%- endif %}
+
+                {%- for event, handler in this.on.items()   %}
+                layer.on(
+                    "{{event}}",
+                    {{handler}}
+                );
+                {%- endfor %}
                 drawnItems_{{ this.get_name() }}.addLayer(layer);
              });
-            {{ this._parent.get_name() }}.on('draw:created', function(e) {
-                drawnItems_{{ this.get_name() }}.addLayer(e.layer);
-            });
             {% if this.export %}
             document.getElementById('export').onclick = function(e) {
                 var data = drawnItems_{{ this.get_name() }}.toGeoJSON();
@@ -111,6 +128,7 @@ class Draw(JSCSSMixin, MacroElement):
         show_geometry_on_click=True,
         draw_options=None,
         edit_options=None,
+        on=None,
     ):
         super().__init__()
         self._name = "DrawControl"
@@ -120,6 +138,7 @@ class Draw(JSCSSMixin, MacroElement):
         self.show_geometry_on_click = show_geometry_on_click
         self.draw_options = draw_options or {}
         self.edit_options = edit_options or {}
+        self.on = on or {}
 
     def render(self, **kwargs):
         super().render(**kwargs)
