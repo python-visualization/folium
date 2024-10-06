@@ -59,7 +59,7 @@ def test_heat_map_with_time():
             speedStep: {{this.speed_step}},
             styleNS: "{{this.style_NS}}",
             timeSlider: {{this.time_slider}},
-            timeSliderDrapUpdate: {{this.time_slider_drap_update}},
+            timeSliderDragUpdate: {{this.time_slider_drag_update}},
             timeSteps: {{this.index_steps}}
             })
             .addTo({{this._parent.get_name()}});
