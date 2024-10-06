@@ -86,7 +86,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 speedStep: {{this.speed_step}},
                 styleNS: "{{this.style_NS}}",
                 timeSlider: {{this.time_slider}},
-                timeSliderDrapUpdate: {{this.time_slider_drap_update}},
+                timeSliderDragUpdate: {{this.time_slider_drag_update}},
                 timeSteps: {{this.index_steps}}
                 })
                 .addTo({{this._parent.get_name()}});
@@ -199,7 +199,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         self.time_slider = "true"
         self.play_button = "true"
         self.play_reverse_button = "true"
-        self.time_slider_drap_update = "false"
+        self.time_slider_drag_update = "false"
         self.style_NS = "leaflet-control-timecontrol"
 
     def render(self, **kwargs):
