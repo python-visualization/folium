@@ -19,6 +19,8 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     styledict: dict
         A dictionary where the keys are the geojson feature ids and the values are
         dicts of `{time: style_options_dict}`
+    date_options: str, default "ddd MMM DD YYYY"
+        A format string to render the currently active time in the control.
     highlight: bool, default False
         Whether to show a visual effect on mouse hover and click.
     name : string, default None
@@ -44,6 +46,11 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
             let styledict = {{ this.styledict|tojson }};
             let current_timestamp = timestamps[{{ this.init_timestamp }}];
 
+            function formatDate(date) {
+               var newdate = new moment(date);
+               return newdate.format({{this.date_format|tojson}});
+            }
+
             let slider_body = d3.select("body").insert("div", "div.folium-map")
                 .attr("id", "slider_{{ this.get_name() }}");
             $("#slider_{{ this.get_name() }}").hide();
@@ -64,7 +71,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 .attr("step", "1")
                 .style('align', 'center');
 
-            let datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+            let datestring = formatDate(parseInt(current_timestamp)*1000);
             d3.select("#slider_{{ this.get_name() }} > output").text(datestring);
 
             let fill_map = function(){
@@ -84,7 +91,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
 
             d3.select("#slider_{{ this.get_name() }} > input").on("input", function() {
                 current_timestamp = timestamps[this.value];
-                var datestring = new Date(parseInt(current_timestamp)*1000).toDateString();
+                let datestring = formatDate(parseInt(current_timestamp)*1000);
                 d3.select("#slider_{{ this.get_name() }} > output").text(datestring);
                 fill_map();
             });
@@ -155,12 +162,19 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         """
     )
 
-    default_js = [("d3v4", "https://d3js.org/d3.v4.min.js")]
+    default_js = [
+        ("d3v4", "https://d3js.org/d3.v4.min.js"),
+        (
+            "moment",
+            "https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js",
+        ),
+    ]
 
     def __init__(
         self,
         data,
         styledict,
+        date_options: str = "ddd MMM DD YYYY",
         highlight: bool = False,
         name=None,
         overlay=True,
@@ -173,6 +187,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
+        self.date_format = date_options
         self.highlight = highlight
 
         self.stroke_opacity = stroke_opacity
@@ -180,14 +195,13 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         self.stroke_color = stroke_color
 
         if not isinstance(styledict, dict):
-            raise ValueError(
-                f"styledict must be a dictionary, got {styledict!r}"
-            )  # noqa
+            raise ValueError(f"styledict must be a dictionary, got {styledict!r}")
+
         for val in styledict.values():
             if not isinstance(val, dict):
                 raise ValueError(
                     f"Each item in styledict must be a dictionary, got {val!r}"
-                )  # noqa
+                )
 
         # Make set of timestamps.
         timestamps_set = set()
