@@ -68,21 +68,18 @@ class Draw(JSCSSMixin, MacroElement):
             var {{ this.get_name() }} = new L.Control.Draw(
                 options
             ).addTo( {{this._parent.get_name()}} );
-            {{ this._parent.get_name() }}.on(
-                    L.Draw.Event.CREATED,
-                    function(e) {
-                        var layer = e.layer,
-                            type = e.layerType;
-                        var coords = JSON.stringify(layer.toGeoJSON());
-                        {%- if this.show_geometry_on_click %}
-                        layer.on('click', function() {
-                            alert(coords);
-                            console.log(coords);
-                        });
-                        {%- endif %}
-                        drawnItems_{{ this.get_name() }}.addLayer(layer);
-                    }
-            );
+            {{ this._parent.get_name() }}.on(L.Draw.Event.CREATED, function(e) {
+                var layer = e.layer,
+                    type = e.layerType;
+                var coords = JSON.stringify(layer.toGeoJSON());
+                {%- if this.show_geometry_on_click %}
+                layer.on('click', function() {
+                    alert(coords);
+                    console.log(coords);
+                });
+                {%- endif %}
+                drawnItems_{{ this.get_name() }}.addLayer(layer);
+            });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
