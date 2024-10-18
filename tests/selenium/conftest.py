@@ -23,7 +23,7 @@ class DriverFolium(Chrome):
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
-        options.add_argument("--headless")
+        options.add_argument("--headless=new")
         options.add_argument("--window-size=1024,768")
         super().__init__(options=options)
 
