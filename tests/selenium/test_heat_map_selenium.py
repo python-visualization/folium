@@ -34,6 +34,11 @@ def test_heat_map_with_weights(driver):
         driver.verify_js_logs()
     canvas = driver.wait_until("canvas.leaflet-heatmap-layer")
     assert canvas
+    # Print the canvas size
+    canvas_size = driver.execute_script(
+        "return {width: arguments[0].width, height: arguments[0].height};", canvas
+    )
+    print(f"Canvas size: {canvas_size['width']}x{canvas_size['height']}")
     # get the canvas as a PNG base64 string
     canvas_base64 = driver.execute_script(
         "return arguments[0].toDataURL('image/png').substring(21);", canvas
