@@ -33,6 +33,10 @@ jobs:
           --file requirements.txt
           --file requirements-dev.txt
 
+    - name: Install fiona dependency
+      shell: bash -l {0}
+      run: python -m pip install fiona
+
     - name: Install folium from source
       shell: bash -l {0}
       run: python -m pip install -e . --no-deps --force-reinstall
