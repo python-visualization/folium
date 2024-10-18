@@ -12,6 +12,9 @@ class Draw(JSCSSMixin, MacroElement):
     ----------
     export : bool, default False
         Add a small button that exports the drawn shapes as a geojson file.
+    feature_group : FeatureGroup, optional
+        The FeatureGroup object that will hold the editable figures. This can
+        be used to initialize the Draw plugin with predefined Layer objects.
     filename : string, default 'data.geojson'
         Name of geojson file
     position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
@@ -50,10 +53,17 @@ class Draw(JSCSSMixin, MacroElement):
               draw: {{ this.draw_options|tojson }},
               edit: {{ this.edit_options|tojson }},
             }
-            // FeatureGroup is to store editable layers.
-            var drawnItems_{{ this.get_name() }} = new L.featureGroup().addTo(
-                {{ this._parent.get_name() }}
-            );
+            {%- if this.feature_group  %}
+                var drawnItems_{{ this.get_name() }} =
+                    {{ this.feature_group.get_name() }};
+            {%- else %}
+                // FeatureGroup is to store editable layers.
+                var drawnItems_{{ this.get_name() }} =
+                    new L.featureGroup().addTo(
+                        {{ this._parent.get_name() }}
+                    );
+            {%- endif %}
+
             options.edit.featureGroup = drawnItems_{{ this.get_name() }};
             var {{ this.get_name() }} = new L.Control.Draw(
                 options
@@ -69,7 +79,7 @@ class Draw(JSCSSMixin, MacroElement):
                 });
                 {%- endif %}
                 drawnItems_{{ this.get_name() }}.addLayer(layer);
-             });
+            });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
@@ -106,6 +116,7 @@ class Draw(JSCSSMixin, MacroElement):
     def __init__(
         self,
         export=False,
+        feature_group=None,
         filename="data.geojson",
         position="topleft",
         show_geometry_on_click=True,
@@ -115,6 +126,7 @@ class Draw(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "DrawControl"
         self.export = export
+        self.feature_group = feature_group
         self.filename = filename
         self.position = position
         self.show_geometry_on_click = show_geometry_on_click
