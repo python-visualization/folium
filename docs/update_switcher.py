@@ -26,7 +26,9 @@ def main():
     for i, version in enumerate(switcher):
         if version["version"] == "latest":
             latest_index = i
-            previous_version = re.search(r"latest \(([v.\d]+)\)", version["name"]).group(1)
+            previous_version = re.search(
+                r"latest \(([v.\d]+)\)", version["name"]
+            ).group(1)
             if previous_version == args.version:
                 print(f"Version {args.version} already is the latest version. Exiting.")
                 return
