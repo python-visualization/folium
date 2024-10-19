@@ -5,13 +5,16 @@ from folium.elements import JSCSSMixin
 
 
 class Draw(JSCSSMixin, MacroElement):
-    """
+    '''
     Vector drawing and editing plugin for Leaflet.
 
     Parameters
     ----------
     export : bool, default False
         Add a small button that exports the drawn shapes as a geojson file.
+    feature_group : FeatureGroup, optional
+        The FeatureGroup object that will hold the editable figures. This can
+        be used to initialize the Draw plugin with predefined Layer objects.
     filename : string, default 'data.geojson'
         Name of geojson file
     position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
@@ -25,6 +28,9 @@ class Draw(JSCSSMixin, MacroElement):
     edit_options : dict, optional
         The options used to configure the edit toolbar. See
         https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html#editpolyoptions
+    on : dict, optional
+        Event handlers to attach to the created layer. Pass a mapping from the
+        names of the events to their `JsCode` handlers.
 
     Examples
     --------
@@ -32,15 +38,25 @@ class Draw(JSCSSMixin, MacroElement):
     >>> Draw(
     ...     export=True,
     ...     filename="my_data.geojson",
+    ...     show_geometry_on_click=False,
     ...     position="topleft",
     ...     draw_options={"polyline": {"allowIntersection": False}},
     ...     edit_options={"poly": {"allowIntersection": False}},
+    ...     on={
+    ...         "click": JsCode(
+    ...             """
+    ...         function(event) {
+    ...            alert(JSON.stringify(this.toGeoJSON()));
+    ...         }
+    ...     """
+    ...         )
+    ...     },
     ... ).add_to(m)
 
     For more info please check
     https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
 
-    """
+    '''
 
     _template = Template(
         """
@@ -50,10 +66,17 @@ class Draw(JSCSSMixin, MacroElement):
               draw: {{ this.draw_options|tojson }},
               edit: {{ this.edit_options|tojson }},
             }
-            // FeatureGroup is to store editable layers.
-            var drawnItems_{{ this.get_name() }} = new L.featureGroup().addTo(
-                {{ this._parent.get_name() }}
-            );
+            {%- if this.feature_group  %}
+                var drawnItems_{{ this.get_name() }} =
+                    {{ this.feature_group.get_name() }};
+            {%- else %}
+                // FeatureGroup is to store editable layers.
+                var drawnItems_{{ this.get_name() }} =
+                    new L.featureGroup().addTo(
+                        {{ this._parent.get_name() }}
+                    );
+            {%- endif %}
+
             options.edit.featureGroup = drawnItems_{{ this.get_name() }};
             var {{ this.get_name() }} = new L.Control.Draw(
                 options
@@ -68,11 +91,19 @@ class Draw(JSCSSMixin, MacroElement):
                     console.log(coords);
                 });
                 {%- endif %}
+
+                {%- for event, handler in this.on.items()   %}
+                layer.on(
+                    "{{event}}",
+                    {{handler}}
+                );
+                {%- endfor %}
                 drawnItems_{{ this.get_name() }}.addLayer(layer);
-             });
+            });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
+
             {% if this.export %}
             document.getElementById('export').onclick = function(e) {
                 var data = drawnItems_{{ this.get_name() }}.toGeoJSON();
@@ -106,20 +137,24 @@ class Draw(JSCSSMixin, MacroElement):
     def __init__(
         self,
         export=False,
+        feature_group=None,
         filename="data.geojson",
         position="topleft",
         show_geometry_on_click=True,
         draw_options=None,
         edit_options=None,
+        on=None,
     ):
         super().__init__()
         self._name = "DrawControl"
         self.export = export
+        self.feature_group = feature_group
         self.filename = filename
         self.position = position
         self.show_geometry_on_click = show_geometry_on_click
         self.draw_options = draw_options or {}
         self.edit_options = edit_options or {}
+        self.on = on or {}
 
     def render(self, **kwargs):
         super().render(**kwargs)
