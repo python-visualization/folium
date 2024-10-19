@@ -15,7 +15,14 @@ def test_heat_map_with_weights(driver):
     This test will fail in non-headless mode because window size will be different.
 
     """
-    m = folium.Map((0.5, 0.5), zoom_start=8, tiles=None)
+    figure_width, figure_height = 800, 600
+    m = folium.Map(
+        (0.5, 0.5),
+        zoom_start=8,
+        tiles=None,
+        width=figure_width,
+        height=figure_height,
+    )
     HeatMap(
         # make four dots with different weights: 1, 1, 1.5 and 2.
         data=[
@@ -34,17 +41,14 @@ def test_heat_map_with_weights(driver):
         driver.verify_js_logs()
     canvas = driver.wait_until("canvas.leaflet-heatmap-layer")
     assert canvas
-    # Print the canvas size
-    canvas_size = driver.execute_script(
-        "return {width: arguments[0].width, height: arguments[0].height};", canvas
-    )
-    print(f"Canvas size: {canvas_size['width']}x{canvas_size['height']}")
     # get the canvas as a PNG base64 string
     canvas_base64 = driver.execute_script(
         "return arguments[0].toDataURL('image/png').substring(21);", canvas
     )
     screenshot_bytes = base64.b64decode(canvas_base64)
     screenshot = Image.open(io.BytesIO(screenshot_bytes))
+    # window size is not reliable, so crop to a smaller fixed size
+    screenshot = screenshot.crop((0, 0, figure_width, figure_height))
     path = os.path.dirname(__file__)
     with open(os.path.join(path, "test_heat_map_selenium_screenshot.png"), "rb") as f:
         screenshot_expected = Image.open(f)
