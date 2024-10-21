@@ -6,6 +6,7 @@ the list of versions and sets the latest version to the new version.
 import argparse
 import json
 import os
+import re
 
 
 def main():
@@ -21,31 +22,34 @@ def main():
     with open(switcher_path) as f:
         switcher = json.load(f)
 
-    # Find index of 'latest' entry
-    latest_index = None
+    # first we get the version number of the previous version
     for i, version in enumerate(switcher):
         if version["version"] == "latest":
             latest_index = i
+            previous_version = re.search(
+                r"latest \(([v.\d]+)\)", version["name"]
+            ).group(1)
+            if previous_version == args.version:
+                print(f"Version {args.version} already is the latest version. Exiting.")
+                return
+
+            # now replace the name of this one with the new version
+            switcher[i]["name"] = f"latest ({args.version})"
             break
-    if latest_index is None:
+    else:
         raise ValueError("'latest' version not found in switcher.json")
 
-    # Add the new version to the list of versions (we always insert it after latest)
-    new_version = {
-        "version": args.version,
-        "url": f"https://python-visualization.github.io/folium/{args.version}/",
-    }
-
-    # Update the latest version
-    switcher[latest_index]["url"] = new_version["url"]
-
-    # Make sure version is unique
-    if any(version["version"] == args.version for version in switcher):
+    # Add the previous version to the list of versions (we always insert it after latest)
+    if any(version["version"] == previous_version for version in switcher):
         print(
-            f"Version {args.version} already exists in switcher.json. Not adding it again."
+            f"Previous version {previous_version} already exists in switcher.json. Not adding it again."
         )
     else:
-        switcher.insert(latest_index + 1, new_version)
+        previous_version_entry = {
+            "version": previous_version,
+            "url": f"https://python-visualization.github.io/folium/{previous_version}/",
+        }
+        switcher.insert(latest_index + 1, previous_version_entry)
 
     # Write the updated switcher.json
     with open(switcher_path, "w") as f:

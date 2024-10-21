@@ -71,10 +71,19 @@ jobs:
         destination_dir: dev
         keep_files: false
 
-    - name: Publish to Github Pages on release
+    - name: Publish to Github Pages on release (versioned)
       if: ${{ github.event_name == 'release' }}
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
         destination_dir: ${{ github.ref_name }}
+
+    - name: Publish to Github Pages on release (latest)
+      if: ${{ github.event_name == 'release' }}
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html/
+        destination_dir: latest
+        keep_files: false
