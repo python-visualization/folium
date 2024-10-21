@@ -17,28 +17,29 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-        ref: main
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v2
       with:
         environment-name: TEST
+        init-shell: bash
         create-args: >-
           python=3
           --file requirements.txt
           --file requirements-dev.txt
 
     - name: Install folium from source
-      shell: bash -l {0}
       run: python -m pip install -e . --no-deps --force-reinstall
 
     - name: Build documentation
-      shell: bash -l {0}
       run: |
         set -e
         pushd docs

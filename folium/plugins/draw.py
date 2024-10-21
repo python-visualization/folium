@@ -103,7 +103,7 @@ class Draw(JSCSSMixin, MacroElement):
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
                 drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
-            
+
             {% if this.export %}
             document.getElementById('export').onclick = function(e) {
                 var data = drawnItems_{{ this.get_name() }}.toGeoJSON();
