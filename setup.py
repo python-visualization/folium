@@ -52,11 +52,11 @@ setup(
     url="https://github.com/python-visualization/folium",
     keywords="data visualization",
     classifiers=[
-        "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Scientific/Engineering :: GIS",
         "Topic :: Scientific/Engineering :: Visualization",
         "License :: OSI Approved :: MIT License",
