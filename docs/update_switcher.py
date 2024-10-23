@@ -6,7 +6,6 @@ the list of versions and sets the latest version to the new version.
 import argparse
 import json
 import os
-import re
 
 
 def main():
