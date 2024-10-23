@@ -31,8 +31,9 @@ jobs:
       with:
         environment-name: TEST
         init-shell: bash
+        # use '3.12' for now while Altair is not 3.13 compatible. Revert to '3' when it is.
         create-args: >-
-          python=3
+          python=3.12
           --file requirements.txt
           --file requirements-dev.txt
 
