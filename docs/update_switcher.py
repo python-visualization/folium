@@ -29,7 +29,9 @@ def main():
             latest_index = i
             previous_version = version["version"]
             if previous_version == new_version_without_prefix:
-                print(f"Version {new_version_without_prefix} already is the latest version. Exiting.")
+                print(
+                    f"Version {new_version_without_prefix} already is the latest version. Exiting."
+                )
                 return
 
             # now replace the name and version of this one with the new version
