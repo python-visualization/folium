@@ -59,6 +59,7 @@ copyright = f"2013-{year}, Rob Story"
 
 import folium
 
+# N.B. this version is without the "v" prefix
 version = release = folium.__version__
 print(f"Version: {version}")
 
