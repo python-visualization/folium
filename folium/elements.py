@@ -107,7 +107,7 @@ class EventHandler(MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            {{ this._parent.get_name()}}.on(
+            {{ this._parent.get_name()}}.{{ this.method }}(
                 {{ this.event|tojson}},
                 {{ this.handler.js_code }}
             );
@@ -115,11 +115,12 @@ class EventHandler(MacroElement):
         """
     )
 
-    def __init__(self, event: str, handler: JsCode):
+    def __init__(self, event: str, handler: JsCode, once=False):
         super().__init__()
         self._name = "EventHandler"
         self.event = event
         self.handler = handler
+        self.method = "once" if once else "on"
 
 
 class ElementAddToElement(MacroElement):

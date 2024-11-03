@@ -25,7 +25,7 @@ from folium.utilities import (
 class Evented(MacroElement):
     """The base class for Layer and Map
 
-    Adds the `on` method for event handling capabilities.
+    Adds the `on` and `once` methods for event handling capabilities.
 
     See https://leafletjs.com/reference.html#evented for
     more in depth documentation. Please note that we have
@@ -34,8 +34,14 @@ class Evented(MacroElement):
     """
 
     def on(self, **event_map: JsCode):
+        self._add(False, **event_map)
+
+    def once(self, **event_map: JsCode):
+        self._add(True, **event_map)
+
+    def _add(self, once, **event_map: JsCode):
         for event_type, handler in event_map.items():
-            self.add_child(EventHandler(event_type, handler))
+            self.add_child(EventHandler(event_type, handler, once))
 
 
 class Layer(Evented):
