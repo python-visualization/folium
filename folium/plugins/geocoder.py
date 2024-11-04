@@ -77,7 +77,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         zoom: Optional[int] = 11,
         provider: str = "nominatim",
         provider_options: dict = {},
-        **kwargs,
+        **kwargs
     ):
         super().__init__()
         self._name = "Geocoder"
@@ -88,5 +88,5 @@ class Geocoder(JSCSSMixin, MacroElement):
             zoom=zoom,
             provider=provider,
             provider_options=provider_options,
-            **kwargs,
+            **kwargs
         )

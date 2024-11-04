@@ -73,7 +73,7 @@ class HeatMap(JSCSSMixin, Layer):
         overlay=True,
         control=True,
         show=True,
-        **kwargs,
+        **kwargs
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "HeatMap"
@@ -95,7 +95,7 @@ class HeatMap(JSCSSMixin, Layer):
             radius=radius,
             blur=blur,
             gradient=gradient,
-            **kwargs,
+            **kwargs
         )
 
     def _get_self_bounds(self):

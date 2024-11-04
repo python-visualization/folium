@@ -61,7 +61,7 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
         offset=0,
         orientation=0,
         attributes=None,
-        **kwargs,
+        **kwargs
     ):
         super().__init__()
         self._name = "PolyLineTextPath"
@@ -74,5 +74,5 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
             offset=offset,
             orientation=orientation,
             attributes=attributes,
-            **kwargs,
+            **kwargs
         )

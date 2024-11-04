@@ -109,7 +109,7 @@ class Timeline(GeoJson):
         self,
         data: Union[dict, str, TextIO],
         get_interval: Optional[JsCode] = None,
-        **kwargs,
+        **kwargs
     ):
         super().__init__(data)
         self._name = "Timeline"
@@ -217,7 +217,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         show_ticks: bool = True,
         steps: int = 1000,
         playback_duration: int = 10000,
-        **kwargs,
+        **kwargs
     ):
         super().__init__()
         self._name = "TimelineSlider"
