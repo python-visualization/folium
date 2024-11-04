@@ -1,9 +1,8 @@
 """Test PolyLineFromEncoded Plugin."""
 
-from jinja2 import Template
-
 from folium import Map
 from folium.plugins import PolygonFromEncoded, PolyLineFromEncoded
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -33,7 +32,7 @@ def test_polyline_from_encoded():
         """
         var {{this.get_name()}} = L.Polyline.fromEncoded(
                         {{ this.encoded|tojson }},
-                        {{ this.options|tojson }}
+                        {{ this.options|tojavascript }}
         ).addTo({{this._parent.get_name()}});
         """
     )
@@ -69,7 +68,7 @@ def test_polygon_from_encoded():
         """
         var {{this.get_name()}} = L.Polygon.fromEncoded(
                             {{ this.encoded|tojson }},
-                            {{ this.options|tojson }}
+                            {{ this.options|tojavascript }}
         )
         .addTo({{this._parent.get_name()}});
         """

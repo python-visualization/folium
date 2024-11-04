@@ -4,10 +4,9 @@ Test BeautifyIcon
 
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -46,7 +45,7 @@ def test_beautify_icon():
     # We verify that the Beautiful Icons are rendered correctly.
     tmpl = Template(
         """
-                var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options|tojson }})
+                var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options|tojavascript }})
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
             """
     )  # noqa

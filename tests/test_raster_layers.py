@@ -6,9 +6,9 @@ Test raster_layers
 
 import pytest
 import xyzservices
-from jinja2 import Template
 
 import folium
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -65,6 +65,7 @@ def test_wms():
     )
     w.add_to(m)
     html = m.get_root().render()
+    print(html)
 
     # verify this special case wasn't converted to lowerCamelCase
     assert '"cql_filter": "something",' in html

@@ -1,6 +1,5 @@
-from jinja2 import Template
-
 from folium.plugins.marker_cluster import MarkerCluster
+from folium.template import Template
 from folium.utilities import if_pandas_df_convert_to_numpy, validate_location
 
 
@@ -50,7 +49,7 @@ class FastMarkerCluster(MarkerCluster):
                 {{ this.callback }}
 
                 var data = {{ this.data|tojson }};
-                var cluster = L.markerClusterGroup({{ this.options|tojson }});
+                var cluster = L.markerClusterGroup({{ this.options|tojavascript }});
                 {%- if this.icon_create_function is not none %}
                 cluster.options.iconCreateFunction =
                     {{ this.icon_create_function.strip() }};

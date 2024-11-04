@@ -1,9 +1,9 @@
 from branca.element import Figure, MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import LayerControl
+from folium.template import Template
 from folium.utilities import deep_copy
 
 

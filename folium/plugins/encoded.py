@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.features import MacroElement
+from folium.template import Template
 from folium.vector_layers import path_options
 
 
@@ -28,7 +27,7 @@ class _BaseFromEncoded(JSCSSMixin, MacroElement, ABC):
 
             var {{ this.get_name() }} = L.{{ this._encoding_type }}.fromEncoded(
                 {{ this.encoded|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
 
         {% endmacro %}

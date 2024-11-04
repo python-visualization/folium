@@ -1,8 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class BeautifyIcon(JSCSSMixin, MacroElement):
@@ -56,7 +55,7 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.BeautifyIcon.icon(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             )
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
@@ -100,7 +99,7 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "BeautifyIcon"
 
-        self.options = parse_options(
+        self.options = dict(
             icon=icon,
             icon_shape=icon_shape,
             border_width=border_width,

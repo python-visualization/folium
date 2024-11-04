@@ -1,12 +1,12 @@
 from typing import List, Optional, TextIO, Union
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.folium import Map
-from folium.utilities import JsCode, camelize, get_bounds, parse_options
+from folium.template import Template
+from folium.utilities import JsCode, get_bounds
 
 
 class Timeline(GeoJson):
@@ -83,10 +83,7 @@ class Timeline(GeoJson):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-          var {{ this.get_name() }}_options = {{ this.options|tojson }};
-          {% for key, value in this.functions.items() %}
-            {{ this.get_name() }}_options["{{key}}"] = {{ value }};
-          {% endfor %}
+          var {{ this.get_name() }}_options = {{ this.options|tojavascript }};
 
           var {{ this.get_name() }} = L.timeline(
               {{ this.data|tojson }},
@@ -112,7 +109,7 @@ class Timeline(GeoJson):
         self,
         data: Union[dict, str, TextIO],
         get_interval: Optional[JsCode] = None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(data)
         self._name = "Timeline"
@@ -120,14 +117,7 @@ class Timeline(GeoJson):
         if get_interval is not None:
             kwargs["get_interval"] = get_interval
 
-        # extract JsCode objects
-        self.functions = {}
-        for key, value in list(kwargs.items()):
-            if isinstance(value, JsCode):
-                self.functions[camelize(key)] = value.js_code
-                kwargs.pop(key)
-
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
 
     def _get_self_bounds(self):
         """
@@ -191,13 +181,8 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         {% endmacro %}
 
         {% macro script(this, kwargs) %}
-          var {{ this.get_name() }}_options = {{ this.options|tojson }};
-          {% for key, value in this.functions.items() %}
-            {{ this.get_name() }}_options["{{key}}"] = {{ value }};
-          {% endfor %}
-
           var {{ this.get_name() }} = L.timelineSliderControl(
-              {{ this.get_name() }}_options
+              {{ this.options|tojavascript }};
           );
           {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
 
@@ -232,7 +217,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         show_ticks: bool = True,
         steps: int = 1000,
         playback_duration: int = 10000,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "TimelineSlider"
@@ -257,15 +242,8 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         """
         )
 
-        # extract JsCode objects
-        self.functions = {}
-        for key, value in list(kwargs.items()):
-            if isinstance(value, JsCode):
-                self.functions[camelize(key)] = value.js_code
-                kwargs.pop(key)
-
         self.timelines: List[Timeline] = []
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
 
     def add_timelines(self, *args):
         """Add timelines to the control"""

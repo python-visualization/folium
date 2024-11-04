@@ -365,7 +365,8 @@ def temp_html_filepath(data: str) -> Iterator[str]:
         yield filepath
     finally:
         if os.path.isfile(filepath):
-            os.remove(filepath)
+            pass
+            # os.remove(filepath)
 
 
 def deep_copy(item_original: Element) -> Element:

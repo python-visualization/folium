@@ -100,7 +100,7 @@ def test_divicon():
               </svg>"""  # noqa
     div = folium.DivIcon(html=html)
     assert isinstance(div, Element)
-    assert div.options["className"] == "empty"
+    assert div.options["class_name"] == "empty"
     assert div.options["html"] == html
 
 

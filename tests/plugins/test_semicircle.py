@@ -4,10 +4,9 @@ Test SemiCircle
 
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -49,7 +48,7 @@ def test_semicircle():
         """
         var {{ this.get_name() }} = L.semiCircle(
         {{ this.location|tojson }},
-        {{ this.options | tojson }}
+        {{ this.options|tojavascript }}
         )
             .setDirection{{ this.direction }}
         .addTo({{ this._parent.get_name() }});
@@ -60,7 +59,7 @@ def test_semicircle():
         """
         var {{ this.get_name() }} = L.semiCircle(
         {{ this.location|tojson }},
-        {{ this.options | tojson }}
+        {{ this.options|tojavascript }}
         )
         .addTo({{ this._parent.get_name() }});
     """

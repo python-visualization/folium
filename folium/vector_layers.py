@@ -6,9 +6,9 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 from typing import List, Optional, Sequence, Union
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.map import Marker, Popup, Tooltip
+from folium.template import Template
 from folium.utilities import (
     TypeLine,
     TypeMultiLine,
@@ -230,7 +230,7 @@ class Polygon(BaseMultiLocation):
         locations: TypeMultiLine,
         popup: Union[Popup, str, None] = None,
         tooltip: Union[Tooltip, str, None] = None,
-        **kwargs: TypePathOptions
+        **kwargs: TypePathOptions,
     ):
         super().__init__(locations, popup=popup, tooltip=tooltip)
         self._name = "Polygon"
@@ -272,7 +272,7 @@ class Rectangle(MacroElement):
         bounds: TypeLine,
         popup: Union[Popup, str, None] = None,
         tooltip: Union[Tooltip, str, None] = None,
-        **kwargs: TypePathOptions
+        **kwargs: TypePathOptions,
     ):
         super().__init__()
         self._name = "rectangle"
@@ -333,7 +333,7 @@ class Circle(Marker):
         radius: float = 50,
         popup: Union[Popup, str, None] = None,
         tooltip: Union[Tooltip, str, None] = None,
-        **kwargs: TypePathOptions
+        **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "circle"
@@ -379,7 +379,7 @@ class CircleMarker(Marker):
         radius: float = 10,
         popup: Union[Popup, str, None] = None,
         tooltip: Union[Tooltip, str, None] = None,
-        **kwargs: TypePathOptions
+        **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
         self._name = "CircleMarker"

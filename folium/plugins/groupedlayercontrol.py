@@ -1,8 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class GroupedLayerControl(JSCSSMixin, MacroElement):
@@ -55,7 +54,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
                     },
                     {%- endfor %}
                 },
-                {{ this.options|tojson }},
+                {{ this.options|tojavascript }},
             ).addTo({{this._parent.get_name()}});
 
             {%- for val in this.layers_untoggle %}
@@ -69,7 +68,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
     def __init__(self, groups, exclusive_groups=True, **kwargs):
         super().__init__()
         self._name = "GroupedLayerControl"
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
         if exclusive_groups:
             self.options["exclusiveGroups"] = list(groups.keys())
         self.layers_untoggle = set()

@@ -1,11 +1,10 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium import Map
 from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class Search(JSCSSMixin, MacroElement):
@@ -69,7 +68,7 @@ class Search(JSCSSMixin, MacroElement):
                         return feature.properties.style
                     })
                     {% if this.options %}
-                    e.layer.setStyle({{ this.options|tojson }});
+                    e.layer.setStyle({{ this.options|tojavascript }});
                     {% endif %}
                     if(e.layer._popup)
                         e.layer.openPopup();
@@ -122,7 +121,7 @@ class Search(JSCSSMixin, MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = collapsed
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
 
     def test_params(self, keys):
         if keys is not None and self.search_label is not None:

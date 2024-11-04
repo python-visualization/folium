@@ -3,10 +3,9 @@ Test DualMap
 ------------
 """
 
-from jinja2 import Template
-
 import folium
 import folium.plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 

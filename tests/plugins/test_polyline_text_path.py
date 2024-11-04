@@ -3,10 +3,9 @@ Test PolyLineTextPath
 ---------------
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -52,7 +51,7 @@ def test_polyline_text_path():
         """
         {{ this.polyline.get_name() }}.setText(
             "{{this.text}}",
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         );
         """
     )
