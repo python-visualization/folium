@@ -663,7 +663,7 @@ class GeoJson(Layer):
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         marker: Union[Circle, CircleMarker, Marker, None] = None,
-        **kwargs: TypeJsonValue,
+        **kwargs: Any,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "GeoJson"
