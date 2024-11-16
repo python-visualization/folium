@@ -6,6 +6,37 @@ from folium.utilities import parse_options
 
 
 class OverlappingMarkerSpiderfier(JSCSSMixin, Layer):
+    """A plugin that handles overlapping markers by spreading them into a spider-like pattern.
+
+    This plugin uses the OverlappingMarkerSpiderfier-Leaflet library to manage markers
+    that are close to each other or overlap. When clicked, the overlapping markers
+    spread out in a spiral pattern, making them easier to select individually.
+
+    Parameters
+    ----------
+    markers : list, optional
+        List of markers to be managed by the spiderfier
+    name : string, optional
+        Name of the layer control
+    overlay : bool, default True
+        Whether the layer will be included in LayerControl
+    control : bool, default True
+        Whether the layer will be included in LayerControl
+    show : bool, default True
+        Whether the layer will be shown on opening
+    options : dict, optional
+        Additional options to be passed to the OverlappingMarkerSpiderfier instance
+        See https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet for available options
+
+    Example
+    -------
+    >>> markers = [marker1, marker2, marker3]  # Create some markers
+    >>> spiderfier = OverlappingMarkerSpiderfier(
+    ...     markers=markers, keepSpiderfied=True, nearbyDistance=20
+    ... )
+    >>> spiderfier.add_to(m)  # Add to your map
+    """
+
     _template = Template(
         """
         {% macro script(this, kwargs) %}
