@@ -61,8 +61,6 @@ def test_marker_cluster():
         in out
     )  # noqa
 
-    print(out)
-    print(expected)
     assert expected in out
 
     bounds = m.get_bounds()
