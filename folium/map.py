@@ -37,7 +37,7 @@ class Evented(MacroElement):
         self._add(once=False, **event_map)
 
     def once(self, **event_map: JsCode):
-        self._add(True, **event_map)
+        self._add(once=True, **event_map)
 
     def _add(self, once, **event_map: JsCode):
         for event_type, handler in event_map.items():
