@@ -115,7 +115,7 @@ class EventHandler(MacroElement):
         """
     )
 
-    def __init__(self, event: str, handler: JsCode, once=False):
+    def __init__(self, event: str, handler: JsCode, once: bool = False):
         super().__init__()
         self._name = "EventHandler"
         self.event = event
