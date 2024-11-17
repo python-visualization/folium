@@ -30,6 +30,7 @@ package_data = {
         "templates/*.html",
         "templates/*.js",
         "templates/*.txt",
+        "py.typed",
     ]
     + walk_subpkg("templates/tiles")
 }
