@@ -464,9 +464,6 @@ class TestFolium:
         m = folium.Map(prefer_canvas=True)
         out = m._parent.render()
         out_str = "".join(out.split())
-        for line in out.split("\n"):
-            print(line)
-        print(out_str)
         assert '"preferCanvas":true' in out_str
         assert not m.global_switches.no_touch
         assert not m.global_switches.disable_3d
