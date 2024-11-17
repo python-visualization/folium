@@ -40,6 +40,4 @@ def test_grouped_layer_control():
          {fg2.get_name()}.remove();
     """
     )
-    print(out)
-    print(expected)
     assert expected in out
