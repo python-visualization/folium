@@ -65,7 +65,6 @@ def test_wms():
     )
     w.add_to(m)
     html = m.get_root().render()
-    print(html)
 
     # verify this special case wasn't converted to lowerCamelCase
     assert '"cql_filter": "something",' in html
