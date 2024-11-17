@@ -65,7 +65,7 @@ setup(
     platforms="any",
     packages=packages,
     package_data=package_data,
-    python_requires=">=3.8",
+    python_requires=">=3.9",
     extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
