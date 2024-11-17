@@ -4,10 +4,9 @@ Test BoatMarker
 
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -35,7 +34,7 @@ def test_boat_marker():
         """
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         ).addTo({{ this._parent.get_name() }});
         {{ this.get_name() }}.setHeadingWind(
             {{ this.heading }},
@@ -64,7 +63,7 @@ def test_boat_marker_with_no_wind_speed_or_heading():
         """
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         ).addTo({{ this._parent.get_name() }});
         {{ this.get_name() }}.setHeading({{ this.heading }});
     """

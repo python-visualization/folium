@@ -6,11 +6,10 @@ Test Timeline
 
 import json
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
 from folium.features import GeoJsonPopup
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -63,7 +62,7 @@ def test_timeline():
           {% endmacro %}
 
           {% macro script(this, kwargs) %}
-            var {{ this.get_name() }}_options = {{ this.options|tojson }};
+            var {{ this.get_name() }}_options = {{ this.options|tojavascript }};
             {% for key, value in this.functions.items() %}
               {{ this.get_name() }}_options["{{key}}"] = {{ value }};
             {% endfor %}

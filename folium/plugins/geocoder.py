@@ -1,10 +1,9 @@
 from typing import Optional
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class Geocoder(JSCSSMixin, MacroElement):
@@ -36,7 +35,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
 
-            var geocoderOpts_{{ this.get_name() }} = {{ this.options|tojson }};
+            var geocoderOpts_{{ this.get_name() }} = {{ this.options|tojavascript }};
 
             // note: geocoder name should start with lowercase
             var geocoderName_{{ this.get_name() }} = geocoderOpts_{{ this.get_name() }}["provider"];
@@ -82,7 +81,7 @@ class Geocoder(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Geocoder"
-        self.options = parse_options(
+        self.options = dict(
             collapsed=collapsed,
             position=position,
             default_mark_geocode=add_marker,

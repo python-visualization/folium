@@ -1,8 +1,6 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.features import MacroElement
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class PolyLineTextPath(JSCSSMixin, MacroElement):
@@ -40,7 +38,7 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
         {% macro script(this, kwargs) %}
             {{ this.polyline.get_name() }}.setText(
                 {{ this.text|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
@@ -69,7 +67,7 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
         self._name = "PolyLineTextPath"
         self.polyline = polyline
         self.text = text
-        self.options = parse_options(
+        self.options = dict(
             repeat=repeat,
             center=center,
             below=below,

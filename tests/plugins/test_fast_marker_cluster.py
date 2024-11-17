@@ -6,10 +6,10 @@ Test FastMarkerCluster
 import numpy as np
 import pandas as pd
 import pytest
-from jinja2 import Template
 
 import folium
 from folium.plugins import FastMarkerCluster
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -48,7 +48,7 @@ def test_fast_marker_cluster():
             {{ this.callback }}
 
             var data = {{ this.data|tojson }};
-            var cluster = L.markerClusterGroup({{ this.options|tojson }});
+            var cluster = L.markerClusterGroup({{ this.options|tojavascript }});
             {%- if this.icon_create_function is not none %}
             cluster.options.iconCreateFunction =
                 {{ this.icon_create_function.strip() }};

@@ -5,10 +5,10 @@ Test HeatMap
 
 import numpy as np
 import pytest
-from jinja2 import Template
 
 import folium
 from folium.plugins import HeatMap
+from folium.template import Template
 from folium.utilities import normalize
 
 

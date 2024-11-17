@@ -8,17 +8,16 @@ import webbrowser
 from typing import Any, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import Evented, FitBounds, Layer
 from folium.raster_layers import TileLayer
+from folium.template import Template
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
     _parse_size,
     parse_font_size,
-    parse_options,
     temp_html_filepath,
     validate_location,
 )
@@ -204,9 +203,8 @@ class Map(JSCSSMixin, Evented):
                 {
                     center: {{ this.location|tojson }},
                     crs: L.CRS.{{ this.crs }},
-                    {%- for key, value in this.options.items() %}
-                    {{ key }}: {{ value|tojson }},
-                    {%- endfor %}
+                    ...{{this.options|tojavascript}}
+
                 }
             );
 
@@ -305,7 +303,7 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
-        self.options = parse_options(
+        self.options = dict(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
             zoom_control=False if self.zoom_control_position else zoom_control,

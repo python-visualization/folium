@@ -1,8 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class TagFilterButton(JSCSSMixin, MacroElement):
@@ -44,7 +43,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
 
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.control.tagFilterButton(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
@@ -86,7 +85,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "TagFilterButton"
-        self.options = parse_options(
+        self.options = dict(
             data=data,
             icon=icon,
             clear_text=clear_text,

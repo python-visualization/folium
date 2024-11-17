@@ -1,9 +1,8 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.raster_layers import TileLayer
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class MiniMap(JSCSSMixin, MacroElement):
@@ -68,7 +67,7 @@ class MiniMap(JSCSSMixin, MacroElement):
             );
             var {{ this.get_name() }} = new L.Control.MiniMap(
                 {{ this.tile_layer.get_name() }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{ this._parent.get_name() }}.addControl({{ this.get_name() }});
         {% endmacro %}
@@ -115,7 +114,7 @@ class MiniMap(JSCSSMixin, MacroElement):
         else:
             self.tile_layer = TileLayer(tile_layer)
 
-        self.options = parse_options(
+        self.options = dict(
             position=position,
             width=width,
             height=height,

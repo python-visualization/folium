@@ -1,9 +1,8 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.raster_layers import WmsTileLayer
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
@@ -66,11 +65,11 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.timeDimension = L.timeDimension(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{ this._parent.get_name() }}.timeDimensionControl =
                 L.control.timeDimension(
-                    {{ this.options_control|tojson }}
+                    {{ this.options_control|tojavascript }}
                 );
             {{ this._parent.get_name() }}.addControl(
                 {{ this._parent.get_name() }}.timeDimensionControl
@@ -129,11 +128,11 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "TimestampedWmsTileLayers"
-        self.options = parse_options(
+        self.options = dict(
             period=period,
             time_interval=time_interval,
         )
-        self.options_control = parse_options(
+        self.options_control = dict(
             position="bottomleft",
             auto_play=auto_play,
             player_options={

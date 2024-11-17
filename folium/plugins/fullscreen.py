@@ -1,8 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class Fullscreen(JSCSSMixin, MacroElement):
@@ -31,7 +30,7 @@ class Fullscreen(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             L.control.fullscreen(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
@@ -60,7 +59,7 @@ class Fullscreen(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Fullscreen"
-        self.options = parse_options(
+        self.options = dict(
             position=position,
             title=title,
             title_cancel=title_cancel,

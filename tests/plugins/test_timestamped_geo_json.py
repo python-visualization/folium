@@ -5,10 +5,10 @@ Test TimestampedGeoJson
 """
 
 import numpy as np
-from jinja2 import Template
 
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -146,7 +146,7 @@ def test_timestamped_geo_json():
             }
         );
         var timeDimensionControl = new L.Control.TimeDimensionCustom(
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         );
         {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 

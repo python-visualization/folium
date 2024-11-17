@@ -16,16 +16,17 @@ def test_grouped_layer_control():
     m.add_child(fg3)
     lc = groupedlayercontrol.GroupedLayerControl(groups={"groups1": [fg1, fg2]})
     lc.add_to(m)
-    out = normalize(m._parent.render())
+    out = m._parent.render()
+    print(out)
+    out = normalize(out)
 
     assert (
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet-groupedlayercontrol/0.6.1/leaflet.groupedlayercontrol.min.js"
         in out
     )
 
-    assert (
-        normalize(
-            f"""
+    expected = normalize(
+        f"""
         L.control.groupedLayers(
             null,
             {{
@@ -34,10 +35,9 @@ def test_grouped_layer_control():
                     "g2" : {fg2.get_name()},
                 }},
             }},
-            {{"exclusiveGroups": ["groups1"]}},
+            {{"exclusiveGroups": ["groups1",],}},
          ).addTo({m.get_name()});
          {fg2.get_name()}.remove();
     """
-        )
-        in out
     )
+    assert expected in out

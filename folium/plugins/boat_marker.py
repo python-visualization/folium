@@ -1,8 +1,6 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.map import Marker
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class BoatMarker(JSCSSMixin, Marker):
@@ -30,7 +28,7 @@ class BoatMarker(JSCSSMixin, Marker):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.boatMarker(
                 {{ this.location|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
             {% if this.wind_heading is not none -%}
             {{ this.get_name() }}.setHeadingWind(
@@ -67,4 +65,4 @@ class BoatMarker(JSCSSMixin, Marker):
         self.heading = heading
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)

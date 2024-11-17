@@ -4,7 +4,6 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
-from folium.utilities import parse_options
 
 
 class TreeLayerControl(JSCSSMixin, MacroElement):
@@ -128,7 +127,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
             L.control.layers.tree(
                 {{this.base_tree|tojavascript}},
                 {{this.overlay_tree|tojavascript}},
-                {{this.options|tojson}}
+                {{this.options|tojavascript}}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """
@@ -158,6 +157,6 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         kwargs["collapse_all"] = collapse_all
         kwargs["expand_all"] = expand_all
         kwargs["label_is_selector"] = label_is_selector
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
         self.base_tree = base_tree
         self.overlay_tree = overlay_tree

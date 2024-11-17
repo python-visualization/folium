@@ -4,10 +4,9 @@ Based on leaflet plugin: https://github.com/domoritz/leaflet-locatecontrol
 """
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class LocateControl(JSCSSMixin, MacroElement):
@@ -74,4 +73,4 @@ class LocateControl(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "LocateControl"
         self.auto_start = auto_start
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)

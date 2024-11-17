@@ -7,9 +7,9 @@ from typing import Any, Callable, Optional, Union
 
 import xyzservices
 from branca.element import Element, Figure
-from jinja2 import Template
 
 from folium.map import Layer
+from folium.template import Template
 from folium.utilities import (
     TypeBounds,
     TypeJsonValue,
@@ -82,7 +82,8 @@ class TileLayer(Layer):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.tileLayer(
                 {{ this.tiles|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
+
             );
         {% endmacro %}
         """
@@ -139,7 +140,7 @@ class TileLayer(Layer):
         if not attr:
             raise ValueError("Custom tiles must have an attribution.")
 
-        self.options = parse_options(
+        self.options = dict(
             min_zoom=min_zoom or 0,
             max_zoom=max_zoom or 18,
             max_native_zoom=max_native_zoom,
@@ -228,8 +229,8 @@ class WmsTileLayer(Layer):
             attribution=attr,
             **kwargs,
         )
+        # special parameter that shouldn't be camelized
         if cql_filter:
-            # special parameter that shouldn't be camelized
             self.options["cql_filter"] = cql_filter
 
 
@@ -286,7 +287,7 @@ class ImageOverlay(Layer):
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
                 {{ this.bounds|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
@@ -309,7 +310,7 @@ class ImageOverlay(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "ImageOverlay"
         self.bounds = bounds
-        self.options = parse_options(**kwargs)
+        self.options = kwargs
         self.pixelated = pixelated
         if mercator_project:
             image = mercator_transform(
@@ -385,7 +386,7 @@ class VideoOverlay(Layer):
             var {{ this.get_name() }} = L.videoOverlay(
                 {{ this.video_url|tojson }},
                 {{ this.bounds|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
@@ -408,7 +409,7 @@ class VideoOverlay(Layer):
         self.video_url = video_url
 
         self.bounds = bounds
-        self.options = parse_options(autoplay=autoplay, loop=loop, **kwargs)
+        self.options = dict(autoplay=autoplay, loop=loop, **kwargs)
 
     def _get_self_bounds(self) -> TypeBounds:
         """

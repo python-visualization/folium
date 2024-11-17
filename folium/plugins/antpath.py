@@ -1,6 +1,5 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
+from folium.template import Template
 from folium.vector_layers import BaseMultiLocation, path_options
 
 
@@ -31,7 +30,7 @@ class AntPath(JSCSSMixin, BaseMultiLocation):
         {% macro script(this, kwargs) %}
             {{ this.get_name() }} = L.polyline.antPath(
               {{ this.locations|tojson }},
-              {{ this.options|tojson }}
+              {{ this.options|tojavascript }}
         ).addTo({{this._parent.get_name()}});
         {% endmacro %}
         """

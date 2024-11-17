@@ -5,17 +5,16 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict
-from typing import Dict, List, Optional, Sequence, Tuple, Type, Union
+from typing import List, Optional, Sequence, Union
 
 from branca.element import Element, Figure, Html, MacroElement
-from jinja2 import Template
 
 from folium.elements import ElementAddToElement, EventHandler
+from folium.template import Template
 from folium.utilities import (
     JsCode,
     TypeBounds,
     TypeJsonValue,
-    camelize,
     escape_backticks,
     parse_options,
     validate_location,
@@ -109,7 +108,7 @@ class FeatureGroup(Layer):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
@@ -126,7 +125,7 @@ class FeatureGroup(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
-        self.options = parse_options(**kwargs)
+        self.options = kwargs
 
 
 class LayerControl(MacroElement):
@@ -180,7 +179,7 @@ class LayerControl(MacroElement):
             let {{ this.get_name() }} = L.control.layers(
                 {{ this.get_name() }}_layers.base_layers,
                 {{ this.get_name() }}_layers.overlays,
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{this._parent.get_name()}});
 
             {%- if this.draggable %}
@@ -201,7 +200,7 @@ class LayerControl(MacroElement):
     ):
         super().__init__()
         self._name = "LayerControl"
-        self.options = parse_options(
+        self.options = dict(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.draggable = draggable
@@ -263,7 +262,7 @@ class Icon(MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
@@ -307,7 +306,7 @@ class Icon(MacroElement):
                 f"color argument of Icon should be one of: {self.color_options}.",
                 stacklevel=2,
             )
-        self.options = parse_options(
+        self.options = dict(
             marker_color=color,
             icon_color=icon_color,
             icon=icon,
@@ -356,7 +355,7 @@ class Marker(MacroElement):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.marker(
                 {{ this.location|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
@@ -374,7 +373,7 @@ class Marker(MacroElement):
         super().__init__()
         self._name = "Marker"
         self.location = validate_location(location) if location is not None else None
-        self.options = parse_options(
+        self.options = dict(
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
         if icon is not None:
@@ -424,7 +423,7 @@ class Popup(Element):
 
     _template = Template(
         """
-        var {{this.get_name()}} = L.popup({{ this.options|tojson }});
+        var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
 
         {% for name, element in this.html._children.items() %}
             {% if this.lazy %}
@@ -476,7 +475,7 @@ class Popup(Element):
 
         self.show = show
         self.lazy = lazy
-        self.options = parse_options(
+        self.options = dict(
             max_width=max_width,
             autoClose=False if show or sticky else None,
             closeOnClick=False if sticky else None,
@@ -526,22 +525,11 @@ class Tooltip(MacroElement):
                 `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
                      {{ this.text }}
                  </div>`,
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
     )
-    valid_options: Dict[str, Tuple[Type, ...]] = {
-        "pane": (str,),
-        "offset": (tuple,),
-        "direction": (str,),
-        "permanent": (bool,),
-        "sticky": (bool,),
-        "interactive": (bool,),
-        "opacity": (float, int),
-        "attribution": (str,),
-        "className": (str,),
-    }
 
     def __init__(
         self,
@@ -556,7 +544,7 @@ class Tooltip(MacroElement):
         self.text = str(text)
 
         kwargs.update({"sticky": sticky})
-        self.options = self.parse_options(kwargs)
+        self.options = kwargs
 
         if style:
             assert isinstance(
@@ -564,23 +552,6 @@ class Tooltip(MacroElement):
             ), "Pass a valid inline HTML style property string to style."
             # noqa outside of type checking.
             self.style = style
-
-    def parse_options(
-        self,
-        kwargs: Dict[str, TypeJsonValue],
-    ) -> Dict[str, TypeJsonValue]:
-        """Validate the provided kwargs and return options as json string."""
-        kwargs = {camelize(key): value for key, value in kwargs.items()}
-        for key in kwargs.keys():
-            assert (
-                key in self.valid_options
-            ), "The option {} is not in the available options: {}.".format(
-                key, ", ".join(self.valid_options)
-            )
-            assert isinstance(
-                kwargs[key], self.valid_options[key]
-            ), f"The option {key} must be one of the following types: {self.valid_options[key]}."
-        return kwargs
 
 
 class FitBounds(MacroElement):
@@ -660,7 +631,7 @@ class FitOverlays(MacroElement):
                 }
             });
             if (bounds.isValid()) {
-                {{ this._parent.get_name() }}.{{ this.method }}(bounds, {{ this.options|tojson }});
+                {{ this._parent.get_name() }}.{{ this.method }}(bounds, {{ this.options|tojavascript }});
             }
         }
         {{ this._parent.get_name() }}.on('overlayadd', customFlyToBounds);
@@ -682,7 +653,7 @@ class FitOverlays(MacroElement):
         self._name = "FitOverlays"
         self.method = "flyToBounds" if fly else "fitBounds"
         self.fit_on_map_load = fit_on_map_load
-        self.options = parse_options(padding=(padding, padding), max_zoom=max_zoom)
+        self.options = dict(padding=(padding, padding), max_zoom=max_zoom)
 
 
 class CustomPane(MacroElement):

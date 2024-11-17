@@ -1,11 +1,11 @@
 import json
 
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.utilities import get_bounds, parse_options
+from folium.template import Template
+from folium.utilities import get_bounds
 
 
 class TimestampedGeoJson(JSCSSMixin, MacroElement):
@@ -94,7 +94,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                 }
             );
             var timeDimensionControl = new L.Control.TimeDimensionCustom(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{this._parent.get_name()}}.addControl(this.timeDimensionControl);
 
@@ -211,7 +211,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         self.date_options = date_options
         self.duration = "undefined" if duration is None else '"' + duration + '"'
 
-        self.options = parse_options(
+        self.options = dict(
             position="bottomleft",
             min_speed=min_speed,
             max_speed=max_speed,

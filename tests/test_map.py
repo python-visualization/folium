@@ -112,8 +112,11 @@ def test_popup_sticky():
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
-        "autoClose": false, "closeOnClick": false, "maxWidth": "100%"
+        "maxWidth": "100%",
+        "autoClose": false,
+        "closeOnClick": false,
     }});
+
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name});
@@ -131,7 +134,7 @@ def test_popup_show():
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
-        "autoClose": false, "maxWidth": "100%"
+        "maxWidth": "100%","autoClose": false,"closeOnClick": null,
     }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
@@ -150,7 +153,11 @@ def test_popup_backticks():
     popup = Popup("back`tick`tick").add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {popup_name} = L.popup({{
+        "maxWidth": "100%",
+        "autoClose": null,
+        "closeOnClick": null,
+    }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick\\`tick</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name});
@@ -167,7 +174,11 @@ def test_popup_backticks_already_escaped():
     popup = Popup("back\\`tick").add_to(m)
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
-    var {popup_name} = L.popup({{"maxWidth": "100%"}});
+    var {popup_name} = L.popup({{
+        "maxWidth": "100%",
+        "autoClose": null,
+        "closeOnClick": null,
+    }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick</div>`)[0];
     {popup_name}.setContent({html_name});
     {map_name}.bindPopup({popup_name});

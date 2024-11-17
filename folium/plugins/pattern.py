@@ -1,9 +1,9 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.utilities import get_obj_in_upper_tree, parse_options
+from folium.template import Template
+from folium.utilities import get_obj_in_upper_tree
 
 
 class StripePattern(JSCSSMixin, MacroElement):
@@ -35,7 +35,7 @@ class StripePattern(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.StripePattern(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{ this.get_name() }}.addTo({{ this.parent_map.get_name() }});
         {% endmacro %}
@@ -59,7 +59,7 @@ class StripePattern(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "StripePattern"
-        self.options = parse_options(
+        self.options = dict(
             angle=angle,
             weight=weight,
             space_weight=space_weight,
@@ -107,10 +107,10 @@ class CirclePattern(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }}_shape = new L.PatternCircle(
-                {{ this.options_pattern_circle|tojson }}
+                {{ this.options_pattern_circle|tojavascript }}
             );
             var {{ this.get_name() }} = new L.Pattern(
-                {{ this.options_pattern|tojson }}
+                {{ this.options_pattern|tojavascript }}
             );
             {{ this.get_name() }}.addShape({{ this.get_name() }}_shape);
             {{ this.get_name() }}.addTo({{ this.parent_map }});
@@ -135,7 +135,7 @@ class CirclePattern(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "CirclePattern"
-        self.options_pattern_circle = parse_options(
+        self.options_pattern_circle = dict(
             x=radius + 2 * weight,
             y=radius + 2 * weight,
             weight=weight,
@@ -146,7 +146,7 @@ class CirclePattern(JSCSSMixin, MacroElement):
             fill_opacity=fill_opacity,
             fill=True,
         )
-        self.options_pattern = parse_options(
+        self.options_pattern = dict(
             width=width,
             height=height,
         )

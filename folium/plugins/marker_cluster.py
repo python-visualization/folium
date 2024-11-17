@@ -1,8 +1,7 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
-from folium.utilities import parse_options, validate_locations
+from folium.template import Template
+from folium.utilities import validate_locations
 
 
 class MarkerCluster(JSCSSMixin, Layer):
@@ -48,7 +47,7 @@ class MarkerCluster(JSCSSMixin, Layer):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.markerClusterGroup(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {%- if this.icon_create_function is not none %}
             {{ this.get_name() }}.options.iconCreateFunction =
@@ -103,7 +102,7 @@ class MarkerCluster(JSCSSMixin, Layer):
                     )
                 )
 
-        self.options = parse_options(**kwargs)
+        self.options = dict(**kwargs)
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function

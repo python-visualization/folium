@@ -4,10 +4,9 @@ Test Fullscreen
 
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -21,7 +20,7 @@ def test_fullscreen():
     tmpl = Template(
         """
         L.control.fullscreen(
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         ).addTo({{this._parent.get_name()}});
     """
     )

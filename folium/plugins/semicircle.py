@@ -1,8 +1,6 @@
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.map import Marker
-from folium.utilities import parse_options
+from folium.template import Template
 from folium.vector_layers import path_options
 
 
@@ -41,7 +39,7 @@ class SemiCircle(JSCSSMixin, Marker):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.semiCircle(
                 {{ this.location|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
                 )
                 {%- if this.direction %}
                     .setDirection({{ this.direction[0] }}, {{ this.direction[1] }})
@@ -77,7 +75,7 @@ class SemiCircle(JSCSSMixin, Marker):
         )
         self.options = path_options(line=False, radius=radius, **kwargs)
         self.options.update(
-            parse_options(
+            dict(
                 start_angle=start_angle,
                 stop_angle=stop_angle,
             )

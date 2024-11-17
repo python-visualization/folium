@@ -1,8 +1,7 @@
 from branca.element import MacroElement
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
-from folium.utilities import parse_options
+from folium.template import Template
 
 
 class MousePosition(JSCSSMixin, MacroElement):
@@ -49,7 +48,7 @@ class MousePosition(JSCSSMixin, MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.Control.MousePosition(
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
             {{ this.get_name() }}.options["latFormatter"] =
                 {{ this.lat_formatter }};
@@ -88,7 +87,7 @@ class MousePosition(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "MousePosition"
 
-        self.options = parse_options(
+        self.options = dict(
             position=position,
             separator=separator,
             empty_string=empty_string,

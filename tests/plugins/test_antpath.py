@@ -3,10 +3,9 @@ Test AntPath
 -------------
 """
 
-from jinja2 import Template
-
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -46,7 +45,7 @@ def test_antpath():
         """
           {{this.get_name()}} = L.polyline.antPath(
                   {{ this.locations|tojson }},
-                  {{ this.options|tojson }}
+                  {{ this.options|tojavascript }}
                 )
                 .addTo({{this._parent.get_name()}});
         """

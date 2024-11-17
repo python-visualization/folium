@@ -1,11 +1,10 @@
 from typing import Optional, Union
 
-from jinja2 import Template
-
 from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import FeatureGroup
-from folium.utilities import JsCode, camelize, parse_options
+from folium.template import Template
+from folium.utilities import JsCode
 
 
 class Realtime(JSCSSMixin, FeatureGroup):
@@ -70,26 +69,17 @@ class Realtime(JSCSSMixin, FeatureGroup):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            var {{ this.get_name() }}_options = {{ this.options|tojson }};
-            {% for key, value in this.functions.items() %}
-            {{ this.get_name() }}_options["{{key}}"] = {{ value }};
-            {% endfor %}
-
-            {% if this.container -%}
-                {{ this.get_name() }}_options["container"]
-                    = {{ this.container.get_name() }};
-            {% endif -%}
-
             var {{ this.get_name() }} = L.realtime(
             {% if this.src is string or this.src is mapping -%}
                 {{ this.src|tojson }},
             {% else -%}
                 {{ this.src.js_code }},
             {% endif -%}
-                {{ this.get_name() }}_options
+                {{ this.options | tojavascript }}
             );
             {{ this._parent.get_name() }}.addLayer(
-                {{ this.get_name() }}._container);
+                {{ this.get_name() }}._container
+            );
         {% endmacro %}
     """
     )
@@ -115,7 +105,6 @@ class Realtime(JSCSSMixin, FeatureGroup):
         super().__init__()
         self._name = "Realtime"
         self.src = source
-        self.container = container
 
         kwargs["start"] = start
         kwargs["interval"] = interval
@@ -124,12 +113,6 @@ class Realtime(JSCSSMixin, FeatureGroup):
         if update_feature is not None:
             kwargs["update_feature"] = JsCode(update_feature)
         kwargs["remove_missing"] = remove_missing
+        kwargs["container"] = container
 
-        # extract JsCode objects
-        self.functions = {}
-        for key, value in list(kwargs.items()):
-            if isinstance(value, JsCode):
-                self.functions[camelize(key)] = value.js_code
-                kwargs.pop(key)
-
-        self.options = parse_options(**kwargs)
+        self.options = kwargs

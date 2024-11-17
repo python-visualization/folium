@@ -6,9 +6,9 @@ Test raster_layers
 
 import pytest
 import xyzservices
-from jinja2 import Template
 
 import folium
+from folium.template import Template
 from folium.utilities import normalize
 
 

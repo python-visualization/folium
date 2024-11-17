@@ -12,12 +12,12 @@ import numpy as np
 import pandas as pd
 import pytest
 import xyzservices.providers as xyz
-from jinja2 import Template
 from jinja2.utils import htmlsafe_json_dumps
 
 import folium
 from folium import TileLayer
 from folium.features import Choropleth, GeoJson
+from folium.template import Template
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -92,7 +92,7 @@ class TestFolium:
         assert self.m.get_root() == self.m._parent
         assert self.m.location == [45.5236, -122.6750]
         assert self.m.options["zoom"] == 4
-        assert self.m.options["maxBounds"] == [[-90, -180], [90, 180]]
+        assert self.m.options["max_bounds"] == [[-90, -180], [90, 180]]
         assert self.m.position == "relative"
         assert self.m.height == (400, "px")
         assert self.m.width == (900, "px")
@@ -464,28 +464,28 @@ class TestFolium:
         m = folium.Map(prefer_canvas=True)
         out = m._parent.render()
         out_str = "".join(out.split())
-        assert "preferCanvas:true" in out_str
+        assert '"preferCanvas":true' in out_str
         assert not m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(no_touch=True)
         out = m._parent.render()
         out_str = "".join(out.split())
-        assert "preferCanvas:false" in out_str
+        assert '"preferCanvas":false' in out_str
         assert m.global_switches.no_touch
         assert not m.global_switches.disable_3d
 
         m = folium.Map(disable_3d=True)
         out = m._parent.render()
         out_str = "".join(out.split())
-        assert "preferCanvas:false" in out_str
+        assert '"preferCanvas":false' in out_str
         assert not m.global_switches.no_touch
         assert m.global_switches.disable_3d
 
         m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
         out = m._parent.render()
         out_str = "".join(out.split())
-        assert "preferCanvas:true" in out_str
+        assert '"preferCanvas":true' in out_str
         assert m.global_switches.no_touch
         assert m.global_switches.disable_3d
 

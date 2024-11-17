@@ -1,15 +1,14 @@
 import warnings
 
 import numpy as np
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.map import Layer
+from folium.template import Template
 from folium.utilities import (
     if_pandas_df_convert_to_numpy,
     none_max,
     none_min,
-    parse_options,
     validate_location,
 )
 
@@ -49,7 +48,7 @@ class HeatMap(JSCSSMixin, Layer):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.heatLayer(
                 {{ this.data|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             );
         {% endmacro %}
         """
@@ -90,7 +89,7 @@ class HeatMap(JSCSSMixin, Layer):
                 "The largest intensity is calculated automatically.",
                 stacklevel=2,
             )
-        self.options = parse_options(
+        self.options = dict(
             min_opacity=min_opacity,
             max_zoom=max_zoom,
             radius=radius,

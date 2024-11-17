@@ -4,10 +4,10 @@ Test MarkerCluster
 """
 
 import numpy as np
-from jinja2 import Template
 
 import folium
 from folium import plugins
+from folium.template import Template
 from folium.utilities import normalize
 
 
@@ -26,7 +26,7 @@ def test_marker_cluster():
     tmpl_for_expected = Template(
         """
         var {{this.get_name()}} = L.markerClusterGroup(
-            {{ this.options|tojson }}
+            {{ this.options|tojavascript }}
         );
         {%- if this.icon_create_function is not none %}
             {{ this.get_name() }}.options.iconCreateFunction =
@@ -36,7 +36,7 @@ def test_marker_cluster():
         {% for marker in this._children.values() %}
             var {{marker.get_name()}} = L.marker(
                 {{ marker.location|tojson }},
-                {}
+                {"draggable": null,"autoPan": null,}
             ).addTo({{this.get_name()}});
         {% endfor %}
 

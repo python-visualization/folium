@@ -3,10 +3,9 @@ Test Realtime
 ------------------
 """
 
-from jinja2 import Template
-
 import folium
 from folium.plugins import MarkerCluster, Realtime
+from folium.template import Template
 from folium.utilities import JsCode, normalize
 
 
@@ -30,7 +29,7 @@ def test_realtime():
     tmpl_for_expected = Template(
         """
           {% macro script(this, kwargs) %}
-              var {{ this.get_name() }}_options = {{ this.options|tojson }};
+              var {{ this.get_name() }}_options = {{ this.options|tojavascript }};
               {% for key, value in this.functions.items() %}
               {{ this.get_name() }}_options["{{key}}"] = {{ value }};
               {% endfor %}

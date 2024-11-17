@@ -14,17 +14,16 @@ import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
 from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement
 from branca.utilities import color_brewer
-from jinja2 import Template
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
+from folium.template import Template
 from folium.utilities import (
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
     _parse_size,
-    camelize,
     escape_backticks,
     get_bounds,
     get_obj_in_upper_tree,
@@ -32,7 +31,6 @@ from folium.utilities import (
     javascript_identifier_path_to_array_notation,
     none_max,
     none_min,
-    parse_options,
     validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
@@ -68,7 +66,7 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.RegularPolygonMarker(
                 {{ this.location|tojson }},
-                {{ this.options|tojson }}
+                {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
         """
@@ -95,7 +93,7 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         self._name = "RegularPolygonMarker"
         self.options = path_options(line=False, radius=radius, **kwargs)
         self.options.update(
-            parse_options(
+            dict(
                 number_of_sides=number_of_sides,
                 rotation=rotation,
             )
@@ -627,9 +625,7 @@ class GeoJson(Layer):
             {%- if this.marker %}
                 pointToLayer: {{ this.get_name() }}_pointToLayer,
             {%- endif %}
-            {%- for key, value in this.options.items() %}
-                {{ key }}: {{ value|tojson }},
-            {%- endfor %}
+            ...{{this.options | tojavascript }}
         });
 
         function {{ this.get_name() }}_add (data) {
@@ -667,7 +663,7 @@ class GeoJson(Layer):
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         marker: Union[Circle, CircleMarker, Marker, None] = None,
-        **kwargs: TypeJsonValue,
+        **kwargs: Any,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "GeoJson"
@@ -692,7 +688,7 @@ class GeoJson(Layer):
         self.popup_keep_highlighted = popup_keep_highlighted
 
         self.marker = marker
-        self.options = parse_options(**kwargs)
+        self.options = kwargs
 
         self.data = self.process_data(data)
 
@@ -1267,7 +1263,7 @@ class GeoJsonTooltip(GeoJsonDetail):
     {% macro script(this, kwargs) %}
     {{ this._parent.get_name() }}.bindTooltip("""
         + GeoJsonDetail.base_template
-        + """,{{ this.tooltip_options | tojson | safe }});
+        + """,{{ this.tooltip_options | tojavascript }});
                      {% endmacro %}
                      """
     )
@@ -1293,7 +1289,7 @@ class GeoJsonTooltip(GeoJsonDetail):
         )
         self._name = "GeoJsonTooltip"
         kwargs.update({"sticky": sticky, "class_name": class_name})
-        self.tooltip_options = {camelize(key): kwargs[key] for key in kwargs.keys()}
+        self.tooltip_options = kwargs
 
 
 class GeoJsonPopup(GeoJsonDetail):
@@ -1335,7 +1331,7 @@ class GeoJsonPopup(GeoJsonDetail):
     {% macro script(this, kwargs) %}
     {{ this._parent.get_name() }}.bindPopup("""
         + GeoJsonDetail.base_template
-        + """,{{ this.popup_options | tojson | safe }});
+        + """,{{ this.popup_options | tojavascript }});
                      {% endmacro %}
                      """
     )
@@ -1360,7 +1356,7 @@ class GeoJsonPopup(GeoJsonDetail):
         )
         self._name = "GeoJsonPopup"
         kwargs.update({"class_name": self.class_name})
-        self.popup_options = {camelize(key): value for key, value in kwargs.items()}
+        self.popup_options = kwargs
 
 
 class Choropleth(FeatureGroup):
@@ -1703,7 +1699,7 @@ class DivIcon(MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-            var {{ this.get_name() }} = L.divIcon({{ this.options|tojson }});
+            var {{ this.get_name() }} = L.divIcon({{ this.options|tojavascript }});
             {{this._parent.get_name()}}.setIcon({{this.get_name()}});
         {% endmacro %}
         """
@@ -1719,7 +1715,7 @@ class DivIcon(MacroElement):
     ):
         super().__init__()
         self._name = "DivIcon"
-        self.options = parse_options(
+        self.options = dict(
             html=html,
             icon_size=icon_size,
             icon_anchor=icon_anchor,
@@ -1880,7 +1876,7 @@ class CustomIcon(Icon):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-        var {{ this.get_name() }} = L.icon({{ this.options|tojson }});
+        var {{ this.get_name() }} = L.icon({{ this.options|tojavascript }});
         {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
@@ -1898,7 +1894,7 @@ class CustomIcon(Icon):
     ):
         super(Icon, self).__init__()
         self._name = "CustomIcon"
-        self.options = parse_options(
+        self.options = dict(
             icon_url=image_to_url(icon_image),
             icon_size=icon_size,
             icon_anchor=icon_anchor,
