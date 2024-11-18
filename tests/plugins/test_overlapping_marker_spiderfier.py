@@ -15,7 +15,7 @@ def test_oms_js_inclusion():
     Test that the OverlappingMarkerSpiderfier JavaScript library is included in the map.
     """
     m = Map([45.05, 3.05], zoom_start=14)
-    oms = OverlappingMarkerSpiderfier().add_to(m)
+    OverlappingMarkerSpiderfier().add_to(m)
 
     rendered_map = m._parent.render()
     assert (
@@ -38,16 +38,20 @@ def test_marker_addition():
     ).T
 
     m = Map([45.05, 3.05], zoom_start=14)
-    markers = [Marker(location=loc, popup=f"Marker {
-                      i}") for i, loc in enumerate(data)]
+    markers = [
+        Marker(
+            location=loc,
+            popup=f"Marker {i}",
+        )
+        for i, loc in enumerate(data)
+    ]
 
     for marker in markers:
         marker.add_to(m)
 
-    assert len(m._children) == len(markers) + 1, (
-        f"Expected {len(markers)} markers on the map, but found {
-            len(m._children) - 1}."
-    )
+    assert (
+        len(m._children) == len(markers) + 1
+    ), f"Expected {len(markers)} markers, found {len(m._children) - 1}."
 
 
 def test_map_bounds():
@@ -64,8 +68,13 @@ def test_map_bounds():
     ).T
 
     m = Map([45.05, 3.05], zoom_start=14)
-    markers = [Marker(location=loc, popup=f"Marker {
-                      i}") for i, loc in enumerate(data)]
+    markers = [
+        Marker(
+            location=loc,
+            popup=f"Marker {i}",
+        )
+        for i, loc in enumerate(data)
+    ]
 
     for marker in markers:
         marker.add_to(m)
@@ -76,10 +85,18 @@ def test_map_bounds():
     min_lat, min_lon = data.min(axis=0)
     max_lat, max_lon = data.max(axis=0)
 
-    assert bounds[0][0] <= min_lat, "Map bounds do not correctly include the minimum latitude."
-    assert bounds[0][1] <= min_lon, "Map bounds do not correctly include the minimum longitude."
-    assert bounds[1][0] >= max_lat, "Map bounds do not correctly include the maximum latitude."
-    assert bounds[1][1] >= max_lon, "Map bounds do not correctly include the maximum longitude."
+    assert (
+        bounds[0][0] <= min_lat
+    ), "Map bounds do not correctly include the minimum latitude."
+    assert (
+        bounds[0][1] <= min_lon
+    ), "Map bounds do not correctly include the minimum longitude."
+    assert (
+        bounds[1][0] >= max_lat
+    ), "Map bounds do not correctly include the maximum latitude."
+    assert (
+        bounds[1][1] >= max_lon
+    ), "Map bounds do not correctly include the maximum longitude."
 
 
 def test_overlapping_marker_spiderfier_integration():
@@ -88,9 +105,10 @@ def test_overlapping_marker_spiderfier_integration():
     """
     m = Map([45.05, 3.05], zoom_start=14)
     oms = OverlappingMarkerSpiderfier(
-        options={"keepSpiderfied": True, "nearbyDistance": 20})
+        options={"keepSpiderfied": True, "nearbyDistance": 20}
+    )
     oms.add_to(m)
 
-    assert oms.get_name() in m._children, (
-        f"OverlappingMarkerSpiderfier is not correctly added to the map."
-    )
+    assert (
+        oms.get_name() in m._children
+    ), "OverlappingMarkerSpiderfier is not correctly added to the map."

@@ -1,18 +1,20 @@
 from jinja2 import Template
+
 from folium.elements import JSCSSMixin, MacroElement
 from folium.utilities import parse_options
+
 
 class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     """
     A plugin that handles overlapping markers on a map by spreading them out in a spiral or circle pattern when clicked.
-    
+
     This plugin is useful when you have multiple markers in close proximity that would otherwise be difficult to interact with.
-    When a user clicks on a cluster of overlapping markers, they spread out in a 'spider' pattern, making each marker 
+    When a user clicks on a cluster of overlapping markers, they spread out in a 'spider' pattern, making each marker
     individually accessible.
 
-    Markers must be added to the map **before** calling `oms.add_to(map)`. 
+    Markers must be added to the map **before** calling `oms.add_to(map)`.
     The plugin identifies and manages all markers already present on the map.
-      
+
     Parameters
     ----------
     options : dict, optional
@@ -25,16 +27,15 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
             Weight of the spider legs
         - circleSpiralSwitchover : int, optional
             Number of markers at which to switch from circle to spiral pattern
-    
+
     Example
     -------
-    >>> oms = OverlappingMarkerSpiderfier(options={
-    ...     "keepSpiderfied": True,
-    ...     "nearbyDistance": 30,
-    ...     "legWeight": 2.0
-    ... })
+    >>> oms = OverlappingMarkerSpiderfier(
+    ...     options={"keepSpiderfied": True, "nearbyDistance": 30, "legWeight": 2.0}
+    ... )
     >>> oms.add_to(map)
     """
+
     _template = Template(
         """
         {% macro script(this, kwargs) %}
