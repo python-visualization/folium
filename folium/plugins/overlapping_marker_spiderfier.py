@@ -1,100 +1,67 @@
 from jinja2 import Template
-
-from folium.elements import JSCSSMixin
-from folium.map import Layer
+from folium.elements import JSCSSMixin, MacroElement
 from folium.utilities import parse_options
 
+class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
+    """
+    A plugin that handles overlapping markers on a map by spreading them out in a spiral or circle pattern when clicked.
+    
+    This plugin is useful when you have multiple markers in close proximity that would otherwise be difficult to interact with.
+    When a user clicks on a cluster of overlapping markers, they spread out in a 'spider' pattern, making each marker 
+    individually accessible.
 
-class OverlappingMarkerSpiderfier(JSCSSMixin, Layer):
-    """A plugin that handles overlapping markers by spreading them into a spider-like pattern.
-
-    This plugin uses the OverlappingMarkerSpiderfier-Leaflet library to manage markers
-    that are close to each other or overlap. When clicked, the overlapping markers
-    spread out in a spiral pattern, making them easier to select individually.
-
+    Markers must be added to the map **before** calling `oms.add_to(map)`. 
+    The plugin identifies and manages all markers already present on the map.
+      
     Parameters
     ----------
-    markers : list, optional
-        List of markers to be managed by the spiderfier
-    name : string, optional
-        Name of the layer control
-    overlay : bool, default True
-        Whether the layer will be included in LayerControl
-    control : bool, default True
-        Whether the layer will be included in LayerControl
-    show : bool, default True
-        Whether the layer will be shown on opening
     options : dict, optional
-        Additional options to be passed to the OverlappingMarkerSpiderfier instance
-        See https://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet for available options
-
+        The options to configure the spiderfier behavior:
+        - keepSpiderfied : bool, default True
+            If true, markers stay spiderfied after clicking
+        - nearbyDistance : int, default 20
+            Pixels away from a marker that is considered overlapping
+        - legWeight : float, default 1.5
+            Weight of the spider legs
+        - circleSpiralSwitchover : int, optional
+            Number of markers at which to switch from circle to spiral pattern
+    
     Example
     -------
-    >>> markers = [marker1, marker2, marker3]  # Create some markers
-    >>> spiderfier = OverlappingMarkerSpiderfier(
-    ...     markers=markers, keepSpiderfied=True, nearbyDistance=20
-    ... )
-    >>> spiderfier.add_to(m)  # Add to your map
+    >>> oms = OverlappingMarkerSpiderfier(options={
+    ...     "keepSpiderfied": True,
+    ...     "nearbyDistance": 30,
+    ...     "legWeight": 2.0
+    ... })
+    >>> oms.add_to(map)
     """
-
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-        var {{ this.get_name() }} = (function () {
-            var layerGroup = L.layerGroup();
-
+        (function () {
             try {
                 var oms = new OverlappingMarkerSpiderfier(
                     {{ this._parent.get_name() }},
                     {{ this.options|tojson }}
                 );
 
-                var popup = L.popup({
-                    offset: L.point(0, -30)
-                });
-
-                oms.addListener('click', function(marker) {
-                    var content;
-                    if (marker.options && marker.options.options && marker.options.options.desc) {
-                        content = marker.options.options.desc;
-                    } else if (marker._popup && marker._popup._content) {
-                        content = marker._popup._content;
-                    } else {
-                        content = "";
-                    }
-
-                    if (content) {
-                        popup.setContent(content);
-                        popup.setLatLng(marker.getLatLng());
-                        {{ this._parent.get_name() }}.openPopup(popup);
-                    }
-                });
-
-                oms.addListener('spiderfy', function(markers) {
+                oms.addListener('spiderfy', function() {
                     {{ this._parent.get_name() }}.closePopup();
                 });
 
-                {% for marker in this.markers %}
-                var {{ marker.get_name() }} = L.marker(
-                    {{ marker.location|tojson }},
-                    {{ marker.options|tojson }}
-                );
+                {{ this._parent.get_name() }}.eachLayer(function(layer) {
+                    if (
+                        layer instanceof L.Marker
+                    ) {
+                        oms.addMarker(layer);
+                    }
+                });
 
-                {% if marker.popup %}
-                {{ marker.get_name() }}.bindPopup({{ marker.popup.get_content()|tojson }});
-                {% endif %}
-
-                oms.addMarker({{ marker.get_name() }});
-                layerGroup.addLayer({{ marker.get_name() }});
-                {% endfor %}
             } catch (error) {
-                console.error('Error in OverlappingMarkerSpiderfier initialization:', error);
+                console.error('Error initializing OverlappingMarkerSpiderfier:', error);
             }
-
-            return layerGroup;
         })();
         {% endmacro %}
-
         """
     )
 
@@ -105,21 +72,9 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, Layer):
         )
     ]
 
-    def __init__(
-        self,
-        markers=None,
-        name=None,
-        overlay=True,
-        control=True,
-        show=True,
-        options=None,
-        **kwargs,
-    ):
-        super().__init__(name=name, overlay=overlay, control=control, show=show)
+    def __init__(self, options=None, **kwargs):
+        super().__init__()
         self._name = "OverlappingMarkerSpiderfier"
-
-        self.markers = markers or []
-
         default_options = {
             "keepSpiderfied": True,
             "nearbyDistance": 20,
@@ -127,5 +82,4 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, Layer):
         }
         if options:
             default_options.update(options)
-
         self.options = parse_options(**default_options, **kwargs)
