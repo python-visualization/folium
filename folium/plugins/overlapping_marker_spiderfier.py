@@ -50,13 +50,9 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
                     {{ this._parent.get_name() }}.closePopup();
                 });
 
-                {{ this._parent.get_name() }}.eachLayer(function(layer) {
-                    if (
-                        layer instanceof L.Marker
-                    ) {
-                        oms.addMarker(layer);
-                    }
-                });
+                {%- for marker in this.markers %}
+                    oms.addMarker({{ marker.get_name() }});
+                {%- endfor %}
 
             } catch (error) {
                 console.error('Error initializing OverlappingMarkerSpiderfier:', error);
