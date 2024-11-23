@@ -73,7 +73,14 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(self, options=None, **kwargs):
+    def __init__(
+            self,
+            keep_spiderfied: bool = True,
+            nearby_distance: int = 20,
+            leg_weight: float = 1.5,
+            circle_spiral_switchover: int = 9,
+            **kwargs
+    ):
         super().__init__()
         self._name = "OverlappingMarkerSpiderfier"
         default_options = {
