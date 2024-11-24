@@ -1,6 +1,9 @@
+from typing import Optional
+
 from jinja2 import Template
 
-from folium.elements import JSCSSMixin, MacroElement
+from folium.elements import Element, JSCSSMixin, MacroElement
+from folium.map import Marker
 from folium.utilities import parse_options
 
 
@@ -12,26 +15,24 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     When a user clicks on a cluster of overlapping markers, they spread out in a 'spider' pattern, making each marker
     individually accessible.
 
-    Markers must be added to the map **before** calling `oms.add_to(map)`.
-    The plugin identifies and manages all markers already present on the map.
+    Markers are automatically identified and managed by the plugin, so there is no need to add them separately.
+    Simply add the plugin to the map using `oms.add_to(map)`.
 
     Parameters
     ----------
-    options : dict, optional
-        The options to configure the spiderfier behavior:
-        - keepSpiderfied : bool, default True
-            If true, markers stay spiderfied after clicking
-        - nearbyDistance : int, default 20
-            Pixels away from a marker that is considered overlapping
-        - legWeight : float, default 1.5
-            Weight of the spider legs
-        - circleSpiralSwitchover : int, optional
-            Number of markers at which to switch from circle to spiral pattern
+    keep_spiderfied : bool, default True
+        If true, markers stay spiderfied after clicking.
+    nearby_distance : int, default 20
+        Pixels away from a marker that is considered overlapping.
+    leg_weight : float, default 1.5
+        Weight of the spider legs.
+    circle_spiral_switchover : int, optional
+        Number of markers at which to switch from circle to spiral pattern.
 
     Example
     -------
     >>> oms = OverlappingMarkerSpiderfier(
-    ...     options={"keepSpiderfied": True, "nearbyDistance": 30, "legWeight": 2.0}
+    ...     keep_spiderfied=True, nearby_distance=30, leg_weight=2.0
     ... )
     >>> oms.add_to(map)
     """
@@ -53,7 +54,6 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
                 {%- for marker in this.markers %}
                     oms.addMarker({{ marker.get_name() }});
                 {%- endfor %}
-
             } catch (error) {
                 console.error('Error initializing OverlappingMarkerSpiderfier:', error);
             }
@@ -70,20 +70,35 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     ]
 
     def __init__(
-            self,
-            keep_spiderfied: bool = True,
-            nearby_distance: int = 20,
-            leg_weight: float = 1.5,
-            circle_spiral_switchover: int = 9,
-            **kwargs
+        self,
+        keep_spiderfied: bool = True,
+        nearby_distance: int = 20,
+        leg_weight: float = 1.5,
+        circle_spiral_switchover: int = 9,
+        **kwargs
     ):
         super().__init__()
         self._name = "OverlappingMarkerSpiderfier"
-        default_options = {
-            "keepSpiderfied": True,
-            "nearbyDistance": 20,
-            "legWeight": 1.5,
-        }
-        if options:
-            default_options.update(options)
-        self.options = parse_options(**default_options, **kwargs)
+        self.options = parse_options(
+            keep_spiderfied=keep_spiderfied,
+            nearby_distance=nearby_distance,
+            leg_weight=leg_weight,
+            circle_spiral_switchover=circle_spiral_switchover,
+            **kwargs
+        )
+
+    def add_to(
+        self, parent: Element, name: Optional[str] = None, index: Optional[int] = None
+    ) -> Element:
+        self._parent = parent
+        self.markers = self._get_all_markers(parent)
+        super().add_to(parent, name=name, index=index)
+
+    def _get_all_markers(self, element: Element) -> list:
+        markers = []
+        for child in element._children.values():
+            if isinstance(child, Marker):
+                markers.append(child)
+            elif hasattr(child, "_children"):
+                markers.extend(self._get_all_markers(child))
+        return markers

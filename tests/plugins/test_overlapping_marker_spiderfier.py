@@ -105,7 +105,8 @@ def test_overlapping_marker_spiderfier_integration():
     """
     m = Map([45.05, 3.05], zoom_start=14)
     oms = OverlappingMarkerSpiderfier(
-        options={"keepSpiderfied": True, "nearbyDistance": 20}
+        keep_spiderfied=True,
+        nearby_distance=20,
     )
     oms.add_to(m)
 
