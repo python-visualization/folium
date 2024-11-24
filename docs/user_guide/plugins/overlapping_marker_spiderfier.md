@@ -89,12 +89,12 @@ for i in range(10, 20):
         popup=f"Sub Group 2 Marker {i}"
     ).add_to(sub_group2)
 
+# Add the main group to the map
+main_group.add_to(m)
+
 # Add sub-groups to the map
 sub_group1.add_to(m)
 sub_group2.add_to(m)
-
-# Add the main group to the map
-main_group.add_to(m)
 
 # Initialize OverlappingMarkerSpiderfier
 oms = OverlappingMarkerSpiderfier()
