@@ -26,7 +26,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
         Pixels away from a marker that is considered overlapping.
     leg_weight : float, default 1.5
         Weight of the spider legs.
-    circle_spiral_switchover : int, optional
+    circle_spiral_switchover : int, default 9
         Number of markers at which to switch from circle to spiral pattern.
 
     Example
