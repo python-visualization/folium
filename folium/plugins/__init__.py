@@ -19,6 +19,7 @@ from folium.plugins.marker_cluster import MarkerCluster
 from folium.plugins.measure_control import MeasureControl
 from folium.plugins.minimap import MiniMap
 from folium.plugins.mouse_position import MousePosition
+from folium.plugins.overlapping_marker_spiderfier import OverlappingMarkerSpiderfier
 from folium.plugins.pattern import CirclePattern, StripePattern
 from folium.plugins.polyline_offset import PolyLineOffset
 from folium.plugins.polyline_text_path import PolyLineTextPath
@@ -56,6 +57,7 @@ __all__ = [
     "MeasureControl",
     "MiniMap",
     "MousePosition",
+    "OverlappingMarkerSpiderfier",
     "PolygonFromEncoded",
     "PolyLineFromEncoded",
     "PolyLineTextPath",
