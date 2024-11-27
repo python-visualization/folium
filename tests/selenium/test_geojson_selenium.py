@@ -35,4 +35,4 @@ def test_geojson(driver):
     )
     assert control_label.text == "geojson"
     control_input = control_label.find_element(By.CSS_SELECTOR, value="input")
-    assert control_input.get_attribute("checked") is None
+    assert control_input.get_dom_attribute("checked") is None
