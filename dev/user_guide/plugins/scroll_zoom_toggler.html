@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ScrollZoomToggler &#8212; Folium 0.18.1.dev13+g1f2d67b8 documentation</title>
+    <title>ScrollZoomToggler &#8212; Folium 0.18.1.dev14+g808163ff documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=615885a5"></script>
+    <script src="../../_static/documentation_options.js?v=20dcf004"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -59,7 +59,7 @@
     <link rel="prev" title="Realtime" href="realtime.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.18.1.dev13+g1f2d67b8" />
+  <meta name="docsearch:version" content="0.18.1.dev14+g808163ff" />
   </head>
   
   
@@ -418,6 +418,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mini_map.html">MiniMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overlapping_marker_spiderfier.html">OverlappingMarkerSpiderfier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
@@ -543,7 +544,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_2e048ebd1f8d184d7892cf8d51bfdd6f {
+                #map_bb1bf66b32002b23a61740598d87a04a {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -555,7 +556,7 @@
 
 
             &lt;style&gt;
-                #scroll_zoom_toggler_5a5c8b3969617c06797f9b49462bf897 {
+                #scroll_zoom_toggler_f77a0161d31554a4e5e555e78ff096ac {
                     position:absolute;
                     width:35px;
                     bottom:10px;
@@ -572,22 +573,22 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_2e048ebd1f8d184d7892cf8d51bfdd6f&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_bb1bf66b32002b23a61740598d87a04a&quot; &gt;&lt;/div&gt;
 
 
-            &lt;img id=&quot;scroll_zoom_toggler_5a5c8b3969617c06797f9b49462bf897&quot;
+            &lt;img id=&quot;scroll_zoom_toggler_f77a0161d31554a4e5e555e78ff096ac&quot;
                  alt=&quot;scroll&quot;
                  src=&quot;https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/png/512/arrow-move.png&quot;
                  style=&quot;z-index: 999999&quot;
-                 onclick=&quot;map_2e048ebd1f8d184d7892cf8d51bfdd6f.toggleScroll()&quot;&gt;
+                 onclick=&quot;map_bb1bf66b32002b23a61740598d87a04a.toggleScroll()&quot;&gt;
             &lt;/img&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_2e048ebd1f8d184d7892cf8d51bfdd6f = L.map(
-                &quot;map_2e048ebd1f8d184d7892cf8d51bfdd6f&quot;,
+            var map_bb1bf66b32002b23a61740598d87a04a = L.map(
+                &quot;map_bb1bf66b32002b23a61740598d87a04a&quot;,
                 {
                     center: [45.0, 3.0],
                     crs: L.CRS.EPSG3857,
@@ -605,7 +606,7 @@
 
 
 
-            var tile_layer_c1851f92a92e80a84fcb9b5c4510a638 = L.tileLayer(
+            var tile_layer_b4bc04d6d50f526f82a7fa2f75d855fd = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -622,12 +623,12 @@
             );
 
 
-            tile_layer_c1851f92a92e80a84fcb9b5c4510a638.addTo(map_2e048ebd1f8d184d7892cf8d51bfdd6f);
+            tile_layer_b4bc04d6d50f526f82a7fa2f75d855fd.addTo(map_bb1bf66b32002b23a61740598d87a04a);
 
 
-            map_2e048ebd1f8d184d7892cf8d51bfdd6f.scrollEnabled = true;
+            map_bb1bf66b32002b23a61740598d87a04a.scrollEnabled = true;
 
-            map_2e048ebd1f8d184d7892cf8d51bfdd6f.toggleScroll = function() {
+            map_bb1bf66b32002b23a61740598d87a04a.toggleScroll = function() {
                 if (this.scrollEnabled) {
                     this.scrollEnabled = false;
                     this.scrollWheelZoom.disable();
@@ -636,7 +637,7 @@
                     this.scrollWheelZoom.enable();
                 }
             };
-            map_2e048ebd1f8d184d7892cf8d51bfdd6f.toggleScroll();
+            map_bb1bf66b32002b23a61740598d87a04a.toggleScroll();
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -713,7 +714,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.18.1.dev13+g1f2d67b8</div>
+Folium version 0.18.1.dev14+g808163ff</div>
       
         <div class="footer-item">
 

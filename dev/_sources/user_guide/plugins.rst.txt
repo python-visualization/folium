@@ -21,6 +21,7 @@ Plugins
   plugins/mini_map
   plugins/measure_control
   plugins/mouse_position
+  plugins/overlapping_marker_spiderfier
   plugins/pattern
   plugins/polygon_encoded
   plugins/polyline_encoded
