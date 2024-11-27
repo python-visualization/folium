@@ -116,8 +116,10 @@ The *final* PR should contain:
 - a new module in `folium/plugins` with the plugin class, with docstring
 - importing that class in `folium/plugins/__init__.py`
 - a test in `tests/plugins/test_[new plugin module].py`
-- listing the plugin in `docs/user_guide/plugins.rst`
 - a documentation module with examples in `docs/user_guide/plugins`
+- listing that module in `docs/user_guide/plugins.rst`
+  - in the toctree
+  - as well as the table lower on the page
 
 Before doing all this work it's a good idea to open a PR with just the plugin
 to discuss whether it's something to include in folium.
