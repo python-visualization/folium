@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Draw &#8212; Folium 0.18.0 documentation</title>
+    <title>Draw &#8212; Folium 0.19.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=ba2e7b09"></script>
+    <script src="../../_static/documentation_options.js?v=cbfb3150"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -50,7 +50,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -59,7 +59,7 @@
     <link rel="prev" title="BeautifyIcon" href="beautify_icon.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.18.0" />
+  <meta name="docsearch:version" content="0.19.0" />
   </head>
   
   
@@ -418,6 +418,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mini_map.html">MiniMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overlapping_marker_spiderfier.html">OverlappingMarkerSpiderfier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
@@ -545,7 +546,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_ced3e1c3abab6941387435e1540b0269 {
+                #map_77357cfd92e73c32599036657ecaf47d {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -580,21 +581,25 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_ced3e1c3abab6941387435e1540b0269&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_77357cfd92e73c32599036657ecaf47d&quot; &gt;&lt;/div&gt;
 
     &lt;a href=&#x27;#&#x27; id=&#x27;export&#x27;&gt;Export&lt;/a&gt;
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_ced3e1c3abab6941387435e1540b0269 = L.map(
-                &quot;map_ced3e1c3abab6941387435e1540b0269&quot;,
+            var map_77357cfd92e73c32599036657ecaf47d = L.map(
+                &quot;map_77357cfd92e73c32599036657ecaf47d&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
-                    zoom: 1,
-                    zoomControl: true,
-                    preferCanvas: false,
+                    ...{
+  &quot;maxBounds&quot;: null,
+  &quot;zoom&quot;: 1,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
                 }
             );
 
@@ -602,13 +607,24 @@
 
 
 
-            var tile_layer_801dabeb135e58982cc4d60662a2c59b = L.tileLayer(
+            var tile_layer_3be36b85e24be3111065050644f2b267 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
-                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
             );
 
 
-            tile_layer_801dabeb135e58982cc4d60662a2c59b.addTo(map_ced3e1c3abab6941387435e1540b0269);
+            tile_layer_3be36b85e24be3111065050644f2b267.addTo(map_77357cfd92e73c32599036657ecaf47d);
 
 
             var options = {
@@ -617,16 +633,16 @@
               edit: {},
             }
                 // FeatureGroup is to store editable layers.
-                var drawnItems_draw_control_404646585f62500a67991446d2ca7f1e =
+                var drawnItems_draw_control_f6220561ae70bd86c280bb5a51eac252 =
                     new L.featureGroup().addTo(
-                        map_ced3e1c3abab6941387435e1540b0269
+                        map_77357cfd92e73c32599036657ecaf47d
                     );
 
-            options.edit.featureGroup = drawnItems_draw_control_404646585f62500a67991446d2ca7f1e;
-            var draw_control_404646585f62500a67991446d2ca7f1e = new L.Control.Draw(
+            options.edit.featureGroup = drawnItems_draw_control_f6220561ae70bd86c280bb5a51eac252;
+            var draw_control_f6220561ae70bd86c280bb5a51eac252 = new L.Control.Draw(
                 options
-            ).addTo( map_ced3e1c3abab6941387435e1540b0269 );
-            map_ced3e1c3abab6941387435e1540b0269.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_77357cfd92e73c32599036657ecaf47d );
+            map_77357cfd92e73c32599036657ecaf47d.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -634,15 +650,15 @@
                     alert(coords);
                     console.log(coords);
                 });
-                drawnItems_draw_control_404646585f62500a67991446d2ca7f1e.addLayer(layer);
+                drawnItems_draw_control_f6220561ae70bd86c280bb5a51eac252.addLayer(layer);
             });
-            map_ced3e1c3abab6941387435e1540b0269.on(&#x27;draw:created&#x27;, function(e) {
-                drawnItems_draw_control_404646585f62500a67991446d2ca7f1e.addLayer(e.layer);
+            map_77357cfd92e73c32599036657ecaf47d.on(&#x27;draw:created&#x27;, function(e) {
+                drawnItems_draw_control_f6220561ae70bd86c280bb5a51eac252.addLayer(e.layer);
             });
 
 
             document.getElementById(&#x27;export&#x27;).onclick = function(e) {
-                var data = drawnItems_draw_control_404646585f62500a67991446d2ca7f1e.toGeoJSON();
+                var data = drawnItems_draw_control_f6220561ae70bd86c280bb5a51eac252.toGeoJSON();
                 var convertedData = &#x27;text/json;charset=utf-8,&#x27;
                     + encodeURIComponent(JSON.stringify(data));
                 document.getElementById(&#x27;export&#x27;).setAttribute(
@@ -729,7 +745,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.18.0</div>
+Folium version 0.19.0</div>
       
         <div class="footer-item">
 

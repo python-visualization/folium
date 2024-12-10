@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>FloatImage &#8212; Folium 0.18.0 documentation</title>
+    <title>FloatImage &#8212; Folium 0.19.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=ba2e7b09"></script>
+    <script src="../../_static/documentation_options.js?v=cbfb3150"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -50,7 +50,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -59,7 +59,7 @@
     <link rel="prev" title="FeatureGroupSubGroup" href="featuregroup_subgroup.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.18.0" />
+  <meta name="docsearch:version" content="0.19.0" />
   </head>
   
   
@@ -418,6 +418,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mini_map.html">MiniMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overlapping_marker_spiderfier.html">OverlappingMarkerSpiderfier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
@@ -551,7 +552,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_25d44a441d0543ee744035e12b24573a {
+                #map_1c703d324ba34cb8b08ea3f399d77c0c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -563,7 +564,7 @@
 
 
                 &lt;style&gt;
-                    #float_image_7cd62106d27f85c4bc81de40cd6d3f24 {
+                    #float_image_7df38c3303289315a343801f6d70442b {
                         position: absolute;
                         bottom: 40%;
                         left: 65%;
@@ -574,10 +575,10 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_25d44a441d0543ee744035e12b24573a&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_1c703d324ba34cb8b08ea3f399d77c0c&quot; &gt;&lt;/div&gt;
 
 
-            &lt;img id=&quot;float_image_7cd62106d27f85c4bc81de40cd6d3f24&quot; alt=&quot;float_image&quot;
+            &lt;img id=&quot;float_image_7df38c3303289315a343801f6d70442b&quot; alt=&quot;float_image&quot;
                  src=&quot;https://raw.githubusercontent.com/ocefpaf/secoora_assets_map/a250729bbcf2ddd12f46912d36c33f7539131bec/secoora_icons/rose.png&quot;
                  style=&quot;z-index: 999999&quot;&gt;
             &lt;/img&gt;
@@ -586,14 +587,18 @@
 &lt;script&gt;
 
 
-            var map_25d44a441d0543ee744035e12b24573a = L.map(
-                &quot;map_25d44a441d0543ee744035e12b24573a&quot;,
+            var map_1c703d324ba34cb8b08ea3f399d77c0c = L.map(
+                &quot;map_1c703d324ba34cb8b08ea3f399d77c0c&quot;,
                 {
                     center: [-13.0, -38.15],
                     crs: L.CRS.EPSG3857,
-                    zoom: 10,
-                    zoomControl: true,
-                    preferCanvas: false,
+                    ...{
+  &quot;maxBounds&quot;: null,
+  &quot;zoom&quot;: 10,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
                 }
             );
 
@@ -601,13 +606,24 @@
 
 
 
-            var tile_layer_bdca7cfa2e7fd318f85f87f0226c7cd4 = L.tileLayer(
+            var tile_layer_017e7f1e798e26b121664a3b545af10e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
-                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
             );
 
 
-            tile_layer_bdca7cfa2e7fd318f85f87f0226c7cd4.addTo(map_25d44a441d0543ee744035e12b24573a);
+            tile_layer_017e7f1e798e26b121664a3b545af10e.addTo(map_1c703d324ba34cb8b08ea3f399d77c0c);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -684,7 +700,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.18.0</div>
+Folium version 0.19.0</div>
       
         <div class="footer-item">
 

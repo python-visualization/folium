@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>SemiCircle &#8212; Folium 0.18.0 documentation</title>
+    <title>SemiCircle &#8212; Folium 0.19.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=ba2e7b09"></script>
+    <script src="../../_static/documentation_options.js?v=cbfb3150"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -50,7 +50,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -59,7 +59,7 @@
     <link rel="prev" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.18.0" />
+  <meta name="docsearch:version" content="0.19.0" />
   </head>
   
   
@@ -418,6 +418,7 @@
 <li class="toctree-l2"><a class="reference internal" href="mini_map.html">MiniMap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="measure_control.html">MeasureControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mouse_position.html">MousePosition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="overlapping_marker_spiderfier.html">OverlappingMarkerSpiderfier</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
@@ -564,7 +565,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_8662b08e26ab49dbbb45c68a5ac2471b {
+                #map_c99d38bd87489783544b4e60c30d2b68 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -579,20 +580,24 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_8662b08e26ab49dbbb45c68a5ac2471b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c99d38bd87489783544b4e60c30d2b68&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_8662b08e26ab49dbbb45c68a5ac2471b = L.map(
-                &quot;map_8662b08e26ab49dbbb45c68a5ac2471b&quot;,
+            var map_c99d38bd87489783544b4e60c30d2b68 = L.map(
+                &quot;map_c99d38bd87489783544b4e60c30d2b68&quot;,
                 {
                     center: [45.0, 3.0],
                     crs: L.CRS.EPSG3857,
-                    zoom: 5,
-                    zoomControl: true,
-                    preferCanvas: false,
+                    ...{
+  &quot;maxBounds&quot;: null,
+  &quot;zoom&quot;: 5,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
                 }
             );
 
@@ -600,55 +605,108 @@
 
 
 
-            var tile_layer_98d59b5f6f368f5f24197912735b298c = L.tileLayer(
+            var tile_layer_3a107294583f77d25d7fffce21b9ce5e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
-                {&quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;, &quot;detectRetina&quot;: false, &quot;maxNativeZoom&quot;: 19, &quot;maxZoom&quot;: 19, &quot;minZoom&quot;: 0, &quot;noWrap&quot;: false, &quot;opacity&quot;: 1, &quot;subdomains&quot;: &quot;abc&quot;, &quot;tms&quot;: false}
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
             );
 
 
-            tile_layer_98d59b5f6f368f5f24197912735b298c.addTo(map_8662b08e26ab49dbbb45c68a5ac2471b);
+            tile_layer_3a107294583f77d25d7fffce21b9ce5e.addTo(map_c99d38bd87489783544b4e60c30d2b68);
 
 
-            var semi_circle_e3c58c2155168ce16952a66377f5ea3a = L.semiCircle(
+            var semi_circle_5f8a12c6a70e90c42ee7b06f80923ee7 = L.semiCircle(
                 [45.0, 3.0],
-                {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;green&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;green&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 0, &quot;radius&quot;: 400000, &quot;startAngle&quot;: 50, &quot;stopAngle&quot;: 200, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
+                {
+  &quot;stroke&quot;: true,
+  &quot;color&quot;: &quot;green&quot;,
+  &quot;weight&quot;: 3,
+  &quot;opacity&quot;: 0,
+  &quot;lineCap&quot;: &quot;round&quot;,
+  &quot;lineJoin&quot;: &quot;round&quot;,
+  &quot;dashArray&quot;: null,
+  &quot;dashOffset&quot;: null,
+  &quot;fill&quot;: true,
+  &quot;fillColor&quot;: &quot;green&quot;,
+  &quot;fillOpacity&quot;: 0.2,
+  &quot;fillRule&quot;: &quot;evenodd&quot;,
+  &quot;bubblingMouseEvents&quot;: true,
+  &quot;radius&quot;: 400000,
+  &quot;startAngle&quot;: 50,
+  &quot;stopAngle&quot;: 200,
+}
                 )
-                .addTo(map_8662b08e26ab49dbbb45c68a5ac2471b);
+                .addTo(map_c99d38bd87489783544b4e60c30d2b68);
 
 
-        var popup_1b1db054cc296e4bdea322bd2b6290a2 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+        var popup_c1c60e13983c657eeee0052469b649ce = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+  &quot;autoClose&quot;: null,
+  &quot;closeOnClick&quot;: null,
+});
 
 
 
-                var html_c9317ad2bf74b4909c310a497fc7288b = $(`&lt;div id=&quot;html_c9317ad2bf74b4909c310a497fc7288b&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;start angle - 50 degrees, stop angle - 200 degrees&lt;/div&gt;`)[0];
-                popup_1b1db054cc296e4bdea322bd2b6290a2.setContent(html_c9317ad2bf74b4909c310a497fc7288b);
+                var html_3e47bdfa31f3dbbda7a0d0fce8e45551 = $(`&lt;div id=&quot;html_3e47bdfa31f3dbbda7a0d0fce8e45551&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;start angle - 50 degrees, stop angle - 200 degrees&lt;/div&gt;`)[0];
+                popup_c1c60e13983c657eeee0052469b649ce.setContent(html_3e47bdfa31f3dbbda7a0d0fce8e45551);
 
 
 
-        semi_circle_e3c58c2155168ce16952a66377f5ea3a.bindPopup(popup_1b1db054cc296e4bdea322bd2b6290a2)
+        semi_circle_5f8a12c6a70e90c42ee7b06f80923ee7.bindPopup(popup_c1c60e13983c657eeee0052469b649ce)
         ;
 
 
 
 
-            var semi_circle_961e5ce16d55e532487dcfdaeb0f47bf = L.semiCircle(
+            var semi_circle_1fa5369f2808f28711206d255232e132 = L.semiCircle(
                 [46.5, 9.5],
-                {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;red&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 0, &quot;radius&quot;: 200000, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
+                {
+  &quot;stroke&quot;: true,
+  &quot;color&quot;: &quot;red&quot;,
+  &quot;weight&quot;: 3,
+  &quot;opacity&quot;: 0,
+  &quot;lineCap&quot;: &quot;round&quot;,
+  &quot;lineJoin&quot;: &quot;round&quot;,
+  &quot;dashArray&quot;: null,
+  &quot;dashOffset&quot;: null,
+  &quot;fill&quot;: true,
+  &quot;fillColor&quot;: &quot;red&quot;,
+  &quot;fillOpacity&quot;: 0.2,
+  &quot;fillRule&quot;: &quot;evenodd&quot;,
+  &quot;bubblingMouseEvents&quot;: true,
+  &quot;radius&quot;: 200000,
+  &quot;startAngle&quot;: null,
+  &quot;stopAngle&quot;: null,
+}
                 )
                     .setDirection(360, 90)
-                .addTo(map_8662b08e26ab49dbbb45c68a5ac2471b);
+                .addTo(map_c99d38bd87489783544b4e60c30d2b68);
 
 
-        var popup_1d30b9df17905441f1e12e92b199abd6 = L.popup({&quot;maxWidth&quot;: &quot;100%&quot;});
+        var popup_56c3a36ff2fa1af9381583537d15d161 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+  &quot;autoClose&quot;: null,
+  &quot;closeOnClick&quot;: null,
+});
 
 
 
-                var html_139b0ba7acecb680137871f3ffef4339 = $(`&lt;div id=&quot;html_139b0ba7acecb680137871f3ffef4339&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Direction - 0 degrees, arc 90 degrees&lt;/div&gt;`)[0];
-                popup_1d30b9df17905441f1e12e92b199abd6.setContent(html_139b0ba7acecb680137871f3ffef4339);
+                var html_29c95749c5a81c32e7dd1385a82d502f = $(`&lt;div id=&quot;html_29c95749c5a81c32e7dd1385a82d502f&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Direction - 0 degrees, arc 90 degrees&lt;/div&gt;`)[0];
+                popup_56c3a36ff2fa1af9381583537d15d161.setContent(html_29c95749c5a81c32e7dd1385a82d502f);
 
 
 
-        semi_circle_961e5ce16d55e532487dcfdaeb0f47bf.bindPopup(popup_1d30b9df17905441f1e12e92b199abd6)
+        semi_circle_1fa5369f2808f28711206d255232e132.bindPopup(popup_56c3a36ff2fa1af9381583537d15d161)
         ;
 
 
@@ -728,7 +786,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.18.0</div>
+Folium version 0.19.0</div>
       
         <div class="footer-item">
 

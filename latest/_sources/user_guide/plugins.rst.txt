@@ -21,6 +21,7 @@ Plugins
   plugins/mini_map
   plugins/measure_control
   plugins/mouse_position
+  plugins/overlapping_marker_spiderfier
   plugins/pattern
   plugins/polygon_encoded
   plugins/polyline_encoded
@@ -80,6 +81,8 @@ Plugins
       - A small minimap showing the map at a different scale to aid navigation.
     * - :doc:`Mouse Position <plugins/mouse_position>`
       - A control that displays geographic coordinates of the mouse pointer, as it is moved over the map.
+    * - :doc:`Overlapping Marker Spiderifier <plugins/overlapping_marker_spiderfier>`
+      - Help manage overlapping markers by “spiderfying” them when clicked, making it easier to select individual markers.
     * - :doc:`Pattern <plugins/pattern>`
       - Add support for pattern fills on Paths.
     * - :doc:`Polygon Encoded <plugins/polygon_encoded>`
