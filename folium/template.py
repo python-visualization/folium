@@ -15,6 +15,8 @@ def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
     elif isinstance(obj, dict):
         out = ["{\n"]
         for key, value in obj.items():
+            if value is None:
+                continue
             out.append(f'  "{camelize(key)}": ')
             out.append(tojavascript(value))
             out.append(",\n")
