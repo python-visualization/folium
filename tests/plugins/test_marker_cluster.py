@@ -35,8 +35,7 @@ def test_marker_cluster():
 
         {% for marker in this._children.values() %}
             var {{marker.get_name()}} = L.marker(
-                {{ marker.location|tojson }},
-                {"draggable": null,"autoPan": null,}
+                {{ marker.location|tojson }}, {}
             ).addTo({{this.get_name()}});
         {% endfor %}
 
