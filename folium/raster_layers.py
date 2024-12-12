@@ -122,7 +122,6 @@ class TileLayer(Layer):
             attr = attr if attr else tiles.html_attribution  # type: ignore
             min_zoom = min_zoom or tiles.get("min_zoom")
             max_zoom = max_zoom or tiles.get("max_zoom")
-            max_native_zoom = max_native_zoom or tiles.get("max_zoom")
             subdomains = tiles.get("subdomains", subdomains)
             if name is None:
                 name = tiles.name.replace(".", "").lower()
@@ -143,7 +142,7 @@ class TileLayer(Layer):
         self.options = dict(
             min_zoom=min_zoom or 0,
             max_zoom=max_zoom or 18,
-            max_native_zoom=max_native_zoom,
+            max_native_zoom=max_native_zoom or max_zoom or 18,
             no_wrap=no_wrap,
             attribution=attr,
             subdomains=subdomains,
