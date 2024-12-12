@@ -18,6 +18,7 @@ from folium.utilities import (
     TypeJsonValue,
     _parse_size,
     parse_font_size,
+    remove_empty,
     temp_html_filepath,
     validate_location,
 )
@@ -303,7 +304,7 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
-        self.options = dict(
+        self.options = remove_empty(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
             zoom_control=False if self.zoom_control_position else zoom_control,

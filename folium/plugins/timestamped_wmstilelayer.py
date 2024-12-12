@@ -3,6 +3,7 @@ from branca.element import MacroElement
 from folium.elements import JSCSSMixin
 from folium.raster_layers import WmsTileLayer
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
@@ -128,7 +129,7 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "TimestampedWmsTileLayers"
-        self.options = dict(
+        self.options = remove_empty(
             period=period,
             time_interval=time_interval,
         )

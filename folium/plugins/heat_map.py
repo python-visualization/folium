@@ -9,6 +9,7 @@ from folium.utilities import (
     if_pandas_df_convert_to_numpy,
     none_max,
     none_min,
+    remove_empty,
     validate_location,
 )
 
@@ -89,7 +90,7 @@ class HeatMap(JSCSSMixin, Layer):
                 "The largest intensity is calculated automatically.",
                 stacklevel=2,
             )
-        self.options = dict(
+        self.options = remove_empty(
             min_opacity=min_opacity,
             max_zoom=max_zoom,
             radius=radius,

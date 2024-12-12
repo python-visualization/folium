@@ -4,6 +4,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class Geocoder(JSCSSMixin, MacroElement):
@@ -81,7 +82,7 @@ class Geocoder(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Geocoder"
-        self.options = dict(
+        self.options = remove_empty(
             collapsed=collapsed,
             position=position,
             default_mark_geocode=add_marker,

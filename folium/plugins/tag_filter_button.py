@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class TagFilterButton(JSCSSMixin, MacroElement):
@@ -85,7 +86,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "TagFilterButton"
-        self.options = dict(
+        self.options = remove_empty(
             data=data,
             icon=icon,
             clear_text=clear_text,

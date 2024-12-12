@@ -17,6 +17,7 @@ from folium.utilities import (
     TypeJsonValue,
     escape_backticks,
     parse_options,
+    remove_empty,
     validate_location,
 )
 
@@ -131,7 +132,7 @@ class FeatureGroup(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "FeatureGroup"
         self.tile_name = name if name is not None else self.get_name()
-        self.options = kwargs
+        self.options = remove_empty(**kwargs)
 
 
 class LayerControl(MacroElement):
@@ -206,7 +207,7 @@ class LayerControl(MacroElement):
     ):
         super().__init__()
         self._name = "LayerControl"
-        self.options = dict(
+        self.options = remove_empty(
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.draggable = draggable
@@ -312,7 +313,7 @@ class Icon(MacroElement):
                 f"color argument of Icon should be one of: {self.color_options}.",
                 stacklevel=2,
             )
-        self.options = dict(
+        self.options = remove_empty(
             marker_color=color,
             icon_color=icon_color,
             icon=icon,
@@ -379,7 +380,7 @@ class Marker(MacroElement):
         super().__init__()
         self._name = "Marker"
         self.location = validate_location(location) if location is not None else None
-        self.options = dict(
+        self.options = remove_empty(
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
         if icon is not None:
@@ -481,7 +482,7 @@ class Popup(Element):
 
         self.show = show
         self.lazy = lazy
-        self.options = dict(
+        self.options = remove_empty(
             max_width=max_width,
             autoClose=False if show or sticky else None,
             closeOnClick=False if sticky else None,
@@ -550,7 +551,7 @@ class Tooltip(MacroElement):
         self.text = str(text)
 
         kwargs.update({"sticky": sticky})
-        self.options = kwargs
+        self.options = remove_empty(**kwargs)
 
         if style:
             assert isinstance(
@@ -659,7 +660,7 @@ class FitOverlays(MacroElement):
         self._name = "FitOverlays"
         self.method = "flyToBounds" if fly else "fitBounds"
         self.fit_on_map_load = fit_on_map_load
-        self.options = dict(padding=(padding, padding), max_zoom=max_zoom)
+        self.options = remove_empty(padding=(padding, padding), max_zoom=max_zoom)
 
 
 class CustomPane(MacroElement):

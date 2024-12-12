@@ -5,7 +5,7 @@ from branca.element import MacroElement
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.template import Template
-from folium.utilities import get_bounds
+from folium.utilities import get_bounds, remove_empty
 
 
 class TimestampedGeoJson(JSCSSMixin, MacroElement):
@@ -211,7 +211,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         self.date_options = date_options
         self.duration = "undefined" if duration is None else '"' + duration + '"'
 
-        self.options = dict(
+        self.options = remove_empty(
             position="bottomleft",
             min_speed=min_speed,
             max_speed=max_speed,

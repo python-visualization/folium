@@ -6,7 +6,7 @@ from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.folium import Map
 from folium.template import Template
-from folium.utilities import JsCode, get_bounds
+from folium.utilities import JsCode, get_bounds, remove_empty
 
 
 class Timeline(GeoJson):
@@ -117,7 +117,7 @@ class Timeline(GeoJson):
         if get_interval is not None:
             kwargs["get_interval"] = get_interval
 
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
 
     def _get_self_bounds(self):
         """
@@ -243,7 +243,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         )
 
         self.timelines: List[Timeline] = []
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
 
     def add_timelines(self, *args):
         """Add timelines to the control"""

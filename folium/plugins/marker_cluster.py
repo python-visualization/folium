@@ -1,7 +1,7 @@
 from folium.elements import JSCSSMixin
 from folium.map import Layer, Marker
 from folium.template import Template
-from folium.utilities import validate_locations
+from folium.utilities import remove_empty, validate_locations
 
 
 class MarkerCluster(JSCSSMixin, Layer):
@@ -102,7 +102,7 @@ class MarkerCluster(JSCSSMixin, Layer):
                     )
                 )
 
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
         if icon_create_function is not None:
             assert isinstance(icon_create_function, str)
         self.icon_create_function = icon_create_function

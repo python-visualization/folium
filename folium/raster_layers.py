@@ -16,6 +16,7 @@ from folium.utilities import (
     image_to_url,
     mercator_transform,
     parse_options,
+    remove_empty,
 )
 
 
@@ -139,7 +140,7 @@ class TileLayer(Layer):
         if not attr:
             raise ValueError("Custom tiles must have an attribution.")
 
-        self.options = dict(
+        self.options = remove_empty(
             min_zoom=min_zoom or 0,
             max_zoom=max_zoom or 18,
             max_native_zoom=max_native_zoom or max_zoom or 18,
@@ -309,7 +310,7 @@ class ImageOverlay(Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "ImageOverlay"
         self.bounds = bounds
-        self.options = kwargs
+        self.options = remove_empty(**kwargs)
         self.pixelated = pixelated
         if mercator_project:
             image = mercator_transform(
@@ -408,7 +409,7 @@ class VideoOverlay(Layer):
         self.video_url = video_url
 
         self.bounds = bounds
-        self.options = dict(autoplay=autoplay, loop=loop, **kwargs)
+        self.options = remove_empty(autoplay=autoplay, loop=loop, **kwargs)
 
     def _get_self_bounds(self) -> TypeBounds:
         """
