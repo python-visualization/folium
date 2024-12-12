@@ -483,8 +483,8 @@ class Popup(Element):
         self.lazy = lazy
         self.options = dict(
             max_width=max_width,
-            autoClose=False if show or sticky else None,
-            closeOnClick=False if sticky else None,
+            autoClose=not (show or sticky),
+            closeOnClick=not sticky,
             **kwargs,
         )
 
