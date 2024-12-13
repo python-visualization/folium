@@ -4,6 +4,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class TreeLayerControl(JSCSSMixin, MacroElement):
@@ -157,6 +158,6 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         kwargs["collapse_all"] = collapse_all
         kwargs["expand_all"] = expand_all
         kwargs["label_is_selector"] = label_is_selector
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
         self.base_tree = base_tree
         self.overlay_tree = overlay_tree

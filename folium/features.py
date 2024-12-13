@@ -31,6 +31,7 @@ from folium.utilities import (
     javascript_identifier_path_to_array_notation,
     none_max,
     none_min,
+    remove_empty,
     validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
@@ -688,7 +689,7 @@ class GeoJson(Layer):
         self.popup_keep_highlighted = popup_keep_highlighted
 
         self.marker = marker
-        self.options = kwargs
+        self.options = remove_empty(**kwargs)
 
         self.data = self.process_data(data)
 
@@ -1715,7 +1716,7 @@ class DivIcon(MacroElement):
     ):
         super().__init__()
         self._name = "DivIcon"
-        self.options = dict(
+        self.options = remove_empty(
             html=html,
             icon_size=icon_size,
             icon_anchor=icon_anchor,
@@ -1894,7 +1895,7 @@ class CustomIcon(Icon):
     ):
         super(Icon, self).__init__()
         self._name = "CustomIcon"
-        self.options = dict(
+        self.options = remove_empty(
             icon_url=image_to_url(icon_image),
             icon_size=icon_size,
             icon_anchor=icon_anchor,

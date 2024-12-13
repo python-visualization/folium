@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class BeautifyIcon(JSCSSMixin, MacroElement):
@@ -99,7 +100,7 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "BeautifyIcon"
 
-        self.options = dict(
+        self.options = remove_empty(
             icon=icon,
             icon_shape=icon_shape,
             border_width=border_width,

@@ -1,6 +1,7 @@
 from folium.elements import JSCSSMixin
 from folium.map import Marker
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class BoatMarker(JSCSSMixin, Marker):
@@ -65,4 +66,4 @@ class BoatMarker(JSCSSMixin, Marker):
         self.heading = heading
         self.wind_heading = wind_heading
         self.wind_speed = wind_speed
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)

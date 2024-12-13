@@ -134,7 +134,7 @@ def test_popup_show():
     rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
-        "maxWidth": "100%","autoClose": false,"closeOnClick": null,
+        "maxWidth": "100%","autoClose": false,
     }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">Some text.</div>`)[0];
     {popup_name}.setContent({html_name});
@@ -155,8 +155,6 @@ def test_popup_backticks():
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%",
-        "autoClose": null,
-        "closeOnClick": null,
     }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick\\`tick</div>`)[0];
     {popup_name}.setContent({html_name});
@@ -176,8 +174,6 @@ def test_popup_backticks_already_escaped():
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%",
-        "autoClose": null,
-        "closeOnClick": null,
     }});
     var {html_name} = $(`<div id="{html_name}" style="width: 100.0%; height: 100.0%;">back\\`tick</div>`)[0];
     {popup_name}.setContent({html_name});

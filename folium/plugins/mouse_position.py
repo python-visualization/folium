@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class MousePosition(JSCSSMixin, MacroElement):
@@ -87,7 +88,7 @@ class MousePosition(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "MousePosition"
 
-        self.options = dict(
+        self.options = remove_empty(
             position=position,
             separator=separator,
             empty_string=empty_string,

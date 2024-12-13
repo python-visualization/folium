@@ -5,6 +5,7 @@ from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class Search(JSCSSMixin, MacroElement):
@@ -121,7 +122,7 @@ class Search(JSCSSMixin, MacroElement):
         self.position = position
         self.placeholder = placeholder
         self.collapsed = collapsed
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
 
     def test_params(self, keys):
         if keys is not None and self.search_label is not None:

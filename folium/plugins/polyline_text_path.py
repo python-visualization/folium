@@ -1,6 +1,7 @@
 from folium.elements import JSCSSMixin
 from folium.features import MacroElement
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class PolyLineTextPath(JSCSSMixin, MacroElement):
@@ -67,7 +68,7 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
         self._name = "PolyLineTextPath"
         self.polyline = polyline
         self.text = text
-        self.options = dict(
+        self.options = remove_empty(
             repeat=repeat,
             center=center,
             below=below,

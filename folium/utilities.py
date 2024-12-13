@@ -397,6 +397,11 @@ def parse_options(**kwargs: TypeJsonValue) -> Dict[str, TypeJsonValueNoNone]:
     return {camelize(key): value for key, value in kwargs.items() if value is not None}
 
 
+def remove_empty(**kwargs: TypeJsonValue) -> Dict[str, TypeJsonValueNoNone]:
+    """Return a dict without None values."""
+    return {key: value for key, value in kwargs.items() if value is not None}
+
+
 def escape_backticks(text: str) -> str:
     """Escape backticks so text can be used in a JS template."""
     return re.sub(r"(?<!\\)`", r"\`", text)

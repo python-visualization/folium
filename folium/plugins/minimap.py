@@ -3,6 +3,7 @@ from branca.element import MacroElement
 from folium.elements import JSCSSMixin
 from folium.raster_layers import TileLayer
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class MiniMap(JSCSSMixin, MacroElement):
@@ -114,7 +115,7 @@ class MiniMap(JSCSSMixin, MacroElement):
         else:
             self.tile_layer = TileLayer(tile_layer)
 
-        self.options = dict(
+        self.options = remove_empty(
             position=position,
             width=width,
             height=height,

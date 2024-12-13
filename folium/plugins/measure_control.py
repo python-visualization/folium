@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class MeasureControl(JSCSSMixin, MacroElement):
@@ -72,7 +73,7 @@ class MeasureControl(JSCSSMixin, MacroElement):
         super().__init__()
         self._name = "MeasureControl"
 
-        self.options = dict(
+        self.options = remove_empty(
             position=position,
             primary_length_unit=primary_length_unit,
             secondary_length_unit=secondary_length_unit,

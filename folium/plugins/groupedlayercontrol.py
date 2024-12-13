@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class GroupedLayerControl(JSCSSMixin, MacroElement):
@@ -68,7 +69,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
     def __init__(self, groups, exclusive_groups=True, **kwargs):
         super().__init__()
         self._name = "GroupedLayerControl"
-        self.options = dict(**kwargs)
+        self.options = remove_empty(**kwargs)
         if exclusive_groups:
             self.options["exclusiveGroups"] = list(groups.keys())
         self.layers_untoggle = set()

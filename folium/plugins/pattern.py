@@ -3,7 +3,7 @@ from branca.element import MacroElement
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.template import Template
-from folium.utilities import get_obj_in_upper_tree
+from folium.utilities import get_obj_in_upper_tree, remove_empty
 
 
 class StripePattern(JSCSSMixin, MacroElement):
@@ -59,7 +59,7 @@ class StripePattern(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "StripePattern"
-        self.options = dict(
+        self.options = remove_empty(
             angle=angle,
             weight=weight,
             space_weight=space_weight,

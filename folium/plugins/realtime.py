@@ -4,7 +4,7 @@ from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.map import FeatureGroup
 from folium.template import Template
-from folium.utilities import JsCode
+from folium.utilities import JsCode, remove_empty
 
 
 class Realtime(JSCSSMixin, FeatureGroup):
@@ -115,4 +115,4 @@ class Realtime(JSCSSMixin, FeatureGroup):
         kwargs["remove_missing"] = remove_missing
         kwargs["container"] = container
 
-        self.options = kwargs
+        self.options = remove_empty(**kwargs)

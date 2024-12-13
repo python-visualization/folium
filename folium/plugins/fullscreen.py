@@ -2,6 +2,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
+from folium.utilities import remove_empty
 
 
 class Fullscreen(JSCSSMixin, MacroElement):
@@ -59,7 +60,7 @@ class Fullscreen(JSCSSMixin, MacroElement):
     ):
         super().__init__()
         self._name = "Fullscreen"
-        self.options = dict(
+        self.options = remove_empty(
             position=position,
             title=title,
             title_cancel=title_cancel,
