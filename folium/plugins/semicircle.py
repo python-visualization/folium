@@ -81,7 +81,7 @@ class SemiCircle(JSCSSMixin, Marker):
                 stop_angle=stop_angle,
             )
         )
-        self.options = remove_empty(self.options)
+        self.options = remove_empty(**self.options)
 
         if not (
             (direction is None and arc is None)
