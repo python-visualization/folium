@@ -35,7 +35,8 @@ class HeatMap(JSCSSMixin, Layer):
     blur : int, default 15
         Amount of blur
     gradient : dict, default None
-        Color gradient config. e.g. {0.4: 'blue', 0.65: 'lime', 1: 'red'}
+        Color gradient config. Defaults to
+        {.4: "blue", .6: "cyan", .7: "lime", .8: "yellow", 1: "red"}
     overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
