@@ -271,7 +271,6 @@ class Icon(MacroElement):
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojavascript }}
             );
-            {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
     )
@@ -321,6 +320,24 @@ class Icon(MacroElement):
             extra_classes=f"fa-rotate-{angle}",
             **kwargs,
         )
+
+    class SetIcon(MacroElement):
+        """Set the icon of a marker after both are created."""
+        _template = Template("""
+            {% macro script(this, kwargs) %}
+                {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
+            {% endmacro %}
+        """)
+
+        def __init__(self, marker: 'Marker', icon: 'Icon'):
+            super().__init__()
+            self._name = "SetIcon"
+            self.marker = marker
+            self.icon = icon
+
+    def register_marker(self, marker: "Marker") -> None:
+        """Register a marker to use this icon, so one icon can have multiple markers."""
+        self.add_child(Icon.SetIcon(marker=marker, icon=self))
 
 
 class Marker(MacroElement):
@@ -383,7 +400,11 @@ class Marker(MacroElement):
         self.options = remove_empty(
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
+        self.icon: Optional[Icon] = None
         if icon is not None:
+            # here we make sure the icon is rendered after the last marker that needs it
+            if icon._parent is not None:
+                del icon._parent._children[icon.get_name()]
             self.add_child(icon)
             self.icon = icon
         if popup is not None:
@@ -406,6 +427,8 @@ class Marker(MacroElement):
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
             )
+        if self.icon:
+            self.icon.register_marker(self)
         super().render()
 
 
