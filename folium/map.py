@@ -373,7 +373,7 @@ class Marker(MacroElement):
         location: Optional[Sequence[float]] = None,
         popup: Union["Popup", str, None] = None,
         tooltip: Union["Tooltip", str, None] = None,
-        icon: Optional[Icon] = None,
+        icon: Optional[Union[Icon, "DivIcon"]] = None,
         draggable: bool = False,
         **kwargs: TypeJsonValue,
     ):
