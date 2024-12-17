@@ -5,7 +5,7 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict
-from typing import List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -20,6 +20,9 @@ from folium.utilities import (
     remove_empty,
     validate_location,
 )
+
+if TYPE_CHECKING:
+    from folium.features import CustomIcon, DivIcon
 
 
 class Evented(MacroElement):
@@ -373,7 +376,7 @@ class Marker(MacroElement):
         location: Optional[Sequence[float]] = None,
         popup: Union["Popup", str, None] = None,
         tooltip: Union["Tooltip", str, None] = None,
-        icon: Optional[Icon] = None,
+        icon: Optional[Union[Icon, "CustomIcon", "DivIcon"]] = None,
         draggable: bool = False,
         **kwargs: TypeJsonValue,
     ):
