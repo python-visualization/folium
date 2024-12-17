@@ -31,6 +31,10 @@ class Draw(JSCSSMixin, MacroElement):
     on : dict, optional
         Event handlers to attach to the created layer. Pass a mapping from the
         names of the events to their `JsCode` handlers.
+    unique : bool , default False
+        Set if the draw object should only exist one at a time.
+        Automatically delete the last drawn object, ensure the map will only exist one draw object at a time.
+        This option can sometimes increase user experience in specific conditions since they won't need to keep deleting last drawn object.
 
     Examples
     --------
@@ -51,6 +55,7 @@ class Draw(JSCSSMixin, MacroElement):
     ...     """
     ...         )
     ...     },
+            unique=False
     ... ).add_to(m)
 
     For more info please check
@@ -92,6 +97,8 @@ class Draw(JSCSSMixin, MacroElement):
                 });
                 {%- endif %}
 
+                
+
                 {%- for event, handler in this.on.items()   %}
                 layer.on(
                     "{{event}}",
@@ -101,6 +108,11 @@ class Draw(JSCSSMixin, MacroElement):
                 drawnItems_{{ this.get_name() }}.addLayer(layer);
             });
             {{ this._parent.get_name() }}.on('draw:created', function(e) {
+                {%- if this.unique %}
+                for(const k in drawnItems_{{ this.get_name() }}._layers){
+                    drawnItems_{{ this.get_name() }}.removeLayer(drawnItems_{{ this.get_name() }}._layers[k])
+                }
+                {%- endif %}
                 drawnItems_{{ this.get_name() }}.addLayer(e.layer);
             });
 
@@ -144,6 +156,7 @@ class Draw(JSCSSMixin, MacroElement):
         draw_options=None,
         edit_options=None,
         on=None,
+        unique=False,
     ):
         super().__init__()
         self._name = "DrawControl"
@@ -155,6 +168,7 @@ class Draw(JSCSSMixin, MacroElement):
         self.draw_options = draw_options or {}
         self.edit_options = edit_options or {}
         self.on = on or {}
+        self.unique = unique
 
     def render(self, **kwargs):
         super().render(**kwargs)
