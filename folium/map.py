@@ -372,6 +372,20 @@ class Marker(MacroElement):
         """
     )
 
+    class SetIcon(MacroElement):
+        """Set the icon of a marker after both are created."""
+        _template = Template("""
+            {% macro script(this, kwargs) %}
+                {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
+            {% endmacro %}
+        """)
+
+        def __init__(self, marker: 'Marker', icon: 'Icon'):
+            super().__init__()
+            self._name = "SetIcon"
+            self.marker = marker
+            self.icon = icon
+
     def __init__(
         self,
         location: Optional[Sequence[float]] = None,
@@ -388,7 +402,8 @@ class Marker(MacroElement):
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
         if icon is not None:
-            self.add_child(icon)
+            # this makes sure it is added only once
+            self._parent.add_child(icon, name=icon.get_name(), index=0)
             self.icon = icon
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
@@ -406,6 +421,8 @@ class Marker(MacroElement):
         return cast(TypeBoundsReturn, [self.location, self.location])
 
     def render(self):
+        if self.icon:
+            self.add_child(self.SetIcon(marker=self, icon=self.icon))
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
