@@ -12,9 +12,11 @@ from folium.map import Layer
 from folium.template import Template
 from folium.utilities import (
     TypeBounds,
+    TypeBoundsReturn,
     TypeJsonValue,
     image_to_url,
     mercator_transform,
+    normalize_bounds_type,
     parse_options,
     remove_empty,
 )
@@ -246,7 +248,7 @@ class ImageOverlay(Layer):
         * If string, it will be written directly in the output file.
         * If file, it's content will be converted as embedded in the output file.
         * If array-like, it will be converted to PNG base64 string and embedded in the output.
-    bounds: list
+    bounds: list/tuple of list/tuple of float
         Image bounds on the map in the form
          [[lat_min, lon_min], [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
@@ -319,7 +321,7 @@ class ImageOverlay(Layer):
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         super().render()
 
         figure = self.get_root()
@@ -344,13 +346,13 @@ class ImageOverlay(Layer):
                 Element(pixelated), name="leaflet-image-layer"
             )  # noqa
 
-    def _get_self_bounds(self) -> TypeBounds:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
-        return self.bounds
+        return normalize_bounds_type(self.bounds)
 
 
 class VideoOverlay(Layer):
@@ -361,7 +363,7 @@ class VideoOverlay(Layer):
     ----------
     video_url: str
         URL of the video
-    bounds: list
+    bounds: list/tuple of list/tuple of float
         Video bounds on the map in the form
          [[lat_min, lon_min], [lat_max, lon_max]]
     autoplay: bool, default True
@@ -411,10 +413,10 @@ class VideoOverlay(Layer):
         self.bounds = bounds
         self.options = remove_empty(autoplay=autoplay, loop=loop, **kwargs)
 
-    def _get_self_bounds(self) -> TypeBounds:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
 
         """
-        return self.bounds
+        return normalize_bounds_type(self.bounds)

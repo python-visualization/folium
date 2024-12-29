@@ -5,7 +5,7 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict
-from typing import TYPE_CHECKING, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -14,6 +14,7 @@ from folium.template import Template
 from folium.utilities import (
     JsCode,
     TypeBounds,
+    TypeBoundsReturn,
     TypeJsonValue,
     escape_backticks,
     parse_options,
@@ -221,7 +222,7 @@ class LayerControl(MacroElement):
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.reset()
         for item in self._parent._children.values():
@@ -396,15 +397,15 @@ class Marker(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> List[List[float]]:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """Computes the bounds of the object itself.
 
         Because a marker has only single coordinates, we repeat them.
         """
         assert self.location is not None
-        return [self.location, self.location]
+        return cast(TypeBoundsReturn, [self.location, self.location])
 
-    def render(self) -> None:
+    def render(self):
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
@@ -492,7 +493,7 @@ class Popup(Element):
             **kwargs,
         )
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)

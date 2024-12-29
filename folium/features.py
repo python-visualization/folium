@@ -12,7 +12,15 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 import numpy as np
 import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement
+from branca.element import (
+    Div,
+    Element,
+    Figure,
+    Html,
+    IFrame,
+    JavascriptLink,
+    MacroElement,
+)
 from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
@@ -20,6 +28,8 @@ from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.template import Template
 from folium.utilities import (
+    TypeBoundsReturn,
+    TypeContainer,
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
@@ -165,7 +175,7 @@ class Vega(JSCSSMixin, Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         super().render(**kwargs)
 
@@ -284,9 +294,15 @@ class VegaLite(Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self._parent.html.add_child(
+        parent = self._parent
+        if not isinstance(parent, (Figure, Div, Popup)):
+            raise TypeError(
+                "VegaLite elements can only be added to a Figure, Div, or Popup"
+            )
+
+        parent.html.add_child(
             Element(
                 Template(
                     """
@@ -331,7 +347,7 @@ class VegaLite(Element):
         embed_vegalite = embed_mapping.get(
             self.vegalite_major_version, self._embed_vegalite_v2
         )
-        embed_vegalite(figure)
+        embed_vegalite(figure=figure, parent=parent)
 
     @property
     def vegalite_major_version(self) -> Optional[int]:
@@ -342,8 +358,8 @@ class VegaLite(Element):
 
         return int(schema.split("/")[-1].split(".")[0].lstrip("v"))
 
-    def _embed_vegalite_v5(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v5(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm//vega@5"), name="vega"
@@ -356,8 +372,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v4(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v4(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm//vega@5"), name="vega"
@@ -370,8 +386,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v3(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v3(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm/vega@4"), name="vega"
@@ -384,8 +400,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v2(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v2(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm/vega@3"), name="vega"
@@ -398,8 +414,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _vega_embed(self) -> None:
-        self._parent.script.add_child(
+    def _vega_embed(self, parent: TypeContainer) -> None:
+        parent.script.add_child(
             Element(
                 Template(
                     """
@@ -412,8 +428,8 @@ class VegaLite(Element):
             name=self.get_name(),
         )
 
-    def _embed_vegalite_v1(self, figure: Figure) -> None:
-        self._parent.script.add_child(
+    def _embed_vegalite_v1(self, figure: Figure, parent: TypeContainer) -> None:
+        parent.script.add_child(
             Element(
                 Template(
                     """
@@ -436,19 +452,19 @@ class VegaLite(Element):
         figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js"),
             name="vega",
-        )  # noqa
+        )
         figure.header.add_child(
             JavascriptLink(
                 "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js"
             ),
             name="vega-lite",
-        )  # noqa
+        )
         figure.header.add_child(
             JavascriptLink(
                 "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js"
             ),
             name="vega-embed",
-        )  # noqa
+        )
 
 
 class GeoJson(Layer):
@@ -820,7 +836,7 @@ class GeoJson(Layer):
         """
         return get_bounds(self.data, lonlat=True)
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         # Need at least one feature, otherwise style mapping fails
         if (self.style or self.highlight) and self.data["features"]:
@@ -1041,12 +1057,12 @@ class TopoJson(JSCSSMixin, Layer):
                 self.style_function(feature)
             )  # noqa
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.style_data()
         super().render(**kwargs)
 
-    def get_bounds(self) -> List[List[float]]:
+    def get_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
@@ -1146,6 +1162,7 @@ class GeoJsonDetail(MacroElement):
 
     def warn_for_geometry_collections(self) -> None:
         """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
+        assert isinstance(self._parent, GeoJson)
         geom_collections = [
             feature.get("properties") if feature.get("properties") is not None else key
             for key, feature in enumerate(self._parent.data["features"])
@@ -1160,7 +1177,7 @@ class GeoJsonDetail(MacroElement):
                 UserWarning,
             )
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         if isinstance(self._parent, GeoJson):
@@ -1565,7 +1582,7 @@ class Choropleth(FeatureGroup):
             color_range = color_brewer(fill_color, n=nb_bins)
             self.color_scale = StepColormap(
                 color_range,
-                index=bin_edges,
+                index=list(bin_edges),
                 vmin=bins_min,
                 vmax=bins_max,
                 caption=legend_name,
@@ -1625,7 +1642,7 @@ class Choropleth(FeatureGroup):
             return {"weight": line_weight + 2, "fillOpacity": fill_opacity + 0.2}
 
         if topojson:
-            self.geojson = TopoJson(
+            self.geojson: Union[TopoJson, GeoJson] = TopoJson(
                 geo_data,
                 topojson,
                 style_function=style_function,
@@ -1657,7 +1674,7 @@ class Choropleth(FeatureGroup):
         else:
             return value
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Render the GeoJson/TopoJson and color scale objects."""
         if self.color_scale:
             # ColorMap needs Map as its parent
@@ -1963,8 +1980,13 @@ class ColorLine(FeatureGroup):
                 vmin=min(colors),
                 vmax=max(colors),
             ).to_step(nb_steps)
-        else:
+        elif isinstance(colormap, StepColormap):
             cm = colormap
+        else:
+            raise TypeError(
+                f"Unexpected type for argument `colormap`: {type(colormap)}"
+            )
+
         out: Dict[str, List[List[List[float]]]] = {}
         for (lat1, lng1), (lat2, lng2), color in zip(coords[:-1], coords[1:], colors):
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])

@@ -9,6 +9,7 @@ import tempfile
 import uuid
 from contextlib import contextmanager
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     Dict,
@@ -24,7 +25,7 @@ from typing import (
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
-from branca.element import Element, Figure
+from branca.element import Div, Element, Figure
 
 # import here for backwards compatibility
 from branca.utilities import (  # noqa F401
@@ -40,6 +41,9 @@ try:
 except ImportError:
     pd = None
 
+if TYPE_CHECKING:
+    from .features import Popup
+
 
 TypeLine = Iterable[Sequence[float]]
 TypeMultiLine = Union[TypeLine, Iterable[TypeLine]]
@@ -50,6 +54,9 @@ TypeJsonValue = Union[TypeJsonValueNoNone, None]
 TypePathOptions = Union[bool, str, float, None]
 
 TypeBounds = Sequence[Sequence[float]]
+TypeBoundsReturn = List[List[Optional[float]]]
+
+TypeContainer = Union[Figure, Div, "Popup"]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
@@ -323,6 +330,10 @@ def get_bounds(
     if lonlat:
         bounds = _locations_mirror(bounds)
     return bounds
+
+
+def normalize_bounds_type(bounds: TypeBounds) -> TypeBoundsReturn:
+    return [[float(x) if x is not None else None for x in y] for y in bounds]
 
 
 def camelize(key: str) -> str:

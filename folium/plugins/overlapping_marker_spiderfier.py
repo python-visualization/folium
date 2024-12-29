@@ -92,7 +92,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     ) -> Element:
         self._parent = parent
         self.markers = self._get_all_markers(parent)
-        super().add_to(parent, name=name, index=index)
+        return super().add_to(parent, name=name, index=index)
 
     def _get_all_markers(self, element: Element) -> list:
         markers = []
