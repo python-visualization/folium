@@ -1570,7 +1570,7 @@ class Choropleth(FeatureGroup):
             color_range = color_brewer(fill_color, n=nb_bins)
             self.color_scale = StepColormap(
                 color_range,
-                index=bin_edges,
+                index=list(bin_edges),
                 vmin=bins_min,
                 vmax=bins_max,
                 caption=legend_name,
