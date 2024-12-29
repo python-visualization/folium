@@ -9,6 +9,7 @@ import tempfile
 import uuid
 from contextlib import contextmanager
 from typing import (
+    TYPE_CHECKING,
     Any,
     Callable,
     Dict,
@@ -35,12 +36,13 @@ from branca.utilities import (  # noqa F401
     write_png,
 )
 
-from folium import Popup
-
 try:
     import pandas as pd
 except ImportError:
     pd = None
+
+if TYPE_CHECKING:
+    from .features import Popup
 
 
 TypeLine = Iterable[Sequence[float]]
@@ -54,7 +56,7 @@ TypePathOptions = Union[bool, str, float, None]
 TypeBounds = Sequence[Sequence[float]]
 TypeBoundsReturn = List[List[Optional[float]]]
 
-TypeContainer = Union[Figure, Div, Popup]
+TypeContainer = Union[Figure, Div, "Popup"]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
