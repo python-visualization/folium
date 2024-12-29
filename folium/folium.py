@@ -377,7 +377,7 @@ class Map(JSCSSMixin, Evented):
             return None
         return self._to_png()
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         assert isinstance(

@@ -319,7 +319,7 @@ class ImageOverlay(Layer):
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         super().render()
 
         figure = self.get_root()

@@ -221,7 +221,7 @@ class LayerControl(MacroElement):
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.reset()
         for item in self._parent._children.values():
@@ -404,7 +404,7 @@ class Marker(MacroElement):
         assert self.location is not None
         return [self.location, self.location]
 
-    def render(self) -> None:
+    def render(self):
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
@@ -492,7 +492,7 @@ class Popup(Element):
             **kwargs,
         )
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)

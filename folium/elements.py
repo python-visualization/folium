@@ -12,7 +12,7 @@ class JSCSSMixin(Element):
     default_js: List[Tuple[str, str]] = []
     default_css: List[Tuple[str, str]] = []
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         figure = self.get_root()
         assert isinstance(
             figure, Figure

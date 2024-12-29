@@ -165,7 +165,7 @@ class Vega(JSCSSMixin, Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         super().render(**kwargs)
 
@@ -284,7 +284,7 @@ class VegaLite(Element):
         self.top = _parse_size(top)
         self.position = position
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self._parent.html.add_child(
             Element(
@@ -820,7 +820,7 @@ class GeoJson(Layer):
         """
         return get_bounds(self.data, lonlat=True)
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         self.parent_map = get_obj_in_upper_tree(self, Map)
         # Need at least one feature, otherwise style mapping fails
         if (self.style or self.highlight) and self.data["features"]:
@@ -1041,7 +1041,7 @@ class TopoJson(JSCSSMixin, Layer):
                 self.style_function(feature)
             )  # noqa
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.style_data()
         super().render(**kwargs)
@@ -1160,7 +1160,7 @@ class GeoJsonDetail(MacroElement):
                 UserWarning,
             )
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         if isinstance(self._parent, GeoJson):
@@ -1657,7 +1657,7 @@ class Choropleth(FeatureGroup):
         else:
             return value
 
-    def render(self, **kwargs) -> None:
+    def render(self, **kwargs):
         """Render the GeoJson/TopoJson and color scale objects."""
         if self.color_scale:
             # ColorMap needs Map as its parent
