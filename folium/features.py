@@ -1630,7 +1630,7 @@ class Choropleth(FeatureGroup):
             return {"weight": line_weight + 2, "fillOpacity": fill_opacity + 0.2}
 
         if topojson:
-            self.geojson = TopoJson(
+            self.geojson: Union[TopoJson, GeoJson] = TopoJson(
                 geo_data,
                 topojson,
                 style_function=style_function,
