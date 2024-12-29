@@ -49,7 +49,8 @@ TypeJsonValue = Union[TypeJsonValueNoNone, None]
 
 TypePathOptions = Union[bool, str, float, None]
 
-TypeBounds = List[List[Optional[float]]]
+TypeBounds = Sequence[Sequence[float]]
+TypeBoundsReturn = List[List[Optional[float]]]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)

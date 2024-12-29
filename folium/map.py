@@ -18,7 +18,7 @@ from folium.utilities import (
     escape_backticks,
     parse_options,
     remove_empty,
-    validate_location,
+    validate_location, TypeBoundsReturn,
 )
 
 if TYPE_CHECKING:
@@ -396,7 +396,7 @@ class Marker(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> TypeBounds:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """Computes the bounds of the object itself.
 
         Because a marker has only single coordinates, we repeat them.

@@ -32,7 +32,7 @@ from folium.utilities import (
     none_max,
     none_min,
     remove_empty,
-    validate_locations,
+    validate_locations, TypeBoundsReturn,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -1046,7 +1046,7 @@ class TopoJson(JSCSSMixin, Layer):
         self.style_data()
         super().render(**kwargs)
 
-    def get_bounds(self) -> List[List[float]]:
+    def get_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]

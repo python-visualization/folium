@@ -16,7 +16,7 @@ from folium.utilities import (
     image_to_url,
     mercator_transform,
     parse_options,
-    remove_empty,
+    remove_empty, TypeBoundsReturn,
 )
 
 
@@ -344,7 +344,7 @@ class ImageOverlay(Layer):
                 Element(pixelated), name="leaflet-image-layer"
             )  # noqa
 
-    def _get_self_bounds(self) -> TypeBounds:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
@@ -411,7 +411,7 @@ class VideoOverlay(Layer):
         self.bounds = bounds
         self.options = remove_empty(autoplay=autoplay, loop=loop, **kwargs)
 
-    def _get_self_bounds(self) -> TypeBounds:
+    def _get_self_bounds(self) -> TypeBoundsReturn:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
