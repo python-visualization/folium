@@ -12,7 +12,15 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 import numpy as np
 import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import Div, Element, Figure, Html, IFrame, JavascriptLink, MacroElement
+from branca.element import (
+    Div,
+    Element,
+    Figure,
+    Html,
+    IFrame,
+    JavascriptLink,
+    MacroElement,
+)
 from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
@@ -290,7 +298,9 @@ class VegaLite(Element):
         """Renders the HTML representation of the element."""
         parent = self._parent
         if not isinstance(parent, (Figure, Div, Popup)):
-            raise TypeError("VegaLite elements can only be added to a Figure, Div, or Popup")
+            raise TypeError(
+                "VegaLite elements can only be added to a Figure, Div, or Popup"
+            )
 
         parent.html.add_child(
             Element(
@@ -1973,7 +1983,9 @@ class ColorLine(FeatureGroup):
         elif isinstance(colormap, StepColormap):
             cm = colormap
         else:
-            raise TypeError(f"Unexpected type for argument `colormap`: {type(colormap)}")
+            raise TypeError(
+                f"Unexpected type for argument `colormap`: {type(colormap)}"
+            )
 
         out: Dict[str, List[List[List[float]]]] = {}
         for (lat1, lng1), (lat2, lng2), color in zip(coords[:-1], coords[1:], colors):
