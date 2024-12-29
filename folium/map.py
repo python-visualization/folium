@@ -396,7 +396,7 @@ class Marker(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> List[List[float]]:
+    def _get_self_bounds(self) -> TypeBounds:
         """Computes the bounds of the object itself.
 
         Because a marker has only single coordinates, we repeat them.
