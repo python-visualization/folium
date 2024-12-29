@@ -24,7 +24,9 @@ from typing import (
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
-from branca.element import Element, Figure
+from folium import Popup
+
+from branca.element import Element, Figure, Div
 
 # import here for backwards compatibility
 from branca.utilities import (  # noqa F401
@@ -51,6 +53,8 @@ TypePathOptions = Union[bool, str, float, None]
 
 TypeBounds = Sequence[Sequence[float]]
 TypeBoundsReturn = List[List[Optional[float]]]
+
+TypeContainer = Union[Figure, Div, Popup]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)

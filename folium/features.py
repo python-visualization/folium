@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 import numpy as np
 import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement
+from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement, Div
 from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
@@ -32,7 +32,7 @@ from folium.utilities import (
     none_max,
     none_min,
     remove_empty,
-    validate_locations, TypeBoundsReturn,
+    validate_locations, TypeBoundsReturn, TypeContainer,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
@@ -286,7 +286,11 @@ class VegaLite(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self._parent.html.add_child(
+        parent = self._parent
+        if not isinstance(parent, (Figure, Div, Popup)):
+            raise TypeError("VegaLite elements can only be added to a Figure, Div, or Popup")
+
+        parent.html.add_child(
             Element(
                 Template(
                     """
@@ -331,7 +335,7 @@ class VegaLite(Element):
         embed_vegalite = embed_mapping.get(
             self.vegalite_major_version, self._embed_vegalite_v2
         )
-        embed_vegalite(figure)
+        embed_vegalite(figure=figure, parent=parent)
 
     @property
     def vegalite_major_version(self) -> Optional[int]:
@@ -342,8 +346,8 @@ class VegaLite(Element):
 
         return int(schema.split("/")[-1].split(".")[0].lstrip("v"))
 
-    def _embed_vegalite_v5(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v5(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm//vega@5"), name="vega"
@@ -356,8 +360,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v4(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v4(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm//vega@5"), name="vega"
@@ -370,8 +374,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v3(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v3(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm/vega@4"), name="vega"
@@ -384,8 +388,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _embed_vegalite_v2(self, figure: Figure) -> None:
-        self._vega_embed()
+    def _embed_vegalite_v2(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
 
         figure.header.add_child(
             JavascriptLink("https://cdn.jsdelivr.net/npm/vega@3"), name="vega"
@@ -398,8 +402,8 @@ class VegaLite(Element):
             name="vega-embed",
         )
 
-    def _vega_embed(self) -> None:
-        self._parent.script.add_child(
+    def _vega_embed(self, parent: TypeContainer) -> None:
+        parent.script.add_child(
             Element(
                 Template(
                     """
@@ -412,8 +416,8 @@ class VegaLite(Element):
             name=self.get_name(),
         )
 
-    def _embed_vegalite_v1(self, figure: Figure) -> None:
-        self._parent.script.add_child(
+    def _embed_vegalite_v1(self, figure: Figure, parent: TypeContainer) -> None:
+        parent.script.add_child(
             Element(
                 Template(
                     """
@@ -436,19 +440,19 @@ class VegaLite(Element):
         figure.header.add_child(
             JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/vega/2.6.5/vega.js"),
             name="vega",
-        )  # noqa
+        )
         figure.header.add_child(
             JavascriptLink(
                 "https://cdnjs.cloudflare.com/ajax/libs/vega-lite/1.3.1/vega-lite.js"
             ),
             name="vega-lite",
-        )  # noqa
+        )
         figure.header.add_child(
             JavascriptLink(
                 "https://cdnjs.cloudflare.com/ajax/libs/vega-embed/2.2.0/vega-embed.js"
             ),
             name="vega-embed",
-        )  # noqa
+        )
 
 
 class GeoJson(Layer):
