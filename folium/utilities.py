@@ -326,6 +326,10 @@ def get_bounds(
     return bounds
 
 
+def normalize_bounds_type(bounds: TypeBounds) -> TypeBoundsReturn:
+    return [[float(x) if x is not None else None for x in y] for y in bounds]
+
+
 def camelize(key: str) -> str:
     """Convert a python_style_variable_name to lowerCamelCase.
 

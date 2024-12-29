@@ -16,7 +16,7 @@ from folium.utilities import (
     parse_options,
     validate_location,
     validate_locations,
-    validate_multi_locations,
+    validate_multi_locations, normalize_bounds_type,
 )
 
 
@@ -131,6 +131,20 @@ def test_if_pandas_df_convert_to_numpy():
     # Also check if it ignores things that are not Pandas DataFrame:
     assert if_pandas_df_convert_to_numpy(data) is data
     assert if_pandas_df_convert_to_numpy(expected) is expected
+
+
+@pytest.mark.parametrize(
+    "bounds, expected",
+    [
+        ([[1, 2], [3, 4]], [[1.0, 2.0], [3.0, 4.0]]),
+        ([[None, 2], [3, None]], [[None, 2.0], [3.0, None]]),
+        ([[1.1, 2.2], [3.3, 4.4]], [[1.1, 2.2], [3.3, 4.4]]),
+        ([[None, None], [None, None]], [[None, None], [None, None]]),
+        ([[0, -1], [-2, 3]], [[0.0, -1.0], [-2.0, 3.0]]),
+    ],
+)
+def test_normalize_bounds_type(bounds, expected):
+    assert normalize_bounds_type(bounds) == expected
 
 
 def test_camelize():

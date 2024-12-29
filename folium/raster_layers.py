@@ -3,7 +3,7 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 
 """
 
-from typing import Any, Callable, Optional, Union
+from typing import Any, Callable, Optional, Union, cast
 
 import xyzservices
 from branca.element import Element, Figure
@@ -16,7 +16,7 @@ from folium.utilities import (
     image_to_url,
     mercator_transform,
     parse_options,
-    remove_empty, TypeBoundsReturn,
+    remove_empty, TypeBoundsReturn, normalize_bounds_type,
 )
 
 
@@ -246,7 +246,7 @@ class ImageOverlay(Layer):
         * If string, it will be written directly in the output file.
         * If file, it's content will be converted as embedded in the output file.
         * If array-like, it will be converted to PNG base64 string and embedded in the output.
-    bounds: list
+    bounds: list/tuple of list/tuple of float
         Image bounds on the map in the form
          [[lat_min, lon_min], [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
@@ -350,7 +350,7 @@ class ImageOverlay(Layer):
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
 
         """
-        return self.bounds
+        return normalize_bounds_type(self.bounds)
 
 
 class VideoOverlay(Layer):
@@ -361,7 +361,7 @@ class VideoOverlay(Layer):
     ----------
     video_url: str
         URL of the video
-    bounds: list
+    bounds: list/tuple of list/tuple of float
         Video bounds on the map in the form
          [[lat_min, lon_min], [lat_max, lon_max]]
     autoplay: bool, default True
@@ -417,4 +417,4 @@ class VideoOverlay(Layer):
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
 
         """
-        return self.bounds
+        return normalize_bounds_type(self.bounds)

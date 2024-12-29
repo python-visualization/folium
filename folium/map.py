@@ -5,7 +5,7 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict
-from typing import TYPE_CHECKING, List, Optional, Sequence, Union
+from typing import TYPE_CHECKING, List, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -402,7 +402,7 @@ class Marker(MacroElement):
         Because a marker has only single coordinates, we repeat them.
         """
         assert self.location is not None
-        return [self.location, self.location]
+        return cast(TypeBoundsReturn, [self.location, self.location])
 
     def render(self):
         if self.location is None:
