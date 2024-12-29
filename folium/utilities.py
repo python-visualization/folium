@@ -24,9 +24,7 @@ from typing import (
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
-from folium import Popup
-
-from branca.element import Element, Figure, Div
+from branca.element import Div, Element, Figure
 
 # import here for backwards compatibility
 from branca.utilities import (  # noqa F401
@@ -36,6 +34,8 @@ from branca.utilities import (  # noqa F401
     none_min,
     write_png,
 )
+
+from folium import Popup
 
 try:
     import pandas as pd

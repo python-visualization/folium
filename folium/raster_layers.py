@@ -3,7 +3,7 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 
 """
 
-from typing import Any, Callable, Optional, Union, cast
+from typing import Any, Callable, Optional, Union
 
 import xyzservices
 from branca.element import Element, Figure
@@ -12,11 +12,13 @@ from folium.map import Layer
 from folium.template import Template
 from folium.utilities import (
     TypeBounds,
+    TypeBoundsReturn,
     TypeJsonValue,
     image_to_url,
     mercator_transform,
+    normalize_bounds_type,
     parse_options,
-    remove_empty, TypeBoundsReturn, normalize_bounds_type,
+    remove_empty,
 )
 
 

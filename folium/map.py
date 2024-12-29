@@ -5,7 +5,7 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict
-from typing import TYPE_CHECKING, List, Optional, Sequence, Union, cast
+from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -14,11 +14,12 @@ from folium.template import Template
 from folium.utilities import (
     JsCode,
     TypeBounds,
+    TypeBoundsReturn,
     TypeJsonValue,
     escape_backticks,
     parse_options,
     remove_empty,
-    validate_location, TypeBoundsReturn,
+    validate_location,
 )
 
 if TYPE_CHECKING:

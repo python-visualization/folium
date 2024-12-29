@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence, Tupl
 import numpy as np
 import requests
 from branca.colormap import ColorMap, LinearColormap, StepColormap
-from branca.element import Element, Figure, Html, IFrame, JavascriptLink, MacroElement, Div
+from branca.element import Div, Element, Figure, Html, IFrame, JavascriptLink, MacroElement
 from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
@@ -20,6 +20,8 @@ from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.template import Template
 from folium.utilities import (
+    TypeBoundsReturn,
+    TypeContainer,
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
@@ -32,7 +34,7 @@ from folium.utilities import (
     none_max,
     none_min,
     remove_empty,
-    validate_locations, TypeBoundsReturn, TypeContainer,
+    validate_locations,
 )
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
