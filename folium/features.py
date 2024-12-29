@@ -1968,8 +1968,11 @@ class ColorLine(FeatureGroup):
                 vmin=min(colors),
                 vmax=max(colors),
             ).to_step(nb_steps)
-        else:
+        elif isinstance(colormap, StepColormap):
             cm = colormap
+        else:
+            raise TypeError(f"Unexpected type for argument `colormap`: {type(colormap)}")
+
         out: Dict[str, List[List[List[float]]]] = {}
         for (lat1, lng1), (lat2, lng2), color in zip(coords[:-1], coords[1:], colors):
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
