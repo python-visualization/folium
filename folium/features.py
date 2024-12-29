@@ -1150,6 +1150,7 @@ class GeoJsonDetail(MacroElement):
 
     def warn_for_geometry_collections(self) -> None:
         """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
+        assert isinstance(self._parent, GeoJson)
         geom_collections = [
             feature.get("properties") if feature.get("properties") is not None else key
             for key, feature in enumerate(self._parent.data["features"])
