@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.19.2 documentation</title>
+    <title>API reference &#8212; Folium 0.19.3 documentation</title>
   
   
   
@@ -16,8 +16,8 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
+  <!--
+    this give us a css class that will be invisible only if js is disabled
   -->
   <noscript>
     <style>
@@ -27,35 +27,36 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=924e9346" />
   
   <!-- So that users can add custom icons -->
-  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=587b3f23"></script>
+    <script src="_static/documentation_options.js?v=fc03bb3a"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'reference';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.2';
-        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
         </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Customizing javascript or css resources" href="advanced_guide/customize_javascript_and_css.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.19.2" />
+  <meta name="docsearch:version" content="0.19.3" />
   </head>
   
   
@@ -365,9 +366,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -440,7 +446,7 @@ any of the following to the “tiles” keyword:</p>
 <p>Explore more provider names available in <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> here:
 <a class="reference external" href="https://leaflet-extras.github.io/leaflet-providers/preview/">https://leaflet-extras.github.io/leaflet-providers/preview/</a>.</p>
 <p>You can also pass a custom tileset by passing a
-<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">https://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -448,8 +454,8 @@ URL to the tiles parameter: <code class="docutils literal notranslate"><span cla
 <li><p><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Map (Northing, Easting).</p></li>
 <li><p><strong>width</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Width of the map.</p></li>
 <li><p><strong>height</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Height of the map.</p></li>
-<li><p><strong>tiles</strong> (str or TileLayer or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – Map tileset to use. Can choose from a list of built-in tiles,
-pass a <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>,
+<li><p><strong>tiles</strong> (str or TileLayer or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – Map tileset to use. Can choose from a list of built-in tiles,
+pass a <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>,
 pass a custom URL, pass a TileLayer object,
 or pass <cite>None</cite> to create a map without tiles.
 For more advanced tile layer options, use the <cite>TileLayer</cite> class.</p></li>
@@ -556,7 +562,7 @@ Does not work with markers, for those use z_index_offset.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.folium.Map.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.folium.Map.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.folium.Map.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -777,7 +783,7 @@ to True to allow dragging the control around.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.map.LayerControl.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.map.LayerControl.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.LayerControl.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -790,7 +796,7 @@ to True to allow dragging the control around.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="folium.map.Marker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">Marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Popup" title="folium.map.Popup"><span class="pre">Popup</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tooltip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Tooltip" title="folium.map.Tooltip"><span class="pre">Tooltip</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Icon" title="folium.map.Icon"><span class="pre">Icon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draggable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">Marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Popup" title="folium.map.Popup"><span class="pre">Popup</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tooltip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Tooltip" title="folium.map.Tooltip"><span class="pre">Tooltip</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Icon" title="folium.map.Icon"><span class="pre">Icon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#folium.features.CustomIcon" title="folium.features.CustomIcon"><span class="pre">CustomIcon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#folium.features.DivIcon" title="folium.features.DivIcon"><span class="pre">DivIcon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draggable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
 <p>Create a simple stock Leaflet marker on the map, with optional
 popup text or Vincent visualization.</p>
@@ -821,7 +827,7 @@ folium.Popup or a folium.Popup instance.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.map.Marker.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.map.Marker.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -846,7 +852,7 @@ folium.Popup or a folium.Popup instance.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.map.Popup.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.map.Popup.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Popup.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -889,7 +895,7 @@ the map, implements ILayer interface.</p>
 * If string, it will be written directly in the output file.
 * If file, it’s content will be converted as embedded in the output file.
 * If array-like, it will be converted to PNG base64 string and embedded in the output.</p></li>
-<li><p><strong>bounds</strong> (<em>list</em>) – <dl class="simple">
+<li><p><strong>bounds</strong> (<em>list/tuple</em><em> of </em><em>list/tuple</em><em> of </em><em>float</em>) – <dl class="simple">
 <dt>Image bounds on the map in the form</dt><dd><p>[[lat_min, lon_min], [lat_max, lon_max]]</p>
 </dd>
 </dl>
@@ -919,7 +925,7 @@ Note that if used the image will be clipped beyond latitude -85 and 85.</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.raster_layers.ImageOverlay.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.raster_layers.ImageOverlay.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.ImageOverlay.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -927,13 +933,13 @@ Note that if used the image will be clipped beyond latitude -85 and 85.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="folium.raster_layers.TileLayer">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.raster_layers.</span></span><span class="sig-name descname"><span class="pre">TileLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><span class="pre">TileProvider</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'OpenStreetMap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_native_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_retina</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_wrap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.TileLayer" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.raster_layers.</span></span><span class="sig-name descname"><span class="pre">TileLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><span class="pre">TileProvider</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'OpenStreetMap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_native_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_retina</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_wrap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.TileLayer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
 <p>Create a tile layer to append on a Map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tiles</strong> (str or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – <p>Map tileset to use. Folium has built-in all tilesets
+<li><p><strong>tiles</strong> (str or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – <p>Map tileset to use. Folium has built-in all tilesets
 available in the <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> package. For example, you can pass
 any of the following to the “tiles” keyword:</p>
 <blockquote>
@@ -946,7 +952,7 @@ any of the following to the “tiles” keyword:</p>
 <p>Explore more provider names available in <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> here:
 <a class="reference external" href="https://leaflet-extras.github.io/leaflet-providers/preview/">https://leaflet-extras.github.io/leaflet-providers/preview/</a>.</p>
 <p>You can also pass a custom tileset by passing a
-<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev10+gc847f31)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2024.9.1.dev11+g260b0ca)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">https://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 </p></li>
 <li><p><strong>min_zoom</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default 0</em>) – Minimum allowed zoom level for this tile layer. Filled by xyzservices by default.</p></li>
@@ -985,7 +991,7 @@ object.</p></li>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>video_url</strong> (<em>str</em>) – URL of the video</p></li>
-<li><p><strong>bounds</strong> (<em>list</em>) – <dl class="simple">
+<li><p><strong>bounds</strong> (<em>list/tuple</em><em> of </em><em>list/tuple</em><em> of </em><em>float</em>) – <dl class="simple">
 <dt>Video bounds on the map in the form</dt><dd><p>[[lat_min, lon_min], [lat_max, lon_max]]</p>
 </dd>
 </dl>
@@ -1284,7 +1290,7 @@ distributed.</p></li>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.Choropleth.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.features.Choropleth.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Choropleth.render" title="Link to this definition">#</a></dt>
 <dd><p>Render the GeoJson/TopoJson and color scale objects.</p>
 </dd></dl>
 
@@ -1504,7 +1510,7 @@ or even null.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.GeoJson.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.features.GeoJson.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.GeoJson.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -1674,14 +1680,14 @@ see folium.GeoJsonTooltip for info on how to do that.</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.TopoJson.get_bounds">
-<span class="sig-name descname"><span class="pre">get_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#folium.features.TopoJson.get_bounds" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#folium.features.TopoJson.get_bounds" title="Link to this definition">#</a></dt>
 <dd><p>Computes the bounds of the object itself (not including it’s children)
 in the form [[lat_min, lon_min], [lat_max, lon_max]]</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.TopoJson.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.features.TopoJson.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.TopoJson.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -1726,7 +1732,7 @@ Ex: ‘relative’, ‘absolute’</p></li>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.Vega.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.features.Vega.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Vega.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -1760,7 +1766,7 @@ Ex: ‘relative’, ‘absolute’</p></li>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.VegaLite.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#folium.features.VegaLite.render" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.VegaLite.render" title="Link to this definition">#</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
@@ -2333,7 +2339,8 @@ You can also provide a numpy.array of shape (n,2) or (n,3).</p></li>
 scales with zoom), equals maxZoom of the map by default</p></li>
 <li><p><strong>radius</strong> (<em>int</em><em>, </em><em>default 25</em>) – Radius of each “point” of the heatmap</p></li>
 <li><p><strong>blur</strong> (<em>int</em><em>, </em><em>default 15</em>) – Amount of blur</p></li>
-<li><p><strong>gradient</strong> (<em>dict</em><em>, </em><em>default None</em>) – Color gradient config. e.g. {0.4: ‘blue’, 0.65: ‘lime’, 1: ‘red’}</p></li>
+<li><p><strong>gradient</strong> (<em>dict</em><em>, </em><em>default None</em>) – Color gradient config. Defaults to
+{.4: “blue”, .6: “cyan”, .7: “lime”, .8: “yellow”, 1: “red”}</p></li>
 <li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</p></li>
 <li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</p></li>
 <li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening.</p></li>
@@ -3884,13 +3891,13 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
   </nav></div>
 
   <div class="sidebar-secondary-item">
-
-  <div class="tocsection sourcelink">
-    <a href="_sources/reference.rst.txt">
-      <i class="fa-solid fa-file-lines"></i> Show Source
-    </a>
-  </div>
-</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
 
 </div></div>
               
@@ -3905,8 +3912,8 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -3914,7 +3921,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.19.2</div>
+Folium version 0.19.3</div>
       
         <div class="footer-item">
 
@@ -3936,7 +3943,8 @@ Folium version 0.19.2</div>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
@@ -3947,7 +3955,8 @@ Folium version 0.19.2</div>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
 </p></div>
       
     </div>
