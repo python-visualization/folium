@@ -373,13 +373,16 @@ class Marker(MacroElement):
 
     class SetIcon(MacroElement):
         """Set the icon of a marker after both are created."""
-        _template = Template("""
+
+        _template = Template(
+            """
             {% macro script(this, kwargs) %}
                 {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
             {% endmacro %}
-        """)
+        """
+        )
 
-        def __init__(self, marker: 'Marker', icon: 'Icon'):
+        def __init__(self, marker: "Marker", icon: "Icon"):
             super().__init__()
             self._name = "SetIcon"
             self.marker = marker
