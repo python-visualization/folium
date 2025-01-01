@@ -409,7 +409,7 @@ class Marker(MacroElement):
         super().render()
 
 
-class Popup(Element):
+class Popup(MacroElement):
     """Create a Popup instance that can be linked to a Layer.
 
     Parameters

@@ -101,7 +101,7 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         )
 
 
-class Vega(JSCSSMixin, Element):
+class Vega(JSCSSMixin):
     """
     Creates a Vega chart element.
 
@@ -193,6 +193,8 @@ class Vega(JSCSSMixin, Element):
             name=self.get_name(),
         )
 
+        # TODO: this could be rewritten to use the facilities of MacroElement
+        # and the facilities of JSCSSMixin
         figure = self.get_root()
         assert isinstance(
             figure, Figure
@@ -224,7 +226,7 @@ class Vega(JSCSSMixin, Element):
         )
 
 
-class VegaLite(Element):
+class VegaLite(MacroElement):
     """
     Creates a Vega-Lite chart element.
 
@@ -296,6 +298,9 @@ class VegaLite(Element):
             ),
             name=self.get_name(),
         )
+
+        # TODO: this could be rewritten to use the facilities of MacroElement
+        # and the facilities of JSCSSMixin
 
         figure = self.get_root()
         assert isinstance(

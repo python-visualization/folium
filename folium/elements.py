@@ -1,12 +1,12 @@
 from typing import List, Tuple
 
-from branca.element import CssLink, Element, Figure, JavascriptLink, MacroElement
+from branca.element import CssLink, Figure, JavascriptLink, MacroElement
 
 from folium.template import Template
 from folium.utilities import JsCode
 
 
-class JSCSSMixin(Element):
+class JSCSSMixin(MacroElement):
     """Render links to external Javascript and CSS resources."""
 
     default_js: List[Tuple[str, str]] = []
