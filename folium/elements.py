@@ -1,6 +1,12 @@
 from typing import List, Tuple
 
-from branca.element import CssLink, Figure, JavascriptLink, MacroElement
+from branca.element import (
+    CssLink,
+    Element,  # NoQA: F401  needed as a reexport
+    Figure,
+    JavascriptLink,
+    MacroElement,
+)
 
 from folium.template import Template
 from folium.utilities import JsCode
