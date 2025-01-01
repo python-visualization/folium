@@ -340,7 +340,7 @@ class Marker(MacroElement):
         folium.Popup or a folium.Popup instance.
     tooltip: str or folium.Tooltip, default None
         Display a text when hovering over the object.
-    icon: Icon plugin
+    icon: Icon, CustomIcon or DivIcon, optional
         the Icon plugin to use to render the marker.
     draggable: bool, default False
         Set to True to be able to drag the marker around the map.
@@ -418,12 +418,14 @@ class Marker(MacroElement):
         return cast(TypeBoundsReturn, [self.location, self.location])
 
     def render(self):
+        from .features import CustomIcon, DivIcon
+
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
             )
         for child in list(self._children.values()):
-            if isinstance(child, Icon):
+            if isinstance(child, (Icon, CustomIcon, DivIcon)):
                 self.add_child(self.SetIcon(marker=self, icon=child))
         super().render()
 
