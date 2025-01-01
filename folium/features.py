@@ -297,9 +297,6 @@ class VegaLite(MacroElement):
             name=self.get_name(),
         )
 
-        # TODO: this could be rewritten to use the facilities of MacroElement
-        # and the facilities of JSCSSMixin
-
         figure = self.get_root()
         assert isinstance(
             figure, Figure
