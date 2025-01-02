@@ -111,7 +111,7 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         )
 
 
-class Vega(JSCSSMixin, Element):
+class Vega(JSCSSMixin):
     """
     Creates a Vega chart element.
 
@@ -234,7 +234,7 @@ class Vega(JSCSSMixin, Element):
         )
 
 
-class VegaLite(Element):
+class VegaLite(MacroElement):
     """
     Creates a Vega-Lite chart element.
 
