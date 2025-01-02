@@ -275,7 +275,6 @@ class Icon(MacroElement):
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojavascript }}
             );
-            {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
     )
@@ -341,7 +340,7 @@ class Marker(MacroElement):
         folium.Popup or a folium.Popup instance.
     tooltip: str or folium.Tooltip, default None
         Display a text when hovering over the object.
-    icon: Icon plugin
+    icon: Icon, CustomIcon or DivIcon, optional
         the Icon plugin to use to render the marker.
     draggable: bool, default False
         Set to True to be able to drag the marker around the map.
@@ -372,6 +371,23 @@ class Marker(MacroElement):
         """
     )
 
+    class SetIcon(MacroElement):
+        """Set the icon of a marker after both are created."""
+
+        _template = Template(
+            """
+            {% macro script(this, kwargs) %}
+                {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
+            {% endmacro %}
+        """
+        )
+
+        def __init__(self, marker: "Marker", icon: "Icon"):
+            super().__init__()
+            self._name = "SetIcon"
+            self.marker = marker
+            self.icon = icon
+
     def __init__(
         self,
         location: Optional[Sequence[float]] = None,
@@ -389,7 +405,6 @@ class Marker(MacroElement):
         )
         if icon is not None:
             self.add_child(icon)
-            self.icon = icon
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
@@ -406,10 +421,15 @@ class Marker(MacroElement):
         return cast(TypeBoundsReturn, [self.location, self.location])
 
     def render(self):
+        from .features import CustomIcon, DivIcon
+
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
             )
+        for child in list(self._children.values()):
+            if isinstance(child, (Icon, CustomIcon, DivIcon)):
+                self.add_child(self.SetIcon(marker=self, icon=child))
         super().render()
 
 
