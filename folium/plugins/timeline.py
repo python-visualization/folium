@@ -182,7 +182,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
 
         {% macro script(this, kwargs) %}
           var {{ this.get_name() }} = L.timelineSliderControl(
-              {{ this.options|tojavascript }};
+              {{ this.options|tojavascript }}
           );
           {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
 
