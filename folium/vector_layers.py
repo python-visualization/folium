@@ -103,6 +103,9 @@ def path_options(
     if kwargs.get("tags"):
         extra_options["tags"] = kwargs.pop("tags")
 
+    if kwargs.get("className"):
+        extra_options["className"] = kwargs.pop("className")
+
     default = {
         "stroke": kwargs.pop("stroke", True),
         "color": color,
