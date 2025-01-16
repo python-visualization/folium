@@ -41,6 +41,7 @@ packages = ["folium", "folium.plugins"]
 with open("requirements.txt") as f:
     tests_require = f.readlines()
 install_requires = [t.strip() for t in tests_require]
+install_requires.append("js_loader")
 
 setup(
     name="folium",
