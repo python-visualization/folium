@@ -27,7 +27,7 @@ folium.Map(location=[lat, lon], tiles="Cartodb dark_matter", zoom_start=zoom_sta
 ### Custom tiles
 
 You can also provide a url template to load tiles from, for example if you use a paid API.
-You also have to provide an attribution in that case. For information how that 
+You also have to provide an attribution in that case. For information how that
 url template should look like see the Leaflet documentation:
 https://leafletjs.com/reference.html#tilelayer.
 
