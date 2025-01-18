@@ -29,7 +29,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install flake8 pytest pytest-playwright
-	  if [ -f tests/streamlit/requirements.txt ]; then pip install -r tests/streamlit/requirements.txt; fi
+          if [ -f tests/streamlit/requirements.txt ]; then pip install -r tests/streamlit/requirements.txt; fi
           pip install -e . --force-reinstall
       - uses: pre-commit/action@v2.0.3
       - name: Install playwright dependencies
