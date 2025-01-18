@@ -30,6 +30,11 @@ jobs:
       shell: bash -l {0}
       run: python -m pip install -e . --no-deps --force-reinstall
 
+    - name: Install python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest pytest-playwright
+
     - name: Install playwright dependencies
       run: |
         playwright install --with-deps
