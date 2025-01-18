@@ -6,7 +6,7 @@ from folium.elements import JSCSSMixin
 from folium.features import GeoJson
 from folium.folium import Map
 from folium.template import Template
-from folium.utilities import JsCode, get_bounds, remove_empty
+from folium.utilities import JsCode, TypeJsCode, get_bounds, remove_empty
 
 
 class Timeline(GeoJson):
@@ -108,7 +108,7 @@ class Timeline(GeoJson):
     def __init__(
         self,
         data: Union[dict, str, TextIO],
-        get_interval: Optional[JsCode] = None,
+        get_interval: Optional[TypeJsCode] = None,
         **kwargs
     ):
         super().__init__(data)

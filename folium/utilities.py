@@ -17,10 +17,12 @@ from typing import (
     Iterator,
     List,
     Optional,
+    Protocol,
     Sequence,
     Tuple,
     Type,
     Union,
+    runtime_checkable,
 )
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
@@ -35,7 +37,6 @@ from branca.utilities import (  # noqa F401
     none_min,
     write_png,
 )
-from js_loader import JsCode  # noqa: F401
 
 try:
     import pandas as pd
@@ -63,6 +64,25 @@ TypeContainer = Union[Figure, Div, "Popup"]
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard("")
 _VALID_URLS.add("data")
+
+
+@runtime_checkable
+class TypeJsCode(Protocol):
+    # we only care about this attribute.
+    js_code: str
+
+
+class JsCode(TypeJsCode):
+    """Wrapper around Javascript code."""
+
+    def __init__(self, js_code: Union[str, "JsCode"]):
+        if isinstance(js_code, JsCode):
+            self.js_code: str = js_code.js_code
+        else:
+            self.js_code = js_code
+
+    def __str__(self):
+        return self.js_code
 
 
 def validate_location(location: Sequence[float]) -> List[float]:

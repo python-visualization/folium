@@ -4,11 +4,11 @@ from typing import Union
 import jinja2
 from branca.element import Element
 
-from folium.utilities import JsCode, TypeJsonValue, camelize
+from folium.utilities import TypeJsCode, TypeJsonValue, camelize
 
 
-def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
-    if isinstance(obj, JsCode):
+def tojavascript(obj: Union[str, TypeJsCode, dict, list, Element]) -> str:
+    if isinstance(obj, TypeJsCode):
         return obj.js_code
     elif isinstance(obj, Element):
         return obj.get_name()
