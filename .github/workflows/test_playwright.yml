@@ -40,7 +40,7 @@ jobs:
 
       - name: Test with pytest and retry flaky tests up to 3 times
         run: |
-          pytest --browser chromium -s --reruns 3 --junit-xml=test-results.xml
+          pytest --browser chromium -s --reruns 3 --junit-xml=test-results.xml tests/streamlit
 
       - name: Surface failing tests
         if: always()
