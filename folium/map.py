@@ -403,8 +403,11 @@ class Marker(MacroElement):
         self.options = remove_empty(
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
+        # this attribute is not used by Marker, but by GeoJson
+        self.icon: Optional[Icon] = None
         if icon is not None:
             self.add_child(icon)
+            self.icon = icon
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
