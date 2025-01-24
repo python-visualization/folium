@@ -404,7 +404,7 @@ class Marker(MacroElement):
             draggable=draggable or None, autoPan=draggable or None, **kwargs
         )
         # this attribute is not used by Marker, but by GeoJson
-        self.icon: Union[Icon, "CustomIcon", "DivIcon", None] = None
+        self.icon = None
         if icon is not None:
             self.add_child(icon)
             self.icon = icon
