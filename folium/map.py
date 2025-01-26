@@ -455,25 +455,25 @@ class Popup(MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
-        var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
+            var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
 
-        {% for name, element in this.html._children.items() %}
-            {% if this.lazy %}
-                {{ this._parent.get_name() }}.once('click', function() {
-                    {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
-                });
-            {% else %}
-                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
-                {{ this.get_name() }}.setContent({{ name }});
-            {% endif %}
-        {% endfor %}
+            {% for name, element in this.html._children.items() %}
+                {% if this.lazy %}
+                    {{ this._parent.get_name() }}.once('click', function() {
+                        {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
+                    });
+                {% else %}
+                    var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
+                    {{ this.get_name() }}.setContent({{ name }});
+                {% endif %}
+            {% endfor %}
 
-        {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
-        {% if this.show %}.openPopup(){% endif %};
+            {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
+            {% if this.show %}.openPopup(){% endif %};
 
-        {% for name, element in this.script._children.items() %}
-            {{element.render()}}
-        {% endfor %}
+            {% for name, element in this.script._children.items() %}
+                {{element.render()}}
+            {% endfor %}
         {% endmacro %}
     """
     )  # noqa
