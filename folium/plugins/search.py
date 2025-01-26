@@ -1,6 +1,5 @@
 from branca.element import MacroElement
 
-from folium import Map
 from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
 from folium.plugins import MarkerCluster
@@ -123,17 +122,9 @@ class Search(JSCSSMixin, MacroElement):
         self.placeholder = placeholder
         self.collapsed = collapsed
         self.options = remove_empty(**kwargs)
+        self.test_params()
 
-    def test_params(self, keys):
-        if keys is not None and self.search_label is not None:
-            assert self.search_label in keys, (
-                f"The label '{self.search_label}' was not " f"available in {keys}" ""
-            )
-        assert isinstance(
-            self._parent, Map
-        ), "Search can only be added to folium Map objects."
-
-    def render(self, **kwargs):
+    def test_params(self):
         if isinstance(self.layer, GeoJson):
             keys = tuple(self.layer.data["features"][0]["properties"].keys())
         elif isinstance(self.layer, TopoJson):
@@ -145,6 +136,8 @@ class Search(JSCSSMixin, MacroElement):
             )  # noqa
         else:
             keys = None
-        self.test_params(keys=keys)
 
-        super().render(**kwargs)
+        if keys is not None and self.search_label is not None:
+            assert self.search_label in keys, (
+                f"The label '{self.search_label}' was not " f"available in {keys}" ""
+            )

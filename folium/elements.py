@@ -18,6 +18,10 @@ class JSCSSMixin(MacroElement):
     default_js: List[Tuple[str, str]] = []
     default_css: List[Tuple[str, str]] = []
 
+    # Since this is typically used as a mixin, we cannot
+    # override the _template member variable here. It would
+    # be overwritten by any subclassing class that also has
+    # a _template variable.
     def render(self, **kwargs):
         figure = self.get_root()
         assert isinstance(

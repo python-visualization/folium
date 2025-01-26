@@ -1,5 +1,3 @@
-from branca.element import Element, Figure
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.template import Template
@@ -61,6 +59,87 @@ class HeatMapWithTime(JSCSSMixin, Layer):
 
     _template = Template(
         """
+        {% macro header(this, kwargs) %}
+            <script>
+            var TDHeatmap = L.TimeDimension.Layer.extend({
+                initialize: function(data, options) {
+                    var heatmapCfg = {
+                        radius: 15,
+                        blur: 0.8,
+                        maxOpacity: 1.,
+                        scaleRadius: false,
+                        useLocalExtrema: false,
+                        latField: 'lat',
+                        lngField: 'lng',
+                        valueField: 'count',
+                        defaultWeight : 1,
+                    };
+                    heatmapCfg = $.extend({}, heatmapCfg, options.heatmapOptions || {});
+                    var layer = new HeatmapOverlay(heatmapCfg);
+                    L.TimeDimension.Layer.prototype.initialize.call(this, layer, options);
+                    this._currentLoadedTime = 0;
+                    this._currentTimeData = {
+                        data: []
+                        };
+                    this.data= data;
+                    this.defaultWeight = heatmapCfg.defaultWeight || 1;
+                },
+                onAdd: function(map) {
+                    L.TimeDimension.Layer.prototype.onAdd.call(this, map);
+                    map.addLayer(this._baseLayer);
+                    if (this._timeDimension) {
+                        this._getDataForTime(this._timeDimension.getCurrentTime());
+                    }
+                },
+                _onNewTimeLoading: function(ev) {
+                    this._getDataForTime(ev.time);
+                    return;
+                },
+                isReady: function(time) {
+                    return (this._currentLoadedTime == time);
+                },
+                _update: function() {
+                    this._baseLayer.setData(this._currentTimeData);
+                    return true;
+                },
+                _getDataForTime: function(time) {
+                    delete this._currentTimeData.data;
+                    this._currentTimeData.data = [];
+                    var data = this.data[time-1];
+                    for (var i = 0; i < data.length; i++) {
+                        this._currentTimeData.data.push({
+                                lat: data[i][0],
+                                lng: data[i][1],
+                                count: data[i].length>2 ? data[i][2] : this.defaultWeight
+                            });
+                        }
+                    this._currentLoadedTime = time;
+                    if (this._timeDimension && time == this._timeDimension.getCurrentTime() && !this._timeDimension.isLoading()) {
+                        this._update();
+                    }
+                    this.fire('timeload', {
+                        time: time
+                    });
+                }
+            });
+
+            L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
+                initialize: function(index, options) {
+                    var playerOptions = {
+                        buffer: 1,
+                        minBufferReady: -1
+                        };
+                    options.playerOptions = $.extend({}, playerOptions, options.playerOptions || {});
+                    L.Control.TimeDimension.prototype.initialize.call(this, options);
+                    this.index = index;
+                },
+                _getDisplayDateFormat: function(date) {
+                    return this.index[date.getTime()-1];
+                }
+            });
+            </script>
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
 
             var times = {{this.times}};
@@ -201,101 +280,6 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         self.play_reverse_button = "true"
         self.time_slider_drag_update = "false"
         self.style_NS = "leaflet-control-timecontrol"
-
-    def render(self, **kwargs):
-        super().render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-
-        figure.header.add_child(
-            Element(
-                """
-            <script>
-                var TDHeatmap = L.TimeDimension.Layer.extend({
-
-            initialize: function(data, options) {
-                var heatmapCfg = {
-                    radius: 15,
-                    blur: 0.8,
-                    maxOpacity: 1.,
-                    scaleRadius: false,
-                    useLocalExtrema: false,
-                    latField: 'lat',
-                    lngField: 'lng',
-                    valueField: 'count',
-                    defaultWeight : 1,
-                };
-                heatmapCfg = $.extend({}, heatmapCfg, options.heatmapOptions || {});
-                var layer = new HeatmapOverlay(heatmapCfg);
-                L.TimeDimension.Layer.prototype.initialize.call(this, layer, options);
-                this._currentLoadedTime = 0;
-                this._currentTimeData = {
-                    data: []
-                    };
-                this.data= data;
-                this.defaultWeight = heatmapCfg.defaultWeight || 1;
-            },
-            onAdd: function(map) {
-                L.TimeDimension.Layer.prototype.onAdd.call(this, map);
-                map.addLayer(this._baseLayer);
-                if (this._timeDimension) {
-                    this._getDataForTime(this._timeDimension.getCurrentTime());
-                }
-            },
-            _onNewTimeLoading: function(ev) {
-                this._getDataForTime(ev.time);
-                return;
-            },
-            isReady: function(time) {
-                return (this._currentLoadedTime == time);
-            },
-            _update: function() {
-                this._baseLayer.setData(this._currentTimeData);
-                return true;
-            },
-            _getDataForTime: function(time) {
-                    delete this._currentTimeData.data;
-                    this._currentTimeData.data = [];
-                    var data = this.data[time-1];
-                    for (var i = 0; i < data.length; i++) {
-                        this._currentTimeData.data.push({
-                                lat: data[i][0],
-                                lng: data[i][1],
-                                count: data[i].length>2 ? data[i][2] : this.defaultWeight
-                            });
-                        }
-                    this._currentLoadedTime = time;
-                    if (this._timeDimension && time == this._timeDimension.getCurrentTime() && !this._timeDimension.isLoading()) {
-                        this._update();
-                    }
-                    this.fire('timeload', {
-                        time: time
-                    });
-                }
-        });
-
-        L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
-            initialize: function(index, options) {
-                var playerOptions = {
-                    buffer: 1,
-                    minBufferReady: -1
-                    };
-                options.playerOptions = $.extend({}, playerOptions, options.playerOptions || {});
-                L.Control.TimeDimension.prototype.initialize.call(this, options);
-                this.index = index;
-                },
-            _getDisplayDateFormat: function(date){
-                return this.index[date.getTime()-1];
-                }
-            });
-            </script>
-                """,  # noqa
-                template_name="timeControlScript",
-            )
-        )
 
     def _get_self_bounds(self):
         """
