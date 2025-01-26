@@ -1,4 +1,4 @@
-from branca.element import Element, Figure, MacroElement
+from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.template import Template
@@ -60,6 +60,29 @@ class Draw(JSCSSMixin, MacroElement):
 
     _template = Template(
         """
+        {% macro html(this, kwargs) %}
+            {% if this.export %}
+            <style>
+                #export {
+                    position: absolute;
+                    top: 5px;
+                    right: 10px;
+                    z-index: 999;
+                    background: white;
+                    color: black;
+                    padding: 6px;
+                    border-radius: 4px;
+                    font-family: 'Helvetica Neue';
+                    cursor: pointer;
+                    font-size: 12px;
+                    text-decoration: none;
+                    top: 90px;
+                }
+            </style>
+            <a href='#' id='export'>Export</a>
+            {% endif %}
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
             var options = {
               position: {{ this.position|tojson }},
@@ -155,35 +178,3 @@ class Draw(JSCSSMixin, MacroElement):
         self.draw_options = draw_options or {}
         self.edit_options = edit_options or {}
         self.on = on or {}
-
-    def render(self, **kwargs):
-        super().render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-
-        export_style = """
-            <style>
-                #export {
-                    position: absolute;
-                    top: 5px;
-                    right: 10px;
-                    z-index: 999;
-                    background: white;
-                    color: black;
-                    padding: 6px;
-                    border-radius: 4px;
-                    font-family: 'Helvetica Neue';
-                    cursor: pointer;
-                    font-size: 12px;
-                    text-decoration: none;
-                    top: 90px;
-                }
-            </style>
-        """
-        export_button = """<a href='#' id='export'>Export</a>"""
-        if self.export:
-            figure.header.add_child(Element(export_style), name="export")
-            figure.html.add_child(Element(export_button), name="export_button")

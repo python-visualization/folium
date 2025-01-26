@@ -98,8 +98,8 @@ class TestFolium:
         assert self.m.width == (900, "px")
         assert self.m.left == (0, "%")
         assert self.m.top == (0, "%")
-        assert self.m.global_switches.no_touch is False
-        assert self.m.global_switches.disable_3d is False
+        assert self.m.no_touch is False
+        assert self.m.disable_3d is False
         assert self.m.font_size == "1.5rem"
         assert self.m.to_dict() == {
             "name": "Map",
@@ -465,29 +465,29 @@ class TestFolium:
         out = m._parent.render()
         out_str = "".join(out.split())
         assert '"preferCanvas":true' in out_str
-        assert not m.global_switches.no_touch
-        assert not m.global_switches.disable_3d
+        assert not m.no_touch
+        assert not m.disable_3d
 
         m = folium.Map(no_touch=True)
         out = m._parent.render()
         out_str = "".join(out.split())
         assert '"preferCanvas":false' in out_str
-        assert m.global_switches.no_touch
-        assert not m.global_switches.disable_3d
+        assert m.no_touch
+        assert not m.disable_3d
 
         m = folium.Map(disable_3d=True)
         out = m._parent.render()
         out_str = "".join(out.split())
         assert '"preferCanvas":false' in out_str
-        assert not m.global_switches.no_touch
-        assert m.global_switches.disable_3d
+        assert not m.no_touch
+        assert m.disable_3d
 
         m = folium.Map(prefer_canvas=True, no_touch=True, disable_3d=True)
         out = m._parent.render()
         out_str = "".join(out.split())
         assert '"preferCanvas":true' in out_str
-        assert m.global_switches.no_touch
-        assert m.global_switches.disable_3d
+        assert m.no_touch
+        assert m.disable_3d
 
     def test_json_request(self):
         """Test requests for remote GeoJSON files."""
