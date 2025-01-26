@@ -192,6 +192,11 @@ class Map(JSCSSMixin, Evented):
                 }
                 .leaflet-container { font-size: {{this.font_size}}; }
             </style>
+            <script>
+                L_NO_TOUCH = {{ this.no_touch |tojson}};
+                L_DISABLE_3D = {{ this.disable_3d|tojson }};
+            </script>
+
         {% endmacro %}
 
         {% macro html(this, kwargs) %}
@@ -304,6 +309,9 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
+
         self.options = remove_empty(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
@@ -311,8 +319,6 @@ class Map(JSCSSMixin, Evented):
             prefer_canvas=prefer_canvas,
             **kwargs,
         )
-
-        self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front: List[Layer] = []
 
@@ -383,9 +389,6 @@ class Map(JSCSSMixin, Evented):
         assert isinstance(
             figure, Figure
         ), "You cannot render this Element if it is not in a Figure."
-
-        # Set global switches
-        figure.header.add_child(self.global_switches, name="global_switches")
 
         figure.header.add_child(
             Element(
