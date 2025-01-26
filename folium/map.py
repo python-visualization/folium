@@ -7,7 +7,7 @@ import warnings
 from collections import OrderedDict
 from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
-from branca.element import Element, Figure, Html, MacroElement
+from branca.element import Element, Html, MacroElement
 
 from folium.elements import ElementAddToElement, EventHandler
 from folium.template import Template
@@ -454,6 +454,7 @@ class Popup(MacroElement):
 
     _template = Template(
         """
+        {% macro script(this, kwargs) %}
         var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
 
         {% for name, element in this.html._children.items() %}
@@ -473,6 +474,7 @@ class Popup(MacroElement):
         {% for name, element in this.script._children.items() %}
             {{element.render()}}
         {% endfor %}
+        {% endmacro %}
     """
     )  # noqa
 
@@ -511,21 +513,6 @@ class Popup(MacroElement):
             autoClose=False if show or sticky else None,
             closeOnClick=False if sticky else None,
             **kwargs,
-        )
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        for name, child in self._children.items():
-            child.render(**kwargs)
-
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-
-        figure.script.add_child(
-            Element(self._template.render(this=self, kwargs=kwargs)),
-            name=self.get_name(),
         )
 
 
