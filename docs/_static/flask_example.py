@@ -1,16 +1,16 @@
-""" flask_example.py
+"""flask_example.py
 
-    Required packages:
-    - flask
-    - folium
+Required packages:
+- flask
+- folium
 
-    Usage:
+Usage:
 
-    Start the flask server by running:
+Start the flask server by running:
 
-        $ python flask_example.py
+    $ python flask_example.py
 
-    And then head to http://127.0.0.1:5000/ in your browser to see the map displayed
+And then head to http://127.0.0.1:5000/ in your browser to see the map displayed
 
 """
 
