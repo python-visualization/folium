@@ -424,15 +424,12 @@ class Marker(MacroElement):
         return cast(TypeBoundsReturn, [self.location, self.location])
 
     def render(self):
-        from .features import CustomIcon, DivIcon
-
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
             )
-        for child in list(self._children.values()):
-            if isinstance(child, (Icon, CustomIcon, DivIcon)):
-                self.add_child(self.SetIcon(marker=self, icon=child))
+        if self.icon:
+            self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
 
 
