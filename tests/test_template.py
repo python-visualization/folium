@@ -19,6 +19,12 @@ def test_tojavascript_with_dict():
     assert tojavascript(dict_obj) == '{\n  "key": "value",\n}'
 
 
+def test_tojavascript_with_dict_with_mixed_key_types():
+    dict_obj = {"key": "value", 1: "another value", 3.14: "pi"}
+    expected = '{\n  "key": "value",\n  1: "another value",\n  3.14: "pi",\n}'
+    assert tojavascript(dict_obj) == expected
+
+
 def test_tojavascript_with_list():
     list_obj = ["value1", "value2"]
     assert tojavascript(list_obj) == '[\n"value1",\n"value2",\n]'
