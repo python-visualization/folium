@@ -12,8 +12,7 @@ Add a control to the map to show or hide layers.
 ```{code-cell} ipython3
 m = folium.Map(tiles=None)
 
-folium.TileLayer("OpenStreetMap").add_to(m)
-folium.TileLayer(show=False).add_to(m)
+folium.TileLayer("OpenStreetMap", overlay=True).add_to(m)
 
 folium.LayerControl().add_to(m)
 
