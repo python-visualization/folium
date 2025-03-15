@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.19.6.dev9+g1432232f documentation</title>
+    <title>API reference &#8212; Folium 0.19.6.dev10+gd1b14605 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=9d61bdc2"></script>
+    <script src="_static/documentation_options.js?v=67abd9a3"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -56,7 +56,7 @@
     <link rel="prev" title="Customizing javascript or css resources" href="advanced_guide/customize_javascript_and_css.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.19.6.dev9+g1432232f" />
+  <meta name="docsearch:version" content="0.19.6.dev10+gd1b14605" />
   </head>
   
   
@@ -898,15 +898,17 @@ the map, implements ILayer interface.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>image</strong> (<em>string</em><em>, </em><em>file</em><em> or </em><em>array-like object</em>) – The data you want to draw on the map.
-* If string, it will be written directly in the output file.
-* If file, it’s content will be converted as embedded in the output file.
-* If array-like, it will be converted to PNG base64 string and embedded in the output.</p></li>
-<li><p><strong>bounds</strong> (<em>list/tuple</em><em> of </em><em>list/tuple</em><em> of </em><em>float</em>) – <dl class="simple">
-<dt>Image bounds on the map in the form</dt><dd><p>[[lat_min, lon_min], [lat_max, lon_max]]</p>
-</dd>
-</dl>
+<li><p><strong>image</strong> (<em>string</em><em> or </em><em>array-like object</em>) – <p>The data to overlay as an image.</p>
+<ul>
+<li><p>If string is a path to an image file, its content will be converted and
+embedded.</p></li>
+<li><p>If string is a URL, it will be linked.</p></li>
+<li><p>Otherwise a string will be assumed to be JSON and embedded.</p></li>
+<li><p>If array-like, it will be converted to PNG base64 string and embedded.</p></li>
+</ul>
 </p></li>
+<li><p><strong>bounds</strong> (<em>list/tuple</em><em> of </em><em>list/tuple</em><em> of </em><em>float</em>) – Image bounds on the map in the form
+[[lat_min, lon_min], [lat_max, lon_max]]</p></li>
 <li><p><strong>opacity</strong> (<em>float</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>1.0</em><em>)</em>)</p></li>
 <li><p><strong>alt</strong> (<em>string</em><em>, </em><em>default Leaflet's default</em><em> (</em><em>''</em><em>)</em>)</p></li>
 <li><p><strong>origin</strong> (<em>[</em><em>'upper'</em><em> | </em><em>'lower'</em><em>]</em><em>, </em><em>optional</em><em>, </em><em>default 'upper'</em>) – Place the [0,0] index of the array in the upper left or
@@ -1375,12 +1377,15 @@ a LinearColormap will be created from it.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>icon_image</strong> (<em>string</em><em>, </em><em>file</em><em> or </em><em>array-like object</em>) – The data you want to use as an icon.
-* If string, it will be written directly in the output file.
-* If file, it’s content will be converted as embedded in the
-output file.
-* If array-like, it will be converted to PNG base64 string
-and embedded in the output.</p></li>
+<li><p><strong>icon_image</strong> (<em>string</em><em> or </em><em>array-like object</em>) – <p>The data to use as an icon.</p>
+<ul>
+<li><p>If string is a path to an image file, its content will be converted and
+embedded.</p></li>
+<li><p>If string is a URL, it will be linked.</p></li>
+<li><p>Otherwise a string will be assumed to be JSON and embedded.</p></li>
+<li><p>If array-like, it will be converted to PNG base64 string and embedded.</p></li>
+</ul>
+</p></li>
 <li><p><strong>icon_size</strong> (<em>tuple</em><em> of </em><em>2 int</em><em>, </em><em>optional</em>) – Size of the icon image in pixels.</p></li>
 <li><p><strong>icon_anchor</strong> (<em>tuple</em><em> of </em><em>2 int</em><em>, </em><em>optional</em>) – The coordinates of the “tip” of the icon
 (relative to its top left corner).
@@ -3929,7 +3934,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.19.6.dev9+g1432232f</div>
+Folium version 0.19.6.dev10+gd1b14605</div>
       
         <div class="footer-item">
 
