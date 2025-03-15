@@ -243,14 +243,17 @@ class ImageOverlay(Layer):
 
     Parameters
     ----------
-    image: string, file or array-like object
-        The data you want to draw on the map.
-        * If string, it will be written directly in the output file.
-        * If file, it's content will be converted as embedded in the output file.
-        * If array-like, it will be converted to PNG base64 string and embedded in the output.
+    image: string or array-like object
+        The data to overlay as an image.
+
+        * If string is a path to an image file, its content will be converted and
+          embedded.
+        * If string is a URL, it will be linked.
+        * Otherwise a string will be assumed to be JSON and embedded.
+        * If array-like, it will be converted to PNG base64 string and embedded.
     bounds: list/tuple of list/tuple of float
         Image bounds on the map in the form
-         [[lat_min, lon_min], [lat_max, lon_max]]
+        [[lat_min, lon_min], [lat_max, lon_max]]
     opacity: float, default Leaflet's default (1.0)
     alt: string, default Leaflet's default ('')
     origin: ['upper' | 'lower'], optional, default 'upper'

@@ -169,12 +169,14 @@ def image_to_url(
 
     Parameters
     ----------
-    image: string, file or array-like object
-        * If string, it will be written directly in the output file.
-        * If file, it's content will be converted as embedded in the
-          output file.
-        * If array-like, it will be converted to PNG base64 string and
-          embedded in the output.
+    image: string or array-like object
+        *  If string is a path to an image file, its content will be converted and
+           embedded in the output URL.
+        *  If string is a URL, it will be linked in the output URL.
+        *  Otherwise a string will be assumed to be JSON and embedded in the
+           output URL.
+        *  If array-like, it will be converted to PNG base64 string and embedded in the
+           output URL.
     origin: ['upper' | 'lower'], optional, default 'upper'
         Place the [0, 0] index of the array in the upper left or
         lower left corner of the axes.
