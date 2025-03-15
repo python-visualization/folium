@@ -26,8 +26,8 @@ Every layer element in Folium has a couple common arguments:
 
 - `name`: how the layer will be named in the layer control.
 - `overlay`: True if the layer is an overlay, False if the layer is a base layer.
-  - base layer: only one of them can be active at a time. Mostly used for tile layers.
-  - overlay: multiple can be active at the same time. Used for anything else than tile layers.
+  - base layer: only one can be active at a time. Tile layers are base layers by default.
+  - overlay: multiple can be active at the same time. `FeatureGroup`s and most non-tile layers are overlays by default.
 - `control`: Whether the layer can be controlled in the layer control.
 - `show`: Whether the layer will be shown when opening the map.
 
