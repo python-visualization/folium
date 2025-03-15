@@ -11,37 +11,31 @@ If you have a static image file on your disk, you can simply draw it on the map.
 import os
 import folium
 
-m = folium.Map([37, 0], zoom_start=1)
-merc = os.path.join("data", "Mercator_projection_SW.png")
+m = folium.Map([0, 0], zoom_start=2)
+image_filepath = os.path.join("..", "..", "_static", "folium_logo.png")
 
+img = folium.raster_layers.ImageOverlay(
+    name="Folium logo",
+    image=image_filepath,
+    bounds=[[-50, -45], [50, 45]],
+    opacity=0.6,
+    interactive=True,
+    cross_origin=False,
+    zindex=1,
+)
 
-if not os.path.isfile(merc):
-    print(f"Could not find {merc}")
-else:
-    img = folium.raster_layers.ImageOverlay(
-        name="Mercator projection SW",
-        image=merc,
-        bounds=[[-82, -180], [82, 180]],
-        opacity=0.6,
-        interactive=True,
-        cross_origin=False,
-        zindex=1,
-    )
+folium.Popup("I am an image").add_to(img)
 
-    folium.Popup("I am an image").add_to(img)
-
-    img.add_to(m)
-    folium.LayerControl().add_to(m)
+img.add_to(m)
+folium.LayerControl().add_to(m)
 
 m
 ```
 
-A few remarks:
+Note that your image has to be in Mercator projection format.
 
-* Note that your image has to be in Mercator projection format.
 
-  The image we've used is based on https://en.wikipedia.org/wiki/File:Mercator_projection_SW.jpg ; that you can find in wikipedia's article on Mercator Projection (https://en.wikipedia.org/wiki/Mercator_projection).
-
+## Using an image from a url
 
 You can also provide simply URL. In this case, the image will not be embedded in folium's output.
 
