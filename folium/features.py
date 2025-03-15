@@ -1864,12 +1864,12 @@ class CustomIcon(Icon):
     ----------
     icon_image : string or array-like object
         The data to use as an icon.
-        *   If string is a path to an image file, its content will be converted and
-            embedded.
-        *   If string is a URL, it will be linked.
-        *   Otherwise a string will be assumed to be JSON and embedded.
-        *   If array-like, it will be converted to PNG base64 string and embedded.
 
+        * If string is a path to an image file, its content will be converted and
+          embedded.
+        * If string is a URL, it will be linked.
+        * Otherwise a string will be assumed to be JSON and embedded.
+        * If array-like, it will be converted to PNG base64 string and embedded.
     icon_size : tuple of 2 int, optional
         Size of the icon image in pixels.
     icon_anchor : tuple of 2 int, optional
