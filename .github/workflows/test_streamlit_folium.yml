@@ -1,0 +1,52 @@
+name: Run Streamlit Folium Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Folium
+      uses: actions/checkout@v4
+
+    - name: Setup Micromamba env
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-name: TEST
+        create-args: >-
+          python=3
+          --file requirements.txt
+
+    - name: Checkout Streamlit Folium
+      uses: actions/checkout@v4
+      with:
+        repository: randyzwitch/streamlit-folium
+        ref: master
+        path: streamlit_folium  # Checkout into a subdirectory
+
+    - name: Install streamlit_folium dev dependencies
+      run: |
+        pip install -r streamlit_folium/tests/requirements.txt
+
+    - name: Install folium from source
+      shell: bash -l {0}
+      run: |
+        python -m pip install -e . --no-deps --force-reinstall
+
+    - name: Install playwright dependencies
+      run: |
+        playwright install --with-deps
+
+    - name: Install annotate-failures-plugin
+      run: pip install pytest-github-actions-annotate-failures
+
+    - name: Test with pytest and retry flaky tests up to 3 times
+      run: |
+        cd streamlit_folium
+        pip install streamlit-folium
+        pytest tests/test_frontend.py --browser chromium -s --reruns 3 --junit-xml=test-results.xml
