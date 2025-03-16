@@ -243,7 +243,7 @@ class Map(JSCSSMixin, Evented):
         left: Union[str, float] = "0%",
         top: Union[str, float] = "0%",
         position: str = "relative",
-        tiles: Union[str, TileLayer, None] = "CartDbPositron",
+        tiles: Union[str, TileLayer, None] = "OpenStreetMap",
         attr: Optional[str] = None,
         min_zoom: Optional[int] = None,
         max_zoom: Optional[int] = None,
