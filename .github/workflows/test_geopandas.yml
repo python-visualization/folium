@@ -34,14 +34,11 @@ jobs:
         pip install -r geopandas/requirements-dev.txt
 
     - name: Install folium from source
-      shell: bash -l {0}
       run: |
-        cd folium
         pwd && ls -la
-        python -m pip install -e . --no-deps --force-reinstall
+        python -m pip install -e folium/ --no-deps --force-reinstall
 
     - name: Run Geopandas tests
       run: |
-        cd geopandas
         pwd && ls -la
-        pytest geopandas/tests/test_explore.py
+        pytest geopandas/geopandas/tests/test_explore.py
