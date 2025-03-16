@@ -39,6 +39,8 @@ jobs:
       run: |
         cd folium
         python -m pip install -e . --no-deps --force-reinstall
+        python -c "import os; f='folium/_version.py'; print(open(f).read() if os.path.exists(f) else f'File {f} does not exist')"
+        python -c "import folium; print(folium.__version__)"
 
     - name: Run Geopandas tests
       run: |
