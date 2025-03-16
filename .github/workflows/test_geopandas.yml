@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout Folium
       uses: actions/checkout@v4
+      with:
+        path: main
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v2
@@ -36,9 +38,11 @@ jobs:
     - name: Install folium from source
       shell: bash -l {0}
       run: |
+        pwd && ls -la
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Run Geopandas tests
       run: |
         cd geopandas
+        pwd && ls -la
         pytest geopandas/tests/test_explore.py
