@@ -14,6 +14,7 @@ jobs:
     - name: Checkout Folium
       uses: actions/checkout@v4
       with:
+        # needed to get the correct version number for Folium
         fetch-depth: 0
         path: folium
 
@@ -40,10 +41,8 @@ jobs:
       run: |
         cd folium
         python -m pip install -e . --no-deps --force-reinstall
-        python -c "import os; f='folium/_version.py'; print(open(f).read() if os.path.exists(f) else f'File {f} does not exist')"
-        python -c "import folium; print(folium.__version__)"
 
     - name: Run Geopandas tests
       run: |
         cd geopandas
-        pytest -v -r a -n auto --color=yes geopandas/tests/test_explore.py
+        pytest geopandas/tests/test_explore.py

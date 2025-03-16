@@ -259,7 +259,7 @@ class Map(JSCSSMixin, Evented):
         no_touch: bool = False,
         disable_3d: bool = False,
         png_enabled: bool = False,
-        zoom_control: Union[bool, str] = True,
+        zoom_control: Union[bool, str] = False,
         font_size: str = "1rem",
         **kwargs: TypeJsonValue,
     ):
