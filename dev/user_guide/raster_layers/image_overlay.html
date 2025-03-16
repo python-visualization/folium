@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ImageOverlay &#8212; Folium 0.19.6.dev12+g34e464d7 documentation</title>
+    <title>ImageOverlay &#8212; Folium 0.19.6.dev13+g661fc9f1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=e7f3d283"></script>
+    <script src="../../_static/documentation_options.js?v=176db61f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Tiles" href="tiles.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.19.6.dev12+g34e464d7" />
+  <meta name="docsearch:version" content="0.19.6.dev13+g661fc9f1" />
   </head>
   
   
@@ -514,39 +514,27 @@
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
 
-<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mi">37</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">merc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;Mercator_projection_SW.png&quot;</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">image_filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;..&quot;</span><span class="p">,</span> <span class="s2">&quot;_static&quot;</span><span class="p">,</span> <span class="s2">&quot;folium_logo.png&quot;</span><span class="p">)</span>
 
+<span class="n">img</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">raster_layers</span><span class="o">.</span><span class="n">ImageOverlay</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Folium logo&quot;</span><span class="p">,</span>
+    <span class="n">image</span><span class="o">=</span><span class="n">image_filepath</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="o">-</span><span class="mi">45</span><span class="p">],</span> <span class="p">[</span><span class="mi">50</span><span class="p">,</span> <span class="mi">45</span><span class="p">]],</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+    <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cross_origin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">zindex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">merc</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find </span><span class="si">{</span><span class="n">merc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">img</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">raster_layers</span><span class="o">.</span><span class="n">ImageOverlay</span><span class="p">(</span>
-        <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Mercator projection SW&quot;</span><span class="p">,</span>
-        <span class="n">image</span><span class="o">=</span><span class="n">merc</span><span class="p">,</span>
-        <span class="n">bounds</span><span class="o">=</span><span class="p">[[</span><span class="o">-</span><span class="mi">82</span><span class="p">,</span> <span class="o">-</span><span class="mi">180</span><span class="p">],</span> <span class="p">[</span><span class="mi">82</span><span class="p">,</span> <span class="mi">180</span><span class="p">]],</span>
-        <span class="n">opacity</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
-        <span class="n">interactive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">cross_origin</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">zindex</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="p">)</span>
+<span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="s2">&quot;I am an image&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
 
-    <span class="n">folium</span><span class="o">.</span><span class="n">Popup</span><span class="p">(</span><span class="s2">&quot;I am an image&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-
-    <span class="n">img</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-    <span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">img</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">folium</span><span class="o">.</span><span class="n">LayerControl</span><span class="p">()</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
 <span class="n">m</span>
 </pre></div>
 </div>
-</div>
-<div class="nboutput docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area docutils container">
-<div class="highlight"><pre>
-Could not find data/Mercator_projection_SW.png
-</pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
@@ -580,7 +568,7 @@ Could not find data/Mercator_projection_SW.png
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_509798e0b8813cd11c6c4a590d942f22 {
+                #map_8f6a04dcb0a7d1d46d90711b6dea274b {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -590,23 +578,36 @@ Could not find data/Mercator_projection_SW.png
                 .leaflet-container { font-size: 1rem; }
             &lt;/style&gt;
 
+
+                &lt;style&gt;
+                    .leaflet-image-layer {
+                        /* old android/safari*/
+                        image-rendering: -webkit-optimize-contrast;
+                        image-rendering: crisp-edges; /* safari */
+                        image-rendering: pixelated; /* chrome */
+                        image-rendering: -moz-crisp-edges; /* firefox */
+                        image-rendering: -o-crisp-edges; /* opera */
+                        -ms-interpolation-mode: nearest-neighbor; /* ie */
+                    }
+                &lt;/style&gt;
+
 &lt;/head&gt;
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_509798e0b8813cd11c6c4a590d942f22&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_8f6a04dcb0a7d1d46d90711b6dea274b&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_509798e0b8813cd11c6c4a590d942f22 = L.map(
-                &quot;map_509798e0b8813cd11c6c4a590d942f22&quot;,
+            var map_8f6a04dcb0a7d1d46d90711b6dea274b = L.map(
+                &quot;map_8f6a04dcb0a7d1d46d90711b6dea274b&quot;,
                 {
-                    center: [37.0, 0.0],
+                    center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
                     ...{
-  &quot;zoom&quot;: 1,
+  &quot;zoom&quot;: 2,
   &quot;zoomControl&quot;: true,
   &quot;preferCanvas&quot;: false,
 }
@@ -618,7 +619,7 @@ Could not find data/Mercator_projection_SW.png
 
 
 
-            var tile_layer_39d45b614037d5b0d5a8a5228f4f0b66 = L.tileLayer(
+            var tile_layer_32296a30e07142b5beebd394082715ab = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -635,17 +636,67 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            tile_layer_39d45b614037d5b0d5a8a5228f4f0b66.addTo(map_509798e0b8813cd11c6c4a590d942f22);
+            tile_layer_32296a30e07142b5beebd394082715ab.addTo(map_8f6a04dcb0a7d1d46d90711b6dea274b);
+
+
+            var image_overlay_e9b60665388fdeaadba9638cfdf17c81 = L.imageOverlay(
+                &quot;data:image/png;base64,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&quot;,
+                [[-50, -45], [50, 45]],
+                {
+  &quot;opacity&quot;: 0.6,
+  &quot;interactive&quot;: true,
+  &quot;crossOrigin&quot;: false,
+  &quot;zindex&quot;: 1,
+}
+            );
+
+
+        var popup_d87d1a7aeef3bf51a6499c020ed3f464 = L.popup({
+  &quot;maxWidth&quot;: &quot;100%&quot;,
+});
+
+
+
+                var html_e530c5f2bb0bdee08cfe838fe69a6851 = $(`&lt;div id=&quot;html_e530c5f2bb0bdee08cfe838fe69a6851&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I am an image&lt;/div&gt;`)[0];
+                popup_d87d1a7aeef3bf51a6499c020ed3f464.setContent(html_e530c5f2bb0bdee08cfe838fe69a6851);
+
+
+
+        image_overlay_e9b60665388fdeaadba9638cfdf17c81.bindPopup(popup_d87d1a7aeef3bf51a6499c020ed3f464)
+        ;
+
+
+
+
+            image_overlay_e9b60665388fdeaadba9638cfdf17c81.addTo(map_8f6a04dcb0a7d1d46d90711b6dea274b);
+
+
+            var layer_control_112c345aebed458e5ba9032cf9e3d9a0_layers = {
+                base_layers : {
+                    &quot;openstreetmap&quot; : tile_layer_32296a30e07142b5beebd394082715ab,
+                },
+                overlays :  {
+                    &quot;Folium logo&quot; : image_overlay_e9b60665388fdeaadba9638cfdf17c81,
+                },
+            };
+            let layer_control_112c345aebed458e5ba9032cf9e3d9a0 = L.control.layers(
+                layer_control_112c345aebed458e5ba9032cf9e3d9a0_layers.base_layers,
+                layer_control_112c345aebed458e5ba9032cf9e3d9a0_layers.overlays,
+                {
+  &quot;position&quot;: &quot;topright&quot;,
+  &quot;collapsed&quot;: true,
+  &quot;autoZIndex&quot;: true,
+}
+            ).addTo(map_8f6a04dcb0a7d1d46d90711b6dea274b);
+
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-<p>A few remarks:</p>
-<ul>
-<li><p>Note that your image has to be in Mercator projection format.</p>
-<p>The image we’ve used is based on <a class="reference external" href="https://en.wikipedia.org/wiki/File:Mercator_projection_SW.jpg">https://en.wikipedia.org/wiki/File:Mercator_projection_SW.jpg</a> ; that you can find in wikipedia’s article on Mercator Projection (<a class="reference external" href="https://en.wikipedia.org/wiki/Mercator_projection">https://en.wikipedia.org/wiki/Mercator_projection</a>).</p>
-</li>
-</ul>
+<p>Note that your image has to be in Mercator projection format.</p>
+</section>
+<section id="Using-an-image-from-a-url">
+<h2>Using an image from a url<a class="headerlink" href="#Using-an-image-from-a-url" title="Link to this heading">#</a></h2>
 <p>You can also provide simply URL. In this case, the image will not be embedded in folium’s output.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
@@ -703,7 +754,7 @@ Could not find data/Mercator_projection_SW.png
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_373334dd07d7fe6ac77457a5719d3247 {
+                #map_efac413820d848bebc59ab85ac033889 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -730,14 +781,14 @@ Could not find data/Mercator_projection_SW.png
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_373334dd07d7fe6ac77457a5719d3247&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_efac413820d848bebc59ab85ac033889&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_373334dd07d7fe6ac77457a5719d3247 = L.map(
-                &quot;map_373334dd07d7fe6ac77457a5719d3247&quot;,
+            var map_efac413820d848bebc59ab85ac033889 = L.map(
+                &quot;map_efac413820d848bebc59ab85ac033889&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -754,7 +805,7 @@ Could not find data/Mercator_projection_SW.png
 
 
 
-            var tile_layer_2a9d31f0304199d8d9ac358b4dbdc726 = L.tileLayer(
+            var tile_layer_2747ea5cc757c06f917b1f123faf1d7b = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -771,10 +822,10 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            tile_layer_2a9d31f0304199d8d9ac358b4dbdc726.addTo(map_373334dd07d7fe6ac77457a5719d3247);
+            tile_layer_2747ea5cc757c06f917b1f123faf1d7b.addTo(map_efac413820d848bebc59ab85ac033889);
 
 
-            var image_overlay_d3c88a2a9ed039db36107a653a92c189 = L.imageOverlay(
+            var image_overlay_ce30decaa8f5bb48acc32ee3eb99624b = L.imageOverlay(
                 &quot;https://upload.wikimedia.org/wikipedia/commons/f/f4/Mercator_projection_SW.jpg&quot;,
                 [[-82, -180], [82, 180]],
                 {
@@ -787,26 +838,26 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            image_overlay_d3c88a2a9ed039db36107a653a92c189.addTo(map_373334dd07d7fe6ac77457a5719d3247);
+            image_overlay_ce30decaa8f5bb48acc32ee3eb99624b.addTo(map_efac413820d848bebc59ab85ac033889);
 
 
-            var layer_control_2a85a876e532dea09c763060d4ee3d71_layers = {
+            var layer_control_d4724a6d14a48c346af1bc6ed20b0b2b_layers = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_2a9d31f0304199d8d9ac358b4dbdc726,
+                    &quot;openstreetmap&quot; : tile_layer_2747ea5cc757c06f917b1f123faf1d7b,
                 },
                 overlays :  {
-                    &quot;I am a jpeg&quot; : image_overlay_d3c88a2a9ed039db36107a653a92c189,
+                    &quot;I am a jpeg&quot; : image_overlay_ce30decaa8f5bb48acc32ee3eb99624b,
                 },
             };
-            let layer_control_2a85a876e532dea09c763060d4ee3d71 = L.control.layers(
-                layer_control_2a85a876e532dea09c763060d4ee3d71_layers.base_layers,
-                layer_control_2a85a876e532dea09c763060d4ee3d71_layers.overlays,
+            let layer_control_d4724a6d14a48c346af1bc6ed20b0b2b = L.control.layers(
+                layer_control_d4724a6d14a48c346af1bc6ed20b0b2b_layers.base_layers,
+                layer_control_d4724a6d14a48c346af1bc6ed20b0b2b_layers.overlays,
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;collapsed&quot;: true,
   &quot;autoZIndex&quot;: true,
 }
-            ).addTo(map_373334dd07d7fe6ac77457a5719d3247);
+            ).addTo(map_efac413820d848bebc59ab85ac033889);
 
 
 &lt;/script&gt;
@@ -881,7 +932,7 @@ Could not find data/Mercator_projection_SW.png
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_711740fed8fa0eaee991b8aaae737396 {
+                #map_ded21196bdb78e5080fe97d42ea17e1b {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -908,14 +959,14 @@ Could not find data/Mercator_projection_SW.png
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_711740fed8fa0eaee991b8aaae737396&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ded21196bdb78e5080fe97d42ea17e1b&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_711740fed8fa0eaee991b8aaae737396 = L.map(
-                &quot;map_711740fed8fa0eaee991b8aaae737396&quot;,
+            var map_ded21196bdb78e5080fe97d42ea17e1b = L.map(
+                &quot;map_ded21196bdb78e5080fe97d42ea17e1b&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -932,7 +983,7 @@ Could not find data/Mercator_projection_SW.png
 
 
 
-            var tile_layer_3c49d626710055466af4d92a39d68860 = L.tileLayer(
+            var tile_layer_98f0c7b48898151a9d85ba137b3eb21c = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -949,10 +1000,10 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            tile_layer_3c49d626710055466af4d92a39d68860.addTo(map_711740fed8fa0eaee991b8aaae737396);
+            tile_layer_98f0c7b48898151a9d85ba137b3eb21c.addTo(map_ded21196bdb78e5080fe97d42ea17e1b);
 
 
-            var image_overlay_fe8deb2b117db2a139bc8a91848c5d29 = L.imageOverlay(
+            var image_overlay_2d25240ca6ce2b773b91df988cc8724c = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD0AAAA9CAYAAAAeYmHpAAAAW0lEQVR42u3PoQ0AAAzDsP7/9EaG90ANIoU6k0xbuUlR0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0C+6qgWzYWppA9g/7AAAAABJRU5ErkJggg==&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -960,7 +1011,7 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            image_overlay_fe8deb2b117db2a139bc8a91848c5d29.addTo(map_711740fed8fa0eaee991b8aaae737396);
+            image_overlay_2d25240ca6ce2b773b91df988cc8724c.addTo(map_ded21196bdb78e5080fe97d42ea17e1b);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1025,7 +1076,7 @@ Could not find data/Mercator_projection_SW.png
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_78ccb9a9a40b8ee839b2db54f98b2c6e {
+                #map_efbb1ff39be832575a4b9b533d0fab30 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1052,14 +1103,14 @@ Could not find data/Mercator_projection_SW.png
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_78ccb9a9a40b8ee839b2db54f98b2c6e&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_efbb1ff39be832575a4b9b533d0fab30&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_78ccb9a9a40b8ee839b2db54f98b2c6e = L.map(
-                &quot;map_78ccb9a9a40b8ee839b2db54f98b2c6e&quot;,
+            var map_efbb1ff39be832575a4b9b533d0fab30 = L.map(
+                &quot;map_efbb1ff39be832575a4b9b533d0fab30&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -1076,7 +1127,7 @@ Could not find data/Mercator_projection_SW.png
 
 
 
-            var tile_layer_ce6ab9456d5d45ed825eca274ff1b443 = L.tileLayer(
+            var tile_layer_d65f9d47c32bdf9b37d3045f3f10373e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1093,10 +1144,10 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            tile_layer_ce6ab9456d5d45ed825eca274ff1b443.addTo(map_78ccb9a9a40b8ee839b2db54f98b2c6e);
+            tile_layer_d65f9d47c32bdf9b37d3045f3f10373e.addTo(map_efbb1ff39be832575a4b9b533d0fab30);
 
 
-            var image_overlay_aa03a8ed0d7709181db5a2179966c10d = L.imageOverlay(
+            var image_overlay_a74c5e65087d00aa1d0fe3f72071e9f2 = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA9CAYAAABsrQNfAAAAFklEQVR42mP4zwAEVCP+M1DXvMFHAABxyD3DNwdSfAAAAABJRU5ErkJggg==&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -1104,13 +1155,13 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            image_overlay_aa03a8ed0d7709181db5a2179966c10d.addTo(map_78ccb9a9a40b8ee839b2db54f98b2c6e);
+            image_overlay_a74c5e65087d00aa1d0fe3f72071e9f2.addTo(map_efbb1ff39be832575a4b9b533d0fab30);
 
 
-            var poly_line_85d5e5a43a754f6e00e7662576678ce7 = L.polyline(
+            var poly_line_b4cd8263f1b6fddfae938bcb3642f379 = L.polyline(
                 [[45.0, -60.0], [45.0, 60.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_78ccb9a9a40b8ee839b2db54f98b2c6e);
+            ).addTo(map_efbb1ff39be832575a4b9b533d0fab30);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1169,7 +1220,7 @@ Could not find data/Mercator_projection_SW.png
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_cb59f9137e3705b7eb84f2a80971a09f {
+                #map_2ac3e6d292281c48e70bf375f70796b3 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -1196,14 +1247,14 @@ Could not find data/Mercator_projection_SW.png
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_cb59f9137e3705b7eb84f2a80971a09f&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_2ac3e6d292281c48e70bf375f70796b3&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_cb59f9137e3705b7eb84f2a80971a09f = L.map(
-                &quot;map_cb59f9137e3705b7eb84f2a80971a09f&quot;,
+            var map_2ac3e6d292281c48e70bf375f70796b3 = L.map(
+                &quot;map_2ac3e6d292281c48e70bf375f70796b3&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -1220,7 +1271,7 @@ Could not find data/Mercator_projection_SW.png
 
 
 
-            var tile_layer_acb5c48b4bb56b4e3d72c0f83f053f78 = L.tileLayer(
+            var tile_layer_3632c0ed60d252640828471e160232cf = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1237,16 +1288,16 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            tile_layer_acb5c48b4bb56b4e3d72c0f83f053f78.addTo(map_cb59f9137e3705b7eb84f2a80971a09f);
+            tile_layer_3632c0ed60d252640828471e160232cf.addTo(map_2ac3e6d292281c48e70bf375f70796b3);
 
 
-            var poly_line_b02f60a07b36c6b9e8bf12bff5f2d6ec = L.polyline(
+            var poly_line_a1a9058e9374c2c9b251989b8eac00db = L.polyline(
                 [[45.0, -60.0], [45.0, 60.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_cb59f9137e3705b7eb84f2a80971a09f);
+            ).addTo(map_2ac3e6d292281c48e70bf375f70796b3);
 
 
-            var image_overlay_3efc9e815c8d2e4f101f09164af313b3 = L.imageOverlay(
+            var image_overlay_43f36ebbd3c190246947d973afe6ace1 = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA9CAYAAABsrQNfAAAAG0lEQVR42mP4zwAENCU0QMR/EMHPQHvbaE0AAISNPfostPrWAAAAAElFTkSuQmCC&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -1254,7 +1305,7 @@ Could not find data/Mercator_projection_SW.png
             );
 
 
-            image_overlay_3efc9e815c8d2e4f101f09164af313b3.addTo(map_cb59f9137e3705b7eb84f2a80971a09f);
+            image_overlay_43f36ebbd3c190246947d973afe6ace1.addTo(map_2ac3e6d292281c48e70bf375f70796b3);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1311,6 +1362,7 @@ Could not find data/Mercator_projection_SW.png
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Using-an-image-from-disk">Using an image from disk</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Using-an-image-from-a-url">Using an image from a url</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-an-image-with-numpy">Creating an image with numpy</a></li>
 </ul>
   </nav></div>
@@ -1346,7 +1398,7 @@ Could not find data/Mercator_projection_SW.png
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.19.6.dev12+g34e464d7</div>
+Folium version 0.19.6.dev13+g661fc9f1</div>
       
         <div class="footer-item">
 
