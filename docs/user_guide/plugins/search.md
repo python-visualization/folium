@@ -2,7 +2,9 @@
 
 The `Search` plugin allows you to search in your `GeoJson`, `TopoJson`, `FeatureGroup` or `MarkerCluster` objects.
 
-## Data
+## Search in GeoJSON
+
+### Data
 
 Let's get some JSON data from the web - both a point layer and a polygon GeoJson dataset with some population data.
 
@@ -89,7 +91,7 @@ Ok, now we have a new GeoDataFrame with our top 20 populated cities. Let's see t
 pop_ranked_cities.head(5)
 ```
 
-## Map with Search plugin
+### Map with Search plugin and GeoJSON data
 
 Alright, let's build a map!
 
@@ -146,6 +148,28 @@ citysearch = Search(
 
 folium.LayerControl().add_to(m)
 colormap.add_to(m)
+
+m
+```
+
+## Search in FeatureGroup
+
+Here's an example how to search `Marker`s in a `FeatureGroup`. Note how we
+add an extra field to each `Marker` that is then used to search on.
+
+
+```{code-cell} ipython3
+from folium import Map, FeatureGroup, Marker, Icon
+from folium.plugins import Search
+
+m = Map((45.5236, -122.5), tiles="carto db positron")
+
+fg = FeatureGroup().add_to(m)
+Marker([45.5236, -122.7], icon=Icon(color="red"), title="red").add_to(fg)
+Marker([45.5236, -122.5], icon=Icon(color="blue"), title="blue").add_to(fg)
+Marker([45.5236, -122.3], icon=Icon(color="green"), title="green").add_to(fg)
+
+Search(fg, search_label="title").add_to(m)
 
 m
 ```
