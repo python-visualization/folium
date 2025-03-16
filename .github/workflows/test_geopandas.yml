@@ -22,11 +22,6 @@ jobs:
           python=3
           --file requirements.txt
 
-    - name: Install folium from source
-      shell: bash -l {0}
-      run: |
-        python -m pip install -e . --no-deps --force-reinstall
-
     - name: Checkout Geopandas
       uses: actions/checkout@v4
       with:
@@ -38,6 +33,11 @@ jobs:
       run: |
         cd geopandas
         pip install -r requirements-dev.txt
+
+    - name: Install folium from source
+      shell: bash -l {0}
+      run: |
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Run Geopandas tests
       run: |
