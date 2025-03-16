@@ -7,7 +7,7 @@ import time
 import webbrowser
 from typing import Any, List, Optional, Sequence, Union
 
-from branca.element import Figure
+from branca.element import Element, Figure
 
 from folium.elements import JSCSSMixin
 from folium.map import Evented, FitBounds, Layer
@@ -60,6 +60,23 @@ _default_css = [
         "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css",
     ),  # noqa
 ]
+
+
+class GlobalSwitches(Element):
+    _template = Template(
+        """
+        <script>
+            L_NO_TOUCH = {{ this.no_touch |tojson}};
+            L_DISABLE_3D = {{ this.disable_3d|tojson }};
+        </script>
+    """
+    )
+
+    def __init__(self, no_touch=False, disable_3d=False):
+        super().__init__()
+        self._name = "GlobalSwitches"
+        self.no_touch = no_touch
+        self.disable_3d = disable_3d
 
 
 class Map(JSCSSMixin, Evented):
@@ -193,10 +210,9 @@ class Map(JSCSSMixin, Evented):
                 }
             </style>
 
-
             <script>
-                L_NO_TOUCH = {{ this.no_touch |tojson}};
-                L_DISABLE_3D = {{ this.disable_3d|tojson }};
+                L_NO_TOUCH = {{ this.global_switches.no_touch |tojson}};
+                L_DISABLE_3D = {{ this.global_switches.disable_3d|tojson }};
             </script>
 
         {% endmacro %}
@@ -311,8 +327,7 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
-        self.no_touch = no_touch
-        self.disable_3d = disable_3d
+        self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.options = remove_empty(
             max_bounds=max_bounds_array,

@@ -109,8 +109,7 @@ def test_popup_unicode():
 def test_popup_sticky():
     m = Map()
     popup = Popup("Some text.", sticky=True).add_to(m)
-    script = popup._template.module.__dict__.get("script", None)
-    rendered = script(this=popup, kwargs={})
+    rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%",
@@ -132,8 +131,7 @@ def test_popup_sticky():
 def test_popup_show():
     m = Map()
     popup = Popup("Some text.", show=True).add_to(m)
-    script = popup._template.module.__dict__.get("script", None)
-    rendered = script(this=popup, kwargs={})
+    rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%","autoClose": false,
@@ -153,8 +151,7 @@ def test_popup_show():
 def test_popup_backticks():
     m = Map()
     popup = Popup("back`tick`tick").add_to(m)
-    script = popup._template.module.__dict__.get("script", None)
-    rendered = script(this=popup, kwargs={})
+    rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%",
@@ -173,8 +170,7 @@ def test_popup_backticks():
 def test_popup_backticks_already_escaped():
     m = Map()
     popup = Popup("back\\`tick").add_to(m)
-    script = popup._template.module.__dict__.get("script", None)
-    rendered = script(this=popup, kwargs={})
+    rendered = popup._template.render(this=popup, kwargs={})
     expected = """
     var {popup_name} = L.popup({{
         "maxWidth": "100%",
