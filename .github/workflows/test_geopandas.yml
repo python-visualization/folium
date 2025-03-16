@@ -27,6 +27,7 @@ jobs:
     - name: Checkout Geopandas
       uses: actions/checkout@v4
       with:
+        repository: geopandas/geopandas
         path: geopandas
 
     - name: Install Geopandas dev dependencies
@@ -35,10 +36,12 @@ jobs:
 
     - name: Install folium from source
       run: |
+        cd folium
         pwd && ls -la
-        python -m pip install -e folium/ --no-deps --force-reinstall
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Run Geopandas tests
       run: |
+        cd geopandas
         pwd && ls -la
-        pytest geopandas/geopandas/tests/test_explore.py
+        pytest geopandas/tests/test_explore.py
