@@ -26,6 +26,13 @@ folium.Map(location=[lat, lon], tiles="Cartodb dark_matter", zoom_start=zoom_sta
 
 ### Custom tiles
 
+You can also provide a url template to load tiles from, for example if you use a paid API.
+You also have to provide an attribution in that case. For information how that
+url template should look like see the Leaflet documentation:
+https://leafletjs.com/reference.html#tilelayer.
+
+Below is an example, note the literal `{z}`, `{x}` and `{y}` in the url template.
+
 ```{code-cell} ipython3
 attr = (
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> '
