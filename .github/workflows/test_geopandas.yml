@@ -37,11 +37,9 @@ jobs:
     - name: Install folium from source
       run: |
         cd folium
-        pwd && ls -la
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Run Geopandas tests
       run: |
         cd geopandas
-        pwd && ls -la
-        pytest geopandas/tests/test_explore.py
+        pytest -v -r a -n auto --color=yes geopandas/tests/test_explore.py
