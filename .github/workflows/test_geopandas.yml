@@ -1,0 +1,47 @@
+name: Geopandas tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Folium
+      uses: actions/checkout@v4
+      with:
+        # needed to get the correct version number for Folium
+        fetch-depth: 0
+        path: folium
+
+    - name: Setup Micromamba env
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-name: TEST
+        create-args: >-
+          python=3
+          --file folium/requirements.txt
+
+    - name: Checkout Geopandas
+      uses: actions/checkout@v4
+      with:
+        repository: geopandas/geopandas
+        path: geopandas
+
+    - name: Install Geopandas dev dependencies
+      run: |
+        pip install -r geopandas/requirements-dev.txt
+
+    - name: Install folium from source
+      run: |
+        cd folium
+        python -m pip install -e . --no-deps --force-reinstall
+
+    - name: Run Geopandas tests
+      run: |
+        cd geopandas
+        pytest -r a geopandas/tests/test_explore.py
