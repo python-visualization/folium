@@ -219,7 +219,7 @@ def mercator_transform(
 ) -> np.ndarray:
     """
     Transforms an image computed in (longitude,latitude) coordinates into
-    the a Mercator projection image.
+    the a Mercator projection image
 
     Parameters
     ----------
