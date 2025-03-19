@@ -266,7 +266,7 @@ def mercator_transform(
         0.5 / height_out, 1.0 - 0.5 / height_out, height_out
     ) * (mercator(lat_max) - mercator(lat_min))
 
-    out = np.zeros((height_out, width, nblayers))
+    out: np.ndarray = np.zeros((height_out, width, nblayers))
     for i in range(width):
         for j in range(nblayers):
             out[:, i, j] = np.interp(latslats, mercator(lats), array[:, i, j])
