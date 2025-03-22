@@ -9,7 +9,7 @@ from branca.element import (
 )
 
 from folium.template import Template
-from folium.utilities import JsCode
+from folium.utilities import TypeJsCode
 
 
 class JSCSSMixin(MacroElement):
@@ -125,7 +125,7 @@ class EventHandler(MacroElement):
         """
     )
 
-    def __init__(self, event: str, handler: JsCode, once: bool = False):
+    def __init__(self, event: str, handler: TypeJsCode, once: bool = False):
         super().__init__()
         self._name = "EventHandler"
         self.event = event
