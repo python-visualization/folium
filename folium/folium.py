@@ -192,6 +192,29 @@ class Map(JSCSSMixin, Evented):
                 }
                 .leaflet-container { font-size: {{this.font_size}}; }
             </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = {{ this.global_switches.no_touch |tojson}};
+                L_DISABLE_3D = {{ this.global_switches.disable_3d|tojson }};
+            </script>
+
         {% endmacro %}
 
         {% macro html(this, kwargs) %}
@@ -304,6 +327,8 @@ class Map(JSCSSMixin, Evented):
         else:
             self.zoom_control_position = False
 
+        self.global_switches = GlobalSwitches(no_touch, disable_3d)
+
         self.options = remove_empty(
             max_bounds=max_bounds_array,
             zoom=zoom_start,
@@ -311,8 +336,6 @@ class Map(JSCSSMixin, Evented):
             prefer_canvas=prefer_canvas,
             **kwargs,
         )
-
-        self.global_switches = GlobalSwitches(no_touch, disable_3d)
 
         self.objects_to_stay_in_front: List[Layer] = []
 
@@ -376,45 +399,6 @@ class Map(JSCSSMixin, Evented):
         if not self.png_enabled:
             return None
         return self._to_png()
-
-    def render(self, **kwargs):
-        """Renders the HTML representation of the element."""
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-
-        # Set global switches
-        figure.header.add_child(self.global_switches, name="global_switches")
-
-        figure.header.add_child(
-            Element(
-                "<style>html, body {"
-                "width: 100%;"
-                "height: 100%;"
-                "margin: 0;"
-                "padding: 0;"
-                "}"
-                "</style>"
-            ),
-            name="css_style",
-        )
-
-        figure.header.add_child(
-            Element(
-                "<style>#map {"
-                "position:absolute;"
-                "top:0;"
-                "bottom:0;"
-                "right:0;"
-                "left:0;"
-                "}"
-                "</style>"
-            ),
-            name="map_style",
-        )
-
-        super().render(**kwargs)
 
     def show_in_browser(self) -> None:
         """Display the Map in the default web browser."""

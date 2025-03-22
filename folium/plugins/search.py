@@ -1,8 +1,8 @@
 from branca.element import MacroElement
 
-from folium import Map
 from folium.elements import JSCSSMixin
 from folium.features import FeatureGroup, GeoJson, TopoJson
+from folium.folium import Map
 from folium.plugins import MarkerCluster
 from folium.template import Template
 from folium.utilities import remove_empty

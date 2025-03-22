@@ -6,7 +6,6 @@ Wraps leaflet TileLayer, WmsTileLayer (TileLayer.WMS), ImageOverlay, and VideoOv
 from typing import Any, Callable, Optional, Union
 
 import xyzservices
-from branca.element import Element, Figure
 
 from folium.map import Layer
 from folium.template import Template
@@ -288,6 +287,22 @@ class ImageOverlay(Layer):
 
     _template = Template(
         """
+        {% macro header(this, kwargs) %}
+            {% if this.pixelated %}
+                <style>
+                    .leaflet-image-layer {
+                        /* old android/safari*/
+                        image-rendering: -webkit-optimize-contrast;
+                        image-rendering: crisp-edges; /* safari */
+                        image-rendering: pixelated; /* chrome */
+                        image-rendering: -moz-crisp-edges; /* firefox */
+                        image-rendering: -o-crisp-edges; /* opera */
+                        -ms-interpolation-mode: nearest-neighbor; /* ie */
+                    }
+                </style>
+            {% endif %}
+        {% endmacro %}
+
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.imageOverlay(
                 {{ this.url|tojson }},
@@ -323,31 +338,6 @@ class ImageOverlay(Layer):
             )
 
         self.url = image_to_url(image, origin=origin, colormap=colormap)
-
-    def render(self, **kwargs):
-        super().render()
-
-        figure = self.get_root()
-        assert isinstance(
-            figure, Figure
-        ), "You cannot render this Element if it is not in a Figure."
-        if self.pixelated:
-            pixelated = """
-                <style>
-                    .leaflet-image-layer {
-                        /* old android/safari*/
-                        image-rendering: -webkit-optimize-contrast;
-                        image-rendering: crisp-edges; /* safari */
-                        image-rendering: pixelated; /* chrome */
-                        image-rendering: -moz-crisp-edges; /* firefox */
-                        image-rendering: -o-crisp-edges; /* opera */
-                        -ms-interpolation-mode: nearest-neighbor; /* ie */
-                    }
-                </style>
-            """
-            figure.header.add_child(
-                Element(pixelated), name="leaflet-image-layer"
-            )  # noqa
 
     def _get_self_bounds(self) -> TypeBoundsReturn:
         """
