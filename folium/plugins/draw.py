@@ -121,7 +121,6 @@ class Draw(JSCSSMixin, MacroElement):
         """
     )
 
-    """
     default_js = [
         (
             "leaflet_draw_js",
@@ -134,7 +133,6 @@ class Draw(JSCSSMixin, MacroElement):
             "https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css",
         )
     ]
-    """
 
     def __init__(
         self,
