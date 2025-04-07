@@ -1,0 +1,55 @@
+name: Run Snapshot Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Folium
+      uses: actions/checkout@v4
+
+    - name: Setup Micromamba env
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-name: TEST
+        create-args: >-
+          python=3
+          --file requirements.txt
+          --file requirements-dev.txt
+
+    - name: Install pytest plugins and pixelmatch
+      shell: bash -l {0}
+      run: |
+        pip install pixelmatch pytest-github-actions-annotate-failures pytest-rerunfailures
+
+    - name: Install folium from source
+      shell: bash -l {0}
+      run: |
+        python -m pip install -e . --no-deps --force-reinstall
+
+    - name: Test with pytest
+      shell: bash -l {0}
+      run: |
+        python -m pytest tests/snapshots -s --junit-xml=test-results.xml
+
+    - name: Surface failing tests
+      if: always()
+      uses: pmeier/pytest-results-action@main
+      with:
+        path: test-results.xml
+        fail-on-empty: false
+
+    - name: Upload screenshots
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: screenshots
+        path: |
+          /tmp/screenshot_*_*.png
+          /tmp/folium_map_*.html
