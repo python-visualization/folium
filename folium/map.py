@@ -433,7 +433,7 @@ class Marker(MacroElement):
             self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
 
-    def set_icon(self, icon: Union[Icon, "CustomIcon", "DivIcon"]):
+    def set_icon(self, icon):
         """Set the icon for this Marker"""
         super().add_child(icon)
         self.icon = icon
