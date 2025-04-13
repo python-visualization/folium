@@ -382,7 +382,9 @@ class Marker(MacroElement):
         """
         )
 
-        def __init__(self, marker: "Marker", icon: "Icon"):
+        def __init__(
+            self, marker: "Marker", icon: Union[Icon, "CustomIcon", "DivIcon"]
+        ):
             super().__init__()
             self._name = "SetIcon"
             self.marker = marker
