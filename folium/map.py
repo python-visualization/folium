@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
+import folium.features as features
 from folium.elements import ElementAddToElement, EventHandler
 from folium.template import Template
 from folium.utilities import (
@@ -408,8 +409,7 @@ class Marker(MacroElement):
         # this attribute is not used by Marker, but by GeoJson
         self.icon = None
         if icon is not None:
-            self.add_child(icon)
-            self.icon = icon
+            self.set_icon(icon)
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
@@ -433,6 +433,16 @@ class Marker(MacroElement):
         if self.icon:
             self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
+
+    def set_icon(self, icon: Union[Icon, "CustomIcon", "DivIcon"]):
+        super().add_child(icon)
+        self.icon = icon
+
+    def add_child(self, child, name=None, index=None):
+        if isinstance(child, (Icon, features.CustomIcon, features.DivIcon)):
+            self.set_icon(child)
+        else:
+            super().add_child(child, name, index)
 
 
 class Popup(MacroElement):
