@@ -9,7 +9,6 @@ from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
-import folium.features as features
 from folium.elements import ElementAddToElement, EventHandler
 from folium.template import Template
 from folium.utilities import (
@@ -440,6 +439,8 @@ class Marker(MacroElement):
         self.icon = icon
 
     def add_child(self, child, name=None, index=None):
+        import folium.features as features
+
         if isinstance(child, (Icon, features.CustomIcon, features.DivIcon)):
             self.set_icon(child)
         else:
