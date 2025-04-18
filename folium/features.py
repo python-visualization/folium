@@ -28,6 +28,7 @@ from folium.folium import Map
 from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.template import Template
 from folium.utilities import (
+    JsCode,
     TypeBoundsReturn,
     TypeContainer,
     TypeJsonValue,
@@ -516,6 +517,10 @@ class GeoJson(Layer):
         embedding is only supported if you provide a file link or URL.
     zoom_on_click: bool, default False
         Set to True to enable zooming in on a geometry when clicking on it.
+    on_each_feature: JsCode, optional
+        Javascript code to be called on each feature.
+        See https://leafletjs.com/examples/geojson/
+        `onEachFeature` for more information.
     **kwargs
         Keyword arguments are passed to the geoJson object as extra options.
 
@@ -585,6 +590,10 @@ class GeoJson(Layer):
         {%- endif %}
 
         function {{this.get_name()}}_onEachFeature(feature, layer) {
+            {%- if this.on_each_feature %}
+            ({{this.on_each_feature}})(feature, layer);
+            {%- endif %}
+
             layer.on({
                 {%- if this.highlight %}
                 mouseout: function(e) {
@@ -679,6 +688,7 @@ class GeoJson(Layer):
         embed: bool = True,
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
+        on_each_feature: Optional[JsCode] = None,
         marker: Union[Circle, CircleMarker, Marker, None] = None,
         **kwargs: Any,
     ):
@@ -705,6 +715,7 @@ class GeoJson(Layer):
         self.popup_keep_highlighted = popup_keep_highlighted
 
         self.marker = marker
+        self.on_each_feature = on_each_feature
         self.options = remove_empty(**kwargs)
 
         self.data = self.process_data(data)
