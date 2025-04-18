@@ -358,7 +358,9 @@ class Map(JSCSSMixin, Evented):
             out = self._parent._repr_html_(**kwargs)
         return out
 
-    def _to_png(self, delay: int = 3, driver: Any = None) -> bytes:
+    def _to_png(
+        self, delay: int = 3, driver: Any = None, size: Optional[Sequence[int]] = None
+    ) -> bytes:
         """Export the HTML to byte representation of a PNG image.
 
         Uses selenium to render the HTML and record a PNG. You may need to
@@ -372,6 +374,7 @@ class Map(JSCSSMixin, Evented):
         >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
+
         if self._png_image is None:
             if driver is None:
                 from selenium import webdriver
@@ -380,11 +383,21 @@ class Map(JSCSSMixin, Evented):
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
+            if size is None:
+                driver.fullscreen_window()
+            else:
+                window_size = driver.execute_script(
+                    """
+                    return [window.outerWidth - window.innerWidth + arguments[0],
+                      window.outerHeight - window.innerHeight + arguments[1]];
+                    """,
+                    *size,
+                )
+                driver.set_window_size(*window_size)
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                driver.fullscreen_window()
                 time.sleep(delay)
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
