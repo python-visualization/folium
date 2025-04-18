@@ -1108,7 +1108,15 @@ class GeoJsonDetail(MacroElement):
     function(layer){
     let div = L.DomUtil.create('div');
     {% if this.fields %}
-    let handleObject = feature=>typeof(feature)=='object' ? JSON.stringify(feature) : feature;
+    let handleObject = feature => {
+        if (feature === null) {
+            return '';
+        } else if (typeof(feature)=='object') {
+            return JSON.stringify(feature);
+        } else {
+            return feature;
+        }
+    }
     let fields = {{ this.fields | tojson | safe }};
     let aliases = {{ this.aliases | tojson | safe }};
     let table = '<table>' +
