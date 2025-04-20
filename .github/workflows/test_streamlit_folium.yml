@@ -47,8 +47,7 @@ jobs:
     - name: Install streamlit_folium dev dependencies
       shell: bash -l {0}
       run: |
-        apt-get install libgdal-dev
-        pip install -r streamlit_folium/tests/requirements.txt
+        conda install --file streamlit_folium/tests/requirements.txt
 
     - name: Install playwright dependencies
       shell: bash -l {0}
