@@ -701,7 +701,7 @@ class GeoJson(Layer):
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         on_each_feature: Optional[JsCode] = None,
-        marker: Union[Circle, CircleMarker, folium.map.Marker, None] = None,
+        marker: Union[Circle, CircleMarker, Marker, None] = None,
         **kwargs: Any,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
