@@ -16,6 +16,7 @@ from typing import (
     Iterable,
     Iterator,
     List,
+    Literal,
     Optional,
     Sequence,
     Tuple,
@@ -57,6 +58,7 @@ TypeBounds = Sequence[Sequence[float]]
 TypeBoundsReturn = List[List[Optional[float]]]
 
 TypeContainer = Union[Figure, Div, "Popup"]
+TypePosition = Literal["bottomright", "bottomleft", "topright", "topleft"]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
