@@ -17,6 +17,7 @@ from typing import (
     Sequence,
     Tuple,
     Union,
+    get_args,
 )
 
 import numpy as np
@@ -43,6 +44,7 @@ from folium.utilities import (
     TypeJsonValue,
     TypeLine,
     TypePathOptions,
+    TypePosition,
     _parse_size,
     escape_backticks,
     get_bounds,
@@ -2045,11 +2047,18 @@ class Control(JSCSSMixin, MacroElement):
         self,
         control: Optional[str] = None,
         *args,
+        position: Optional[TypePosition] = None,
         **kwargs,
     ):
         super().__init__()
         if control:
             self._name = control
+
+        if position:
+            position = position.lower()
+            if position not in (args := get_args(TypePosition)):
+                raise TypeError(f"position must be one of {args}")
+            kwargs["position"] = position
 
         self.args = args
         self.options = remove_empty(**kwargs)
