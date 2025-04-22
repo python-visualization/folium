@@ -1825,7 +1825,7 @@ class ClickForMarker(MacroElement):
         if isinstance(popup, Element):
             popup = popup.render()
         if popup:
-            self.popup = "`" + escape_backticks(popup) + "`"
+            self.popup = "`" + escape_backticks(popup) + "`"  # type: ignore
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
 
@@ -2054,8 +2054,8 @@ class Control(JSCSSMixin, MacroElement):
         if control:
             self._name = control
 
-        if position:
-            position = position.lower()
+        if position is not None:
+            position = position.lower()  # type: ignore
             if position not in (args := get_args(TypePosition)):
                 raise TypeError(f"position must be one of {args}")
             kwargs["position"] = position
