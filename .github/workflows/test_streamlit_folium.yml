@@ -38,16 +38,16 @@ jobs:
         npm install
         npm run build
 
+    - name: Install streamlit_folium dev dependencies
+      shell: bash -l {0}
+      run: |
+        conda install --file streamlit_folium/tests/requirements.txt
+
     - name: Install streamlit-folium
       shell: bash -l {0}
       run: |
         cd streamlit_folium
         pip install -e .
-
-    - name: Install streamlit_folium dev dependencies
-      shell: bash -l {0}
-      run: |
-        pip install -r streamlit_folium/tests/requirements.txt
 
     - name: Install playwright dependencies
       shell: bash -l {0}

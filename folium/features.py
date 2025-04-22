@@ -570,9 +570,9 @@ class GeoJson(Layer):
 
         {%- if this.marker %}
         function {{ this.get_name() }}_pointToLayer(feature, latlng) {
-            var opts = {{ this.marker.options | tojson | safe }};
+            var opts = {{ this.marker.options | tojavascript }};
             {% if this.marker._name == 'Marker' and this.marker.icon %}
-            const iconOptions = {{ this.marker.icon.options | tojson | safe }}
+            const iconOptions = {{ this.marker.icon.options | tojavascript }}
             const iconRootAlias = L{%- if this.marker.icon._name == "Icon" %}.AwesomeMarkers{%- endif %}
             opts.icon = new iconRootAlias.{{ this.marker.icon._name }}(iconOptions)
             {% endif %}
