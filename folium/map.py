@@ -382,7 +382,9 @@ class Marker(MacroElement):
         """
         )
 
-        def __init__(self, marker: "Marker", icon: "Icon"):
+        def __init__(
+            self, marker: "Marker", icon: Union[Icon, "CustomIcon", "DivIcon"]
+        ):
             super().__init__()
             self._name = "SetIcon"
             self.marker = marker
@@ -406,8 +408,7 @@ class Marker(MacroElement):
         # this attribute is not used by Marker, but by GeoJson
         self.icon = None
         if icon is not None:
-            self.add_child(icon)
-            self.icon = icon
+            self.set_icon(icon)
         if popup is not None:
             self.add_child(popup if isinstance(popup, Popup) else Popup(str(popup)))
         if tooltip is not None:
@@ -431,6 +432,19 @@ class Marker(MacroElement):
         if self.icon:
             self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
+
+    def set_icon(self, icon):
+        """Set the icon for this Marker"""
+        super().add_child(icon)
+        self.icon = icon
+
+    def add_child(self, child, name=None, index=None):
+        import folium.features as features
+
+        if isinstance(child, (Icon, features.CustomIcon, features.DivIcon)):
+            self.set_icon(child)
+        else:
+            super().add_child(child, name, index)
 
 
 class Popup(MacroElement):

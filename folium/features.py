@@ -1718,7 +1718,6 @@ class DivIcon(MacroElement):
         """
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.divIcon({{ this.options|tojavascript }});
-            {{this._parent.get_name()}}.setIcon({{this.get_name()}});
         {% endmacro %}
         """
     )  # noqa
@@ -1895,7 +1894,6 @@ class CustomIcon(Icon):
         """
         {% macro script(this, kwargs) %}
         var {{ this.get_name() }} = L.icon({{ this.options|tojavascript }});
-        {{ this._parent.get_name() }}.setIcon({{ this.get_name() }});
         {% endmacro %}
         """
     )  # noqa
