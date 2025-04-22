@@ -34,9 +34,9 @@ from branca.element import (
 )
 from branca.utilities import color_brewer
 
+import folium.map
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.template import Template
 from folium.utilities import (
     JsCode,
@@ -60,7 +60,7 @@ from folium.utilities import (
 from folium.vector_layers import Circle, CircleMarker, PolyLine, path_options
 
 
-class RegularPolygonMarker(JSCSSMixin, Marker):
+class RegularPolygonMarker(JSCSSMixin, folium.map.Marker):
     """
     Custom markers using the Leaflet Data Vis Framework.
 
@@ -109,8 +109,8 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         number_of_sides: int = 4,
         rotation: int = 0,
         radius: int = 15,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Union[folium.map.Popup, str, None] = None,
+        tooltip: Union[folium.map.Tooltip, str, None] = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
@@ -310,7 +310,7 @@ class VegaLite(MacroElement):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         parent = self._parent
-        if not isinstance(parent, (Figure, Div, Popup)):
+        if not isinstance(parent, (Figure, Div, folium.map.Popup)):
             raise TypeError(
                 "VegaLite elements can only be added to a Figure, Div, or Popup"
             )
@@ -480,7 +480,7 @@ class VegaLite(MacroElement):
         )
 
 
-class GeoJson(Layer):
+class GeoJson(folium.map.Layer):
     """
     Creates a GeoJson object for plotting into a Map.
 
@@ -696,12 +696,12 @@ class GeoJson(Layer):
         control: bool = True,
         show: bool = True,
         smooth_factor: Optional[float] = None,
-        tooltip: Union[str, Tooltip, "GeoJsonTooltip", None] = None,
+        tooltip: Union[str, folium.map.Tooltip, "GeoJsonTooltip", None] = None,
         embed: bool = True,
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
         on_each_feature: Optional[JsCode] = None,
-        marker: Union[Circle, CircleMarker, Marker, None] = None,
+        marker: Union[Circle, CircleMarker, folium.map.Marker, None] = None,
         **kwargs: Any,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
@@ -715,7 +715,7 @@ class GeoJson(Layer):
         self.highlight = highlight_function is not None
         self.zoom_on_click = zoom_on_click
         if marker:
-            if not isinstance(marker, (Circle, CircleMarker, Marker)):
+            if not isinstance(marker, (Circle, CircleMarker, folium.map.Marker)):
                 raise TypeError(
                     "Only Marker, Circle, and CircleMarker are supported as GeoJson marker types."
                 )
@@ -744,11 +744,11 @@ class GeoJson(Layer):
                 self.highlight_map: dict = {}
             self.feature_identifier = self.find_identifier()
 
-        if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
+        if isinstance(tooltip, (GeoJsonTooltip, folium.map.Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
-            self.add_child(Tooltip(tooltip))
-        if isinstance(popup, (GeoJsonPopup, Popup)):
+            self.add_child(folium.map.Tooltip(tooltip))
+        if isinstance(popup, (GeoJsonPopup, folium.map.Popup)):
             self.add_child(popup)
 
     def process_data(self, data: Any) -> dict:
@@ -939,7 +939,7 @@ class GeoJsonStyleMapper:
         del mapping[key_longest]
 
 
-class TopoJson(JSCSSMixin, Layer):
+class TopoJson(JSCSSMixin, folium.map.Layer):
     """
     Creates a TopoJson object for plotting into a Map.
 
@@ -1034,7 +1034,7 @@ class TopoJson(JSCSSMixin, Layer):
         control: bool = True,
         show: bool = True,
         smooth_factor: Optional[float] = None,
-        tooltip: Union[str, Tooltip, None] = None,
+        tooltip: Union[str, folium.map.Tooltip, None] = None,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "TopoJson"
@@ -1058,10 +1058,10 @@ class TopoJson(JSCSSMixin, Layer):
 
         self.smooth_factor = smooth_factor
 
-        if isinstance(tooltip, (GeoJsonTooltip, Tooltip)):
+        if isinstance(tooltip, (GeoJsonTooltip, folium.map.Tooltip)):
             self.add_child(tooltip)
         elif tooltip is not None:
-            self.add_child(Tooltip(tooltip))
+            self.add_child(folium.map.Tooltip(tooltip))
 
     def style_data(self) -> None:
         """Applies self.style_function to each feature of self.data."""
@@ -1408,7 +1408,7 @@ class GeoJsonPopup(GeoJsonDetail):
         self.popup_options = kwargs
 
 
-class Choropleth(FeatureGroup):
+class Choropleth(folium.map.FeatureGroup):
     """Apply a GeoJSON overlay to the map.
 
     Plot a GeoJSON overlay on the base map. There is no requirement
@@ -1886,7 +1886,7 @@ class ClickForLatLng(MacroElement):
         self.alert = alert
 
 
-class CustomIcon(Icon):
+class CustomIcon(folium.map.Icon):
     """
     Create a custom icon, based on an image.
 
@@ -1939,7 +1939,7 @@ class CustomIcon(Icon):
         shadow_anchor: Optional[Tuple[int, int]] = None,
         popup_anchor: Optional[Tuple[int, int]] = None,
     ):
-        super(Icon, self).__init__()
+        super(folium.map.Icon, self).__init__()
         self._name = "CustomIcon"
         self.options = remove_empty(
             icon_url=image_to_url(icon_image),
@@ -1952,7 +1952,7 @@ class CustomIcon(Icon):
         )
 
 
-class ColorLine(FeatureGroup):
+class ColorLine(folium.map.FeatureGroup):
     """
     Draw data on a map with specified colors.
 
