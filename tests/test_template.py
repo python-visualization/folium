@@ -1,7 +1,8 @@
 from branca.element import Element
 
 from folium import JsCode
-from folium.template import Environment, Template, _to_escaped_json, tojavascript
+from folium.template import Environment, Template
+from folium.utilities import _to_escaped_json, tojavascript
 
 
 def test_tojavascript_with_jscode():
@@ -72,3 +73,9 @@ def test_environment_filter():
 
 def test_template_environment_class():
     assert Template.environment_class == Environment
+
+
+def test_jscode_with_parameters():
+    element = Element()
+    js_code = JsCode("var element = %(element)s", element=element)
+    assert js_code.js_code == f"var element = {element.get_name()}"
