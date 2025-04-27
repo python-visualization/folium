@@ -32,6 +32,10 @@ jobs:
       shell: bash -l {0}
       run: python -m pip install -e . --no-deps --force-reinstall
 
+    - name: Install js_loader
+      shell: bash -l {0}
+      run: python -m pip install js_loader
+
     - name: Selenium tests
       shell: bash -l {0}
       run: python -m pytest tests/selenium -vv

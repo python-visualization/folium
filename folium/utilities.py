@@ -18,10 +18,12 @@ from typing import (
     List,
     Literal,
     Optional,
+    Protocol,
     Sequence,
     Tuple,
     Type,
     Union,
+    runtime_checkable,
 )
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
@@ -64,6 +66,25 @@ TypePosition = Literal["bottomright", "bottomleft", "topright", "topleft"]
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
 _VALID_URLS.discard("")
 _VALID_URLS.add("data")
+
+
+@runtime_checkable
+class TypeJsCode(Protocol):
+    # we only care about this attribute.
+    js_code: str
+
+
+class JsCode(TypeJsCode):
+    """Wrapper around Javascript code."""
+
+    def __init__(self, js_code: Union[str, "JsCode"]):
+        if isinstance(js_code, JsCode):
+            self.js_code: str = js_code.js_code
+        else:
+            self.js_code = js_code
+
+    def __str__(self):
+        return self.js_code
 
 
 def validate_location(location: Sequence[float]) -> List[float]:
@@ -438,19 +459,6 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
         figure, Figure
     ), "You cannot render this Element if it is not in a Figure."
     return figure
-
-
-class JsCode:
-    """Wrapper around Javascript code."""
-
-    def __init__(self, js_code: Union[str, "JsCode"]):
-        if isinstance(js_code, JsCode):
-            self.js_code: str = js_code.js_code
-        else:
-            self.js_code = js_code
-
-    def __str__(self):
-        return self.js_code
 
 
 def parse_font_size(value: Union[str, int, float]) -> str:

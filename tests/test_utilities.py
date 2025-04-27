@@ -1,10 +1,12 @@
 import numpy as np
 import pandas as pd
 import pytest
+from js_loader import JsCode as external_JsCode
 
 from folium import FeatureGroup, Map, Marker, Popup
 from folium.utilities import (
     JsCode,
+    TypeJsCode,
     _is_url,
     camelize,
     deep_copy,
@@ -246,6 +248,11 @@ def test_js_code_init_js_code():
     js_code_2 = JsCode(js_code)
     assert isinstance(js_code_2, JsCode)
     assert isinstance(js_code_2.js_code, str)
+
+
+def test_external_js_code():
+    js_code = external_JsCode("hi")
+    assert isinstance(js_code, TypeJsCode)
 
 
 @pytest.mark.parametrize(
