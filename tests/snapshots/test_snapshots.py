@@ -32,6 +32,7 @@ def test_screenshot(path: str):
         mismatch = pixelmatch(img_a, img_b, img_diff, threshold=0.2, includeAA=False)
 
         img_diff.save(f"/tmp/screenshot_diff_{path}.png")
+        m.save(f"/tmp/folium_map_{path}.html")
         assert mismatch < 200
 
     else:
