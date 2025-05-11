@@ -32,6 +32,7 @@ jobs:
       shell: bash -l {0}
       run: |
         conda list > /tmp/versions.txt
+        chromium --version >> /tmp/versions.txt
 
     - name: Save versions.txt
       if: always()
