@@ -49,7 +49,7 @@ colormap = branca.colormap.LinearColormap(
     caption="State Level Median County Household Income (%)",
 )
 
-m = folium.Map(location=[35.3, -97.6], zoom_start=4)
+m = folium.Map(tiles=None, location=[35.3, -97.6], zoom_start=4)
 
 popup = folium.GeoJsonPopup(
     fields=["name", "change"],

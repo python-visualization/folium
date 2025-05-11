@@ -55,7 +55,7 @@ gdf_warehouse = gpd.GeoDataFrame(
 )
 gdf_warehouse["Facility Type"] = "Warehouse"
 
-m = folium.Map([40, -100.0], zoom_start=5, tiles="cartodbpositron")
+m = folium.Map([40, -100.0], zoom_start=5, tiles=None)
 
 gdf_warehouse.explore(
     m=m,

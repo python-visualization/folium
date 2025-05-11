@@ -4,7 +4,7 @@ import folium
 loc_coordinates = (38.8886, -77.0047)
 
 # Create a Folium map centered around the Library of Congress
-m = folium.Map(location=loc_coordinates, zoom_start=15)
+m = folium.Map(tiles=None, location=loc_coordinates, zoom_start=15)
 
 # Define the DivIcon with the custom icon.  This variable can be used in one marker successfully, but will fail if we use it in two markers.
 
