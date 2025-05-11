@@ -12,14 +12,14 @@ options = webdriver.chrome.options.Options()
 options.add_argument("--headless")
 
 
-paths = os.listdir("tests/regressions/")
+paths = os.listdir("tests/snapshots/")
 paths = [p.replace(".py", "") for p in paths if p.endswith(".py")]
 
 
 @pytest.mark.parametrize("path", paths)
 def test_screenshot(path: str):
     driver = webdriver.Chrome(options=options)
-    m = importlib.import_module(f"tests.regressions.{path}").m
+    m = importlib.import_module(f"tests.snapshots.{path}").m
     img_data = m._to_png(3, driver=driver, size=(800, 800))
     img_a = Image.open(io.BytesIO(img_data))
     img_a.save(f"/tmp/screenshot_new_{path}.png")
@@ -32,7 +32,7 @@ def test_screenshot(path: str):
         mismatch = pixelmatch(img_a, img_b, img_diff, threshold=0.2, includeAA=False)
 
         img_diff.save(f"/tmp/screenshot_diff_{path}.png")
-        assert mismatch < 1500
+        assert mismatch < 200
 
     else:
         shutil.copy(

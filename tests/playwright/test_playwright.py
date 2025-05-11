@@ -81,18 +81,13 @@ def click_button_or_marker(page: Page, nth: int = 0, locator: str | None = None)
 def test_draw(page: Page):
     # Test draw support
     page.get_by_role("link", name="draw feature group").click()
+    m = page.locator('[data-testid="stCustomComponentV1"]').content_frame
 
     # This is the marker that was drawn beforehand
-    expect(
-        page.locator('[data-testid="stCustomComponentV1"]').content_frame.get_by_role(
-            "button", name="Marker"
-        )
-    ).to_be_visible()
+    expect(m.get_by_role("button", name="Marker")).to_be_visible()
 
     # Start drawing a rectangle
-    page.locator('[data-testid="stCustomComponentV1"]').content_frame.get_by_role(
-        "link", name="Draw a rectangle"
-    ).click()
+    m.get_by_role("link", name="Draw a rectangle").click()
 
     # I could not record this
     # so some trickery to get the mouse movements correct
@@ -110,3 +105,34 @@ def test_draw(page: Page):
 
     # Now check if streamlit shows a Polygon result
     expect(page.get_by_text('"Polygon"').first).to_be_visible()
+
+
+def test_issue_1989(page: Page):
+    # Test removal of null values
+    page.get_by_role("link", name="issue 1989").click()
+    m = page.locator('[data-testid="stCustomComponentV1"]').content_frame
+
+    # Apparently Montana is the 26th state, hover to show the tooltip
+    m.locator("path:nth-child(26)").hover()
+    expect(m.get_by_text("Montana")).to_be_visible()
+    expect(m.get_by_text("Georgia")).to_be_visible(visible=False)
+
+    # Expect the text empty to be visible
+    expect(m.get_by_text("empty")).to_be_visible()
+
+    # But not null
+    expect(m.get_by_text("null")).to_be_visible(visible=False)
+
+
+def test_issue_1770(page: Page):
+    # Test popup using on_each_feature
+    # This test is broken. Using, dispatch_event, the popup shows, but not in
+    # the right location. Using click, the map starts moving up and down.
+    page.get_by_role("link", name="issue 1770").click()
+    m = page.locator('[data-testid="stCustomComponentV1"]').content_frame
+
+    # Click to show the popup
+    # m.get_by_role("img").locator("path").click(force=True)
+    # m.get_by_role("img").locator("path").first.click()
+    m.get_by_role("img").locator("path").first.dispatch_event("click")
+    expect(m.get_by_text("hello world")).to_be_visible()
