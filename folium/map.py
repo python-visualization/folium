@@ -445,6 +445,7 @@ class Marker(MacroElement):
             self.set_icon(child)
         else:
             super().add_child(child, name, index)
+        return self
 
 
 class Popup(MacroElement):
