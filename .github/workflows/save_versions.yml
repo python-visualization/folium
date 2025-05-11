@@ -33,9 +33,13 @@ jobs:
       run: |
         conda list > /tmp/versions.txt
 
+        name: screenshots
+        path: /tmp/screenshot_*_*.png
+
     - name: Save versions.txt
       if: always()
-      uses: pmeier/pytest-results-action@main
+      uses: actions/upload-artifact@v4
       with:
+        name: versions.txt
         path: /tmp/versions.txt
         fail-on-empty: false
