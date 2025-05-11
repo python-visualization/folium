@@ -28,14 +28,14 @@ jobs:
       run: |
         python -m pip install -e . --no-deps --force-reinstall
 
-    - name: Install folium from source
+    - name: Create versions.txt
       shell: bash -l {0}
       run: |
-        conda list > versions.txt
+        conda list > /tmp/versions.txt
 
-    - name: Save version.txt
+    - name: Save versions.txt
       if: always()
       uses: pmeier/pytest-results-action@main
       with:
-        path: versions.txt
+        path: /tmp/versions.txt
         fail-on-empty: false
