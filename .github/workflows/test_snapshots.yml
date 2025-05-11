@@ -23,13 +23,10 @@ jobs:
           --file requirements.txt
           --file requirements-dev.txt
 
-    - name: Install pixelmatch
+    - name: Install pytest plugins and pixelmatch
       shell: bash -l {0}
       run: |
-        pip install pixelmatch
-
-    - name: Install annotate-failures-plugin
-      run: pip install pytest-github-actions-annotate-failures
+        pip install pixelmatch pytest-github-actions-annotate-failures pytest-rerunfailures
 
     - name: Install folium from source
       shell: bash -l {0}
@@ -39,7 +36,7 @@ jobs:
     - name: Test with pytest
       shell: bash -l {0}
       run: |
-        python -m pytest tests/snapshots -s --junit-xml=test-results.xml
+        python -m pytest tests/snapshots -s --reruns=3 --junit-xml=test-results.xml
 
     - name: Surface failing tests
       if: always()

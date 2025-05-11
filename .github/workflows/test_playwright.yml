@@ -52,10 +52,3 @@ jobs:
       with:
         path: test-results.xml
         fail-on-empty: false
-
-    - name: Upload screenshots
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: screenshots
-        path: /tmp/screenshot_*_*.png
