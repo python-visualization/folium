@@ -24,8 +24,8 @@ def test_screenshot(path: str):
     img_a = Image.open(io.BytesIO(img_data))
     img_a.save(f"/tmp/screenshot_new_{path}.png")
 
-    if os.path.exists(f"tests/screenshots/screenshot_{path}.png"):
-        img_b = Image.open(f"tests/screenshots/screenshot_{path}.png")
+    if os.path.exists(f"tests/snapshots/screenshots/screenshot_{path}.png"):
+        img_b = Image.open(f"tests/snapshots/screenshots/screenshot_{path}.png")
 
         img_diff = Image.new("RGBA", img_a.size)
         # note how there is no need to specify dimensions
@@ -38,6 +38,6 @@ def test_screenshot(path: str):
     else:
         shutil.copy(
             f"/tmp/screenshot_new_{path}.png",
-            f"tests/screenshots/screenshot_{path}.png",
+            f"tests/snapshots/screenshots/screenshot_{path}.png",
         )
         raise Exception("no screenshot available, generating new")
