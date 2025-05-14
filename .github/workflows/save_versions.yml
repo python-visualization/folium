@@ -1,0 +1,43 @@
+name: Save package versions
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Folium
+      uses: actions/checkout@v4
+
+    - name: Setup Micromamba env
+      uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-name: TEST
+        create-args: >-
+          python=3
+          --file requirements.txt
+          --file requirements-dev.txt
+
+    - name: Install folium from source
+      shell: bash -l {0}
+      run: |
+        python -m pip install -e . --no-deps --force-reinstall
+
+    - name: Create versions.txt
+      shell: bash -l {0}
+      run: |
+        conda list > /tmp/versions.txt
+        chromium --version >> /tmp/versions.txt
+
+    - name: Save versions.txt
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: versions.txt
+        path: /tmp/versions.txt
+        fail-on-empty: false
