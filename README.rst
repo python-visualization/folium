@@ -60,6 +60,24 @@ and we'd love to have you hang out in our community.
 
 See `our complete contributor's guide <https://github.com/python-visualization/folium/blob/main/.github/CONTRIBUTING.md>`_ for more info.
 
+Examples
+--------
+
+Explore some use cases and working examples in the ``examples/`` directory:
+
+- `Interactive Map Example <https://github.com/python-visualization/folium/blob/main/examples/interactive_map_example.py>`_: A simple example showing how to create a map with markers and popups using Python.
+- Launch examples in a live environment via |binder|.
+This example shows how to create an interactive map using `folium` with a marker and popup.
+To run this example, navigate to the folium repo root and run:
+
+.. code:: bash
+
+   python examples/interactive_map_example.py
+
+This will create an HTML file called `interactive_map_example.html` that can be opened in any web browser.
+The resulting map is centered on San Francisco and includes a popup marker labeled "San Francisco".
+
+
 
 Changelog
 ---------
