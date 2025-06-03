@@ -1940,7 +1940,7 @@ class CustomIcon(Icon):
         popup_anchor: Optional[Tuple[int, int]] = None,
     ):
         super(Icon, self).__init__()
-        self._name = "CustomIcon"
+        self._name = "icon"
         self.options = remove_empty(
             icon_url=image_to_url(icon_image),
             icon_size=icon_size,
