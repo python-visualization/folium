@@ -1,6 +1,6 @@
 from branca.element import MacroElement
 
-from folium.elements import JSCSSMixin
+from folium.elements import JSCSSMixin, leaflet_method
 from folium.template import Template
 from folium.utilities import remove_empty
 
@@ -22,6 +22,8 @@ class GeoMan(JSCSSMixin, MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
+            /* ensure the name is usable */
+            var {{this.get_name()}} = {{this._parent.get_name()}}.pm;
             {%- if this.feature_group  %}
                 var drawnItems_{{ this.get_name() }} =
                     {{ this.feature_group.get_name() }};
@@ -37,7 +39,7 @@ class GeoMan(JSCSSMixin, MacroElement):
             */
             var drawnItems = drawnItems_{{ this.get_name() }};
 
-            {{this._parent.get_name()}}.pm.addControls(
+            {{this.get_name()}}.addControls(
                 {{this.options|tojavascript}}
             )
             drawnItems_{{ this.get_name() }}.eachLayer(function(layer){
@@ -99,3 +101,7 @@ class GeoMan(JSCSSMixin, MacroElement):
         self.options = remove_empty(
             position=position, layer_group=feature_group, **kwargs
         )
+
+    @leaflet_method
+    def set_global_options(self, **kwargs):
+        pass
