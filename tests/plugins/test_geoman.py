@@ -20,7 +20,7 @@ def test_geoman():
     # the map
     tmpl = Template(
         """
-        {{this._parent.get_name()}}.pm.addControls(
+        {{this.get_name()}}.addControls(
             {{this.options|tojavascript}}
         )
     """
