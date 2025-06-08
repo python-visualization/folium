@@ -34,7 +34,7 @@ class GeoMan(JSCSSMixin, MacroElement):
                         {{ this._parent.get_name() }}
                     );
             {%- endif %}
-            /* The global varianble below is needed to prevent streamlit-folium
+            /* The global variable below is needed to prevent streamlit-folium
                from barfing :-(
             */
             var drawnItems = drawnItems_{{ this.get_name() }};
@@ -62,12 +62,6 @@ class GeoMan(JSCSSMixin, MacroElement):
                     {{handler}}
                 );
                 {%- endfor %}
-                drawnItems_{{ this.get_name() }}.addLayer(layer);
-            });
-            {{ this._parent.get_name() }}.on("pm:remove", function(e) {
-                var layer = e.layer,
-                    type = e.layerType;
-                drawnItems_{{ this.get_name() }}.removeLayer(layer);
             });
 
         {% endmacro %}
@@ -87,21 +81,65 @@ class GeoMan(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(
-        self,
-        position="topleft",
-        feature_group=None,
-        on=None,
-        **kwargs,
-    ):
+    def __init__(self, position="topleft", feature_group=None, on=None, **kwargs):
         super().__init__()
         self._name = "GeoMan"
         self.feature_group = feature_group
         self.on = on or {}
-        self.options = remove_empty(
-            position=position, layer_group=feature_group, **kwargs
-        )
+        self.options = remove_empty(position=position, **kwargs)
 
     @leaflet_method
     def set_global_options(self, **kwargs):
+        pass
+
+    @leaflet_method
+    def enable_draw(self, shape, /, **kwargs):
+        pass
+
+    @leaflet_method
+    def disable_draw(self):
+        pass
+
+    @leaflet_method
+    def set_path_options(self, *, options_modifier, **options):
+        pass
+
+    @leaflet_method
+    def enable_global_edit_mode(self, **options):
+        pass
+
+    @leaflet_method
+    def disable_global_edit_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_drag_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_drag_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_removal_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_removal_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_cut_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_cut_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_rotation_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_rotation_mode(self):
         pass
