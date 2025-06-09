@@ -34,3 +34,11 @@ jobs:
         micromamba remove branca --yes --force
         python -m pip install git+https://github.com/python-visualization/branca.git
         coverage run -p -m pytest -vv --ignore=tests/selenium --ignore=tests/playwright --ignore=tests/snapshots
+
+    - name: Upload coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-test-branca
+        path: |
+          .coverage*

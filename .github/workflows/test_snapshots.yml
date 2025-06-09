@@ -53,3 +53,11 @@ jobs:
         path: |
           /tmp/screenshot_*_*.png
           /tmp/folium_map_*.html
+
+    - name: Upload coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-test-snapshots
+        path: |
+          .coverage*

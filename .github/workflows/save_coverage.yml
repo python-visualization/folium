@@ -1,0 +1,34 @@
+name: Upload coverage
+
+on:
+  workflow_run:
+    workflows: ['Code Tests', 'Geopandas tests', 'Code Tests with Latest branca', 'Selenium Tests', 'Run Snapshot Tests', 'Run Streamlit Folium Tests']
+    types: [completed]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download coverage files from previous steps
+      id: download-artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: combined-coverage
+        pattern: coverage-*
+        merge-multiple: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Combine coverage
+      run: coverage combine
+
+    - name: Generate report
+      run: coverage html --skip-covered
+
+    - name: Upload coverage report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: combined-coverage
+        path: htmlcov/**
+        fail-on-empty: false

@@ -74,3 +74,12 @@ jobs:
       with:
         path: streamlit_folium/test-results.xml
         fail-on-empty: false
+
+
+    - name: Upload coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-test-streamlit-folium
+        path: |
+          .coverage*
