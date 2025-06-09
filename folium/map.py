@@ -4,12 +4,12 @@ Classes for drawing maps.
 """
 
 import warnings
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
-from folium.elements import ElementAddToElement, EventHandler
+from folium.elements import ElementAddToElement, EventHandler, IncludeStatement
 from folium.template import Template
 from folium.utilities import (
     JsCode,
@@ -22,11 +22,47 @@ from folium.utilities import (
     validate_location,
 )
 
+
+class classproperty:
+    def __init__(self, f):
+        self.f = f
+
+    def __get__(self, obj, owner):
+        return self.f(owner)
+
+
 if TYPE_CHECKING:
     from folium.features import CustomIcon, DivIcon
 
 
-class Evented(MacroElement):
+class Class(MacroElement):
+    """The root class of the leaflet class hierarchy"""
+
+    _includes = defaultdict(dict)
+
+    @classmethod
+    def include(cls, **kwargs):
+        cls._includes[cls].update(**kwargs)
+
+    @classproperty
+    def includes(cls):
+        return cls._includes[cls]
+
+    def render(self, **kwargs):
+        figure = self.get_root()
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
+        if self.includes:
+            stmt = IncludeStatement(self._name, **self.includes)
+            figure.script.add_child(
+                Element(stmt._template.render(this=stmt, kwargs=self.includes)),
+                index=-1,
+            )
+        super().render(**kwargs)
+
+
+class Evented(Class):
     """The base class for Layer and Map
 
     Adds the `on` and `once` methods for event handling capabilities.

@@ -148,3 +148,23 @@ class ElementAddToElement(MacroElement):
         super().__init__()
         self.element_name = element_name
         self.element_parent_name = element_parent_name
+
+
+class IncludeStatement(MacroElement):
+    """Generate an include statement on a class."""
+
+    _template = Template(
+        """
+        L.{{ this.class_name }}.include(
+            {{ this.options | tojavascript }}
+        )
+    """
+    )
+
+    def __init__(self, class_name: str, **kwargs):
+        super().__init__()
+        self.class_name = class_name
+        self.options = kwargs
+
+    def render(self, *args, **kwargs):
+        return super().render(*args, **kwargs)

@@ -11,7 +11,7 @@ import pytest
 
 from folium import GeoJson, Map, TileLayer
 from folium.map import CustomPane, Icon, LayerControl, Marker, Popup
-from folium.utilities import normalize
+from folium.utilities import JsCode, normalize
 
 tmpl = """
         <div id="{id}"
@@ -146,6 +146,55 @@ def test_popup_show():
     )
     # assert compare_rendered(rendered, expected)
     assert normalize(rendered) == normalize(expected)
+
+
+def test_include():
+    create_tile = """
+        function(coords, done) {
+            const url = this.getTileUrl(coords);
+            const img = document.createElement('img');
+            fetch(url, {
+              headers: {
+                "Authorization": "Bearer <Token>"
+              },
+            })
+            .then((response) => {
+                img.src = URL.createObjectURL(response.body);
+                done(null, img);
+            })
+            return img;
+        }
+    """
+    TileLayer.include(create_tile=JsCode(create_tile))
+    tiles = TileLayer(
+        tiles="OpenStreetMap",
+    )
+    m = Map(
+        tiles=tiles,
+    )
+    rendered = m.get_root().render()
+    expected = """
+    L.TileLayer.include({
+      "createTile":
+        function(coords, done) {
+            console.log("creating tile");
+            const url = this.getTileUrl(coords);
+            const img = document.createElement('img');
+            fetch(url, {
+              headers: {
+                "Authorization": "Bearer <Token>"
+              },
+            })
+            .then((response) => {
+                img.src = URL.createObjectURL(response.body);
+                done(null, img);
+            })
+            return img;
+        },
+    })
+    """
+
+    assert normalize(expected) in normalize(rendered)
 
 
 def test_popup_backticks():
