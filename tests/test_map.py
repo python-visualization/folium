@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 
 from folium import GeoJson, Map, TileLayer
-from folium.map import CustomPane, Icon, LayerControl, Marker, Popup
+from folium.map import Class, CustomPane, Icon, LayerControl, Marker, Popup
 from folium.utilities import JsCode, normalize
 
 tmpl = """
@@ -173,11 +173,11 @@ def test_include():
         tiles=tiles,
     )
     rendered = m.get_root().render()
+    Class._includes.clear()
     expected = """
     L.TileLayer.include({
       "createTile":
         function(coords, done) {
-            console.log("creating tile");
             const url = this.getTileUrl(coords);
             const img = document.createElement('img');
             fetch(url, {
@@ -193,8 +193,30 @@ def test_include():
         },
     })
     """
+    print(expected)
+    print("-----")
+    print(rendered)
 
     assert normalize(expected) in normalize(rendered)
+
+
+def test_include_once():
+    abc = "MY BEAUTIFUL SENTINEL"
+    TileLayer.include(abc=abc)
+    tiles = TileLayer(
+        tiles="OpenStreetMap",
+    )
+    m = Map(
+        tiles=tiles,
+    )
+    TileLayer(
+        tiles="OpenStreetMap",
+    ).add_to(m)
+
+    rendered = m.get_root().render()
+    Class._includes.clear()
+
+    assert rendered.count(abc) == 1, "Includes should happen only once per class"
 
 
 def test_popup_backticks():

@@ -48,15 +48,26 @@ class Class(MacroElement):
     def includes(cls):
         return cls._includes[cls]
 
+    @property
+    def leaflet_class_name(self):
+        # TODO: I did not check all Folium classes to see if
+        # this holds up. This breaks at least for CustomIcon.
+        return f"L.{self._name}"
+
     def render(self, **kwargs):
         figure = self.get_root()
         assert isinstance(
             figure, Figure
         ), "You cannot render this Element if it is not in a Figure."
         if self.includes:
-            stmt = IncludeStatement(self._name, **self.includes)
+            stmt = IncludeStatement(self.leaflet_class_name, **self.includes)
+            # A bit weird. I tried adding IncludeStatement directly to both
+            # figure and script, but failed. So we render this ourself.
             figure.script.add_child(
                 Element(stmt._template.render(this=stmt, kwargs=self.includes)),
+                # make sure each class include gets rendered only once
+                name=self._name + "_includes",
+                # make sure this renders before the element itself
                 index=-1,
             )
         super().render(**kwargs)

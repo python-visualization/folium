@@ -155,15 +155,15 @@ class IncludeStatement(MacroElement):
 
     _template = Template(
         """
-        L.{{ this.class_name }}.include(
+        {{ this.leaflet_class_name }}.include(
             {{ this.options | tojavascript }}
         )
     """
     )
 
-    def __init__(self, class_name: str, **kwargs):
+    def __init__(self, leaflet_class_name: str, **kwargs):
         super().__init__()
-        self.class_name = class_name
+        self.leaflet_class_name = leaflet_class_name
         self.options = kwargs
 
     def render(self, *args, **kwargs):
