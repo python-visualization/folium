@@ -5,7 +5,7 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict, defaultdict
-from typing import TYPE_CHECKING, Optional, Sequence, Union, cast
+from typing import TYPE_CHECKING, DefaultDict, Optional, Sequence, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 class Class(MacroElement):
     """The root class of the leaflet class hierarchy"""
 
-    _includes = defaultdict(dict)
+    _includes: DefaultDict[str, dict] = defaultdict(dict)
 
     @classmethod
     def include(cls, **kwargs):
