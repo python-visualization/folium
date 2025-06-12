@@ -1,6 +1,6 @@
 from branca.element import MacroElement
 
-from folium.elements import JSCSSMixin
+from folium.elements import JSCSSMixin, leaflet_method
 from folium.template import Template
 from folium.utilities import remove_empty
 
@@ -22,6 +22,8 @@ class GeoMan(JSCSSMixin, MacroElement):
     _template = Template(
         """
         {% macro script(this, kwargs) %}
+            /* ensure the name is usable */
+            var {{this.get_name()}} = {{this._parent.get_name()}}.pm;
             {%- if this.feature_group  %}
                 var drawnItems_{{ this.get_name() }} =
                     {{ this.feature_group.get_name() }};
@@ -32,12 +34,12 @@ class GeoMan(JSCSSMixin, MacroElement):
                         {{ this._parent.get_name() }}
                     );
             {%- endif %}
-            /* The global varianble below is needed to prevent streamlit-folium
+            /* The global variable below is needed to prevent streamlit-folium
                from barfing :-(
             */
             var drawnItems = drawnItems_{{ this.get_name() }};
 
-            {{this._parent.get_name()}}.pm.addControls(
+            {{this.get_name()}}.addControls(
                 {{this.options|tojavascript}}
             )
             drawnItems_{{ this.get_name() }}.eachLayer(function(layer){
@@ -60,12 +62,6 @@ class GeoMan(JSCSSMixin, MacroElement):
                     {{handler}}
                 );
                 {%- endfor %}
-                drawnItems_{{ this.get_name() }}.addLayer(layer);
-            });
-            {{ this._parent.get_name() }}.on("pm:remove", function(e) {
-                var layer = e.layer,
-                    type = e.layerType;
-                drawnItems_{{ this.get_name() }}.removeLayer(layer);
             });
 
         {% endmacro %}
@@ -85,17 +81,65 @@ class GeoMan(JSCSSMixin, MacroElement):
         )
     ]
 
-    def __init__(
-        self,
-        position="topleft",
-        feature_group=None,
-        on=None,
-        **kwargs,
-    ):
+    def __init__(self, position="topleft", feature_group=None, on=None, **kwargs):
         super().__init__()
         self._name = "GeoMan"
         self.feature_group = feature_group
         self.on = on or {}
-        self.options = remove_empty(
-            position=position, layer_group=feature_group, **kwargs
-        )
+        self.options = remove_empty(position=position, **kwargs)
+
+    @leaflet_method
+    def set_global_options(self, **kwargs):
+        pass
+
+    @leaflet_method
+    def enable_draw(self, shape, /, **kwargs):
+        pass
+
+    @leaflet_method
+    def disable_draw(self):
+        pass
+
+    @leaflet_method
+    def set_path_options(self, *, options_modifier, **options):
+        pass
+
+    @leaflet_method
+    def enable_global_edit_mode(self, **options):
+        pass
+
+    @leaflet_method
+    def disable_global_edit_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_drag_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_drag_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_removal_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_removal_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_cut_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_cut_mode(self):
+        pass
+
+    @leaflet_method
+    def enable_global_rotation_mode(self):
+        pass
+
+    @leaflet_method
+    def disable_global_rotation_mode(self):
+        pass

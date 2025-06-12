@@ -1,3 +1,4 @@
+from functools import wraps
 from typing import List, Tuple
 
 from branca.element import (
@@ -9,7 +10,15 @@ from branca.element import (
 )
 
 from folium.template import Template
-from folium.utilities import JsCode
+from folium.utilities import JsCode, camelize
+
+
+def leaflet_method(fn):
+    @wraps(fn)
+    def inner(self, *args, **kwargs):
+        self.add_child(MethodCall(self, fn.__name__, *args, **kwargs))
+
+    return inner
 
 
 class JSCSSMixin(MacroElement):
@@ -168,3 +177,26 @@ class IncludeStatement(MacroElement):
 
     def render(self, *args, **kwargs):
         return super().render(*args, **kwargs)
+
+class MethodCall(MacroElement):
+    """Abstract class to add an element to another element."""
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+            {{ this.target }}.{{ this.method }}(
+                {% for arg in this.args %}
+                    {{ arg | tojavascript }},
+                {% endfor %}
+                {{ this.kwargs | tojavascript }}
+            );
+        {% endmacro %}
+    """
+    )
+
+    def __init__(self, target: MacroElement, method: str, *args, **kwargs):
+        super().__init__()
+        self.target = target.get_name()
+        self.method = camelize(method)
+        self.args = args
+        self.kwargs = kwargs
