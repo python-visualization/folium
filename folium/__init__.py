@@ -46,13 +46,16 @@ from folium.vector_layers import Circle, CircleMarker, Polygon, PolyLine, Rectan
 
 try:
     from ._version import __version__
-except ImportError:
+except ImportError:  # pragma: no cover
     __version__ = "unknown"
 
 
 if branca.__version__ != "unknown" and tuple(
     int(x) for x in branca.__version__.split(".")[:2]
-) < (0, 3):
+) < (
+    0,
+    3,
+):  # pragma: no cover
     raise ImportError(
         "branca version 0.3.0 or higher is required. "
         "Update branca with e.g. `pip install branca --upgrade`."

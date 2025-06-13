@@ -35,7 +35,7 @@ def test_screenshot(path: str):
         m.save(f"/tmp/folium_map_{path}.html")
         assert mismatch < 200
 
-    else:
+    else:  # pragma: no cover
         shutil.copy(
             f"/tmp/screenshot_new_{path}.png",
             f"tests/snapshots/screenshots/screenshot_{path}.png",
