@@ -178,6 +178,7 @@ class IncludeStatement(MacroElement):
     def render(self, *args, **kwargs):
         return super().render(*args, **kwargs)
 
+
 class MethodCall(MacroElement):
     """Abstract class to add an element to another element."""
 
