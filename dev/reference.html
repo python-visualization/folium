@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.19.8.dev11+g2de8ff26 documentation</title>
+    <title>API reference &#8212; Folium 0.19.8.dev12+g5c460674 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=3f4800b0"></script>
+    <script src="_static/documentation_options.js?v=59c9ee81"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -53,10 +53,10 @@
         </script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Customizing javascript or css resources" href="advanced_guide/customize_javascript_and_css.html" />
+    <link rel="prev" title="Overriding Leaflet class methods" href="advanced_guide/override_leaflet_class_methods.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.19.8.dev11+g2de8ff26" />
+  <meta name="docsearch:version" content="0.19.8.dev12+g5c460674" />
   </head>
   
   
@@ -573,6 +573,34 @@ Does not work with markers, for those use z_index_offset.</p>
 <span id="ui-elements"></span><h2>UI elements<a class="headerlink" href="#module-folium.map" title="Link to this heading">#</a></h2>
 <p>Classes for drawing maps.</p>
 <dl class="py class">
+<dt class="sig sig-object py" id="folium.map.Class">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">Class</span></span><a class="headerlink" href="#folium.map.Class" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>The root class of the leaflet class hierarchy</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="folium.map.Class.include">
+<em class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">include</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Class.include" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="folium.map.Class.includes">
+<span class="sig-name descname"><span class="pre">includes</span></span><a class="headerlink" href="#folium.map.Class.includes" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="folium.map.Class.leaflet_class_name">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">leaflet_class_name</span></span><a class="headerlink" href="#folium.map.Class.leaflet_class_name" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="folium.map.Class.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Class.render" title="Link to this definition">#</a></dt>
+<dd><p>Renders the HTML representation of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="folium.map.CustomPane">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">CustomPane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">625</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pointer_events</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.CustomPane" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
@@ -600,7 +628,7 @@ pointer events associated with lower layers.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="folium.map.Evented">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">Evented</span></span><a class="headerlink" href="#folium.map.Evented" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#folium.map.Class" title="folium.map.Class"><code class="xref py py-class docutils literal notranslate"><span class="pre">Class</span></code></a></p>
 <p>The base class for Layer and Map</p>
 <p>Adds the <cite>on</cite> and <cite>once</cite> methods for event handling capabilities.</p>
 <p>See <a class="reference external" href="https://leafletjs.com/reference.html#evented">https://leafletjs.com/reference.html#evented</a> for
@@ -889,6 +917,12 @@ available here: <a class="reference external" href="https://leafletjs.com/refere
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.map.classproperty">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">classproperty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.classproperty" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 </dd></dl>
 
 </section>
@@ -1372,7 +1406,7 @@ a LinearColormap will be created from it.</p></li>
 <dl class="py class">
 <dt class="sig sig-object py" id="folium.features.Control">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">folium.features.</span></span><span class="sig-name descname"><span class="pre">Control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Literal</span><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'bottomright'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'bottomleft'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'topright'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'topleft'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Control" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference internal" href="#folium.map.Class" title="folium.map.Class"><code class="xref py py-class docutils literal notranslate"><span class="pre">Class</span></code></a></p>
 <p>Add a Leaflet Control object to the map</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -3694,12 +3728,12 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="advanced_guide/customize_javascript_and_css.html"
+       href="advanced_guide/override_leaflet_class_methods.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Customizing javascript or css resources</p>
+        <p class="prev-next-title">Overriding Leaflet class methods</p>
       </div>
     </a>
 </div>
@@ -3734,6 +3768,13 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-folium.map">UI elements</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Class"><code class="docutils literal notranslate"><span class="pre">Class</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Class.include"><code class="docutils literal notranslate"><span class="pre">Class.include()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Class.includes"><code class="docutils literal notranslate"><span class="pre">Class.includes</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Class.leaflet_class_name"><code class="docutils literal notranslate"><span class="pre">Class.leaflet_class_name</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Class.render"><code class="docutils literal notranslate"><span class="pre">Class.render()</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.CustomPane"><code class="docutils literal notranslate"><span class="pre">CustomPane</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Evented"><code class="docutils literal notranslate"><span class="pre">Evented</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Evented.on"><code class="docutils literal notranslate"><span class="pre">Evented.on()</span></code></a></li>
@@ -3768,6 +3809,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Tooltip"><code class="docutils literal notranslate"><span class="pre">Tooltip</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.classproperty"><code class="docutils literal notranslate"><span class="pre">classproperty</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#module-folium.raster_layers">Raster Layers</a><ul class="nav section-nav flex-column">
@@ -4062,7 +4104,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.19.8.dev11+g2de8ff26</div>
+Folium version 0.19.8.dev12+g5c460674</div>
       
         <div class="footer-item">
 
