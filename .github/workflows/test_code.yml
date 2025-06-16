@@ -44,6 +44,7 @@ jobs:
       shell: bash -l {0}
       run: |
         coverage run -p -m pytest -vv --ignore=tests/selenium --ignore=tests/playwright --ignore=tests/snapshots
+        pwd
         ls -la
 
     - name: Upload coverage
