@@ -42,7 +42,9 @@ jobs:
 
     - name: Code tests
       shell: bash -l {0}
-      run: coverage run -p -m pytest -vv --ignore=tests/selenium --ignore=tests/playwright --ignore=tests/snapshots
+      run: |
+        coverage run -p -m pytest -vv --ignore=tests/selenium --ignore=tests/playwright --ignore=tests/snapshots
+        ls -la
 
     - name: Upload coverage
       if: always()
