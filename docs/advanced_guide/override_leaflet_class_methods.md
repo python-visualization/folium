@@ -16,7 +16,7 @@ One such use case is if you need to override the `createTile` on `L.TileLayer`, 
 server. This can be done like this:
 
 ```{code-cell}
-create_tile = JsCode("""
+create_tile = folium.JsCode("""
     function(coords, done) {
         const url = this.getTileUrl(coords);
         const img = document.createElement('img');
