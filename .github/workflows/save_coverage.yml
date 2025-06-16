@@ -19,6 +19,9 @@ jobs:
         merge-multiple: true
         token: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Install coverage
+      run: pip install coverage
+
     - name: Combine coverage
       run: coverage combine
 
