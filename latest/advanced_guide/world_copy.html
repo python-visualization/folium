@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Scrolling beyond the world edge &#8212; Folium 0.19.7 documentation</title>
+    <title>Scrolling beyond the world edge &#8212; Folium 0.20.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=0072a19d"></script>
+    <script src="../_static/documentation_options.js?v=b52c616d"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -48,7 +48,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.19.7';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.20.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Using colormaps" href="colormaps.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.19.7" />
+  <meta name="docsearch:version" content="0.20.0" />
   </head>
   
   
@@ -374,6 +374,7 @@
 <li class="toctree-l1"><a class="reference internal" href="piechart_icons.html">Piechart icons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="polygons_from_list_of_points.html">Creating a polygon from a list of points</a></li>
 <li class="toctree-l1"><a class="reference internal" href="customize_javascript_and_css.html">Customizing javascript or css resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="override_leaflet_class_methods.html">Overriding Leaflet class methods</a></li>
 </ul>
 </div>
 </nav></div>
@@ -479,7 +480,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_569e38bd7c295e9a22257cacc20b8b5d {
+                #map_5cd1bb642df7998f31eb1c5a840ed2e7 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -516,14 +517,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_569e38bd7c295e9a22257cacc20b8b5d&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_5cd1bb642df7998f31eb1c5a840ed2e7&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_569e38bd7c295e9a22257cacc20b8b5d = L.map(
-                &quot;map_569e38bd7c295e9a22257cacc20b8b5d&quot;,
+            var map_5cd1bb642df7998f31eb1c5a840ed2e7 = L.map(
+                &quot;map_5cd1bb642df7998f31eb1c5a840ed2e7&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -541,7 +542,7 @@
 
 
 
-            var tile_layer_76b90bc8a62fe196fa74abe005340bee = L.tileLayer(
+            var tile_layer_8e43c6f037eee3db05c6c2b08414a6ec = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -558,28 +559,28 @@
             );
 
 
-            tile_layer_76b90bc8a62fe196fa74abe005340bee.addTo(map_569e38bd7c295e9a22257cacc20b8b5d);
+            tile_layer_8e43c6f037eee3db05c6c2b08414a6ec.addTo(map_5cd1bb642df7998f31eb1c5a840ed2e7);
 
 
-            var marker_e8be6b4f19156cd19df60a464e9a34af = L.marker(
+            var marker_ec9b9cf43eacf665f1281e5f6b0c995d = L.marker(
                 [0.0, 0.0],
                 {
 }
-            ).addTo(map_569e38bd7c295e9a22257cacc20b8b5d);
+            ).addTo(map_5cd1bb642df7998f31eb1c5a840ed2e7);
 
 
-        var popup_01eecf6f8e82e1c68d6fcce4a4200ba7 = L.popup({
+        var popup_679f1c52b868c303b4cf3125b2b28d2d = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_fe3f807c66cf545b8c544fafe7df0cee = $(`&lt;div id=&quot;html_fe3f807c66cf545b8c544fafe7df0cee&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will disappear when moved outside the  map domain.&lt;/div&gt;`)[0];
-                popup_01eecf6f8e82e1c68d6fcce4a4200ba7.setContent(html_fe3f807c66cf545b8c544fafe7df0cee);
+                var html_7ae431bc039f0c560daae5d33743aa0c = $(`&lt;div id=&quot;html_7ae431bc039f0c560daae5d33743aa0c&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will disappear when moved outside the  map domain.&lt;/div&gt;`)[0];
+                popup_679f1c52b868c303b4cf3125b2b28d2d.setContent(html_7ae431bc039f0c560daae5d33743aa0c);
 
 
 
-        marker_e8be6b4f19156cd19df60a464e9a34af.bindPopup(popup_01eecf6f8e82e1c68d6fcce4a4200ba7)
+        marker_ec9b9cf43eacf665f1281e5f6b0c995d.bindPopup(popup_679f1c52b868c303b4cf3125b2b28d2d)
         ;
 
 
@@ -629,7 +630,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_a14fd53f3c4b7286f65d2ecb63188638 {
+                #map_7950f67a2c9040acf3c3b4e752054ef5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -666,14 +667,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_a14fd53f3c4b7286f65d2ecb63188638&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_7950f67a2c9040acf3c3b4e752054ef5&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_a14fd53f3c4b7286f65d2ecb63188638 = L.map(
-                &quot;map_a14fd53f3c4b7286f65d2ecb63188638&quot;,
+            var map_7950f67a2c9040acf3c3b4e752054ef5 = L.map(
+                &quot;map_7950f67a2c9040acf3c3b4e752054ef5&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -691,7 +692,7 @@
 
 
 
-            var tile_layer_9afe6324267cd1e4d0847692cb1e0a99 = L.tileLayer(
+            var tile_layer_4518b41cffe7f9e367221429834d42e2 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -708,28 +709,28 @@
             );
 
 
-            tile_layer_9afe6324267cd1e4d0847692cb1e0a99.addTo(map_a14fd53f3c4b7286f65d2ecb63188638);
+            tile_layer_4518b41cffe7f9e367221429834d42e2.addTo(map_7950f67a2c9040acf3c3b4e752054ef5);
 
 
-            var marker_5639e4e749755945eccdeab896918728 = L.marker(
+            var marker_8cc19b41974bb59772895daf04092b8b = L.marker(
                 [0.0, 0.0],
                 {
 }
-            ).addTo(map_a14fd53f3c4b7286f65d2ecb63188638);
+            ).addTo(map_7950f67a2c9040acf3c3b4e752054ef5);
 
 
-        var popup_fef6de3cde10e198f720efc954392b8a = L.popup({
+        var popup_4c9ce9e407a459d57459e0acacf498ce = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_f7290da58485cff3549918531d87c356 = $(`&lt;div id=&quot;html_f7290da58485cff3549918531d87c356&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will magically reappear when moved outside the map domain.&lt;/div&gt;`)[0];
-                popup_fef6de3cde10e198f720efc954392b8a.setContent(html_f7290da58485cff3549918531d87c356);
+                var html_5fb206094b50deb5f2378dc8d65a29d6 = $(`&lt;div id=&quot;html_5fb206094b50deb5f2378dc8d65a29d6&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I will magically reappear when moved outside the map domain.&lt;/div&gt;`)[0];
+                popup_4c9ce9e407a459d57459e0acacf498ce.setContent(html_5fb206094b50deb5f2378dc8d65a29d6);
 
 
 
-        marker_5639e4e749755945eccdeab896918728.bindPopup(popup_fef6de3cde10e198f720efc954392b8a)
+        marker_8cc19b41974bb59772895daf04092b8b.bindPopup(popup_4c9ce9e407a459d57459e0acacf498ce)
         ;
 
 
@@ -778,7 +779,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d5edf4015f8ca149c5c4d875c35ab1f7 {
+                #map_94dc343f17500d0908de07a2547178f9 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -815,14 +816,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d5edf4015f8ca149c5c4d875c35ab1f7&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_94dc343f17500d0908de07a2547178f9&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d5edf4015f8ca149c5c4d875c35ab1f7 = L.map(
-                &quot;map_d5edf4015f8ca149c5c4d875c35ab1f7&quot;,
+            var map_94dc343f17500d0908de07a2547178f9 = L.map(
+                &quot;map_94dc343f17500d0908de07a2547178f9&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -839,7 +840,7 @@
 
 
 
-            var tile_layer_905c4beb294f68f0a571e330000339cb = L.tileLayer(
+            var tile_layer_950c38243d7ba1d304a2f44ab05c5e55 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -856,28 +857,28 @@
             );
 
 
-            tile_layer_905c4beb294f68f0a571e330000339cb.addTo(map_d5edf4015f8ca149c5c4d875c35ab1f7);
+            tile_layer_950c38243d7ba1d304a2f44ab05c5e55.addTo(map_94dc343f17500d0908de07a2547178f9);
 
 
-            var marker_bc380f93039d42adb17effb391ba1bd7 = L.marker(
+            var marker_2df85646f4609070a966349033bfe81f = L.marker(
                 [0.0, 0.0],
                 {
 }
-            ).addTo(map_d5edf4015f8ca149c5c4d875c35ab1f7);
+            ).addTo(map_94dc343f17500d0908de07a2547178f9);
 
 
-        var popup_1694a78ee4234a330dcbec841ea07772 = L.popup({
+        var popup_fd9ec3142befe557ced2fbceef9527ff = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_9ac6ef48cab2d8664d845115292ea394 = $(`&lt;div id=&quot;html_9ac6ef48cab2d8664d845115292ea394&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;The map domain here is not wrapped.&lt;/div&gt;`)[0];
-                popup_1694a78ee4234a330dcbec841ea07772.setContent(html_9ac6ef48cab2d8664d845115292ea394);
+                var html_4668370ffec3004017e9b3f30daacd3e = $(`&lt;div id=&quot;html_4668370ffec3004017e9b3f30daacd3e&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;The map domain here is not wrapped.&lt;/div&gt;`)[0];
+                popup_fd9ec3142befe557ced2fbceef9527ff.setContent(html_4668370ffec3004017e9b3f30daacd3e);
 
 
 
-        marker_bc380f93039d42adb17effb391ba1bd7.bindPopup(popup_1694a78ee4234a330dcbec841ea07772)
+        marker_2df85646f4609070a966349033bfe81f.bindPopup(popup_fd9ec3142befe557ced2fbceef9527ff)
         ;
 
 
@@ -972,7 +973,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.19.7</div>
+Folium version 0.20.0</div>
       
         <div class="footer-item">
 
