@@ -159,6 +159,26 @@ class ElementAddToElement(MacroElement):
         self.element_parent_name = element_parent_name
 
 
+class IncludeStatement(MacroElement):
+    """Generate an include statement on a class."""
+
+    _template = Template(
+        """
+        {{ this.leaflet_class_name }}.include(
+            {{ this.options | tojavascript }}
+        )
+    """
+    )
+
+    def __init__(self, leaflet_class_name: str, **kwargs):
+        super().__init__()
+        self.leaflet_class_name = leaflet_class_name
+        self.options = kwargs
+
+    def render(self, *args, **kwargs):
+        return super().render(*args, **kwargs)
+
+
 class MethodCall(MacroElement):
     """Abstract class to add an element to another element."""
 

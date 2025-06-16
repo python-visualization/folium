@@ -36,7 +36,7 @@ from branca.utilities import color_brewer
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.map import FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
+from folium.map import Class, FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
 from folium.template import Template
 from folium.utilities import (
     JsCode,
@@ -2023,7 +2023,7 @@ class ColorLine(FeatureGroup):
             self.add_child(PolyLine(val, color=key, weight=weight, opacity=opacity))
 
 
-class Control(JSCSSMixin, MacroElement):
+class Control(JSCSSMixin, Class):
     """
     Add a Leaflet Control object to the map
 

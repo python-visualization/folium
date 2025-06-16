@@ -10,8 +10,8 @@ import numpy as np
 import pytest
 
 from folium import GeoJson, Map, TileLayer
-from folium.map import CustomPane, Icon, LayerControl, Marker, Popup
-from folium.utilities import normalize
+from folium.map import Class, CustomPane, Icon, LayerControl, Marker, Popup
+from folium.utilities import JsCode, normalize
 
 tmpl = """
         <div id="{id}"
@@ -146,6 +146,73 @@ def test_popup_show():
     )
     # assert compare_rendered(rendered, expected)
     assert normalize(rendered) == normalize(expected)
+
+
+def test_include():
+    create_tile = """
+        function(coords, done) {
+            const url = this.getTileUrl(coords);
+            const img = document.createElement('img');
+            fetch(url, {
+              headers: {
+                "Authorization": "Bearer <Token>"
+              },
+            })
+            .then((response) => {
+                img.src = URL.createObjectURL(response.body);
+                done(null, img);
+            })
+            return img;
+        }
+    """
+    TileLayer.include(create_tile=JsCode(create_tile))
+    tiles = TileLayer(
+        tiles="OpenStreetMap",
+    )
+    m = Map(
+        tiles=tiles,
+    )
+    rendered = m.get_root().render()
+    Class._includes.clear()
+    expected = """
+    L.TileLayer.include({
+      "createTile":
+        function(coords, done) {
+            const url = this.getTileUrl(coords);
+            const img = document.createElement('img');
+            fetch(url, {
+              headers: {
+                "Authorization": "Bearer <Token>"
+              },
+            })
+            .then((response) => {
+                img.src = URL.createObjectURL(response.body);
+                done(null, img);
+            })
+            return img;
+        },
+    })
+    """
+    assert normalize(expected) in normalize(rendered)
+
+
+def test_include_once():
+    abc = "MY BEAUTIFUL SENTINEL"
+    TileLayer.include(abc=abc)
+    tiles = TileLayer(
+        tiles="OpenStreetMap",
+    )
+    m = Map(
+        tiles=tiles,
+    )
+    TileLayer(
+        tiles="OpenStreetMap",
+    ).add_to(m)
+
+    rendered = m.get_root().render()
+    Class._includes.clear()
+
+    assert rendered.count(abc) == 1, "Includes should happen only once per class"
 
 
 def test_popup_backticks():

@@ -15,3 +15,4 @@ Advanced guide
   advanced_guide/piechart_icons
   advanced_guide/polygons_from_list_of_points
   advanced_guide/customize_javascript_and_css
+  advanced_guide/override_leaflet_class_methods
