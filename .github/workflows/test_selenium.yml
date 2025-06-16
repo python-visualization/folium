@@ -34,4 +34,12 @@ jobs:
 
     - name: Selenium tests
       shell: bash -l {0}
-      run: python -m pytest tests/selenium -vv
+      run: coverage run -p -m pytest tests/selenium -vv
+
+    - name: Upload coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-test-selenium
+        path: |
+          .coverage*

@@ -46,4 +46,12 @@ jobs:
     - name: Run Geopandas tests
       run: |
         cd geopandas
-        pytest -r a geopandas/tests/test_explore.py
+        coverage run -p -m pytest -r a geopandas/tests/test_explore.py
+
+    - name: Upload coverage
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-test-geopandas
+        path: |
+          .coverage*
