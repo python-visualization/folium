@@ -193,10 +193,6 @@ def test_include():
         },
     })
     """
-    print(expected)
-    print("-----")
-    print(rendered)
-
     assert normalize(expected) in normalize(rendered)
 
 
