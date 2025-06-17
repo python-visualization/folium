@@ -47,14 +47,13 @@ jobs:
 
     - name: Debug step
       run: |
-        echo '====='
         pwd
+        echo '====='
         ls .coverage*
-        cp .coverage.* /tmp/
 
     - name: Upload coverage
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: coverage-test-code-${{ matrix.os }}-${{ matrix.python_version }}
-        path: /tmp/.coverage.*
+        path: .coverage*
