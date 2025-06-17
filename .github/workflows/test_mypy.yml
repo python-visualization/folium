@@ -11,6 +11,9 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - uses: actions/checkout@v4
@@ -25,11 +28,9 @@ jobs:
           --file requirements-dev.txt
 
     - name: Install folium from source
-      shell: bash -l {0}
       run: |
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Mypy test
-      shell: bash -l {0}
       run: |
         mypy folium

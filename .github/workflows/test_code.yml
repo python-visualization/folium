@@ -45,12 +45,6 @@ jobs:
         pwd
         ls -la
 
-    - name: Debug step
-      run: |
-        pwd
-        echo '====='
-        ls .coverage*
-
     - name: Upload coverage
       if: always()
       uses: actions/upload-artifact@v4
