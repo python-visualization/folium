@@ -50,11 +50,11 @@ jobs:
         echo '====='
         pwd
         ls .coverage*
-        cp .coverage.* /tmp/coverage
+        cp .coverage.* /tmp/
 
     - name: Upload coverage
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: coverage-test-code
-        path: /tmp/coverage
+        path: /tmp/.coverage.*
