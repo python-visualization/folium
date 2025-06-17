@@ -36,16 +36,20 @@ jobs:
       run: python -m pip install -e . --no-deps --force-reinstall
 
     - name: Install pixelmatch
-      shell: bash -l {0}
       run: |
         pip install pixelmatch
 
     - name: Code tests
-      shell: bash -l {0}
       run: |
         coverage run -p -m pytest -vv --ignore=tests/selenium --ignore=tests/playwright --ignore=tests/snapshots
         pwd
         ls -la
+
+    - name: Debug step
+      run: |
+        echo '====='
+        pwd
+        ls .coverage*
 
     - name: Upload coverage
       if: always()
@@ -53,4 +57,4 @@ jobs:
       with:
         name: coverage-test-code
         path: |
-          /home/runner/work/folium/folium/.coverage*
+          .coverage*
