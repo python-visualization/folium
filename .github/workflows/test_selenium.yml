@@ -15,6 +15,9 @@ jobs:
       matrix:
         python-version: [ "3.9", "3.13" ]
       fail-fast: false
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - uses: actions/checkout@v4
@@ -29,17 +32,16 @@ jobs:
           --file requirements-dev.txt
 
     - name: Install folium from source
-      shell: bash -l {0}
       run: python -m pip install -e . --no-deps --force-reinstall
 
     - name: Selenium tests
-      shell: bash -l {0}
       run: coverage run -p -m pytest tests/selenium -vv
 
     - name: Upload coverage
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: coverage-test-selenium
+        name: coverage-test-selenium-${{ matrix.python-version }}
         path: |
           .coverage*
+        include-hidden-files: true

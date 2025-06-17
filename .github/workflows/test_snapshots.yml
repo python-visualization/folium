@@ -9,6 +9,9 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - name: Checkout Folium
@@ -24,17 +27,14 @@ jobs:
           --file requirements-dev.txt
 
     - name: Install pytest plugins and pixelmatch
-      shell: bash -l {0}
       run: |
         pip install pixelmatch pytest-github-actions-annotate-failures pytest-rerunfailures
 
     - name: Install folium from source
-      shell: bash -l {0}
       run: |
         python -m pip install -e . --no-deps --force-reinstall
 
     - name: Test with pytest
-      shell: bash -l {0}
       run: |
         coverage run -p -m pytest tests/snapshots -s --junit-xml=test-results.xml
 
@@ -61,3 +61,4 @@ jobs:
         name: coverage-test-snapshots
         path: |
           .coverage*
+        include-hidden-files: true

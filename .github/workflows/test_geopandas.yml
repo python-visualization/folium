@@ -11,6 +11,9 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
 
     steps:
     - name: Checkout Folium
@@ -55,3 +58,4 @@ jobs:
         name: coverage-test-geopandas
         path: |
           .coverage*
+        include-hidden-files: true
