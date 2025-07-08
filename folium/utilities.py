@@ -398,7 +398,7 @@ def get_obj_in_upper_tree(element: Element, cls: type) -> Element:
         raise ValueError(f"The top of the tree was reached without finding a {cls}")
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
-    return parent
+    return parent  # type: ignore
 
 
 def parse_options(**kwargs: TypeJsonValue) -> dict[str, TypeJsonValueNoNone]:

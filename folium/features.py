@@ -344,7 +344,7 @@ class VegaLite(MacroElement):
             name=self.get_name(),
         )
 
-        embed_mapping: dict[Optional[int], Callable] = {
+        embed_mapping = {
             1: self._embed_vegalite_v1,
             2: self._embed_vegalite_v2,
             3: self._embed_vegalite_v3,
