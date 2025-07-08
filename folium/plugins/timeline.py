@@ -1,4 +1,4 @@
-from typing import List, Optional, TextIO, Union
+from typing import Optional, TextIO, Union
 
 from branca.element import MacroElement
 
@@ -242,7 +242,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         """
         )
 
-        self.timelines: List[Timeline] = []
+        self.timelines: list[Timeline] = []
         self.options = remove_empty(**kwargs)
 
     def add_timelines(self, *args):

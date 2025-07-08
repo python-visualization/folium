@@ -5,7 +5,8 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 import time
 import webbrowser
-from typing import Any, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Any, Optional, Union
 
 from branca.element import Element, Figure
 
@@ -337,7 +338,7 @@ class Map(JSCSSMixin, Evented):
             **kwargs,
         )
 
-        self.objects_to_stay_in_front: List[Layer] = []
+        self.objects_to_stay_in_front: list[Layer] = []
 
         if isinstance(tiles, TileLayer):
             self.add_child(tiles)
