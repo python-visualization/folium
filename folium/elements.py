@@ -1,5 +1,4 @@
 from functools import wraps
-from typing import List, Tuple
 
 from branca.element import (
     CssLink,
@@ -24,8 +23,8 @@ def leaflet_method(fn):
 class JSCSSMixin(MacroElement):
     """Render links to external Javascript and CSS resources."""
 
-    default_js: List[Tuple[str, str]] = []
-    default_css: List[Tuple[str, str]] = []
+    default_js: list[tuple[str, str]] = []
+    default_css: list[tuple[str, str]] = []
 
     # Since this is typically used as a mixin, we cannot
     # override the _template member variable here. It would
@@ -53,7 +52,7 @@ class JSCSSMixin(MacroElement):
         """Add or update JS resource link."""
         self._add_link(name, url, self.default_js)
 
-    def _add_link(self, name: str, url: str, default_list: List[Tuple[str, str]]):
+    def _add_link(self, name: str, url: str, default_list: list[tuple[str, str]]):
         """Modify a css or js link.
 
         If `name` does not exist, the link will be appended

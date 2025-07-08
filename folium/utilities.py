@@ -7,20 +7,14 @@ import os
 import re
 import tempfile
 import uuid
+from collections.abc import Iterable, Iterator, Sequence
 from contextlib import contextmanager
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
-    Dict,
-    Iterable,
-    Iterator,
-    List,
     Literal,
     Optional,
-    Sequence,
-    Tuple,
-    Type,
     Union,
 )
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
@@ -55,7 +49,7 @@ TypeJsonValue = Union[TypeJsonValueNoNone, None]
 TypePathOptions = Union[bool, str, float, None]
 
 TypeBounds = Sequence[Sequence[float]]
-TypeBoundsReturn = List[List[Optional[float]]]
+TypeBoundsReturn = list[list[Optional[float]]]
 
 TypeContainer = Union[Figure, Div, "Popup"]
 TypePosition = Literal["bottomright", "bottomleft", "topright", "topleft"]
@@ -66,7 +60,7 @@ _VALID_URLS.discard("")
 _VALID_URLS.add("data")
 
 
-def validate_location(location: Sequence[float]) -> List[float]:
+def validate_location(location: Sequence[float]) -> list[float]:
     """Validate a single lat/lon coordinate pair and convert to a list
 
     Validate that location:
@@ -126,7 +120,7 @@ def _validate_locations_basics(locations: TypeMultiLine) -> None:
         raise ValueError("Locations is empty.")
 
 
-def validate_locations(locations: TypeLine) -> List[List[float]]:
+def validate_locations(locations: TypeLine) -> list[list[float]]:
     """Validate an iterable with lat/lon coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
     _validate_locations_basics(locations)
@@ -135,7 +129,7 @@ def validate_locations(locations: TypeLine) -> List[List[float]]:
 
 def validate_multi_locations(
     locations: TypeMultiLine,
-) -> Union[List[List[float]], List[List[List[float]]]]:
+) -> Union[list[list[float]], list[list[list[float]]]]:
     """Validate an iterable with possibly nested lists of coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
     _validate_locations_basics(locations)
@@ -215,7 +209,7 @@ def _is_url(url: str) -> bool:
 
 def mercator_transform(
     data: Any,
-    lat_bounds: Tuple[float, float],
+    lat_bounds: tuple[float, float],
     origin: str = "upper",
     height_out: Optional[int] = None,
 ) -> np.ndarray:
@@ -279,7 +273,7 @@ def mercator_transform(
     return out
 
 
-def iter_coords(obj: Any) -> Iterator[Tuple[float, ...]]:
+def iter_coords(obj: Any) -> Iterator[tuple[float, ...]]:
     """
     Returns all the coordinate tuples from a geometry or feature.
 
@@ -313,13 +307,13 @@ def iter_coords(obj: Any) -> Iterator[Tuple[float, ...]]:
 def get_bounds(
     locations: Any,
     lonlat: bool = False,
-) -> List[List[Optional[float]]]:
+) -> list[list[Optional[float]]]:
     """
     Computes the bounds of the object in the form
     [[lat_min, lon_min], [lat_max, lon_max]]
 
     """
-    bounds: List[List[Optional[float]]] = [[None, None], [None, None]]
+    bounds: list[list[Optional[float]]] = [[None, None], [None, None]]
     for point in iter_coords(locations):
         bounds = [
             [
@@ -397,22 +391,22 @@ def deep_copy(item_original: Element) -> Element:
     return item
 
 
-def get_obj_in_upper_tree(element: Element, cls: Type) -> Element:
+def get_obj_in_upper_tree(element: Element, cls: type) -> Element:
     """Return the first object in the parent tree of class `cls`."""
     parent = element._parent
     if parent is None:
         raise ValueError(f"The top of the tree was reached without finding a {cls}")
     if not isinstance(parent, cls):
         return get_obj_in_upper_tree(parent, cls)
-    return parent
+    return parent  # type: ignore
 
 
-def parse_options(**kwargs: TypeJsonValue) -> Dict[str, TypeJsonValueNoNone]:
+def parse_options(**kwargs: TypeJsonValue) -> dict[str, TypeJsonValueNoNone]:
     """Return a dict with lower-camelcase keys and non-None values.."""
     return {camelize(key): value for key, value in kwargs.items() if value is not None}
 
 
-def remove_empty(**kwargs: TypeJsonValue) -> Dict[str, TypeJsonValueNoNone]:
+def remove_empty(**kwargs: TypeJsonValue) -> dict[str, TypeJsonValueNoNone]:
     """Return a dict without None values."""
     return {key: value for key, value in kwargs.items() if value is not None}
 

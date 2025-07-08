@@ -2,7 +2,6 @@
 
 ```python
 # Your code here
-
 ```
 #### Problem description
 

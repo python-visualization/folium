@@ -3,7 +3,8 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 
 """
 
-from typing import List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Optional, Union
 
 from branca.element import MacroElement
 
@@ -147,7 +148,7 @@ class BaseMultiLocation(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> List[List[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[Optional[float]]]:
         """Compute the bounds of the object itself."""
         return get_bounds(self.locations)
 
@@ -289,7 +290,7 @@ class Rectangle(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> List[List[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[Optional[float]]]:
         """Compute the bounds of the object itself."""
         return get_bounds(self.locations)
 

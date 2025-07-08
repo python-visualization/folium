@@ -7,15 +7,11 @@ import functools
 import json
 import operator
 import warnings
+from collections.abc import Iterable, Sequence
 from typing import (
     Any,
     Callable,
-    Dict,
-    Iterable,
-    List,
     Optional,
-    Sequence,
-    Tuple,
     Union,
     get_args,
 )
@@ -348,7 +344,7 @@ class VegaLite(MacroElement):
             name=self.get_name(),
         )
 
-        embed_mapping: Dict[Optional[int], Callable] = {
+        embed_mapping = {
             1: self._embed_vegalite_v1,
             2: self._embed_vegalite_v2,
             3: self._embed_vegalite_v3,
@@ -851,7 +847,7 @@ class GeoJson(Layer):
             "field to your geojson data or set `embed=True`. "
         )
 
-    def _get_self_bounds(self) -> List[List[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[Optional[float]]]:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
@@ -871,7 +867,7 @@ class GeoJson(Layer):
         super().render()
 
 
-TypeStyleMapping = Dict[str, Union[str, List[Union[str, int]]]]
+TypeStyleMapping = dict[str, Union[str, list[Union[str, int]]]]
 
 
 class GeoJsonStyleMapper:
@@ -1756,9 +1752,9 @@ class DivIcon(MacroElement):
     def __init__(
         self,
         html: Optional[str] = None,
-        icon_size: Optional[Tuple[int, int]] = None,
-        icon_anchor: Optional[Tuple[int, int]] = None,
-        popup_anchor: Optional[Tuple[int, int]] = None,
+        icon_size: Optional[tuple[int, int]] = None,
+        icon_anchor: Optional[tuple[int, int]] = None,
+        popup_anchor: Optional[tuple[int, int]] = None,
         class_name: str = "empty",
     ):
         super().__init__()
@@ -1932,12 +1928,12 @@ class CustomIcon(Icon):
     def __init__(
         self,
         icon_image: Any,
-        icon_size: Optional[Tuple[int, int]] = None,
-        icon_anchor: Optional[Tuple[int, int]] = None,
+        icon_size: Optional[tuple[int, int]] = None,
+        icon_anchor: Optional[tuple[int, int]] = None,
         shadow_image: Any = None,
-        shadow_size: Optional[Tuple[int, int]] = None,
-        shadow_anchor: Optional[Tuple[int, int]] = None,
-        popup_anchor: Optional[Tuple[int, int]] = None,
+        shadow_size: Optional[tuple[int, int]] = None,
+        shadow_anchor: Optional[tuple[int, int]] = None,
+        popup_anchor: Optional[tuple[int, int]] = None,
     ):
         super(Icon, self).__init__()
         self._name = "icon"
@@ -2016,7 +2012,7 @@ class ColorLine(FeatureGroup):
                 f"Unexpected type for argument `colormap`: {type(colormap)}"
             )
 
-        out: Dict[str, List[List[List[float]]]] = {}
+        out: dict[str, list[list[list[float]]]] = {}
         for (lat1, lng1), (lat2, lng2), color in zip(coords[:-1], coords[1:], colors):
             out.setdefault(cm(color), []).append([[lat1, lng1], [lat2, lng2]])
         for key, val in out.items():
