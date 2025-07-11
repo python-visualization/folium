@@ -64,6 +64,18 @@ class GeoMan(JSCSSMixin, MacroElement):
                 {%- endfor %}
             });
 
+            {{ this._parent.get_name() }}.on("pm:cut", function(e) {
+                var layer = e.layer,
+                    type = e.layerType;
+
+                {%- for event, handler in this.on.items()   %}
+                layer.on(
+                    "{{event}}",
+                    {{handler}}
+                );
+                {%- endfor %}
+            });
+
         {% endmacro %}
         """
     )
