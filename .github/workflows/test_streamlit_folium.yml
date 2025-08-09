@@ -47,10 +47,13 @@ jobs:
 
     - name: Install playwright dependencies
       run: |
+        cd streamlit_folium
         uv run playwright install --with-deps
 
     - name: Install annotate-failures-plugin
-      run: uv add pytest-github-actions-annotate-failures --dev
+      run: |
+        cd streamlit_folium
+        uv add pytest-github-actions-annotate-failures --dev
 
     - name: Install folium from source
       run: |
