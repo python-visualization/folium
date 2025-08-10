@@ -57,7 +57,8 @@ jobs:
 
     - name: Install folium from source
       run: |
-        uv pip install -e . --force-reinstall
+        cd streamlit_folium
+        uv pip install -e .. --force-reinstall
 
     - name: Test with pytest and retry flaky tests up to 3 times
       run: |
