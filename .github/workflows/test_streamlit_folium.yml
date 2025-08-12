@@ -24,6 +24,9 @@ jobs:
     - name: Checkout Folium
       uses: actions/checkout@v5
 
+    - name: Install uv
+      uses: astral-sh/setup-uv@v4
+
     - name: Checkout Streamlit Folium
       uses: actions/checkout@v5
       with:
@@ -40,29 +43,27 @@ jobs:
     - name: Install streamlit_folium dev dependencies
       run: |
         cd streamlit_folium
-        python -m pip install --upgrade pip
-        pip install -r tests/requirements.txt
-
-    - name: Install streamlit-folium
-      run: |
-        cd streamlit_folium
-        pip install -e .
+        uv sync --group dev --group test
 
     - name: Install playwright dependencies
       run: |
-        playwright install --with-deps
+        cd streamlit_folium
+        uv run playwright install --with-deps
 
     - name: Install annotate-failures-plugin
-      run: pip install pytest-github-actions-annotate-failures coverage
+      run: |
+        cd streamlit_folium
+        uv add pytest-github-actions-annotate-failures --dev
 
     - name: Install folium from source
       run: |
-        python -m pip install -e . --force-reinstall
+        cd streamlit_folium
+        uv pip install -e .. --force-reinstall
 
     - name: Test with pytest and retry flaky tests up to 3 times
       run: |
         cd streamlit_folium
-        python -m pytest tests/test_frontend.py --browser chromium -s --reruns 3 -k "not test_layer_control_dynamic_update"
+        uv run pytest tests/test_frontend.py --browser chromium -s --reruns 3 -k "not test_layer_control_dynamic_update"
 
     - name: Surface failing tests
       if: always()
@@ -70,7 +71,6 @@ jobs:
       with:
         path: streamlit_folium/test-results.xml
         fail-on-empty: false
-
 
     - name: Upload coverage
       if: always()
