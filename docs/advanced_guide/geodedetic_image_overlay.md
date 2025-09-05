@@ -104,4 +104,4 @@ TODO: Try [rasterio](https://github.com/mapbox/rasterio/blob/ca75cf0a842943c1b3d
 
 From https://scitools.org.uk/cartopy/docs/latest/gallery/scalar_data/waves.html
 
-![](https://scitools.org.uk/cartopy/docs/16.0/_images/sphx_glr_waves_001.png)
+![](https://scitools.org.uk/cartopy/docs/v0.16/_images/sphx_glr_waves_001.png)
