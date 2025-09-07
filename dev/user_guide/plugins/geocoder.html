@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geocoder &#8212; Folium 0.20.1.dev38+g60bc0d6ef documentation</title>
+    <title>Geocoder &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=54f481fc"></script>
+    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -54,11 +54,11 @@
         </script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="GroupedLayerControl" href="grouped_layer_control.html" />
+    <link rel="next" title="Geoman" href="geoman.html" />
     <link rel="prev" title="Fullscreen" href="fullscreen.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev38+g60bc0d6ef" />
+  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
   </head>
   
   
@@ -409,6 +409,7 @@
 <li class="toctree-l2"><a class="reference internal" href="float_image.html">FloatImage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fullscreen.html">Fullscreen</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Geocoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoman.html">Geoman</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouped_layer_control.html">GroupedLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="heatmap.html">Heatmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="heatmap_with_time.html">HeatMapWithTime</a></li>
@@ -541,7 +542,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_9b61d695e7a57e2064004f646a99eed6 {
+                #map_d536dbc49df8cb6667cb54b96817ada5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -580,14 +581,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_9b61d695e7a57e2064004f646a99eed6&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_d536dbc49df8cb6667cb54b96817ada5&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_9b61d695e7a57e2064004f646a99eed6 = L.map(
-                &quot;map_9b61d695e7a57e2064004f646a99eed6&quot;,
+            var map_d536dbc49df8cb6667cb54b96817ada5 = L.map(
+                &quot;map_d536dbc49df8cb6667cb54b96817ada5&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -604,7 +605,7 @@
 
 
 
-            var tile_layer_b3810aa49936a772c231630450183d08 = L.tileLayer(
+            var tile_layer_70d477a054e64faa344777b9e53c2092 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -621,11 +622,11 @@
             );
 
 
-            tile_layer_b3810aa49936a772c231630450183d08.addTo(map_9b61d695e7a57e2064004f646a99eed6);
+            tile_layer_70d477a054e64faa344777b9e53c2092.addTo(map_d536dbc49df8cb6667cb54b96817ada5);
 
 
 
-            var geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8 = {
+            var geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500 = {
   &quot;collapsed&quot;: false,
   &quot;position&quot;: &quot;topright&quot;,
   &quot;defaultMarkGeocode&quot;: true,
@@ -636,19 +637,19 @@
 };
 
             // note: geocoder name should start with lowercase
-            var geocoderName_geocoder_babbfff4a7beed60ccc560bd56dc31f8 = geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8[&quot;provider&quot;];
+            var geocoderName_geocoder_a19e4c1544f59578eb235b578cabb500 = geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500[&quot;provider&quot;];
 
-            var customGeocoder_geocoder_babbfff4a7beed60ccc560bd56dc31f8 = L.Control.Geocoder[ geocoderName_geocoder_babbfff4a7beed60ccc560bd56dc31f8 ](
-                geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8[&#x27;providerOptions&#x27;]
+            var customGeocoder_geocoder_a19e4c1544f59578eb235b578cabb500 = L.Control.Geocoder[ geocoderName_geocoder_a19e4c1544f59578eb235b578cabb500 ](
+                geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500[&#x27;providerOptions&#x27;]
             );
-            geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8[&quot;geocoder&quot;] = customGeocoder_geocoder_babbfff4a7beed60ccc560bd56dc31f8;
+            geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500[&quot;geocoder&quot;] = customGeocoder_geocoder_a19e4c1544f59578eb235b578cabb500;
 
             L.Control.geocoder(
-                geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8
+                geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500
             ).on(&#x27;markgeocode&#x27;, function(e) {
-                var zoom = geocoderOpts_geocoder_babbfff4a7beed60ccc560bd56dc31f8[&#x27;zoom&#x27;] || map_9b61d695e7a57e2064004f646a99eed6.getZoom();
-                map_9b61d695e7a57e2064004f646a99eed6.setView(e.geocode.center, zoom);
-            }).addTo(map_9b61d695e7a57e2064004f646a99eed6);
+                var zoom = geocoderOpts_geocoder_a19e4c1544f59578eb235b578cabb500[&#x27;zoom&#x27;] || map_d536dbc49df8cb6667cb54b96817ada5.getZoom();
+                map_d536dbc49df8cb6667cb54b96817ada5.setView(e.geocode.center, zoom);
+            }).addTo(map_d536dbc49df8cb6667cb54b96817ada5);
 
 
 &lt;/script&gt;
@@ -676,11 +677,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="grouped_layer_control.html"
+       href="geoman.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">GroupedLayerControl</p>
+        <p class="prev-next-title">Geoman</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -726,7 +727,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev38+g60bc0d6ef</div>
+Folium version 0.20.1.dev39+g469bae318</div>
       
         <div class="footer-item">
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Draw &#8212; Folium 0.20.1.dev38+g60bc0d6ef documentation</title>
+    <title>Draw &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=54f481fc"></script>
+    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="BeautifyIcon" href="beautify_icon.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev38+g60bc0d6ef" />
+  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
   </head>
   
   
@@ -409,6 +409,7 @@
 <li class="toctree-l2"><a class="reference internal" href="float_image.html">FloatImage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="fullscreen.html">Fullscreen</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geocoder.html">Geocoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geoman.html">Geoman</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouped_layer_control.html">GroupedLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="heatmap.html">Heatmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="heatmap_with_time.html">HeatMapWithTime</a></li>
@@ -542,7 +543,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_9120b1df0bfc0f8de462865d209ccf62 {
+                #map_ec03a0aaf2546b1aa6a98522b05119ad {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -581,7 +582,7 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_9120b1df0bfc0f8de462865d209ccf62&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ec03a0aaf2546b1aa6a98522b05119ad&quot; &gt;&lt;/div&gt;
 
 
 
@@ -609,8 +610,8 @@
 &lt;script&gt;
 
 
-            var map_9120b1df0bfc0f8de462865d209ccf62 = L.map(
-                &quot;map_9120b1df0bfc0f8de462865d209ccf62&quot;,
+            var map_ec03a0aaf2546b1aa6a98522b05119ad = L.map(
+                &quot;map_ec03a0aaf2546b1aa6a98522b05119ad&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -627,7 +628,7 @@
 
 
 
-            var tile_layer_623d0fac70b57db4b09d59b1fa1ae94c = L.tileLayer(
+            var tile_layer_5bc20a991e33516145b733f51280d4f5 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -644,7 +645,7 @@
             );
 
 
-            tile_layer_623d0fac70b57db4b09d59b1fa1ae94c.addTo(map_9120b1df0bfc0f8de462865d209ccf62);
+            tile_layer_5bc20a991e33516145b733f51280d4f5.addTo(map_ec03a0aaf2546b1aa6a98522b05119ad);
 
 
             var options = {
@@ -653,16 +654,16 @@
               edit: {},
             }
                 // FeatureGroup is to store editable layers.
-                var drawnItems_draw_control_37647b83619749e5de17c1be01483683 =
+                var drawnItems_draw_control_6b2d7afa41e442839ff4adcefacee065 =
                     new L.featureGroup().addTo(
-                        map_9120b1df0bfc0f8de462865d209ccf62
+                        map_ec03a0aaf2546b1aa6a98522b05119ad
                     );
 
-            options.edit.featureGroup = drawnItems_draw_control_37647b83619749e5de17c1be01483683;
-            var draw_control_37647b83619749e5de17c1be01483683 = new L.Control.Draw(
+            options.edit.featureGroup = drawnItems_draw_control_6b2d7afa41e442839ff4adcefacee065;
+            var draw_control_6b2d7afa41e442839ff4adcefacee065 = new L.Control.Draw(
                 options
-            ).addTo( map_9120b1df0bfc0f8de462865d209ccf62 );
-            map_9120b1df0bfc0f8de462865d209ccf62.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_ec03a0aaf2546b1aa6a98522b05119ad );
+            map_ec03a0aaf2546b1aa6a98522b05119ad.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -670,15 +671,15 @@
                     alert(coords);
                     console.log(coords);
                 });
-                drawnItems_draw_control_37647b83619749e5de17c1be01483683.addLayer(layer);
+                drawnItems_draw_control_6b2d7afa41e442839ff4adcefacee065.addLayer(layer);
             });
-            map_9120b1df0bfc0f8de462865d209ccf62.on(&#x27;draw:created&#x27;, function(e) {
-                drawnItems_draw_control_37647b83619749e5de17c1be01483683.addLayer(e.layer);
+            map_ec03a0aaf2546b1aa6a98522b05119ad.on(&#x27;draw:created&#x27;, function(e) {
+                drawnItems_draw_control_6b2d7afa41e442839ff4adcefacee065.addLayer(e.layer);
             });
 
 
             document.getElementById(&#x27;export&#x27;).onclick = function(e) {
-                var data = drawnItems_draw_control_37647b83619749e5de17c1be01483683.toGeoJSON();
+                var data = drawnItems_draw_control_6b2d7afa41e442839ff4adcefacee065.toGeoJSON();
                 var convertedData = &#x27;text/json;charset=utf-8,&#x27;
                     + encodeURIComponent(JSON.stringify(data));
                 document.getElementById(&#x27;export&#x27;).setAttribute(
@@ -765,7 +766,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev38+g60bc0d6ef</div>
+Folium version 0.20.1.dev39+g469bae318</div>
       
         <div class="footer-item">
 
