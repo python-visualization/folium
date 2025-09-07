@@ -13,6 +13,7 @@ Plugins
   plugins/float_image
   plugins/fullscreen
   plugins/geocoder
+  plugins/geoman
   plugins/grouped_layer_control
   plugins/heatmap
   plugins/heatmap_with_time
@@ -65,6 +66,8 @@ Plugins
       - A fullscreen button control for modern browsers, using HTML Fullscreen API.
     * - :doc:`Geocoder <plugins/geocoder>`
       - A clean and extensible control for both geocoding and reverse geocoding using different geocoding providers.
+    * - :doc:`Geoman <plugins/geoman>`
+      - Interactive drawing and editing interface for polygons, polylines, circles, and other geometric shapes.
     * - :doc:`Grouped Layer Control <plugins/grouped_layer_control>`
       - Create layer control with support for grouping overlays together.
     * - :doc:`Heatmap <plugins/heatmap>`
