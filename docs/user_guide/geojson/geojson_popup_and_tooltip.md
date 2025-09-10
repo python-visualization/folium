@@ -137,3 +137,6 @@ colormap.add_to(m)
 
 m
 ```
+
+
+The standard `GeoJsonPopup` and `GeoJsonTooltip` classes work well with most geometry types, but have limitations with MultiPoint and other complex multigeometries. For these cases, consider using the `on_each_feature` parameter for custom handling. See the [doc](geojson_advanced_on_each_feature.html) for more information.
