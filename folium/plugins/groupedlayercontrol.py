@@ -12,19 +12,18 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
     Parameters
     ----------
     groups : dict
-          A dictionary where the keys are group names and the values are lists
-          of layer objects.
-          e.g. {
-              "Group 1": [layer1, layer2],
-              "Group 2": [layer3, layer4]
-            }
+        A dictionary where the keys are group names and the values are lists
+        of layer objects.
+        e.g. {
+            "Group 1": [layer1, layer2],
+            "Group 2": [layer3, layer4]
+        }
     exclusive_groups: bool, default True
-         Whether to use radio buttons (default) or checkboxes.
-         If you want to use both, use two separate instances of this class.
+        Whether to use radio buttons (default) or checkboxes.
+        If you want to use both, use two separate instances of this class.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#control-layers
-
     """
 
     default_js = [
