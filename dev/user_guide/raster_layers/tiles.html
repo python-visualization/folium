@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Tiles &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Tiles &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Raster layers" href="../raster_layers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -551,7 +552,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_36282b661391a5a6d77b59406561882d {
+                #map_1d9ebc38942a8e3fa7ac7747ad100bb8 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -588,14 +589,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_36282b661391a5a6d77b59406561882d&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_1d9ebc38942a8e3fa7ac7747ad100bb8&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_36282b661391a5a6d77b59406561882d = L.map(
-                &quot;map_36282b661391a5a6d77b59406561882d&quot;,
+            var map_1d9ebc38942a8e3fa7ac7747ad100bb8 = L.map(
+                &quot;map_1d9ebc38942a8e3fa7ac7747ad100bb8&quot;,
                 {
                     center: [-12.875, -38.625],
                     crs: L.CRS.EPSG3857,
@@ -612,7 +613,7 @@
 
 
 
-            var tile_layer_447556f535c909adaafd5cc7391e6953 = L.tileLayer(
+            var tile_layer_ae1271bfb471686c9aa35403ba3521e9 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -629,7 +630,7 @@
             );
 
 
-            tile_layer_447556f535c909adaafd5cc7391e6953.addTo(map_36282b661391a5a6d77b59406561882d);
+            tile_layer_ae1271bfb471686c9aa35403ba3521e9.addTo(map_1d9ebc38942a8e3fa7ac7747ad100bb8);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -666,7 +667,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_8256c75710ddc0a4dd52dc96249d3c2a {
+                #map_2d8255e03b0b411529d0ee022d1501ef {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -703,14 +704,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_8256c75710ddc0a4dd52dc96249d3c2a&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_2d8255e03b0b411529d0ee022d1501ef&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_8256c75710ddc0a4dd52dc96249d3c2a = L.map(
-                &quot;map_8256c75710ddc0a4dd52dc96249d3c2a&quot;,
+            var map_2d8255e03b0b411529d0ee022d1501ef = L.map(
+                &quot;map_2d8255e03b0b411529d0ee022d1501ef&quot;,
                 {
                     center: [-12.875, -38.625],
                     crs: L.CRS.EPSG3857,
@@ -727,7 +728,7 @@
 
 
 
-            var tile_layer_32272c29458bd139464df28490463d5a = L.tileLayer(
+            var tile_layer_091195ef2e51c34b2a2fe990f2b02aa0 = L.tileLayer(
                 &quot;https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -744,7 +745,7 @@
             );
 
 
-            tile_layer_32272c29458bd139464df28490463d5a.addTo(map_8256c75710ddc0a4dd52dc96249d3c2a);
+            tile_layer_091195ef2e51c34b2a2fe990f2b02aa0.addTo(map_2d8255e03b0b411529d0ee022d1501ef);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -781,7 +782,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_28ab710a337a9fabd5f46842ff4680a1 {
+                #map_ceb127c219a0ed18796ae09aa43ae520 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -818,14 +819,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_28ab710a337a9fabd5f46842ff4680a1&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ceb127c219a0ed18796ae09aa43ae520&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_28ab710a337a9fabd5f46842ff4680a1 = L.map(
-                &quot;map_28ab710a337a9fabd5f46842ff4680a1&quot;,
+            var map_ceb127c219a0ed18796ae09aa43ae520 = L.map(
+                &quot;map_ceb127c219a0ed18796ae09aa43ae520&quot;,
                 {
                     center: [-12.875, -38.625],
                     crs: L.CRS.EPSG3857,
@@ -842,7 +843,7 @@
 
 
 
-            var tile_layer_58a0b68d00c4703e7253e020c1149811 = L.tileLayer(
+            var tile_layer_c00e440aeac59a6495fec2fa9459878b = L.tileLayer(
                 &quot;https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -859,7 +860,7 @@
             );
 
 
-            tile_layer_58a0b68d00c4703e7253e020c1149811.addTo(map_28ab710a337a9fabd5f46842ff4680a1);
+            tile_layer_c00e440aeac59a6495fec2fa9459878b.addTo(map_ceb127c219a0ed18796ae09aa43ae520);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -907,7 +908,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d906777553fea03480d0f003b0e41f5b {
+                #map_b0f4ed9a76dd2a76b293978477664e21 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -944,14 +945,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d906777553fea03480d0f003b0e41f5b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_b0f4ed9a76dd2a76b293978477664e21&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d906777553fea03480d0f003b0e41f5b = L.map(
-                &quot;map_d906777553fea03480d0f003b0e41f5b&quot;,
+            var map_b0f4ed9a76dd2a76b293978477664e21 = L.map(
+                &quot;map_b0f4ed9a76dd2a76b293978477664e21&quot;,
                 {
                     center: [-12.875, -38.625],
                     crs: L.CRS.EPSG3857,
@@ -968,7 +969,7 @@
 
 
 
-            var tile_layer_ae9a999e2a7d2b9bfd6724283d090150 = L.tileLayer(
+            var tile_layer_2f5c1d66ae247653d32d911d4d3f01e3 = L.tileLayer(
                 &quot;https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -985,7 +986,7 @@
             );
 
 
-            tile_layer_ae9a999e2a7d2b9bfd6724283d090150.addTo(map_d906777553fea03480d0f003b0e41f5b);
+            tile_layer_2f5c1d66ae247653d32d911d4d3f01e3.addTo(map_b0f4ed9a76dd2a76b293978477664e21);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1082,7 +1083,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

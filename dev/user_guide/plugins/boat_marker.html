@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>BoatMarker &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>BoatMarker &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Antpath" href="antpath.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -546,7 +547,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_3e7d9d89a854ac2b762315b776946d9d {
+                #map_af33f8dbc817a3e3d471b30408f36f5c {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -584,14 +585,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_3e7d9d89a854ac2b762315b776946d9d&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_af33f8dbc817a3e3d471b30408f36f5c&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_3e7d9d89a854ac2b762315b776946d9d = L.map(
-                &quot;map_3e7d9d89a854ac2b762315b776946d9d&quot;,
+            var map_af33f8dbc817a3e3d471b30408f36f5c = L.map(
+                &quot;map_af33f8dbc817a3e3d471b30408f36f5c&quot;,
                 {
                     center: [30.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -608,7 +609,7 @@
 
 
 
-            var tile_layer_1b4b44d8466de628bb7125707c77fd30 = L.tileLayer(
+            var tile_layer_7d6587b57a6900fd6a03495e31e62b39 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -625,29 +626,29 @@
             );
 
 
-            tile_layer_1b4b44d8466de628bb7125707c77fd30.addTo(map_3e7d9d89a854ac2b762315b776946d9d);
+            tile_layer_7d6587b57a6900fd6a03495e31e62b39.addTo(map_af33f8dbc817a3e3d471b30408f36f5c);
 
 
-            var boat_marker_4679d5e91c8b4c60db1f1f226d7d6f32 = L.boatMarker(
+            var boat_marker_fe4ab67c77c1b461cf840750ff1d799b = L.boatMarker(
                 [34.0, -43.0],
                 {
   &quot;color&quot;: &quot;#8f8&quot;,
 }
-            ).addTo(map_3e7d9d89a854ac2b762315b776946d9d);
-            boat_marker_4679d5e91c8b4c60db1f1f226d7d6f32.setHeadingWind(
+            ).addTo(map_af33f8dbc817a3e3d471b30408f36f5c);
+            boat_marker_fe4ab67c77c1b461cf840750ff1d799b.setHeadingWind(
                 45,
                 45,
                 150
             );
 
 
-            var boat_marker_101f39b8aea721fbcca3e3e2ded95606 = L.boatMarker(
+            var boat_marker_c0f9d50488ca03d75d69fb066d51fedc = L.boatMarker(
                 [46.0, -30.0],
                 {
   &quot;color&quot;: &quot;#88f&quot;,
 }
-            ).addTo(map_3e7d9d89a854ac2b762315b776946d9d);
-            boat_marker_101f39b8aea721fbcca3e3e2ded95606.setHeadingWind(
+            ).addTo(map_af33f8dbc817a3e3d471b30408f36f5c);
+            boat_marker_c0f9d50488ca03d75d69fb066d51fedc.setHeadingWind(
                 -20,
                 25,
                 46
@@ -728,7 +729,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

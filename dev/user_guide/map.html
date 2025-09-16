@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Map &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Map &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="User guide" href="../user_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -539,7 +540,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_8d4e81b0abc3a9f1b43df464722eee08 {
+                #map_ad0e4e90baf0eb2bbd2d466d2d266fc5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -576,14 +577,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_8d4e81b0abc3a9f1b43df464722eee08&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ad0e4e90baf0eb2bbd2d466d2d266fc5&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_8d4e81b0abc3a9f1b43df464722eee08 = L.map(
-                &quot;map_8d4e81b0abc3a9f1b43df464722eee08&quot;,
+            var map_ad0e4e90baf0eb2bbd2d466d2d266fc5 = L.map(
+                &quot;map_ad0e4e90baf0eb2bbd2d466d2d266fc5&quot;,
                 {
                     center: [-38.625, -12.875],
                     crs: L.CRS.EPSG3857,
@@ -595,13 +596,13 @@
 
                 }
             );
-            L.control.scale().addTo(map_8d4e81b0abc3a9f1b43df464722eee08);
+            L.control.scale().addTo(map_ad0e4e90baf0eb2bbd2d466d2d266fc5);
 
 
 
 
 
-            var tile_layer_ac1c47a18ac67914a0185c5f7de29609 = L.tileLayer(
+            var tile_layer_4b6b3be41222a331871cb3e45b873528 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -618,7 +619,7 @@
             );
 
 
-            tile_layer_ac1c47a18ac67914a0185c5f7de29609.addTo(map_8d4e81b0abc3a9f1b43df464722eee08);
+            tile_layer_4b6b3be41222a331871cb3e45b873528.addTo(map_ad0e4e90baf0eb2bbd2d466d2d266fc5);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -662,7 +663,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_0b1b14e3bc31bed51078e7a724ce36b9 {
+                #map_c61fea6cee60d0ebc3c97d9c876c1c28 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -699,14 +700,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_0b1b14e3bc31bed51078e7a724ce36b9&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c61fea6cee60d0ebc3c97d9c876c1c28&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_0b1b14e3bc31bed51078e7a724ce36b9 = L.map(
-                &quot;map_0b1b14e3bc31bed51078e7a724ce36b9&quot;,
+            var map_c61fea6cee60d0ebc3c97d9c876c1c28 = L.map(
+                &quot;map_c61fea6cee60d0ebc3c97d9c876c1c28&quot;,
                 {
                     center: [-38.625, -12.875],
                     crs: L.CRS.EPSG3857,
@@ -723,7 +724,7 @@
 
 
 
-            var tile_layer_1394c7e0b8e52b46a6cdf6c25ee78ade = L.tileLayer(
+            var tile_layer_98442138d185efbcab425c710e187317 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -740,7 +741,7 @@
             );
 
 
-            tile_layer_1394c7e0b8e52b46a6cdf6c25ee78ade.addTo(map_0b1b14e3bc31bed51078e7a724ce36b9);
+            tile_layer_98442138d185efbcab425c710e187317.addTo(map_c61fea6cee60d0ebc3c97d9c876c1c28);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -801,7 +802,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_1fb9245de2f9274882770b0773af6102 {
+                #map_918f3ca1e3f916a6c1bcf30a13db6fb0 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -838,14 +839,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_1fb9245de2f9274882770b0773af6102&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_918f3ca1e3f916a6c1bcf30a13db6fb0&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_1fb9245de2f9274882770b0773af6102 = L.map(
-                &quot;map_1fb9245de2f9274882770b0773af6102&quot;,
+            var map_918f3ca1e3f916a6c1bcf30a13db6fb0 = L.map(
+                &quot;map_918f3ca1e3f916a6c1bcf30a13db6fb0&quot;,
                 {
                     center: [-20.0, -40.0],
                     crs: L.CRS.EPSG3857,
@@ -872,7 +873,7 @@
 
 
 
-            var tile_layer_6aacf16c2c1bd1c9f6d66196d74fcb08 = L.tileLayer(
+            var tile_layer_614294158c37dbd1974335335abadc94 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -889,16 +890,16 @@
             );
 
 
-            tile_layer_6aacf16c2c1bd1c9f6d66196d74fcb08.addTo(map_1fb9245de2f9274882770b0773af6102);
+            tile_layer_614294158c37dbd1974335335abadc94.addTo(map_918f3ca1e3f916a6c1bcf30a13db6fb0);
 
 
-            var circle_marker_82d3ea40658aafa3091214d4b9e44350 = L.circleMarker(
+            var circle_marker_2e01031801f85824351efd33e394d06d = L.circleMarker(
                 [-15.0, -45.0],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 10, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_1fb9245de2f9274882770b0773af6102);
+            ).addTo(map_918f3ca1e3f916a6c1bcf30a13db6fb0);
 
 
-            circle_marker_82d3ea40658aafa3091214d4b9e44350.bindTooltip(
+            circle_marker_2e01031801f85824351efd33e394d06d.bindTooltip(
                 `&lt;div&gt;
                      Upper Left Corner
                  &lt;/div&gt;`,
@@ -908,13 +909,13 @@
             );
 
 
-            var circle_marker_f792e986d2cbaa0ed71480b2c3ac97f5 = L.circleMarker(
+            var circle_marker_b8ac15aca19deb1428ab9a0717e2730a = L.circleMarker(
                 [-25.0, -45.0],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 10, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_1fb9245de2f9274882770b0773af6102);
+            ).addTo(map_918f3ca1e3f916a6c1bcf30a13db6fb0);
 
 
-            circle_marker_f792e986d2cbaa0ed71480b2c3ac97f5.bindTooltip(
+            circle_marker_b8ac15aca19deb1428ab9a0717e2730a.bindTooltip(
                 `&lt;div&gt;
                      Lower Left Corner
                  &lt;/div&gt;`,
@@ -924,13 +925,13 @@
             );
 
 
-            var circle_marker_4cdc24c2a6dcc9afe214805f03b41e1c = L.circleMarker(
+            var circle_marker_63729b28de0335ea11225462b29dd30c = L.circleMarker(
                 [-25.0, -35.0],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 10, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_1fb9245de2f9274882770b0773af6102);
+            ).addTo(map_918f3ca1e3f916a6c1bcf30a13db6fb0);
 
 
-            circle_marker_4cdc24c2a6dcc9afe214805f03b41e1c.bindTooltip(
+            circle_marker_63729b28de0335ea11225462b29dd30c.bindTooltip(
                 `&lt;div&gt;
                      Lower Right Corner
                  &lt;/div&gt;`,
@@ -940,13 +941,13 @@
             );
 
 
-            var circle_marker_7e202d7d67bf5312def832397d63283a = L.circleMarker(
+            var circle_marker_3ab6cfffbb4e9ea170afaf1afc987e4d = L.circleMarker(
                 [-15.0, -35.0],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 10, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_1fb9245de2f9274882770b0773af6102);
+            ).addTo(map_918f3ca1e3f916a6c1bcf30a13db6fb0);
 
 
-            circle_marker_7e202d7d67bf5312def832397d63283a.bindTooltip(
+            circle_marker_3ab6cfffbb4e9ea170afaf1afc987e4d.bindTooltip(
                 `&lt;div&gt;
                      Upper Right Corner
                  &lt;/div&gt;`,
@@ -1045,7 +1046,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

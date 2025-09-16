@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Icons &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Icons &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Popups" href="popups.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -554,7 +555,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_6317f33ae2fb2e7fc4b990aec345a22a {
+                #map_96cefe1e37b0b2e6ca42a44fbd3dbce5 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -591,14 +592,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_6317f33ae2fb2e7fc4b990aec345a22a&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_96cefe1e37b0b2e6ca42a44fbd3dbce5&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_6317f33ae2fb2e7fc4b990aec345a22a = L.map(
-                &quot;map_6317f33ae2fb2e7fc4b990aec345a22a&quot;,
+            var map_96cefe1e37b0b2e6ca42a44fbd3dbce5 = L.map(
+                &quot;map_96cefe1e37b0b2e6ca42a44fbd3dbce5&quot;,
                 {
                     center: [41.0, -71.0],
                     crs: L.CRS.EPSG3857,
@@ -615,7 +616,7 @@
 
 
 
-            var tile_layer_5fe712ac70480c5d815963991c577339 = L.tileLayer(
+            var tile_layer_9c9ca02acd583ec400bfc901ad9d2bb9 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -632,17 +633,17 @@
             );
 
 
-            tile_layer_5fe712ac70480c5d815963991c577339.addTo(map_6317f33ae2fb2e7fc4b990aec345a22a);
+            tile_layer_9c9ca02acd583ec400bfc901ad9d2bb9.addTo(map_96cefe1e37b0b2e6ca42a44fbd3dbce5);
 
 
-            var marker_b18f3f5c8b4b40c72dfed15b68511882 = L.marker(
+            var marker_b212232748e7d8bb3f2599fa81c2b60e = L.marker(
                 [41.0, -72.0],
                 {
 }
-            ).addTo(map_6317f33ae2fb2e7fc4b990aec345a22a);
+            ).addTo(map_96cefe1e37b0b2e6ca42a44fbd3dbce5);
 
 
-            var icon_888ac24dd58896efb5c71b095ce0df1a = L.AwesomeMarkers.icon(
+            var icon_2ff9ccac54c2c44ef9232e64f8b8249a = L.AwesomeMarkers.icon(
                 {
   &quot;markerColor&quot;: &quot;green&quot;,
   &quot;iconColor&quot;: &quot;white&quot;,
@@ -653,7 +654,7 @@
             );
 
 
-            marker_b18f3f5c8b4b40c72dfed15b68511882.bindTooltip(
+            marker_b212232748e7d8bb3f2599fa81c2b60e.bindTooltip(
                 `&lt;div&gt;
                      180
                  &lt;/div&gt;`,
@@ -663,17 +664,17 @@
             );
 
 
-                marker_b18f3f5c8b4b40c72dfed15b68511882.setIcon(icon_888ac24dd58896efb5c71b095ce0df1a);
+                marker_b212232748e7d8bb3f2599fa81c2b60e.setIcon(icon_2ff9ccac54c2c44ef9232e64f8b8249a);
 
 
-            var marker_8d322a0d1c7980dcb0ce8b79ff28c71e = L.marker(
+            var marker_1378b2838f09f44f41c94d426c3f9a3f = L.marker(
                 [41.0, -75.0],
                 {
 }
-            ).addTo(map_6317f33ae2fb2e7fc4b990aec345a22a);
+            ).addTo(map_96cefe1e37b0b2e6ca42a44fbd3dbce5);
 
 
-            var icon_29f065e1b70ce042cf5ba0c38483adfa = L.AwesomeMarkers.icon(
+            var icon_8e9aa362daeded2998a26436b004ee3f = L.AwesomeMarkers.icon(
                 {
   &quot;markerColor&quot;: &quot;green&quot;,
   &quot;iconColor&quot;: &quot;white&quot;,
@@ -684,7 +685,7 @@
             );
 
 
-            marker_8d322a0d1c7980dcb0ce8b79ff28c71e.bindTooltip(
+            marker_1378b2838f09f44f41c94d426c3f9a3f.bindTooltip(
                 `&lt;div&gt;
                      45
                  &lt;/div&gt;`,
@@ -694,17 +695,17 @@
             );
 
 
-                marker_8d322a0d1c7980dcb0ce8b79ff28c71e.setIcon(icon_29f065e1b70ce042cf5ba0c38483adfa);
+                marker_1378b2838f09f44f41c94d426c3f9a3f.setIcon(icon_8e9aa362daeded2998a26436b004ee3f);
 
 
-            var marker_d26e54c082b22756863e691db197cbd3 = L.marker(
+            var marker_f7bc20b13a372ca50663fcdc65e0d78e = L.marker(
                 [41.0, -78.0],
                 {
 }
-            ).addTo(map_6317f33ae2fb2e7fc4b990aec345a22a);
+            ).addTo(map_96cefe1e37b0b2e6ca42a44fbd3dbce5);
 
 
-            var icon_69eba9b1060ce2f1fe77154fc753d440 = L.AwesomeMarkers.icon(
+            var icon_57cfa449e443d973eeb955f1ce9cb649 = L.AwesomeMarkers.icon(
                 {
   &quot;markerColor&quot;: &quot;green&quot;,
   &quot;iconColor&quot;: &quot;white&quot;,
@@ -715,7 +716,7 @@
             );
 
 
-            marker_d26e54c082b22756863e691db197cbd3.bindTooltip(
+            marker_f7bc20b13a372ca50663fcdc65e0d78e.bindTooltip(
                 `&lt;div&gt;
                      90
                  &lt;/div&gt;`,
@@ -725,7 +726,7 @@
             );
 
 
-                marker_d26e54c082b22756863e691db197cbd3.setIcon(icon_69eba9b1060ce2f1fe77154fc753d440);
+                marker_f7bc20b13a372ca50663fcdc65e0d78e.setIcon(icon_57cfa449e443d973eeb955f1ce9cb649);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -785,7 +786,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_a28582751992840685df3a5f75dcbf66 {
+                #map_7d89965a0831a7178ba8c4f95c32afd3 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -822,14 +823,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_a28582751992840685df3a5f75dcbf66&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_7d89965a0831a7178ba8c4f95c32afd3&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_a28582751992840685df3a5f75dcbf66 = L.map(
-                &quot;map_a28582751992840685df3a5f75dcbf66&quot;,
+            var map_7d89965a0831a7178ba8c4f95c32afd3 = L.map(
+                &quot;map_7d89965a0831a7178ba8c4f95c32afd3&quot;,
                 {
                     center: [45.3288, -121.6625],
                     crs: L.CRS.EPSG3857,
@@ -846,7 +847,7 @@
 
 
 
-            var tile_layer_6bd7c64b7851da1431e6956b8771f42e = L.tileLayer(
+            var tile_layer_a37d12fad3f823d405eae7188bc59d85 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -863,17 +864,17 @@
             );
 
 
-            tile_layer_6bd7c64b7851da1431e6956b8771f42e.addTo(map_a28582751992840685df3a5f75dcbf66);
+            tile_layer_a37d12fad3f823d405eae7188bc59d85.addTo(map_7d89965a0831a7178ba8c4f95c32afd3);
 
 
-            var marker_8f83e56553cd45ff8897662c9b1623e4 = L.marker(
+            var marker_34b5669e9f8347f149a451a03debdbe4 = L.marker(
                 [45.3288, -121.6625],
                 {
 }
-            ).addTo(map_a28582751992840685df3a5f75dcbf66);
+            ).addTo(map_7d89965a0831a7178ba8c4f95c32afd3);
 
 
-        var icon_a9097ed7e6aa7e0924c1f8fe866dfa1d = L.icon({
+        var icon_acd967a4f4ac4437fb2cd6413d10a29f = L.icon({
   &quot;iconUrl&quot;: &quot;https://leafletjs.com/examples/custom-icons/leaf-red.png&quot;,
   &quot;iconSize&quot;: [38, 95],
   &quot;iconAnchor&quot;: [22, 94],
@@ -884,24 +885,24 @@
 });
 
 
-        var popup_214e8ebb31bc11cbc0b33a88bbdcbcf3 = L.popup({
+        var popup_49fb9b803a8f257228b04b1c1414f4ca = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_9f7822ee7a291b3a9e91abcd43919dd5 = $(`&lt;div id=&quot;html_9f7822ee7a291b3a9e91abcd43919dd5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Mt. Hood Meadows&lt;/div&gt;`)[0];
-                popup_214e8ebb31bc11cbc0b33a88bbdcbcf3.setContent(html_9f7822ee7a291b3a9e91abcd43919dd5);
+                var html_aece092637329c0a4782019e5efffbc5 = $(`&lt;div id=&quot;html_aece092637329c0a4782019e5efffbc5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Mt. Hood Meadows&lt;/div&gt;`)[0];
+                popup_49fb9b803a8f257228b04b1c1414f4ca.setContent(html_aece092637329c0a4782019e5efffbc5);
 
 
 
-        marker_8f83e56553cd45ff8897662c9b1623e4.bindPopup(popup_214e8ebb31bc11cbc0b33a88bbdcbcf3)
+        marker_34b5669e9f8347f149a451a03debdbe4.bindPopup(popup_49fb9b803a8f257228b04b1c1414f4ca)
         ;
 
 
 
 
-                marker_8f83e56553cd45ff8897662c9b1623e4.setIcon(icon_a9097ed7e6aa7e0924c1f8fe866dfa1d);
+                marker_34b5669e9f8347f149a451a03debdbe4.setIcon(icon_acd967a4f4ac4437fb2cd6413d10a29f);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -992,7 +993,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

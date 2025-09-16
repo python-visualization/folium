@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>MeasureControl &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>MeasureControl &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="MiniMap" href="mini_map.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -544,7 +545,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_38caca79362441a24a114616340cf48b {
+                #map_a5a5be8bc24719efaea37d0f2c434d87 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -583,14 +584,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_38caca79362441a24a114616340cf48b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_a5a5be8bc24719efaea37d0f2c434d87&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_38caca79362441a24a114616340cf48b = L.map(
-                &quot;map_38caca79362441a24a114616340cf48b&quot;,
+            var map_a5a5be8bc24719efaea37d0f2c434d87 = L.map(
+                &quot;map_a5a5be8bc24719efaea37d0f2c434d87&quot;,
                 {
                     center: [-27.5717, -48.6256],
                     crs: L.CRS.EPSG3857,
@@ -607,7 +608,7 @@
 
 
 
-            var tile_layer_e2c3af9b5ed352b52896a235bc6a9965 = L.tileLayer(
+            var tile_layer_8a4103405f571da40b83f22e55e88ae7 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -624,10 +625,10 @@
             );
 
 
-            tile_layer_e2c3af9b5ed352b52896a235bc6a9965.addTo(map_38caca79362441a24a114616340cf48b);
+            tile_layer_8a4103405f571da40b83f22e55e88ae7.addTo(map_a5a5be8bc24719efaea37d0f2c434d87);
 
 
-            var measure_control_13562c4ad0f9cf366cc766c0d422d547 = new L.Control.Measure(
+            var measure_control_9e8fc3079e51c646aba101966afa46ef = new L.Control.Measure(
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;primaryLengthUnit&quot;: &quot;meters&quot;,
@@ -635,7 +636,7 @@
   &quot;primaryAreaUnit&quot;: &quot;sqmeters&quot;,
   &quot;secondaryAreaUnit&quot;: &quot;acres&quot;,
 });
-            map_38caca79362441a24a114616340cf48b.addControl(measure_control_13562c4ad0f9cf366cc766c0d422d547);
+            map_a5a5be8bc24719efaea37d0f2c434d87.addControl(measure_control_9e8fc3079e51c646aba101966afa46ef);
 
             // Workaround for using this plugin with Leaflet&gt;=1.8.0
             // https://github.com/ljagis/leaflet-measure/issues/171
@@ -728,7 +729,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

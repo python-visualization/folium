@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Rectangle &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Rectangle &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="PolyLine" href="polyline.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -570,7 +571,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_716af891687cc1747b23cbcc5297a0a8 {
+                #map_d5ec51eb51ded9ba6370d5a3cb97ad64 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -607,14 +608,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_716af891687cc1747b23cbcc5297a0a8&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_d5ec51eb51ded9ba6370d5a3cb97ad64&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_716af891687cc1747b23cbcc5297a0a8 = L.map(
-                &quot;map_716af891687cc1747b23cbcc5297a0a8&quot;,
+            var map_d5ec51eb51ded9ba6370d5a3cb97ad64 = L.map(
+                &quot;map_d5ec51eb51ded9ba6370d5a3cb97ad64&quot;,
                 {
                     center: [35.685, 139.76],
                     crs: L.CRS.EPSG3857,
@@ -631,7 +632,7 @@
 
 
 
-            var tile_layer_1455439026094ee96a794cf7582e7d0c = L.tileLayer(
+            var tile_layer_7c83065c8347a537de4465428a785f42 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -648,33 +649,33 @@
             );
 
 
-            tile_layer_1455439026094ee96a794cf7582e7d0c.addTo(map_716af891687cc1747b23cbcc5297a0a8);
+            tile_layer_7c83065c8347a537de4465428a785f42.addTo(map_d5ec51eb51ded9ba6370d5a3cb97ad64);
 
 
-            var rectangle_fdc0dff0699b910a9614dd65f9ba0a40 = L.rectangle(
+            var rectangle_3c621e994ea53e0b9cd61a6e95a8e6fa = L.rectangle(
                 [[35.681, 139.766], [35.691, 139.776]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;blue&quot;, &quot;dashArray&quot;: &quot;5, 5&quot;, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 5}
-            ).addTo(map_716af891687cc1747b23cbcc5297a0a8);
+            ).addTo(map_d5ec51eb51ded9ba6370d5a3cb97ad64);
 
 
-        var popup_8ab8f213b853c2c74858f323b44254f3 = L.popup({
+        var popup_a9ca4130a75da6644f8b4cac4c2ac79b = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_3d4d9e1fdf515bcbecefe18103ccd0c9 = $(`&lt;div id=&quot;html_3d4d9e1fdf515bcbecefe18103ccd0c9&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
-                popup_8ab8f213b853c2c74858f323b44254f3.setContent(html_3d4d9e1fdf515bcbecefe18103ccd0c9);
+                var html_b7e07afa9f40ce7176b6c8a3983cf15d = $(`&lt;div id=&quot;html_b7e07afa9f40ce7176b6c8a3983cf15d&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
+                popup_a9ca4130a75da6644f8b4cac4c2ac79b.setContent(html_b7e07afa9f40ce7176b6c8a3983cf15d);
 
 
 
-        rectangle_fdc0dff0699b910a9614dd65f9ba0a40.bindPopup(popup_8ab8f213b853c2c74858f323b44254f3)
+        rectangle_3c621e994ea53e0b9cd61a6e95a8e6fa.bindPopup(popup_a9ca4130a75da6644f8b4cac4c2ac79b)
         ;
 
 
 
 
-            rectangle_fdc0dff0699b910a9614dd65f9ba0a40.bindTooltip(
+            rectangle_3c621e994ea53e0b9cd61a6e95a8e6fa.bindTooltip(
                 `&lt;div&gt;
                      &lt;strong&gt;Click me!&lt;/strong&gt;
                  &lt;/div&gt;`,
@@ -684,30 +685,30 @@
             );
 
 
-            var rectangle_ef62a58c7fd6d68d8548b2973734ce97 = L.rectangle(
+            var rectangle_e43d67465228e41e4630515a68d32181 = L.rectangle(
                 [[35.681, 139.754], [35.691, 139.764]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;blue&quot;, &quot;dashArray&quot;: &quot;5, 10&quot;, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;mitter&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 5}
-            ).addTo(map_716af891687cc1747b23cbcc5297a0a8);
+            ).addTo(map_d5ec51eb51ded9ba6370d5a3cb97ad64);
 
 
-        var popup_c5af452f06270381023bea7bed22c651 = L.popup({
+        var popup_1292247acdf7bfc617e40252fa3322a6 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_196bef5a43219d4c97a1441f6e5274a5 = $(`&lt;div id=&quot;html_196bef5a43219d4c97a1441f6e5274a5&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
-                popup_c5af452f06270381023bea7bed22c651.setContent(html_196bef5a43219d4c97a1441f6e5274a5);
+                var html_0fd4b2610cbe3a94d20ea965fb3e80f7 = $(`&lt;div id=&quot;html_0fd4b2610cbe3a94d20ea965fb3e80f7&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
+                popup_1292247acdf7bfc617e40252fa3322a6.setContent(html_0fd4b2610cbe3a94d20ea965fb3e80f7);
 
 
 
-        rectangle_ef62a58c7fd6d68d8548b2973734ce97.bindPopup(popup_c5af452f06270381023bea7bed22c651)
+        rectangle_e43d67465228e41e4630515a68d32181.bindPopup(popup_1292247acdf7bfc617e40252fa3322a6)
         ;
 
 
 
 
-            rectangle_ef62a58c7fd6d68d8548b2973734ce97.bindTooltip(
+            rectangle_e43d67465228e41e4630515a68d32181.bindTooltip(
                 `&lt;div&gt;
                      &lt;strong&gt;Click me!&lt;/strong&gt;
                  &lt;/div&gt;`,
@@ -717,30 +718,30 @@
             );
 
 
-            var rectangle_4a748dde80439059e5030fa15cb9ae77 = L.rectangle(
+            var rectangle_a7541e93131c86085cf9e01c6ce8f698 = L.rectangle(
                 [[35.681, 139.742], [35.691, 139.7522]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;blue&quot;, &quot;dashArray&quot;: &quot;15, 10, 5, 10, 15&quot;, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;bevel&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 5}
-            ).addTo(map_716af891687cc1747b23cbcc5297a0a8);
+            ).addTo(map_d5ec51eb51ded9ba6370d5a3cb97ad64);
 
 
-        var popup_9bf7d2df412a86ba3ac9c5fdca58e3d0 = L.popup({
+        var popup_5551d1d187f0828c5fb66b4572e005db = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_5f72f7f96cfdb20dfa9e7d5c5660fcf2 = $(`&lt;div id=&quot;html_5f72f7f96cfdb20dfa9e7d5c5660fcf2&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
-                popup_9bf7d2df412a86ba3ac9c5fdca58e3d0.setContent(html_5f72f7f96cfdb20dfa9e7d5c5660fcf2);
+                var html_ed01574cf16c3f98f25bcb026ccb9c85 = $(`&lt;div id=&quot;html_ed01574cf16c3f98f25bcb026ccb9c85&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;Tokyo, Japan&lt;/div&gt;`)[0];
+                popup_5551d1d187f0828c5fb66b4572e005db.setContent(html_ed01574cf16c3f98f25bcb026ccb9c85);
 
 
 
-        rectangle_4a748dde80439059e5030fa15cb9ae77.bindPopup(popup_9bf7d2df412a86ba3ac9c5fdca58e3d0)
+        rectangle_a7541e93131c86085cf9e01c6ce8f698.bindPopup(popup_5551d1d187f0828c5fb66b4572e005db)
         ;
 
 
 
 
-            rectangle_4a748dde80439059e5030fa15cb9ae77.bindTooltip(
+            rectangle_a7541e93131c86085cf9e01c6ce8f698.bindTooltip(
                 `&lt;div&gt;
                      &lt;strong&gt;Click me!&lt;/strong&gt;
                  &lt;/div&gt;`,
@@ -824,7 +825,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

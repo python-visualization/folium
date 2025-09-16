@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geocoder &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Geocoder &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Fullscreen" href="fullscreen.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -542,7 +543,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_75f8e20bfc205f1dac128b5542ff7dbb {
+                #map_016e1a538cc3781e70e3c7fcb7c9f9a6 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -581,14 +582,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_75f8e20bfc205f1dac128b5542ff7dbb&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_016e1a538cc3781e70e3c7fcb7c9f9a6&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_75f8e20bfc205f1dac128b5542ff7dbb = L.map(
-                &quot;map_75f8e20bfc205f1dac128b5542ff7dbb&quot;,
+            var map_016e1a538cc3781e70e3c7fcb7c9f9a6 = L.map(
+                &quot;map_016e1a538cc3781e70e3c7fcb7c9f9a6&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -605,7 +606,7 @@
 
 
 
-            var tile_layer_b0ebd3b24bb11510f7a4ae240ea07144 = L.tileLayer(
+            var tile_layer_dcceacaf3834372bc52e8c3ee7787088 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -622,11 +623,11 @@
             );
 
 
-            tile_layer_b0ebd3b24bb11510f7a4ae240ea07144.addTo(map_75f8e20bfc205f1dac128b5542ff7dbb);
+            tile_layer_dcceacaf3834372bc52e8c3ee7787088.addTo(map_016e1a538cc3781e70e3c7fcb7c9f9a6);
 
 
 
-            var geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c = {
+            var geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49 = {
   &quot;collapsed&quot;: false,
   &quot;position&quot;: &quot;topright&quot;,
   &quot;defaultMarkGeocode&quot;: true,
@@ -637,19 +638,19 @@
 };
 
             // note: geocoder name should start with lowercase
-            var geocoderName_geocoder_9dc42e58acf819339011464160e5335c = geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c[&quot;provider&quot;];
+            var geocoderName_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49 = geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49[&quot;provider&quot;];
 
-            var customGeocoder_geocoder_9dc42e58acf819339011464160e5335c = L.Control.Geocoder[ geocoderName_geocoder_9dc42e58acf819339011464160e5335c ](
-                geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c[&#x27;providerOptions&#x27;]
+            var customGeocoder_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49 = L.Control.Geocoder[ geocoderName_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49 ](
+                geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49[&#x27;providerOptions&#x27;]
             );
-            geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c[&quot;geocoder&quot;] = customGeocoder_geocoder_9dc42e58acf819339011464160e5335c;
+            geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49[&quot;geocoder&quot;] = customGeocoder_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49;
 
             L.Control.geocoder(
-                geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c
+                geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49
             ).on(&#x27;markgeocode&#x27;, function(e) {
-                var zoom = geocoderOpts_geocoder_9dc42e58acf819339011464160e5335c[&#x27;zoom&#x27;] || map_75f8e20bfc205f1dac128b5542ff7dbb.getZoom();
-                map_75f8e20bfc205f1dac128b5542ff7dbb.setView(e.geocode.center, zoom);
-            }).addTo(map_75f8e20bfc205f1dac128b5542ff7dbb);
+                var zoom = geocoderOpts_geocoder_f6cd701f2d4ecb80491a5e2e6dddae49[&#x27;zoom&#x27;] || map_016e1a538cc3781e70e3c7fcb7c9f9a6.getZoom();
+                map_016e1a538cc3781e70e3c7fcb7c9f9a6.setView(e.geocode.center, zoom);
+            }).addTo(map_016e1a538cc3781e70e3c7fcb7c9f9a6);
 
 
 &lt;/script&gt;
@@ -727,7 +728,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

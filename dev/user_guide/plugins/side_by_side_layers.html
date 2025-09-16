@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>SideBySideLayers &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>SideBySideLayers &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="SemiCircle" href="semi_circle.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -550,7 +551,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_900334a4bb76c6fd360655b75ecef93c {
+                #map_d3edfe1fa8b703e794511e0b0fd4a5ef {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -588,14 +589,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_900334a4bb76c6fd360655b75ecef93c&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_d3edfe1fa8b703e794511e0b0fd4a5ef&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_900334a4bb76c6fd360655b75ecef93c = L.map(
-                &quot;map_900334a4bb76c6fd360655b75ecef93c&quot;,
+            var map_d3edfe1fa8b703e794511e0b0fd4a5ef = L.map(
+                &quot;map_d3edfe1fa8b703e794511e0b0fd4a5ef&quot;,
                 {
                     center: [30.0, 20.0],
                     crs: L.CRS.EPSG3857,
@@ -612,7 +613,7 @@
 
 
 
-            var tile_layer_036a8fb469ed639d19bb23a5c8836e84 = L.tileLayer(
+            var tile_layer_c64c0482076c5bcc7b5a341b35fcfa57 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -629,10 +630,10 @@
             );
 
 
-            tile_layer_036a8fb469ed639d19bb23a5c8836e84.addTo(map_900334a4bb76c6fd360655b75ecef93c);
+            tile_layer_c64c0482076c5bcc7b5a341b35fcfa57.addTo(map_d3edfe1fa8b703e794511e0b0fd4a5ef);
 
 
-            var tile_layer_cc472e96a1d20e844542a72328fa0f0a = L.tileLayer(
+            var tile_layer_12021f33853865b906f41fb56174c6c0 = L.tileLayer(
                 &quot;https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -649,10 +650,10 @@
             );
 
 
-            tile_layer_cc472e96a1d20e844542a72328fa0f0a.addTo(map_900334a4bb76c6fd360655b75ecef93c);
+            tile_layer_12021f33853865b906f41fb56174c6c0.addTo(map_d3edfe1fa8b703e794511e0b0fd4a5ef);
 
 
-            var tile_layer_ecdf3d824b3c041a66f73d5dd233536e = L.tileLayer(
+            var tile_layer_cba5a11e2e1b9099bc47d9fa5d8a4413 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -669,12 +670,12 @@
             );
 
 
-            tile_layer_ecdf3d824b3c041a66f73d5dd233536e.addTo(map_900334a4bb76c6fd360655b75ecef93c);
+            tile_layer_cba5a11e2e1b9099bc47d9fa5d8a4413.addTo(map_d3edfe1fa8b703e794511e0b0fd4a5ef);
 
 
-            var side_by_side_layers_ec4bf115db211a72a7f7399c93f6b008 = L.control.sideBySide(
-                tile_layer_cc472e96a1d20e844542a72328fa0f0a, tile_layer_ecdf3d824b3c041a66f73d5dd233536e
-            ).addTo(map_900334a4bb76c6fd360655b75ecef93c);
+            var side_by_side_layers_4235d1affc0059faa32e6e86e0cf1f4d = L.control.sideBySide(
+                tile_layer_12021f33853865b906f41fb56174c6c0, tile_layer_cba5a11e2e1b9099bc47d9fa5d8a4413
+            ).addTo(map_d3edfe1fa8b703e794511e0b0fd4a5ef);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -751,7 +752,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 

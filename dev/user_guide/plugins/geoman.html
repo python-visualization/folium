@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geoman &#8212; Folium 0.20.1.dev39+g469bae318 documentation</title>
+    <title>Geoman &#8212; Folium 0.20.1.dev43+g01ca1e4b1 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=85c3f929"></script>
+    <script src="../../_static/documentation_options.js?v=e99f339f"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -58,7 +58,7 @@
     <link rel="prev" title="Geocoder" href="geocoder.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev39+g469bae318" />
+  <meta name="docsearch:version" content="0.20.1.dev43+g01ca1e4b1" />
   </head>
   
   
@@ -390,6 +390,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -557,7 +558,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_84e5d7817c6bfb55abbd8d78d421405b {
+                #map_67a3de898ab42a6afff565c5bfb1eeba {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -596,14 +597,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_84e5d7817c6bfb55abbd8d78d421405b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_67a3de898ab42a6afff565c5bfb1eeba&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_84e5d7817c6bfb55abbd8d78d421405b = L.map(
-                &quot;map_84e5d7817c6bfb55abbd8d78d421405b&quot;,
+            var map_67a3de898ab42a6afff565c5bfb1eeba = L.map(
+                &quot;map_67a3de898ab42a6afff565c5bfb1eeba&quot;,
                 {
                     center: [45.5236, -122.675],
                     crs: L.CRS.EPSG3857,
@@ -620,7 +621,7 @@
 
 
 
-            var tile_layer_d42d21ab8389dea2004667b1262515c9 = L.tileLayer(
+            var tile_layer_e13b44ab94e4b428dbcc12d16eab7a9d = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -637,39 +638,40 @@
             );
 
 
-            tile_layer_d42d21ab8389dea2004667b1262515c9.addTo(map_84e5d7817c6bfb55abbd8d78d421405b);
+            tile_layer_e13b44ab94e4b428dbcc12d16eab7a9d.addTo(map_67a3de898ab42a6afff565c5bfb1eeba);
 
 
             /* ensure the name is usable */
-            var geo_man_9b5e9903252082c481688f19a43465c1 = map_84e5d7817c6bfb55abbd8d78d421405b.pm;
+            var geo_man_a4279e21d021497b5f7a7458f002c6c9 = map_67a3de898ab42a6afff565c5bfb1eeba.pm;
                 // FeatureGroup is to store editable layers.
-                var drawnItems_geo_man_9b5e9903252082c481688f19a43465c1 =
+                var drawnItems_geo_man_a4279e21d021497b5f7a7458f002c6c9 =
                     new L.featureGroup().addTo(
-                        map_84e5d7817c6bfb55abbd8d78d421405b
+                        map_67a3de898ab42a6afff565c5bfb1eeba
                     );
+
             /* The global variable below is needed to prevent streamlit-folium
                from barfing :-(
             */
-            var drawnItems = drawnItems_geo_man_9b5e9903252082c481688f19a43465c1;
+            var drawnItems = drawnItems_geo_man_a4279e21d021497b5f7a7458f002c6c9;
 
-            geo_man_9b5e9903252082c481688f19a43465c1.addControls(
+            geo_man_a4279e21d021497b5f7a7458f002c6c9.addControls(
                 {
   &quot;position&quot;: &quot;topleft&quot;,
 }
             )
-            drawnItems_geo_man_9b5e9903252082c481688f19a43465c1.eachLayer(function(layer){
+
+            drawnItems_geo_man_a4279e21d021497b5f7a7458f002c6c9.eachLayer(function(layer){
                 L.PM.reInitLayer(layer);
             });
 
-            map_84e5d7817c6bfb55abbd8d78d421405b.on(&quot;pm:create&quot;, function(e) {
+            var new_element_handler_geo_man_a4279e21d021497b5f7a7458f002c6c9 = function(e) {
                 var layer = e.layer,
                     type = e.layerType;
-            });
+                drawnItems_geo_man_a4279e21d021497b5f7a7458f002c6c9.addLayer(layer);
+            };
 
-            map_84e5d7817c6bfb55abbd8d78d421405b.on(&quot;pm:cut&quot;, function(e) {
-                var layer = e.layer,
-                    type = e.layerType;
-            });
+            map_67a3de898ab42a6afff565c5bfb1eeba.on(&quot;pm:create&quot;, new_element_handler_geo_man_a4279e21d021497b5f7a7458f002c6c9);
+            map_67a3de898ab42a6afff565c5bfb1eeba.on(&quot;pm:cut&quot;, new_element_handler_geo_man_a4279e21d021497b5f7a7458f002c6c9);
 
 
 &lt;/script&gt;
@@ -733,7 +735,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_5fc908e12e58484c1e888e1a354c7fe3 {
+                #map_a4473add7d9ed852acca7a834c118339 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -772,14 +774,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_5fc908e12e58484c1e888e1a354c7fe3&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_a4473add7d9ed852acca7a834c118339&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_5fc908e12e58484c1e888e1a354c7fe3 = L.map(
-                &quot;map_5fc908e12e58484c1e888e1a354c7fe3&quot;,
+            var map_a4473add7d9ed852acca7a834c118339 = L.map(
+                &quot;map_a4473add7d9ed852acca7a834c118339&quot;,
                 {
                     center: [45.5236, -122.675],
                     crs: L.CRS.EPSG3857,
@@ -796,7 +798,7 @@
 
 
 
-            var tile_layer_46eb21d0b4cfca1d1993dd749bef98b7 = L.tileLayer(
+            var tile_layer_8c4ece323c8ba67bd3f0a6555fa36c99 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -813,22 +815,23 @@
             );
 
 
-            tile_layer_46eb21d0b4cfca1d1993dd749bef98b7.addTo(map_5fc908e12e58484c1e888e1a354c7fe3);
+            tile_layer_8c4ece323c8ba67bd3f0a6555fa36c99.addTo(map_a4473add7d9ed852acca7a834c118339);
 
 
             /* ensure the name is usable */
-            var geo_man_fef345c4222e27b5864f08e30e5c8ef0 = map_5fc908e12e58484c1e888e1a354c7fe3.pm;
+            var geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f = map_a4473add7d9ed852acca7a834c118339.pm;
                 // FeatureGroup is to store editable layers.
-                var drawnItems_geo_man_fef345c4222e27b5864f08e30e5c8ef0 =
+                var drawnItems_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f =
                     new L.featureGroup().addTo(
-                        map_5fc908e12e58484c1e888e1a354c7fe3
+                        map_a4473add7d9ed852acca7a834c118339
                     );
+
             /* The global variable below is needed to prevent streamlit-folium
                from barfing :-(
             */
-            var drawnItems = drawnItems_geo_man_fef345c4222e27b5864f08e30e5c8ef0;
+            var drawnItems = drawnItems_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f;
 
-            geo_man_fef345c4222e27b5864f08e30e5c8ef0.addControls(
+            geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f.addControls(
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;drawMarker&quot;: true,
@@ -845,19 +848,19 @@
   &quot;rotateMode&quot;: false,
 }
             )
-            drawnItems_geo_man_fef345c4222e27b5864f08e30e5c8ef0.eachLayer(function(layer){
+
+            drawnItems_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f.eachLayer(function(layer){
                 L.PM.reInitLayer(layer);
             });
 
-            map_5fc908e12e58484c1e888e1a354c7fe3.on(&quot;pm:create&quot;, function(e) {
+            var new_element_handler_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f = function(e) {
                 var layer = e.layer,
                     type = e.layerType;
-            });
+                drawnItems_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f.addLayer(layer);
+            };
 
-            map_5fc908e12e58484c1e888e1a354c7fe3.on(&quot;pm:cut&quot;, function(e) {
-                var layer = e.layer,
-                    type = e.layerType;
-            });
+            map_a4473add7d9ed852acca7a834c118339.on(&quot;pm:create&quot;, new_element_handler_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f);
+            map_a4473add7d9ed852acca7a834c118339.on(&quot;pm:cut&quot;, new_element_handler_geo_man_8ab2ab8bec6d9f1cf77d7cd12cb6902f);
 
 
 &lt;/script&gt;
@@ -951,7 +954,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev39+g469bae318</div>
+Folium version 0.20.1.dev43+g01ca1e4b1</div>
       
         <div class="footer-item">
 
