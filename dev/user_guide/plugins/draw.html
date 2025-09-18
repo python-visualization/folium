@@ -544,7 +544,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d19c2ce5da173f1a7fadca35002c0b62 {
+                #map_ecd56a50a4bdfe4df3cf8b5064fabae7 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -583,7 +583,7 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d19c2ce5da173f1a7fadca35002c0b62&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ecd56a50a4bdfe4df3cf8b5064fabae7&quot; &gt;&lt;/div&gt;
 
 
 
@@ -611,8 +611,8 @@
 &lt;script&gt;
 
 
-            var map_d19c2ce5da173f1a7fadca35002c0b62 = L.map(
-                &quot;map_d19c2ce5da173f1a7fadca35002c0b62&quot;,
+            var map_ecd56a50a4bdfe4df3cf8b5064fabae7 = L.map(
+                &quot;map_ecd56a50a4bdfe4df3cf8b5064fabae7&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -629,7 +629,7 @@
 
 
 
-            var tile_layer_3b1f691043a6883631bf1e62b79a4147 = L.tileLayer(
+            var tile_layer_8160b15ffb859a52af413d45942e99ab = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -646,7 +646,7 @@
             );
 
 
-            tile_layer_3b1f691043a6883631bf1e62b79a4147.addTo(map_d19c2ce5da173f1a7fadca35002c0b62);
+            tile_layer_8160b15ffb859a52af413d45942e99ab.addTo(map_ecd56a50a4bdfe4df3cf8b5064fabae7);
 
 
             var options = {
@@ -655,16 +655,16 @@
               edit: {},
             }
                 // FeatureGroup is to store editable layers.
-                var drawnItems_draw_control_e89b627cc7ceba0ab779922cbf3a490f =
+                var drawnItems_draw_control_b682d9a4317eb428072428535739e67c =
                     new L.featureGroup().addTo(
-                        map_d19c2ce5da173f1a7fadca35002c0b62
+                        map_ecd56a50a4bdfe4df3cf8b5064fabae7
                     );
 
-            options.edit.featureGroup = drawnItems_draw_control_e89b627cc7ceba0ab779922cbf3a490f;
-            var draw_control_e89b627cc7ceba0ab779922cbf3a490f = new L.Control.Draw(
+            options.edit.featureGroup = drawnItems_draw_control_b682d9a4317eb428072428535739e67c;
+            var draw_control_b682d9a4317eb428072428535739e67c = new L.Control.Draw(
                 options
-            ).addTo( map_d19c2ce5da173f1a7fadca35002c0b62 );
-            map_d19c2ce5da173f1a7fadca35002c0b62.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_ecd56a50a4bdfe4df3cf8b5064fabae7 );
+            map_ecd56a50a4bdfe4df3cf8b5064fabae7.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -672,15 +672,15 @@
                     alert(coords);
                     console.log(coords);
                 });
-                drawnItems_draw_control_e89b627cc7ceba0ab779922cbf3a490f.addLayer(layer);
+                drawnItems_draw_control_b682d9a4317eb428072428535739e67c.addLayer(layer);
             });
-            map_d19c2ce5da173f1a7fadca35002c0b62.on(&#x27;draw:created&#x27;, function(e) {
-                drawnItems_draw_control_e89b627cc7ceba0ab779922cbf3a490f.addLayer(e.layer);
+            map_ecd56a50a4bdfe4df3cf8b5064fabae7.on(&#x27;draw:created&#x27;, function(e) {
+                drawnItems_draw_control_b682d9a4317eb428072428535739e67c.addLayer(e.layer);
             });
 
 
             document.getElementById(&#x27;export&#x27;).onclick = function(e) {
-                var data = drawnItems_draw_control_e89b627cc7ceba0ab779922cbf3a490f.toGeoJSON();
+                var data = drawnItems_draw_control_b682d9a4317eb428072428535739e67c.toGeoJSON();
                 var convertedData = &#x27;text/json;charset=utf-8,&#x27;
                     + encodeURIComponent(JSON.stringify(data));
                 document.getElementById(&#x27;export&#x27;).setAttribute(
@@ -782,7 +782,7 @@ Folium version 0.20.1.dev43+g01ca1e4b1</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
     <br/>
   </p>
 </div>
