@@ -49,6 +49,7 @@ jobs:
     - name: Run Geopandas tests
       run: |
         cd geopandas
+        pip install -e .
         coverage run -p -m pytest -r a geopandas/tests/test_explore.py
 
     - name: Upload coverage
