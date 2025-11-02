@@ -19,7 +19,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
-        python-version: '3.x'
+        python-version: '3.13'
 
     - name: Checkout Folium
       uses: actions/checkout@v5
@@ -43,6 +43,7 @@ jobs:
     - name: Install streamlit_folium dev dependencies
       run: |
         cd streamlit_folium
+        sudo apt-get install proj-bin
         uv sync --group dev --group test
 
     - name: Install playwright dependencies
