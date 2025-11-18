@@ -1,10 +1,10 @@
 from branca.element import Figure, MacroElement
 
-from folium.elements import JSCSSMixin
+from folium.elements import EventHandler, JSCSSMixin
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.template import Template
-from folium.utilities import deep_copy
+from folium.utilities import JsCode, deep_copy
 
 
 class DualMap(JSCSSMixin, MacroElement):
@@ -107,6 +107,19 @@ class DualMap(JSCSSMixin, MacroElement):
         if index is None:
             index = len(self.m2._children)
         self.children_for_m2.append((child, name, index))
+
+    def on(self, **event_map: JsCode):
+        """Add event handlers to both maps at once"""
+        self._add(once=False, **event_map)
+
+    def once(self, **event_map: JsCode):
+        """Add event handlers to both maps at once"""
+        self._add(once=True, **event_map)
+
+    def _add(self, once: bool, **event_map: JsCode):
+        for event_type, handler in event_map.items():
+            self.m1.add_child(EventHandler(event_type, handler, once))
+            self.m2.add_child(EventHandler(event_type, handler, once))
 
     def render(self, **kwargs):
         super().render(**kwargs)
