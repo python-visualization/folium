@@ -122,3 +122,69 @@ Plugins
       - Display gridded vector data (GeoJSON or TopoJSON sliced with geojson-vt, or protobuf vector tiles).
     * - :doc:`WMS Time Dimension <plugins/WmsTimeDimension>`
       - Create a time-aware WmsTileLayer.
+
+      .. _custom_controls:
+
+Custom Controls via ``Control`` (add text/UI without a full plugin)
+===================================================================
+
+Folium’s ``Control`` (Leaflet’s ``L.Control``) lets you add small custom UI elements—
+like always-visible text, badges, or buttons—**without** writing a full Folium plugin.
+Below is a minimal example that injects a Leaflet control containing text.
+
+.. code-block:: python
+
+   from folium import Map
+   from branca.element import Element
+
+   # 1) Create a map
+   m = Map(location=[0, 0], zoom_start=2)
+
+   # 2) Get the JS map variable name Folium uses (needed to attach the control)
+   map_var = m.get_name()
+
+   # 3) Inject a small Leaflet control that renders HTML text
+   control_js = f"""
+   <script>
+   // Define a small custom control
+   var CustomText = L.Control.extend({{
+     onAdd: function(map) {{
+       var div = L.DomUtil.create('div');
+       div.innerHTML = 'My Label';
+       div.style.background = 'white';
+       div.style.padding = '4px 8px';
+       div.style.border = '1px solid #ccc';
+       div.style.borderRadius = '4px';
+       div.style.font = '14px/1.2 sans-serif';
+       return div;
+     }},
+     onRemove: function(map) {{}}
+   }});
+
+   // Factory and add to the map in the top-right corner
+   L.control.customText = function(opts) {{
+     return new CustomText(opts);
+   }};
+   L.control.customText({{ position: 'topright' }}).addTo({map_var});
+   </script>
+   """
+
+   m.get_root().html.add_child(Element(control_js))
+   m.save("map_with_custom_text_control.html")
+
+**Notes & tips**
+
+- This approach is best for **small UI** (labels, badges, short instructions).
+- For **text tied to a geographic point**, see :py:class:`folium.features.DivIcon`.
+- If your control overlaps with other UI, change the Leaflet position
+  (``'topleft'``, ``'topright'``, ``'bottomleft'``, ``'bottomright'``) or use custom CSS.
+- For larger features, consider wrapping JS in a proper Folium element (e.g. a
+  :class:`branca.element.MacroElement`) and reusing it across maps.
+
+.. seealso::
+
+   Leaflet Controls: https://leafletjs.com/reference.html#control
+   • API: :py:class:`folium.features.Control`
+
+
+
