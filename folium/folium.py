@@ -380,7 +380,7 @@ class Map(JSCSSMixin, Evented):
             if driver is None:
                 from selenium import webdriver
 
-                options = webdriver.firefox.options.Options()
+                options = webdriver.Firefox.options.Options()
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
