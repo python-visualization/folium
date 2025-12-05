@@ -20,7 +20,7 @@ jobs:
         shell: bash -l {0}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Setup Micromamba env
       uses: mamba-org/setup-micromamba@v2
@@ -39,7 +39,7 @@ jobs:
 
     - name: Upload coverage
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: coverage-test-selenium-${{ matrix.python-version }}
         path: |
