@@ -379,8 +379,9 @@ class Map(JSCSSMixin, Evented):
         if self._png_image is None:
             if driver is None:
                 from selenium import webdriver
+                from selenium.webdriver.firefox.options import Options
 
-                options = webdriver.Firefox.options.Options()
+                options = Options()
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
