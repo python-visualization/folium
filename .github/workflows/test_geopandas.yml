@@ -17,7 +17,7 @@ jobs:
 
     steps:
     - name: Checkout Folium
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         # needed to get the correct version number for Folium
         fetch-depth: 0
@@ -32,7 +32,7 @@ jobs:
           --file folium/requirements.txt
 
     - name: Checkout Geopandas
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
       with:
         repository: geopandas/geopandas
         path: geopandas
@@ -54,7 +54,7 @@ jobs:
 
     - name: Upload coverage
       if: always()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: coverage-test-geopandas
         path: |
