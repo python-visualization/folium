@@ -263,6 +263,4 @@ my_map_global
 
 * https://docs.scipy.org/doc/scipy-0.19.0/reference/generated/scipy.spatial.ConvexHull.html, accessed 29.12.2018
 
-* https://medium.com/@vworri/simple-geospacial-mapping-with-geopandas-and-the-usual-suspects-77f46d40e807, accessed 29.12.2018
-
 * https://web.archive.org/web/20191207074940/http://blog.thehumangeo.com/2014/05/12/drawing-boundaries-in-python/, accessed 04.01.2019
