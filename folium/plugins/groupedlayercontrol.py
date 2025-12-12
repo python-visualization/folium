@@ -22,6 +22,9 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
     exclusive_groups: bool, default True
         Whether to use radio buttons (default) or checkboxes.
         If you want to use both, use two separate instances of this class.
+
+    group_checkboxes: bool, default True
+        Show a checkbox next to non-exclusive group labels for toggling all
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#control-layers
@@ -66,12 +69,13 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         """
     )
 
-    def __init__(self, groups, exclusive_groups=True, **kwargs):
+    def __init__(self, groups, exclusive_groups=True, group_checkboxes=True, **kwargs):
         super().__init__()
         self._name = "GroupedLayerControl"
         self.options = remove_empty(**kwargs)
         if exclusive_groups:
             self.options["exclusiveGroups"] = list(groups.keys())
+        self.options["groupCheckboxes"] = group_checkboxes
         self.layers_untoggle = set()
         self.grouped_overlays = {}
         for group_name, sublist in groups.items():
