@@ -59,3 +59,25 @@ GroupedLayerControl(
 
 m
 ```
+
+To toggle every layer in a group at once, set `group_checkboxes=True` together with
+`exclusive_groups=False`. This adds a checkbox next to each group label. Group
+checkboxes are disabled by default and do not apply to exclusive groups.
+
+```{code-cell} ipython3
+m = folium.Map([40., 70.], zoom_start=6)
+
+fg1 = folium.FeatureGroup(name='g1', show=False).add_to(m)
+fg2 = folium.FeatureGroup(name='g2', show=False).add_to(m)
+folium.Marker([40, 74]).add_to(fg1)
+folium.Marker([38, 72]).add_to(fg2)
+
+GroupedLayerControl(
+    groups={'groups1': [fg1, fg2]},
+    exclusive_groups=False,
+    group_checkboxes=True,
+    collapsed=False,
+).add_to(m)
+
+m
+```

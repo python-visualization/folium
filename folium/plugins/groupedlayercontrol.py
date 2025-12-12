@@ -27,6 +27,9 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         Layer objects, typically tile layers, to show as base layers in this
         control. These are removed from the regular LayerControl. Use the
         layers' `show` argument to choose which one is shown on opening.
+    group_checkboxes : bool, default False
+        Show a checkbox next to each non-exclusive group label to toggle all
+        layers in that group. Use with `exclusive_groups=False`.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference-1.9.4.html#control-layers
@@ -77,12 +80,21 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         {% endmacro %}
         """)
 
-    def __init__(self, groups, exclusive_groups=True, base_layers=None, **kwargs):
+    def __init__(
+        self,
+        groups,
+        exclusive_groups=True,
+        base_layers=None,
+        group_checkboxes=False,
+        **kwargs,
+    ):
         super().__init__()
         self._name = "GroupedLayerControl"
         self.options = remove_empty(**kwargs)
         if exclusive_groups:
             self.options["exclusiveGroups"] = list(groups.keys())
+        if group_checkboxes:
+            self.options["groupCheckboxes"] = group_checkboxes
         self.base_layers = {}
         for element in base_layers or []:
             self.base_layers[element.layer_name] = element.get_name()

@@ -1,3 +1,5 @@
+import pytest
+
 import folium
 from folium.plugins import groupedlayercontrol
 from folium.utilities import normalize
@@ -41,15 +43,22 @@ def test_grouped_layer_control():
     assert expected in out
 
 
-def test_grouped_layer_control_base_layers():
+@pytest.mark.parametrize("positional", [False, True])
+def test_grouped_layer_control_base_layers(positional):
     m = folium.Map([40.0, 70.0], zoom_start=6, tiles=None)
     osm = folium.TileLayer("OpenStreetMap", name="osm").add_to(m)
     topo = folium.TileLayer("OpenTopoMap", name="topo", show=False).add_to(m)
     fg1 = folium.FeatureGroup(name="g1").add_to(m)
     fg2 = folium.FeatureGroup(name="g2").add_to(m)
-    groupedlayercontrol.GroupedLayerControl(
-        groups={"groups1": [fg1, fg2]}, base_layers=[osm, topo]
-    ).add_to(m)
+    if positional:
+        control = groupedlayercontrol.GroupedLayerControl(
+            {"groups1": [fg1, fg2]}, True, [osm, topo]
+        )
+    else:
+        control = groupedlayercontrol.GroupedLayerControl(
+            groups={"groups1": [fg1, fg2]}, base_layers=[osm, topo]
+        )
+    control.add_to(m)
     lc = folium.LayerControl().add_to(m)
     out = normalize(m._parent.render())
 
@@ -71,3 +80,52 @@ def test_grouped_layer_control_base_layers():
     assert expected in out
     # The base layers are no longer listed in the regular LayerControl.
     assert not lc.base_layers
+
+
+@pytest.mark.parametrize("exclusive_groups", [False, True])
+@pytest.mark.parametrize("group_checkboxes", [False, True])
+def test_grouped_layer_control_group_checkboxes(exclusive_groups, group_checkboxes):
+    m = folium.Map([40.0, 70.0], zoom_start=6, tiles=None)
+    osm = folium.TileLayer("OpenStreetMap", name="osm").add_to(m)
+    fg1 = folium.FeatureGroup(name="g1").add_to(m)
+    fg2 = folium.FeatureGroup(name="g2").add_to(m)
+    hidden = folium.FeatureGroup(name="hidden", show=False).add_to(m)
+    groupedlayercontrol.GroupedLayerControl(
+        groups={"groups1": [fg1, fg2, hidden]},
+        exclusive_groups=exclusive_groups,
+        base_layers=[osm],
+        group_checkboxes=group_checkboxes,
+        collapsed=False,
+    ).add_to(m)
+    lc = folium.LayerControl().add_to(m)
+    out = normalize(m._parent.render())
+
+    assert ('"groupCheckboxes": true' in out) == group_checkboxes
+    assert ('"exclusiveGroups": ["groups1",]' in out) == exclusive_groups
+    assert (f"{fg2.get_name()}.remove();" in out) == exclusive_groups
+    assert f"{fg1.get_name()}.remove();" not in out
+    assert f"{hidden.get_name()}.remove();" in out
+    assert '"collapsed": false' in out
+    assert f'"osm" : {osm.get_name()}' in out
+    assert not lc.base_layers
+    assert not lc.overlays
+
+
+def test_grouped_layer_control_group_checkboxes_default():
+    m = folium.Map()
+    fg = folium.FeatureGroup(name="g1").add_to(m)
+    groupedlayercontrol.GroupedLayerControl(
+        groups={"groups1": [fg]}, exclusive_groups=False
+    ).add_to(m)
+
+    assert '"groupCheckboxes"' not in m._parent.render()
+
+
+def test_grouped_layer_control_group_checkboxes_camel_case():
+    m = folium.Map()
+    fg = folium.FeatureGroup(name="g1").add_to(m)
+    groupedlayercontrol.GroupedLayerControl(
+        groups={"groups1": [fg]}, exclusive_groups=False, groupCheckboxes=True
+    ).add_to(m)
+
+    assert '"groupCheckboxes": true' in m._parent.render()
