@@ -350,6 +350,7 @@ class VegaLite(MacroElement):
             3: self._embed_vegalite_v3,
             4: self._embed_vegalite_v4,
             5: self._embed_vegalite_v5,
+            6: self._embed_vegalite_v6,  # noqa
         }
 
         # Version 2 is assumed as the default, if no version is given in the schema.
@@ -366,6 +367,21 @@ class VegaLite(MacroElement):
         schema = self.data["$schema"]
 
         return int(schema.split("/")[-1].split(".")[0].lstrip("v"))
+    
+    
+    def _embed_vegalite_v6(self, figure: Figure, parent: TypeContainer) -> None:
+        self._vega_embed(parent=parent)
+
+        figure.header.add_child(
+            JavascriptLink("https://cdn.jsdelivr.net/npm/vega@5"), name="vega"
+        )
+        figure.header.add_child(
+            JavascriptLink("https://cdn.jsdelivr.net/npm/vega-lite@6"), name="vega-lite"
+        )
+        figure.header.add_child(
+            JavascriptLink("https://cdn.jsdelivr.net/npm/vega-embed@6"),
+            name="vega-embed",
+        )
 
     def _embed_vegalite_v5(self, figure: Figure, parent: TypeContainer) -> None:
         self._vega_embed(parent=parent)
