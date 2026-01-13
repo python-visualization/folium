@@ -367,7 +367,7 @@ class VegaLite(MacroElement):
         schema = self.data["$schema"]
 
         return int(schema.split("/")[-1].split(".")[0].lstrip("v"))
-    
+
     def _embed_vegalite_v6(self, figure: Figure, parent: TypeContainer) -> None:
         self._vega_embed(parent=parent)
 
