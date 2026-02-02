@@ -81,16 +81,14 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.RegularPolygonMarker(
                 {{ this.location|tojson }},
                 {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (
@@ -191,24 +189,16 @@ class Vega(JSCSSMixin):
         self.json = json.dumps(self.data)
 
         self._parent.html.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
             <div id="{{this.get_name()}}"></div>
-            """
-                ).render(this=self, kwargs=kwargs)
-            ),
+            """).render(this=self, kwargs=kwargs)),
             name=self.get_name(),
         )
 
         self._parent.script.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
             vega_parse({{this.json}},{{this.get_name()}});
-            """
-                ).render(this=self)
-            ),
+            """).render(this=self)),
             name=self.get_name(),
         )
 
@@ -218,9 +208,7 @@ class Vega(JSCSSMixin):
         ), "You cannot render this Element if it is not in a Figure."
 
         figure.header.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
             <style> #{{this.get_name()}} {
                 position : {{this.position}};
                 width : {{this.width[0]}}{{this.width[1]}};
@@ -228,9 +216,7 @@ class Vega(JSCSSMixin):
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
             </style>
-            """
-                ).render(this=self, **kwargs)
-            ),
+            """).render(this=self, **kwargs)),
             name=self.get_name(),
         )
 
@@ -312,13 +298,9 @@ class VegaLite(MacroElement):
             )
 
         parent.html.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
             <div id="{{this.get_name()}}"></div>
-            """
-                ).render(this=self, kwargs=kwargs)
-            ),
+            """).render(this=self, kwargs=kwargs)),
             name=self.get_name(),
         )
 
@@ -328,9 +310,7 @@ class VegaLite(MacroElement):
         ), "You cannot render this Element if it is not in a Figure."
 
         figure.header.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
             <style> #{{this.get_name()}} {
                 position : {{this.position}};
                 width : {{this.width[0]}}{{this.width[1]}};
@@ -338,9 +318,7 @@ class VegaLite(MacroElement):
                 left: {{this.left[0]}}{{this.left[1]}};
                 top: {{this.top[0]}}{{this.top[1]}};
             </style>
-            """
-                ).render(this=self, **kwargs)
-            ),
+            """).render(this=self, **kwargs)),
             name=self.get_name(),
         )
 
@@ -440,23 +418,17 @@ class VegaLite(MacroElement):
 
     def _vega_embed(self, parent: TypeContainer) -> None:
         parent.script.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
                     vegaEmbed({{this.get_name()}}, {{this.json}})
                         .then(function(result) {})
                         .catch(console.error);
-                """
-                ).render(this=self)
-            ),
+                """).render(this=self)),
             name=self.get_name(),
         )
 
     def _embed_vegalite_v1(self, figure: Figure, parent: TypeContainer) -> None:
         parent.script.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
                     var embedSpec = {
                         mode: "vega-lite",
                         spec: {{this.json}}
@@ -464,9 +436,7 @@ class VegaLite(MacroElement):
                     vg.embed(
                         {{this.get_name()}}, embedSpec, function(error, result) {}
                     );
-                """
-                ).render(this=self)
-            ),
+                """).render(this=self)),
             name=self.get_name(),
         )
 
@@ -568,8 +538,7 @@ class GeoJson(Layer):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
         {%- if this.style %}
         function {{ this.get_name() }}_styler(feature) {
@@ -693,8 +662,7 @@ class GeoJson(Layer):
         {%- endif %}
 
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     def __init__(
         self,
@@ -1006,8 +974,7 @@ class TopoJson(JSCSSMixin, Layer):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }}_data = {{ this.data|tojson }};
             var {{ this.get_name() }} = L.geoJson(
@@ -1025,8 +992,7 @@ class TopoJson(JSCSSMixin, Layer):
                 return feature.properties.style;
             });
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     default_js = [
         (
@@ -1247,9 +1213,7 @@ class GeoJsonDetail(MacroElement):
                 value in keys
             ), f"The field {value} is not available in the data. Choose from: {keys}."
         figure.header.add_child(
-            Element(
-                Template(
-                    """
+            Element(Template("""
                     <style>
                         .{{ this.class_name }} {
                             {{ this.style }}
@@ -1264,9 +1228,7 @@ class GeoJsonDetail(MacroElement):
                             padding: 2px; padding-right: 8px;
                         }
                     </style>
-            """
-                ).render(this=self)
-            ),
+            """).render(this=self)),
             name=self.get_name() + "tablestyle",
         )
 
@@ -1756,13 +1718,11 @@ class DivIcon(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.divIcon({{ this.options|tojavascript }});
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     def __init__(
         self,
@@ -1790,8 +1750,7 @@ class LatLngPopup(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
             {% macro script(this, kwargs) %}
                 var {{this.get_name()}} = L.popup();
                 function latLngPop(e) {
@@ -1803,8 +1762,7 @@ class LatLngPopup(MacroElement):
                     }
                 {{this._parent.get_name()}}.on('click', latLngPop);
             {% endmacro %}
-            """
-    )  # noqa
+            """)  # noqa
 
     def __init__(self):
         super().__init__()
@@ -1831,8 +1789,7 @@ class ClickForMarker(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
             {% macro script(this, kwargs) %}
                 function newMarker(e){
                     var new_mark = L.marker().setLatLng(e.latlng).addTo({{this._parent.get_name()}});
@@ -1844,8 +1801,7 @@ class ClickForMarker(MacroElement):
                     };
                 {{this._parent.get_name()}}.on('click', newMarker);
             {% endmacro %}
-            """
-    )  # noqa
+            """)  # noqa
 
     def __init__(self, popup: Union[IFrame, Html, str, None] = None):
         super().__init__()
@@ -1875,8 +1831,7 @@ class ClickForLatLng(MacroElement):
         Whether there should be an alert when something has been copied to clipboard.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
             {% macro script(this, kwargs) %}
                 function getLatLng(e){
                     var lat = e.latlng.lat.toFixed(6),
@@ -1887,8 +1842,7 @@ class ClickForLatLng(MacroElement):
                     };
                 {{this._parent.get_name()}}.on('click', getLatLng);
             {% endmacro %}
-            """
-    )  # noqa
+            """)  # noqa
 
     def __init__(self, format_str: Optional[str] = None, alert: bool = True):
         super().__init__()
@@ -1932,13 +1886,11 @@ class CustomIcon(Icon):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
         var {{ this.get_name() }} = L.icon({{ this.options|tojavascript }});
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     def __init__(
         self,
@@ -2058,8 +2010,7 @@ class Control(JSCSSMixin, Class):
     >>> Control("Zoom", position="topleft").add_to(m)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
       {% macro script(this, kwargs) %}
           var {{ this.get_name() }} = new L.Control.{{this._name}}(
               {% for arg in this.args %}
@@ -2068,8 +2019,7 @@ class Control(JSCSSMixin, Class):
               {{ this.options|tojavascript }}
           ).addTo({{ this._parent.get_name() }});
       {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(
         self,

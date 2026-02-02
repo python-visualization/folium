@@ -46,8 +46,7 @@ def test_tag_filter_button():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
             var {{this.get_name()}} = L.control.tagFilterButton(
                 {
                     data: {{this.options.data}},
@@ -57,6 +56,5 @@ def test_tag_filter_button():
                     openPopupOnHover: {{this.options.open_popup_on_hover}}
                     })
                 .addTo({{this._parent.get_name()}});
-    """
-    )
+    """)
     assert normalize(tmpl.render(this=hm))

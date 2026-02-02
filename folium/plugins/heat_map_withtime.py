@@ -57,8 +57,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this, kwargs) %}
             <script>
             var TDHeatmap = L.TimeDimension.Layer.extend({
@@ -184,8 +183,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 });
 
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

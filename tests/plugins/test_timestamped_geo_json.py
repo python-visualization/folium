@@ -131,8 +131,7 @@ def test_timestamped_geo_json():
     )
 
     # Verify that the script is okay.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
             _getDisplayDateFormat: function(date){
                 var newdate = new moment(date);
@@ -192,8 +191,7 @@ def test_timestamped_geo_json():
                 duration: {{ this.duration }},
             }
         ).addTo({{this._parent.get_name()}});
-    """
-    )  # noqa
+    """)  # noqa
     expected = normalize(tmpl.render(this=tgj))
     assert expected in out
 

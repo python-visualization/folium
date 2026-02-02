@@ -34,8 +34,7 @@ def test_heat_map_with_time():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var times = {{this.times}};
 
         {{this._parent.get_name()}}.timeDimension = L.timeDimension(
@@ -77,7 +76,6 @@ def test_heat_map_with_time():
                 }
             });
             {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
-    """
-    )
+    """)
 
     assert normalize(tmpl.render(this=hm)) in out

@@ -27,15 +27,13 @@ class Fullscreen(JSCSSMixin, MacroElement):
     See https://github.com/brunob/leaflet.fullscreen for more information.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             L.control.fullscreen(
                 {{ this.options|tojavascript }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     default_js = [
         (

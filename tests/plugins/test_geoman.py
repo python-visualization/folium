@@ -18,12 +18,10 @@ def test_geoman():
 
     # verify that the GeoMan plugin was added to
     # the map
-    tmpl = Template(
-        """
+    tmpl = Template("""
         {{this.get_name()}}.addControls(
             {{this.options|tojavascript}}
         )
-    """
-    )
+    """)
 
     assert normalize(tmpl.render(this=fs)) in out

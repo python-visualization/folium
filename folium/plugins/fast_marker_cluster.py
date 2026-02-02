@@ -42,8 +42,7 @@ class FastMarkerCluster(MarkerCluster):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = (function(){
                 {{ this.callback }}
@@ -64,8 +63,7 @@ class FastMarkerCluster(MarkerCluster):
                 cluster.addTo({{ this._parent.get_name() }});
                 return cluster;
             })();
-        {% endmacro %}"""
-    )
+        {% endmacro %}""")
 
     def __init__(
         self,

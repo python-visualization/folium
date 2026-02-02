@@ -30,8 +30,7 @@ def test_boat_marker():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
             {{ this.options|tojavascript }}
@@ -41,8 +40,7 @@ def test_boat_marker():
             {{ this.wind_speed }},
             {{ this.wind_heading }}
         );
-    """
-    )
+    """)
 
     assert normalize(tmpl.render(this=bm1)) in out
     assert normalize(tmpl.render(this=bm2)) in out
@@ -59,14 +57,12 @@ def test_boat_marker_with_no_wind_speed_or_heading():
     out = normalize(m._parent.render())
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{ this.get_name() }} = L.boatMarker(
             {{ this.location|tojson }},
             {{ this.options|tojavascript }}
         ).addTo({{ this._parent.get_name() }});
         {{ this.get_name() }}.setHeading({{ this.heading }});
-    """
-    )
+    """)
 
     assert normalize(tmpl.render(this=bm1)) in out

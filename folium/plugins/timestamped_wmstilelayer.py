@@ -62,8 +62,7 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.timeDimension = L.timeDimension(
                 {{ this.options|tojavascript }}
@@ -86,8 +85,7 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
             ).addTo({{ this._parent.get_name() }});
             {% endfor %}
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

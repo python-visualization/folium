@@ -32,8 +32,7 @@ class Geocoder(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
 
             var geocoderOpts_{{ this.get_name() }} = {{ this.options|tojavascript }};
@@ -54,8 +53,7 @@ class Geocoder(JSCSSMixin, MacroElement):
             }).addTo({{ this._parent.get_name() }});
 
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (

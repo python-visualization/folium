@@ -25,8 +25,7 @@ def test_grouped_layer_control():
         in out
     )
 
-    expected = normalize(
-        f"""
+    expected = normalize(f"""
         L.control.groupedLayers(
             null,
             {{
@@ -38,6 +37,5 @@ def test_grouped_layer_control():
             {{"exclusiveGroups": ["groups1",],}},
          ).addTo({m.get_name()});
          {fg2.get_name()}.remove();
-    """
-    )
+    """)
     assert expected in out

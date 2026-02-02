@@ -163,15 +163,13 @@ class FeatureGroup(Layer):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup(
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -220,8 +218,7 @@ class LayerControl(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this,kwargs) %}
             var {{ this.get_name() }}_layers = {
                 base_layers : {
@@ -246,8 +243,7 @@ class LayerControl(MacroElement):
             {%- endif %}
 
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -317,15 +313,13 @@ class Icon(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.AwesomeMarkers.icon(
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
     color_options = {
         "red",
         "darkred",
@@ -408,27 +402,23 @@ class Marker(MacroElement):
     ... )
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.marker(
                 {{ this.location|tojson }},
                 {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """
-    )
+        """)
 
     class SetIcon(MacroElement):
         """Set the icon of a marker after both are created."""
 
-        _template = Template(
-            """
+        _template = Template("""
             {% macro script(this, kwargs) %}
                 {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
             {% endmacro %}
-        """
-        )
+        """)
 
         def __init__(
             self, marker: "Marker", icon: Union[Icon, "CustomIcon", "DivIcon"]
@@ -515,8 +505,7 @@ class Popup(MacroElement):
         True only loads the Popup content when clicking on the Marker.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
 
         {% for name, element in this.html._children.items() %}
@@ -536,8 +525,7 @@ class Popup(MacroElement):
         {% for name, element in this.script._children.items() %}
             {{element.render()}}
         {% endfor %}
-    """
-    )  # noqa
+    """)  # noqa
 
     def __init__(
         self,
@@ -612,8 +600,7 @@ class Tooltip(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.bindTooltip(
                 `<div{% if this.style %} style={{ this.style|tojson }}{% endif %}>
@@ -622,8 +609,7 @@ class Tooltip(MacroElement):
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -669,16 +655,14 @@ class FitBounds(MacroElement):
         Maximum zoom to be used.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name() }}.fitBounds(
                 {{ this.bounds|tojson }},
                 {{ this.options|tojson }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -714,8 +698,7 @@ class FitOverlays(MacroElement):
         Apply the fit when initially loading the map.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
         function customFlyToBounds() {
             let bounds = L.latLngBounds([]);
@@ -733,8 +716,7 @@ class FitOverlays(MacroElement):
         customFlyToBounds();
         {%- endif %}
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(
         self,
@@ -774,8 +756,7 @@ class CustomPane(MacroElement):
         pointer events associated with lower layers.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = {{ this._parent.get_name() }}.createPane(
                 {{ this.name|tojson }});
@@ -784,8 +765,7 @@ class CustomPane(MacroElement):
                 {{ this.get_name() }}.style.pointerEvents = 'none';
             {% endif %}
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,

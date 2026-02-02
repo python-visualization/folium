@@ -21,8 +21,7 @@ class MeasureControl(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = new L.Control.Measure(
                 {{ this.options|tojavascript }});
@@ -44,8 +43,7 @@ class MeasureControl(JSCSSMixin, MacroElement):
             });
 
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     default_js = [
         (

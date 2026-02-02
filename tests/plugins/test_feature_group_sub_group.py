@@ -32,13 +32,11 @@ def test_feature_group_sub_group():
     )  # noqa
 
     # Verify the script part is okay.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{ this.get_name() }} = L.featureGroup.subGroup(
             {{ this._group.get_name() }}
         );
-    """
-    )
+    """)
     assert normalize(tmpl.render(this=g1)) in out
     assert normalize(tmpl.render(this=g2)) in out
 

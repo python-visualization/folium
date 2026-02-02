@@ -42,8 +42,7 @@ def test_fast_marker_cluster():
     )  # noqa
 
     # Verify the script part is okay.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{ this.get_name() }} = (function(){
             {{ this.callback }}
 
@@ -63,8 +62,7 @@ def test_fast_marker_cluster():
             cluster.addTo({{ this._parent.get_name() }});
             return cluster;
         })();
-    """
-    )
+    """)
     expected = normalize(tmpl.render(this=mc))
     assert expected in out
 

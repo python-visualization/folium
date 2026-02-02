@@ -80,8 +80,7 @@ class Timeline(GeoJson):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
           var {{ this.get_name() }}_options = {{ this.options|tojavascript }};
 
@@ -91,8 +90,7 @@ class Timeline(GeoJson):
           );
           {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (
@@ -164,8 +162,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this,kwargs) %}
             <style>
                 .leaflet-bottom.leaflet-left {
@@ -191,8 +188,7 @@ class TimelineSlider(JSCSSMixin, MacroElement):
           {% endfor %}
 
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (

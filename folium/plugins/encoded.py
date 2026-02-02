@@ -21,8 +21,7 @@ class _BaseFromEncoded(JSCSSMixin, MacroElement, ABC):
         Object options as accepted by leaflet.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
 
             var {{ this.get_name() }} = L.{{ this._encoding_type }}.fromEncoded(
@@ -31,8 +30,7 @@ class _BaseFromEncoded(JSCSSMixin, MacroElement, ABC):
             ).addTo({{ this._parent.get_name() }});
 
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

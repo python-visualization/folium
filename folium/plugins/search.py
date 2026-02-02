@@ -42,8 +42,7 @@ class Search(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.layer.get_name()}}searchControl = new L.Control.Search({
                 layer: {{this.layer.get_name()}},
@@ -85,8 +84,7 @@ class Search(JSCSSMixin, MacroElement):
             {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
 
         {% endmacro %}
-        """  # noqa
-    )
+        """)  # noqa
 
     default_js = [
         (

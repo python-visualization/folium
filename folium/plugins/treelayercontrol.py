@@ -122,8 +122,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         )
     ]
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this,kwargs) %}
             L.control.layers.tree(
                 {{this.base_tree|tojavascript}},
@@ -131,8 +130,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
                 {{this.options|tojavascript}}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,

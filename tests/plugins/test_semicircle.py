@@ -44,26 +44,22 @@ def test_semicircle():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl_sc1 = Template(
-        """
+    tmpl_sc1 = Template("""
         var {{ this.get_name() }} = L.semiCircle(
         {{ this.location|tojson }},
         {{ this.options|tojavascript }}
         )
             .setDirection{{ this.direction }}
         .addTo({{ this._parent.get_name() }});
-    """
-    )
+    """)
 
-    tmpl_sc2 = Template(
-        """
+    tmpl_sc2 = Template("""
         var {{ this.get_name() }} = L.semiCircle(
         {{ this.location|tojson }},
         {{ this.options|tojavascript }}
         )
         .addTo({{ this._parent.get_name() }});
-    """
-    )
+    """)
     assert normalize(tmpl_sc1.render(this=sc1)) in out
     assert normalize(tmpl_sc2.render(this=sc2)) in out
 

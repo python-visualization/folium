@@ -54,15 +54,13 @@ class FeatureGroupSubGroup(JSCSSMixin, Layer):
     >>> folium.LayerControl().add_to(m)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.featureGroup.subGroup(
                 {{ this._group.get_name() }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

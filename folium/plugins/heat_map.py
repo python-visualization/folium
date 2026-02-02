@@ -45,16 +45,14 @@ class HeatMap(JSCSSMixin, Layer):
         Whether the layer will be shown on opening.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.heatLayer(
                 {{ this.data|tojson }},
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

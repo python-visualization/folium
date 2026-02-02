@@ -41,15 +41,13 @@ def test_antpath():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
           {{this.get_name()}} = L.polyline.antPath(
                   {{ this.locations|tojson }},
                   {{ this.options|tojavascript }}
                 )
                 .addTo({{this._parent.get_name()}});
-        """
-    )  # noqa
+        """)  # noqa
 
     expected_rendered = tmpl.render(this=antpath)
     rendered = antpath._template.module.script(antpath)

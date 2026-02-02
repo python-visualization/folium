@@ -28,14 +28,12 @@ def test_polyline_from_encoded():
     script = '<script src="https://cdn.jsdelivr.net/npm/polyline-encoded@0.0.9/Polyline.encoded.js"></script>'
     assert script in out
 
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{this.get_name()}} = L.Polyline.fromEncoded(
                         {{ this.encoded|tojson }},
                         {{ this.options|tojavascript }}
         ).addTo({{this._parent.get_name()}});
-        """
-    )
+        """)
 
     expected_render = tmpl.render(this=polyline)
     actual_render = polyline._template.module.script(polyline)
@@ -64,15 +62,13 @@ def test_polygon_from_encoded():
     script = '<script src="https://cdn.jsdelivr.net/npm/polyline-encoded@0.0.9/Polyline.encoded.js"></script>'
     assert script in out
 
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{this.get_name()}} = L.Polygon.fromEncoded(
                             {{ this.encoded|tojson }},
                             {{ this.options|tojavascript }}
         )
         .addTo({{this._parent.get_name()}});
-        """
-    )
+        """)
 
     expected_render = tmpl.render(this=polygon)
 

@@ -69,8 +69,7 @@ class TestFolium:
             font_size="1.5rem",
             attr=attr,
         )
-        self.fit_bounds_template = Template(
-            """
+        self.fit_bounds_template = Template("""
             {% if autobounds %}
             var autobounds = L.featureGroup({{ features }}).getBounds()
             {% if not bounds %}
@@ -82,8 +81,7 @@ class TestFolium:
                 {{ fit_bounds_options }}
             );
             {% endif %}
-        """
-        )
+        """)
 
     def test_init(self):
         """Test map initialization."""

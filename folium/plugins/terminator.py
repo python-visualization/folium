@@ -11,13 +11,11 @@ class Terminator(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             L.terminator().addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [("terminator", "https://unpkg.com/@joergdietrich/leaflet.terminator")]
 
