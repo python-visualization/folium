@@ -44,8 +44,7 @@ class LocateControl(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.control.locate(
                 {{this.options | tojson}}
@@ -54,8 +53,7 @@ class LocateControl(JSCSSMixin, MacroElement):
                 {{this.get_name()}}.start();
             {% endif %}
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

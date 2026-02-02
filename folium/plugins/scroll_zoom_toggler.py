@@ -6,8 +6,7 @@ from folium.template import Template
 class ScrollZoomToggler(MacroElement):
     """Creates a button for enabling/disabling scroll on the Map."""
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this,kwargs) %}
             <style>
                 #{{ this.get_name() }} {
@@ -47,8 +46,7 @@ class ScrollZoomToggler(MacroElement):
             };
             {{ this._parent.get_name() }}.toggleScroll();
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(self):
         super().__init__()

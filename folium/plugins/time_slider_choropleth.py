@@ -37,8 +37,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         latest timestamp.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
         {
             let timestamps = {{ this.timestamps|tojson }};
@@ -158,8 +157,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
             {%- endif %}
         }
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         ("d3v4", "https://d3js.org/d3.v4.min.js"),

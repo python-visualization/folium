@@ -43,12 +43,10 @@ def test_beautify_icon():
     assert css in out
 
     # We verify that the Beautiful Icons are rendered correctly.
-    tmpl = Template(
-        """
+    tmpl = Template("""
                 var {{this.get_name()}} = new L.BeautifyIcon.icon({{ this.options|tojavascript }})
                 {{this._parent.get_name()}}.setIcon({{this.get_name()}});
-            """
-    )  # noqa
+            """)  # noqa
 
     assert normalize(tmpl.render(this=ic1)) in out
     assert normalize(tmpl.render(this=ic2)) in out

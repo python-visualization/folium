@@ -19,8 +19,7 @@ from folium.utilities import JsCode
 
 @pytest.fixture
 def tmpl():
-    yield (
-        """
+    yield ("""
     <!DOCTYPE html>
     <html>
     <head>
@@ -31,8 +30,7 @@ def tmpl():
     <script>
     </script>
     </html>
-    """
-    )  # noqa
+    """)  # noqa
 
 
 # Root path variable
@@ -290,13 +288,11 @@ def test_geojson_event_handler():
     m = Map()
     data = {"type": "FeatureCollection", "features": []}
     geojson = GeoJson(data, style_function=lambda x: {}).add_to(m)
-    fn = JsCode(
-        """
+    fn = JsCode("""
         function f(e) {
             console.log("only for testing")
         }
-    """
-    )
+    """)
     geojson.add_child(EventHandler("mouseover", fn))
     rendered = m.get_root().render()
     assert fn.js_code in rendered

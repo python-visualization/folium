@@ -27,8 +27,7 @@ def test_heat_map():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
             var {{this.get_name()}} = L.heatLayer(
                 {{this.data}},
                 {
@@ -39,8 +38,7 @@ def test_heat_map():
                     gradient: {{this.gradient}}
                     })
                 .addTo({{this._parent.get_name()}});
-    """
-    )
+    """)
 
     assert tmpl.render(this=hm)
 

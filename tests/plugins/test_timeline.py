@@ -45,8 +45,7 @@ def test_timeline():
     )
 
     # Verify that the script is okay.
-    tmpl = Template(
-        """
+    tmpl = Template("""
           {% macro header(this,kwargs) %}
               <style>
                   .leaflet-bottom.leaflet-left {
@@ -77,7 +76,6 @@ def test_timeline():
             {% endfor %}
 
           {% endmacro %}
-      """
-    )  # noqa
+      """)  # noqa
     expected = normalize(tmpl.render(this=slider))
     assert expected in out

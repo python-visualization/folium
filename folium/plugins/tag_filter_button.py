@@ -28,8 +28,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this,kwargs) %}
             <style>
                 .easy-button-button {
@@ -47,8 +46,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
                 {{ this.options|tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

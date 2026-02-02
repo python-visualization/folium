@@ -17,12 +17,10 @@ def test_fullscreen():
     out = normalize(m._parent.render())
 
     # verify that the fullscreen control was rendered
-    tmpl = Template(
-        """
+    tmpl = Template("""
         L.control.fullscreen(
             {{ this.options|tojavascript }}
         ).addTo({{this._parent.get_name()}});
-    """
-    )
+    """)
 
     assert normalize(tmpl.render(this=fs)) in out

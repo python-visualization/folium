@@ -103,8 +103,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     For more info, see: https://leaflet.github.io/Leaflet.VectorGrid/vectorgrid-api-docs.html#styling-vectorgrids.
     """
 
-    _template = Template(
-        """
+    _template = Template("""
             {% macro script(this, kwargs) -%}
             var {{ this.get_name() }} = L.vectorGrid.protobuf(
                 '{{ this.url }}',
@@ -113,8 +112,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
                 {%- endif %}
             );
             {%- endmacro %}
-            """
-    )
+            """)
 
     default_js = [
         (

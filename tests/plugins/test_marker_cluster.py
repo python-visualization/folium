@@ -23,8 +23,7 @@ def test_marker_cluster():
     m = folium.Map([45.0, 3.0], zoom_start=4)
     mc = plugins.MarkerCluster(data).add_to(m)
 
-    tmpl_for_expected = Template(
-        """
+    tmpl_for_expected = Template("""
         var {{this.get_name()}} = L.markerClusterGroup(
             {{ this.options|tojavascript }}
         );
@@ -40,8 +39,7 @@ def test_marker_cluster():
         {% endfor %}
 
         {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
-    """
-    )
+    """)
     expected = normalize(tmpl_for_expected.render(this=mc))
 
     out = normalize(m._parent.render())

@@ -47,14 +47,12 @@ def test_polyline_text_path():
     assert script in out
 
     # We verify that the script part is correct.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         {{ this.polyline.get_name() }}.setText(
             "{{this.text}}",
             {{ this.options|tojavascript }}
         );
-        """
-    )
+        """)
 
     expected = normalize(tmpl.render(this=wind_textpath))
     assert expected in out

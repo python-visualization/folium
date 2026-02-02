@@ -58,8 +58,7 @@ class Draw(JSCSSMixin, MacroElement):
 
     '''
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro html(this, kwargs) %}
             {% if this.export %}
             <style>
@@ -141,8 +140,7 @@ class Draw(JSCSSMixin, MacroElement):
             }
             {% endif %}
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

@@ -66,8 +66,7 @@ class Realtime(JSCSSMixin, FeatureGroup):
     >>> rt.add_to(m)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.realtime(
             {% if this.src is string or this.src is mapping -%}
@@ -81,8 +80,7 @@ class Realtime(JSCSSMixin, FeatureGroup):
                 {{ this.get_name() }}._container
             );
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (

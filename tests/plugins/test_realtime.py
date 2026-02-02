@@ -26,8 +26,7 @@ def test_realtime():
     )
     rt.add_to(m)
 
-    tmpl_for_expected = Template(
-        """
+    tmpl_for_expected = Template("""
           {% macro script(this, kwargs) %}
               var {{ this.get_name() }}_options = {{ this.options|tojavascript }};
               {% for key, value in this.functions.items() %}
@@ -50,8 +49,7 @@ def test_realtime():
               {{ this._parent.get_name() }}.addLayer(
                   {{ this.get_name() }}._container);
           {% endmacro %}
-    """
-    )
+    """)
     expected = normalize(tmpl_for_expected.render(this=rt))
 
     out = normalize(m._parent.render())

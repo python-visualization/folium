@@ -38,14 +38,12 @@ class DualMap(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this.m1.get_name() }}.sync({{ this.m2.get_name() }});
             {{ this.m2.get_name() }}.sync({{ this.m1.get_name() }});
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (

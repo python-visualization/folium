@@ -37,8 +37,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     >>> oms.add_to(map)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
         (function () {
             try {
@@ -59,8 +58,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
             }
         })();
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (

@@ -78,8 +78,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             L.Control.TimeDimensionCustom = L.Control.TimeDimension.extend({
                 _getDisplayDateFormat: function(date){
@@ -141,8 +140,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                 }
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )  # noqa
+        """)  # noqa
 
     default_js = [
         (

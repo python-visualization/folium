@@ -7,27 +7,22 @@ MousePosition().add_to(m)
 
 # This can be used to test the connection to streamlit
 # by returning the resulting GeoJson
-handler = JsCode(
-    """
+handler = JsCode("""
   (e) => {
       var map = %(map)s;
       var layers = L.PM.Utils.findLayers(map);
       var lg = L.layerGroup(layers);
       console.log(lg.toGeoJSON());
   }
-  """  # noqa: UP031
-    % dict(map=m.get_name())
-)
+  """ % dict(map=m.get_name()))  # noqa: UP031
 
 # For manual testing
-click = JsCode(
-    """
+click = JsCode("""
   (e) => {
       console.log(e.target);
       console.log(e.target.toGeoJSON());
   }
-  """
-)
+  """)
 
 # Just a few customizations for the snapshot tests
 # The test succeeds if the position is to the right

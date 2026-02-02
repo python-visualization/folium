@@ -122,16 +122,14 @@ class EventHandler(MacroElement):
     >>> g.add_child(EventHandler("mouseout", reset))
     '''
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this._parent.get_name()}}.{{ this.method }}(
                 {{ this.event|tojson}},
                 {{ this.handler.js_code }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(self, event: str, handler: JsCode, once: bool = False):
         super().__init__()
@@ -144,13 +142,11 @@ class EventHandler(MacroElement):
 class ElementAddToElement(MacroElement):
     """Abstract class to add an element to another element."""
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this.element_name }}.addTo({{ this.element_parent_name }});
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(self, element_name: str, element_parent_name: str):
         super().__init__()
@@ -161,13 +157,11 @@ class ElementAddToElement(MacroElement):
 class IncludeStatement(MacroElement):
     """Generate an include statement on a class."""
 
-    _template = Template(
-        """
+    _template = Template("""
         {{ this.leaflet_class_name }}.include(
             {{ this.options | tojavascript }}
         )
-    """
-    )
+    """)
 
     def __init__(self, leaflet_class_name: str, **kwargs):
         super().__init__()
@@ -181,8 +175,7 @@ class IncludeStatement(MacroElement):
 class MethodCall(MacroElement):
     """Abstract class to add an element to another element."""
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this.target }}.{{ this.method }}(
                 {% for arg in this.args %}
@@ -191,8 +184,7 @@ class MethodCall(MacroElement):
                 {{ this.kwargs | tojavascript }}
             );
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(self, target: MacroElement, method: str, *args, **kwargs):
         super().__init__()

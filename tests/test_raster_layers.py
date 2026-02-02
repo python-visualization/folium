@@ -99,16 +99,14 @@ def test_image_overlay():
     assert io.url == url
 
     # Verify the script part is okay.
-    tmpl = Template(
-        """
+    tmpl = Template("""
         var {{this.get_name()}} = L.imageOverlay(
             "{{ this.url }}",
             {{ this.bounds }},
             {{ this.options }}
         );
         {{ this.get_name() }}.addTo({{this._parent.get_name()}});
-    """
-    )
+    """)
     assert normalize(tmpl.render(this=io)) in normalize(out)
 
     bounds = m.get_bounds()

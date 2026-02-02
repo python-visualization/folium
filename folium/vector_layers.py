@@ -179,16 +179,14 @@ class PolyLine(BaseMultiLocation):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polyline(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(self, locations, popup=None, tooltip=None, **kwargs):
         super().__init__(locations, popup=popup, tooltip=tooltip)
@@ -218,16 +216,14 @@ class Polygon(BaseMultiLocation):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.polygon(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -260,16 +256,14 @@ class Rectangle(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.rectangle(
                 {{ this.locations|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{this._parent.get_name()}});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -320,16 +314,14 @@ class Circle(Marker):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circle(
                 {{ this.location|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
@@ -366,16 +358,14 @@ class CircleMarker(Marker):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.circleMarker(
                 {{ this.location|tojson }},
                 {{ this.options|tojson }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,

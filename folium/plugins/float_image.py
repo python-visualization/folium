@@ -21,8 +21,7 @@ class FloatImage(MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
             {% macro header(this,kwargs) %}
                 <style>
                     #{{this.get_name()}} {
@@ -42,8 +41,7 @@ class FloatImage(MacroElement):
                  style="z-index: 999999">
             </img>
             {% endmacro %}
-            """
-    )
+            """)
 
     def __init__(self, image, bottom=75, left=75, **kwargs):
         super().__init__()

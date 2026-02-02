@@ -40,8 +40,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         )
     ]
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this,kwargs) %}
 
             L.control.groupedLayers(
@@ -63,8 +62,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
             {%- endfor %}
 
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(self, groups, exclusive_groups=True, **kwargs):
         super().__init__()

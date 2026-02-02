@@ -34,16 +34,14 @@ class PolyLineTextPath(JSCSSMixin, MacroElement):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             {{ this.polyline.get_name() }}.setText(
                 {{ this.text|tojson }},
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     default_js = [
         (
