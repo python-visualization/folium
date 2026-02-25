@@ -54,3 +54,21 @@ folium.Marker(
 
 m
 ```
+
+
+## Adding text using DivIcon
+
+You can display custom text on the map using a DivIcon.
+
+```{code-cell} ipython3
+m = folium.Map(location=[0, 0], zoom_start=2)
+
+folium.Marker(
+    [0, 0],
+    icon=folium.DivIcon(html='<div style="font-size: 20px">Hello</div>')
+).add_to(m)
+
+m
+
+```
+
