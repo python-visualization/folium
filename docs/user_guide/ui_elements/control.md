@@ -36,15 +36,22 @@ from folium.features import Control
 m = folium.Map(location=[45, 0], zoom_start=4)
 
 control = Control(
-    "MyPlugin",
+    "Fullscreen",
     position="topright",
     # Any plugin options become JS options.
-    foo="bar",
+    title="View Fullscreen",
+    titleCancel="Exit Fullscreen",
 )
 
 # Add the plugin's JS/CSS assets.
-control.add_js_link("my-plugin", "https://example.com/leaflet.my-plugin.min.js")
-control.add_css_link("my-plugin", "https://example.com/leaflet.my-plugin.css")
+control.add_js_link(
+    "leaflet-fullscreen",
+    "https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.js",
+)
+control.add_css_link(
+    "leaflet-fullscreen",
+    "https://unpkg.com/leaflet.fullscreen@1.6.0/Control.FullScreen.css",
+)
 
 control.add_to(m)
 m
