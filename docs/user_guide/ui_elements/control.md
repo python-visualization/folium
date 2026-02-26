@@ -29,7 +29,7 @@ m
 If a Leaflet plugin exposes a `L.Control.<Name>` class, you can wire it up
 directly and attach its JS/CSS assets to the map.
 
-```python
+```{code-cell} ipython3
 import folium
 from folium.features import Control
 
