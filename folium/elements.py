@@ -101,22 +101,18 @@ class EventHandler(MacroElement):
     >>>
     >>> g = folium.GeoJson(geo_json_data).add_to(m)
     >>>
-    >>> highlight = JsCode(
-    ...     """
+    >>> highlight = JsCode("""
     ...    function highlight(e) {
     ...        e.target.original_color = e.layer.options.color;
     ...        e.target.setStyle({ color: "green" });
     ...    }
-    ... """
-    ... )
+    ... """)
     >>>
-    >>> reset = JsCode(
-    ...     """
+    >>> reset = JsCode("""
     ...    function reset(e) {
     ...       e.target.setStyle({ color: e.target.original_color });
     ...    }
-    ... """
-    ... )
+    ... """)
     >>>
     >>> g.add_child(EventHandler("mouseover", highlight))
     >>> g.add_child(EventHandler("mouseout", reset))
