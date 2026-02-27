@@ -53,8 +53,7 @@ class Timeline(GeoJson):
 
     >>> timeline = Timeline(
     ...     data,
-    ...     get_interval=JsCode(
-    ...         '''
+    ...     get_interval=JsCode('''
     ...         function (quake) {
     ...            // earthquake data only has a time, so we\'ll use that as a "start"
     ...            // and the "end" will be that + some value based on magnitude
@@ -65,8 +64,7 @@ class Timeline(GeoJson):
     ...                end: quake.properties.time + quake.properties.mag * 1800000,
     ...            };
     ...         };
-    ...     '''
-    ...     ),
+    ...     '''),
     ... ).add_to(m)
     >>> TimelineSlider(
     ...     auto_play=False,
