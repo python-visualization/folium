@@ -319,6 +319,33 @@ class Icon(MacroElement):
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
+        
+        {% macro header(this, kwargs) %}
+            {% if this.is_hex %}
+            <style>
+                /* Dynamically generated CSS to replace the sprite image with a colored teardrop */
+                .awesome-marker-icon-{{ this.color_name }} {
+                    background-image: none;
+                    background-color: {{ this.color }};
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                    margin-top: -15px;
+                    margin-left: -17px;
+                    border: 2px solid white;
+                    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                /* Counter-rotate the inner icon so it stands up straight */
+                .awesome-marker-icon-{{ this.color_name }} i {
+                    transform: rotate(45deg);
+                }
+            </style>
+            {% endif %}
+        {% endmacro %}
         """)
     color_options = {
         "red",
@@ -354,16 +381,23 @@ class Icon(MacroElement):
         super().__init__()
         self._name = "Icon"
         
-        # Check if the color is a valid hex code
-        is_hex_color = color.startswith("#") and len(color) in (4, 7)
+        # 1. Determine if the input is a hex color
+        self.is_hex = color.startswith("#") and len(color) in (4, 7)
+        self.color = color
         
-        if color not in self.color_options and not is_hex_color:
+        # 2. Strip the '#' for the CSS class name generation
+        self.color_name = color[1:] if self.is_hex else color
+
+        # 3. Allow hex codes to pass the warning check
+        if color not in self.color_options and not self.is_hex:
             warnings.warn(
-                f"color argument of Icon should be one of: {self.color_options} or a valid hex color (e.g., '#FF0000').",
+                f"color argument of Icon should be one of: {self.color_options} or a valid hex code.",
                 stacklevel=2,
             )
+            
+        # 4. Pass the stripped color_name to the JavaScript options
         self.options = remove_empty(
-            marker_color=color,
+            marker_color=self.color_name,
             icon_color=icon_color,
             icon=icon,
             prefix=prefix,
