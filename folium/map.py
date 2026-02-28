@@ -353,9 +353,13 @@ class Icon(MacroElement):
     ):
         super().__init__()
         self._name = "Icon"
-        if color not in self.color_options:
+        
+        # Check if the color is a valid hex code
+        is_hex_color = color.startswith("#") and len(color) in (4, 7)
+        
+        if color not in self.color_options and not is_hex_color:
             warnings.warn(
-                f"color argument of Icon should be one of: {self.color_options}.",
+                f"color argument of Icon should be one of: {self.color_options} or a valid hex color (e.g., '#FF0000').",
                 stacklevel=2,
             )
         self.options = remove_empty(
