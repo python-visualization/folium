@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Draw &#8212; Folium 0.20.1.dev109+g932a697ee documentation</title>
+    <title>Draw &#8212; Folium 0.20.1.dev111+g54f23c5fe documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=73041a67"></script>
+    <script src="../../_static/documentation_options.js?v=53f3b63f"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +60,7 @@
     <link rel="prev" title="BeautifyIcon" href="beautify_icon.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev109+g932a697ee" />
+  <meta name="docsearch:version" content="0.20.1.dev111+g54f23c5fe" />
   </head>
   
   
@@ -546,7 +546,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_846ab98ca300597cdd88291c6c951f2b {
+                #map_948d2d7d19890d97e15597283061873a {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -585,7 +585,7 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_846ab98ca300597cdd88291c6c951f2b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_948d2d7d19890d97e15597283061873a&quot; &gt;&lt;/div&gt;
 
 
 
@@ -613,8 +613,8 @@
 &lt;script&gt;
 
 
-            var map_846ab98ca300597cdd88291c6c951f2b = L.map(
-                &quot;map_846ab98ca300597cdd88291c6c951f2b&quot;,
+            var map_948d2d7d19890d97e15597283061873a = L.map(
+                &quot;map_948d2d7d19890d97e15597283061873a&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -631,7 +631,7 @@
 
 
 
-            var tile_layer_8280eeb1a4915f063258ff983884c4ca = L.tileLayer(
+            var tile_layer_64977fc77669ac83ab12cb1b9754bfdc = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -648,7 +648,7 @@
             );
 
 
-            tile_layer_8280eeb1a4915f063258ff983884c4ca.addTo(map_846ab98ca300597cdd88291c6c951f2b);
+            tile_layer_64977fc77669ac83ab12cb1b9754bfdc.addTo(map_948d2d7d19890d97e15597283061873a);
 
 
             var options = {
@@ -657,16 +657,16 @@
               edit: {},
             }
                 // FeatureGroup is to store editable layers.
-                var drawnItems_draw_control_c9d757fb120cade54fc34377e2e9aa70 =
+                var drawnItems_draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe =
                     new L.featureGroup().addTo(
-                        map_846ab98ca300597cdd88291c6c951f2b
+                        map_948d2d7d19890d97e15597283061873a
                     );
 
-            options.edit.featureGroup = drawnItems_draw_control_c9d757fb120cade54fc34377e2e9aa70;
-            var draw_control_c9d757fb120cade54fc34377e2e9aa70 = new L.Control.Draw(
+            options.edit.featureGroup = drawnItems_draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe;
+            var draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe = new L.Control.Draw(
                 options
-            ).addTo( map_846ab98ca300597cdd88291c6c951f2b );
-            map_846ab98ca300597cdd88291c6c951f2b.on(L.Draw.Event.CREATED, function(e) {
+            ).addTo( map_948d2d7d19890d97e15597283061873a );
+            map_948d2d7d19890d97e15597283061873a.on(L.Draw.Event.CREATED, function(e) {
                 var layer = e.layer,
                     type = e.layerType;
                 var coords = JSON.stringify(layer.toGeoJSON());
@@ -674,15 +674,15 @@
                     alert(coords);
                     console.log(coords);
                 });
-                drawnItems_draw_control_c9d757fb120cade54fc34377e2e9aa70.addLayer(layer);
+                drawnItems_draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe.addLayer(layer);
             });
-            map_846ab98ca300597cdd88291c6c951f2b.on(&#x27;draw:created&#x27;, function(e) {
-                drawnItems_draw_control_c9d757fb120cade54fc34377e2e9aa70.addLayer(e.layer);
+            map_948d2d7d19890d97e15597283061873a.on(&#x27;draw:created&#x27;, function(e) {
+                drawnItems_draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe.addLayer(e.layer);
             });
 
 
             document.getElementById(&#x27;export&#x27;).onclick = function(e) {
-                var data = drawnItems_draw_control_c9d757fb120cade54fc34377e2e9aa70.toGeoJSON();
+                var data = drawnItems_draw_control_2ad3ce051bc72db7e9aad6f0a240cfbe.toGeoJSON();
                 var convertedData = &#x27;text/json;charset=utf-8,&#x27;
                     + encodeURIComponent(JSON.stringify(data));
                 document.getElementById(&#x27;export&#x27;).setAttribute(
@@ -769,7 +769,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev109+g932a697ee</div>
+Folium version 0.20.1.dev111+g54f23c5fe</div>
       
         <div class="footer-item">
 
