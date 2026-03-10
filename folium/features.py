@@ -1426,11 +1426,14 @@ class Choropleth(FeatureGroup):
         If `bins` is a sequence, it directly defines the bin edges.
         For more information on this parameter, have a look at
         numpy.histogram function.
-    fill_color: string, optional
+   fill_color: string, optional
         Area fill color, defaults to blue. Can pass a hex code, color name,
         or if you are binding data, one of the following color brewer palettes:
         'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
         'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
+        You can also pass any colormap name supported by branca such as
+        'viridis', 'plasma', 'magma', 'Blues' etc. For all available options see:
+        https://python-visualization.github.io/branca/colormap.html
     nan_fill_color: string, default 'black'
         Area fill color for nan or missing values.
         Can pass a hex code, color name.
