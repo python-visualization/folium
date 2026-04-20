@@ -437,14 +437,52 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
 class JsCode:
     """Wrapper around Javascript code."""
 
-    def __init__(self, js_code: Union[str, "JsCode"]):
+    def __init__(self, js_code: Union[str, "JsCode"], **kwargs):
+        args = {k: tojavascript(v) for k, v in kwargs.items()}
         if isinstance(js_code, JsCode):
-            self.js_code: str = js_code.js_code
+            self.js_code: str = js_code.js_code % args
         else:
-            self.js_code = js_code
+            self.js_code = js_code % args
 
     def __str__(self):
         return self.js_code
+
+
+def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
+    if isinstance(obj, JsCode):
+        return obj.js_code
+    elif isinstance(obj, Element):
+        return obj.get_name()
+    elif isinstance(obj, dict):
+        out = ["{\n"]
+        for key, value in obj.items():
+            if isinstance(key, str):
+                out.append(f'  "{camelize(key)}": ')
+            else:
+                out.append(f"  {key}: ")
+            out.append(tojavascript(value))
+            out.append(",\n")
+        out.append("}")
+        return "".join(out)
+    elif isinstance(obj, list):
+        out = ["[\n"]
+        for value in obj:
+            out.append(tojavascript(value))
+            out.append(",\n")
+        out.append("]")
+        return "".join(out)
+    else:
+        return _to_escaped_json(obj)
+
+
+def _to_escaped_json(obj: TypeJsonValue) -> str:
+    return (
+        json.dumps(obj)
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("'", "\\u0027")
+    )
 
 
 def parse_font_size(value: Union[str, int, float]) -> str:
