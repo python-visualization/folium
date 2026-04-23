@@ -319,7 +319,7 @@ class Icon(MacroElement):
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        
+
         {% macro header(this, kwargs) %}
             {% if this.is_hex %}
             <style>
@@ -380,11 +380,11 @@ class Icon(MacroElement):
     ):
         super().__init__()
         self._name = "Icon"
-        
+
         # 1. Determine if the input is a hex color
         self.is_hex = color.startswith("#") and len(color) in (4, 7)
         self.color = color
-        
+
         # 2. Strip the '#' for the CSS class name generation
         self.color_name = color[1:] if self.is_hex else color
 
@@ -394,7 +394,7 @@ class Icon(MacroElement):
                 f"color argument of Icon should be one of: {self.color_options} or a valid hex code.",
                 stacklevel=2,
             )
-            
+
         # 4. Pass the stripped color_name to the JavaScript options
         self.options = remove_empty(
             marker_color=self.color_name,
