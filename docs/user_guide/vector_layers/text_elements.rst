@@ -22,10 +22,10 @@ Example:
     folium.Marker(
         location=[40, -100],
         icon=DivIcon(
-            icon_size=(150,36),
-            icon_anchor=(0,0),
+            icon_size=(150, 36),
+            icon_anchor=(0, 0),
             html='<div style="font-size: 16pt; color: red;">Hello Map!</div>',
-        )
+        ),
     ).add_to(m)
 
     m

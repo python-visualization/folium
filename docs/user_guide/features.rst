@@ -23,10 +23,10 @@ To add always-visible text labels on the map:
     Marker(
         location=[40.7128, -74.0060],
         icon=DivIcon(
-            icon_size=(150,36),
-            icon_anchor=(0,0),
+            icon_size=(150, 36),
+            icon_anchor=(0, 0),
             html='<div style="font-size: 12pt; color : black">Hello World!</div>',
-        )
+        ),
     ).add_to(m)
     m.save("map.html")
 
