@@ -80,7 +80,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
         clear_text="clear",
         filter_on_every_click=True,
         open_popup_on_hover=False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "TagFilterButton"
@@ -90,5 +90,5 @@ class TagFilterButton(JSCSSMixin, MacroElement):
             clear_text=clear_text,
             filter_on_every_click=filter_on_every_click,
             open_popup_on_hover=open_popup_on_hover,
-            **kwargs
+            **kwargs,
         )

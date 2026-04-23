@@ -101,7 +101,7 @@ class MiniMap(JSCSSMixin, MacroElement):
         toggle_display=False,
         auto_toggle_display=False,
         minimized=False,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "MiniMap"
@@ -126,5 +126,5 @@ class MiniMap(JSCSSMixin, MacroElement):
             toggle_display=toggle_display,
             auto_toggle_display=auto_toggle_display,
             minimized=minimized,
-            **kwargs
+            **kwargs,
         )

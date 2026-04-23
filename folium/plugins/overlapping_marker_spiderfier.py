@@ -73,7 +73,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
         nearby_distance: int = 20,
         leg_weight: float = 1.5,
         circle_spiral_switchover: int = 9,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "OverlappingMarkerSpiderfier"
@@ -82,7 +82,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
             nearby_distance=nearby_distance,
             leg_weight=leg_weight,
             circle_spiral_switchover=circle_spiral_switchover,
-            **kwargs
+            **kwargs,
         )
 
     def add_to(

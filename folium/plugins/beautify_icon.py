@@ -93,7 +93,7 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
         inner_icon_style="",
         spin=False,
         number=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "BeautifyIcon"
@@ -109,5 +109,5 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
             spin=spin,
             isAlphaNumericIcon=number is not None,
             text=number,
-            **kwargs
+            **kwargs,
         )

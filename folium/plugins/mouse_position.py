@@ -81,7 +81,7 @@ class MousePosition(JSCSSMixin, MacroElement):
         prefix="",
         lat_formatter=None,
         lng_formatter=None,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "MousePosition"
@@ -93,7 +93,7 @@ class MousePosition(JSCSSMixin, MacroElement):
             lng_first=lng_first,
             num_digits=num_digits,
             prefix=prefix,
-            **kwargs
+            **kwargs,
         )
         self.lat_formatter = lat_formatter or "undefined"
         self.lng_formatter = lng_formatter or "undefined"
