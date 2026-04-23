@@ -66,7 +66,7 @@ class MeasureControl(JSCSSMixin, MacroElement):
         secondary_length_unit="miles",
         primary_area_unit="sqmeters",
         secondary_area_unit="acres",
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "MeasureControl"
@@ -77,5 +77,5 @@ class MeasureControl(JSCSSMixin, MacroElement):
             secondary_length_unit=secondary_length_unit,
             primary_area_unit=primary_area_unit,
             secondary_area_unit=secondary_area_unit,
-            **kwargs
+            **kwargs,
         )

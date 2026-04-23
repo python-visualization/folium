@@ -53,7 +53,7 @@ class StripePattern(JSCSSMixin, MacroElement):
         space_color="#ffffff",
         opacity=0.75,
         space_opacity=0.0,
-        **kwargs
+        **kwargs,
     ):
         super().__init__()
         self._name = "StripePattern"
@@ -65,7 +65,7 @@ class StripePattern(JSCSSMixin, MacroElement):
             space_color=space_color,
             opacity=opacity,
             space_opacity=space_opacity,
-            **kwargs
+            **kwargs,
         )
         self.parent_map = None
 

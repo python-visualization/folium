@@ -57,7 +57,7 @@ class BoatMarker(JSCSSMixin, Marker):
         heading=0,
         wind_heading=None,
         wind_speed=0,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(location, popup=popup, icon=icon)
         self._name = "BoatMarker"
