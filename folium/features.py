@@ -1384,115 +1384,118 @@ class GeoJsonPopup(GeoJsonDetail):
 class Choropleth(FeatureGroup):
     """Apply a GeoJSON overlay to the map.
 
-    Plot a GeoJSON overlay on the base map. There is no requirement
-    to bind data (passing just a GeoJSON plots a single-color overlay),
-    but there is a data binding option to map your columnar data to
-    different feature objects with a color scale.
+     Plot a GeoJSON overlay on the base map. There is no requirement
+     to bind data (passing just a GeoJSON plots a single-color overlay),
+     but there is a data binding option to map your columnar data to
+     different feature objects with a color scale.
 
-    If data is passed as a Pandas DataFrame, the "columns" and "key-on"
-    keywords must be included, the first to indicate which DataFrame
-    columns to use, the second to indicate the layer in the GeoJSON
-    on which to key the data. The 'columns' keyword does not need to be
-    passed for a Pandas series.
+     If data is passed as a Pandas DataFrame, the "columns" and "key-on"
+     keywords must be included, the first to indicate which DataFrame
+     columns to use, the second to indicate the layer in the GeoJSON
+     on which to key the data. The 'columns' keyword does not need to be
+     passed for a Pandas series.
 
-    Colors are generated from color brewer (https://colorbrewer2.org/)
-    sequential palettes. By default, linear binning is used between
-    the min and the max of the values. Custom binning can be achieved
-    with the `bins` parameter.
+     Colors are generated from color brewer (https://colorbrewer2.org/)
+     sequential palettes. By default, linear binning is used between
+     the min and the max of the values. Custom binning can be achieved
+     with the `bins` parameter.
 
-    TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
-    also be passed with the reference to the topojson objects to convert.
-    See the topojson.feature method in the TopoJSON API reference:
-    https://github.com/topojson/topojson/wiki/API-Reference
+     TopoJSONs can be passed as "geo_data", but the "topojson" keyword must
+     also be passed with the reference to the topojson objects to convert.
+     See the topojson.feature method in the TopoJSON API reference:
+     https://github.com/topojson/topojson/wiki/API-Reference
 
 
-    Parameters
-    ----------
-    geo_data: string/object
-        URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
-        geometries
-    data: Pandas DataFrame or Series, default None
-        Data to bind to the GeoJSON.
-    columns: tuple with two values, default None
-        If the data is a Pandas DataFrame, the columns of data to be bound.
-        Must pass column 1 as the key, and column 2 the values.
-    key_on: string, default None
-        Variable in the `geo_data` GeoJSON file to bind the data to. Must
-        start with 'feature' and be in JavaScript objection notation.
-        Ex: 'feature.id' or 'feature.properties.statename'.
-    bins: int or sequence of scalars or str, default 6
-        If `bins` is an int, it defines the number of equal-width
-        bins between the min and the max of the values.
-        If `bins` is a sequence, it directly defines the bin edges.
-        For more information on this parameter, have a look at
-        numpy.histogram function.
+     Parameters
+     ----------
+     geo_data: string/object
+         URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+         geometries
+     data: Pandas DataFrame or Series, default None
+         Data to bind to the GeoJSON.
+     columns: tuple with two values, default None
+         If the data is a Pandas DataFrame, the columns of data to be bound.
+         Must pass column 1 as the key, and column 2 the values.
+     key_on: string, default None
+         Variable in the `geo_data` GeoJSON file to bind the data to. Must
+         start with 'feature' and be in JavaScript objection notation.
+         Ex: 'feature.id' or 'feature.properties.statename'.
+     bins: int or sequence of scalars or str, default 6
+         If `bins` is an int, it defines the number of equal-width
+         bins between the min and the max of the values.
+         If `bins` is a sequence, it directly defines the bin edges.
+         For more information on this parameter, have a look at
+         numpy.histogram function.
     fill_color: string, optional
-        Area fill color, defaults to blue. Can pass a hex code, color name,
-        or if you are binding data, one of the following color brewer palettes:
-        'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
-        'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
-    nan_fill_color: string, default 'black'
-        Area fill color for nan or missing values.
-        Can pass a hex code, color name.
-    fill_opacity: float, default 0.6
-        Area fill opacity, range 0-1.
-    nan_fill_opacity: float, default fill_opacity
-        Area fill opacity for nan or missing values, range 0-1.
-    line_color: string, default 'black'
-        GeoJSON geopath line color.
-    line_weight: int, default 1
-        GeoJSON geopath line weight.
-    line_opacity: float, default 1
-        GeoJSON geopath line opacity, range 0-1.
-    legend_name: string, default empty string
-        Title for data legend.
-    topojson: string, default None
-        If using a TopoJSON, passing "objects.yourfeature" to the topojson
-        keyword argument will enable conversion to GeoJSON.
-    smooth_factor: float, default None
-        How much to simplify the polyline on each zoom level. More means
-        better performance and smoother look, and less means more accurate
-        representation. Leaflet defaults to 1.0.
-    highlight: boolean, default False
-        Enable highlight functionality when hovering over a GeoJSON area.
-    use_jenks: bool, default False
-        Use jenkspy to calculate bins using "natural breaks"
-        (Fisher-Jenks algorithm). This is useful when your data is unevenly
-        distributed.
-    name : string, optional
-        The name of the layer, as it will appear in LayerControls
-    overlay : bool, default True
-        Adds the layer as an optional overlay (True) or the base layer (False).
-    control : bool, default True
-        Whether the Layer will be included in LayerControls.
-    show: bool, default True
-        Whether the layer will be shown on opening.
+         Area fill color, defaults to blue. Can pass a hex code, color name,
+         or if you are binding data, one of the following color brewer palettes:
+         'BuGn', 'BuPu', 'GnBu', 'OrRd', 'PuBu', 'PuBuGn', 'PuRd', 'RdPu',
+         'YlGn', 'YlGnBu', 'YlOrBr', and 'YlOrRd'.
+         You can also pass any colormap name supported by branca such as
+         'viridis', 'plasma', 'magma', 'Blues' etc. For all available options see:
+         https://python-visualization.github.io/branca/colormap.html
+     nan_fill_color: string, default 'black'
+         Area fill color for nan or missing values.
+         Can pass a hex code, color name.
+     fill_opacity: float, default 0.6
+         Area fill opacity, range 0-1.
+     nan_fill_opacity: float, default fill_opacity
+         Area fill opacity for nan or missing values, range 0-1.
+     line_color: string, default 'black'
+         GeoJSON geopath line color.
+     line_weight: int, default 1
+         GeoJSON geopath line weight.
+     line_opacity: float, default 1
+         GeoJSON geopath line opacity, range 0-1.
+     legend_name: string, default empty string
+         Title for data legend.
+     topojson: string, default None
+         If using a TopoJSON, passing "objects.yourfeature" to the topojson
+         keyword argument will enable conversion to GeoJSON.
+     smooth_factor: float, default None
+         How much to simplify the polyline on each zoom level. More means
+         better performance and smoother look, and less means more accurate
+         representation. Leaflet defaults to 1.0.
+     highlight: boolean, default False
+         Enable highlight functionality when hovering over a GeoJSON area.
+     use_jenks: bool, default False
+         Use jenkspy to calculate bins using "natural breaks"
+         (Fisher-Jenks algorithm). This is useful when your data is unevenly
+         distributed.
+     name : string, optional
+         The name of the layer, as it will appear in LayerControls
+     overlay : bool, default True
+         Adds the layer as an optional overlay (True) or the base layer (False).
+     control : bool, default True
+         Whether the Layer will be included in LayerControls.
+     show: bool, default True
+         Whether the layer will be shown on opening.
 
-    Returns
-    -------
-    GeoJSON data layer in obj.template_vars
+     Returns
+     -------
+     GeoJSON data layer in obj.template_vars
 
-    Examples
-    --------
-    >>> Choropleth(geo_data="us-states.json", line_color="blue", line_weight=3)
-    >>> Choropleth(
-    ...     geo_data="geo.json",
-    ...     data=df,
-    ...     columns=["Data 1", "Data 2"],
-    ...     key_on="feature.properties.myvalue",
-    ...     fill_color="PuBu",
-    ...     bins=[0, 20, 30, 40, 50, 60],
-    ... )
-    >>> Choropleth(geo_data="countries.json", topojson="objects.countries")
-    >>> Choropleth(
-    ...     geo_data="geo.json",
-    ...     data=df,
-    ...     columns=["Data 1", "Data 2"],
-    ...     key_on="feature.properties.myvalue",
-    ...     fill_color="PuBu",
-    ...     bins=[0, 20, 30, 40, 50, 60],
-    ...     highlight=True,
-    ... )
+     Examples
+     --------
+     >>> Choropleth(geo_data="us-states.json", line_color="blue", line_weight=3)
+     >>> Choropleth(
+     ...     geo_data="geo.json",
+     ...     data=df,
+     ...     columns=["Data 1", "Data 2"],
+     ...     key_on="feature.properties.myvalue",
+     ...     fill_color="PuBu",
+     ...     bins=[0, 20, 30, 40, 50, 60],
+     ... )
+     >>> Choropleth(geo_data="countries.json", topojson="objects.countries")
+     >>> Choropleth(
+     ...     geo_data="geo.json",
+     ...     data=df,
+     ...     columns=["Data 1", "Data 2"],
+     ...     key_on="feature.properties.myvalue",
+     ...     fill_color="PuBu",
+     ...     bins=[0, 20, 30, 40, 50, 60],
+     ...     highlight=True,
+     ... )
     """
 
     def __init__(
