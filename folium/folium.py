@@ -368,7 +368,7 @@ class Map(JSCSSMixin, Evented):
         Examples
         --------
         >>> m._to_png()
-        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png(delay=10)  # Wait 10 seconds between render and snapshot.
 
         """
 
