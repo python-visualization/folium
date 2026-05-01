@@ -368,7 +368,7 @@ class Map(JSCSSMixin, Evented):
         Examples
         --------
         >>> m._to_png()
-        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png(delay=10)  # Wait 10 seconds between render and snapshot.
 
         """
 
@@ -392,11 +392,16 @@ class Map(JSCSSMixin, Evented):
                     *size,
                 )
                 driver.set_window_size(*window_size)
+            from selenium.webdriver.support.ui import WebDriverWait
+
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                time.sleep(delay)
+                WebDriverWait(driver, delay).until(
+                    lambda _driver: _driver.execute_script("return document.readyState")
+                    == "complete"
+                )
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
                 driver.quit()
