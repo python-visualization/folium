@@ -663,6 +663,14 @@ class GeoJson(Layer):
 
         {% endmacro %}
         """)  # noqa
+# noqa
+
+See Also
+--------
+For information about coordinate ordering differences between Leaflet and GeoJSON,
+see :doc:`/user_guide/geojson/coordinate_ordering`
+
+"""
 
     def __init__(
         self,
@@ -672,7 +680,7 @@ class GeoJson(Layer):
         popup_keep_highlighted: bool = False,
         name: Optional[str] = None,
         overlay: bool = True,
-        control: bool = True,
+         control: bool = True,
         show: bool = True,
         smooth_factor: Optional[float] = None,
         tooltip: Union[str, Tooltip, "GeoJsonTooltip", None] = None,
