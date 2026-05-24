@@ -25,8 +25,8 @@ geojson_data = {
     "type": "Feature",
     "geometry": {
         "type": "Point",
-        "coordinates": [-87.6298, 41.8781]  # longitude, latitude (Chicago)
-    }
+        "coordinates": [-87.6298, 41.8781],  # longitude, latitude (Chicago)
+    },
 }
 
 # Folium map with correct [lat, lon] order
@@ -49,8 +49,8 @@ geojson_data = {
     "type": "Feature",
     "geometry": {
         "type": "Point",
-        "coordinates": [41.8781, -87.6298]  # WRONG: latitude, longitude
-    }
+        "coordinates": [41.8781, -87.6298],  # WRONG: latitude, longitude
+    },
 }
 
 m = folium.Map(location=[41.8781, -87.6298], zoom_start=12)
@@ -75,10 +75,7 @@ correct_order = [wrong_order[1], wrong_order[0]]
 
 geojson_data = {
     "type": "Feature",
-    "geometry": {
-        "type": "Point",
-        "coordinates": correct_order  # now [lon, lat]
-    }
+    "geometry": {"type": "Point", "coordinates": correct_order},  # now [lon, lat]
 }
 
 m = folium.Map(location=[correct_order[1], correct_order[0]], zoom_start=12)

@@ -676,7 +676,7 @@ class GeoJson(Layer):
         popup_keep_highlighted: bool = False,
         name: Optional[str] = None,
         overlay: bool = True,
-         control: bool = True,
+        control: bool = True,
         show: bool = True,
         smooth_factor: Optional[float] = None,
         tooltip: Union[str, Tooltip, "GeoJsonTooltip", None] = None,
@@ -852,7 +852,7 @@ class GeoJson(Layer):
             if self.highlight:
                 self.highlight_map = mapper.get_highlight_map(self.highlight_function)
         super().render()
-        
+
 
 TypeStyleMapping = dict[str, Union[str, list[Union[str, int]]]]
 
