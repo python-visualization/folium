@@ -536,6 +536,10 @@ class GeoJson(Layer):
     ... }
     >>> GeoJson(geojson, style_function=style_function)
 
+    See Also
+    --------
+    For information about coordinate ordering differences between Leaflet and GeoJSON,
+    see :doc:`/user_guide/geojson/coordinate_ordering`
     """
 
     _template = Template("""
@@ -663,14 +667,6 @@ class GeoJson(Layer):
 
         {% endmacro %}
         """)  # noqa
-# noqa
-
-See Also
---------
-For information about coordinate ordering differences between Leaflet and GeoJSON,
-see :doc:`/user_guide/geojson/coordinate_ordering`
-
-"""
 
     def __init__(
         self,
@@ -856,7 +852,7 @@ see :doc:`/user_guide/geojson/coordinate_ordering`
             if self.highlight:
                 self.highlight_map = mapper.get_highlight_map(self.highlight_function)
         super().render()
-
+        
 
 TypeStyleMapping = dict[str, Union[str, list[Union[str, int]]]]
 
