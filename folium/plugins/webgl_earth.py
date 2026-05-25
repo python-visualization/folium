@@ -1,4 +1,6 @@
-from typing import List, Optional, Union
+from __future__ import annotations
+
+from typing import Union
 
 from branca.element import MacroElement
 from folium.elements import JSCSSMixin
@@ -127,7 +129,7 @@ class WebGLEarth(JSCSSMixin, MacroElement):
 
     def __init__(
         self,
-        center: Optional[List[float]] = None,
+        center: list[float] | None = None,
         zoom: float = 2.5,
         tile_url: Optional[str] = None,
         tile_subdomains: str = "abc",
@@ -191,7 +193,7 @@ class WebGLEarthMarker(MacroElement):
 
     def __init__(
         self,
-        location: List[float],
+        location: list[float],
         popup: Optional[str] = None,
     ):
         super().__init__()
