@@ -40,6 +40,8 @@ Plugins
   plugins/timestamped_geojson
   plugins/treelayercontrol
   plugins/vector_tiles
+  plugins/webgl_earth
+
   plugins/WmsTimeDimension
 
 .. list-table::
@@ -120,5 +122,7 @@ Plugins
       - Add a control for a tree of layers with checkboxes for visibility control.
     * - :doc:`Vector Tiles using VectorGridProtobuf <plugins/vector_tiles>`
       - Display gridded vector data (GeoJSON or TopoJSON sliced with geojson-vt, or protobuf vector tiles).
+    * - :doc:`WebGL Earth <plugins/webgl_earth>`
+      - Render a 3D interactive globe with live data support, replacing the flat Leaflet map.
     * - :doc:`WMS Time Dimension <plugins/WmsTimeDimension>`
       - Create a time-aware WmsTileLayer.
