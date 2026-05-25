@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from branca.element import MacroElement
+
 from folium.elements import JSCSSMixin
 from folium.template import Template
 from folium.utilities import JsCode, remove_empty, validate_location
