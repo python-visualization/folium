@@ -1,6 +1,3 @@
----
-nbsphinx: hidden
----
 import folium
 
 # Coordinate Ordering in GeoJSON and Folium
