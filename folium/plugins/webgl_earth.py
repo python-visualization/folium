@@ -1,4 +1,3 @@
-
 from typing import List, Optional, Union
 
 from branca.element import MacroElement
@@ -43,8 +42,7 @@ class WebGLEarth(JSCSSMixin, MacroElement):
     >>> marker.add_to(globe)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this, kwargs) %}
             <style>
                 #{{ this._parent.get_name() }} {
@@ -118,8 +116,7 @@ class WebGLEarth(JSCSSMixin, MacroElement):
                 });
             })();
         {% endmacro %}
-    """
-    )
+    """)
 
     default_js = [
         (
@@ -150,9 +147,7 @@ class WebGLEarth(JSCSSMixin, MacroElement):
             )
         self.zoom = zoom
         self.height = height
-        self.tile_url = (
-            tile_url or "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        )
+        self.tile_url = tile_url or "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         self.tile_subdomains = list(tile_subdomains)
         self.container_id = f"webgl-earth-{self.get_name()}"
 
@@ -183,8 +178,7 @@ class WebGLEarthMarker(MacroElement):
     >>> marker.add_to(globe)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = WE.marker(
                 [{{ this.location[0] }}, {{ this.location[1] }}]
@@ -193,8 +187,7 @@ class WebGLEarthMarker(MacroElement):
             {{ this.get_name() }}.bindPopup({{ this.popup | tojson }});
             {% endif %}
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(
         self,
@@ -237,16 +230,14 @@ class WebGLEarthTileLayer(MacroElement):
     >>> tiles.add_to(globe)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = WE.tileLayer(
                 {{ this.url | tojson }},
                 {{ this.options | tojavascript }}
             ).addTo({{ this._parent.get_name() }});
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(
         self,
@@ -299,8 +290,7 @@ class WebGLEarthRealtime(JSCSSMixin, MacroElement):
     >>> iss.add_to(globe)
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             (function() {
                 var earth = {{ this._parent.get_name() }};
@@ -319,8 +309,7 @@ class WebGLEarthRealtime(JSCSSMixin, MacroElement):
                 setInterval({{ this.get_name() }}_update, {{ this.interval }});
             })();
         {% endmacro %}
-    """
-    )
+    """)
 
     def __init__(
         self,

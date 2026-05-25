@@ -12,9 +12,8 @@ from folium.plugins.webgl_earth import (
     WebGLEarth,
     WebGLEarthMarker,
     WebGLEarthRealtime,
-    WebGLEarthTileLayer
+    WebGLEarthTileLayer,
 )
-
 
 # ─────────────────────────── WebGLEarth ───────────────────────────
 
@@ -138,9 +137,7 @@ class TestWebGLEarthTileLayer:
         m = folium.Map()
         globe = WebGLEarth()
         globe.add_to(m)
-        WebGLEarthTileLayer(url="https://example.com/{z}/{x}/{y}.png").add_to(
-            globe
-        )
+        WebGLEarthTileLayer(url="https://example.com/{z}/{x}/{y}.png").add_to(globe)
         html = m._repr_html_()
         assert "WE.tileLayer" in html
         assert "example.com" in html
@@ -151,13 +148,11 @@ class TestWebGLEarthTileLayer:
 
 class TestWebGLEarthRealtime:
     def _make_callback(self):
-        return JsCode(
-            """
+        return JsCode("""
             function(data, earth) {
                 WE.marker([data.lat, data.lng]).addTo(earth);
             }
-            """
-        )
+            """)
 
     def test_default(self):
         rt = WebGLEarthRealtime(
