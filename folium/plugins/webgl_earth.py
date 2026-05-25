@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Union
-
 from branca.element import MacroElement
 from folium.elements import JSCSSMixin
 from folium.template import Template
@@ -131,7 +129,7 @@ class WebGLEarth(JSCSSMixin, MacroElement):
         self,
         center: list[float] | None = None,
         zoom: float = 2.5,
-        tile_url: Optional[str] = None,
+        tile_url: str | None = None,
         tile_subdomains: str = "abc",
         height: int = 600,
         atmosphere: bool = True,
@@ -194,7 +192,7 @@ class WebGLEarthMarker(MacroElement):
     def __init__(
         self,
         location: list[float],
-        popup: Optional[str] = None,
+        popup: str | None = None,
     ):
         super().__init__()
         self._name = "WebGLEarthMarker"
@@ -317,7 +315,7 @@ class WebGLEarthRealtime(JSCSSMixin, MacroElement):
         self,
         source_url: str,
         interval: int = 5000,
-        on_update: Union[JsCode, str, None] = None,
+        on_update: JsCode | str | None = None,
     ):
         super().__init__()
         self._name = "WebGLEarthRealtime"

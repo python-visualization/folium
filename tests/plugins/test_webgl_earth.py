@@ -1,19 +1,13 @@
-"""
-Tests for the WebGL Earth folium plugin.
-
-Run with: pytest test_webgl_earth.py -v
-"""
+import pytest
 
 import folium
-import pytest
-from folium.utilities import JsCode
-
 from folium.plugins.webgl_earth import (
     WebGLEarth,
     WebGLEarthMarker,
     WebGLEarthRealtime,
     WebGLEarthTileLayer,
 )
+from folium.utilities import JsCode
 
 # ─────────────────────────── WebGLEarth ───────────────────────────
 
