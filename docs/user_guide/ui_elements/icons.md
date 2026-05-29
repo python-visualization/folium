@@ -54,3 +54,33 @@ folium.Marker(
 
 m
 ```
+
+## Text labels with DivIcon
+
+`DivIcon` allows you to add text directly on the map using an HTML `div` element.
+This is useful when you want a visible label at a specific location, without
+relying on tooltips or popups that only appear on interaction.
+
+```{code-cell} ipython3
+m = folium.Map(location=[41, -71], zoom_start=6)
+
+folium.Marker(
+    location=[41, -71],
+    icon=folium.DivIcon(
+        html='<div style="font-size: 14px; color: black; font-weight: bold;">New York</div>',
+        icon_size=(100, 36),
+        icon_anchor=(50, 18),
+    ),
+).add_to(m)
+
+folium.Marker(
+    location=[42.36, -71.06],
+    icon=folium.DivIcon(
+        html='<div style="font-size: 12px; color: navy;">Boston</div>',
+        icon_size=(80, 30),
+        icon_anchor=(40, 15),
+    ),
+).add_to(m)
+
+m
+```
