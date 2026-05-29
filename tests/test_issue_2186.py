@@ -10,11 +10,6 @@ Validates that:
 """
 
 import re
-import sys
-
-import pytest
-
-sys.path.insert(0, ".")
 import folium
 
 
