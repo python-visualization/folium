@@ -185,6 +185,59 @@ class FeatureGroup(Layer):
         self.options = remove_empty(**kwargs)
 
 
+class LayerGroup(Layer):
+    """
+    Create a LayerGroup layer ; you can put things in it and handle them
+    as a single layer.  For example, you can add a LayerControl to
+    tick/untick the whole group.
+
+    LayerGroup is the base class of FeatureGroup in Leaflet.
+    Unlike FeatureGroup, LayerGroup accepts custom options
+    that can be used in custom JavaScript code.
+
+    Parameters
+    ----------
+    name : str, default None
+        The name of the layer group layer.
+        It will be displayed in the LayerControl.
+        If None get_name() will be called to get the technical (ugly) name.
+    overlay : bool, default True
+        Whether your layer will be an overlay (ticked with a check box in
+        LayerControls) or a base layer (ticked with a radio button).
+    control: bool, default True
+        Whether the layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening.
+    **kwargs
+        Additional (possibly inherited) options. See
+        https://leafletjs.com/reference.html#layergroup
+
+    """
+
+    _template = Template(
+        """
+        {% macro script(this, kwargs) %}
+            var {{ this.get_name() }} = L.layerGroup(
+                {{ this.options|tojavascript }}
+            );
+        {% endmacro %}
+        """
+    )
+
+    def __init__(
+        self,
+        name: Optional[str] = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
+        **kwargs: TypeJsonValue,
+    ):
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
+        self._name = "LayerGroup"
+        self.tile_name = name if name is not None else self.get_name()
+        self.options = remove_empty(**kwargs)
+
+
 class LayerControl(MacroElement):
     """
     Creates a LayerControl object to be added on a folium map.
