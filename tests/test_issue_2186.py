@@ -7,10 +7,12 @@ Validates that:
 2. Pixel heights/widths emit min-height/min-width to prevent collapse
 3. The dead `#map { position:absolute; ... }` CSS rule is removed
 4. All existing size formats (int, px string, % string) still parse correctly
+
 """
 
-import re
+
 import folium
+import re
 
 
 def _get_map_css(m: folium.Map) -> str:
