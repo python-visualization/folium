@@ -11,8 +11,10 @@ Validates that:
 """
 
 
-import folium
+
 import re
+
+import folium
 
 
 def _get_map_css(m: folium.Map) -> str:
