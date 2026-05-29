@@ -10,8 +10,6 @@ Validates that:
 
 """
 
-
-
 import re
 
 import folium
