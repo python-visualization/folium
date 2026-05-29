@@ -5,7 +5,8 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 import time
 import webbrowser
-from typing import Any, List, Optional, Sequence, Union
+from collections.abc import Sequence
+from typing import Any, Optional, Union
 
 from branca.element import Element, Figure
 
@@ -63,14 +64,12 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
-    _template = Template(
-        """
+    _template = Template("""
         <script>
             L_NO_TOUCH = {{ this.no_touch |tojson}};
             L_DISABLE_3D = {{ this.disable_3d|tojson }};
         </script>
-    """
-    )
+    """)
 
     def __init__(self, no_touch=False, disable_3d=False):
         super().__init__()
@@ -177,8 +176,7 @@ class Map(JSCSSMixin, Evented):
 
     """  # noqa
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -252,8 +250,7 @@ class Map(JSCSSMixin, Evented):
             {%- endif %}
 
         {% endmacro %}
-        """
-    )
+        """)
 
     # use the module variables for backwards compatibility
     default_js = _default_js
@@ -342,7 +339,7 @@ class Map(JSCSSMixin, Evented):
             **kwargs,
         )
 
-        self.objects_to_stay_in_front: List[Layer] = []
+        self.objects_to_stay_in_front: list[Layer] = []
 
         if isinstance(tiles, TileLayer):
             self.add_child(tiles)

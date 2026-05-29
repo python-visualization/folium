@@ -30,15 +30,16 @@ def _get_map_css(m: folium.Map) -> str:
 # Percentage → viewport units
 # ---------------------------------------------------------------------------
 
+
 class TestPercentageUsesViewportUnits:
     def test_height_100_percent_emits_vh(self):
         """The default height='100%' should use 100vh, not 100%."""
         m = folium.Map(location=[0, 0], height="100%")
         css = _get_map_css(m)
         assert "100.0vh" in css, f"Expected vh unit, got:\n{css}"
-        assert "100.0%" not in css.split("position")[1], (
-            "Should not emit bare % for height when using viewport units"
-        )
+        assert (
+            "100.0%" not in css.split("position")[1]
+        ), "Should not emit bare % for height when using viewport units"
 
     def test_width_100_percent_emits_vw(self):
         """width='100%' should use 100vw."""
@@ -63,6 +64,7 @@ class TestPercentageUsesViewportUnits:
 # ---------------------------------------------------------------------------
 # Pixel values → min-height / min-width guards
 # ---------------------------------------------------------------------------
+
 
 class TestPixelValuesGetMinConstraints:
     def test_pixel_string_height_gets_min_height(self):
@@ -90,6 +92,7 @@ class TestPixelValuesGetMinConstraints:
 # Dead CSS rule removal
 # ---------------------------------------------------------------------------
 
+
 class TestDeadMapRuleRemoved:
     def test_dead_map_id_rule_absent(self):
         """The stale `#map { position:absolute; ... }` block must not appear."""
@@ -97,14 +100,15 @@ class TestDeadMapRuleRemoved:
         html = m.get_root().render()
         # The old rule targeted the literal id="map" which never matched the
         # hashed IDs folium actually generates.
-        assert "<style>#map {" not in html, (
-            "Dead `#map { position:absolute; }` CSS rule should have been removed"
-        )
+        assert (
+            "<style>#map {" not in html
+        ), "Dead `#map { position:absolute; }` CSS rule should have been removed"
 
 
 # ---------------------------------------------------------------------------
 # Backwards-compatibility: all existing call signatures still work
 # ---------------------------------------------------------------------------
+
 
 class TestBackwardsCompatibility:
     def test_default_call(self):
