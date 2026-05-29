@@ -175,7 +175,9 @@ class TestFolium:
         """Test LayerGroup."""
 
         m = folium.Map()
-        layer_group = folium.LayerGroup(name="my_layer_group", custom_option="test_value")
+        layer_group = folium.LayerGroup(
+            name="my_layer_group", custom_option="test_value"
+        )
         layer_group.add_child(folium.Marker([45, -30], popup=folium.Popup("-30")))
         layer_group.add_child(folium.Marker([45, 30], popup=folium.Popup("30")))
         m.add_child(layer_group)

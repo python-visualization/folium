@@ -214,15 +214,13 @@ class LayerGroup(Layer):
 
     """
 
-    _template = Template(
-        """
+    _template = Template("""
         {% macro script(this, kwargs) %}
             var {{ this.get_name() }} = L.layerGroup(
                 {{ this.options|tojavascript }}
             );
         {% endmacro %}
-        """
-    )
+        """)
 
     def __init__(
         self,
