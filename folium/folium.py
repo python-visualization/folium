@@ -5,8 +5,7 @@ Make beautiful, interactive maps with Python and Leaflet.js
 
 import time
 import webbrowser
-from collections.abc import Sequence
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Sequence, Union
 
 from branca.element import Element, Figure
 
@@ -64,12 +63,14 @@ _default_css = [
 
 
 class GlobalSwitches(Element):
-    _template = Template("""
+    _template = Template(
+        """
         <script>
             L_NO_TOUCH = {{ this.no_touch |tojson}};
             L_DISABLE_3D = {{ this.disable_3d|tojson }};
         </script>
-    """)
+    """
+    )
 
     def __init__(self, no_touch=False, disable_3d=False):
         super().__init__()
@@ -176,15 +177,26 @@ class Map(JSCSSMixin, Evented):
 
     """  # noqa
 
-    _template = Template("""
+    _template = Template(
+        """
         {% macro header(this, kwargs) %}
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
                 #{{ this.get_name() }} {
                     position: {{this.position}};
+                    {%- if this._width_is_percent %}
+                    width: {{this.width[0]}}vw;
+                    {%- else %}
                     width: {{this.width[0]}}{{this.width[1]}};
+                    min-width: {{this.width[0]}}{{this.width[1]}};
+                    {%- endif %}
+                    {%- if this._height_is_percent %}
+                    height: {{this.height[0]}}vh;
+                    {%- else %}
                     height: {{this.height[0]}}{{this.height[1]}};
+                    min-height: {{this.height[0]}}{{this.height[1]}};
+                    {%- endif %}
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
@@ -197,15 +209,6 @@ class Map(JSCSSMixin, Evented):
                 margin: 0;
                 padding: 0;
             }
-            </style>
-
-            <style>#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
             </style>
 
             <script>
@@ -249,7 +252,8 @@ class Map(JSCSSMixin, Evented):
             {%- endif %}
 
         {% endmacro %}
-        """)
+        """
+    )
 
     # use the module variables for backwards compatibility
     default_js = _default_js
@@ -301,6 +305,10 @@ class Map(JSCSSMixin, Evented):
         # Map Size Parameters.
         self.width = _parse_size(width)
         self.height = _parse_size(height)
+
+        self._height_is_percent = self.height[1] == "%"
+        self._width_is_percent = self.width[1] == "%"
+
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -334,7 +342,7 @@ class Map(JSCSSMixin, Evented):
             **kwargs,
         )
 
-        self.objects_to_stay_in_front: list[Layer] = []
+        self.objects_to_stay_in_front: List[Layer] = []
 
         if isinstance(tiles, TileLayer):
             self.add_child(tiles)
@@ -368,16 +376,15 @@ class Map(JSCSSMixin, Evented):
         Examples
         --------
         >>> m._to_png()
-        >>> m._to_png(delay=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
 
         """
 
         if self._png_image is None:
             if driver is None:
                 from selenium import webdriver
-                from selenium.webdriver.firefox.options import Options
 
-                options = Options()
+                options = webdriver.firefox.options.Options()
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
@@ -392,16 +399,11 @@ class Map(JSCSSMixin, Evented):
                     *size,
                 )
                 driver.set_window_size(*window_size)
-            from selenium.webdriver.support.ui import WebDriverWait
-
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                WebDriverWait(driver, delay).until(
-                    lambda _driver: _driver.execute_script("return document.readyState")
-                    == "complete"
-                )
+                time.sleep(delay)
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
                 driver.quit()
