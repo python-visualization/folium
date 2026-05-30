@@ -54,6 +54,7 @@ m = folium.Map(location=[41.8781, -87.6298], zoom_start=12)
 folium.GeoJson(geojson_data).add_to(m)
 m
 ```
+![Wrong coordinate order - marker appears in Antarctica instead of Chicago](./example2_wrong_location.png)
 
 GeoJSON interprets the coordinates as [lon, lat], so when you provide [lat, lon] by mistake, the point ends up in the wrong location. In this case, the marker would appear far from Chicago.
 
