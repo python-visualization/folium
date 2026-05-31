@@ -279,14 +279,16 @@ class WebGLEarthRealtime(JSCSSMixin, MacroElement):
     >>> iss = WebGLEarthRealtime(
     ...     source_url="https://api.wheretheiss.at/v1/satellites/25544",
     ...     interval=3000,
-    ...     on_update=JsCode('''
+    ...     on_update=JsCode(
+    ...         '''
     ...         function(data, earth) {
     ...             if (window._issMarker) window._issMarker.removeFrom(earth);
     ...             window._issMarker = WE.marker(
     ...                 [data.latitude, data.longitude]
     ...             ).addTo(earth);
     ...         }
-    ...     '''),
+    ...     '''
+    ...     ),
     ... )
     >>> iss.add_to(globe)
     """

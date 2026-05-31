@@ -42,11 +42,15 @@ class Draw(JSCSSMixin, MacroElement):
     ...     position="topleft",
     ...     draw_options={"polyline": {"allowIntersection": False}},
     ...     edit_options={"poly": {"allowIntersection": False}},
-    ...     on={"click": JsCode("""
+    ...     on={
+    ...         "click": JsCode(
+    ...             """
     ...         function(event) {
     ...            alert(JSON.stringify(this.toGeoJSON()));
     ...         }
-    ...     """)},
+    ...     """
+    ...         )
+    ...     },
     ... ).add_to(m)
 
     For more info please check
