@@ -37,7 +37,12 @@ from folium.plugins.timestamped_geo_json import TimestampedGeoJson
 from folium.plugins.timestamped_wmstilelayer import TimestampedWmsTileLayers
 from folium.plugins.treelayercontrol import TreeLayerControl
 from folium.plugins.vectorgrid_protobuf import VectorGridProtobuf
-from folium.plugins.webgl_earth import WebGLEarth, WebGLEarthMarker, WebGLEarthTileLayer, WebGLEarthRealtime
+from folium.plugins.webgl_earth import (
+    WebGLEarth,
+    WebGLEarthMarker,
+    WebGLEarthRealtime,
+    WebGLEarthTileLayer,
+)
 
 __all__ = [
     "AntPath",
