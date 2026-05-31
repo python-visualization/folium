@@ -10,7 +10,7 @@ from owslib.wms import WebMapService
 
 url = "https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS"
 
-web_map_services = WebMapService(url)
+web_map_services = WebMapService(url, timeout=100)
 
 print("\n".join(web_map_services.contents.keys()))
 ```
