@@ -171,6 +171,26 @@ class TestFolium:
         bounds = m.get_bounds()
         assert bounds == [[45, -30], [45, 30]], bounds
 
+    def test_layer_group(self):
+        """Test LayerGroup."""
+
+        m = folium.Map()
+        layer_group = folium.LayerGroup(
+            name="my_layer_group", custom_option="test_value"
+        )
+        layer_group.add_child(folium.Marker([45, -30], popup=folium.Popup("-30")))
+        layer_group.add_child(folium.Marker([45, 30], popup=folium.Popup("30")))
+        m.add_child(layer_group)
+        m.add_child(folium.LayerControl())
+
+        m._repr_html_()
+
+        bounds = m.get_bounds()
+        assert bounds == [[45, -30], [45, 30]], bounds
+        html = m._repr_html_()
+        assert "L.layerGroup" in html
+        assert "my_layer_group" in html
+
     def test_topo_json_smooth_factor(self):
         """Test topojson smooth factor method."""
         self.m = folium.Map([43, -100], zoom_start=4)
