@@ -183,8 +183,19 @@ class Map(JSCSSMixin, Evented):
             <style>
                 #{{ this.get_name() }} {
                     position: {{this.position}};
+                    {%- if this._width_is_percent %}
+                    width: {{this.width[0]}}vw;
+                    {%- else %}
                     width: {{this.width[0]}}{{this.width[1]}};
+                    min-width: {{this.width[0]}}{{this.width[1]}};
+                    {%- endif %}
+                    {%- if this._height_is_percent %}
+                    height: {{this.height[0]}}vh;
+                    {%- else %}
                     height: {{this.height[0]}}{{this.height[1]}};
+                    min-height: {{this.height[0]}}{{this.height[1]}};
+                    {%- endif %}
+
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
@@ -301,6 +312,8 @@ class Map(JSCSSMixin, Evented):
         # Map Size Parameters.
         self.width = _parse_size(width)
         self.height = _parse_size(height)
+        self._height_is_percent = self.height[1] == "%"
+        self._width_is_percent = self.width[1] == "%"
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
