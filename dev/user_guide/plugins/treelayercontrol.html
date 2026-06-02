@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TreeLayerControl &#8212; Folium 0.20.1.dev126+g3e16b5b81 documentation</title>
+    <title>TreeLayerControl &#8212; Folium 0.20.1.dev133+ge7371df0f documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script src="../../_static/documentation_options.js?v=809abe14"></script>
+    <script src="../../_static/documentation_options.js?v=3c10d648"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -61,7 +61,7 @@
     <link rel="prev" title="TimestampedGeoJson" href="timestamped_geojson.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev126+g3e16b5b81" />
+  <meta name="docsearch:version" content="0.20.1.dev133+ge7371df0f" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -466,6 +466,7 @@
 <li class="toctree-l2"><a class="reference internal" href="timestamped_geojson.html">TimestampedGeoJson</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">TreeLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vector_tiles.html">Vector tiles using VectorGridProtobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webgl_earth.html">WebGL Earth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WmsTimeDimension.html">TimestampedWmsTileLayers</a></li>
 </ul>
 </details></li>
@@ -627,10 +628,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d1c792f0f59be968435a11bfbc76f185 {
+                #map_c6df695e3b6b7a926e460d89d2efdac4 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -666,14 +668,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d1c792f0f59be968435a11bfbc76f185&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c6df695e3b6b7a926e460d89d2efdac4&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d1c792f0f59be968435a11bfbc76f185 = L.map(
-                &quot;map_d1c792f0f59be968435a11bfbc76f185&quot;,
+            var map_c6df695e3b6b7a926e460d89d2efdac4 = L.map(
+                &quot;map_c6df695e3b6b7a926e460d89d2efdac4&quot;,
                 {
                     center: [46.603354, 1.8883335],
                     crs: L.CRS.EPSG3857,
@@ -690,7 +692,7 @@
 
 
 
-            var tile_layer_f33b37e60f608ca37cf5b17f66c31fab = L.tileLayer(
+            var tile_layer_d8e9c0069a626d5d98dacd0a678c6008 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -707,70 +709,70 @@
             );
 
 
-            tile_layer_f33b37e60f608ca37cf5b17f66c31fab.addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            tile_layer_d8e9c0069a626d5d98dacd0a678c6008.addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_dca27cfac9bf24ccb05c544c927372cb = L.marker(
+            var marker_df907aa2ece76ab30c5e146ae7879a20 = L.marker(
                 [48.8582441, 2.2944775],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_d8ea3d9cecfb14d8052e0ab727817c86 = L.marker(
+            var marker_0c30a48fe1c0c65c6a10a33831758ca1 = L.marker(
                 [48.852954, 2.3498726],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_f96f448e14383c5235528de18a4c5041 = L.marker(
+            var marker_a59ccd63c9c7ec56ab18286936b43bf2 = L.marker(
                 [48.8605847, 2.3376267],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_fef47ae58be0075b0b8e4014ff5cb07f = L.marker(
+            var marker_2338f53f8308225a24e730202a6d0434 = L.marker(
                 [52.5162542, 13.3776805],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_4df73c87e32994a7669a192fd9c196b5 = L.marker(
+            var marker_0c27de3f96745d95b30b04881dea5e68 = L.marker(
                 [50.941324, 6.9581201],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_b4d69c6736394fdbcd5d1e6397f1ab0c = L.marker(
+            var marker_cc89e4d040c70b3422e0b061aa6ee9e8 = L.marker(
                 [40.4184145, -3.7137051],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_6e83b97eb2b3fb35178b429b6c494dd8 = L.marker(
+            var marker_2b207755e5a33c2f8a87a21526697aec = L.marker(
                 [37.1767829, -3.5892795],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_c67074dfe2a0410b69e1a3b053fdab9e = L.marker(
+            var marker_e1d0bf7b7a721686c9e77ccc06458b36 = L.marker(
                 [30.3292215, 35.4432464],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
-            var marker_c828b1fd7ab5d84e14a36fa29c85854c = L.marker(
+            var marker_30f0e5421e6924f70203cc80332616bd = L.marker(
                 [29.6233486, 35.4390656],
                 {
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 
             L.control.layers.tree(
@@ -789,15 +791,15 @@
   &quot;children&quot;: [
 {
   &quot;label&quot;: &quot;Tour Eiffel&quot;,
-  &quot;layer&quot;: marker_dca27cfac9bf24ccb05c544c927372cb,
+  &quot;layer&quot;: marker_df907aa2ece76ab30c5e146ae7879a20,
 },
 {
   &quot;label&quot;: &quot;Notre Dame&quot;,
-  &quot;layer&quot;: marker_d8ea3d9cecfb14d8052e0ab727817c86,
+  &quot;layer&quot;: marker_0c30a48fe1c0c65c6a10a33831758ca1,
 },
 {
   &quot;label&quot;: &quot;Louvre&quot;,
-  &quot;layer&quot;: marker_f96f448e14383c5235528de18a4c5041,
+  &quot;layer&quot;: marker_a59ccd63c9c7ec56ab18286936b43bf2,
 },
 ],
 },
@@ -807,11 +809,11 @@
   &quot;children&quot;: [
 {
   &quot;label&quot;: &quot;Branderburger Tor&quot;,
-  &quot;layer&quot;: marker_fef47ae58be0075b0b8e4014ff5cb07f,
+  &quot;layer&quot;: marker_2338f53f8308225a24e730202a6d0434,
 },
 {
   &quot;label&quot;: &quot;K\u00f6lner Dom&quot;,
-  &quot;layer&quot;: marker_4df73c87e32994a7669a192fd9c196b5,
+  &quot;layer&quot;: marker_0c27de3f96745d95b30b04881dea5e68,
 },
 ],
 },
@@ -821,11 +823,11 @@
   &quot;children&quot;: [
 {
   &quot;label&quot;: &quot;Palacio Real&quot;,
-  &quot;layer&quot;: marker_b4d69c6736394fdbcd5d1e6397f1ab0c,
+  &quot;layer&quot;: marker_cc89e4d040c70b3422e0b061aa6ee9e8,
 },
 {
   &quot;label&quot;: &quot;La Alhambra&quot;,
-  &quot;layer&quot;: marker_6e83b97eb2b3fb35178b429b6c494dd8,
+  &quot;layer&quot;: marker_2b207755e5a33c2f8a87a21526697aec,
 },
 ],
 },
@@ -841,11 +843,11 @@
   &quot;children&quot;: [
 {
   &quot;label&quot;: &quot;Petra&quot;,
-  &quot;layer&quot;: marker_c67074dfe2a0410b69e1a3b053fdab9e,
+  &quot;layer&quot;: marker_e1d0bf7b7a721686c9e77ccc06458b36,
 },
 {
   &quot;label&quot;: &quot;Wadi Rum&quot;,
-  &quot;layer&quot;: marker_c828b1fd7ab5d84e14a36fa29c85854c,
+  &quot;layer&quot;: marker_30f0e5421e6924f70203cc80332616bd,
 },
 ],
 },
@@ -865,7 +867,7 @@
   &quot;expandAll&quot;: &quot;&quot;,
   &quot;labelIsSelector&quot;: &quot;both&quot;,
 }
-            ).addTo(map_d1c792f0f59be968435a11bfbc76f185);
+            ).addTo(map_c6df695e3b6b7a926e460d89d2efdac4);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -955,7 +957,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev126+g3e16b5b81</div>
+Folium version 0.20.1.dev133+ge7371df0f</div>
       
         <div class="footer-item">
 

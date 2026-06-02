@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API reference &#8212; Folium 0.20.1.dev126+g3e16b5b81 documentation</title>
+    <title>API reference &#8212; Folium 0.20.1.dev133+ge7371df0f documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script src="_static/documentation_options.js?v=809abe14"></script>
+    <script src="_static/documentation_options.js?v=3c10d648"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -57,7 +57,7 @@
     <link rel="prev" title="Overriding Leaflet class methods" href="advanced_guide/override_leaflet_class_methods.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev126+g3e16b5b81" />
+  <meta name="docsearch:version" content="0.20.1.dev133+ge7371df0f" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -472,7 +472,7 @@ any of the following to the “tiles” keyword:</p>
 <p>Explore more provider names available in <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> here:
 <a class="reference external" href="https://leaflet-extras.github.io/leaflet-providers/preview/">https://leaflet-extras.github.io/leaflet-providers/preview/</a>.</p>
 <p>You can also pass a custom tileset by passing a
-<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">https://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -480,8 +480,8 @@ URL to the tiles parameter: <code class="docutils literal notranslate"><span cla
 <li><p><strong>location</strong> (<em>tuple</em><em> or </em><em>list</em><em>, </em><em>default None</em>) – Latitude and Longitude of Map (Northing, Easting).</p></li>
 <li><p><strong>width</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Width of the map.</p></li>
 <li><p><strong>height</strong> (<em>pixel int</em><em> or </em><em>percentage string</em><em> (</em><em>default: '100%'</em><em>)</em>) – Height of the map.</p></li>
-<li><p><strong>tiles</strong> (str or TileLayer or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – Map tileset to use. Can choose from a list of built-in tiles,
-pass a <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>,
+<li><p><strong>tiles</strong> (str or TileLayer or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – Map tileset to use. Can choose from a list of built-in tiles,
+pass a <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>,
 pass a custom URL, pass a TileLayer object,
 or pass <cite>None</cite> to create a map without tiles.
 For more advanced tile layer options, use the <cite>TileLayer</cite> class.</p></li>
@@ -853,6 +853,33 @@ to True to allow dragging the control around.</p></li>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="folium.map.LayerGroup">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">LayerGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.LayerGroup" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
+<p>Create a LayerGroup layer ; you can put things in it and handle them
+as a single layer.  For example, you can add a LayerControl to
+tick/untick the whole group.</p>
+<p>LayerGroup is the base class of FeatureGroup in Leaflet.
+Unlike FeatureGroup, LayerGroup accepts custom options
+that can be used in custom JavaScript code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em><em>, </em><em>default None</em>) – The name of the layer group layer.
+It will be displayed in the LayerControl.
+If None get_name() will be called to get the technical (ugly) name.</p></li>
+<li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether your layer will be an overlay (ticked with a check box in
+LayerControls) or a base layer (ticked with a radio button).</p></li>
+<li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be included in LayerControls.</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening.</p></li>
+<li><p><strong>**kwargs</strong> – Additional (possibly inherited) options. See
+<a class="reference external" href="https://leafletjs.com/reference.html#layergroup">https://leafletjs.com/reference.html#layergroup</a></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="folium.map.Marker">
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.map.</span></span><span class="sig-name descname"><span class="pre">Marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Popup" title="folium.map.Popup"><span class="pre">Popup</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tooltip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Tooltip" title="folium.map.Tooltip"><span class="pre">Tooltip</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.map.Icon" title="folium.map.Icon"><span class="pre">Icon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#folium.features.CustomIcon" title="folium.features.CustomIcon"><span class="pre">CustomIcon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#folium.features.DivIcon" title="folium.features.DivIcon"><span class="pre">DivIcon</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">draggable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.map.Marker" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
@@ -1012,13 +1039,13 @@ Note that if used the image will be clipped beyond latitude -85 and 85.</p></li>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="folium.raster_layers.TileLayer">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.raster_layers.</span></span><span class="sig-name descname"><span class="pre">TileLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><span class="pre">TileProvider</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'OpenStreetMap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_native_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_retina</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_wrap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.TileLayer" title="Link to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.raster_layers.</span></span><span class="sig-name descname"><span class="pre">TileLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tiles</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><span class="pre">TileProvider</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'OpenStreetMap'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_native_zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detect_retina</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_wrap</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.raster_layers.TileLayer" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.Layer" title="folium.map.Layer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Layer</span></code></a></p>
 <p>Create a tile layer to append on a Map.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>tiles</strong> (str or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – <p>Map tileset to use. Folium has built-in all tilesets
+<li><p><strong>tiles</strong> (str or <a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a>, default ‘OpenStreetMap’) – <p>Map tileset to use. Folium has built-in all tilesets
 available in the <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> package. For example, you can pass
 any of the following to the “tiles” keyword:</p>
 <blockquote>
@@ -1031,7 +1058,7 @@ any of the following to the “tiles” keyword:</p>
 <p>Explore more provider names available in <code class="docutils literal notranslate"><span class="pre">xyzservices</span></code> here:
 <a class="reference external" href="https://leaflet-extras.github.io/leaflet-providers/preview/">https://leaflet-extras.github.io/leaflet-providers/preview/</a>.</p>
 <p>You can also pass a custom tileset by passing a
-<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev6+g53ace4e41)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
+<a class="reference external" href="https://xyzservices.readthedocs.io/en/latest/api.html#xyzservices.TileProvider" title="(in xyzservices v2026.3.1.dev7+g1199eea93)"><code class="xref py py-class docutils literal notranslate"><span class="pre">xyzservices.TileProvider</span></code></a> or a Leaflet-style
 URL to the tiles parameter: <code class="docutils literal notranslate"><span class="pre">https://{s}.yourtiles.com/{z}/{x}/{y}.png</span></code>.</p>
 </p></li>
 <li><p><strong>min_zoom</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default 0</em>) – Minimum allowed zoom level for this tile layer. Filled by xyzservices by default.</p></li>
@@ -1281,8 +1308,7 @@ allows turning it on or off.</p></li>
 <span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.features.</span></span><span class="sig-name descname"><span class="pre">Choropleth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geo_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key_on</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_fill_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nan_fill_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_weight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overlay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topojson</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth_factor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlight</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_jenks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Choropleth" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#folium.map.FeatureGroup" title="folium.map.FeatureGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">FeatureGroup</span></code></a></p>
 <p>Apply a GeoJSON overlay to the map.</p>
-<blockquote>
-<div><p>Plot a GeoJSON overlay on the base map. There is no requirement
+<p>Plot a GeoJSON overlay on the base map. There is no requirement
 to bind data (passing just a GeoJSON plots a single-color overlay),
 but there is a data binding option to map your columnar data to
 different feature objects with a color scale.</p>
@@ -1299,76 +1325,57 @@ with the <cite>bins</cite> parameter.</p>
 also be passed with the reference to the topojson objects to convert.
 See the topojson.feature method in the TopoJSON API reference:
 <a class="github reference external" href="https://github.com/topojson/topojson/wiki/API-Reference">topojson/topojson</a></p>
-<dl class="simple">
-<dt>geo_data: string/object</dt><dd><p>URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
-geometries</p>
-</dd>
-<dt>data: Pandas DataFrame or Series, default None</dt><dd><p>Data to bind to the GeoJSON.</p>
-</dd>
-<dt>columns: tuple with two values, default None</dt><dd><p>If the data is a Pandas DataFrame, the columns of data to be bound.
-Must pass column 1 as the key, and column 2 the values.</p>
-</dd>
-<dt>key_on: string, default None</dt><dd><p>Variable in the <cite>geo_data</cite> GeoJSON file to bind the data to. Must
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geo_data</strong> (<em>string/object</em>) – URL, file path, or data (json, dict, geopandas, etc) to your GeoJSON
+geometries</p></li>
+<li><p><strong>data</strong> (<em>Pandas DataFrame</em><em> or </em><em>Series</em><em>, </em><em>default None</em>) – Data to bind to the GeoJSON.</p></li>
+<li><p><strong>columns</strong> (<em>tuple with two values</em><em>, </em><em>default None</em>) – If the data is a Pandas DataFrame, the columns of data to be bound.
+Must pass column 1 as the key, and column 2 the values.</p></li>
+<li><p><strong>key_on</strong> (<em>string</em><em>, </em><em>default None</em>) – Variable in the <cite>geo_data</cite> GeoJSON file to bind the data to. Must
 start with ‘feature’ and be in JavaScript objection notation.
-Ex: ‘feature.id’ or ‘feature.properties.statename’.</p>
-</dd>
-<dt>bins: int or sequence of scalars or str, default 6</dt><dd><p>If <cite>bins</cite> is an int, it defines the number of equal-width
+Ex: ‘feature.id’ or ‘feature.properties.statename’.</p></li>
+<li><p><strong>bins</strong> (<em>int</em><em> or </em><em>sequence</em><em> of </em><em>scalars</em><em> or </em><em>str</em><em>, </em><em>default 6</em>) – If <cite>bins</cite> is an int, it defines the number of equal-width
 bins between the min and the max of the values.
 If <cite>bins</cite> is a sequence, it directly defines the bin edges.
 For more information on this parameter, have a look at
-numpy.histogram function.</p>
-</dd>
-</dl>
-</div></blockquote>
-<dl>
-<dt>fill_color: string, optional</dt><dd><blockquote>
-<div><p>Area fill color, defaults to blue. Can pass a hex code, color name,
+numpy.histogram function.</p></li>
+<li><p><strong>fill_color</strong> (<em>string</em><em>, </em><em>optional</em>) – Area fill color, defaults to blue. Can pass a hex code, color name,
 or if you are binding data, one of the following color brewer palettes:
 ‘BuGn’, ‘BuPu’, ‘GnBu’, ‘OrRd’, ‘PuBu’, ‘PuBuGn’, ‘PuRd’, ‘RdPu’,
 ‘YlGn’, ‘YlGnBu’, ‘YlOrBr’, and ‘YlOrRd’.
 You can also pass any colormap name supported by branca such as
 ‘viridis’, ‘plasma’, ‘magma’, ‘Blues’ etc. For all available options see:
-<a class="reference external" href="https://python-visualization.github.io/branca/colormap.html">https://python-visualization.github.io/branca/colormap.html</a></p>
-</div></blockquote>
-<dl class="simple">
-<dt>nan_fill_color: string, default ‘black’</dt><dd><p>Area fill color for nan or missing values.
-Can pass a hex code, color name.</p>
-</dd>
-<dt>fill_opacity: float, default 0.6</dt><dd><p>Area fill opacity, range 0-1.</p>
-</dd>
-<dt>nan_fill_opacity: float, default fill_opacity</dt><dd><p>Area fill opacity for nan or missing values, range 0-1.</p>
-</dd>
-<dt>line_color: string, default ‘black’</dt><dd><p>GeoJSON geopath line color.</p>
-</dd>
-<dt>line_weight: int, default 1</dt><dd><p>GeoJSON geopath line weight.</p>
-</dd>
-<dt>line_opacity: float, default 1</dt><dd><p>GeoJSON geopath line opacity, range 0-1.</p>
-</dd>
-<dt>legend_name: string, default empty string</dt><dd><p>Title for data legend.</p>
-</dd>
-<dt>topojson: string, default None</dt><dd><p>If using a TopoJSON, passing “objects.yourfeature” to the topojson
-keyword argument will enable conversion to GeoJSON.</p>
-</dd>
-<dt>smooth_factor: float, default None</dt><dd><p>How much to simplify the polyline on each zoom level. More means
+<a class="reference external" href="https://python-visualization.github.io/branca/colormap.html">https://python-visualization.github.io/branca/colormap.html</a></p></li>
+<li><p><strong>nan_fill_color</strong> (<em>string</em><em>, </em><em>default 'black'</em>) – Area fill color for nan or missing values.
+Can pass a hex code, color name.</p></li>
+<li><p><strong>fill_opacity</strong> (<em>float</em><em>, </em><em>default 0.6</em>) – Area fill opacity, range 0-1.</p></li>
+<li><p><strong>nan_fill_opacity</strong> (<em>float</em><em>, </em><em>default fill_opacity</em>) – Area fill opacity for nan or missing values, range 0-1.</p></li>
+<li><p><strong>line_color</strong> (<em>string</em><em>, </em><em>default 'black'</em>) – GeoJSON geopath line color.</p></li>
+<li><p><strong>line_weight</strong> (<em>int</em><em>, </em><em>default 1</em>) – GeoJSON geopath line weight.</p></li>
+<li><p><strong>line_opacity</strong> (<em>float</em><em>, </em><em>default 1</em>) – GeoJSON geopath line opacity, range 0-1.</p></li>
+<li><p><strong>legend_name</strong> (<em>string</em><em>, </em><em>default empty string</em>) – Title for data legend.</p></li>
+<li><p><strong>topojson</strong> (<em>string</em><em>, </em><em>default None</em>) – If using a TopoJSON, passing “objects.yourfeature” to the topojson
+keyword argument will enable conversion to GeoJSON.</p></li>
+<li><p><strong>smooth_factor</strong> (<em>float</em><em>, </em><em>default None</em>) – How much to simplify the polyline on each zoom level. More means
 better performance and smoother look, and less means more accurate
-representation. Leaflet defaults to 1.0.</p>
-</dd>
-<dt>highlight: boolean, default False</dt><dd><p>Enable highlight functionality when hovering over a GeoJSON area.</p>
-</dd>
-<dt>use_jenks: bool, default False</dt><dd><p>Use jenkspy to calculate bins using “natural breaks”
+representation. Leaflet defaults to 1.0.</p></li>
+<li><p><strong>highlight</strong> (<em>boolean</em><em>, </em><em>default False</em>) – Enable highlight functionality when hovering over a GeoJSON area.</p></li>
+<li><p><strong>use_jenks</strong> (<em>bool</em><em>, </em><em>default False</em>) – Use jenkspy to calculate bins using “natural breaks”
 (Fisher-Jenks algorithm). This is useful when your data is unevenly
-distributed.</p>
+distributed.</p></li>
+<li><p><strong>name</strong> (<em>string</em><em>, </em><em>optional</em>) – The name of the layer, as it will appear in LayerControls</p></li>
+<li><p><strong>overlay</strong> (<em>bool</em><em>, </em><em>default True</em>) – Adds the layer as an optional overlay (True) or the base layer (False).</p></li>
+<li><p><strong>control</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the Layer will be included in LayerControls.</p></li>
+<li><p><strong>show</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the layer will be shown on opening.</p></li>
+</ul>
 </dd>
-<dt>name<span class="classifier">string, optional</span></dt><dd><p>The name of the layer, as it will appear in LayerControls</p>
-</dd>
-<dt>overlay<span class="classifier">bool, default True</span></dt><dd><p>Adds the layer as an optional overlay (True) or the base layer (False).</p>
-</dd>
-<dt>control<span class="classifier">bool, default True</span></dt><dd><p>Whether the Layer will be included in LayerControls.</p>
-</dd>
-<dt>show: bool, default True</dt><dd><p>Whether the layer will be shown on opening.</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>GeoJSON data layer in obj.template_vars</p>
 </dd>
 </dl>
-<p>GeoJSON data layer in obj.template_vars</p>
+<p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span><span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;us-states.json&quot;</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">line_weight</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">Choropleth</span><span class="p">(</span>
 <span class="gp">... </span>    <span class="n">geo_data</span><span class="o">=</span><span class="s2">&quot;geo.json&quot;</span><span class="p">,</span>
@@ -1390,8 +1397,6 @@ distributed.</p>
 <span class="gp">... </span><span class="p">)</span>
 </pre></div>
 </div>
-</dd>
-</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="folium.features.Choropleth.render">
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.features.Choropleth.render" title="Link to this definition">#</a></dt>
@@ -3780,6 +3785,135 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 
 </dd></dl>
 
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.WebGLEarth">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">WebGLEarth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zoom</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tile_subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atmosphere</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.WebGLEarth" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>Create a 3D globe visualization using WebGL Earth.</p>
+<p>Based on: <a class="reference external" href="https://www.webglearth.com/">https://www.webglearth.com/</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>list</em><em>, </em><em>default</em><em> [</em><em>20</em><em>, </em><em>0</em><em>]</em>) – Initial center of the globe as [lat, lng].</p></li>
+<li><p><strong>zoom</strong> (<em>float</em><em>, </em><em>default 2.5</em>) – Initial zoom level of the globe.</p></li>
+<li><p><strong>tile_url</strong> (<em>str</em><em>, </em><em>optional</em>) – URL template for the tile layer. Defaults to OpenStreetMap tiles.</p></li>
+<li><p><strong>tile_subdomains</strong> (<em>str</em><em>, </em><em>default &quot;abc&quot;</em>) – Subdomains for the tile layer URL.</p></li>
+<li><p><strong>height</strong> (<em>int</em><em>, </em><em>default 600</em>) – Height of the globe container in pixels.</p></li>
+<li><p><strong>atmosphere</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether to show the atmosphere effect around the globe.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">folium.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebGLEarth</span><span class="p">,</span> <span class="n">WebGLEarthMarker</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">globe</span> <span class="o">=</span> <span class="n">WebGLEarth</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mf">48.2</span><span class="p">,</span> <span class="mf">16.4</span><span class="p">],</span> <span class="n">zoom</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">globe</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">marker</span> <span class="o">=</span> <span class="n">WebGLEarthMarker</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">48.2</span><span class="p">,</span> <span class="mf">16.4</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">popup</span><span class="o">=</span><span class="s2">&quot;Vienna&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marker</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">globe</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="folium.plugins.WebGLEarth.default_js">
+<span class="sig-name descname"><span class="pre">default_js</span></span><span class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><a class="headerlink" href="#folium.plugins.WebGLEarth.default_js" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.WebGLEarthMarker">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">WebGLEarthMarker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popup</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.WebGLEarthMarker" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>Add a marker to a WebGLEarth globe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>location</strong> (<em>list</em>) – Marker location as [lat, lng].</p></li>
+<li><p><strong>popup</strong> (<em>str</em><em>, </em><em>optional</em>) – Text to show in a popup when the marker is clicked.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">globe</span> <span class="o">=</span> <span class="n">WebGLEarth</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marker</span> <span class="o">=</span> <span class="n">WebGLEarthMarker</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">48.2</span><span class="p">,</span> <span class="mf">16.4</span><span class="p">],</span>
+<span class="gp">... </span>    <span class="n">popup</span><span class="o">=</span><span class="s2">&quot;Vienna&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">marker</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">globe</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.WebGLEarthRealtime">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">WebGLEarthRealtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">5000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_update</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><span class="pre">JsCode</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.WebGLEarthRealtime" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSCSSMixin</span></code>, <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>Show realtime-updating data on a WebGLEarth globe.</p>
+<p>This is the 3D equivalent of the Realtime plugin.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_url</strong> (<em>str</em>) – URL to fetch JSON data from.</p></li>
+<li><p><strong>interval</strong> (<em>int</em><em>, </em><em>default 5000</em>) – Update interval in milliseconds.</p></li>
+<li><p><strong>on_update</strong> (<em>str</em><em> or </em><a class="reference internal" href="#folium.utilities.JsCode" title="folium.utilities.JsCode"><em>JsCode</em></a>) – A JavaScript function called with (data, earth) on each update.
+Use this to parse the response and update markers/layers.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">folium.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">JsCode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">globe</span> <span class="o">=</span> <span class="n">WebGLEarth</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">zoom</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iss</span> <span class="o">=</span> <span class="n">WebGLEarthRealtime</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">source_url</span><span class="o">=</span><span class="s2">&quot;https://api.wheretheiss.at/v1/satellites/25544&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">interval</span><span class="o">=</span><span class="mi">3000</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">on_update</span><span class="o">=</span><span class="n">JsCode</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span>
+<span class="gp">... </span><span class="s1">        function(data, earth) {</span>
+<span class="gp">... </span><span class="s1">            if (window._issMarker) window._issMarker.removeFrom(earth);</span>
+<span class="gp">... </span><span class="s1">            window._issMarker = WE.marker(</span>
+<span class="gp">... </span><span class="s1">                [data.latitude, data.longitude]</span>
+<span class="gp">... </span><span class="s1">            ).addTo(earth);</span>
+<span class="gp">... </span><span class="s1">        }</span>
+<span class="gp">... </span><span class="s1">    &#39;&#39;&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iss</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">globe</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="folium.plugins.WebGLEarthTileLayer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">folium.plugins.</span></span><span class="sig-name descname"><span class="pre">WebGLEarthTileLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subdomains</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'abc'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#folium.plugins.WebGLEarthTileLayer" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://python-visualization.github.io/branca/element.html#branca.element.MacroElement" title="(in branca v0.8.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MacroElement</span></code></a></p>
+<p>Add an additional tile layer to a WebGLEarth globe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – URL template for the tile layer.</p></li>
+<li><p><strong>attribution</strong> (<em>str</em><em>, </em><em>default &quot;&quot;</em>) – Attribution text for the tile layer.</p></li>
+<li><p><strong>subdomains</strong> (<em>str</em><em>, </em><em>default &quot;abc&quot;</em>) – Subdomains for the tile layer URL.</p></li>
+<li><p><strong>opacity</strong> (<em>float</em><em>, </em><em>default 1.0</em>) – Opacity of the tile layer (0.0 to 1.0).</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">globe</span> <span class="o">=</span> <span class="n">WebGLEarth</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tiles</span> <span class="o">=</span> <span class="n">WebGLEarthTileLayer</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://tiles.example.com/</span><span class="si">{z}</span><span class="s2">/</span><span class="si">{x}</span><span class="s2">/</span><span class="si">{y}</span><span class="s2">.png&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">attribution</span><span class="o">=</span><span class="s2">&quot;Example Tiles&quot;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tiles</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">globe</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
 </section>
 </section>
 
@@ -3865,6 +3999,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.LayerControl.reset"><code class="docutils literal notranslate"><span class="pre">LayerControl.reset()</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.LayerGroup"><code class="docutils literal notranslate"><span class="pre">LayerGroup</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Marker"><code class="docutils literal notranslate"><span class="pre">Marker</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Marker.SetIcon"><code class="docutils literal notranslate"><span class="pre">Marker.SetIcon</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.map.Marker.add_child"><code class="docutils literal notranslate"><span class="pre">Marker.add_child()</span></code></a></li>
@@ -4139,6 +4274,13 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.VectorGridProtobuf.default_js"><code class="docutils literal notranslate"><span class="pre">VectorGridProtobuf.default_js</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.WebGLEarth"><code class="docutils literal notranslate"><span class="pre">WebGLEarth</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.WebGLEarth.default_js"><code class="docutils literal notranslate"><span class="pre">WebGLEarth.default_js</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.WebGLEarthMarker"><code class="docutils literal notranslate"><span class="pre">WebGLEarthMarker</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.WebGLEarthRealtime"><code class="docutils literal notranslate"><span class="pre">WebGLEarthRealtime</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#folium.plugins.WebGLEarthTileLayer"><code class="docutils literal notranslate"><span class="pre">WebGLEarthTileLayer</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -4175,7 +4317,7 @@ LayerControls) or a base layer (ticked with a radio button).</p></li>
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev126+g3e16b5b81</div>
+Folium version 0.20.1.dev133+ge7371df0f</div>
       
         <div class="footer-item">
 

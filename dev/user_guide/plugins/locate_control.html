@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>LocateControl &#8212; Folium 0.20.1.dev126+g3e16b5b81 documentation</title>
+    <title>LocateControl &#8212; Folium 0.20.1.dev133+ge7371df0f documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
 
-    <script src="../../_static/documentation_options.js?v=809abe14"></script>
+    <script src="../../_static/documentation_options.js?v=3c10d648"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -61,7 +61,7 @@
     <link rel="prev" title="HeatMapWithTime" href="heatmap_with_time.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.1.dev126+g3e16b5b81" />
+  <meta name="docsearch:version" content="0.20.1.dev133+ge7371df0f" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -466,6 +466,7 @@
 <li class="toctree-l2"><a class="reference internal" href="timestamped_geojson.html">TimestampedGeoJson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="treelayercontrol.html">TreeLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vector_tiles.html">Vector tiles using VectorGridProtobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webgl_earth.html">WebGL Earth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="WmsTimeDimension.html">TimestampedWmsTileLayers</a></li>
 </ul>
 </details></li>
@@ -575,10 +576,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_f90053ef3f1be049b45dcebdf6b79aae {
+                #map_7e010350235be1e9c7952e2537323e7d {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -614,14 +616,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_f90053ef3f1be049b45dcebdf6b79aae&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_7e010350235be1e9c7952e2537323e7d&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_f90053ef3f1be049b45dcebdf6b79aae = L.map(
-                &quot;map_f90053ef3f1be049b45dcebdf6b79aae&quot;,
+            var map_7e010350235be1e9c7952e2537323e7d = L.map(
+                &quot;map_7e010350235be1e9c7952e2537323e7d&quot;,
                 {
                     center: [41.97, 2.81],
                     crs: L.CRS.EPSG3857,
@@ -638,7 +640,7 @@
 
 
 
-            var tile_layer_76d90fd4aa2259a36bbbc39cf2994776 = L.tileLayer(
+            var tile_layer_1e7c6d2f18b1cdec346da82cac9c784a = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -655,18 +657,18 @@
             );
 
 
-            tile_layer_76d90fd4aa2259a36bbbc39cf2994776.addTo(map_f90053ef3f1be049b45dcebdf6b79aae);
+            tile_layer_1e7c6d2f18b1cdec346da82cac9c784a.addTo(map_7e010350235be1e9c7952e2537323e7d);
 
 
-            var locate_control_5ddb483db7ea2941dc5e93cdad634846 = L.control.locate(
+            var locate_control_eee3892e1a1ec471afb4d44a78c3ead0 = L.control.locate(
                 {}
-            ).addTo(map_f90053ef3f1be049b45dcebdf6b79aae);
+            ).addTo(map_7e010350235be1e9c7952e2537323e7d);
 
 
 
-            var locate_control_5b4f4d9279afbbeb8bb8e60695e042c8 = L.control.locate(
+            var locate_control_c74fcfc7477bc08b570a10b3747e5cea = L.control.locate(
                 {}
-            ).addTo(map_f90053ef3f1be049b45dcebdf6b79aae);
+            ).addTo(map_7e010350235be1e9c7952e2537323e7d);
 
 
 &lt;/script&gt;
@@ -744,7 +746,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.1.dev126+g3e16b5b81</div>
+Folium version 0.20.1.dev133+ge7371df0f</div>
       
         <div class="footer-item">
 
