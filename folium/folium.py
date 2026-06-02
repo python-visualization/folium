@@ -195,6 +195,7 @@ class Map(JSCSSMixin, Evented):
                     height: {{this.height[0]}}{{this.height[1]}};
                     min-height: {{this.height[0]}}{{this.height[1]}};
                     {%- endif %}
+
                     left: {{this.left[0]}}{{this.left[1]}};
                     top: {{this.top[0]}}{{this.top[1]}};
                 }
@@ -207,6 +208,15 @@ class Map(JSCSSMixin, Evented):
                 margin: 0;
                 padding: 0;
             }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
             </style>
 
             <script>
@@ -302,10 +312,8 @@ class Map(JSCSSMixin, Evented):
         # Map Size Parameters.
         self.width = _parse_size(width)
         self.height = _parse_size(height)
-
         self._height_is_percent = self.height[1] == "%"
         self._width_is_percent = self.width[1] == "%"
-
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -373,15 +381,16 @@ class Map(JSCSSMixin, Evented):
         Examples
         --------
         >>> m._to_png()
-        >>> m._to_png(time=10)  # Wait 10 seconds between render and snapshot.
+        >>> m._to_png(delay=10)  # Wait 10 seconds between render and snapshot.
 
         """
 
         if self._png_image is None:
             if driver is None:
                 from selenium import webdriver
+                from selenium.webdriver.firefox.options import Options
 
-                options = webdriver.firefox.options.Options()
+                options = Options()
                 options.add_argument("--headless")
                 driver = webdriver.Firefox(options=options)
 
@@ -396,11 +405,16 @@ class Map(JSCSSMixin, Evented):
                     *size,
                 )
                 driver.set_window_size(*window_size)
+            from selenium.webdriver.support.ui import WebDriverWait
+
             html = self.get_root().render()
             with temp_html_filepath(html) as fname:
                 # We need the tempfile to avoid JS security issues.
                 driver.get(f"file:///{fname}")
-                time.sleep(delay)
+                WebDriverWait(driver, delay).until(
+                    lambda _driver: _driver.execute_script("return document.readyState")
+                    == "complete"
+                )
                 div = driver.find_element("class name", "folium-map")
                 png = div.screenshot_as_png
                 driver.quit()
