@@ -3,6 +3,7 @@
 from folium.plugins.antpath import AntPath
 from folium.plugins.beautify_icon import BeautifyIcon
 from folium.plugins.boat_marker import BoatMarker
+from folium.plugins.coordinate_input import CoordinateInput
 from folium.plugins.draw import Draw
 from folium.plugins.dual_map import DualMap
 from folium.plugins.encoded import PolygonFromEncoded, PolyLineFromEncoded
@@ -49,6 +50,7 @@ __all__ = [
     "BeautifyIcon",
     "BoatMarker",
     "CirclePattern",
+    "CoordinateInput",
     "Draw",
     "DualMap",
     "FastMarkerCluster",
