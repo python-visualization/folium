@@ -536,6 +536,10 @@ class GeoJson(Layer):
     ... }
     >>> GeoJson(geojson, style_function=style_function)
 
+    See Also
+    --------
+    For information about coordinate ordering differences between Leaflet and GeoJSON,
+    see :doc:`/user_guide/geojson/coordinate_ordering`
     """
 
     _template = Template("""
