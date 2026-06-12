@@ -290,3 +290,27 @@ def test_icon_invalid_marker_colors():
     pytest.warns(UserWarning, Icon, color="lila")
     pytest.warns(UserWarning, Icon, color=42)
     pytest.warns(UserWarning, Icon, color=None)
+
+
+def test_repeated_save_produces_identical_html(tmp_path):
+    """Regression test for https://github.com/python-visualization/folium/issues/2237"""
+    m = Map(location=[40.75, -73.98], zoom_start=13)
+    locations = [
+        [40.7829, -73.9654],
+        [40.7484, -73.9857],
+        [40.7580, -73.9855],
+    ]
+    for lat, lon in locations:
+        Marker([lat, lon], icon=Icon(color="blue", icon="info-sign")).add_to(m)
+
+    path1 = tmp_path / "1.html"
+    path2 = tmp_path / "2.html"
+    path3 = tmp_path / "3.html"
+    m.save(path1)
+    m.save(path2)
+    m.save(path3)
+
+    html1 = path1.read_text()
+    html2 = path2.read_text()
+    html3 = path3.read_text()
+    assert html1 == html2 == html3

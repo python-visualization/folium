@@ -517,6 +517,18 @@ class Marker(MacroElement):
             self.marker = marker
             self.icon = icon
 
+        def render(self, **kwargs):
+            figure = self.get_root()
+            assert isinstance(
+                figure, Figure
+            ), "You cannot render this Element if it is not in a Figure."
+            script = self._template.module.__dict__.get("script", None)
+            if script is not None:
+                figure.script.add_child(
+                    Element(script(self, kwargs)),
+                    name=f"{self.marker.get_name()}_set_icon",
+                )
+
     def __init__(
         self,
         location: Optional[Sequence[float]] = None,
@@ -557,7 +569,7 @@ class Marker(MacroElement):
                 f"{self._name} location must be assigned when added directly to map."
             )
         if self.icon:
-            self.add_child(self.SetIcon(marker=self, icon=self.icon))
+            self.add_child(self.SetIcon(marker=self, icon=self.icon), name="set_icon")
         super().render()
 
     def set_icon(self, icon):

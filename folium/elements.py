@@ -149,6 +149,18 @@ class ElementAddToElement(MacroElement):
         self.element_name = element_name
         self.element_parent_name = element_parent_name
 
+    def render(self, **kwargs):
+        figure = self.get_root()
+        assert isinstance(
+            figure, Figure
+        ), "You cannot render this Element if it is not in a Figure."
+        script = self._template.module.__dict__.get("script", None)
+        if script is not None:
+            figure.script.add_child(
+                Element(script(self, kwargs)),
+                name=f"{self.element_name}_add_to_{self.element_parent_name}",
+            )
+
 
 class IncludeStatement(MacroElement):
     """Generate an include statement on a class."""
