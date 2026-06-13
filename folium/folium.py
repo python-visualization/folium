@@ -8,10 +8,9 @@ import webbrowser
 from collections.abc import Sequence
 from typing import Any, Optional, Union
 
-from branca.element import Element
+from branca.element import Element, Figure
 
 from folium.elements import JSCSSMixin
-from folium.figure import Figure
 from folium.map import Evented, FitBounds, Layer
 from folium.raster_layers import TileLayer
 from folium.template import Template

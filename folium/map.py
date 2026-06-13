@@ -569,7 +569,7 @@ class Marker(MacroElement):
                 f"{self._name} location must be assigned when added directly to map."
             )
         if self.icon:
-            self.add_child(self.SetIcon(marker=self, icon=self.icon), name="set_icon")
+            self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
 
     def set_icon(self, icon):
