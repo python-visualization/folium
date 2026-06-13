@@ -1,6 +1,7 @@
-from branca.element import Figure, MacroElement
+from branca.element import MacroElement
 
 from folium.elements import EventHandler, JSCSSMixin
+from folium.figure import Figure
 from folium.folium import Map
 from folium.map import LayerControl
 from folium.template import Template

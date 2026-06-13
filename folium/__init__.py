@@ -4,7 +4,6 @@ from branca.element import (
     CssLink,
     Div,
     Element,
-    Figure,
     Html,
     IFrame,
     JavascriptLink,
@@ -29,6 +28,7 @@ from folium.features import (
     Vega,
     VegaLite,
 )
+from folium.figure import Figure
 from folium.folium import Map
 from folium.map import (
     FeatureGroup,
