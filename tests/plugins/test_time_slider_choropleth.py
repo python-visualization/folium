@@ -91,3 +91,32 @@ def test_timedynamic_geo_json():
 
     expected_styledict = normalize(json.dumps(styledict, sort_keys=True))
     assert expected_styledict in normalize(rendered)
+
+
+def test_slider_overlays_map():
+    # the slider must not push the map (and its attribution) out of view,
+    # so it is positioned as an overlay instead of a block element
+    geojson = json.dumps(
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "id": "0",
+                    "properties": {},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]],
+                    },
+                }
+            ],
+        }
+    )
+    styledict = {"0": {"1420070400": {"color": "#ff0000", "opacity": 0.5}}}
+
+    m = folium.Map((0, 0), zoom_start=2)
+    plugin = TimeSliderChoropleth(geojson, styledict)
+    plugin.add_to(m)
+    rendered = plugin._template.module.script(plugin)
+
+    assert '.style("position", "absolute")' in rendered
