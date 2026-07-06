@@ -66,3 +66,43 @@ def test_heat_map_exception():
         HeatMap(np.array([[4, 5, 1], [3, 6, np.nan]]))
     with pytest.raises(Exception):
         HeatMap(np.array([3, 4, 5]))
+
+
+def test_heatmap_integer_numpy_weights():
+    """Integer numpy arrays of shape (n, 3) are documented as supported input.
+
+    ``np.float64`` is a subclass of ``float`` so JSON serialization tolerates
+    float weights, but ``np.int64`` is not a subclass of ``int``, so an
+    all-integer array (dtype ``int64``) used to crash rendering with
+    "Object of type int64 is not JSON serializable". The weight column must be
+    coerced to ``float`` the same way ``validate_location`` coerces lat/lon.
+    """
+    data = np.array([[3, 4, 1], [5, 6, 2]])
+    assert data.dtype == np.int64
+
+    hm = HeatMap(data)
+
+    # Weights must be normalized to plain Python floats, matching lat/lon.
+    for point in hm.data:
+        assert len(point) == 3
+        for value in point:
+            assert type(value) is float
+
+    # Rendering must not raise (the JSON serialization used to fail here).
+    m = folium.Map()
+    hm.add_to(m)
+    out = m.get_root().render()
+    assert "L.heatLayer" in out
+
+    # Integer and float weights must produce identical serialized data.
+    hm_float = HeatMap(np.array([[3, 4, 1.0], [5, 6, 2.0]]))
+    assert hm.data == hm_float.data
+
+
+def test_heatmap_integer_numpy_no_weight():
+    """Integer numpy arrays of shape (n, 2) (no weight column) also render."""
+    data = np.array([[3, 4], [5, 6]])
+    assert data.dtype == np.int64
+    m = folium.Map()
+    HeatMap(data).add_to(m)
+    assert "L.heatLayer" in m.get_root().render()
