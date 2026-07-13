@@ -14,6 +14,9 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
     defaults:
       run:
         shell: bash -l {0}
@@ -65,5 +68,3 @@ jobs:
         path: |
           .coverage*
         include-hidden-files: true
-      permissions:
-        actions: write

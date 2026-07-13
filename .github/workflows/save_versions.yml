@@ -12,6 +12,8 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
 
     steps:
     - name: Checkout Folium
@@ -47,5 +49,3 @@ jobs:
         name: versions.txt
         path: /tmp/versions.txt
         fail-on-empty: false
-      permissions:
-        actions: write

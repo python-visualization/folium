@@ -17,6 +17,8 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    permissions:
+      actions: write
 
     steps:
     - name: Set up Python
@@ -88,5 +90,3 @@ jobs:
         name: coverage-test-streamlit-folium
         path: |
           .coverage*
-      permissions:
-        actions: write

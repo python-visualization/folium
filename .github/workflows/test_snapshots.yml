@@ -15,6 +15,8 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    permissions:
+      actions: write
 
     steps:
     - name: Checkout Folium
@@ -59,8 +61,6 @@ jobs:
         path: |
           /tmp/screenshot_*_*.png
           /tmp/folium_map_*.html
-      permissions:
-        actions: write
 
     - name: Upload coverage
       if: always()
@@ -70,5 +70,3 @@ jobs:
         path: |
           .coverage*
         include-hidden-files: true
-      permissions:
-        actions: write
