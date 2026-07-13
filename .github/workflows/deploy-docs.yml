@@ -22,6 +22,8 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    env:
+      REF_NAME: ${{ github.ref_name }}
 
     steps:
     - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
@@ -53,16 +55,16 @@ jobs:
     - name: Update switcher and latest version
       if: ${{ github.event_name == 'release' }}
       run: |
-        python docs/update_switcher.py --version ${{ github.ref_name }}
+        python docs/update_switcher.py --version $REF_NAME
 
     - name: Create PR
       if: ${{ github.event_name == 'release' }}
       uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v8.1.1
       with:
-        commit-message: "docs: Update switcher.json for ${{ github.ref_name }}"
-        title: "docs: Update switcher.json for ${{ github.ref_name }}"
+        commit-message: "docs: Update switcher.json for $REF_NAME"
+        title: "docs: Update switcher.json for $REF_NAME"
         body: "This PR updates the switcher.json file."
-        branch: "docs/update-switcher-${{ github.ref_name }}"
+        branch: "docs/update-switcher-$REF_NAME"
         base: "main"
         labels: "documentation"
 
@@ -81,7 +83,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
-        destination_dir: ${{ github.ref_name }}
+        destination_dir: $REF_NAME
 
     - name: Publish to Github Pages on release (latest)
       if: ${{ github.event_name == 'release' }}
