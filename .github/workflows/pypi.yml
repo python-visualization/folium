@@ -22,7 +22,7 @@ jobs:
     - uses: actions/checkout@v7
 
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: "3.x"
 
@@ -48,7 +48,7 @@ jobs:
 
     - name: Publish a Python distribution to PyPI
       if: success() && github.event_name == 'release'
-      uses: pypa/gh-action-pypi-publish@v1.14.0
+      uses: pypa/gh-action-pypi-publish@v1.14.1
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
