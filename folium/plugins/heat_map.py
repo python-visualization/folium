@@ -79,7 +79,8 @@ class HeatMap(JSCSSMixin, Layer):
         self._name = "HeatMap"
         data = if_pandas_df_convert_to_numpy(data)
         self.data = [
-            [*validate_location(line[:2]), *line[2:]] for line in data  # noqa: E999
+            [*validate_location(line[:2]), *[float(w) for w in line[2:]]]
+            for line in data  # noqa: E999
         ]
         if np.any(np.isnan(self.data)):
             raise ValueError("data may not contain NaNs.")
