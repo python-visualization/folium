@@ -1,5 +1,8 @@
 name: Geopandas tests
 
+# no permissions by default
+permissions: {}
+
 on:
   schedule:
     - cron: "0 13 * * *"
@@ -11,20 +14,23 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
     defaults:
       run:
         shell: bash -l {0}
 
     steps:
     - name: Checkout Folium
-      uses: actions/checkout@v7
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       with:
-        # needed to get the correct version number for Folium
         fetch-depth: 0
+        persist-credentials: false
         path: folium
 
     - name: Setup Micromamba env
-      uses: mamba-org/setup-micromamba@v3
+      uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476  # v3.0.0
       with:
         environment-name: TEST
         create-args: >-
@@ -32,8 +38,10 @@ jobs:
           --file folium/requirements.txt
 
     - name: Checkout Geopandas
-      uses: actions/checkout@v7
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       with:
+        fetch-depth: 0
+        persist-credentials: false
         repository: geopandas/geopandas
         path: geopandas
 
@@ -54,7 +62,7 @@ jobs:
 
     - name: Upload coverage
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
       with:
         name: coverage-test-geopandas
         path: |

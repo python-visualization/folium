@@ -1,5 +1,8 @@
 name: Selenium Tests
 
+# no permissions by default
+permissions: {}
+
 on:
   schedule:
     - cron: "0 13 * * *"
@@ -13,17 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ "3.9", "3.13" ]
+        python-version: [ "3.9", "3.14" ]
       fail-fast: false
     defaults:
       run:
         shell: bash -l {0}
+    permissions:
+      actions: write
 
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      with:
+        fetch-depth: 0
+        persist-credentials: false
 
     - name: Setup Micromamba env
-      uses: mamba-org/setup-micromamba@v3
+      uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476  # v3.0.0
       with:
         environment-name: TEST
         create-args: >-
@@ -39,7 +47,7 @@ jobs:
 
     - name: Upload coverage
       if: always()
-      uses: actions/upload-artifact@v7
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
       with:
         name: coverage-test-selenium-${{ matrix.python-version }}
         path: |

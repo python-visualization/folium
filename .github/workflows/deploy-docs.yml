@@ -22,14 +22,17 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    env:
+      REF_NAME: ${{ github.ref_name }}
 
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       with:
         fetch-depth: 0
+        persist-credentials: false
 
     - name: Setup Micromamba env
-      uses: mamba-org/setup-micromamba@v3
+      uses: mamba-org/setup-micromamba@d7c9bd84e824b79d2af72a2d4196c7f4300d3476  # v3.0.0
       with:
         environment-name: TEST
         init-shell: bash
@@ -45,28 +48,29 @@ jobs:
       run: |
         set -e
         pushd docs
+
         make clean html linkcheck
         popd
 
     - name: Update switcher and latest version
       if: ${{ github.event_name == 'release' }}
       run: |
-        python docs/update_switcher.py --version ${{ github.ref_name }}
+        python docs/update_switcher.py --version $REF_NAME
 
     - name: Create PR
       if: ${{ github.event_name == 'release' }}
-      uses: peter-evans/create-pull-request@v8
+      uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v8.1.1
       with:
-        commit-message: "docs: Update switcher.json for ${{ github.ref_name }}"
-        title: "docs: Update switcher.json for ${{ github.ref_name }}"
+        commit-message: "docs: Update switcher.json for $REF_NAME"
+        title: "docs: Update switcher.json for $REF_NAME"
         body: "This PR updates the switcher.json file."
-        branch: "docs/update-switcher-${{ github.ref_name }}"
+        branch: "docs/update-switcher-$REF_NAME"
         base: "main"
         labels: "documentation"
 
     - name: Publish to Github Pages on main
       if: ${{ github.ref == 'refs/heads/main' }}
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453  # v4.1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
@@ -75,15 +79,15 @@ jobs:
 
     - name: Publish to Github Pages on release (versioned)
       if: ${{ github.event_name == 'release' }}
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453  # v4.1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
-        destination_dir: ${{ github.ref_name }}
+        destination_dir: $REF_NAME
 
     - name: Publish to Github Pages on release (latest)
       if: ${{ github.event_name == 'release' }}
-      uses: peaceiris/actions-gh-pages@v4
+      uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453  # v4.1.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html/
