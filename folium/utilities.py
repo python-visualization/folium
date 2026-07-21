@@ -4,7 +4,6 @@ import copy
 import json
 import math
 import os
-import re
 import tempfile
 import uuid
 from collections.abc import Iterable, Iterator, Sequence
@@ -412,8 +411,8 @@ def remove_empty(**kwargs: TypeJsonValue) -> dict[str, TypeJsonValueNoNone]:
 
 
 def escape_backticks(text: str) -> str:
-    """Escape backticks so text can be used in a JS template."""
-    return re.sub(r"(?<!\\)`", r"\`", text)
+    """Escape backslashes and backticks so text can be used in a JS template."""
+    return text.replace("\\", "\\\\").replace("`", "\\`")
 
 
 def escape_double_quotes(text: str) -> str:
