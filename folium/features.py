@@ -1053,9 +1053,12 @@ class TopoJson(JSCSSMixin, Layer):
             else:
                 return data
 
-        geometries = recursive_get(self.data, self.object_path.split("."))[
-            "geometries"
-        ]  # noqa
+        geometry = recursive_get(self.data, self.object_path.split("."))
+        geometries = (
+            geometry["geometries"]
+            if geometry["type"] == "GeometryCollection"
+            else [geometry]
+        )
         for feature in geometries:
             feature.setdefault("properties", {}).setdefault("style", {}).update(
                 self.style_function(feature)

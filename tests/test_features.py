@@ -17,6 +17,27 @@ from folium.elements import EventHandler
 from folium.utilities import JsCode
 
 
+@pytest.mark.parametrize("geometry_type", ["Polygon", "MultiPolygon"])
+def test_topojson_non_collection_geometry(geometry_type):
+    """TopoJson supports objects that are not GeometryCollections."""
+    topology = {
+        "type": "Topology",
+        "objects": {
+            "shape": {
+                "type": geometry_type,
+                "arcs": [[0]] if geometry_type == "Polygon" else [[[0]]],
+            }
+        },
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+    map_ = folium.Map()
+    folium.TopoJson(topology, "objects.shape").add_to(map_)
+
+    assert "topojson.feature" in map_.get_root().render()
+
+
 @pytest.fixture
 def tmpl():
     yield ("""
