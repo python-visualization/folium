@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ImageOverlay &#8212; Folium 0.20.0 documentation</title>
+    <title>ImageOverlay &#8212; Folium 1.0.0rc1 documentation</title>
   
   
   
@@ -27,52 +27,61 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
 
-    <script src="../../_static/documentation_options.js?v=b52c616d"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/documentation_options.js?v=77c1c56c"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/raster_layers/image_overlay';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0rc1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="VideoOverlay" href="video_overlay.html" />
     <link rel="prev" title="Tiles" href="tiles.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="0.20.0" />
+  <meta name="docsearch:version" content="1.0.0rc1" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -98,7 +107,7 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
   <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
@@ -217,11 +226,18 @@
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -234,8 +250,7 @@
           
           
           
-          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
       
@@ -331,11 +346,18 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -348,8 +370,7 @@
           
           
           
-          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
-            <span class="sr-only">GitHub</span></a>
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
         </li>
 </ul></div>
         
@@ -358,7 +379,15 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
         <div class="sidebar-primary-item">
+
 <nav class="bd-docs-nav bd-links"
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
@@ -366,6 +395,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../map.html">Map</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ui_elements.html">UI elements</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ui_elements/layer_control.html">LayerControl</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui_elements/control.html">Controls</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui_elements/popups.html">Popups</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ui_elements/icons.html">Icons</a></li>
 </ul>
@@ -390,6 +420,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../geojson/choropleth.html">Using <code class="docutils literal notranslate"><span class="pre">Choropleth</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_marker.html">GeoJSON point features with markers</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_popup_and_tooltip.html">GeoJSON popup and tooltip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../geojson/geojson_advanced_on_each_feature.html">Advanced GeoJSON Customization with on_each_feature</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/geopandas_and_geo_interface.html">Using GeoPandas.GeoDataFrame in folium</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../geojson/smoothing.html">Smoothing</a></li>
 </ul>
@@ -409,6 +440,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plugins/float_image.html">FloatImage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/fullscreen.html">Fullscreen</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/geocoder.html">Geocoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/geoman.html">Geoman</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/grouped_layer_control.html">GroupedLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/heatmap.html">Heatmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/heatmap_with_time.html">HeatMapWithTime</a></li>
@@ -435,6 +467,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../plugins/timestamped_geojson.html">TimestampedGeoJson</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/treelayercontrol.html">TreeLayerControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/vector_tiles.html">Vector tiles using VectorGridProtobuf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plugins/webgl_earth.html">WebGL Earth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plugins/WmsTimeDimension.html">TimestampedWmsTileLayers</a></li>
 </ul>
 </details></li>
@@ -560,10 +593,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_3f826fb0334c73dd4f8dc36673ae12d4 {
+                #map_12360393de45ef65c8493be61cb1e324 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -612,14 +646,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_3f826fb0334c73dd4f8dc36673ae12d4&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_12360393de45ef65c8493be61cb1e324&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_3f826fb0334c73dd4f8dc36673ae12d4 = L.map(
-                &quot;map_3f826fb0334c73dd4f8dc36673ae12d4&quot;,
+            var map_12360393de45ef65c8493be61cb1e324 = L.map(
+                &quot;map_12360393de45ef65c8493be61cb1e324&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -636,7 +670,7 @@
 
 
 
-            var tile_layer_d437d6cea0ebc3deeae53aae3d8a8696 = L.tileLayer(
+            var tile_layer_baaa07e08068e66dd5bb69ddfcb28c0e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -653,10 +687,10 @@
             );
 
 
-            tile_layer_d437d6cea0ebc3deeae53aae3d8a8696.addTo(map_3f826fb0334c73dd4f8dc36673ae12d4);
+            tile_layer_baaa07e08068e66dd5bb69ddfcb28c0e.addTo(map_12360393de45ef65c8493be61cb1e324);
 
 
-            var image_overlay_78dc4838b7b343234cbe8133d07e285a = L.imageOverlay(
+            var image_overlay_ce7d822301178be1f884bbcdb8d48dc1 = L.imageOverlay(
                 &quot;data:image/png;base64,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&quot;,
                 [[-50, -45], [50, 45]],
                 {
@@ -668,43 +702,43 @@
             );
 
 
-        var popup_c376d36d3a4430f7c751a493ccd173fc = L.popup({
+        var popup_8fe5d2b2b6fb7bc0c5754a623132a356 = L.popup({
   &quot;maxWidth&quot;: &quot;100%&quot;,
 });
 
 
 
-                var html_f7d6ac88cd893d4358861d16fff0b2d8 = $(`&lt;div id=&quot;html_f7d6ac88cd893d4358861d16fff0b2d8&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I am an image&lt;/div&gt;`)[0];
-                popup_c376d36d3a4430f7c751a493ccd173fc.setContent(html_f7d6ac88cd893d4358861d16fff0b2d8);
+                var html_15465c7880d3cf9f0332ae37764a7182 = $(`&lt;div id=&quot;html_15465c7880d3cf9f0332ae37764a7182&quot; style=&quot;width: 100.0%; height: 100.0%;&quot;&gt;I am an image&lt;/div&gt;`)[0];
+                popup_8fe5d2b2b6fb7bc0c5754a623132a356.setContent(html_15465c7880d3cf9f0332ae37764a7182);
 
 
 
-        image_overlay_78dc4838b7b343234cbe8133d07e285a.bindPopup(popup_c376d36d3a4430f7c751a493ccd173fc)
+        image_overlay_ce7d822301178be1f884bbcdb8d48dc1.bindPopup(popup_8fe5d2b2b6fb7bc0c5754a623132a356)
         ;
 
 
 
 
-            image_overlay_78dc4838b7b343234cbe8133d07e285a.addTo(map_3f826fb0334c73dd4f8dc36673ae12d4);
+            image_overlay_ce7d822301178be1f884bbcdb8d48dc1.addTo(map_12360393de45ef65c8493be61cb1e324);
 
 
-            var layer_control_214ff30a3b814cd5cb8b912a640637b4_layers = {
+            var layer_control_0d8c43662ae7cf260502562f6f1c6f7f_layers = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_d437d6cea0ebc3deeae53aae3d8a8696,
+                    &quot;openstreetmap&quot; : tile_layer_baaa07e08068e66dd5bb69ddfcb28c0e,
                 },
                 overlays :  {
-                    &quot;Folium logo&quot; : image_overlay_78dc4838b7b343234cbe8133d07e285a,
+                    &quot;Folium logo&quot; : image_overlay_ce7d822301178be1f884bbcdb8d48dc1,
                 },
             };
-            let layer_control_214ff30a3b814cd5cb8b912a640637b4 = L.control.layers(
-                layer_control_214ff30a3b814cd5cb8b912a640637b4_layers.base_layers,
-                layer_control_214ff30a3b814cd5cb8b912a640637b4_layers.overlays,
+            let layer_control_0d8c43662ae7cf260502562f6f1c6f7f = L.control.layers(
+                layer_control_0d8c43662ae7cf260502562f6f1c6f7f_layers.base_layers,
+                layer_control_0d8c43662ae7cf260502562f6f1c6f7f_layers.overlays,
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;collapsed&quot;: true,
   &quot;autoZIndex&quot;: true,
 }
-            ).addTo(map_3f826fb0334c73dd4f8dc36673ae12d4);
+            ).addTo(map_12360393de45ef65c8493be61cb1e324);
 
 
 &lt;/script&gt;
@@ -763,10 +797,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_e9141ec6deda0c0e6c84f17297a9e12e {
+                #map_ef0e9d918cb83021c3195809bfa97af5 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -815,14 +850,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_e9141ec6deda0c0e6c84f17297a9e12e&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ef0e9d918cb83021c3195809bfa97af5&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_e9141ec6deda0c0e6c84f17297a9e12e = L.map(
-                &quot;map_e9141ec6deda0c0e6c84f17297a9e12e&quot;,
+            var map_ef0e9d918cb83021c3195809bfa97af5 = L.map(
+                &quot;map_ef0e9d918cb83021c3195809bfa97af5&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -839,7 +874,7 @@
 
 
 
-            var tile_layer_93b9dfa6116c7c8fe3078a22bdde25c4 = L.tileLayer(
+            var tile_layer_ed4c497620e0a3ae98973f7051dd533a = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -856,10 +891,10 @@
             );
 
 
-            tile_layer_93b9dfa6116c7c8fe3078a22bdde25c4.addTo(map_e9141ec6deda0c0e6c84f17297a9e12e);
+            tile_layer_ed4c497620e0a3ae98973f7051dd533a.addTo(map_ef0e9d918cb83021c3195809bfa97af5);
 
 
-            var image_overlay_4d3a0be453316c0c43e521601dc92081 = L.imageOverlay(
+            var image_overlay_800b5c374fd832d80e416596408bd54d = L.imageOverlay(
                 &quot;https://upload.wikimedia.org/wikipedia/commons/f/f4/Mercator_projection_SW.jpg&quot;,
                 [[-82, -180], [82, 180]],
                 {
@@ -872,26 +907,26 @@
             );
 
 
-            image_overlay_4d3a0be453316c0c43e521601dc92081.addTo(map_e9141ec6deda0c0e6c84f17297a9e12e);
+            image_overlay_800b5c374fd832d80e416596408bd54d.addTo(map_ef0e9d918cb83021c3195809bfa97af5);
 
 
-            var layer_control_e532eaa3131d1ad78d5ce2c5f347d89d_layers = {
+            var layer_control_3c423332c3fbdb65908cedbb3df68542_layers = {
                 base_layers : {
-                    &quot;openstreetmap&quot; : tile_layer_93b9dfa6116c7c8fe3078a22bdde25c4,
+                    &quot;openstreetmap&quot; : tile_layer_ed4c497620e0a3ae98973f7051dd533a,
                 },
                 overlays :  {
-                    &quot;I am a jpeg&quot; : image_overlay_4d3a0be453316c0c43e521601dc92081,
+                    &quot;I am a jpeg&quot; : image_overlay_800b5c374fd832d80e416596408bd54d,
                 },
             };
-            let layer_control_e532eaa3131d1ad78d5ce2c5f347d89d = L.control.layers(
-                layer_control_e532eaa3131d1ad78d5ce2c5f347d89d_layers.base_layers,
-                layer_control_e532eaa3131d1ad78d5ce2c5f347d89d_layers.overlays,
+            let layer_control_3c423332c3fbdb65908cedbb3df68542 = L.control.layers(
+                layer_control_3c423332c3fbdb65908cedbb3df68542_layers.base_layers,
+                layer_control_3c423332c3fbdb65908cedbb3df68542_layers.overlays,
                 {
   &quot;position&quot;: &quot;topright&quot;,
   &quot;collapsed&quot;: true,
   &quot;autoZIndex&quot;: true,
 }
-            ).addTo(map_e9141ec6deda0c0e6c84f17297a9e12e);
+            ).addTo(map_ef0e9d918cb83021c3195809bfa97af5);
 
 
 &lt;/script&gt;
@@ -958,10 +993,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_b2d81eb40215477c87b0bea539004f09 {
+                #map_a40fd17dd0d575bf4e508f8b207106b4 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -1010,14 +1046,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_b2d81eb40215477c87b0bea539004f09&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_a40fd17dd0d575bf4e508f8b207106b4&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_b2d81eb40215477c87b0bea539004f09 = L.map(
-                &quot;map_b2d81eb40215477c87b0bea539004f09&quot;,
+            var map_a40fd17dd0d575bf4e508f8b207106b4 = L.map(
+                &quot;map_a40fd17dd0d575bf4e508f8b207106b4&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -1034,7 +1070,7 @@
 
 
 
-            var tile_layer_f9a9529a702b83581b0a353e1c9f526e = L.tileLayer(
+            var tile_layer_981e5793b1f095efa04cb92adc06426a = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1051,10 +1087,10 @@
             );
 
 
-            tile_layer_f9a9529a702b83581b0a353e1c9f526e.addTo(map_b2d81eb40215477c87b0bea539004f09);
+            tile_layer_981e5793b1f095efa04cb92adc06426a.addTo(map_a40fd17dd0d575bf4e508f8b207106b4);
 
 
-            var image_overlay_13d24f158b121d909d39947e7add12c0 = L.imageOverlay(
+            var image_overlay_419b2838f6dbdf92c75423297457b746 = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD0AAAA9CAYAAAAeYmHpAAAAW0lEQVR42u3PoQ0AAAzDsP7/9EaG90ANIoU6k0xbuUlR0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0NDQ0C+6qgWzYWppA9g/7AAAAABJRU5ErkJggg==&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -1062,7 +1098,7 @@
             );
 
 
-            image_overlay_13d24f158b121d909d39947e7add12c0.addTo(map_b2d81eb40215477c87b0bea539004f09);
+            image_overlay_419b2838f6dbdf92c75423297457b746.addTo(map_a40fd17dd0d575bf4e508f8b207106b4);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1119,10 +1155,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_cc96201b02c7c8898a968ef2afc1192f {
+                #map_36acab2aa89c7ffc0f516285ccf1f5db {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -1171,14 +1208,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_cc96201b02c7c8898a968ef2afc1192f&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_36acab2aa89c7ffc0f516285ccf1f5db&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_cc96201b02c7c8898a968ef2afc1192f = L.map(
-                &quot;map_cc96201b02c7c8898a968ef2afc1192f&quot;,
+            var map_36acab2aa89c7ffc0f516285ccf1f5db = L.map(
+                &quot;map_36acab2aa89c7ffc0f516285ccf1f5db&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -1195,7 +1232,7 @@
 
 
 
-            var tile_layer_d899ac718950609dbc54fcfd597704e9 = L.tileLayer(
+            var tile_layer_f8068aded380dfe7f68c972a44940012 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1212,10 +1249,10 @@
             );
 
 
-            tile_layer_d899ac718950609dbc54fcfd597704e9.addTo(map_cc96201b02c7c8898a968ef2afc1192f);
+            tile_layer_f8068aded380dfe7f68c972a44940012.addTo(map_36acab2aa89c7ffc0f516285ccf1f5db);
 
 
-            var image_overlay_88b9a3c7dad7d1b0421cfe1bef35fed5 = L.imageOverlay(
+            var image_overlay_db3228ff18475604ee8bc3e0794b06c1 = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA9CAYAAABsrQNfAAAAFklEQVR42mP4zwAEVCP+M1DXvMFHAABxyD3DNwdSfAAAAABJRU5ErkJggg==&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -1223,13 +1260,13 @@
             );
 
 
-            image_overlay_88b9a3c7dad7d1b0421cfe1bef35fed5.addTo(map_cc96201b02c7c8898a968ef2afc1192f);
+            image_overlay_db3228ff18475604ee8bc3e0794b06c1.addTo(map_36acab2aa89c7ffc0f516285ccf1f5db);
 
 
-            var poly_line_724069d07cc2b6e232734a80b3b7a801 = L.polyline(
+            var poly_line_dfc8dd9f9a0623312f67d36c7fbd4b36 = L.polyline(
                 [[45.0, -60.0], [45.0, 60.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_cc96201b02c7c8898a968ef2afc1192f);
+            ).addTo(map_36acab2aa89c7ffc0f516285ccf1f5db);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1280,10 +1317,11 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d1fb9fd3fb4997d22a587b90ffa00bcc {
+                #map_c8afd90991aa2000c760fbb6832e6662 {
                     position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
                     left: 0.0%;
                     top: 0.0%;
                 }
@@ -1332,14 +1370,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d1fb9fd3fb4997d22a587b90ffa00bcc&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c8afd90991aa2000c760fbb6832e6662&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d1fb9fd3fb4997d22a587b90ffa00bcc = L.map(
-                &quot;map_d1fb9fd3fb4997d22a587b90ffa00bcc&quot;,
+            var map_c8afd90991aa2000c760fbb6832e6662 = L.map(
+                &quot;map_c8afd90991aa2000c760fbb6832e6662&quot;,
                 {
                     center: [37.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -1356,7 +1394,7 @@
 
 
 
-            var tile_layer_9adf08d6c45214b2dea9fc57838bc637 = L.tileLayer(
+            var tile_layer_15e2519de19044d402dd09ea58657c43 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1373,16 +1411,16 @@
             );
 
 
-            tile_layer_9adf08d6c45214b2dea9fc57838bc637.addTo(map_d1fb9fd3fb4997d22a587b90ffa00bcc);
+            tile_layer_15e2519de19044d402dd09ea58657c43.addTo(map_c8afd90991aa2000c760fbb6832e6662);
 
 
-            var poly_line_4de2004583a97d251c3ccc60f3cb2fbd = L.polyline(
+            var poly_line_9fe0a44273426b831243e8f8a42c9da5 = L.polyline(
                 [[45.0, -60.0], [45.0, 60.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#3388ff&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#3388ff&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_d1fb9fd3fb4997d22a587b90ffa00bcc);
+            ).addTo(map_c8afd90991aa2000c760fbb6832e6662);
 
 
-            var image_overlay_3875e33bc0916e33b82838b2f46d8493 = L.imageOverlay(
+            var image_overlay_cf8855f79c5172f9eb93151583308b32 = L.imageOverlay(
                 &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAA9CAYAAABsrQNfAAAAG0lEQVR42mP4zwAENCU0QMR/EMHPQHvbaE0AAISNPfostPrWAAAAAElFTkSuQmCC&quot;,
                 [[0, -60], [60, 60]],
                 {
@@ -1390,7 +1428,7 @@
             );
 
 
-            image_overlay_3875e33bc0916e33b82838b2f46d8493.addTo(map_d1fb9fd3fb4997d22a587b90ffa00bcc);
+            image_overlay_cf8855f79c5172f9eb93151583308b32.addTo(map_c8afd90991aa2000c760fbb6832e6662);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1444,8 +1482,8 @@
     class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
-  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Using-an-image-from-disk">Using an image from disk</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Using-an-image-from-a-url">Using an image from a url</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-an-image-with-numpy">Creating an image with numpy</a></li>
@@ -1453,13 +1491,13 @@
   </nav></div>
 
   <div class="sidebar-secondary-item">
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../../_sources/user_guide/raster_layers/image_overlay.md.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div></div>
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/user_guide/raster_layers/image_overlay.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
 
 </div></div>
               
@@ -1474,8 +1512,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1483,13 +1521,13 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 0.20.0</div>
+Folium version 1.0.0rc1</div>
       
         <div class="footer-item">
 
   <p class="copyright">
     
-      © Copyright 2013-2025, Rob Story.
+      © Copyright 2013-2026, Rob Story.
       <br/>
     
   </p>
@@ -1498,7 +1536,7 @@ Folium version 0.20.0</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
@@ -1506,7 +1544,7 @@ Folium version 0.20.0</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>
@@ -1518,7 +1556,7 @@ Folium version 0.20.0</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
 </p></div>
       
     </div>
