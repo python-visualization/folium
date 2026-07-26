@@ -1,0 +1,1113 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Subplots &#8212; Folium 1.0.0rc1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=924e9346" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=77c1c56c"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'advanced_guide/subplots';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0rc1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using colormaps" href="colormaps.html" />
+    <link rel="prev" title="Integrating Jenks Natural Break Optimization with choropleth" href="choropleth%20with%20Jenks%20natural%20breaks%20optimization.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.0.0rc1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/folium_logo.png" class="logo__image only-light" alt=""/>
+    <img src="../_static/folium_logo.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">Folium</p>
+  
+</a></div>
+    
+      <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../advanced_guide.html">
+    Advanced guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../user_guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../advanced_guide.html">
+    Advanced guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../reference.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/python-visualization/folium" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flask.html">Using folium with flask</a></li>
+<li class="toctree-l1"><a class="reference internal" href="choropleth%20with%20Jenks%20natural%20breaks%20optimization.html">Integrating Jenks Natural Break Optimization with choropleth</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Subplots</a></li>
+<li class="toctree-l1"><a class="reference internal" href="colormaps.html">Using colormaps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="world_copy.html">Scrolling beyond the world edge</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_panes.html">Panes and CustomPane</a></li>
+<li class="toctree-l1"><a class="reference internal" href="geodedetic_image_overlay.html">Geodedetic image overlay</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_tiles.html">Custom tiles</a></li>
+<li class="toctree-l1"><a class="reference internal" href="piechart_icons.html">Piechart icons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="polygons_from_list_of_points.html">Creating a polygon from a list of points</a></li>
+<li class="toctree-l1"><a class="reference internal" href="customize_javascript_and_css.html">Customizing javascript or css resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="override_leaflet_class_methods.html">Overriding Leaflet class methods</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../advanced_guide.html" class="nav-link">Advanced guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Subplots</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Subplots">
+<h1>Subplots<a class="headerlink" href="#Subplots" title="Link to this heading">#</a></h1>
+<section id="Two-maps-in-one-figure">
+<h2>Two maps in one figure<a class="headerlink" href="#Two-maps-in-one-figure" title="Link to this heading">#</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">Map</span></code> automatically creates a <code class="docutils literal notranslate"><span class="pre">Figure</span></code> to put itself in. You can also do this manually, or in this example, create subplots to have two maps in one figure.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">branca</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+
+<span class="n">subplot1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">subplot2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">subplot1</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">subplot2</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span>
+    <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mi">46</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;OpenStreetMap&quot;</span><span class="p">,</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_c8ecf969bd2b4502ad27df3c53365f57 {
+                    position: relative;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            &lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+
+    &lt;style&gt; #div_6ee12dfaefc5411a744f4dd7f52c2dd8 {
+        position : absolute;
+        width : 45.0%;
+        height: 90.0%;
+        left: 2.5%;
+        top: 5.0%;
+    &lt;/style&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_ce2ef961407c5a9147a0c32875229e09 {
+                    position: relative;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            &lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+
+    &lt;style&gt; #div_be41ee58631bf2ae1839e83f239fcd32 {
+        position : absolute;
+        width : 45.0%;
+        height: 90.0%;
+        left: 52.5%;
+        top: 5.0%;
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;div id=&quot;div_6ee12dfaefc5411a744f4dd7f52c2dd8&quot;&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c8ecf969bd2b4502ad27df3c53365f57&quot; &gt;&lt;/div&gt;
+        &lt;/div&gt;
+    &lt;div id=&quot;div_be41ee58631bf2ae1839e83f239fcd32&quot;&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_ce2ef961407c5a9147a0c32875229e09&quot; &gt;&lt;/div&gt;
+        &lt;/div&gt;
+&lt;/body&gt;
+&lt;script&gt;
+
+
+            var map_c8ecf969bd2b4502ad27df3c53365f57 = L.map(
+                &quot;map_c8ecf969bd2b4502ad27df3c53365f57&quot;,
+                {
+                    center: [0.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 1,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+
+
+
+
+            var tile_layer_37fd9f5099157d28ad3e04cd469f67b3 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+
+
+            tile_layer_37fd9f5099157d28ad3e04cd469f67b3.addTo(map_c8ecf969bd2b4502ad27df3c53365f57);
+
+
+            var map_ce2ef961407c5a9147a0c32875229e09 = L.map(
+                &quot;map_ce2ef961407c5a9147a0c32875229e09&quot;,
+                {
+                    center: [46.0, 3.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 5,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+
+
+
+
+            var tile_layer_3c4d98d132fca539f723f864c826f78f = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+
+
+            tile_layer_3c4d98d132fca539f723f864c826f78f.addTo(map_ce2ef961407c5a9147a0c32875229e09);
+
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
+</div>
+</section>
+<section id="Vega-div-and-a-Map">
+<h2>Vega div and a Map<a class="headerlink" href="#Vega-div-and-a-Map" title="Link to this heading">#</a></h2>
+<p>Here we create a single figure in which we’ll embed two maps and two Vega charts. Note that this also works with <code class="docutils literal notranslate"><span class="pre">VegaLite</span></code>.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">vincent</span>
+
+
+<span class="n">multi_iter2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,)),</span>
+    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,)),</span>
+<span class="p">}</span>
+<span class="n">scatter</span> <span class="o">=</span> <span class="n">vincent</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span><span class="n">multi_iter2</span><span class="p">,</span> <span class="n">iter_idx</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">420</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">scatter</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+<span class="n">f</span> <span class="o">=</span> <span class="n">branca</span><span class="o">.</span><span class="n">element</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+
+<span class="c1"># Create two maps.</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
+    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="n">zoom_start</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">position</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span>
+    <span class="n">left</span><span class="o">=</span><span class="s2">&quot;0%&quot;</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">m2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
+    <span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mi">46</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="n">tiles</span><span class="o">=</span><span class="s2">&quot;OpenStreetMap&quot;</span><span class="p">,</span>
+    <span class="n">zoom_start</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">position</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span>
+    <span class="n">left</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+    <span class="n">top</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create two Vega charts</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Vega</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">)</span>
+
+<span class="n">v2</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Vega</span><span class="p">(</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s2">&quot;absolute&quot;</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="s2">&quot;0%&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="s2">&quot;50%&quot;</span>
+<span class="p">)</span>
+
+<span class="n">f</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">m2</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">v2</span><span class="p">)</span>
+
+<span class="n">f</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/runner/micromamba/envs/TEST/lib/python3.14/site-packages/vincent/core.py:10: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools&lt;81.
+  from pkg_resources import resource_string
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_f1521a20c0521ec7abd2ffd1a2bdf471 {
+                    position: absolute;
+                    width: 50.0vw;
+                    height: 50.0vh;
+
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            &lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_79ab5f0b4feda13e5a79f3a2d5deaefd {
+                    position: absolute;
+                    width: 50.0vw;
+                    height: 50.0vh;
+
+                    left: 50.0%;
+                    top: 50.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            &lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js&quot;&gt;&lt;/script&gt;
+
+            &lt;style&gt; #vega_4a91a6e57a69fa6a0b2c8d974686419c {
+                position : absolute;
+                width : 50.0%;
+                height: 50.0%;
+                left: 50.0%;
+                top: 0.0%;
+            &lt;/style&gt;
+
+
+            &lt;style&gt; #vega_91450dd74ff3dc51dd10b1d8ed5081b6 {
+                position : absolute;
+                width : 50.0%;
+                height: 50.0%;
+                left: 0.0%;
+                top: 50.0%;
+            &lt;/style&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_f1521a20c0521ec7abd2ffd1a2bdf471&quot; &gt;&lt;/div&gt;
+
+
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_79ab5f0b4feda13e5a79f3a2d5deaefd&quot; &gt;&lt;/div&gt;
+
+
+            &lt;div id=&quot;vega_4a91a6e57a69fa6a0b2c8d974686419c&quot;&gt;&lt;/div&gt;
+
+
+            &lt;div id=&quot;vega_91450dd74ff3dc51dd10b1d8ed5081b6&quot;&gt;&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;script&gt;
+
+
+            var map_f1521a20c0521ec7abd2ffd1a2bdf471 = L.map(
+                &quot;map_f1521a20c0521ec7abd2ffd1a2bdf471&quot;,
+                {
+                    center: [0.0, 0.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 1,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+
+
+
+
+            var tile_layer_d450d83e9b882449bd122b3491228ef7 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+
+
+            tile_layer_d450d83e9b882449bd122b3491228ef7.addTo(map_f1521a20c0521ec7abd2ffd1a2bdf471);
+
+
+            var map_79ab5f0b4feda13e5a79f3a2d5deaefd = L.map(
+                &quot;map_79ab5f0b4feda13e5a79f3a2d5deaefd&quot;,
+                {
+                    center: [46.0, 3.0],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 4,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+
+
+
+
+            var tile_layer_3799f5061c6593d2639211164fb955d0 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+
+
+            tile_layer_3799f5061c6593d2639211164fb955d0.addTo(map_79ab5f0b4feda13e5a79f3a2d5deaefd);
+
+
+            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6772652829485898, &quot;val&quot;: 0.932494316950419}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3413920774148882, &quot;val&quot;: 0.1441876377536485}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3192629846024788, &quot;val&quot;: 0.07410529333883464}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3536177579875167, &quot;val&quot;: 0.23158530284092205}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5736376771411437, &quot;val&quot;: 0.8038678845630096}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16431576083852995, &quot;val&quot;: 0.07783706039080163}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6935683539801403, &quot;val&quot;: 0.7907460014852027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1814352835453409, &quot;val&quot;: 0.11821829782431825}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4117224949065691, &quot;val&quot;: 0.5699649466736517}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7787036222126636, &quot;val&quot;: 0.43281810034768986}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7288737736995426, &quot;val&quot;: 0.7035078821861026}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49705003455742625, &quot;val&quot;: 0.5202394173613546}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5920083111477197, &quot;val&quot;: 0.710788100160884}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.849140850334598, &quot;val&quot;: 0.649898854324103}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5324311489828295, &quot;val&quot;: 0.7613053405781178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9393721675181367, &quot;val&quot;: 0.8166129606263437}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.36044336030677837, &quot;val&quot;: 0.541733246871178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8465475611848974, &quot;val&quot;: 0.5881625994795089}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11534800971735693, &quot;val&quot;: 0.36466663183931525}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10602126221039165, &quot;val&quot;: 0.8356054541941995}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.574896460706773, &quot;val&quot;: 0.6922882797575117}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10761674122641429, &quot;val&quot;: 0.0048650782655568214}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.019989767005902936, &quot;val&quot;: 0.009966402815186237}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.38176796297156346, &quot;val&quot;: 0.6022446446743774}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.143464177346596, &quot;val&quot;: 0.6378922273510261}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5243267099878033, &quot;val&quot;: 0.10585398143594227}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2082759852378111, &quot;val&quot;: 0.47419537953536295}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.854978043626815, &quot;val&quot;: 0.11519381707329968}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4075943163211396, &quot;val&quot;: 0.08119578847995512}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11237356496727335, &quot;val&quot;: 0.11111261783040016}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6115061647535786, &quot;val&quot;: 0.6138990466243788}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7247781173919627, &quot;val&quot;: 0.8472091453930553}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7485178432297859, &quot;val&quot;: 0.581922882447838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7613622212469244, &quot;val&quot;: 0.06611876709241771}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2564014756426687, &quot;val&quot;: 0.332270974645575}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7734886197002107, &quot;val&quot;: 0.07134892956796723}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6502320607763505, &quot;val&quot;: 0.3001069085912369}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14473222033896704, &quot;val&quot;: 0.934174710089991}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49049232575080237, &quot;val&quot;: 0.4685483099596339}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7454926690781336, &quot;val&quot;: 0.3623936265757093}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.44426862041399195, &quot;val&quot;: 0.05116923798736672}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.39697622250350795, &quot;val&quot;: 0.9022800726698067}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5128783734168512, &quot;val&quot;: 0.5163389685044063}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3264165136878425, &quot;val&quot;: 0.3783723122817466}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08714908979582747, &quot;val&quot;: 0.9138850044996573}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3237535709404594, &quot;val&quot;: 0.3795797385579267}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9610152990505031, &quot;val&quot;: 0.29944562765763627}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.06547321785028204, &quot;val&quot;: 0.971484821016683}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8375103276230866, &quot;val&quot;: 0.3902685110573768}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9315902693377037, &quot;val&quot;: 0.31095360584574383}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6908438846891719, &quot;val&quot;: 0.41642599671090164}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.744227623109573, &quot;val&quot;: 0.6933098603140678}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6045798807824181, &quot;val&quot;: 0.17752795510323116}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7281829521102806, &quot;val&quot;: 0.12857685495744997}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7415957255118877, &quot;val&quot;: 0.887811676318944}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8700575892042928, &quot;val&quot;: 0.5653624823146756}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04694173836606996, &quot;val&quot;: 0.9104024903841761}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7120377856708399, &quot;val&quot;: 0.12641821041242407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9570243270869004, &quot;val&quot;: 0.7780801464205602}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08105969478389607, &quot;val&quot;: 0.595967603727262}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3604953239912908, &quot;val&quot;: 0.8888908806023139}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5790860744310503, &quot;val&quot;: 0.7115964686906961}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.991213300263061, &quot;val&quot;: 0.6548730200138019}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7158315270868644, &quot;val&quot;: 0.7183858727577584}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3490767800479303, &quot;val&quot;: 0.116678005491482}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4104065580267757, &quot;val&quot;: 0.6915100828513145}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5671424279232735, &quot;val&quot;: 0.6157289825906486}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16522723698101338, &quot;val&quot;: 0.4688642022896383}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.935380682567535, &quot;val&quot;: 0.3872411046509764}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35360547566261413, &quot;val&quot;: 0.7405971667105642}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5473921502445138, &quot;val&quot;: 0.8324971799631229}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45051454973951954, &quot;val&quot;: 0.26647520695285687}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8861572330572495, &quot;val&quot;: 0.7973132834552178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5074913297135698, &quot;val&quot;: 0.22413533875101632}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.88342102085139, &quot;val&quot;: 0.12650914623128218}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.07396372407300678, &quot;val&quot;: 0.16196420776933151}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4095722624599831, &quot;val&quot;: 0.41725969585613065}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10524733710859469, &quot;val&quot;: 0.3621718521491638}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8114475466389147, &quot;val&quot;: 0.12345043436415548}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27898307760730046, &quot;val&quot;: 0.9469686598946989}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7263453766624334, &quot;val&quot;: 0.849892172144347}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7603757727738601, &quot;val&quot;: 0.5456063288127202}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.24297365325302067, &quot;val&quot;: 0.8081670100776074}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11945979871135104, &quot;val&quot;: 0.4707435428500838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7462961606278161, &quot;val&quot;: 0.9584384183953981}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49938086751369304, &quot;val&quot;: 0.7152291503459257}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7946225415137826, &quot;val&quot;: 0.582392267306666}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6982166655122275, &quot;val&quot;: 0.9944478678162079}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5175854862332397, &quot;val&quot;: 0.022518626550117382}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.606146884019054, &quot;val&quot;: 0.759511701446907}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.28275423445549763, &quot;val&quot;: 0.8719680226853403}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.38814988347939394, &quot;val&quot;: 0.5179186924880661}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27211924960429834, &quot;val&quot;: 0.11321535000590155}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5907023050703734, &quot;val&quot;: 0.9926821440977923}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.13048268407936092, &quot;val&quot;: 0.21661857252690153}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8218021061799847, &quot;val&quot;: 0.2047086268824374}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8132813325171099, &quot;val&quot;: 0.15108123045577027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2239675456984046, &quot;val&quot;: 0.49146681173348217}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8446943142514965, &quot;val&quot;: 0.6447288835887325}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6723286918064596, &quot;val&quot;: 0.05237880195041911}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_4a91a6e57a69fa6a0b2c8d974686419c);
+
+    function vega_parse(spec, div) {
+            vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}
+
+            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6772652829485898, &quot;val&quot;: 0.932494316950419}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3413920774148882, &quot;val&quot;: 0.1441876377536485}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3192629846024788, &quot;val&quot;: 0.07410529333883464}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3536177579875167, &quot;val&quot;: 0.23158530284092205}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5736376771411437, &quot;val&quot;: 0.8038678845630096}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16431576083852995, &quot;val&quot;: 0.07783706039080163}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6935683539801403, &quot;val&quot;: 0.7907460014852027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1814352835453409, &quot;val&quot;: 0.11821829782431825}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4117224949065691, &quot;val&quot;: 0.5699649466736517}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7787036222126636, &quot;val&quot;: 0.43281810034768986}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7288737736995426, &quot;val&quot;: 0.7035078821861026}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49705003455742625, &quot;val&quot;: 0.5202394173613546}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5920083111477197, &quot;val&quot;: 0.710788100160884}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.849140850334598, &quot;val&quot;: 0.649898854324103}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5324311489828295, &quot;val&quot;: 0.7613053405781178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9393721675181367, &quot;val&quot;: 0.8166129606263437}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.36044336030677837, &quot;val&quot;: 0.541733246871178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8465475611848974, &quot;val&quot;: 0.5881625994795089}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11534800971735693, &quot;val&quot;: 0.36466663183931525}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10602126221039165, &quot;val&quot;: 0.8356054541941995}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.574896460706773, &quot;val&quot;: 0.6922882797575117}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10761674122641429, &quot;val&quot;: 0.0048650782655568214}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.019989767005902936, &quot;val&quot;: 0.009966402815186237}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.38176796297156346, &quot;val&quot;: 0.6022446446743774}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.143464177346596, &quot;val&quot;: 0.6378922273510261}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5243267099878033, &quot;val&quot;: 0.10585398143594227}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2082759852378111, &quot;val&quot;: 0.47419537953536295}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.854978043626815, &quot;val&quot;: 0.11519381707329968}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4075943163211396, &quot;val&quot;: 0.08119578847995512}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11237356496727335, &quot;val&quot;: 0.11111261783040016}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6115061647535786, &quot;val&quot;: 0.6138990466243788}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7247781173919627, &quot;val&quot;: 0.8472091453930553}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7485178432297859, &quot;val&quot;: 0.581922882447838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7613622212469244, &quot;val&quot;: 0.06611876709241771}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2564014756426687, &quot;val&quot;: 0.332270974645575}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7734886197002107, &quot;val&quot;: 0.07134892956796723}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6502320607763505, &quot;val&quot;: 0.3001069085912369}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14473222033896704, &quot;val&quot;: 0.934174710089991}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49049232575080237, &quot;val&quot;: 0.4685483099596339}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7454926690781336, &quot;val&quot;: 0.3623936265757093}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.44426862041399195, &quot;val&quot;: 0.05116923798736672}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.39697622250350795, &quot;val&quot;: 0.9022800726698067}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5128783734168512, &quot;val&quot;: 0.5163389685044063}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3264165136878425, &quot;val&quot;: 0.3783723122817466}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08714908979582747, &quot;val&quot;: 0.9138850044996573}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3237535709404594, &quot;val&quot;: 0.3795797385579267}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9610152990505031, &quot;val&quot;: 0.29944562765763627}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.06547321785028204, &quot;val&quot;: 0.971484821016683}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8375103276230866, &quot;val&quot;: 0.3902685110573768}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9315902693377037, &quot;val&quot;: 0.31095360584574383}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6908438846891719, &quot;val&quot;: 0.41642599671090164}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.744227623109573, &quot;val&quot;: 0.6933098603140678}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6045798807824181, &quot;val&quot;: 0.17752795510323116}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7281829521102806, &quot;val&quot;: 0.12857685495744997}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7415957255118877, &quot;val&quot;: 0.887811676318944}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8700575892042928, &quot;val&quot;: 0.5653624823146756}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04694173836606996, &quot;val&quot;: 0.9104024903841761}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7120377856708399, &quot;val&quot;: 0.12641821041242407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9570243270869004, &quot;val&quot;: 0.7780801464205602}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08105969478389607, &quot;val&quot;: 0.595967603727262}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3604953239912908, &quot;val&quot;: 0.8888908806023139}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5790860744310503, &quot;val&quot;: 0.7115964686906961}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.991213300263061, &quot;val&quot;: 0.6548730200138019}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7158315270868644, &quot;val&quot;: 0.7183858727577584}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3490767800479303, &quot;val&quot;: 0.116678005491482}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4104065580267757, &quot;val&quot;: 0.6915100828513145}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5671424279232735, &quot;val&quot;: 0.6157289825906486}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16522723698101338, &quot;val&quot;: 0.4688642022896383}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.935380682567535, &quot;val&quot;: 0.3872411046509764}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35360547566261413, &quot;val&quot;: 0.7405971667105642}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5473921502445138, &quot;val&quot;: 0.8324971799631229}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45051454973951954, &quot;val&quot;: 0.26647520695285687}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8861572330572495, &quot;val&quot;: 0.7973132834552178}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5074913297135698, &quot;val&quot;: 0.22413533875101632}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.88342102085139, &quot;val&quot;: 0.12650914623128218}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.07396372407300678, &quot;val&quot;: 0.16196420776933151}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4095722624599831, &quot;val&quot;: 0.41725969585613065}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10524733710859469, &quot;val&quot;: 0.3621718521491638}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8114475466389147, &quot;val&quot;: 0.12345043436415548}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27898307760730046, &quot;val&quot;: 0.9469686598946989}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7263453766624334, &quot;val&quot;: 0.849892172144347}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7603757727738601, &quot;val&quot;: 0.5456063288127202}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.24297365325302067, &quot;val&quot;: 0.8081670100776074}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11945979871135104, &quot;val&quot;: 0.4707435428500838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7462961606278161, &quot;val&quot;: 0.9584384183953981}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.49938086751369304, &quot;val&quot;: 0.7152291503459257}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7946225415137826, &quot;val&quot;: 0.582392267306666}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6982166655122275, &quot;val&quot;: 0.9944478678162079}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5175854862332397, &quot;val&quot;: 0.022518626550117382}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.606146884019054, &quot;val&quot;: 0.759511701446907}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.28275423445549763, &quot;val&quot;: 0.8719680226853403}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.38814988347939394, &quot;val&quot;: 0.5179186924880661}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27211924960429834, &quot;val&quot;: 0.11321535000590155}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5907023050703734, &quot;val&quot;: 0.9926821440977923}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.13048268407936092, &quot;val&quot;: 0.21661857252690153}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8218021061799847, &quot;val&quot;: 0.2047086268824374}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8132813325171099, &quot;val&quot;: 0.15108123045577027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2239675456984046, &quot;val&quot;: 0.49146681173348217}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8446943142514965, &quot;val&quot;: 0.6447288835887325}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6723286918064596, &quot;val&quot;: 0.05237880195041911}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_91450dd74ff3dc51dd10b1d8ed5081b6);
+
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="choropleth%20with%20Jenks%20natural%20breaks%20optimization.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Integrating Jenks Natural Break Optimization with choropleth</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="colormaps.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Using colormaps</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Two-maps-in-one-figure">Two maps in one figure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Vega-div-and-a-Map">Vega div and a Map</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/advanced_guide/subplots.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item"><!-- This will display the version of the docs -->
+Folium version 1.0.0rc1</div>
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2026, Rob Story.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
