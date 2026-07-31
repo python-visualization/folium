@@ -43,10 +43,13 @@ _default_css = [
         "bootstrap_css",
         "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
     ),
-    # glyphicons came from Bootstrap 3 and are used for Awesome Markers
+    # glyphicons came from Bootstrap 3 and are used for Awesome Markers.
+    # This vendored file has only the @font-face/.glyphicon rules; the previous
+    # netdna stylesheet also shipped a full Bootstrap-3 reset that leaked global
+    # ``body`` styles onto the host page (GH-1820).
     (
         "glyphicons_css",
-        "https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css",
+        "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/glyphicons.css",
     ),
     (
         "awesome_markers_font_css",
