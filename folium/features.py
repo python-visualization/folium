@@ -1053,9 +1053,14 @@ class TopoJson(JSCSSMixin, Layer):
             else:
                 return data
 
-        geometries = recursive_get(self.data, self.object_path.split("."))[
-            "geometries"
-        ]  # noqa
+        obj = recursive_get(self.data, self.object_path.split("."))
+        # A TopoJSON object is either a GeometryCollection (with a "geometries"
+        # list) or a single geometry (Polygon, MultiPolygon, ...) that has no
+        # "geometries" key and is itself the feature to style. See GH-1816.
+        if obj.get("type") == "GeometryCollection":
+            geometries = obj["geometries"]
+        else:
+            geometries = [obj]
         for feature in geometries:
             feature.setdefault("properties", {}).setdefault("style", {}).update(
                 self.style_function(feature)

@@ -208,6 +208,25 @@ class TestFolium:
         topojson_str = topo_json._template.module.script(topo_json)
         assert "".join(topojson_str.split())[:-1] in "".join(out.split())
 
+    def test_topo_json_single_geometry(self):
+        """TopoJSON objects may be a single geometry rather than a
+        GeometryCollection, in which case there is no ``geometries`` key and
+        the object itself is the feature to style (GH-1816)."""
+        topo = {
+            "type": "Topology",
+            "transform": {"scale": [1, 1], "translate": [0, 0]},
+            "objects": {"A": {"type": "Polygon", "id": "A", "arcs": [[0]]}},
+            "arcs": [[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]]],
+        }
+        topo_json = folium.TopoJson(
+            topo, "objects.A", style_function=lambda _: {"color": "red"}
+        )
+        folium.Map().add_child(topo_json).render()
+
+        # The style function must be applied to the single geometry itself.
+        styled = topo_json.data["objects"]["A"]["properties"]["style"]
+        assert styled["color"] == "red"
+
     def test_choropleth_features(self):
         """Test to make sure that Choropleth function doesn't allow
         values outside of the domain defined by bins.
