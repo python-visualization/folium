@@ -58,9 +58,8 @@ class Draw(JSCSSMixin, MacroElement):
         {% macro html(this, kwargs) %}
             {% if this.export %}
             <style>
-                #export {
+                #export_{{ this.get_name() }} {
                     position: absolute;
-                    top: 5px;
                     right: 10px;
                     z-index: 999;
                     background: white;
@@ -74,7 +73,7 @@ class Draw(JSCSSMixin, MacroElement):
                     top: 90px;
                 }
             </style>
-            <a href='#' id='export'>Export</a>
+            <a href='#' id='export_{{ this.get_name() }}'>Export</a>
             {% endif %}
         {% endmacro %}
 
@@ -123,14 +122,14 @@ class Draw(JSCSSMixin, MacroElement):
             });
 
             {% if this.export %}
-            document.getElementById('export').onclick = function(e) {
+            document.getElementById('export_{{ this.get_name() }}').onclick = function(e) {
                 var data = drawnItems_{{ this.get_name() }}.toGeoJSON();
                 var convertedData = 'text/json;charset=utf-8,'
                     + encodeURIComponent(JSON.stringify(data));
-                document.getElementById('export').setAttribute(
+                document.getElementById('export_{{ this.get_name() }}').setAttribute(
                     'href', 'data:' + convertedData
                 );
-                document.getElementById('export').setAttribute(
+                document.getElementById('export_{{ this.get_name() }}').setAttribute(
                     'download', {{ this.filename|tojson }}
                 );
             }
