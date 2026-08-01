@@ -6,6 +6,7 @@ Make beautiful, interactive maps with Python and Leaflet.js
 import time
 import webbrowser
 from collections.abc import Sequence
+from importlib.resources import files as _resource_files
 from typing import Any, Optional, Union
 
 from branca.element import Element, Figure
@@ -43,14 +44,12 @@ _default_css = [
         "bootstrap_css",
         "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
     ),
-    # glyphicons came from Bootstrap 3 and are used for Awesome Markers.
-    # This vendored file has only the @font-face/.glyphicon rules; the previous
-    # netdna stylesheet also shipped a full Bootstrap-3 reset that leaked global
-    # ``body`` styles onto the host page (GH-1820).
-    (
-        "glyphicons_css",
-        "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/glyphicons.css",
-    ),
+    # glyphicons (used for the default Awesome Markers) are inlined into every
+    # ``Map`` as a ``<style>`` block from ``_GLYPHICONS_CSS`` below, rather than
+    # linked from a CDN. The previous netdna stylesheet shipped a full
+    # Bootstrap-3 reset that leaked global ``body`` styles onto the host page
+    # (GH-1820); inlining a glyphicons-only sheet keeps markers working with no
+    # page-wide side effects and no external stylesheet request.
     (
         "awesome_markers_font_css",
         "https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css",
@@ -64,6 +63,13 @@ _default_css = [
         "https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css",
     ),  # noqa
 ]
+
+# Glyphicons-only stylesheet inlined into every ``Map`` (see the note in
+# ``_default_css``). Read once from the packaged template; the file ships via
+# ``recursive-include folium/templates`` in ``MANIFEST.in``.
+_GLYPHICONS_CSS = (
+    _resource_files("folium") / "templates" / "glyphicons.css"
+).read_text(encoding="utf-8")
 
 
 class GlobalSwitches(Element):
@@ -222,6 +228,8 @@ class Map(JSCSSMixin, Evented):
                 }
             </style>
 
+            <style>{{ this.glyphicons_css }}</style>
+
             <script>
                 L_NO_TOUCH = {{ this.global_switches.no_touch |tojson}};
                 L_DISABLE_3D = {{ this.global_switches.disable_3d|tojson }};
@@ -268,6 +276,9 @@ class Map(JSCSSMixin, Evented):
     # use the module variables for backwards compatibility
     default_js = _default_js
     default_css = _default_css
+
+    # Inlined into the map header as a ``<style>`` block (see ``_GLYPHICONS_CSS``).
+    glyphicons_css = _GLYPHICONS_CSS
 
     def __init__(
         self,
