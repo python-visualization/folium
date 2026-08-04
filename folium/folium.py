@@ -210,15 +210,6 @@ class Map(JSCSSMixin, Evented):
             }
             </style>
 
-            <style>#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-
             <script>
                 L_NO_TOUCH = {{ this.global_switches.no_touch |tojson}};
                 L_DISABLE_3D = {{ this.global_switches.disable_3d|tojson }};
