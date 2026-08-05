@@ -53,6 +53,19 @@ def test_location_args():
     assert m.location == [45.5236, -122.6750]
 
 
+def test_glyphicons_css_is_vendored():
+    # GH-1820: the glyphicon rules must come from folium's inlined glyphicons-only
+    # stylesheet, not netdna's ``bootstrap-glyphicons.css`` which despite its name
+    # ships a full Bootstrap-3 reset that leaked global ``body`` styles onto the page.
+    m = folium.Map()
+    html = m.get_root().render()
+    # Inlined as a <style> block rather than linked from a CDN, so the glyphicon
+    # rules are present verbatim and no netdna stylesheet is requested.
+    assert "Glyphicons Halflings" in html
+    assert ".glyphicon" in html
+    assert "netdna.bootstrapcdn.com" not in html
+
+
 class TestFolium:
     """Test class for the Folium library."""
 
