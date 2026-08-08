@@ -586,6 +586,13 @@ class GeoJson(Layer):
         {%- endif %}
 
         function {{this.get_name()}}_onEachFeature(feature, layer) {
+            (function propagate(parent){
+                if (typeof parent.eachLayer !== "function") {return;}
+                parent.eachLayer(function (child) {
+                    if (child.feature === undefined) { child.feature = feature; }
+                    propagate(child);
+                })
+            })(layer)
             {%- if this.on_each_feature %}
             ({{this.on_each_feature}})(feature, layer);
             {%- endif %}
