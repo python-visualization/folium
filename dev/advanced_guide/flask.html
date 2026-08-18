@@ -468,7 +468,7 @@ can do that. The simplest is to return the maps html representation. If instead
 you want to embed a map on an existing page, you can either embed an iframe
 or extract the map components and use those.</p>
 <p>Below is a script containing examples for all three use cases:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;flask_example.py</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sd">"""flask_example.py</span>
 
 <span class="sd">Required packages:</span>
 <span class="sd">- flask</span>
@@ -482,7 +482,7 @@ or extract the map components and use those.</p>
 
 <span class="sd">And then head to http://127.0.0.1:5000/ in your browser to see the map displayed</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template_string</span>
 
@@ -491,25 +491,25 @@ or extract the map components and use those.</p>
 <span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">fullscreen</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Simple example of a fullscreen map.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Simple example of a fullscreen map."""</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/iframe&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/iframe"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">iframe</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Embed a map as an iframe on a page.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Embed a map as an iframe on a page."""</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">()</span>
 
     <span class="c1"># set the iframe width and height</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s2">&quot;800px&quot;</span>
-    <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="s2">&quot;600px&quot;</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s2">"800px"</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="s2">"600px"</span>
     <span class="n">iframe</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">_repr_html_</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">            &lt;!DOCTYPE html&gt;</span>
 <span class="sd">            &lt;html&gt;</span>
 <span class="sd">                &lt;head&gt;&lt;/head&gt;</span>
@@ -518,14 +518,14 @@ or extract the map components and use those.</p>
 <span class="sd">                    {{ iframe|safe }}</span>
 <span class="sd">                &lt;/body&gt;</span>
 <span class="sd">            &lt;/html&gt;</span>
-<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span>
+<span class="sd">        """</span><span class="p">,</span>
         <span class="n">iframe</span><span class="o">=</span><span class="n">iframe</span><span class="p">,</span>
     <span class="p">)</span>
 
 
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/components&quot;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">"/components"</span><span class="p">)</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">components</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract map components and put those on a page.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Extract map components and put those on a page."""</span>
     <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
         <span class="n">width</span><span class="o">=</span><span class="mi">800</span><span class="p">,</span>
         <span class="n">height</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
@@ -537,7 +537,7 @@ or extract the map components and use those.</p>
     <span class="n">script</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">            &lt;!DOCTYPE html&gt;</span>
 <span class="sd">            &lt;html&gt;</span>
 <span class="sd">                &lt;head&gt;</span>
@@ -551,14 +551,14 @@ or extract the map components and use those.</p>
 <span class="sd">                    &lt;/script&gt;</span>
 <span class="sd">                &lt;/body&gt;</span>
 <span class="sd">            &lt;/html&gt;</span>
-<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span>
+<span class="sd">        """</span><span class="p">,</span>
         <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
         <span class="n">body_html</span><span class="o">=</span><span class="n">body_html</span><span class="p">,</span>
         <span class="n">script</span><span class="o">=</span><span class="n">script</span><span class="p">,</span>
     <span class="p">)</span>
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>

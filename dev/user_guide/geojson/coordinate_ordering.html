@@ -447,10 +447,10 @@
 
 <span class="c1"># GeoJSON with correct [lon, lat] order</span>
 <span class="n">geojson_data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">87.6298</span><span class="p">,</span> <span class="mf">41.8781</span><span class="p">],</span>  <span class="c1"># longitude, latitude (Chicago)</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+    <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span>
+        <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="o">-</span><span class="mf">87.6298</span><span class="p">,</span> <span class="mf">41.8781</span><span class="p">],</span>  <span class="c1"># longitude, latitude (Chicago)</span>
     <span class="p">},</span>
 <span class="p">}</span>
 
@@ -469,10 +469,10 @@
 
 <span class="c1"># GeoJSON coordinates in wrong [lat, lon] order</span>
 <span class="n">geojson_data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">41.8781</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.6298</span><span class="p">],</span>  <span class="c1"># WRONG: latitude, longitude</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+    <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span>
+        <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="mf">41.8781</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.6298</span><span class="p">],</span>  <span class="c1"># WRONG: latitude, longitude</span>
     <span class="p">},</span>
 <span class="p">}</span>
 
@@ -496,8 +496,8 @@
 <span class="n">correct_order</span> <span class="o">=</span> <span class="p">[</span><span class="n">wrong_order</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">wrong_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
 
 <span class="n">geojson_data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="n">correct_order</span><span class="p">},</span>  <span class="c1"># now [lon, lat]</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+    <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span> <span class="s2">"coordinates"</span><span class="p">:</span> <span class="n">correct_order</span><span class="p">},</span>  <span class="c1"># now [lon, lat]</span>
 <span class="p">}</span>
 
 <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="n">correct_order</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">correct_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
@@ -517,7 +517,7 @@
 <span class="c1"># Create a GeoDataFrame with points</span>
 <span class="c1"># Shapely/GeoPandas uses [lon, lat] order automatically</span>
 <span class="n">points</span> <span class="o">=</span> <span class="p">[</span><span class="n">Point</span><span class="p">(</span><span class="o">-</span><span class="mf">87.6298</span><span class="p">,</span> <span class="mf">41.8781</span><span class="p">),</span> <span class="n">Point</span><span class="p">(</span><span class="o">-</span><span class="mf">118.2437</span><span class="p">,</span> <span class="mf">34.0522</span><span class="p">)]</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">geometry</span><span class="o">=</span><span class="n">points</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
 
 <span class="c1"># When you pass a GeoDataFrame to folium.GeoJson,</span>
 <span class="c1"># the coordinates are already in the correct [lon, lat] order</span>

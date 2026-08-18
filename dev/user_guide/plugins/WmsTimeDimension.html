@@ -540,17 +540,17 @@
 <h2>Exploring the WMS with OWSLib<a class="headerlink" href="#Exploring-the-WMS-with-OWSLib" title="Link to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">owslib.wms</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebMapService</span>
 
-<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS&quot;</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s2">"https://pae-paha.pacioos.hawaii.edu/thredds/wms/dhw_5km?service=WMS"</span>
 
 <span class="n">web_map_services</span> <span class="o">=</span> <span class="n">WebMapService</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">web_map_services</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">web_map_services</span><span class="o">.</span><span class="n">contents</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
 </pre></div>
 </div>
 </section>
 <section id="Layer-metadata">
 <h2>Layer metadata<a class="headerlink" href="#Layer-metadata" title="Link to this heading">#</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="s2">&quot;CRW_SST&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">layer</span> <span class="o">=</span> <span class="s2">"CRW_SST"</span>
 <span class="n">wms</span> <span class="o">=</span> <span class="n">web_map_services</span><span class="o">.</span><span class="n">contents</span><span class="p">[</span><span class="n">layer</span><span class="p">]</span>
 
 <span class="n">name</span> <span class="o">=</span> <span class="n">wms</span><span class="o">.</span><span class="n">title</span>
@@ -559,10 +559,10 @@
 <span class="n">lat</span> <span class="o">=</span> <span class="p">(</span><span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">wms</span><span class="o">.</span><span class="n">boundingBox</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
 <span class="n">center</span> <span class="o">=</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span>
 
-<span class="n">time_interval</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">/</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="n">time_interval</span> <span class="o">=</span> <span class="s2">"</span><span class="si">{0}</span><span class="s2">/</span><span class="si">{1}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
     <span class="n">wms</span><span class="o">.</span><span class="n">timepositions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">wms</span><span class="o">.</span><span class="n">timepositions</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 <span class="p">)</span>
-<span class="n">style</span> <span class="o">=</span> <span class="s2">&quot;boxfill/sst_36&quot;</span>
+<span class="n">style</span> <span class="o">=</span> <span class="s2">"boxfill/sst_36"</span>
 
 <span class="k">if</span> <span class="n">style</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">wms</span><span class="o">.</span><span class="n">styles</span><span class="p">:</span>
     <span class="n">style</span> <span class="o">=</span> <span class="kc">None</span>
@@ -580,16 +580,16 @@
     <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span>
     <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
     <span class="n">styles</span><span class="o">=</span><span class="n">style</span><span class="p">,</span>
-    <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;image/png&quot;</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"image/png"</span><span class="p">,</span>
     <span class="n">transparent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">layers</span><span class="o">=</span><span class="n">layer</span><span class="p">,</span>
     <span class="n">overlay</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s2">&quot;1.2,28&quot;</span><span class="p">,</span>
+    <span class="n">COLORSCALERANGE</span><span class="o">=</span><span class="s2">"1.2,28"</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 
 <span class="n">folium</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">TimestampedWmsTileLayers</span><span class="p">(</span>
     <span class="n">wms_tile_layer</span><span class="p">,</span>
-    <span class="n">period</span><span class="o">=</span><span class="s2">&quot;PT1H&quot;</span><span class="p">,</span>
+    <span class="n">period</span><span class="o">=</span><span class="s2">"PT1H"</span><span class="p">,</span>
     <span class="n">time_interval</span><span class="o">=</span><span class="n">time_interval</span><span class="p">,</span>
 <span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
 

@@ -563,36 +563,36 @@
 
 <span class="c1"># Simple point data</span>
 <span class="n">geojson_data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;FeatureCollection&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"FeatureCollection"</span><span class="p">,</span>
+    <span class="s2">"features"</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Location 1&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
-            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">77.5946</span><span class="p">,</span> <span class="mf">12.9716</span><span class="p">]}</span>  <span class="c1"># Central Bangalore</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+            <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Location 1"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>
+            <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span> <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="mf">77.5946</span><span class="p">,</span> <span class="mf">12.9716</span><span class="p">]}</span>  <span class="c1"># Central Bangalore</span>
         <span class="p">},</span>
         <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Location 2&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
-            <span class="s2">&quot;geometry&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Point&quot;</span><span class="p">,</span> <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">77.6200</span><span class="p">,</span> <span class="mf">12.9800</span><span class="p">]}</span>  <span class="c1"># Northeast Bangalore</span>
+            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Feature"</span><span class="p">,</span>
+            <span class="s2">"properties"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Location 2"</span><span class="p">,</span> <span class="s2">"value"</span><span class="p">:</span> <span class="mi">200</span><span class="p">},</span>
+            <span class="s2">"geometry"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"Point"</span><span class="p">,</span> <span class="s2">"coordinates"</span><span class="p">:</span> <span class="p">[</span><span class="mf">77.6200</span><span class="p">,</span> <span class="mf">12.9800</span><span class="p">]}</span>  <span class="c1"># Northeast Bangalore</span>
         <span class="p">}</span>
     <span class="p">]</span>
 <span class="p">}</span>
 
 <span class="c1"># Custom JavaScript to add popups</span>
-<span class="n">on_each_feature</span> <span class="o">=</span> <span class="n">JsCode</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="n">on_each_feature</span> <span class="o">=</span> <span class="n">JsCode</span><span class="p">(</span><span class="s2">"""</span>
 <span class="s2">function(feature, layer) {</span>
 <span class="s2">    layer.bindTooltip(</span>
-<span class="s2">        &#39;&lt;b&gt;&#39; + feature.properties.name + &#39;&lt;/b&gt;&lt;br&gt;&#39; +</span>
-<span class="s2">        &#39;Value: &#39; + feature.properties.value</span>
+<span class="s2">        '&lt;b&gt;' + feature.properties.name + '&lt;/b&gt;&lt;br&gt;' +</span>
+<span class="s2">        'Value: ' + feature.properties.value</span>
 <span class="s2">    );</span>
 
 <span class="s2">    layer.bindPopup(</span>
-<span class="s2">        &#39;&lt;b&gt;&#39; + &#39; This is popup &#39; + &#39;&lt;/b&gt;&lt;br&gt;&#39; +</span>
-<span class="s2">        &#39;&lt;b&gt;&#39; + feature.properties.name + &#39;&lt;/b&gt;&lt;br&gt;&#39; +</span>
-<span class="s2">        &#39;Value: &#39; + feature.properties.value</span>
+<span class="s2">        '&lt;b&gt;' + ' This is popup ' + '&lt;/b&gt;&lt;br&gt;' +</span>
+<span class="s2">        '&lt;b&gt;' + feature.properties.name + '&lt;/b&gt;&lt;br&gt;' +</span>
+<span class="s2">        'Value: ' + feature.properties.value</span>
 <span class="s2">    );</span>
 <span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="s2">"""</span><span class="p">)</span>
 
 <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">location</span><span class="o">=</span><span class="p">[</span><span class="mf">12.9716</span><span class="p">,</span> <span class="mf">77.5946</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
@@ -629,7 +629,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_65ad29367a14232405e1027ff3f69c10 {
+                #map_d5f208f9da0e3a1e9ef264a78ed89eee {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -667,14 +667,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_65ad29367a14232405e1027ff3f69c10&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_d5f208f9da0e3a1e9ef264a78ed89eee&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_65ad29367a14232405e1027ff3f69c10 = L.map(
-                &quot;map_65ad29367a14232405e1027ff3f69c10&quot;,
+            var map_d5f208f9da0e3a1e9ef264a78ed89eee = L.map(
+                &quot;map_d5f208f9da0e3a1e9ef264a78ed89eee&quot;,
                 {
                     center: [12.9716, 77.5946],
                     crs: L.CRS.EPSG3857,
@@ -691,7 +691,7 @@
 
 
 
-            var tile_layer_928e9af1838b2fe697005601d8cd590a = L.tileLayer(
+            var tile_layer_ad42e7755747a2d080223cc625787eea = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -708,11 +708,11 @@
             );
 
 
-            tile_layer_928e9af1838b2fe697005601d8cd590a.addTo(map_65ad29367a14232405e1027ff3f69c10);
+            tile_layer_ad42e7755747a2d080223cc625787eea.addTo(map_d5f208f9da0e3a1e9ef264a78ed89eee);
 
 
 
-        function geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a_onEachFeature(feature, layer) {
+        function geo_json_4c61c26c3b878c8d23d76c9dc175cd61_onEachFeature(feature, layer) {
             (
 function(feature, layer) {
     layer.bindTooltip(
@@ -731,23 +731,23 @@ function(feature, layer) {
             layer.on({
             });
         };
-        var geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a = L.geoJson(null, {
-                onEachFeature: geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a_onEachFeature,
+        var geo_json_4c61c26c3b878c8d23d76c9dc175cd61 = L.geoJson(null, {
+                onEachFeature: geo_json_4c61c26c3b878c8d23d76c9dc175cd61_onEachFeature,
 
             ...{
 }
         });
 
-        function geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a_add (data) {
-            geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a
+        function geo_json_4c61c26c3b878c8d23d76c9dc175cd61_add (data) {
+            geo_json_4c61c26c3b878c8d23d76c9dc175cd61
                 .addData(data);
         }
-            geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a_add({&quot;features&quot;: [{&quot;geometry&quot;: {&quot;coordinates&quot;: [77.5946, 12.9716], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 1&quot;, &quot;value&quot;: 100}, &quot;type&quot;: &quot;Feature&quot;}, {&quot;geometry&quot;: {&quot;coordinates&quot;: [77.62, 12.98], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 2&quot;, &quot;value&quot;: 200}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
-        geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a.setStyle(function(feature) {return feature.properties.style;});
+            geo_json_4c61c26c3b878c8d23d76c9dc175cd61_add({&quot;features&quot;: [{&quot;geometry&quot;: {&quot;coordinates&quot;: [77.5946, 12.9716], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 1&quot;, &quot;value&quot;: 100}, &quot;type&quot;: &quot;Feature&quot;}, {&quot;geometry&quot;: {&quot;coordinates&quot;: [77.62, 12.98], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 2&quot;, &quot;value&quot;: 200}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+        geo_json_4c61c26c3b878c8d23d76c9dc175cd61.setStyle(function(feature) {return feature.properties.style;});
 
 
 
-            geo_json_2bf1871b91cfbd62c2f5739a7cc2fa1a.addTo(map_65ad29367a14232405e1027ff3f69c10);
+            geo_json_4c61c26c3b878c8d23d76c9dc175cd61.addTo(map_d5f208f9da0e3a1e9ef264a78ed89eee);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
