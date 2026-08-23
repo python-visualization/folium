@@ -5,6 +5,8 @@ Test Draw
 
 import re
 
+import pytest
+
 import folium
 from folium import plugins
 from folium.template import Template
@@ -68,3 +70,42 @@ def test_two_draw_controls_get_unique_export_ids():
         handler = out[start : out.index("}", start) + 1]
         assert f"drawnItems_{draw.get_name()}.toGeoJSON()" in handler
         assert filename in handler
+
+
+def test_draw_export_position_default():
+    """The default export button keeps its historical top-right placement."""
+    m = folium.Map([45.0, 3.0], zoom_start=4)
+    draw = plugins.Draw(export=True)
+    m.add_child(draw)
+
+    out = normalize(m._parent.render())
+
+    block = out[out.index(f"#export_{draw.get_name()}") :]
+    block = block[: block.index("}")]
+    assert "position: absolute;" in block
+    assert "top: 90px;" in block
+    assert "right: 10px;" in block
+
+
+def test_draw_export_position_corners():
+    expected = {
+        "topright": ("top: 90px;", "right: 10px;"),
+        "topleft": ("top: 90px;", "left: 10px;"),
+        "bottomright": ("bottom: 20px;", "right: 10px;"),
+        "bottomleft": ("bottom: 20px;", "left: 10px;"),
+    }
+    for position, edges in expected.items():
+        m = folium.Map([45.0, 3.0], zoom_start=4)
+        draw = plugins.Draw(export=True, export_position=position)
+        m.add_child(draw)
+
+        out = normalize(m._parent.render())
+        block = out[out.index(f"#export_{draw.get_name()}") :]
+        block = block[: block.index("}")]
+        for edge in edges:
+            assert edge in block, f"{position}: {edge!r} missing from {block!r}"
+
+
+def test_draw_export_position_invalid():
+    with pytest.raises(ValueError, match="export_position must be one of"):
+        plugins.Draw(export=True, export_position="middle")
