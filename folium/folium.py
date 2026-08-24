@@ -219,15 +219,6 @@ class Map(JSCSSMixin, Evented):
             }
             </style>
 
-            <style>#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-
             <style>{{ this.glyphicons_css }}</style>
 
             <script>

@@ -17,6 +17,75 @@ from folium.elements import EventHandler
 from folium.utilities import JsCode
 
 
+@pytest.mark.parametrize("geometry_type", ["Polygon", "MultiPolygon"])
+def test_topojson_non_collection_geometry(geometry_type):
+    """TopoJson supports objects that are not GeometryCollections."""
+    style = {"color": "red"}
+    topology = {
+        "type": "Topology",
+        "objects": {
+            "shape": {
+                "type": geometry_type,
+                "arcs": [[0]] if geometry_type == "Polygon" else [[[0]]],
+            }
+        },
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+    map_ = folium.Map()
+    folium.TopoJson(
+        topology, "objects.shape", style_function=lambda feature: style
+    ).add_to(map_)
+
+    map_.get_root().render()
+
+    assert topology["objects"]["shape"]["properties"]["style"] == style
+
+
+def test_topojson_non_collection_geometry_without_type():
+    """TopoJson does not require a type key to apply styles."""
+    topology = {
+        "type": "Topology",
+        "objects": {"shape": {"arcs": [[0]]}},
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+    topojson = folium.TopoJson(
+        topology,
+        "objects.shape",
+        style_function=lambda feature: {"color": "red"},
+    )
+
+    topojson.style_data()
+
+    assert topology["objects"]["shape"]["properties"]["style"] == {"color": "red"}
+
+
+@pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
+def test_topojson_non_collection_geometry_detail(detail_type):
+    """TopoJson popup and tooltip fields support non-collection geometries."""
+    topology = {
+        "type": "Topology",
+        "objects": {
+            "shape": {
+                "type": "Polygon",
+                "arcs": [[0]],
+                "properties": {"name": "A"},
+            }
+        },
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+    map_ = folium.Map()
+    topojson = folium.TopoJson(topology, "objects.shape").add_to(map_)
+    detail_type(fields=["name"]).add_to(topojson)
+
+    assert "name" in map_.get_root().render()
+
+
 @pytest.fixture
 def tmpl():
     yield ("""

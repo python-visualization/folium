@@ -586,6 +586,13 @@ class GeoJson(Layer):
         {%- endif %}
 
         function {{this.get_name()}}_onEachFeature(feature, layer) {
+            (function propagate(parent){
+                if (typeof parent.eachLayer !== "function") {return;}
+                parent.eachLayer(function (child) {
+                    if (child.feature === undefined) { child.feature = feature; }
+                    propagate(child);
+                })
+            })(layer)
             {%- if this.on_each_feature %}
             ({{this.on_each_feature}})(feature, layer);
             {%- endif %}
@@ -1047,19 +1054,22 @@ class TopoJson(JSCSSMixin, Layer):
     def style_data(self) -> None:
         """Applies self.style_function to each feature of self.data."""
 
+        for feature in self._get_geometries():
+            feature.setdefault("properties", {}).setdefault("style", {}).update(
+                self.style_function(feature)
+            )  # noqa
+
+    def _get_geometries(self) -> list:
+        """Return the selected TopoJSON object as a list of geometries."""
+
         def recursive_get(data, keys):
             if len(keys):
                 return recursive_get(data.get(keys[0]), keys[1:])
             else:
                 return data
 
-        geometries = recursive_get(self.data, self.object_path.split("."))[
-            "geometries"
-        ]  # noqa
-        for feature in geometries:
-            feature.setdefault("properties", {}).setdefault("style", {}).update(
-                self.style_function(feature)
-            )  # noqa
+        geometry = recursive_get(self.data, self.object_path.split("."))
+        return geometry["geometries"] if "geometries" in geometry else [geometry]
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -1200,12 +1210,7 @@ class GeoJsonDetail(MacroElement):
             )
             self.warn_for_geometry_collections()
         elif isinstance(self._parent, TopoJson):
-            obj_name = self._parent.object_path.split(".")[-1]
-            keys = tuple(
-                self._parent.data["objects"][obj_name]["geometries"][0][
-                    "properties"
-                ].keys()
-            )
+            keys = tuple(self._parent._get_geometries()[0]["properties"].keys())
         else:
             raise TypeError(
                 f"You cannot add a {self._name} to anything other than a "
