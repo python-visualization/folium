@@ -59,7 +59,4 @@ def test_geojson_multipoint_tooltip(driver):
         tooltip = driver.wait_until(".leaflet-tooltip.foliumtooltip")
         assert "multipoint" in tooltip.text
 
-    # No verify_js_logs() here: Leaflet 1.9.3 (our pin) throws
-    # "t.getElement is not a function" from _addFocusListenersOnLayer for any
-    # GeoJSON layer containing a nested FeatureGroup, independent of this fix.
-    # Guarded upstream in 1.9.4.
+        driver.verify_js_logs()
