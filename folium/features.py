@@ -950,7 +950,7 @@ class TopoJson(JSCSSMixin, Layer):
         A function mapping a TopoJson geometry to a style dict.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
@@ -1338,7 +1338,7 @@ class GeoJsonPopup(GeoJsonDetail):
         instead of the keys of `fields`.
     labels: bool, default True.
         Set to False to disable displaying the field names or aliases.
-    localize: bool, default False.
+    localize: bool, default True.
         This will use JavaScript's .toLocaleString() to format 'clean' values
         as strings for the user's location; i.e. 1,000,000.00 comma separators,
         float truncation, etc.

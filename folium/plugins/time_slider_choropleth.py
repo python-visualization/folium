@@ -24,7 +24,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         Whether to show a visual effect on mouse hover and click.
     name : string, default None
         The name of the Layer, as it will appear in LayerControls.
-    overlay : bool, default False
+    overlay : bool, default True
         Adds the layer as an optional overlay (True) or the base layer (False).
     control : bool, default True
         Whether the Layer will be included in LayerControls.
