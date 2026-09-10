@@ -120,3 +120,43 @@ def test_slider_overlays_map():
     rendered = plugin._template.module.script(plugin)
 
     assert '.style("position", "absolute")' in rendered
+
+
+def _single_feature_plugin(**kwargs):
+    geojson = json.dumps(
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "id": "0",
+                    "properties": {},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]],
+                    },
+                }
+            ],
+        }
+    )
+    styledict = {"0": {"1420070400": {"color": "#ff0000", "opacity": 0.5}}}
+
+    m = folium.Map((0, 0), zoom_start=2)
+    plugin = TimeSliderChoropleth(geojson, styledict, **kwargs)
+    plugin.add_to(m)
+    return plugin
+
+
+def test_stroke_dash_array_default():
+    # the default keeps the previous dashed stroke, so existing maps are unchanged
+    plugin = _single_feature_plugin()
+    rendered = plugin._template.module.script(plugin)
+    assert ".attr('stroke-dasharray', '5,5')" in rendered
+
+
+def test_stroke_dash_array_custom():
+    # "0" gives a solid line instead of the dashed default
+    plugin = _single_feature_plugin(stroke_dash_array="0")
+    rendered = plugin._template.module.script(plugin)
+    assert ".attr('stroke-dasharray', '0')" in rendered
+    assert ".attr('stroke-dasharray', '5,5')" not in rendered
