@@ -123,6 +123,11 @@ def path_options(
         "bubblingMouseEvents": kwargs.pop("bubblingMouseEvents", True),
     }
     default.update(extra_options)
+    # Pass any remaining options straight through to Leaflet, matching how
+    # the other folium option builders forward **kwargs. Without this, Path
+    # options such as ``interactive``, ``pane`` or ``renderer`` were silently
+    # dropped from vector overlays.
+    default.update(kwargs)
     return default
 
 

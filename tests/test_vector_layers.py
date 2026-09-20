@@ -404,3 +404,31 @@ def test_path_options_lower_camel_case():
     options = path_options(fill_color="red", fillOpacity=0.3)
     assert options["fillColor"] == "red"
     assert options["fillOpacity"] == 0.3
+
+
+def test_path_options_passes_through_extra_leaflet_options():
+    """Leaflet Path options not named explicitly should not be dropped.
+
+    ``interactive``, ``pane``, ``renderer`` and friends used to vanish from
+    vector overlays even though the other folium option builders forward
+    arbitrary **kwargs to Leaflet.
+    """
+    options = path_options(
+        line=False,
+        radius=10,
+        interactive=False,
+        pane="overlayPane",
+        custom_option="x",
+    )
+    assert options["interactive"] is False
+    assert options["pane"] == "overlayPane"
+    # snake_case is camelised like the named options
+    assert options["customOption"] == "x"
+
+
+def test_circle_marker_forwards_interactive():
+    m = Map()
+    marker = CircleMarker(location=[0, 0], radius=5, interactive=False)
+    marker.add_to(m)
+    rendered = normalize(m._parent.render())
+    assert '"interactive": false' in rendered
