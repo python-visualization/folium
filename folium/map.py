@@ -11,6 +11,7 @@ from typing import TYPE_CHECKING, Optional, Union, cast
 from branca.element import Element, Figure, Html, MacroElement
 
 from folium.elements import ElementAddToElement, EventHandler, IncludeStatement
+from folium.font_awesome import extra_classes_for_icon
 from folium.template import Template
 from folium.utilities import (
     JsCode,
@@ -358,7 +359,9 @@ class Icon(MacroElement):
         The icon will be rotated by this amount of degrees.
     prefix : str, default 'glyphicon'
         The prefix states the source of the icon. 'fa' for font-awesome or
-        'glyphicon' for bootstrap 3.
+        'glyphicon' for bootstrap 3. Font Awesome brand icons (for example
+        'fa-bluetooth') automatically get the 'fa-brands' class required by
+        Font Awesome 6.
 
     https://github.com/lvoogdt/Leaflet.awesome-markers
 
@@ -452,7 +455,7 @@ class Icon(MacroElement):
             icon_color=icon_color,
             icon=icon,
             prefix=prefix,
-            extra_classes=f"fa-rotate-{angle}",
+            extra_classes=extra_classes_for_icon(prefix, icon, f"fa-rotate-{angle}"),
             **kwargs,
         )
 
