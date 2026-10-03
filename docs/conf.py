@@ -277,6 +277,7 @@ texinfo_documents = [
 # Ignore tile URLs
 linkcheck_ignore = [
     r"https://free.*",
+    r"https://web.archive.org/.*",
 ]
 
 intersphinx_mapping = {
