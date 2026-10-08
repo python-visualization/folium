@@ -388,6 +388,41 @@ def test_geometry_collection_get_bounds():
     assert folium.GeoJson(geojson_data).get_bounds() == [[0, -3], [4, 2]]
 
 
+@pytest.mark.parametrize("container", ["geometry", "feature", "feature_collection"])
+@pytest.mark.parametrize("collection", ["multiple", "nested", "empty"])
+def test_geometry_collection_bounds_all_members(container, collection):
+    geometries = [
+        {"type": "Point", "coordinates": [2, 1]},
+        {"type": "LineString", "coordinates": [[-3, 4], [40, 30]]},
+    ]
+    expected = [[1, -3], [30, 40]]
+    if collection == "nested":
+        geometries = [
+            {"type": "GeometryCollection", "geometries": []},
+            {"type": "GeometryCollection", "geometries": geometries},
+        ]
+    elif collection == "empty":
+        geometries = []
+        expected = [[None, None], [None, None]]
+
+    data = {"type": "GeometryCollection", "geometries": geometries}
+    if container != "geometry":
+        data = {"type": "Feature", "properties": {}, "geometry": data}
+    if container == "feature_collection":
+        data = {
+            "type": "FeatureCollection",
+            "features": [
+                {"type": "Feature", "properties": {}, "geometry": None},
+                data,
+            ],
+        }
+
+    m = folium.Map()
+    layer = folium.GeoJson(data).add_to(m)
+    assert layer.get_bounds() == expected
+    assert m.get_bounds() == expected
+
+
 def test_choropleth_get_by_key():
     geojson_data = {
         "id": "0",
