@@ -9,10 +9,9 @@ import folium
 
 The `on_each_feature` parameter in `folium.GeoJson` provides powerful customization capabilities by allowing you to execute JavaScript code for each feature in your GeoJSON data. This is particularly useful for:
 
-- Custom tooltip and popup handling for complex geometries like MultiPoint
+- Building tooltip or popup content in JavaScript from feature properties
 - Adding custom event listeners
 - Implementing advanced styling logic
-- Working with geometry types that need special handling
 
 ## Understanding on_each_feature
 
@@ -70,7 +69,7 @@ folium.GeoJson(
 m
 ```
 
-The `on_each_feature` parameter provides the flexibility needed to handle complex GeoJSON scenarios that the standard tooltip and popup classes cannot address, particularly for MultiPoint geometries and advanced interactive features.
+The `on_each_feature` parameter gives you direct access to each Leaflet layer, which is useful when you need behavior beyond what `GeoJsonTooltip` and `GeoJsonPopup` provide.
 
 ## References
 
