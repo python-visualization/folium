@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Advanced GeoJSON Customization with on_each_feature &#8212; Folium 1.0.0rc2.dev52+g893bd1d57 documentation</title>
+    <title>Advanced GeoJSON Customization with on_each_feature &#8212; Folium 1.0.0rc2.dev54+g7f3682505 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=c5a3e513"></script>
+    <script src="../../_static/documentation_options.js?v=7688de1e"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +60,7 @@
     <link rel="prev" title="GeoJSON popup and tooltip" href="geojson_popup_and_tooltip.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc2.dev52+g893bd1d57" />
+  <meta name="docsearch:version" content="1.0.0rc2.dev54+g7f3682505" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -537,10 +537,9 @@
 <h1>Advanced GeoJSON Customization with on_each_feature<a class="headerlink" href="#Advanced-GeoJSON-Customization-with-on_each_feature" title="Link to this heading">#</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">on_each_feature</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">folium.GeoJson</span></code> provides powerful customization capabilities by allowing you to execute JavaScript code for each feature in your GeoJSON data. This is particularly useful for:</p>
 <ul class="simple">
-<li><p>Custom tooltip and popup handling for complex geometries like MultiPoint</p></li>
+<li><p>Building tooltip or popup content in JavaScript from feature properties</p></li>
 <li><p>Adding custom event listeners</p></li>
 <li><p>Implementing advanced styling logic</p></li>
-<li><p>Working with geometry types that need special handling</p></li>
 </ul>
 <section id="Understanding-on_each_feature">
 <h2>Understanding on_each_feature<a class="headerlink" href="#Understanding-on_each_feature" title="Link to this heading">#</a></h2>
@@ -628,7 +627,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_e0dd14c92051112bbdb547d2214ab629 {
+                #map_b14fb0b53c71ee60e1da0d7182139efe {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -657,14 +656,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_e0dd14c92051112bbdb547d2214ab629&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_b14fb0b53c71ee60e1da0d7182139efe&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_e0dd14c92051112bbdb547d2214ab629 = L.map(
-                &quot;map_e0dd14c92051112bbdb547d2214ab629&quot;,
+            var map_b14fb0b53c71ee60e1da0d7182139efe = L.map(
+                &quot;map_b14fb0b53c71ee60e1da0d7182139efe&quot;,
                 {
                     center: [12.9716, 77.5946],
                     crs: L.CRS.EPSG3857,
@@ -681,7 +680,7 @@
 
 
 
-            var tile_layer_63e413a0cabff124297e5cb43b53eb0a = L.tileLayer(
+            var tile_layer_43d1bf700cce12edb0f92455c4dec5c0 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -698,11 +697,11 @@
             );
 
 
-            tile_layer_63e413a0cabff124297e5cb43b53eb0a.addTo(map_e0dd14c92051112bbdb547d2214ab629);
+            tile_layer_43d1bf700cce12edb0f92455c4dec5c0.addTo(map_b14fb0b53c71ee60e1da0d7182139efe);
 
 
 
-        function geo_json_ebbf21b55bf25ddb57bc0214b99cb208_onEachFeature(feature, layer) {
+        function geo_json_d61312e6ab7e01096d7a268a8f8ada9b_onEachFeature(feature, layer) {
             (function propagate(parent){
                 if (typeof parent.eachLayer !== &quot;function&quot;) {return;}
                 parent.eachLayer(function (child) {
@@ -728,28 +727,28 @@ function(feature, layer) {
             layer.on({
             });
         };
-        var geo_json_ebbf21b55bf25ddb57bc0214b99cb208 = L.geoJson(null, {
-                onEachFeature: geo_json_ebbf21b55bf25ddb57bc0214b99cb208_onEachFeature,
+        var geo_json_d61312e6ab7e01096d7a268a8f8ada9b = L.geoJson(null, {
+                onEachFeature: geo_json_d61312e6ab7e01096d7a268a8f8ada9b_onEachFeature,
 
             ...{
 }
         });
 
-        function geo_json_ebbf21b55bf25ddb57bc0214b99cb208_add (data) {
-            geo_json_ebbf21b55bf25ddb57bc0214b99cb208
+        function geo_json_d61312e6ab7e01096d7a268a8f8ada9b_add (data) {
+            geo_json_d61312e6ab7e01096d7a268a8f8ada9b
                 .addData(data);
         }
-            geo_json_ebbf21b55bf25ddb57bc0214b99cb208_add({&quot;features&quot;: [{&quot;geometry&quot;: {&quot;coordinates&quot;: [77.5946, 12.9716], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 1&quot;, &quot;value&quot;: 100}, &quot;type&quot;: &quot;Feature&quot;}, {&quot;geometry&quot;: {&quot;coordinates&quot;: [77.62, 12.98], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 2&quot;, &quot;value&quot;: 200}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
-        geo_json_ebbf21b55bf25ddb57bc0214b99cb208.setStyle(function(feature) {return feature.properties.style;});
+            geo_json_d61312e6ab7e01096d7a268a8f8ada9b_add({&quot;features&quot;: [{&quot;geometry&quot;: {&quot;coordinates&quot;: [77.5946, 12.9716], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 1&quot;, &quot;value&quot;: 100}, &quot;type&quot;: &quot;Feature&quot;}, {&quot;geometry&quot;: {&quot;coordinates&quot;: [77.62, 12.98], &quot;type&quot;: &quot;Point&quot;}, &quot;properties&quot;: {&quot;name&quot;: &quot;Location 2&quot;, &quot;value&quot;: 200}, &quot;type&quot;: &quot;Feature&quot;}], &quot;type&quot;: &quot;FeatureCollection&quot;});
+        geo_json_d61312e6ab7e01096d7a268a8f8ada9b.setStyle(function(feature) {return feature.properties.style;});
 
 
 
-            geo_json_ebbf21b55bf25ddb57bc0214b99cb208.addTo(map_e0dd14c92051112bbdb547d2214ab629);
+            geo_json_d61312e6ab7e01096d7a268a8f8ada9b.addTo(map_b14fb0b53c71ee60e1da0d7182139efe);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">on_each_feature</span></code> parameter provides the flexibility needed to handle complex GeoJSON scenarios that the standard tooltip and popup classes cannot address, particularly for MultiPoint geometries and advanced interactive features.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">on_each_feature</span></code> parameter gives you direct access to each Leaflet layer, which is useful when you need behavior beyond what <code class="docutils literal notranslate"><span class="pre">GeoJsonTooltip</span></code> and <code class="docutils literal notranslate"><span class="pre">GeoJsonPopup</span></code> provide.</p>
 </section>
 <section id="References">
 <h2>References<a class="headerlink" href="#References" title="Link to this heading">#</a></h2>
@@ -843,7 +842,7 @@ function(feature, layer) {
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc2.dev52+g893bd1d57</div>
+Folium version 1.0.0rc2.dev54+g7f3682505</div>
       
         <div class="footer-item">
 
