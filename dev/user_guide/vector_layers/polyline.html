@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>PolyLine &#8212; Folium 1.0.0rc2.dev56+gdbb07644a documentation</title>
+    <title>PolyLine &#8212; Folium 1.0.0rc2.dev57+g42a535ee0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../../_static/documentation_options.js?v=beeb4a87"></script>
+    <script src="../../_static/documentation_options.js?v=a1bad8ab"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +60,7 @@
     <link rel="prev" title="Circle and CircleMarker" href="circle_and_circle_marker.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc2.dev56+gdbb07644a" />
+  <meta name="docsearch:version" content="1.0.0rc2.dev57+g42a535ee0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -588,7 +588,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -596,7 +595,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_5d53fac7de388a6bd9b4b48933951a19 {
+                #map_c812f52fb7b70e6d1e3bf2acf6bb2bf2 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -615,6 +614,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -625,14 +837,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_5d53fac7de388a6bd9b4b48933951a19&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_c812f52fb7b70e6d1e3bf2acf6bb2bf2&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_5d53fac7de388a6bd9b4b48933951a19 = L.map(
-                &quot;map_5d53fac7de388a6bd9b4b48933951a19&quot;,
+            var map_c812f52fb7b70e6d1e3bf2acf6bb2bf2 = L.map(
+                &quot;map_c812f52fb7b70e6d1e3bf2acf6bb2bf2&quot;,
                 {
                     center: [41.9, -97.3],
                     crs: L.CRS.EPSG3857,
@@ -649,7 +861,7 @@
 
 
 
-            var tile_layer_1a16088a82ebf37df904e6a629a8dd10 = L.tileLayer(
+            var tile_layer_c41bd37e790c803e14df75bbe7864ebe = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -666,16 +878,16 @@
             );
 
 
-            tile_layer_1a16088a82ebf37df904e6a629a8dd10.addTo(map_5d53fac7de388a6bd9b4b48933951a19);
+            tile_layer_c41bd37e790c803e14df75bbe7864ebe.addTo(map_c812f52fb7b70e6d1e3bf2acf6bb2bf2);
 
 
-            var poly_line_9bfdedf7383029dda7f83ddd0583f858 = L.polyline(
+            var poly_line_a3d971f9910e9c20de7de23e5cfc3349 = L.polyline(
                 [[42.3581, -71.0636], [42.82995815, -74.78991444], [43.17929819, -78.56603306], [43.40320216, -82.37774519], [43.49975489, -86.20965845], [43.46811941, -90.04569087], [43.30857071, -93.86961818], [43.02248456, -97.66563267], [42.61228259, -101.41886832], [42.08133868, -105.11585198], [41.4338549, -108.74485069], [40.67471747, -112.29609954], [39.8093434, -115.76190821], [38.84352776, -119.13665678], [37.7833, -122.4167]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;#FF0000&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;#FF0000&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 5}
-            ).addTo(map_5d53fac7de388a6bd9b4b48933951a19);
+            ).addTo(map_c812f52fb7b70e6d1e3bf2acf6bb2bf2);
 
 
-            poly_line_9bfdedf7383029dda7f83ddd0583f858.bindTooltip(
+            poly_line_a3d971f9910e9c20de7de23e5cfc3349.bindTooltip(
                 `&lt;div&gt;
                      From Boston to San Francisco
                  &lt;/div&gt;`,
@@ -724,7 +936,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -732,7 +943,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_bd8da80d1b7f6234b6452d43049d022f {
+                #map_b87b5444a023a6c3f18a6d6c5e0afb67 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -751,6 +962,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -761,14 +1185,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_bd8da80d1b7f6234b6452d43049d022f&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_b87b5444a023a6c3f18a6d6c5e0afb67&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_bd8da80d1b7f6234b6452d43049d022f = L.map(
-                &quot;map_bd8da80d1b7f6234b6452d43049d022f&quot;,
+            var map_b87b5444a023a6c3f18a6d6c5e0afb67 = L.map(
+                &quot;map_b87b5444a023a6c3f18a6d6c5e0afb67&quot;,
                 {
                     center: [41.9, -97.3],
                     crs: L.CRS.EPSG3857,
@@ -785,7 +1209,7 @@
 
 
 
-            var tile_layer_9cd6d964e76e15b14db774f9b4b0d9bd = L.tileLayer(
+            var tile_layer_cc2cd59653390fca6bc857795d9fcb9e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -802,16 +1226,16 @@
             );
 
 
-            tile_layer_9cd6d964e76e15b14db774f9b4b0d9bd.addTo(map_bd8da80d1b7f6234b6452d43049d022f);
+            tile_layer_cc2cd59653390fca6bc857795d9fcb9e.addTo(map_b87b5444a023a6c3f18a6d6c5e0afb67);
 
 
-            var poly_line_5e546bd09536091403c4ce865f7804d4 = L.polyline(
+            var poly_line_58c72a6022d17db15be9961897c3e356 = L.polyline(
                 [[42.3581, -71.0636], [42.82995815, -74.78991444], [43.17929819, -78.56603306], [43.40320216, -82.37774519], [43.49975489, -86.20965845], [43.46811941, -90.04569087], [43.30857071, -93.86961818], [43.02248456, -97.66563267], [42.61228259, -101.41886832], [42.08133868, -105.11585198], [41.4338549, -108.74485069], [40.67471747, -112.29609954], [39.8093434, -115.76190821], [38.84352776, -119.13665678], [37.7833, -122.4167]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;grey&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;grey&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 50, &quot;stroke&quot;: true, &quot;weight&quot;: 5}
-            ).addTo(map_bd8da80d1b7f6234b6452d43049d022f);
+            ).addTo(map_b87b5444a023a6c3f18a6d6c5e0afb67);
 
 
-            poly_line_5e546bd09536091403c4ce865f7804d4.bindTooltip(
+            poly_line_58c72a6022d17db15be9961897c3e356.bindTooltip(
                 `&lt;div&gt;
                      Too much smoothing?
                  &lt;/div&gt;`,
@@ -888,7 +1312,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -896,7 +1319,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d65dcd776c767a87647d216755afb8b0 {
+                #map_0aad032c9b9f79edf310becd3197c0e3 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -915,6 +1338,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -925,14 +1561,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d65dcd776c767a87647d216755afb8b0&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_0aad032c9b9f79edf310becd3197c0e3&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d65dcd776c767a87647d216755afb8b0 = L.map(
-                &quot;map_d65dcd776c767a87647d216755afb8b0&quot;,
+            var map_0aad032c9b9f79edf310becd3197c0e3 = L.map(
+                &quot;map_0aad032c9b9f79edf310becd3197c0e3&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -949,7 +1585,7 @@
 
 
 
-            var tile_layer_60c5b10b8e21e91c5fb52c089abeff72 = L.tileLayer(
+            var tile_layer_73533072fa12ffc25230204eca4b9386 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -966,16 +1602,16 @@
             );
 
 
-            tile_layer_60c5b10b8e21e91c5fb52c089abeff72.addTo(map_d65dcd776c767a87647d216755afb8b0);
+            tile_layer_73533072fa12ffc25230204eca4b9386.addTo(map_0aad032c9b9f79edf310becd3197c0e3);
 
 
-            var poly_line_072b436ea3659db5f3e6fad7bfa3e470 = L.polyline(
+            var poly_line_83f365296c813540651f53f9ff2f72ef = L.polyline(
                 [[2.0, 179.0], [2.0, -179.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;red&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 6}
-            ).addTo(map_d65dcd776c767a87647d216755afb8b0);
+            ).addTo(map_0aad032c9b9f79edf310becd3197c0e3);
 
 
-            poly_line_072b436ea3659db5f3e6fad7bfa3e470.bindTooltip(
+            poly_line_83f365296c813540651f53f9ff2f72ef.bindTooltip(
                 `&lt;div&gt;
                      Wrong
                  &lt;/div&gt;`,
@@ -985,13 +1621,13 @@
             );
 
 
-            var poly_line_51674c7fb4d8911e532bcfaee23e3780 = L.polyline(
+            var poly_line_b1023a9d63691ba17581a26d707f9aae = L.polyline(
                 [[-2.0, 179.0], [-2.0, 181.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;blue&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;blue&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;butt&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 6}
-            ).addTo(map_d65dcd776c767a87647d216755afb8b0);
+            ).addTo(map_0aad032c9b9f79edf310becd3197c0e3);
 
 
-            poly_line_51674c7fb4d8911e532bcfaee23e3780.bindTooltip(
+            poly_line_b1023a9d63691ba17581a26d707f9aae.bindTooltip(
                 `&lt;div&gt;
                      Correct
                  &lt;/div&gt;`,
@@ -1001,13 +1637,13 @@
             );
 
 
-            var poly_line_44b14cd8fd14cfd94c28157cef2b5997 = L.polyline(
+            var poly_line_6cc429db2c594143e2adb057e27ff319 = L.polyline(
                 [[-6.0, -179.0], [-6.0, 179.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;green&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;green&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;square&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 6}
-            ).addTo(map_d65dcd776c767a87647d216755afb8b0);
+            ).addTo(map_0aad032c9b9f79edf310becd3197c0e3);
 
 
-            poly_line_44b14cd8fd14cfd94c28157cef2b5997.bindTooltip(
+            poly_line_6cc429db2c594143e2adb057e27ff319.bindTooltip(
                 `&lt;div&gt;
                      Correct
                  &lt;/div&gt;`,
@@ -1017,13 +1653,13 @@
             );
 
 
-            var poly_line_8db3ad2c603c3c0f5bbefb52bda6ab8d = L.polyline(
+            var poly_line_96d0ee03d812cdd93aacc569fe597940 = L.polyline(
                 [[12.0, -179.0], [12.0, 190.0]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;orange&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;orange&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1.0, &quot;smoothFactor&quot;: 1.0, &quot;stroke&quot;: true, &quot;weight&quot;: 6}
-            ).addTo(map_d65dcd776c767a87647d216755afb8b0);
+            ).addTo(map_0aad032c9b9f79edf310becd3197c0e3);
 
 
-            poly_line_8db3ad2c603c3c0f5bbefb52bda6ab8d.bindTooltip(
+            poly_line_96d0ee03d812cdd93aacc569fe597940.bindTooltip(
                 `&lt;div&gt;
                      Artifact?
                  &lt;/div&gt;`,
@@ -1122,7 +1758,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -1130,7 +1765,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_06406dd45c4754866d56fa5662ee5c98 {
+                #map_6407a0e162c2233d9122bca6a319e201 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -1149,6 +1784,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -1159,14 +2007,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_06406dd45c4754866d56fa5662ee5c98&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_6407a0e162c2233d9122bca6a319e201&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_06406dd45c4754866d56fa5662ee5c98 = L.map(
-                &quot;map_06406dd45c4754866d56fa5662ee5c98&quot;,
+            var map_6407a0e162c2233d9122bca6a319e201 = L.map(
+                &quot;map_6407a0e162c2233d9122bca6a319e201&quot;,
                 {
                     center: [38.89399, -77.03659],
                     crs: L.CRS.EPSG3857,
@@ -1183,7 +2031,7 @@
 
 
 
-            var tile_layer_464c02c80ba84f1e022ddc9b7ed82ecb = L.tileLayer(
+            var tile_layer_4f2d35e0db3a0e48be5bb121af404a36 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -1200,25 +2048,25 @@
             );
 
 
-            tile_layer_464c02c80ba84f1e022ddc9b7ed82ecb.addTo(map_06406dd45c4754866d56fa5662ee5c98);
+            tile_layer_4f2d35e0db3a0e48be5bb121af404a36.addTo(map_6407a0e162c2233d9122bca6a319e201);
 
 
-            var circle_marker_00bb11bff6903b9625e2d15726ba4e3d = L.circleMarker(
+            var circle_marker_a93ef1eaeaac21a55b6d655538879767 = L.circleMarker(
                 [38.89415, -77.03738],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;red&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 20, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_06406dd45c4754866d56fa5662ee5c98);
+            ).addTo(map_6407a0e162c2233d9122bca6a319e201);
 
 
-            var circle_marker_e8e4823389a22aa3606eb118295eb526 = L.circleMarker(
+            var circle_marker_40e072242657080daff56e4624bdc0ff = L.circleMarker(
                 [38.89415, -77.03578],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;red&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: true, &quot;fillColor&quot;: &quot;red&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;opacity&quot;: 1.0, &quot;radius&quot;: 20, &quot;stroke&quot;: true, &quot;weight&quot;: 3}
-            ).addTo(map_06406dd45c4754866d56fa5662ee5c98);
+            ).addTo(map_6407a0e162c2233d9122bca6a319e201);
 
 
-            var poly_line_2e89ab1437a1d3014934641385cae723 = L.polyline(
+            var poly_line_1f658afe26da38b3a896ab4d2587e4ce = L.polyline(
                 [[[38.893596444352134, -77.0381498336792], [38.89337933372204, -77.03792452812195]], [[38.89337933372204, -77.03792452812195], [38.89316222242831, -77.03761339187622]], [[38.89316222242831, -77.03761339187622], [38.893028615148424, -77.03731298446655]], [[38.893028615148424, -77.03731298446655], [38.892920059048464, -77.03691601753235]], [[38.892920059048464, -77.03691601753235], [38.892903358095296, -77.03637957572937]], [[38.892903358095296, -77.03637957572937], [38.89301191422077, -77.03592896461487]], [[38.89301191422077, -77.03592896461487], [38.89316222242831, -77.03549981117249]], [[38.89316222242831, -77.03549981117249], [38.89340438498248, -77.03514575958252]], [[38.89340438498248, -77.03514575958252], [38.893596444352134, -77.0349633693695]]],
                 {&quot;bubblingMouseEvents&quot;: true, &quot;color&quot;: &quot;orange&quot;, &quot;dashArray&quot;: null, &quot;dashOffset&quot;: null, &quot;fill&quot;: false, &quot;fillColor&quot;: &quot;orange&quot;, &quot;fillOpacity&quot;: 0.2, &quot;fillRule&quot;: &quot;evenodd&quot;, &quot;lineCap&quot;: &quot;round&quot;, &quot;lineJoin&quot;: &quot;round&quot;, &quot;noClip&quot;: false, &quot;opacity&quot;: 1, &quot;smoothFactor&quot;: 0, &quot;stroke&quot;: true, &quot;weight&quot;: 8}
-            ).addTo(map_06406dd45c4754866d56fa5662ee5c98);
+            ).addTo(map_6407a0e162c2233d9122bca6a319e201);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1310,7 +2158,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc2.dev56+gdbb07644a</div>
+Folium version 1.0.0rc2.dev57+g42a535ee0</div>
       
         <div class="footer-item">
 

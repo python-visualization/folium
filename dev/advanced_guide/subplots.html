@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Subplots &#8212; Folium 1.0.0rc2.dev56+gdbb07644a documentation</title>
+    <title>Subplots &#8212; Folium 1.0.0rc2.dev57+g42a535ee0 documentation</title>
   
   
   
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=beeb4a87"></script>
+    <script src="../_static/documentation_options.js?v=a1bad8ab"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -60,7 +60,7 @@
     <link rel="prev" title="Integrating Jenks Natural Break Optimization with choropleth" href="choropleth%20with%20Jenks%20natural%20breaks%20optimization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc2.dev56+gdbb07644a" />
+  <meta name="docsearch:version" content="1.0.0rc2.dev57+g42a535ee0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -504,7 +504,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -512,7 +511,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_60750be2dd98a91cd7a9f70880bf2087 {
+                #map_4b013248c08834947991db545dcb4bd9 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -531,13 +530,226 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
             &lt;/script&gt;
 
 
-    &lt;style&gt; #div_42f9b4d9ac8a989f8171dbe8a2f6270e {
+    &lt;style&gt; #div_664537443d7db4e625f69d9a12eb9a74 {
         position : absolute;
         width : 45.0%;
         height: 90.0%;
@@ -548,7 +760,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_537ff79af59861c27abb5dee84011b48 {
+                #map_3d0e4f1cec7a133afcbae38074ffb954 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -567,13 +779,226 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
             &lt;/script&gt;
 
 
-    &lt;style&gt; #div_dee5930f68a2f2cf9af88f04024eb6cd {
+    &lt;style&gt; #div_99e628133b4b729ebb4a2f7a90487c43 {
         position : absolute;
         width : 45.0%;
         height: 90.0%;
@@ -583,18 +1008,18 @@
 &lt;/head&gt;
 &lt;body&gt;
 
-    &lt;div id=&quot;div_42f9b4d9ac8a989f8171dbe8a2f6270e&quot;&gt;
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_60750be2dd98a91cd7a9f70880bf2087&quot; &gt;&lt;/div&gt;
+    &lt;div id=&quot;div_664537443d7db4e625f69d9a12eb9a74&quot;&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_4b013248c08834947991db545dcb4bd9&quot; &gt;&lt;/div&gt;
         &lt;/div&gt;
-    &lt;div id=&quot;div_dee5930f68a2f2cf9af88f04024eb6cd&quot;&gt;
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_537ff79af59861c27abb5dee84011b48&quot; &gt;&lt;/div&gt;
+    &lt;div id=&quot;div_99e628133b4b729ebb4a2f7a90487c43&quot;&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_3d0e4f1cec7a133afcbae38074ffb954&quot; &gt;&lt;/div&gt;
         &lt;/div&gt;
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_60750be2dd98a91cd7a9f70880bf2087 = L.map(
-                &quot;map_60750be2dd98a91cd7a9f70880bf2087&quot;,
+            var map_4b013248c08834947991db545dcb4bd9 = L.map(
+                &quot;map_4b013248c08834947991db545dcb4bd9&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -611,7 +1036,7 @@
 
 
 
-            var tile_layer_baab776650046d1bf734f5a2658715c3 = L.tileLayer(
+            var tile_layer_1c8c43edfece57c5e17950b7f72a7f6e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -628,11 +1053,11 @@
             );
 
 
-            tile_layer_baab776650046d1bf734f5a2658715c3.addTo(map_60750be2dd98a91cd7a9f70880bf2087);
+            tile_layer_1c8c43edfece57c5e17950b7f72a7f6e.addTo(map_4b013248c08834947991db545dcb4bd9);
 
 
-            var map_537ff79af59861c27abb5dee84011b48 = L.map(
-                &quot;map_537ff79af59861c27abb5dee84011b48&quot;,
+            var map_3d0e4f1cec7a133afcbae38074ffb954 = L.map(
+                &quot;map_3d0e4f1cec7a133afcbae38074ffb954&quot;,
                 {
                     center: [46.0, 3.0],
                     crs: L.CRS.EPSG3857,
@@ -649,7 +1074,7 @@
 
 
 
-            var tile_layer_90f1381a52a61da2b31930a56bc505b0 = L.tileLayer(
+            var tile_layer_455e5472bc237243370a6b3e02a3d0f9 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -666,7 +1091,7 @@
             );
 
 
-            tile_layer_90f1381a52a61da2b31930a56bc505b0.addTo(map_537ff79af59861c27abb5dee84011b48);
+            tile_layer_455e5472bc237243370a6b3e02a3d0f9.addTo(map_3d0e4f1cec7a133afcbae38074ffb954);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -756,7 +1181,6 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -764,7 +1188,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_1174a09a9798052804baa5256253b19e {
+                #map_124de3a50f279bf09426a44759ac20ba {
                     position: absolute;
                     width: 50.0vw;
                     height: 50.0vh;
@@ -783,6 +1207,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -793,7 +1430,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_05ff2852deb73388c2aee4cb60f4b18b {
+                #map_7caa85062bd24a518ce1120618b9e6e5 {
                     position: absolute;
                     width: 50.0vw;
                     height: 50.0vh;
@@ -812,6 +1449,219 @@
             }
             &lt;/style&gt;
 
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
             &lt;script&gt;
                 L_NO_TOUCH = false;
                 L_DISABLE_3D = false;
@@ -821,7 +1671,7 @@
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/vega/1.4.3/vega.min.js&quot;&gt;&lt;/script&gt;
 
-            &lt;style&gt; #vega_04f0edf9704c7a968f4f2ca5ea0daf7d {
+            &lt;style&gt; #vega_655976ff7467294930690352735475f2 {
                 position : absolute;
                 width : 50.0%;
                 height: 50.0%;
@@ -830,7 +1680,7 @@
             &lt;/style&gt;
 
 
-            &lt;style&gt; #vega_575fa74b5806ce2f66ebb29ca3202bc0 {
+            &lt;style&gt; #vega_2d5838e9934a975c2b84b58b88c70837 {
                 position : absolute;
                 width : 50.0%;
                 height: 50.0%;
@@ -842,23 +1692,23 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_1174a09a9798052804baa5256253b19e&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_124de3a50f279bf09426a44759ac20ba&quot; &gt;&lt;/div&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_05ff2852deb73388c2aee4cb60f4b18b&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_7caa85062bd24a518ce1120618b9e6e5&quot; &gt;&lt;/div&gt;
 
 
-            &lt;div id=&quot;vega_04f0edf9704c7a968f4f2ca5ea0daf7d&quot;&gt;&lt;/div&gt;
+            &lt;div id=&quot;vega_655976ff7467294930690352735475f2&quot;&gt;&lt;/div&gt;
 
 
-            &lt;div id=&quot;vega_575fa74b5806ce2f66ebb29ca3202bc0&quot;&gt;&lt;/div&gt;
+            &lt;div id=&quot;vega_2d5838e9934a975c2b84b58b88c70837&quot;&gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_1174a09a9798052804baa5256253b19e = L.map(
-                &quot;map_1174a09a9798052804baa5256253b19e&quot;,
+            var map_124de3a50f279bf09426a44759ac20ba = L.map(
+                &quot;map_124de3a50f279bf09426a44759ac20ba&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -875,7 +1725,7 @@
 
 
 
-            var tile_layer_b454034a6140ff2d5f5988455ec068c7 = L.tileLayer(
+            var tile_layer_7264d0c150a89c31126b4be788e7028d = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -892,11 +1742,11 @@
             );
 
 
-            tile_layer_b454034a6140ff2d5f5988455ec068c7.addTo(map_1174a09a9798052804baa5256253b19e);
+            tile_layer_7264d0c150a89c31126b4be788e7028d.addTo(map_124de3a50f279bf09426a44759ac20ba);
 
 
-            var map_05ff2852deb73388c2aee4cb60f4b18b = L.map(
-                &quot;map_05ff2852deb73388c2aee4cb60f4b18b&quot;,
+            var map_7caa85062bd24a518ce1120618b9e6e5 = L.map(
+                &quot;map_7caa85062bd24a518ce1120618b9e6e5&quot;,
                 {
                     center: [46.0, 3.0],
                     crs: L.CRS.EPSG3857,
@@ -913,7 +1763,7 @@
 
 
 
-            var tile_layer_6448226e0fa267b4b29f7975ad951171 = L.tileLayer(
+            var tile_layer_a23adae7d2989c1dcbfa817f4b568b4e = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -930,15 +1780,15 @@
             );
 
 
-            tile_layer_6448226e0fa267b4b29f7975ad951171.addTo(map_05ff2852deb73388c2aee4cb60f4b18b);
+            tile_layer_a23adae7d2989c1dcbfa817f4b568b4e.addTo(map_7caa85062bd24a518ce1120618b9e6e5);
 
 
-            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4877428252038555, &quot;val&quot;: 0.2006364612344541}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.31351428715551444, &quot;val&quot;: 0.37752609952988614}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4674577486015935, &quot;val&quot;: 0.7736276663852288}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5093254590130484, &quot;val&quot;: 0.3329791615229899}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11496239504472416, &quot;val&quot;: 0.8667897547959414}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.20259885712497938, &quot;val&quot;: 0.9753883385155295}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1327276314134903, &quot;val&quot;: 0.9693687122306865}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.46255576097376183, &quot;val&quot;: 0.6048000226435668}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.33610429572354283, &quot;val&quot;: 0.5773995832968719}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7502308451304635, &quot;val&quot;: 0.6253919265642248}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4437399510679265, &quot;val&quot;: 0.44646366638332147}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7826095171389427, &quot;val&quot;: 0.13202317140147646}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8228396445820378, &quot;val&quot;: 0.045257012430110044}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.248926770043447, &quot;val&quot;: 0.44063545899050216}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8341080883630915, &quot;val&quot;: 0.9570836380624739}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5778597500621565, &quot;val&quot;: 0.14208103685334872}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35762506586041565, &quot;val&quot;: 0.4848760129452808}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5041340329671964, &quot;val&quot;: 0.3347343844825804}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16950880865103757, &quot;val&quot;: 0.15627233945415486}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2491776967478726, &quot;val&quot;: 0.5776263663627289}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5787140657130867, &quot;val&quot;: 0.46325303336269275}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.004931864311390366, &quot;val&quot;: 0.9742015497126023}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5245108636261405, &quot;val&quot;: 0.6362468317034289}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.25168077607265205, &quot;val&quot;: 0.9140663360964549}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1670414070622691, &quot;val&quot;: 0.7340092302170123}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6963566316308422, &quot;val&quot;: 0.33640935886914003}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8413873352352494, &quot;val&quot;: 0.9809144287126323}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9564749418917782, &quot;val&quot;: 0.6674488689190012}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7487271122499735, &quot;val&quot;: 0.25407664538704766}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.37519374069655054, &quot;val&quot;: 0.08892073927387689}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9982067338978189, &quot;val&quot;: 0.14739734407626015}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.870313115034225, &quot;val&quot;: 0.23125559195308953}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.17417632037960018, &quot;val&quot;: 0.6584563472455228}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.47968581912244357, &quot;val&quot;: 0.7588016518508074}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8192649099748174, &quot;val&quot;: 0.04361216391584144}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45269600669718635, &quot;val&quot;: 0.8619512141211918}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1804116043662286, &quot;val&quot;: 0.7805472623686203}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5083307582782529, &quot;val&quot;: 0.4537707134607242}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2845835546113905, &quot;val&quot;: 0.811955641875556}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7461431247772605, &quot;val&quot;: 0.5763346004476593}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.22241968711529936, &quot;val&quot;: 0.31186604285107256}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.34843997467776444, &quot;val&quot;: 0.32793156310698035}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5232329119040664, &quot;val&quot;: 0.6177031671881621}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3324584542010196, &quot;val&quot;: 0.8144702545500073}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8731727970758172, &quot;val&quot;: 0.7621676316055725}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.754594587968484, &quot;val&quot;: 0.74034442138813}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.87852603452627, &quot;val&quot;: 0.714081767858537}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2726185968352367, &quot;val&quot;: 0.6707606653027064}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7076451395525973, &quot;val&quot;: 0.7575184552653675}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5041542136979058, &quot;val&quot;: 0.30061624178939783}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8664551576990193, &quot;val&quot;: 0.5234892772406318}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.0010214291376648976, &quot;val&quot;: 0.9376391355034096}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.819842455981011, &quot;val&quot;: 0.18479063602956014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.07402964952357216, &quot;val&quot;: 0.7323711315647948}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4889710116662803, &quot;val&quot;: 0.6583013378707391}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3852910204426173, &quot;val&quot;: 0.5965163361236008}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2449379216574169, &quot;val&quot;: 0.36393270302353553}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.32861736263254726, &quot;val&quot;: 0.678334590851245}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27377249173005747, &quot;val&quot;: 0.1606229729035975}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9770594984846949, &quot;val&quot;: 0.21196622259225628}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5038653708549057, &quot;val&quot;: 0.15258959438651465}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6032889650509146, &quot;val&quot;: 0.3151714790930774}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8085243173206493, &quot;val&quot;: 0.30426766558713225}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7842197623110089, &quot;val&quot;: 0.43547342969705227}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6362062541410145, &quot;val&quot;: 0.7695876261324894}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2773824776650746, &quot;val&quot;: 0.2345079242541841}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8078935111245444, &quot;val&quot;: 0.906886437742614}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6738729012090997, &quot;val&quot;: 0.6817460080806258}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4650426940474932, &quot;val&quot;: 0.43595008500364385}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8276570964150692, &quot;val&quot;: 0.9972890384218696}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5284645634213821, &quot;val&quot;: 0.8556920775831159}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10527478511336719, &quot;val&quot;: 0.007787836352502575}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7668433172756833, &quot;val&quot;: 0.9192962728149736}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3703565582159133, &quot;val&quot;: 0.2131370695430027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11105813233448925, &quot;val&quot;: 0.052278530669254475}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6463833554521876, &quot;val&quot;: 0.8460129163388297}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7272325368021042, &quot;val&quot;: 0.8213250642129957}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.666331756130051, &quot;val&quot;: 0.6729895134150725}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7142203134774848, &quot;val&quot;: 0.7228625488874646}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2391008846111654, &quot;val&quot;: 0.8300143276619382}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11224371290658375, &quot;val&quot;: 0.1257412393606928}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8245224536546615, &quot;val&quot;: 0.45324874020975914}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4936485632366624, &quot;val&quot;: 0.11392662536635201}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.815833971386375, &quot;val&quot;: 0.7744484381244364}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.0018253368972988016, &quot;val&quot;: 0.10186281893981974}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35940810787058564, &quot;val&quot;: 0.8963887279692405}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3562706932343289, &quot;val&quot;: 0.6833528735904257}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6710347587975953, &quot;val&quot;: 0.2834392812324936}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6711655774723257, &quot;val&quot;: 0.3820368634956407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.947040218559626, &quot;val&quot;: 0.23717527745050493}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2240990736878784, &quot;val&quot;: 0.5368830146118784}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.060805578372893576, &quot;val&quot;: 0.9395682233434492}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7553786212475637, &quot;val&quot;: 0.28943828889150613}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.19696503368873453, &quot;val&quot;: 0.05143825459881979}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4317508598181379, &quot;val&quot;: 0.8647135266063417}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.12850051970011378, &quot;val&quot;: 0.38396263512359186}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9845819143955771, &quot;val&quot;: 0.6305815896195961}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6791226539452917, &quot;val&quot;: 0.14383924063966014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.41900113652262405, &quot;val&quot;: 0.6256309122335862}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8524427433164515, &quot;val&quot;: 0.9905121218686561}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_04f0edf9704c7a968f4f2ca5ea0daf7d);
+            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6149980411799197, &quot;val&quot;: 0.7562836155938542}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8420491064855378, &quot;val&quot;: 0.9443379420832372}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.20191113890778312, &quot;val&quot;: 0.8902517750888529}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8989190556081946, &quot;val&quot;: 0.9047808508679657}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5671122506605121, &quot;val&quot;: 0.7506652516483447}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5176540191214878, &quot;val&quot;: 0.3984453294847319}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7775628124849918, &quot;val&quot;: 0.2931129284957429}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.19490508610031498, &quot;val&quot;: 0.24727268901709776}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.21150027871123367, &quot;val&quot;: 0.7761252321006847}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6658128793505825, &quot;val&quot;: 0.16136135620823744}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4805879081459046, &quot;val&quot;: 0.6731363598557091}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.045643826770676355, &quot;val&quot;: 0.9558832497523183}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5863040938480484, &quot;val&quot;: 0.945010835151331}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.29146076899640316, &quot;val&quot;: 0.474935310373756}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.13532043608614464, &quot;val&quot;: 0.6789007921683439}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.802103310432334, &quot;val&quot;: 0.8118107004652321}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6234167650336047, &quot;val&quot;: 0.5204221952521912}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.945160631292736, &quot;val&quot;: 0.2220681132842588}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.21766207167745133, &quot;val&quot;: 0.12551523515569407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9686060218255952, &quot;val&quot;: 0.041224021526644505}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5622460121859151, &quot;val&quot;: 0.20777471292265592}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.866421867374919, &quot;val&quot;: 0.15966906323366448}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7159440852473451, &quot;val&quot;: 0.4306611007587624}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6788098975753024, &quot;val&quot;: 0.16108968520181643}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14546342453571348, &quot;val&quot;: 0.9883271835757639}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3149802228165688, &quot;val&quot;: 0.513680424438176}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4875358989122759, &quot;val&quot;: 0.4004112205966447}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04144847628563886, &quot;val&quot;: 0.2225449598112661}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4743912860377407, &quot;val&quot;: 0.21817570265210817}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8849208360937938, &quot;val&quot;: 0.16121280333662014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.09836730973183638, &quot;val&quot;: 0.46028569550450427}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.09941670063928654, &quot;val&quot;: 0.3462842487964455}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.22933570914917212, &quot;val&quot;: 0.31552009401922976}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2628110570851788, &quot;val&quot;: 0.055813908221108655}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.040137718926033905, &quot;val&quot;: 0.4687085801982287}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3921508045935018, &quot;val&quot;: 0.9772968100453548}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3070319223954253, &quot;val&quot;: 0.44757274578180084}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5361940934154477, &quot;val&quot;: 0.42871498276642184}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.391188049355756, &quot;val&quot;: 0.3857808136467955}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5806676389583714, &quot;val&quot;: 0.1522004311105838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8578265846111264, &quot;val&quot;: 0.11193584157130188}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5862501978902611, &quot;val&quot;: 0.1329596904865814}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6623819391759629, &quot;val&quot;: 0.4558641952881568}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.43507909510733866, &quot;val&quot;: 0.7369252249305203}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3846166550562756, &quot;val&quot;: 0.703439822598247}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5871107728633315, &quot;val&quot;: 0.7299897724264097}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8336669222631469, &quot;val&quot;: 0.9526833582944615}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14559684726367106, &quot;val&quot;: 0.8171118361608943}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.337855729382591, &quot;val&quot;: 0.3902849081141625}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9112339957309052, &quot;val&quot;: 0.6358705246914795}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7700732186549255, &quot;val&quot;: 0.8070454443416072}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8747641545746185, &quot;val&quot;: 0.02941985003633829}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2895680518757484, &quot;val&quot;: 0.535003660087851}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8105290886638077, &quot;val&quot;: 0.8365376514688843}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9947225525755035, &quot;val&quot;: 0.9525611002669798}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.43187679185346195, &quot;val&quot;: 0.8686253742878228}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1753971099087469, &quot;val&quot;: 0.9863989129310098}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.019279990671055236, &quot;val&quot;: 0.6271120603314967}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4658013729152618, &quot;val&quot;: 0.43411962331033194}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8159331858095149, &quot;val&quot;: 0.9829330632853962}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8259857545836218, &quot;val&quot;: 0.08890045546555214}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04220154637280171, &quot;val&quot;: 0.7275148467983963}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16183206472762302, &quot;val&quot;: 0.5202585628300154}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9281952238096091, &quot;val&quot;: 0.5180083325992326}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.875004105170736, &quot;val&quot;: 0.2702305952042887}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.061834699096705026, &quot;val&quot;: 0.2592547825495397}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7806388990216002, &quot;val&quot;: 0.9479722114208745}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.12927160714343322, &quot;val&quot;: 0.08656384141564966}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.05767116256400051, &quot;val&quot;: 0.550448613859701}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7969403781405062, &quot;val&quot;: 0.7806139086227146}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.859693997667522, &quot;val&quot;: 0.3281961099241024}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08069408493920471, &quot;val&quot;: 0.9950772606054732}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5635477050006035, &quot;val&quot;: 0.7469868991737535}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7933829066109217, &quot;val&quot;: 0.21703145675932245}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5176157963376724, &quot;val&quot;: 0.5942940789071095}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45940104854641606, &quot;val&quot;: 0.6234361351290417}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8416571523859577, &quot;val&quot;: 0.7157396794996685}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7182486288500692, &quot;val&quot;: 0.3206876861065848}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1514607038107515, &quot;val&quot;: 0.7127893607273534}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.40235639733698003, &quot;val&quot;: 0.14649026674590315}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.26043076723594616, &quot;val&quot;: 0.14748388187138528}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.44139148214737245, &quot;val&quot;: 0.3579269527745813}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.32275272136641553, &quot;val&quot;: 0.6055587137780752}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8845885694480885, &quot;val&quot;: 0.15591330068080766}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6374290378927219, &quot;val&quot;: 0.492386849625567}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.445719401598642, &quot;val&quot;: 0.7709916965935374}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.363749823357418, &quot;val&quot;: 0.3713289392223088}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35125653994208916, &quot;val&quot;: 0.16089291099971792}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2961061187683568, &quot;val&quot;: 0.3564262452337521}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7506915584878392, &quot;val&quot;: 0.19770333024187814}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4796933582546574, &quot;val&quot;: 0.9431116676153393}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6849831974754209, &quot;val&quot;: 0.5915965270941749}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4486916515626058, &quot;val&quot;: 0.32589504099644606}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8671047729084812, &quot;val&quot;: 0.39141954292352754}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6087609981638683, &quot;val&quot;: 0.4619256266611508}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45884095627230026, &quot;val&quot;: 0.5294442111898123}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.39916335091598376, &quot;val&quot;: 0.4351728528563781}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8870308998061338, &quot;val&quot;: 0.07054310417772391}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6622361050586869, &quot;val&quot;: 0.1448229341425219}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7830169937769677, &quot;val&quot;: 0.8904151114004033}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_655976ff7467294930690352735475f2);
 
     function vega_parse(spec, div) {
             vg.parse.spec(spec, function(chart) { chart({el:div}).update(); });}
 
-            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4877428252038555, &quot;val&quot;: 0.2006364612344541}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.31351428715551444, &quot;val&quot;: 0.37752609952988614}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4674577486015935, &quot;val&quot;: 0.7736276663852288}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5093254590130484, &quot;val&quot;: 0.3329791615229899}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11496239504472416, &quot;val&quot;: 0.8667897547959414}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.20259885712497938, &quot;val&quot;: 0.9753883385155295}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1327276314134903, &quot;val&quot;: 0.9693687122306865}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.46255576097376183, &quot;val&quot;: 0.6048000226435668}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.33610429572354283, &quot;val&quot;: 0.5773995832968719}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7502308451304635, &quot;val&quot;: 0.6253919265642248}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4437399510679265, &quot;val&quot;: 0.44646366638332147}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7826095171389427, &quot;val&quot;: 0.13202317140147646}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8228396445820378, &quot;val&quot;: 0.045257012430110044}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.248926770043447, &quot;val&quot;: 0.44063545899050216}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8341080883630915, &quot;val&quot;: 0.9570836380624739}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5778597500621565, &quot;val&quot;: 0.14208103685334872}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35762506586041565, &quot;val&quot;: 0.4848760129452808}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5041340329671964, &quot;val&quot;: 0.3347343844825804}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16950880865103757, &quot;val&quot;: 0.15627233945415486}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2491776967478726, &quot;val&quot;: 0.5776263663627289}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5787140657130867, &quot;val&quot;: 0.46325303336269275}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.004931864311390366, &quot;val&quot;: 0.9742015497126023}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5245108636261405, &quot;val&quot;: 0.6362468317034289}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.25168077607265205, &quot;val&quot;: 0.9140663360964549}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1670414070622691, &quot;val&quot;: 0.7340092302170123}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6963566316308422, &quot;val&quot;: 0.33640935886914003}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8413873352352494, &quot;val&quot;: 0.9809144287126323}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9564749418917782, &quot;val&quot;: 0.6674488689190012}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7487271122499735, &quot;val&quot;: 0.25407664538704766}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.37519374069655054, &quot;val&quot;: 0.08892073927387689}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9982067338978189, &quot;val&quot;: 0.14739734407626015}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.870313115034225, &quot;val&quot;: 0.23125559195308953}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.17417632037960018, &quot;val&quot;: 0.6584563472455228}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.47968581912244357, &quot;val&quot;: 0.7588016518508074}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8192649099748174, &quot;val&quot;: 0.04361216391584144}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45269600669718635, &quot;val&quot;: 0.8619512141211918}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1804116043662286, &quot;val&quot;: 0.7805472623686203}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5083307582782529, &quot;val&quot;: 0.4537707134607242}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2845835546113905, &quot;val&quot;: 0.811955641875556}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7461431247772605, &quot;val&quot;: 0.5763346004476593}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.22241968711529936, &quot;val&quot;: 0.31186604285107256}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.34843997467776444, &quot;val&quot;: 0.32793156310698035}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5232329119040664, &quot;val&quot;: 0.6177031671881621}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3324584542010196, &quot;val&quot;: 0.8144702545500073}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8731727970758172, &quot;val&quot;: 0.7621676316055725}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.754594587968484, &quot;val&quot;: 0.74034442138813}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.87852603452627, &quot;val&quot;: 0.714081767858537}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2726185968352367, &quot;val&quot;: 0.6707606653027064}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7076451395525973, &quot;val&quot;: 0.7575184552653675}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5041542136979058, &quot;val&quot;: 0.30061624178939783}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8664551576990193, &quot;val&quot;: 0.5234892772406318}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.0010214291376648976, &quot;val&quot;: 0.9376391355034096}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.819842455981011, &quot;val&quot;: 0.18479063602956014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.07402964952357216, &quot;val&quot;: 0.7323711315647948}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4889710116662803, &quot;val&quot;: 0.6583013378707391}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3852910204426173, &quot;val&quot;: 0.5965163361236008}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2449379216574169, &quot;val&quot;: 0.36393270302353553}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.32861736263254726, &quot;val&quot;: 0.678334590851245}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.27377249173005747, &quot;val&quot;: 0.1606229729035975}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9770594984846949, &quot;val&quot;: 0.21196622259225628}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5038653708549057, &quot;val&quot;: 0.15258959438651465}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6032889650509146, &quot;val&quot;: 0.3151714790930774}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8085243173206493, &quot;val&quot;: 0.30426766558713225}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7842197623110089, &quot;val&quot;: 0.43547342969705227}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6362062541410145, &quot;val&quot;: 0.7695876261324894}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2773824776650746, &quot;val&quot;: 0.2345079242541841}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8078935111245444, &quot;val&quot;: 0.906886437742614}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6738729012090997, &quot;val&quot;: 0.6817460080806258}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4650426940474932, &quot;val&quot;: 0.43595008500364385}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8276570964150692, &quot;val&quot;: 0.9972890384218696}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5284645634213821, &quot;val&quot;: 0.8556920775831159}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.10527478511336719, &quot;val&quot;: 0.007787836352502575}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7668433172756833, &quot;val&quot;: 0.9192962728149736}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3703565582159133, &quot;val&quot;: 0.2131370695430027}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11105813233448925, &quot;val&quot;: 0.052278530669254475}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6463833554521876, &quot;val&quot;: 0.8460129163388297}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7272325368021042, &quot;val&quot;: 0.8213250642129957}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.666331756130051, &quot;val&quot;: 0.6729895134150725}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7142203134774848, &quot;val&quot;: 0.7228625488874646}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2391008846111654, &quot;val&quot;: 0.8300143276619382}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.11224371290658375, &quot;val&quot;: 0.1257412393606928}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8245224536546615, &quot;val&quot;: 0.45324874020975914}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4936485632366624, &quot;val&quot;: 0.11392662536635201}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.815833971386375, &quot;val&quot;: 0.7744484381244364}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.0018253368972988016, &quot;val&quot;: 0.10186281893981974}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35940810787058564, &quot;val&quot;: 0.8963887279692405}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3562706932343289, &quot;val&quot;: 0.6833528735904257}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6710347587975953, &quot;val&quot;: 0.2834392812324936}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6711655774723257, &quot;val&quot;: 0.3820368634956407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.947040218559626, &quot;val&quot;: 0.23717527745050493}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2240990736878784, &quot;val&quot;: 0.5368830146118784}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.060805578372893576, &quot;val&quot;: 0.9395682233434492}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7553786212475637, &quot;val&quot;: 0.28943828889150613}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.19696503368873453, &quot;val&quot;: 0.05143825459881979}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4317508598181379, &quot;val&quot;: 0.8647135266063417}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.12850051970011378, &quot;val&quot;: 0.38396263512359186}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9845819143955771, &quot;val&quot;: 0.6305815896195961}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6791226539452917, &quot;val&quot;: 0.14383924063966014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.41900113652262405, &quot;val&quot;: 0.6256309122335862}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8524427433164515, &quot;val&quot;: 0.9905121218686561}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_575fa74b5806ce2f66ebb29ca3202bc0);
+            vega_parse({&quot;axes&quot;: [{&quot;scale&quot;: &quot;x&quot;, &quot;type&quot;: &quot;x&quot;}, {&quot;scale&quot;: &quot;y&quot;, &quot;type&quot;: &quot;y&quot;}], &quot;data&quot;: [{&quot;name&quot;: &quot;table&quot;, &quot;values&quot;: [{&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6149980411799197, &quot;val&quot;: 0.7562836155938542}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8420491064855378, &quot;val&quot;: 0.9443379420832372}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.20191113890778312, &quot;val&quot;: 0.8902517750888529}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8989190556081946, &quot;val&quot;: 0.9047808508679657}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5671122506605121, &quot;val&quot;: 0.7506652516483447}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5176540191214878, &quot;val&quot;: 0.3984453294847319}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7775628124849918, &quot;val&quot;: 0.2931129284957429}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.19490508610031498, &quot;val&quot;: 0.24727268901709776}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.21150027871123367, &quot;val&quot;: 0.7761252321006847}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6658128793505825, &quot;val&quot;: 0.16136135620823744}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4805879081459046, &quot;val&quot;: 0.6731363598557091}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.045643826770676355, &quot;val&quot;: 0.9558832497523183}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5863040938480484, &quot;val&quot;: 0.945010835151331}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.29146076899640316, &quot;val&quot;: 0.474935310373756}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.13532043608614464, &quot;val&quot;: 0.6789007921683439}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.802103310432334, &quot;val&quot;: 0.8118107004652321}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6234167650336047, &quot;val&quot;: 0.5204221952521912}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.945160631292736, &quot;val&quot;: 0.2220681132842588}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.21766207167745133, &quot;val&quot;: 0.12551523515569407}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9686060218255952, &quot;val&quot;: 0.041224021526644505}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5622460121859151, &quot;val&quot;: 0.20777471292265592}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.866421867374919, &quot;val&quot;: 0.15966906323366448}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7159440852473451, &quot;val&quot;: 0.4306611007587624}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6788098975753024, &quot;val&quot;: 0.16108968520181643}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14546342453571348, &quot;val&quot;: 0.9883271835757639}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3149802228165688, &quot;val&quot;: 0.513680424438176}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4875358989122759, &quot;val&quot;: 0.4004112205966447}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04144847628563886, &quot;val&quot;: 0.2225449598112661}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4743912860377407, &quot;val&quot;: 0.21817570265210817}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8849208360937938, &quot;val&quot;: 0.16121280333662014}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.09836730973183638, &quot;val&quot;: 0.46028569550450427}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.09941670063928654, &quot;val&quot;: 0.3462842487964455}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.22933570914917212, &quot;val&quot;: 0.31552009401922976}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2628110570851788, &quot;val&quot;: 0.055813908221108655}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.040137718926033905, &quot;val&quot;: 0.4687085801982287}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3921508045935018, &quot;val&quot;: 0.9772968100453548}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3070319223954253, &quot;val&quot;: 0.44757274578180084}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5361940934154477, &quot;val&quot;: 0.42871498276642184}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.391188049355756, &quot;val&quot;: 0.3857808136467955}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5806676389583714, &quot;val&quot;: 0.1522004311105838}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8578265846111264, &quot;val&quot;: 0.11193584157130188}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5862501978902611, &quot;val&quot;: 0.1329596904865814}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6623819391759629, &quot;val&quot;: 0.4558641952881568}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.43507909510733866, &quot;val&quot;: 0.7369252249305203}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.3846166550562756, &quot;val&quot;: 0.703439822598247}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5871107728633315, &quot;val&quot;: 0.7299897724264097}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8336669222631469, &quot;val&quot;: 0.9526833582944615}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.14559684726367106, &quot;val&quot;: 0.8171118361608943}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.337855729382591, &quot;val&quot;: 0.3902849081141625}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9112339957309052, &quot;val&quot;: 0.6358705246914795}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7700732186549255, &quot;val&quot;: 0.8070454443416072}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8747641545746185, &quot;val&quot;: 0.02941985003633829}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2895680518757484, &quot;val&quot;: 0.535003660087851}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8105290886638077, &quot;val&quot;: 0.8365376514688843}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9947225525755035, &quot;val&quot;: 0.9525611002669798}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.43187679185346195, &quot;val&quot;: 0.8686253742878228}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1753971099087469, &quot;val&quot;: 0.9863989129310098}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.019279990671055236, &quot;val&quot;: 0.6271120603314967}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4658013729152618, &quot;val&quot;: 0.43411962331033194}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8159331858095149, &quot;val&quot;: 0.9829330632853962}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8259857545836218, &quot;val&quot;: 0.08890045546555214}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.04220154637280171, &quot;val&quot;: 0.7275148467983963}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.16183206472762302, &quot;val&quot;: 0.5202585628300154}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.9281952238096091, &quot;val&quot;: 0.5180083325992326}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.875004105170736, &quot;val&quot;: 0.2702305952042887}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.061834699096705026, &quot;val&quot;: 0.2592547825495397}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7806388990216002, &quot;val&quot;: 0.9479722114208745}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.12927160714343322, &quot;val&quot;: 0.08656384141564966}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.05767116256400051, &quot;val&quot;: 0.550448613859701}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7969403781405062, &quot;val&quot;: 0.7806139086227146}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.859693997667522, &quot;val&quot;: 0.3281961099241024}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.08069408493920471, &quot;val&quot;: 0.9950772606054732}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5635477050006035, &quot;val&quot;: 0.7469868991737535}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7933829066109217, &quot;val&quot;: 0.21703145675932245}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.5176157963376724, &quot;val&quot;: 0.5942940789071095}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45940104854641606, &quot;val&quot;: 0.6234361351290417}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8416571523859577, &quot;val&quot;: 0.7157396794996685}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7182486288500692, &quot;val&quot;: 0.3206876861065848}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.1514607038107515, &quot;val&quot;: 0.7127893607273534}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.40235639733698003, &quot;val&quot;: 0.14649026674590315}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.26043076723594616, &quot;val&quot;: 0.14748388187138528}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.44139148214737245, &quot;val&quot;: 0.3579269527745813}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.32275272136641553, &quot;val&quot;: 0.6055587137780752}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8845885694480885, &quot;val&quot;: 0.15591330068080766}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6374290378927219, &quot;val&quot;: 0.492386849625567}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.445719401598642, &quot;val&quot;: 0.7709916965935374}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.363749823357418, &quot;val&quot;: 0.3713289392223088}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.35125653994208916, &quot;val&quot;: 0.16089291099971792}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.2961061187683568, &quot;val&quot;: 0.3564262452337521}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7506915584878392, &quot;val&quot;: 0.19770333024187814}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4796933582546574, &quot;val&quot;: 0.9431116676153393}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6849831974754209, &quot;val&quot;: 0.5915965270941749}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.4486916515626058, &quot;val&quot;: 0.32589504099644606}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8671047729084812, &quot;val&quot;: 0.39141954292352754}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6087609981638683, &quot;val&quot;: 0.4619256266611508}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.45884095627230026, &quot;val&quot;: 0.5294442111898123}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.39916335091598376, &quot;val&quot;: 0.4351728528563781}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.8870308998061338, &quot;val&quot;: 0.07054310417772391}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.6622361050586869, &quot;val&quot;: 0.1448229341425219}, {&quot;col&quot;: &quot;y&quot;, &quot;idx&quot;: 0.7830169937769677, &quot;val&quot;: 0.8904151114004033}]}], &quot;height&quot;: 250, &quot;legends&quot;: [], &quot;marks&quot;: [{&quot;from&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;transform&quot;: [{&quot;keys&quot;: [&quot;data.col&quot;], &quot;type&quot;: &quot;facet&quot;}]}, &quot;marks&quot;: [{&quot;properties&quot;: {&quot;enter&quot;: {&quot;fill&quot;: {&quot;field&quot;: &quot;data.col&quot;, &quot;scale&quot;: &quot;color&quot;}, &quot;size&quot;: {&quot;value&quot;: 100}, &quot;x&quot;: {&quot;field&quot;: &quot;data.idx&quot;, &quot;scale&quot;: &quot;x&quot;}, &quot;y&quot;: {&quot;field&quot;: &quot;data.val&quot;, &quot;scale&quot;: &quot;y&quot;}}}, &quot;type&quot;: &quot;symbol&quot;}], &quot;type&quot;: &quot;group&quot;}], &quot;padding&quot;: &quot;auto&quot;, &quot;scales&quot;: [{&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.idx&quot;}, &quot;name&quot;: &quot;x&quot;, &quot;range&quot;: &quot;width&quot;, &quot;type&quot;: &quot;linear&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.val&quot;}, &quot;name&quot;: &quot;y&quot;, &quot;nice&quot;: true, &quot;range&quot;: &quot;height&quot;}, {&quot;domain&quot;: {&quot;data&quot;: &quot;table&quot;, &quot;field&quot;: &quot;data.col&quot;}, &quot;name&quot;: &quot;color&quot;, &quot;range&quot;: &quot;category20&quot;, &quot;type&quot;: &quot;ordinal&quot;}], &quot;width&quot;: 420},vega_2d5838e9934a975c2b84b58b88c70837);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1029,7 +1879,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc2.dev56+gdbb07644a</div>
+Folium version 1.0.0rc2.dev57+g42a535ee0</div>
       
         <div class="footer-item">
 
