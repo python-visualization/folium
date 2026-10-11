@@ -263,11 +263,19 @@ def test_geojson_find_identifier():
     assert geojson.data["features"][0]["id"] == "this-is-an-id"
 
     data_with_unique_properties = _create(
+        {"property_key": "some-value"},
+        {"property_key": "another-value"},
+    )
+    geojson = GeoJson(data_with_unique_properties)
+    assert geojson.find_identifier() == "feature.properties.property_key"
+
+    # Keys that aren't valid Javascript identifiers need bracket notation.
+    data_with_unique_properties = _create(
         {"property-key": "some-value"},
         {"property-key": "another-value"},
     )
     geojson = GeoJson(data_with_unique_properties)
-    assert geojson.find_identifier() == "feature.properties.property-key"
+    assert geojson.find_identifier() == 'feature.properties["property-key"]'
 
     data_with_unique_properties = _create(
         {"property-key": 42},
@@ -275,7 +283,7 @@ def test_geojson_find_identifier():
         {"property-key": "or a string"},
     )
     geojson = GeoJson(data_with_unique_properties)
-    assert geojson.find_identifier() == "feature.properties.property-key"
+    assert geojson.find_identifier() == 'feature.properties["property-key"]'
 
     # The test cases below have no id field or unique property,
     # so an id will be added to the data.
@@ -342,6 +350,35 @@ def test_geojson_find_identifier():
     geojson.convert_to_feature_collection()
     assert geojson.find_identifier() == "feature.id"
     assert geojson.data["features"][0]["id"] == "0"
+
+
+@pytest.mark.parametrize("key", ["Time (UTC)", "@id", "osm.id"])
+def test_geojson_style_identifier_with_special_characters(key):
+    """Assert #1782 is fixed"""
+    m = Map()
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {key: time},
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+            }
+            for time in ["10:00", "11:00", "12:00"]
+        ],
+    }
+    geojson = GeoJson(
+        data,
+        style_function=lambda x: {
+            "color": "red" if x["properties"][key] == "10:00" else "blue"
+        },
+    ).add_to(m)
+    rendered = m.get_root().render()
+    assert f"switch(feature.properties[{json.dumps(key)}])" in rendered
+    assert geojson.style_map == {
+        '{"color": "red"}': ["10:00"],
+        "default": '{"color": "blue"}',
+    }
 
 
 def test_geojson_empty_features_with_styling():

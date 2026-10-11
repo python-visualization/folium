@@ -33,7 +33,7 @@ from branca.utilities import color_brewer
 from folium.elements import JSCSSMixin
 from folium.folium import Map
 from folium.map import Class, FeatureGroup, Icon, Layer, Marker, Popup, Tooltip
-from folium.template import Template
+from folium.template import Template, _to_escaped_json
 from folium.utilities import (
     JsCode,
     TypeBoundsReturn,
@@ -829,7 +829,11 @@ class GeoJson(Layer):
                     if isinstance(feat["properties"].get(key, None), (str, int))
                 }
                 if len(unique_values) == len(feats):
-                    return f"feature.properties.{key}"
+                    if key.isidentifier():
+                        return f"feature.properties.{key}"
+                    # Keys like "Time (UTC)" or "@id" need bracket notation
+                    # to be valid Javascript.
+                    return f"feature.properties[{_to_escaped_json(key)}]"
         # We add an 'id' field with a unique value to the data.
         if self.embed:
             for i, feature in enumerate(feats):
@@ -910,8 +914,13 @@ class GeoJsonStyleMapper:
 
     def get_feature_id(self, feature: dict) -> Union[str, int]:
         """Return a value identifying the feature."""
-        fields = self.feature_identifier.split(".")[1:]
-        value = functools.reduce(operator.getitem, fields, feature)
+        prefix = "feature.properties["
+        if self.feature_identifier.startswith(prefix):
+            key = json.loads(self.feature_identifier[len(prefix) : -1])
+            value = feature["properties"][key]
+        else:
+            fields = self.feature_identifier.split(".")[1:]
+            value = functools.reduce(operator.getitem, fields, feature)
         assert isinstance(value, (str, int))
         return value
 
