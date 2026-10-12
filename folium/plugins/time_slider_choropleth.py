@@ -35,6 +35,15 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         `[-L, L-1]`, where `L` is the maximum number of time stamps in
         `styledict`. For example, use `-1` to initialize the slider to the
         latest timestamp.
+    stroke_opacity: float, default 1
+        Opacity of the stroke drawn around each feature.
+    stroke_width: float, default 0.8
+        Width of the stroke drawn around each feature.
+    stroke_color: str, default "#FFFFFF"
+        Color of the stroke drawn around each feature.
+    stroke_dash_array: str, default "5,5"
+        SVG `stroke-dasharray` for the stroke around each feature. The default
+        "5,5" draws a dashed line; pass "0" (or "none") for a solid line.
     """
 
     _template = Template("""
@@ -150,7 +159,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
                 d3.selectAll('path')
                 .attr('stroke', '{{ this.stroke_color }}')
                 .attr('stroke-width', {{ this.stroke_width }})
-                .attr('stroke-dasharray', '5,5')
+                .attr('stroke-dasharray', '{{ this.stroke_dash_array }}')
                 .attr('stroke-opacity', {{ this.stroke_opacity }})
                 .attr('fill-opacity', 0);
 
@@ -191,6 +200,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         stroke_opacity=1,
         stroke_width=0.8,
         stroke_color="#FFFFFF",
+        stroke_dash_array="5,5",
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self.data = GeoJson.process_data(GeoJson({}), data)
@@ -200,6 +210,7 @@ class TimeSliderChoropleth(JSCSSMixin, Layer):
         self.stroke_opacity = stroke_opacity
         self.stroke_width = stroke_width
         self.stroke_color = stroke_color
+        self.stroke_dash_array = stroke_dash_array
 
         if not isinstance(styledict, dict):
             raise ValueError(f"styledict must be a dictionary, got {styledict!r}")
