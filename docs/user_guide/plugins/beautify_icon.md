@@ -8,11 +8,14 @@ import folium.plugins
 
 ## BeautifyIcon
 
+Use one of the supported icon shapes: `circle`, `circle-dot`, `doughnut`,
+`rectangle-dot`, or `marker`. The default is `circle`.
+
 ```{code-cell} ipython3
 m = folium.Map([45.5, -122], zoom_start=3)
 
 icon_plane = folium.plugins.BeautifyIcon(
-    icon="plane", border_color="#b3334f", text_color="#b3334f", icon_shape="triangle"
+    icon="plane", border_color="#b3334f", text_color="#b3334f", icon_shape="circle"
 )
 
 icon_number = folium.plugins.BeautifyIcon(
