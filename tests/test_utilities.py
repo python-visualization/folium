@@ -80,6 +80,20 @@ def test_validate_locations(locations):
     assert outcome == [[0.0, 5.0], [1.0, 6.0], [2.0, 7.0]]
 
 
+@pytest.mark.parametrize("validator", [validate_locations, validate_multi_locations])
+@pytest.mark.parametrize("count", [1, 3])
+@pytest.mark.parametrize("iterator_type", [iter, lambda points: (p for p in points)])
+def test_validate_locations_iterators(validator, count, iterator_type):
+    points = [[i, i + 5] for i in range(count)]
+    assert validator(iterator_type(points)) == points
+
+
+@pytest.mark.parametrize("validator", [validate_locations, validate_multi_locations])
+def test_validate_locations_empty_iterator(validator):
+    with pytest.raises(ValueError, match="Locations is empty"):
+        validator(iter([]))
+
+
 @pytest.mark.parametrize(
     "locations",
     [
@@ -89,6 +103,15 @@ def test_validate_locations(locations):
 def test_validate_multi_locations(locations):
     outcome = validate_multi_locations(locations)
     assert outcome == [[[0, 5], [1, 6], [2, 7]], [[3, 8], [4, 9]]]
+
+
+@pytest.mark.parametrize("outer_iterator", [False, True])
+def test_validate_multi_locations_iterators(outer_iterator):
+    lines = [[[0, 5], [1, 6], [2, 7]], [[3, 8], [4, 9]]]
+    locations = [iter(line) for line in lines]
+    if outer_iterator:
+        locations = iter(locations)
+    assert validate_multi_locations(locations) == lines
 
 
 @pytest.mark.parametrize(
