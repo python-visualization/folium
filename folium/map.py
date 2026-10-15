@@ -347,6 +347,8 @@ class Icon(MacroElement):
              'darkpurple', 'white', 'pink', 'lightblue', 'lightgreen',
              'gray', 'black', 'lightgray']
 
+        or a hex color code such as '#00A6A6'.
+
     icon_color : str, default 'white'
         The color of the drawing on the marker. You can use colors above,
         or an html color code.
@@ -377,25 +379,24 @@ class Icon(MacroElement):
         {% macro header(this, kwargs) %}
             {% if this.is_hex %}
             <style>
-                /* Dynamically generated CSS to replace the sprite image with a colored teardrop */
+                /* Replace the sprite image with a pin of the same size in the given color.
+                   Leaflet positions the marker with an inline transform, so the pin is a
+                   rotated pseudo-element behind the icon. */
                 .awesome-marker-icon-{{ this.color_name }} {
                     background-image: none;
-                    background-color: {{ this.color }};
-                    width: 35px;
-                    height: 35px;
-                    border-radius: 50% 50% 50% 0;
-                    transform: rotate(-45deg);
-                    margin-top: -15px;
-                    margin-left: -17px;
-                    border: 2px solid white;
-                    box-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
                 }
-                /* Counter-rotate the inner icon so it stands up straight */
-                .awesome-marker-icon-{{ this.color_name }} i {
-                    transform: rotate(45deg);
+                .awesome-marker-icon-{{ this.color_name }}::before {
+                    content: "";
+                    position: absolute;
+                    z-index: -1;
+                    left: 3px;
+                    top: 4px;
+                    width: 29px;
+                    height: 29px;
+                    background-color: {{ this.color }};
+                    border-radius: 50% 50% 50% 0;
+                    transform: scaleY(1.14) rotate(-45deg);
+                    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25);
                 }
             </style>
             {% endif %}
@@ -436,7 +437,9 @@ class Icon(MacroElement):
         self._name = "Icon"
 
         # 1. Determine if the input is a hex color
-        self.is_hex = color.startswith("#") and len(color) in (4, 7)
+        self.is_hex = (
+            isinstance(color, str) and color.startswith("#") and len(color) in (4, 7)
+        )
         self.color = color
 
         # 2. Strip the '#' for the CSS class name generation
