@@ -287,6 +287,18 @@ def test_marker_numpy_array_as_location():
     Marker(np.array([0, 0]))
 
 
+def test_icon_hex_marker_color():
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        icon = Icon(color="#00A6A6")
+    assert icon.options["marker_color"] == "00A6A6"
+    header = normalize(icon._template.module.header(this=icon, kwargs={}))
+    # The pin is drawn on a pseudo-element: Leaflet's inline transform on the
+    # marker element would override a rotation set on the element itself.
+    assert ".awesome-marker-icon-00A6A6::before {" in header
+    assert "background-color: #00A6A6;" in header
+
+
 @pytest.mark.filterwarnings("ignore::UserWarning")
 def test_icon_invalid_marker_colors():
     pytest.warns(UserWarning, Icon, color="lila")
