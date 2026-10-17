@@ -122,6 +122,8 @@ def _validate_locations_basics(locations: TypeMultiLine) -> None:
 def validate_locations(locations: TypeLine) -> list[list[float]]:
     """Validate an iterable with lat/lon coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
+    if isinstance(locations, Iterator):
+        locations = list(locations)
     _validate_locations_basics(locations)
     return [validate_location(coord_pair) for coord_pair in locations]
 
@@ -131,7 +133,12 @@ def validate_multi_locations(
 ) -> Union[list[list[float]], list[list[list[float]]]]:
     """Validate an iterable with possibly nested lists of coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
+    if isinstance(locations, Iterator):
+        locations = list(locations)
     _validate_locations_basics(locations)
+    # Keep the nesting check below from consuming a point from an inner iterator.
+    if isinstance(next(iter(locations)), Iterator):
+        locations = [list(line) for line in locations]
     try:
         float(next(iter(next(iter(next(iter(locations)))))))  # type: ignore
     except (TypeError, StopIteration):
