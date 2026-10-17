@@ -14,7 +14,8 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
     icon: string, default None
         the Font-Awesome icon name to use to render the marker.
     icon_shape: string, default None
-        the icon shape
+        One of "circle", "circle-dot", "doughnut", "rectangle-dot", or "marker".
+        If None, the plugin uses its default "circle" shape.
     border_width: integer, default 3
         the border width of the icon
     border_color: string with hexadecimal RGB, default '#000'
