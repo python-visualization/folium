@@ -94,7 +94,7 @@ def test_image_overlay():
     url = (
         "data:image/png;base64,"
         "iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAYAAACddGYaAAA"
-        "AF0lEQVR42mP4z8AARFDw/z/DeiA5H4QBV60H6ABl9ZIAAAAASUVORK5CYII="
+        "AF0lEQVR42mP4z8AARFDw/z/DciC5DoQBV78H/mpWZYkAAAAASUVORK5CYII="
     )
     assert io.url == url
 
