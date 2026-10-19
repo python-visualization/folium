@@ -12,6 +12,7 @@ from folium.utilities import (
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
     javascript_identifier_path_to_array_notation,
+    mercator_transform,
     normalize_bounds_type,
     parse_font_size,
     parse_options,
@@ -169,6 +170,15 @@ def test_if_pandas_df_convert_to_numpy():
 )
 def test_normalize_bounds_type(bounds, expected):
     assert normalize_bounds_type(bounds) == expected
+
+
+def test_mercator_transform_keeps_integer_dtype():
+    # A uint8 image must stay uint8, otherwise write_png treats the result as
+    # float data and stretches every channel to its maximum.
+    data = np.full((4, 3, 4), (100, 50, 200, 255), dtype="uint8")
+    out = mercator_transform(data, (40, 50))
+    assert out.dtype == np.uint8
+    np.testing.assert_array_equal(out, data)
 
 
 def test_camelize():

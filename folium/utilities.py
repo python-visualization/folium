@@ -273,6 +273,11 @@ def mercator_transform(
         for j in range(nblayers):
             out[:, i, j] = np.interp(latslats, mercator(lats), array[:, i, j])
 
+    # Keep integer images (e.g. uint8 RGBA) in their original dtype, otherwise
+    # write_png treats them as float data and rescales each channel.
+    if np.issubdtype(array.dtype, np.integer):
+        out = np.round(out).astype(array.dtype)
+
     # Eventually flip the image.
     if origin == "upper":
         out = out[::-1, :, :]
