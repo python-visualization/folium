@@ -86,6 +86,33 @@ def test_topojson_non_collection_geometry_detail(detail_type):
     assert "name" in map_.get_root().render()
 
 
+@pytest.mark.parametrize(
+    "popup", [folium.GeoJsonPopup(fields=["name"]), Popup("hello"), "hello"]
+)
+def test_topojson_popup(popup):
+    """TopoJson accepts a popup, like GeoJson does."""
+    topology = {
+        "type": "Topology",
+        "objects": {
+            "shape": {
+                "type": "Polygon",
+                "arcs": [[0]],
+                "properties": {"name": "A"},
+            }
+        },
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+    map_ = folium.Map()
+    topojson = folium.TopoJson(topology, "objects.shape", popup=popup).add_to(map_)
+
+    children = list(topojson._children.values())
+    assert len(children) == 1
+    assert isinstance(children[0], (folium.GeoJsonPopup, Popup))
+    assert f"{topojson.get_name()}.bindPopup(" in map_.get_root().render()
+
+
 @pytest.fixture
 def tmpl():
     yield ("""
