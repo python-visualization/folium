@@ -12,6 +12,7 @@ from folium.utilities import (
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
     javascript_identifier_path_to_array_notation,
+    mercator_transform,
     normalize_bounds_type,
     parse_font_size,
     parse_options,
@@ -292,3 +293,21 @@ expected_errors = "The font size must be expressed in rem, em, or px."
 def test_parse_font_size_invalid(value, error_message):
     with pytest.raises(ValueError, match=error_message):
         parse_font_size(value)
+
+
+def test_mercator_transform_clips_bounds_beyond_mercator_limit():
+    # Each row holds the latitude of its centre, from -89.5 (bottom) to 89.5.
+    height = 180
+    lats = np.linspace(-90, 90, height + 1)[:-1] + 0.5
+    data = np.repeat(lats[:, None], 2, axis=1)
+
+    out = mercator_transform(data, (-90, 90), origin="lower")
+
+    # The output only covers the Web Mercator range, so every output row must
+    # hold (up to interpolation, well within one 1 degree input pixel) the
+    # latitude of its own centre: rows beyond +-85.05 are dropped, not
+    # squeezed into the output.
+    # Output row centres in Web Mercator y (degrees); +-85.05 maps to +-180.
+    y = np.linspace(-180, 180, height + 1)[:-1] + 180 / height
+    expected = np.degrees(np.arctan(np.sinh(np.radians(y))))
+    np.testing.assert_allclose(out[:, 0, 0], expected, atol=0.05)

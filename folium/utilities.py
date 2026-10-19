@@ -232,7 +232,7 @@ def mercator_transform(
     lat_bounds : length 2 tuple
         Minimal and maximal value of the latitude of the image.
         Bounds must be between -85.051128779806589 and 85.051128779806589
-        otherwise they will be clipped to that values.
+        otherwise the image will be clipped to that range.
 
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0,0] index of the array in the upper left or lower left
@@ -261,8 +261,9 @@ def mercator_transform(
     if origin == "upper":
         array = array[::-1, :, :]
 
-    lats = lat_min + np.linspace(0.5 / height, 1.0 - 0.5 / height, height) * (
-        lat_max - lat_min
+    # The input rows span the full lat_bounds; only the output is clipped.
+    lats = lat_bounds[0] + np.linspace(0.5 / height, 1.0 - 0.5 / height, height) * (
+        lat_bounds[1] - lat_bounds[0]
     )
     latslats = mercator(lat_min) + np.linspace(
         0.5 / height_out, 1.0 - 0.5 / height_out, height_out
