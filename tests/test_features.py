@@ -87,6 +87,67 @@ def test_topojson_non_collection_geometry_detail(detail_type):
 
 
 @pytest.fixture
+def topojson_bounds_data():
+    return {
+        "type": "Topology",
+        "objects": {
+            "near": {"type": "Polygon", "arcs": [[0]]},
+            "far": {"type": "Polygon", "arcs": [[1]]},
+        },
+        "arcs": [
+            [[0, 0], [2, 0], [0, 1], [-2, -1]],
+            [[100, 60], [2, 0], [0, 1], [-2, -1]],
+        ],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+
+
+def test_topojson_bounds_use_selected_arcs(topojson_bounds_data):
+    near = folium.TopoJson(topojson_bounds_data, "objects.near")
+    far = folium.TopoJson(topojson_bounds_data, "objects.far")
+    assert near.get_bounds() == [[0, 0], [1, 2]]
+    assert far.get_bounds() == [[60, 100], [61, 102]]
+
+    map_ = folium.Map()
+    near.add_to(map_)
+    assert map_.get_bounds() == [[0, 0], [1, 2]]
+
+
+def test_topojson_bounds_reversed_arc(topojson_bounds_data):
+    topojson_bounds_data["objects"]["near"]["arcs"] = [[-2]]
+    layer = folium.TopoJson(topojson_bounds_data, "objects.near")
+    assert layer.get_bounds() == [[60, 100], [61, 102]]
+
+
+def test_topojson_bounds_mixed_geometry_collection(topojson_bounds_data):
+    topojson_bounds_data["objects"]["near"] = {
+        "type": "GeometryCollection",
+        "geometries": [
+            {"type": "Point", "coordinates": [4, 5]},
+            {"type": "Polygon", "arcs": [[0]]},
+        ],
+    }
+    layer = folium.TopoJson(topojson_bounds_data, "objects.near")
+    assert layer.get_bounds() == [[0, 0], [5, 4]]
+
+
+def test_topojson_bounds_negative_scale(topojson_bounds_data):
+    topojson_bounds_data["transform"] = {"scale": [-2, -3], "translate": [100, 200]}
+    layer = folium.TopoJson(topojson_bounds_data, "objects.near")
+    assert layer.get_bounds() == [[197, 96], [200, 100]]
+
+
+def test_topojson_bounds_absolute_arcs_without_transform():
+    data = {
+        "type": "Topology",
+        "objects": {"near": {"type": "LineString", "arcs": [0]}},
+        "arcs": [[[12.0, 7.0], [14.0, 9.0], [10.0, 8.0]]],
+    }
+    layer = folium.TopoJson(data, "objects.near")
+    assert layer.get_bounds() == [[7, 10], [9, 14]]
+
+
+@pytest.fixture
 def tmpl():
     yield ("""
     <!DOCTYPE html>
