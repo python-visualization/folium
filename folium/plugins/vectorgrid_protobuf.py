@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.template import Template
@@ -124,8 +122,8 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     def __init__(
         self,
         url: str,
-        name: Optional[str] = None,
-        options: Union[str, dict, None] = None,
+        name: str | None = None,
+        options: str | dict | None = None,
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
