@@ -232,6 +232,24 @@ def test_geojson_tooltip():
         ), "GeoJsonTooltip GeometryCollection test failed."
 
 
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-8-sig"])
+def test_geojson_from_utf8_file(tmp_path, encoding):
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "東京都", "alt": "Hämeenlinna"},
+                "geometry": {"type": "Point", "coordinates": [139.69, 35.69]},
+            }
+        ],
+    }
+    path = tmp_path / "data.geojson"
+    path.write_text(json.dumps(data, ensure_ascii=False), encoding=encoding)
+
+    assert GeoJson(str(path)).data == data
+
+
 # GeoJsonMarker type validation.
 def test_geojson_marker():
     m = folium.Map([30.4, -97.5], zoom_start=10)

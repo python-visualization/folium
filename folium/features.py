@@ -757,8 +757,10 @@ class GeoJson(Layer):
             else:  # This is a filename
                 if not self.embed:
                     self.embed_link = data
-                with open(data) as f:
-                    return json.loads(f.read())
+                # Read bytes so json can detect the encoding (UTF-8 per RFC 7946)
+                # instead of decoding with the platform's locale encoding.
+                with open(data, "rb") as f:
+                    return json.load(f)
         elif hasattr(data, "__geo_interface__"):
             self.embed = True
             if hasattr(data, "to_crs"):
