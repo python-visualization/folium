@@ -728,7 +728,7 @@ class Tooltip(MacroElement):
         super().__init__()
         self._name = "Tooltip"
 
-        self.text = str(text)
+        self.text = escape_backticks(str(text))
 
         kwargs.update({"sticky": sticky})
         self.options = remove_empty(**kwargs)
