@@ -202,11 +202,16 @@ def test_timestamped_geo_json():
 def test_timestamped_geo_json_can_animate_markers_without_paths():
     data = {
         "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "geometry": {"type": "LineString", "coordinates": [[1, 2], [3, 4]]},
-            "properties": {"times": [1435708800000, 1435795200000], "icon": "marker"},
-        }],
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "LineString", "coordinates": [[1, 2], [3, 4]]},
+                "properties": {
+                    "times": [1435708800000, 1435795200000],
+                    "icon": "marker",
+                },
+            }
+        ],
     }
 
     map_with_paths = folium.Map(location=[2, 1])
@@ -216,7 +221,9 @@ def test_timestamped_geo_json_can_animate_markers_without_paths():
 
     map_with_markers = folium.Map(location=[2, 1])
     plugin = plugins.TimestampedGeoJson(
-        data, show_path=False, add_last_point=True,
+        data,
+        show_path=False,
+        add_last_point=True,
     ).add_to(map_with_markers)
     html = map_with_markers.get_root().render()
 
