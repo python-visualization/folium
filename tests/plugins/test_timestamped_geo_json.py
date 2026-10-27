@@ -197,3 +197,37 @@ def test_timestamped_geo_json():
 
     bounds = m.get_bounds()
     assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds
+
+
+def test_timestamped_geo_json_can_animate_markers_without_paths():
+    data = {
+        "type": "FeatureCollection",
+        "features": [{
+            "type": "Feature",
+            "geometry": {"type": "LineString", "coordinates": [[1, 2], [3, 4]]},
+            "properties": {"times": [1435708800000, 1435795200000], "icon": "marker"},
+        }],
+    }
+
+    map_with_paths = folium.Map(location=[2, 1])
+    plugins.TimestampedGeoJson(data).add_to(map_with_paths)
+    original = map_with_paths.get_root().render()
+    assert "geoJsonLayer.options.filter" not in original
+
+    map_with_markers = folium.Map(location=[2, 1])
+    plugin = plugins.TimestampedGeoJson(
+        data, show_path=False, add_last_point=True,
+    ).add_to(map_with_markers)
+    html = map_with_markers.get_root().render()
+
+    # Initial GeoJSON must receive every LineString so it can index all times.
+    # The frame-layer filter is installed only afterwards, and suppresses
+    # creating a polyline while allowing the generated last-point marker.
+    initial_layer = html.index("var geoJsonLayer = L.geoJson(")
+    frame_filter = html.index("geoJsonLayer.options.filter = function")
+    animated_layer = html.index("L.timeDimension.layer.geoJson(")
+    assert initial_layer < frame_filter < animated_layer
+    assert 'feature.geometry.type !== "LineString"' in html
+    assert "addlastPoint: true" in html
+    assert '"coordinates": [[1, 2], [3, 4]]' in html
+    assert plugin.show_path is False
