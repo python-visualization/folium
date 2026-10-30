@@ -7,10 +7,9 @@ import functools
 import json
 import operator
 import warnings
-from collections.abc import Iterable, Sequence
+from collections.abc import Callable, Iterable, Sequence
 from typing import (
     Any,
-    Callable,
     Optional,
     Union,
     get_args,
@@ -103,8 +102,8 @@ class RegularPolygonMarker(JSCSSMixin, Marker):
         number_of_sides: int = 4,
         rotation: int = 0,
         radius: int = 15,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
@@ -159,10 +158,10 @@ class Vega(JSCSSMixin):
     def __init__(
         self,
         data: Any,
-        width: Union[int, str, None] = None,
-        height: Union[int, str, None] = None,
-        left: Union[int, str] = "0%",
-        top: Union[int, str] = "0%",
+        width: int | str | None = None,
+        height: int | str | None = None,
+        left: int | str = "0%",
+        top: int | str = "0%",
         position: str = "relative",
     ):
         super().__init__()
@@ -264,10 +263,10 @@ class VegaLite(MacroElement):
     def __init__(
         self,
         data: Any,
-        width: Union[int, str, None] = None,
-        height: Union[int, str, None] = None,
-        left: Union[int, str] = "0%",
-        top: Union[int, str] = "0%",
+        width: int | str | None = None,
+        height: int | str | None = None,
+        left: int | str = "0%",
+        top: int | str = "0%",
         position: str = "relative",
     ):
         super(self.__class__, self).__init__()
@@ -338,7 +337,7 @@ class VegaLite(MacroElement):
         embed_vegalite(figure=figure, parent=parent)
 
     @property
-    def vegalite_major_version(self) -> Optional[int]:
+    def vegalite_major_version(self) -> int | None:
         if "$schema" not in self.data:
             return None
 
@@ -678,26 +677,26 @@ class GeoJson(Layer):
     def __init__(
         self,
         data: Any,
-        style_function: Optional[Callable] = None,
-        highlight_function: Optional[Callable] = None,
+        style_function: Callable | None = None,
+        highlight_function: Callable | None = None,
         popup_keep_highlighted: bool = False,
-        name: Optional[str] = None,
+        name: str | None = None,
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        smooth_factor: Optional[float] = None,
+        smooth_factor: float | None = None,
         tooltip: Union[str, Tooltip, "GeoJsonTooltip", None] = None,
         embed: bool = True,
         popup: Optional["GeoJsonPopup"] = None,
         zoom_on_click: bool = False,
-        on_each_feature: Optional[JsCode] = None,
-        marker: Union[Circle, CircleMarker, Marker, None] = None,
+        on_each_feature: JsCode | None = None,
+        marker: Circle | CircleMarker | Marker | None = None,
         **kwargs: Any,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "GeoJson"
         self.embed = embed
-        self.embed_link: Optional[str] = None
+        self.embed_link: str | None = None
         self.json = None
         self.parent_map = None
         self.smooth_factor = smooth_factor
@@ -845,7 +844,7 @@ class GeoJson(Layer):
             "field to your geojson data or set `embed=True`. "
         )
 
-    def _get_self_bounds(self) -> list[list[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[float | None]]:
         """
         Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
@@ -865,7 +864,7 @@ class GeoJson(Layer):
         super().render()
 
 
-TypeStyleMapping = dict[str, Union[str, list[Union[str, int]]]]
+TypeStyleMapping = dict[str, str | list[str | int]]
 
 
 class GeoJsonStyleMapper:
@@ -912,7 +911,7 @@ class GeoJsonStyleMapper:
         self._set_default_key(mapping)
         return mapping
 
-    def get_feature_id(self, feature: dict) -> Union[str, int]:
+    def get_feature_id(self, feature: dict) -> str | int:
         """Return a value identifying the feature."""
         prefix = "feature.properties["
         if self.feature_identifier.startswith(prefix):
@@ -1025,13 +1024,13 @@ class TopoJson(JSCSSMixin, Layer):
         self,
         data: Any,
         object_path: str,
-        style_function: Optional[Callable] = None,
-        name: Optional[str] = None,
+        style_function: Callable | None = None,
+        name: str | None = None,
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        smooth_factor: Optional[float] = None,
-        tooltip: Union[str, Tooltip, None] = None,
+        smooth_factor: float | None = None,
+        tooltip: str | Tooltip | None = None,
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "TopoJson"
@@ -1161,10 +1160,10 @@ class GeoJsonDetail(MacroElement):
     def __init__(
         self,
         fields: Sequence[str],
-        aliases: Optional[Sequence[str]] = None,
+        aliases: Sequence[str] | None = None,
         labels: bool = True,
         localize: bool = False,
-        style: Optional[str] = None,
+        style: str | None = None,
         class_name: str = "geojsondetail",
     ):
         super().__init__()
@@ -1311,10 +1310,10 @@ class GeoJsonTooltip(GeoJsonDetail):
     def __init__(
         self,
         fields: Sequence[str],
-        aliases: Optional[Sequence[str]] = None,
+        aliases: Sequence[str] | None = None,
         labels: bool = True,
         localize: bool = False,
-        style: Optional[str] = None,
+        style: str | None = None,
         class_name: str = "foliumtooltip",
         sticky: bool = True,
         **kwargs: TypeJsonValue,
@@ -1379,7 +1378,7 @@ class GeoJsonPopup(GeoJsonDetail):
     def __init__(
         self,
         fields: Sequence[str],
-        aliases: Optional[Sequence[str]] = None,
+        aliases: Sequence[str] | None = None,
         labels: bool = True,
         style: str = "margin: auto;",
         class_name: str = "foliumpopup",
@@ -1520,24 +1519,24 @@ class Choropleth(FeatureGroup):
     def __init__(
         self,
         geo_data: Any,
-        data: Optional[Any] = None,
-        columns: Optional[Sequence[Any]] = None,
-        key_on: Optional[str] = None,
-        bins: Union[int, Sequence[float]] = 6,
-        fill_color: Optional[str] = None,
+        data: Any | None = None,
+        columns: Sequence[Any] | None = None,
+        key_on: str | None = None,
+        bins: int | Sequence[float] = 6,
+        fill_color: str | None = None,
         nan_fill_color: str = "black",
         fill_opacity: float = 0.6,
-        nan_fill_opacity: Optional[float] = None,
+        nan_fill_opacity: float | None = None,
         line_color: str = "black",
         line_weight: float = 1,
         line_opacity: float = 1,
-        name: Optional[str] = None,
+        name: str | None = None,
         legend_name: str = "",
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
-        topojson: Optional[str] = None,
-        smooth_factor: Optional[float] = None,
+        topojson: str | None = None,
+        smooth_factor: float | None = None,
         highlight: bool = False,
         use_jenks: bool = False,
         **kwargs,
@@ -1668,7 +1667,7 @@ class Choropleth(FeatureGroup):
             return {"weight": line_weight + 2, "fillOpacity": fill_opacity + 0.2}
 
         if topojson:
-            self.geojson: Union[TopoJson, GeoJson] = TopoJson(
+            self.geojson: TopoJson | GeoJson = TopoJson(
                 geo_data,
                 topojson,
                 style_function=style_function,
@@ -1687,7 +1686,7 @@ class Choropleth(FeatureGroup):
             self.add_child(self.color_scale)
 
     @classmethod
-    def _get_by_key(cls, obj: Union[dict, list], key: str) -> Union[float, str, None]:
+    def _get_by_key(cls, obj: dict | list, key: str) -> float | str | None:
         key_parts = key.split(".")
         first_key_part = key_parts[0]
         if first_key_part.isdigit():
@@ -1748,10 +1747,10 @@ class DivIcon(MacroElement):
 
     def __init__(
         self,
-        html: Optional[str] = None,
-        icon_size: Optional[tuple[int, int]] = None,
-        icon_anchor: Optional[tuple[int, int]] = None,
-        popup_anchor: Optional[tuple[int, int]] = None,
+        html: str | None = None,
+        icon_size: tuple[int, int] | None = None,
+        icon_anchor: tuple[int, int] | None = None,
+        popup_anchor: tuple[int, int] | None = None,
         class_name: str = "empty",
     ):
         super().__init__()
@@ -1825,7 +1824,7 @@ class ClickForMarker(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, popup: Union[IFrame, Html, str, None] = None):
+    def __init__(self, popup: IFrame | Html | str | None = None):
         super().__init__()
         self._name = "ClickForMarker"
 
@@ -1866,7 +1865,7 @@ class ClickForLatLng(MacroElement):
             {% endmacro %}
             """)  # noqa
 
-    def __init__(self, format_str: Optional[str] = None, alert: bool = True):
+    def __init__(self, format_str: str | None = None, alert: bool = True):
         super().__init__()
         self._name = "ClickForLatLng"
         self.format_str = format_str or 'lat + "," + lng'
@@ -1917,12 +1916,12 @@ class CustomIcon(Icon):
     def __init__(
         self,
         icon_image: Any,
-        icon_size: Optional[tuple[int, int]] = None,
-        icon_anchor: Optional[tuple[int, int]] = None,
+        icon_size: tuple[int, int] | None = None,
+        icon_anchor: tuple[int, int] | None = None,
         shadow_image: Any = None,
-        shadow_size: Optional[tuple[int, int]] = None,
-        shadow_anchor: Optional[tuple[int, int]] = None,
-        popup_anchor: Optional[tuple[int, int]] = None,
+        shadow_size: tuple[int, int] | None = None,
+        shadow_anchor: tuple[int, int] | None = None,
+        popup_anchor: tuple[int, int] | None = None,
     ):
         super(Icon, self).__init__()
         self._name = "icon"
@@ -1970,10 +1969,10 @@ class ColorLine(FeatureGroup):
         self,
         positions: TypeLine,
         colors: Iterable[float],
-        colormap: Union[ColorMap, Sequence[Any], None] = None,
+        colormap: ColorMap | Sequence[Any] | None = None,
         nb_steps: int = 12,
-        weight: Optional[int] = None,
-        opacity: Optional[float] = None,
+        weight: int | None = None,
+        opacity: float | None = None,
         **kwargs: Any,
     ):
         super().__init__(**kwargs)
@@ -2045,9 +2044,9 @@ class Control(JSCSSMixin, Class):
 
     def __init__(
         self,
-        control: Optional[str] = None,
+        control: str | None = None,
         *args,
-        position: Optional[TypePosition] = None,
+        position: TypePosition | None = None,
         **kwargs,
     ):
         super().__init__()
