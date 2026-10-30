@@ -66,6 +66,9 @@ def test_wms():
     w.add_to(m)
     html = m.get_root().render()
 
+    assert '"transparent": true' in html
+    assert '"format": "image/png"' in html
+
     # verify this special case wasn't converted to lowerCamelCase
     assert '"cql_filter": "something",' in html
     assert "cqlFilter" not in html
