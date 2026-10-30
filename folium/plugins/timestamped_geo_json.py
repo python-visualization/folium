@@ -47,6 +47,10 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         Used to construct the array of available times starting
         from the first available time. Format: ISO8601 Duration
         ex: 'P1M' 1/month, 'P1D' 1/day, 'PT1H' 1/hour, and 'PT1M' 1/minute
+    show_path: bool, default True
+        Whether to draw animated LineString paths. Set to False to animate
+        only the last-point markers when add_last_point=True. The source paths
+        are still used to determine timestamps and marker positions.
     duration: str, default None
         Period of time which the features will be shown on the map after their
         time has passed. If None, all previous times will be shown.
@@ -131,6 +135,14 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                     }
                 })
 
+            {% if not this.show_path %}
+            // Keep full source features for time indexing, but skip recreating
+            // their polylines in the animated frame layers.
+            geoJsonLayer.options.filter = function (feature) {
+                return feature.geometry.type !== "LineString";
+            };
+            {% endif %}
+
             var {{this.get_name()}} = L.timeDimension.layer.geoJson(
                 geoJsonLayer,
                 {
@@ -191,6 +203,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
         time_slider_drag_update=False,
         duration=None,
         speed_slider=True,
+        show_path=True,
     ):
         super().__init__()
         self._name = "TimestampedGeoJson"
@@ -205,6 +218,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
             self.embed = False
             self.data = data
         self.add_last_point = bool(add_last_point)
+        self.show_path = bool(show_path)
         self.period = period
         self.date_options = date_options
         self.duration = "undefined" if duration is None else '"' + duration + '"'
