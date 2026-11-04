@@ -49,7 +49,7 @@ master_doc = "index"
 # General information about the project.
 import datetime
 
-year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
+year = datetime.datetime.now(tz=datetime.UTC).date().year
 project = "Folium"
 copyright = f"2013-{year}, Rob Story"
 

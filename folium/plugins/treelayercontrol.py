@@ -1,5 +1,3 @@
-from typing import Union
-
 from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
@@ -134,8 +132,8 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
 
     def __init__(
         self,
-        base_tree: Union[dict, list, None] = None,
-        overlay_tree: Union[dict, list, None] = None,
+        base_tree: dict | list | None = None,
+        overlay_tree: dict | list | None = None,
         closed_symbol: str = "+",
         opened_symbol: str = "-",
         space_symbol: str = "&nbsp;",
