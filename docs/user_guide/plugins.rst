@@ -26,6 +26,7 @@ Plugins
   plugins/pattern
   plugins/polygon_encoded
   plugins/polyline_encoded
+  plugins/polyline_decorator
   plugins/polyline_offset
   plugins/polyline_textpath
   plugins/realtime
@@ -94,6 +95,8 @@ Plugins
       - Draw a polygon directly from an encoded string.
     * - :doc:`Polyline Encoded <plugins/polyline_encoded>`
       - Draw a polyline directly from an encoded string.
+    * - :doc:`Polyline Decorator <plugins/polyline_decorator>`
+      - Draw arrowheads, dashes or markers along polylines.
     * - :doc:`Polyline Offset <plugins/polyline_offset>`
       - Shift relative pixel offset, without actually changing the actual latitude longitude values.
     * - :doc:`Polyline Textpath <plugins/polyline_textpath>`
