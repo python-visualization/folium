@@ -74,7 +74,7 @@ def path_options(
 
     This function accepts both snake_case and lowerCamelCase equivalents.
 
-    See https://leafletjs.com/reference.html#path
+    See https://leafletjs.com/reference-1.9.4.html#path
 
     """
 
@@ -180,7 +180,7 @@ class PolyLine(BaseMultiLocation):
         Disable polyline clipping.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference.html#polyline
+        https://leafletjs.com/reference-1.9.4.html#polyline
 
     """
 
@@ -217,7 +217,7 @@ class Polygon(BaseMultiLocation):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference.html#polygon
+        https://leafletjs.com/reference-1.9.4.html#polygon
 
     """
 
@@ -257,7 +257,7 @@ class Rectangle(MacroElement):
         Display a text when hovering over the object.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference.html#rectangle
+        https://leafletjs.com/reference-1.9.4.html#rectangle
 
     """
 
@@ -315,7 +315,7 @@ class Circle(Marker):
         Radius of the circle, in meters.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference.html#circle
+        https://leafletjs.com/reference-1.9.4.html#circle
 
     """
 
@@ -359,7 +359,7 @@ class CircleMarker(Marker):
         Radius of the circle marker, in pixels.
     **kwargs
         Other valid (possibly inherited) options. See:
-        https://leafletjs.com/reference.html#circlemarker
+        https://leafletjs.com/reference-1.9.4.html#circlemarker
 
     """
 
