@@ -264,6 +264,11 @@ class LayerControl(MacroElement):
     draggable: bool, default False
           By default the layer control has a fixed position. Set this argument
           to True to allow dragging the control around.
+    use_local_storage: bool, default False
+          If true, the user's layer control choices (the active base layer
+          and the visible overlays) are saved to the browser's local storage
+          and restored when the page is loaded again, for example after a
+          refresh. The choices are stored per page, keyed by the page path.
     **kwargs
         Additional (possibly inherited) options. See
         https://leafletjs.com/reference.html#control-layers
@@ -294,6 +299,61 @@ class LayerControl(MacroElement):
             new L.Draggable({{ this.get_name() }}.getContainer()).enable();
             {%- endif %}
 
+            {%- if this.use_local_storage %}
+            (function () {
+                var layer_control_map = {{ this._parent.get_name() }};
+                var layer_control_layers = {{ this.get_name() }}_layers;
+                var layer_control_storage_key = "folium-layer-control:" + window.location.pathname;
+                function save_layer_control_state() {
+                    var state = {base: null, overlays: []};
+                    for (var name in layer_control_layers.base_layers) {
+                        if (layer_control_map.hasLayer(layer_control_layers.base_layers[name])) {
+                            state.base = name;
+                        }
+                    }
+                    for (var name in layer_control_layers.overlays) {
+                        if (layer_control_map.hasLayer(layer_control_layers.overlays[name])) {
+                            state.overlays.push(name);
+                        }
+                    }
+                    try {
+                        localStorage.setItem(layer_control_storage_key, JSON.stringify(state));
+                    } catch (e) {}
+                }
+                function restore_layer_control_state() {
+                    var state = null;
+                    try {
+                        state = JSON.parse(localStorage.getItem(layer_control_storage_key));
+                    } catch (e) {}
+                    if (!state) {
+                        return;
+                    }
+                    for (var name in layer_control_layers.base_layers) {
+                        var layer = layer_control_layers.base_layers[name];
+                        if (name === state.base) {
+                            if (!layer_control_map.hasLayer(layer)) {
+                                layer_control_map.addLayer(layer);
+                            }
+                        } else if (layer_control_map.hasLayer(layer)) {
+                            layer_control_map.removeLayer(layer);
+                        }
+                    }
+                    for (var name in layer_control_layers.overlays) {
+                        var layer = layer_control_layers.overlays[name];
+                        if (state.overlays.indexOf(name) !== -1) {
+                            if (!layer_control_map.hasLayer(layer)) {
+                                layer_control_map.addLayer(layer);
+                            }
+                        } else if (layer_control_map.hasLayer(layer)) {
+                            layer_control_map.removeLayer(layer);
+                        }
+                    }
+                }
+                restore_layer_control_state();
+                layer_control_map.on("baselayerchange overlayadd overlayremove", save_layer_control_state);
+            })();
+            {%- endif %}
+
         {% endmacro %}
         """)
 
@@ -303,6 +363,7 @@ class LayerControl(MacroElement):
         collapsed: bool = True,
         autoZIndex: bool = True,
         draggable: bool = False,
+        use_local_storage: bool = False,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
@@ -311,6 +372,7 @@ class LayerControl(MacroElement):
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.draggable = draggable
+        self.use_local_storage = use_local_storage
         self.base_layers: OrderedDict[str, str] = OrderedDict()
         self.overlays: OrderedDict[str, str] = OrderedDict()
 
