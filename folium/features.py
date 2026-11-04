@@ -48,8 +48,6 @@ from folium.utilities import (
     get_obj_in_upper_tree,
     image_to_url,
     javascript_identifier_path_to_array_notation,
-    none_max,
-    none_min,
     remove_empty,
     validate_locations,
 )
@@ -1086,39 +1084,61 @@ class TopoJson(JSCSSMixin, Layer):
         super().render(**kwargs)
 
     def get_bounds(self) -> TypeBoundsReturn:
-        """
-        Computes the bounds of the object itself (not including it's children)
-        in the form [[lat_min, lon_min], [lat_max, lon_max]]
-
-        """
+        """Compute bounds of the selected TopoJSON object in latitude/longitude order."""
         if not self.embed:
             raise ValueError("Cannot compute bounds of non-embedded TopoJSON.")
 
-        xmin, xmax, ymin, ymax = None, None, None, None
+        transform = self.data.get("transform")
+        scale = transform["scale"] if transform else (1, 1)
+        translate = transform["translate"] if transform else (0, 0)
+        xmin = xmax = ymin = ymax = None
 
-        for arc in self.data["arcs"]:
-            x, y = 0, 0
-            for dx, dy in arc:
-                x += dx
-                y += dy
-                xmin = none_min(x, xmin)
-                xmax = none_max(x, xmax)
-                ymin = none_min(y, ymin)
-                ymax = none_max(y, ymax)
-        return [
-            [
-                self.data["transform"]["translate"][1]
-                + self.data["transform"]["scale"][1] * ymin,  # noqa
-                self.data["transform"]["translate"][0]
-                + self.data["transform"]["scale"][0] * xmin,  # noqa
-            ],
-            [
-                self.data["transform"]["translate"][1]
-                + self.data["transform"]["scale"][1] * ymax,  # noqa
-                self.data["transform"]["translate"][0]
-                + self.data["transform"]["scale"][0] * xmax,  # noqa
-            ],
-        ]
+        def include_point(x, y):
+            nonlocal xmin, xmax, ymin, ymax
+            x = translate[0] + scale[0] * x
+            y = translate[1] + scale[1] * y
+            xmin = x if xmin is None else min(x, xmin)
+            xmax = x if xmax is None else max(x, xmax)
+            ymin = y if ymin is None else min(y, ymin)
+            ymax = y if ymax is None else max(y, ymax)
+
+        def iter_arc_indices(value):
+            if isinstance(value, int):
+                yield value if value >= 0 else ~value
+            else:
+                for item in value:
+                    yield from iter_arc_indices(item)
+
+        def visit_coordinates(coordinates):
+            if not coordinates:
+                return
+            if isinstance(coordinates[0], (int, float)):
+                include_point(*coordinates[:2])
+            else:
+                for item in coordinates:
+                    visit_coordinates(item)
+
+        def visit_geometry(geometry):
+            for child in geometry.get("geometries", []):
+                visit_geometry(child)
+            for index in iter_arc_indices(geometry.get("arcs", [])):
+                x = y = 0
+                for dx, dy in self.data["arcs"][index]:
+                    if transform:
+                        x += dx
+                        y += dy
+                    else:
+                        x, y = dx, dy
+                    include_point(x, y)
+            if "coordinates" in geometry:
+                visit_coordinates(geometry["coordinates"])
+
+        geometry = self.data
+        for key in self.object_path.split("."):
+            geometry = geometry[key]
+        visit_geometry(geometry)
+
+        return [[ymin, xmin], [ymax, xmax]]
 
 
 class GeoJsonDetail(MacroElement):
