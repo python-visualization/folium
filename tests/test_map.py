@@ -70,6 +70,43 @@ def test_layer_control_draggable():
     assert normalize(expected) in normalize(rendered)
 
 
+def test_layer_control_use_local_storage():
+    m = Map(tiles=None)
+    TileLayer("openstreetmap").add_to(m)
+    TileLayer("cartodbpositron").add_to(m)
+    layer_control = LayerControl(use_local_storage=True).add_to(m)
+
+    assert layer_control.use_local_storage is True
+    # the flag is a Python-side option, it must not leak into the
+    # options passed to L.control.layers
+    assert "use_local_storage" not in layer_control.options
+
+    rendered = m.get_root().render()
+    # state is saved when the user changes layers
+    assert "localStorage.setItem" in rendered
+    assert "localStorage.getItem" in rendered
+    assert '"folium-layer-control:" + window.location.pathname' in rendered
+    assert f"var layer_control_map = {m.get_name()};" in rendered
+    expected = (
+        'layer_control_map.on("baselayerchange overlayadd overlayremove", '
+        "save_layer_control_state);"
+    )
+    assert normalize(expected) in normalize(rendered)
+    # and restored on load
+    assert "restore_layer_control_state();" in rendered
+
+
+def test_layer_control_use_local_storage_default_off():
+    m = Map(tiles=None)
+    TileLayer("openstreetmap").add_to(m)
+    layer_control = LayerControl().add_to(m)
+
+    assert layer_control.use_local_storage is False
+
+    rendered = m.get_root().render()
+    assert "localStorage" not in rendered
+
+
 def test_popup_ascii():
     popup = Popup("Some text.")
     _id = list(popup.html._children.keys())[0]
