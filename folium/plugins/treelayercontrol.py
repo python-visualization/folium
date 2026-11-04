@@ -74,7 +74,7 @@ class TreeLayerControl(JSCSSMixin, MacroElement):
         on to toggle the layer.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#control-layers
+        https://leafletjs.com/reference-1.9.4.html#control-layers
 
     Examples
     --------

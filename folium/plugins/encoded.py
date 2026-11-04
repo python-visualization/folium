@@ -60,7 +60,7 @@ class PolyLineFromEncoded(_BaseFromEncoded):
         https://developers.google.com/maps/documentation/utilities/polylinealgorithm
     **kwargs:
         Polyline options as accepted by leaflet. See:
-        https://leafletjs.com/reference.html#polyline
+        https://leafletjs.com/reference-1.9.4.html#polyline
 
     Adapted from https://github.com/jieter/Leaflet.encoded
 
@@ -94,7 +94,7 @@ class PolygonFromEncoded(_BaseFromEncoded):
         https://developers.google.com/maps/documentation/utilities/polylinealgorithm
     **kwargs:
         Polygon options as accepted by leaflet. See:
-        https://leafletjs.com/reference.html#polygon
+        https://leafletjs.com/reference-1.9.4.html#polygon
 
     Adapted from https://github.com/jieter/Leaflet.encoded
 

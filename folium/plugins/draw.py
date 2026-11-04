@@ -38,7 +38,7 @@ class Draw(JSCSSMixin, MacroElement):
         Name of geojson file
     position : {'topleft', 'toprigth', 'bottomleft', 'bottomright'}
         Position of control.
-        See https://leafletjs.com/reference.html#control
+        See https://leafletjs.com/reference-1.9.4.html#control
     export_position : {'topright', 'topleft', 'bottomright', 'bottomleft'}
         Corner of the map to place the export button in, when ``export``
         is True. Defaults to 'topright'. Use this to keep the button clear

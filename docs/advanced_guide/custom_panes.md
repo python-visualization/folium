@@ -10,7 +10,7 @@ import folium
 Panes are used to control the ordering of layers on the map. You can customise
 them using the `CustomPane` class.
 
-For more info on the panes Leaflet has, see https://leafletjs.com/reference.html#map-pane.
+For more info on the panes Leaflet has, see https://leafletjs.com/reference-1.9.4.html#map-pane.
 
 First we'll load geojson data to use in the examples:
 
