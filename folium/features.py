@@ -1888,7 +1888,8 @@ class CustomIcon(Icon):
         * Otherwise a string will be assumed to be JSON and embedded.
         * If array-like, it will be converted to PNG base64 string and embedded.
     icon_size : tuple of 2 int, optional
-        Size of the icon image in pixels.
+        Size of the icon image in pixels. If not given, the image is shown
+        at its natural size.
     icon_anchor : tuple of 2 int, optional
         The coordinates of the "tip" of the icon
         (relative to its top left corner).
