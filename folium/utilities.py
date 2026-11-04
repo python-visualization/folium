@@ -433,13 +433,63 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
 
 
 class JsCode:
-    """Wrapper around Javascript code."""
+    """Wrapper around Javascript code.
 
-    def __init__(self, js_code: Union[str, "JsCode"]):
+    Parameters
+    ----------
+    js_code: str or JsCode
+        The Javascript code. It may contain ``%(name)s`` placeholders that are
+        filled in with the keyword arguments.
+    **params:
+        Values for the placeholders in `js_code`. A folium (or branca) element
+        is replaced by its Javascript variable name, a JsCode object by its
+        code, and any other value is formatted with the ``%`` operator.
+        The placeholders are filled in when the code is rendered.
+
+    When parameters are given, a literal ``%`` in the code must be written as
+    ``%%``. Without parameters the code is used as is.
+
+    Examples
+    --------
+    >>> m = folium.Map()
+    >>> marker = folium.Marker([45, -30]).add_to(m)
+    >>> handler = JsCode(
+    ...     '''
+    ...     function(e) {
+    ...         %(marker)s.openPopup();
+    ...     }
+    ... ''',
+    ...     marker=marker,
+    ... )
+    """
+
+    def __init__(self, js_code: Union[str, "JsCode"], **params: Any):
         if isinstance(js_code, JsCode):
-            self.js_code: str = js_code.js_code
+            self._template: str = js_code._template
+            self.params: dict[str, Any] = {**js_code.params, **params}
         else:
-            self.js_code = js_code
+            self._template = js_code
+            self.params = params
+
+    @property
+    def js_code(self) -> str:
+        if not self.params:
+            return self._template
+        return self._template % {
+            key: self._resolve(value) for key, value in self.params.items()
+        }
+
+    @js_code.setter
+    def js_code(self, value: str) -> None:
+        self._template = value
+
+    @staticmethod
+    def _resolve(value: Any) -> Any:
+        if isinstance(value, JsCode):
+            return value.js_code
+        if isinstance(value, Element):
+            return value.get_name()
+        return value
 
     def __str__(self):
         return self.js_code

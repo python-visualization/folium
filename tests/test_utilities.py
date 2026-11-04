@@ -271,6 +271,55 @@ def test_js_code_init_js_code():
     assert isinstance(js_code_2.js_code, str)
 
 
+def test_js_code_without_params_is_not_formatted():
+    js_code = JsCode("var x = 10 % 3; var y = '%(name)s';")
+    assert js_code.js_code == "var x = 10 % 3; var y = '%(name)s';"
+
+
+def test_js_code_params_element():
+    m = Map()
+    marker = Marker([0, 0]).add_to(m)
+    js_code = JsCode("%(marker)s.openPopup();", marker=marker)
+    assert js_code.js_code == f"{marker.get_name()}.openPopup();"
+    assert str(js_code) == js_code.js_code
+
+
+def test_js_code_params_js_code_and_plain_values():
+    inner = JsCode("function(e) { return %(n)s; }", n=5)
+    js_code = JsCode(
+        "var f = %(func)s; var s = '%(text)s'; var p = 10 %% 3;",
+        func=inner,
+        text="hello",
+    )
+    assert js_code.js_code == (
+        "var f = function(e) { return 5; }; var s = 'hello'; var p = 10 % 3;"
+    )
+
+
+def test_js_code_params_merged_when_wrapping_js_code():
+    js_code = JsCode("%(a)s %(b)s", a=1, b=2)
+    js_code_2 = JsCode(js_code, b=3)
+    assert js_code_2.js_code == "1 3"
+    assert js_code.js_code == "1 2"
+
+
+def test_js_code_params_resolved_at_render_time():
+    m = Map()
+    marker = Marker([0, 0])
+    js_code = JsCode("%(marker)s", marker=marker)
+    marker._name = "SomethingElse"
+    marker.add_to(m)
+    assert js_code.js_code == marker.get_name()
+
+
+def test_js_code_params_rendered_in_map():
+    m = Map()
+    marker = Marker([0, 0]).add_to(m)
+    m.on(click=JsCode("function(e) { %(marker)s.openPopup(); }", marker=marker))
+    html = m.get_root().render()
+    assert f"{marker.get_name()}.openPopup();" in html
+
+
 @pytest.mark.parametrize(
     "value,expected",
     [
