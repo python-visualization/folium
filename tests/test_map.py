@@ -305,6 +305,24 @@ def test_marker_numpy_array_as_location():
     Marker(np.array([0, 0]))
 
 
+def test_set_icon_clears_size_of_previous_icon():
+    # Leaflet reuses the <img> of the default icon, so its inline size must be
+    # cleared for a custom icon without icon_size to keep its natural size.
+    from folium.features import CustomIcon
+
+    m = Map()
+    marker = Marker([0, 0], icon=CustomIcon("https://example.com/logo.png"))
+    marker.add_to(m)
+    script = normalize(m.get_root().render())
+    element = f"{marker.get_name()}.getElement()"
+    set_icon = f"{marker.get_name()}.setIcon({marker.icon.get_name()});"
+    assert element in script
+    assert set_icon in script
+    assert script.index(element) < script.index(set_icon)
+    for prop in ("width", "height", "marginLeft", "marginTop"):
+        assert f'.style.{prop} = "";' in script
+
+
 def test_icon_hex_marker_color():
     with warnings.catch_warnings():
         warnings.simplefilter("error")

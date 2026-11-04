@@ -509,8 +509,21 @@ class Marker(MacroElement):
     class SetIcon(MacroElement):
         """Set the icon of a marker after both are created."""
 
+        # Leaflet reuses the current <img> element when the new icon is also an
+        # image, and keeps its inline size and margins if the new icon does not
+        # set them. Clear them first, so an icon without `icon_size` keeps the
+        # natural size of its image instead of the size of the default icon.
         _template = Template("""
             {% macro script(this, kwargs) %}
+                {
+                    const element = {{ this.marker.get_name() }}.getElement();
+                    if (element) {
+                        element.style.width = "";
+                        element.style.height = "";
+                        element.style.marginLeft = "";
+                        element.style.marginTop = "";
+                    }
+                }
                 {{ this.marker.get_name() }}.setIcon({{ this.icon.get_name() }});
             {% endmacro %}
         """)
