@@ -73,6 +73,8 @@ def validate_location(location: Sequence[float]) -> list[float]:
         pd is not None and isinstance(location, pd.DataFrame)
     ):
         location = np.squeeze(location).tolist()
+    elif pd is not None and isinstance(location, pd.Series):
+        location = location.tolist()
     if not hasattr(location, "__len__"):
         raise TypeError(
             "Location should be a sized variable, "
