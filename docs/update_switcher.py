@@ -54,7 +54,7 @@ def main() -> None:
         switcher.insert(latest_index + 1, previous_version_entry)
 
     # Write the updated switcher.json
-   with open(switcher_path, "w", encoding="utf-8") as f:
+    with open(switcher_path, "w", encoding="utf-8") as f:
         json.dump(switcher, f, indent=2)
 
 
