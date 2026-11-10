@@ -8,7 +8,7 @@ import json
 import os
 
 
-def main():
+def main() -> None:
     # Define CLI arguments
     parser = argparse.ArgumentParser(description="Update switcher.json")
     parser.add_argument(
@@ -20,7 +20,7 @@ def main():
 
     # Setup path to switcher.json (relative to this script) and load it
     switcher_path = os.path.join(os.path.dirname(__file__), "_static", "switcher.json")
-    with open(switcher_path) as f:
+    with open(switcher_path, encoding="utf-8") as f:
         switcher = json.load(f)
 
     # first we get the version number of the previous version
@@ -54,7 +54,7 @@ def main():
         switcher.insert(latest_index + 1, previous_version_entry)
 
     # Write the updated switcher.json
-    with open(switcher_path, "w") as f:
+   with open(switcher_path, "w", encoding="utf-8") as f:
         json.dump(switcher, f, indent=2)
 
 
