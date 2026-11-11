@@ -29,6 +29,7 @@ from folium.utilities import (
         np.array([5, 3]),
         np.array([[5, 3]]),
         pd.Series([5, 3]),
+        pd.Series([5, 3], index=["lat", "lon"]),
         pd.DataFrame([5, 3]),
         pd.DataFrame([[5, 3]]),
         ("5.0", "3.0"),
