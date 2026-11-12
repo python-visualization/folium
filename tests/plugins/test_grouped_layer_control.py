@@ -39,3 +39,35 @@ def test_grouped_layer_control():
          {fg2.get_name()}.remove();
     """)
     assert expected in out
+
+
+def test_grouped_layer_control_base_layers():
+    m = folium.Map([40.0, 70.0], zoom_start=6, tiles=None)
+    osm = folium.TileLayer("OpenStreetMap", name="osm").add_to(m)
+    topo = folium.TileLayer("OpenTopoMap", name="topo", show=False).add_to(m)
+    fg1 = folium.FeatureGroup(name="g1").add_to(m)
+    fg2 = folium.FeatureGroup(name="g2").add_to(m)
+    groupedlayercontrol.GroupedLayerControl(
+        groups={"groups1": [fg1, fg2]}, base_layers=[osm, topo]
+    ).add_to(m)
+    lc = folium.LayerControl().add_to(m)
+    out = normalize(m._parent.render())
+
+    expected = normalize(f"""
+        L.control.groupedLayers(
+            {{
+                "osm" : {osm.get_name()},
+                "topo" : {topo.get_name()},
+            }},
+            {{
+                "groups1" : {{
+                    "g1" : {fg1.get_name()},
+                    "g2" : {fg2.get_name()},
+                }},
+            }},
+            {{"exclusiveGroups": ["groups1",],}},
+         ).addTo({m.get_name()});
+    """)
+    assert expected in out
+    # The base layers are no longer listed in the regular LayerControl.
+    assert not lc.base_layers
