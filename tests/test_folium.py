@@ -558,3 +558,7 @@ class TestFolium:
         assert "position must be one of ('bottomright', 'bottomleft'" in str(
             excinfo.value
         )
+
+    def test_control_keeps_args_with_position(self):
+        control = folium.Control("MiniMap", "layer", position="bottomright")
+        assert control.args == ("layer",)

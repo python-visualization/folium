@@ -2056,8 +2056,8 @@ class Control(JSCSSMixin, Class):
 
         if position is not None:
             position = position.lower()  # type: ignore
-            if position not in (args := get_args(TypePosition)):
-                raise TypeError(f"position must be one of {args}")
+            if position not in (positions := get_args(TypePosition)):
+                raise TypeError(f"position must be one of {positions}")
             kwargs["position"] = position
 
         self.args = args
