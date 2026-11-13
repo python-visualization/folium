@@ -1,5 +1,4 @@
 import json
-from typing import Union
 
 import jinja2
 from branca.element import Element
@@ -7,7 +6,7 @@ from branca.element import Element
 from folium.utilities import JsCode, TypeJsonValue, camelize
 
 
-def tojavascript(obj: Union[str, JsCode, dict, list, Element]) -> str:
+def tojavascript(obj: str | JsCode | dict | list | Element) -> str:
     if isinstance(obj, JsCode):
         return obj.js_code
     elif isinstance(obj, Element):

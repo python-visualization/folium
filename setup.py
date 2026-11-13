@@ -53,8 +53,6 @@ setup(
     url="https://github.com/python-visualization/folium",
     keywords="data visualization",
     classifiers=[
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
@@ -66,7 +64,7 @@ setup(
     platforms="any",
     packages=packages,
     package_data=package_data,
-    python_requires=">=3.9",
+    python_requires=">=3.11",
     extras_require={"testing": ["pytest"]},
     install_requires=install_requires,
     zip_safe=False,
