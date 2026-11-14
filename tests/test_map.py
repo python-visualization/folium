@@ -106,6 +106,24 @@ def test_popup_unicode():
     assert "".join(popup.html.render().split()) == "".join(tmpl(**kw).split())
 
 
+@pytest.mark.parametrize("lazy", [False, True])
+def test_popup_multiple_children(lazy):
+    popup = Popup("First", lazy=lazy)
+    popup.html.add_child(Popup("Second").html)
+    marker = Marker([0, 0], popup=popup).add_to(Map(tiles=None))
+    rendered = popup._template.render(this=popup, kwargs={})
+
+    # Setting content once per child discards all but the last child.
+    assert rendered.count(".setContent(") == 1
+    assert "First" in rendered
+    assert "Second" in rendered
+    for name in popup.html._children:
+        assert f"{popup.get_name()}_content.appendChild({name});" in rendered
+    if lazy:
+        assert rendered.count(".once('click'") == 1
+    assert f"{marker.get_name()}.bindPopup({popup.get_name()})" in rendered
+
+
 def test_popup_sticky():
     m = Map()
     popup = Popup("Some text.", sticky=True).add_to(m)
