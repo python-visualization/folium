@@ -1191,12 +1191,24 @@ class GeoJsonDetail(MacroElement):
             # noqa outside of type checking.
             self.style = style
 
+    def _geojson_features(self) -> list:
+        """Return the parent GeoJson's features, whatever form its data has."""
+        assert isinstance(self._parent, GeoJson)
+        data = self._parent.data
+        if data.get("type") == "FeatureCollection":
+            return data["features"]
+        if "geometry" in data:
+            # A single Feature.
+            return [data]
+        # A bare geometry has no properties.
+        return []
+
     def warn_for_geometry_collections(self) -> None:
         """Checks for GeoJson GeometryCollection features to warn user about incompatibility."""
         assert isinstance(self._parent, GeoJson)
         geom_collections = [
             feature.get("properties") if feature.get("properties") is not None else key
-            for key, feature in enumerate(self._parent.data["features"])
+            for key, feature in enumerate(self._geojson_features())
             if feature["geometry"]
             and feature["geometry"]["type"] == "GeometryCollection"
         ]
@@ -1212,10 +1224,9 @@ class GeoJsonDetail(MacroElement):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         if isinstance(self._parent, GeoJson):
+            features = self._geojson_features()
             keys = tuple(
-                self._parent.data["features"][0]["properties"].keys()
-                if self._parent.data["features"]
-                else []
+                (features[0].get("properties") or {}).keys() if features else []
             )
             self.warn_for_geometry_collections()
         elif isinstance(self._parent, TopoJson):
