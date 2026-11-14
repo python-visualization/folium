@@ -73,8 +73,14 @@ class Search(JSCSSMixin, MacroElement):
                     {% if this.options %}
                     e.layer.setStyle({{ this.options|tojavascript }});
                     {% endif %}
-                    if(e.layer._popup)
+                    if(e.layer._popup) {
                         e.layer.openPopup();
+                    } else if ({{this.layer.get_name()}}.getPopup()) {
+                        // GeoJsonPopup is bound to the group. Temporarily bind it
+                        // to the found feature so its content uses that feature.
+                        e.layer.bindPopup({{this.layer.get_name()}}.getPopup())
+                            .openPopup().unbindPopup();
+                    }
                 })
                 {{this.layer.get_name()}}searchControl.on('search:collapsed', function(e) {
                         {{this.layer.get_name()}}.setStyle(function(feature){
