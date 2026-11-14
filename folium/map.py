@@ -615,16 +615,29 @@ class Popup(MacroElement):
     _template = Template("""
         var {{this.get_name()}} = L.popup({{ this.options|tojavascript }});
 
+        {% set multiple = this.html._children|length > 1 %}
+        {% if this.lazy and this.html._children %}
+            {{ this._parent.get_name() }}.once('click', function() {
+        {% endif %}
+        {% if multiple %}
+            var {{ this.get_name() }}_content = document.createElement('div');
+        {% endif %}
         {% for name, element in this.html._children.items() %}
-            {% if this.lazy %}
-                {{ this._parent.get_name() }}.once('click', function() {
-                    {{ this.get_name() }}.setContent($(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0]);
-                });
+            var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
+            {% if multiple %}
+                if ({{ name }}) {
+                    {{ this.get_name() }}_content.appendChild({{ name }});
+                }
             {% else %}
-                var {{ name }} = $(`{{ element.render(**kwargs).replace('\\n',' ') }}`)[0];
                 {{ this.get_name() }}.setContent({{ name }});
             {% endif %}
         {% endfor %}
+        {% if multiple %}
+            {{ this.get_name() }}.setContent({{ this.get_name() }}_content);
+        {% endif %}
+        {% if this.lazy and this.html._children %}
+            });
+        {% endif %}
 
         {{ this._parent.get_name() }}.bindPopup({{ this.get_name() }})
         {% if this.show %}.openPopup(){% endif %};
