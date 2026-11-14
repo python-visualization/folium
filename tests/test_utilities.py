@@ -11,6 +11,7 @@ from folium.utilities import (
     escape_double_quotes,
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
+    image_to_url,
     javascript_identifier_path_to_array_notation,
     normalize_bounds_type,
     parse_font_size,
@@ -232,6 +233,25 @@ def test_parse_options():
 )
 def test_is_url(url):
     assert _is_url(url) is True
+
+
+@pytest.mark.parametrize(
+    "image",
+    [
+        [[0.0, 1.0], [1.0, 0.0]],
+        [[[255, 0, 0], [0, 255, 0]], [[0, 0, 255], [255, 255, 255]]],
+        ((0.0, 1.0), (1.0, 0.0)),
+    ],
+)
+def test_image_to_url_array_like(image):
+    url = image_to_url(image)
+    assert url == image_to_url(np.array(image))
+    assert url.startswith("data:image/png;base64,")
+
+
+def test_image_to_url_url():
+    url = "https://example.com/img.png"
+    assert image_to_url(url) == url
 
 
 @pytest.mark.parametrize(
