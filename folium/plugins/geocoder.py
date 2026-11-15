@@ -1,5 +1,3 @@
-from typing import Optional
-
 from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
@@ -73,7 +71,7 @@ class Geocoder(JSCSSMixin, MacroElement):
         collapsed: bool = False,
         position: str = "topright",
         add_marker: bool = True,
-        zoom: Optional[int] = 11,
+        zoom: int | None = 11,
         provider: str = "nominatim",
         provider_options: dict = {},
         **kwargs,

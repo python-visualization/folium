@@ -77,3 +77,22 @@ rt.add_js_link("dayjs", "https://cdn.jsdelivr.net/npm/dayjs@1.11.10/dayjs.min.js
 rt.add_to(m)
 m
 ```
+
+## Referring to other map objects in JsCode
+Inside a `JsCode` block you often need the Javascript variable of another folium object, such as a marker or a layer. You can write `%(name)s` placeholders in the code and pass the objects as keyword arguments. Folium objects are replaced by their Javascript variable name when the map is rendered, other `JsCode` objects by their code, and any other value is inserted as is.
+
+When you pass parameters, write a literal `%` in the code as `%%`.
+
+```{code-cell} ipython3
+from folium.utilities import JsCode
+
+m = folium.Map(location=[45, -30], zoom_start=4)
+marker = folium.Marker([45, -30], popup="Hello!").add_to(m)
+
+m.on(click=JsCode("""
+function(e) {
+    %(marker)s.setLatLng(e.latlng).openPopup();
+}
+""", marker=marker))
+m
+```

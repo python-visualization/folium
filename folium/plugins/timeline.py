@@ -1,4 +1,4 @@
-from typing import Optional, TextIO, Union
+from typing import TextIO
 
 from branca.element import MacroElement
 
@@ -103,8 +103,8 @@ class Timeline(GeoJson):
 
     def __init__(
         self,
-        data: Union[dict, str, TextIO],
-        get_interval: Optional[JsCode] = None,
+        data: dict | str | TextIO,
+        get_interval: JsCode | None = None,
         **kwargs,
     ):
         super().__init__(data)
@@ -204,8 +204,8 @@ class TimelineSlider(JSCSSMixin, MacroElement):
         # arguments relevant to both interval and timestamp mode
         auto_play: bool = True,
         date_options: str = "YYYY-MM-DD HH:mm:ss",
-        start: Optional[Union[str, int, float]] = None,
-        end: Optional[Union[str, int, float]] = None,
+        start: str | int | float | None = None,
+        end: str | int | float | None = None,
         enable_playback: bool = True,
         enable_keyboard_controls: bool = False,
         show_ticks: bool = True,

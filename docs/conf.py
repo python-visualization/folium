@@ -49,7 +49,7 @@ master_doc = "index"
 # General information about the project.
 import datetime
 
-year = datetime.datetime.now(tz=datetime.timezone.utc).date().year
+year = datetime.datetime.now(tz=datetime.UTC).date().year
 project = "Folium"
 copyright = f"2013-{year}, Rob Story"
 
@@ -144,7 +144,7 @@ html_logo = "_static/folium_logo.png"
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-# html_favicon = None
+html_favicon = "_static/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

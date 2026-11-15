@@ -6,16 +6,9 @@ import math
 import os
 import tempfile
 import uuid
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
 from contextlib import contextmanager
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Callable,
-    Literal,
-    Optional,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Literal, TypeAlias
 from urllib.parse import urlparse, uses_netloc, uses_params, uses_relative
 
 import numpy as np
@@ -39,19 +32,19 @@ if TYPE_CHECKING:
     from .features import Popup
 
 
-TypeLine = Iterable[Sequence[float]]
-TypeMultiLine = Union[TypeLine, Iterable[TypeLine]]
+TypeLine: TypeAlias = Iterable[Sequence[float]]
+TypeMultiLine: TypeAlias = TypeLine | Iterable[TypeLine]
 
-TypeJsonValueNoNone = Union[str, float, bool, Sequence, dict]
-TypeJsonValue = Union[TypeJsonValueNoNone, None]
+TypeJsonValueNoNone: TypeAlias = str | float | bool | Sequence | dict
+TypeJsonValue: TypeAlias = TypeJsonValueNoNone | None
 
-TypePathOptions = Union[bool, str, float, None]
+TypePathOptions: TypeAlias = bool | str | float | None
 
-TypeBounds = Sequence[Sequence[float]]
-TypeBoundsReturn = list[list[Optional[float]]]
+TypeBounds: TypeAlias = Sequence[Sequence[float]]
+TypeBoundsReturn: TypeAlias = list[list[float | None]]
 
-TypeContainer = Union[Figure, Div, "Popup"]
-TypePosition = Literal["bottomright", "bottomleft", "topright", "topleft"]
+TypeContainer: TypeAlias = "Figure | Div | Popup"
+TypePosition: TypeAlias = Literal["bottomright", "bottomleft", "topright", "topleft"]
 
 
 _VALID_URLS = set(uses_relative + uses_netloc + uses_params)
@@ -73,6 +66,8 @@ def validate_location(location: Sequence[float]) -> list[float]:
         pd is not None and isinstance(location, pd.DataFrame)
     ):
         location = np.squeeze(location).tolist()
+    elif pd is not None and isinstance(location, pd.Series):
+        location = location.tolist()
     if not hasattr(location, "__len__"):
         raise TypeError(
             "Location should be a sized variable, "
@@ -130,7 +125,7 @@ def validate_locations(locations: TypeLine) -> list[list[float]]:
 
 def validate_multi_locations(
     locations: TypeMultiLine,
-) -> Union[list[list[float]], list[list[list[float]]]]:
+) -> list[list[float]] | list[list[list[float]]]:
     """Validate an iterable with possibly nested lists of coordinate pairs."""
     locations = if_pandas_df_convert_to_numpy(locations)
     if isinstance(locations, Iterator):
@@ -163,7 +158,7 @@ def if_pandas_df_convert_to_numpy(obj: Any) -> Any:
 
 def image_to_url(
     image: Any,
-    colormap: Optional[Callable] = None,
+    colormap: Callable | None = None,
     origin: str = "upper",
 ) -> str:
     """
@@ -217,7 +212,7 @@ def mercator_transform(
     data: Any,
     lat_bounds: tuple[float, float],
     origin: str = "upper",
-    height_out: Optional[int] = None,
+    height_out: int | None = None,
 ) -> np.ndarray:
     """
     Transforms an image computed in (longitude,latitude) coordinates into
@@ -305,13 +300,13 @@ def iter_coords(obj: Any) -> Iterator[tuple[float, ...]]:
 def get_bounds(
     locations: Any,
     lonlat: bool = False,
-) -> list[list[Optional[float]]]:
+) -> list[list[float | None]]:
     """
     Computes the bounds of the object in the form
     [[lat_min, lon_min], [lat_max, lon_max]]
 
     """
-    bounds: list[list[Optional[float]]] = [[None, None], [None, None]]
+    bounds: list[list[float | None]] = [[None, None], [None, None]]
     for point in iter_coords(locations):
         bounds = [
             [
@@ -433,19 +428,69 @@ def get_and_assert_figure_root(obj: Element) -> Figure:
 
 
 class JsCode:
-    """Wrapper around Javascript code."""
+    """Wrapper around Javascript code.
 
-    def __init__(self, js_code: Union[str, "JsCode"]):
+    Parameters
+    ----------
+    js_code: str or JsCode
+        The Javascript code. It may contain ``%(name)s`` placeholders that are
+        filled in with the keyword arguments.
+    **params:
+        Values for the placeholders in `js_code`. A folium (or branca) element
+        is replaced by its Javascript variable name, a JsCode object by its
+        code, and any other value is formatted with the ``%`` operator.
+        The placeholders are filled in when the code is rendered.
+
+    When parameters are given, a literal ``%`` in the code must be written as
+    ``%%``. Without parameters the code is used as is.
+
+    Examples
+    --------
+    >>> m = folium.Map()
+    >>> marker = folium.Marker([45, -30]).add_to(m)
+    >>> handler = JsCode(
+    ...     '''
+    ...     function(e) {
+    ...         %(marker)s.openPopup();
+    ...     }
+    ... ''',
+    ...     marker=marker,
+    ... )
+    """
+
+    def __init__(self, js_code: "str | JsCode", **params: Any):
         if isinstance(js_code, JsCode):
-            self.js_code: str = js_code.js_code
+            self._template: str = js_code._template
+            self.params: dict[str, Any] = {**js_code.params, **params}
         else:
-            self.js_code = js_code
+            self._template = js_code
+            self.params = params
+
+    @property
+    def js_code(self) -> str:
+        if not self.params:
+            return self._template
+        return self._template % {
+            key: self._resolve(value) for key, value in self.params.items()
+        }
+
+    @js_code.setter
+    def js_code(self, value: str) -> None:
+        self._template = value
+
+    @staticmethod
+    def _resolve(value: Any) -> Any:
+        if isinstance(value, JsCode):
+            return value.js_code
+        if isinstance(value, Element):
+            return value.get_name()
+        return value
 
     def __str__(self):
         return self.js_code
 
 
-def parse_font_size(value: Union[str, int, float]) -> str:
+def parse_font_size(value: str | int | float) -> str:
     """Parse a font size value, if number set as px"""
     if isinstance(value, (int, float)):
         return f"{value}px"

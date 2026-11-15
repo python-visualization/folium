@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 
 from folium import GeoJson, Map, TileLayer
-from folium.map import Class, CustomPane, Icon, LayerControl, Marker, Popup
+from folium.map import Class, CustomPane, Icon, LayerControl, Marker, Popup, Tooltip
 from folium.utilities import JsCode, normalize
 
 tmpl = """
@@ -252,6 +252,24 @@ def test_popup_backslashes():
         html_name=list(popup.html._children.keys())[0],
         map_name=m.get_name(),
     )
+    assert normalize(rendered) == normalize(expected)
+
+
+def test_tooltip_backslashes_and_backticks():
+    m = Map()
+    marker = Marker([0, 0]).add_to(m)
+    tooltip = Tooltip("C:\\path\\20190221 `tick`").add_to(marker)
+    rendered = tooltip._template.module.script(this=tooltip, kwargs={})
+    expected = rf"""
+    {marker.get_name()}.bindTooltip(
+        `<div>
+             C:\\path\\20190221 \`tick\`
+         </div>`,
+        {{
+          "sticky": true,
+        }}
+    );
+    """
     assert normalize(rendered) == normalize(expected)
 
 

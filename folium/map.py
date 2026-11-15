@@ -6,7 +6,7 @@ Classes for drawing maps.
 import warnings
 from collections import OrderedDict, defaultdict
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Optional, Union, cast
+from typing import TYPE_CHECKING, Union, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -80,7 +80,7 @@ class Evented(Class):
 
     Adds the `on` and `once` methods for event handling capabilities.
 
-    See https://leafletjs.com/reference.html#evented for
+    See https://leafletjs.com/reference-1.9.4.html#evented for
     more in depth documentation. Please note that we have
     only added the `on(<Object> eventMap)` variant of this
     method using python keyword arguments.
@@ -116,7 +116,7 @@ class Layer(Evented):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
         overlay: bool = False,
         control: bool = True,
         show: bool = True,
@@ -160,7 +160,7 @@ class FeatureGroup(Layer):
         Whether the layer will be shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#featuregroup
+        https://leafletjs.com/reference-1.9.4.html#featuregroup
 
     """
 
@@ -174,7 +174,7 @@ class FeatureGroup(Layer):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
@@ -211,7 +211,7 @@ class LayerGroup(Layer):
         Whether the layer will be shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#layergroup
+        https://leafletjs.com/reference-1.9.4.html#layergroup
 
     """
 
@@ -225,7 +225,7 @@ class LayerGroup(Layer):
 
     def __init__(
         self,
-        name: Optional[str] = None,
+        name: str | None = None,
         overlay: bool = True,
         control: bool = True,
         show: bool = True,
@@ -266,7 +266,7 @@ class LayerControl(MacroElement):
           to True to allow dragging the control around.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#control-layers
+        https://leafletjs.com/reference-1.9.4.html#control-layers
 
     """
 
@@ -537,10 +537,10 @@ class Marker(MacroElement):
 
     def __init__(
         self,
-        location: Optional[Sequence[float]] = None,
+        location: Sequence[float] | None = None,
         popup: Union["Popup", str, None] = None,
         tooltip: Union["Tooltip", str, None] = None,
-        icon: Optional[Union[Icon, "CustomIcon", "DivIcon"]] = None,
+        icon: Union[Icon, "CustomIcon", "DivIcon"] | None = None,
         draggable: bool = False,
         **kwargs: TypeJsonValue,
     ):
@@ -636,9 +636,9 @@ class Popup(MacroElement):
 
     def __init__(
         self,
-        html: Union[str, Element, None] = None,
+        html: str | Element | None = None,
         parse_html: bool = False,
-        max_width: Union[str, int] = "100%",
+        max_width: str | int = "100%",
         show: bool = False,
         sticky: bool = False,
         lazy: bool = False,
@@ -703,7 +703,7 @@ class Tooltip(MacroElement):
         Whether the tooltip should follow the mouse.
     **kwargs
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference.html#tooltip
+        available here: https://leafletjs.com/reference-1.9.4.html#tooltip
 
     """
 
@@ -721,14 +721,14 @@ class Tooltip(MacroElement):
     def __init__(
         self,
         text: str,
-        style: Optional[str] = None,
+        style: str | None = None,
         sticky: bool = True,
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
         self._name = "Tooltip"
 
-        self.text = str(text)
+        self.text = escape_backticks(str(text))
 
         kwargs.update({"sticky": sticky})
         self.options = remove_empty(**kwargs)
@@ -774,10 +774,10 @@ class FitBounds(MacroElement):
     def __init__(
         self,
         bounds: TypeBounds,
-        padding_top_left: Optional[Sequence[float]] = None,
-        padding_bottom_right: Optional[Sequence[float]] = None,
-        padding: Optional[Sequence[float]] = None,
-        max_zoom: Optional[int] = None,
+        padding_top_left: Sequence[float] | None = None,
+        padding_bottom_right: Sequence[float] | None = None,
+        padding: Sequence[float] | None = None,
+        max_zoom: int | None = None,
     ):
         super().__init__()
         self._name = "FitBounds"
@@ -828,7 +828,7 @@ class FitOverlays(MacroElement):
     def __init__(
         self,
         padding: int = 0,
-        max_zoom: Optional[int] = None,
+        max_zoom: int | None = None,
         fly: bool = False,
         fit_on_map_load: bool = True,
     ):
@@ -856,7 +856,7 @@ class CustomPane(MacroElement):
         determine which map elements lie over/under it. The default
         (625) corresponds to between markers and tooltips. Default
         panes and z-indexes can be found at
-        https://leafletjs.com/reference.html#map-pane
+        https://leafletjs.com/reference-1.9.4.html#map-pane
     pointer_events: bool, default False
         Whether or not layers in the pane should interact with the
         cursor. Setting to False will prevent interfering with
@@ -877,7 +877,7 @@ class CustomPane(MacroElement):
     def __init__(
         self,
         name: str,
-        z_index: Union[int, str] = 625,
+        z_index: int | str = 625,
         pointer_events: bool = False,
     ):
         super().__init__()
