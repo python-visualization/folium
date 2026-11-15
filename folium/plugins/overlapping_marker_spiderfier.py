@@ -1,5 +1,3 @@
-from typing import Optional
-
 from jinja2 import Template
 
 from folium.elements import Element, JSCSSMixin, MacroElement
@@ -86,7 +84,7 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
         )
 
     def add_to(
-        self, parent: Element, name: Optional[str] = None, index: Optional[int] = None
+        self, parent: Element, name: str | None = None, index: int | None = None
     ) -> Element:
         self._parent = parent
         self.markers = self._get_all_markers(parent)

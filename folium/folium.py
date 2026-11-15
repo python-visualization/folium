@@ -7,7 +7,7 @@ import time
 import webbrowser
 from collections.abc import Sequence
 from importlib.resources import files as _resource_files
-from typing import Any, Optional, Union
+from typing import Any
 
 from branca.element import Element, Figure
 
@@ -273,16 +273,16 @@ class Map(JSCSSMixin, Evented):
 
     def __init__(
         self,
-        location: Optional[Sequence[float]] = None,
-        width: Union[str, float] = "100%",
-        height: Union[str, float] = "100%",
-        left: Union[str, float] = "0%",
-        top: Union[str, float] = "0%",
+        location: Sequence[float] | None = None,
+        width: str | float = "100%",
+        height: str | float = "100%",
+        left: str | float = "0%",
+        top: str | float = "0%",
         position: str = "relative",
-        tiles: Union[str, TileLayer, None] = "OpenStreetMap",
-        attr: Optional[str] = None,
-        min_zoom: Optional[int] = None,
-        max_zoom: Optional[int] = None,
+        tiles: str | TileLayer | None = "OpenStreetMap",
+        attr: str | None = None,
+        min_zoom: int | None = None,
+        max_zoom: int | None = None,
         zoom_start: int = 10,
         min_lat: float = -90,
         max_lat: float = 90,
@@ -295,14 +295,14 @@ class Map(JSCSSMixin, Evented):
         no_touch: bool = False,
         disable_3d: bool = False,
         png_enabled: bool = False,
-        zoom_control: Union[bool, str] = True,
+        zoom_control: bool | str = True,
         font_size: str = "1rem",
         **kwargs: TypeJsonValue,
     ):
         super().__init__()
         self._name = "Map"
 
-        self._png_image: Optional[bytes] = None
+        self._png_image: bytes | None = None
         self.png_enabled = png_enabled
 
         if location is None:
@@ -374,7 +374,7 @@ class Map(JSCSSMixin, Evented):
         return out
 
     def _to_png(
-        self, delay: int = 3, driver: Any = None, size: Optional[Sequence[int]] = None
+        self, delay: int = 3, driver: Any = None, size: Sequence[int] | None = None
     ) -> bytes:
         """Export the HTML to byte representation of a PNG image.
 
@@ -426,7 +426,7 @@ class Map(JSCSSMixin, Evented):
             self._png_image = png
         return self._png_image
 
-    def _repr_png_(self) -> Optional[bytes]:
+    def _repr_png_(self) -> bytes | None:
         """Displays the PNG Map in a Jupyter notebook."""
         # The notebook calls all _repr_*_ by default.
         # We don't want that here b/c this one is quite slow.
@@ -452,10 +452,10 @@ class Map(JSCSSMixin, Evented):
     def fit_bounds(
         self,
         bounds: TypeBounds,
-        padding_top_left: Optional[Sequence[float]] = None,
-        padding_bottom_right: Optional[Sequence[float]] = None,
-        padding: Optional[Sequence[float]] = None,
-        max_zoom: Optional[int] = None,
+        padding_top_left: Sequence[float] | None = None,
+        padding_bottom_right: Sequence[float] | None = None,
+        padding: Sequence[float] | None = None,
+        max_zoom: int | None = None,
     ) -> None:
         """Fit the map to contain a bounding box with the
         maximum zoom level possible.
