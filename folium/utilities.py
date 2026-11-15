@@ -190,7 +190,7 @@ def image_to_url(
             img = f.read()
         b64encoded = base64.b64encode(img).decode("utf-8")
         url = f"data:image/{fileformat};base64,{b64encoded}"
-    elif "ndarray" in image.__class__.__name__:
+    elif not isinstance(image, str):
         img = write_png(image, origin=origin, colormap=colormap)
         b64encoded = base64.b64encode(img).decode("utf-8")
         url = f"data:image/png;base64,{b64encoded}"
