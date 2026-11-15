@@ -166,7 +166,7 @@ class Map(JSCSSMixin, Evented):
         string ending in 'rem', 'em', or 'px'.
     **kwargs
         Additional keyword arguments are passed to Leaflets Map class:
-        https://leafletjs.com/reference.html#map
+        https://leafletjs.com/reference-1.9.4.html#map
 
     Returns
     -------

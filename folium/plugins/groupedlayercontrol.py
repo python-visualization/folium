@@ -29,7 +29,7 @@ class GroupedLayerControl(JSCSSMixin, MacroElement):
         layers' `show` argument to choose which one is shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#control-layers
+        https://leafletjs.com/reference-1.9.4.html#control-layers
     """
 
     default_js = [

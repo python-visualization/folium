@@ -107,8 +107,8 @@ You can provide a function of the form `lambda feature: {}` that sets the style 
 
 For possible options, see:
 
-* For `Point` and `MultiPoint`, see https://leafletjs.com/reference.html#marker
-* For other features, see https://leafletjs.com/reference.html#path and https://leafletjs.com/reference.html#polyline
+* For `Point` and `MultiPoint`, see https://leafletjs.com/reference-1.9.4.html#marker
+* For other features, see https://leafletjs.com/reference-1.9.4.html#path and https://leafletjs.com/reference-1.9.4.html#polyline
 
 ```{code-cell} ipython3
 m = folium.Map([43, -100], zoom_start=4)

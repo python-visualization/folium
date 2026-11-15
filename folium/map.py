@@ -80,7 +80,7 @@ class Evented(Class):
 
     Adds the `on` and `once` methods for event handling capabilities.
 
-    See https://leafletjs.com/reference.html#evented for
+    See https://leafletjs.com/reference-1.9.4.html#evented for
     more in depth documentation. Please note that we have
     only added the `on(<Object> eventMap)` variant of this
     method using python keyword arguments.
@@ -160,7 +160,7 @@ class FeatureGroup(Layer):
         Whether the layer will be shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#featuregroup
+        https://leafletjs.com/reference-1.9.4.html#featuregroup
 
     """
 
@@ -211,7 +211,7 @@ class LayerGroup(Layer):
         Whether the layer will be shown on opening.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#layergroup
+        https://leafletjs.com/reference-1.9.4.html#layergroup
 
     """
 
@@ -266,7 +266,7 @@ class LayerControl(MacroElement):
           to True to allow dragging the control around.
     **kwargs
         Additional (possibly inherited) options. See
-        https://leafletjs.com/reference.html#control-layers
+        https://leafletjs.com/reference-1.9.4.html#control-layers
 
     """
 
@@ -703,7 +703,7 @@ class Tooltip(MacroElement):
         Whether the tooltip should follow the mouse.
     **kwargs
         These values will map directly to the Leaflet Options. More info
-        available here: https://leafletjs.com/reference.html#tooltip
+        available here: https://leafletjs.com/reference-1.9.4.html#tooltip
 
     """
 
@@ -856,7 +856,7 @@ class CustomPane(MacroElement):
         determine which map elements lie over/under it. The default
         (625) corresponds to between markers and tooltips. Default
         panes and z-indexes can be found at
-        https://leafletjs.com/reference.html#map-pane
+        https://leafletjs.com/reference-1.9.4.html#map-pane
     pointer_events: bool, default False
         Whether or not layers in the pane should interact with the
         cursor. Setting to False will prevent interfering with
