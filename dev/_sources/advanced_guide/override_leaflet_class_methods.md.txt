@@ -10,7 +10,7 @@ import folium
 ## Customizing Leaflet behavior
 Sometimes you want to override Leaflet's javascript behavior. This can be done using the `Class.include` statement. This mimics Leaflet's
 `L.Class.include` method. See
-[here](https://leafletjs.com/examples/extending/extending-1-classes.html)
+[here](https://leafletjs.com/examples/extending-1-classes/)
 for more details.
 
 ### Example: adding an authentication header to a TileLayer
