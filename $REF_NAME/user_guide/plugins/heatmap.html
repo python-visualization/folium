@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Heatmap &#8212; Folium 1.0.0rc1 documentation</title>
+    <title>Heatmap &#8212; Folium 1.0.0 documentation</title>
   
   
   
@@ -27,20 +26,20 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=77c1c56c"></script>
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -48,20 +47,22 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/plugins/heatmap';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0rc1';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="HeatMapWithTime" href="heatmap_with_time.html" />
     <link rel="prev" title="GroupedLayerControl" href="grouped_layer_control.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc1" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -216,7 +217,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -227,15 +228,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -261,7 +262,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -270,7 +271,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -284,7 +285,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -347,15 +348,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -379,7 +380,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -442,7 +443,7 @@
 <li class="toctree-l2"><a class="reference internal" href="geocoder.html">Geocoder</a></li>
 <li class="toctree-l2"><a class="reference internal" href="geoman.html">Geoman</a></li>
 <li class="toctree-l2"><a class="reference internal" href="grouped_layer_control.html">GroupedLayerControl</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Heatmap</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Heatmap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="heatmap_with_time.html">HeatMapWithTime</a></li>
 <li class="toctree-l2"><a class="reference internal" href="locate_control.html">LocateControl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="marker_cluster.html">MarkerCluster</a></li>
@@ -453,6 +454,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_decorator.html">PolyLineDecorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_textpath.html">PolyLineTextPath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime</a></li>
@@ -508,7 +510,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -536,24 +538,361 @@
                   
   <section id="Heatmap">
 <h1>Heatmap<a class="headerlink" href="#Heatmap" title="Link to this heading">#</a></h1>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="n">data</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
-<span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
+<p>This plugin allows you to create a heat map to visualize the density of some feature on the map. Pass the data as a list of <code class="docutils literal notranslate"><span class="pre">[latitude,</span> <span class="pre">longitude]</span></code> pairs in the first argument.</p>
+<p>As an example let us create a <code class="docutils literal notranslate"><span class="pre">HeatMap</span></code> of pizzerias in Rome using data from OpenStreetMap (2026).</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">folium</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">folium.plugins</span><span class="w"> </span><span class="kn">import</span> <span class="n">HeatMap</span>
+
+<span class="c1"># List of latitude, longitude coordinates of pizza restaurants in Rome (acquired from OpenStreetMap)</span>
+<span class="n">pizzeria_coords</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">41.8883</span><span class="p">,</span> <span class="mf">12.4738</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.897</span><span class="p">,</span> <span class="mf">12.5127</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8821</span><span class="p">,</span> <span class="mf">12.4762</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8741</span><span class="p">,</span> <span class="mf">12.5135</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8983</span><span class="p">,</span> <span class="mf">12.4704</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8742</span><span class="p">,</span> <span class="mf">12.5171</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9067</span><span class="p">,</span> <span class="mf">12.4467</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8995</span><span class="p">,</span> <span class="mf">12.4762</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8876</span><span class="p">,</span> <span class="mf">12.4717</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9091</span><span class="p">,</span> <span class="mf">12.4573</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9142</span><span class="p">,</span> <span class="mf">12.4501</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8762</span><span class="p">,</span> <span class="mf">12.517</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9103</span><span class="p">,</span> <span class="mf">12.448</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8792</span><span class="p">,</span> <span class="mf">12.4514</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9077</span><span class="p">,</span> <span class="mf">12.4466</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9202</span><span class="p">,</span> <span class="mf">12.4415</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9059</span><span class="p">,</span> <span class="mf">12.5052</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8989</span><span class="p">,</span> <span class="mf">12.4926</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8896</span><span class="p">,</span> <span class="mf">12.4955</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9126</span><span class="p">,</span> <span class="mf">12.4542</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8931</span><span class="p">,</span> <span class="mf">12.4882</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9008</span><span class="p">,</span> <span class="mf">12.5145</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8995</span><span class="p">,</span> <span class="mf">12.5168</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8908</span><span class="p">,</span> <span class="mf">12.4707</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9</span><span class="p">,</span> <span class="mf">12.5002</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9036</span><span class="p">,</span> <span class="mf">12.462</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8984</span><span class="p">,</span> <span class="mf">12.4754</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9117</span><span class="p">,</span> <span class="mf">12.4416</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8926</span><span class="p">,</span> <span class="mf">12.5057</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8974</span><span class="p">,</span> <span class="mf">12.5128</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.908</span><span class="p">,</span> <span class="mf">12.4584</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8762</span><span class="p">,</span> <span class="mf">12.5059</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8884</span><span class="p">,</span> <span class="mf">12.4705</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9065</span><span class="p">,</span> <span class="mf">12.5009</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8989</span><span class="p">,</span> <span class="mf">12.4988</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.896</span><span class="p">,</span> <span class="mf">12.4995</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9135</span><span class="p">,</span> <span class="mf">12.4415</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9091</span><span class="p">,</span> <span class="mf">12.4554</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8932</span><span class="p">,</span> <span class="mf">12.4752</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8957</span><span class="p">,</span> <span class="mf">12.5131</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8999</span><span class="p">,</span> <span class="mf">12.4798</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8948</span><span class="p">,</span> <span class="mf">12.4767</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9003</span><span class="p">,</span> <span class="mf">12.4695</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9001</span><span class="p">,</span> <span class="mf">12.4711</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9057</span><span class="p">,</span> <span class="mf">12.4457</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9169</span><span class="p">,</span> <span class="mf">12.4582</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8976</span><span class="p">,</span> <span class="mf">12.4708</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8887</span><span class="p">,</span> <span class="mf">12.4978</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9006</span><span class="p">,</span> <span class="mf">12.4836</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.91</span><span class="p">,</span> <span class="mf">12.5014</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9084</span><span class="p">,</span> <span class="mf">12.4571</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8756</span><span class="p">,</span> <span class="mf">12.4476</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9013</span><span class="p">,</span> <span class="mf">12.4846</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8737</span><span class="p">,</span> <span class="mf">12.4475</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8734</span><span class="p">,</span> <span class="mf">12.4478</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8738</span><span class="p">,</span> <span class="mf">12.4654</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.899</span><span class="p">,</span> <span class="mf">12.4959</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8818</span><span class="p">,</span> <span class="mf">12.4585</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8963</span><span class="p">,</span> <span class="mf">12.5133</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8974</span><span class="p">,</span> <span class="mf">12.4965</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8976</span><span class="p">,</span> <span class="mf">12.496</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.88</span><span class="p">,</span> <span class="mf">12.4757</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8868</span><span class="p">,</span> <span class="mf">12.4719</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9076</span><span class="p">,</span> <span class="mf">12.4978</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9047</span><span class="p">,</span> <span class="mf">12.458</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.889</span><span class="p">,</span> <span class="mf">12.4977</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9085</span><span class="p">,</span> <span class="mf">12.4612</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9062</span><span class="p">,</span> <span class="mf">12.4631</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9137</span><span class="p">,</span> <span class="mf">12.4413</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.898</span><span class="p">,</span> <span class="mf">12.4719</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8995</span><span class="p">,</span> <span class="mf">12.4542</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8914</span><span class="p">,</span> <span class="mf">12.4686</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9004</span><span class="p">,</span> <span class="mf">12.4665</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8961</span><span class="p">,</span> <span class="mf">12.4779</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8781</span><span class="p">,</span> <span class="mf">12.5073</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9172</span><span class="p">,</span> <span class="mf">12.501</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8859</span><span class="p">,</span> <span class="mf">12.4725</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8996</span><span class="p">,</span> <span class="mf">12.4988</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8998</span><span class="p">,</span> <span class="mf">12.5012</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9</span><span class="p">,</span> <span class="mf">12.5011</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8956</span><span class="p">,</span> <span class="mf">12.5001</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.907</span><span class="p">,</span> <span class="mf">12.4608</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8983</span><span class="p">,</span> <span class="mf">12.5144</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9126</span><span class="p">,</span> <span class="mf">12.4757</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.911</span><span class="p">,</span> <span class="mf">12.4665</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9152</span><span class="p">,</span> <span class="mf">12.4748</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8963</span><span class="p">,</span> <span class="mf">12.4941</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.883</span><span class="p">,</span> <span class="mf">12.5143</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9018</span><span class="p">,</span> <span class="mf">12.4855</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8962</span><span class="p">,</span> <span class="mf">12.4729</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9107</span><span class="p">,</span> <span class="mf">12.503</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8743</span><span class="p">,</span> <span class="mf">12.4498</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8814</span><span class="p">,</span> <span class="mf">12.5134</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9065</span><span class="p">,</span> <span class="mf">12.4804</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8919</span><span class="p">,</span> <span class="mf">12.5088</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8805</span><span class="p">,</span> <span class="mf">12.506</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9083</span><span class="p">,</span> <span class="mf">12.4678</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9122</span><span class="p">,</span> <span class="mf">12.4756</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9069</span><span class="p">,</span> <span class="mf">12.5006</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9101</span><span class="p">,</span> <span class="mf">12.502</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8957</span><span class="p">,</span> <span class="mf">12.4931</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9264</span><span class="p">,</span> <span class="mf">12.5156</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8784</span><span class="p">,</span> <span class="mf">12.4781</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9124</span><span class="p">,</span> <span class="mf">12.5013</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9101</span><span class="p">,</span> <span class="mf">12.4966</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8821</span><span class="p">,</span> <span class="mf">12.4766</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8919</span><span class="p">,</span> <span class="mf">12.4686</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8723</span><span class="p">,</span> <span class="mf">12.4786</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8719</span><span class="p">,</span> <span class="mf">12.4793</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8715</span><span class="p">,</span> <span class="mf">12.4797</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.877</span><span class="p">,</span> <span class="mf">12.468</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8803</span><span class="p">,</span> <span class="mf">12.4689</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.913</span><span class="p">,</span> <span class="mf">12.5071</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8989</span><span class="p">,</span> <span class="mf">12.5155</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9046</span><span class="p">,</span> <span class="mf">12.5049</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8975</span><span class="p">,</span> <span class="mf">12.4791</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9056</span><span class="p">,</span> <span class="mf">12.4537</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9048</span><span class="p">,</span> <span class="mf">12.4458</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9256</span><span class="p">,</span> <span class="mf">12.4872</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.91</span><span class="p">,</span> <span class="mf">12.5015</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9021</span><span class="p">,</span> <span class="mf">12.4623</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8839</span><span class="p">,</span> <span class="mf">12.5089</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9087</span><span class="p">,</span> <span class="mf">12.4882</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.913</span><span class="p">,</span> <span class="mf">12.4975</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9038</span><span class="p">,</span> <span class="mf">12.494</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9172</span><span class="p">,</span> <span class="mf">12.4983</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8982</span><span class="p">,</span> <span class="mf">12.5172</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8947</span><span class="p">,</span> <span class="mf">12.4917</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8818</span><span class="p">,</span> <span class="mf">12.4767</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9074</span><span class="p">,</span> <span class="mf">12.4541</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9085</span><span class="p">,</span> <span class="mf">12.4987</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8721</span><span class="p">,</span> <span class="mf">12.4709</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8799</span><span class="p">,</span> <span class="mf">12.4768</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.892</span><span class="p">,</span> <span class="mf">12.4685</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9051</span><span class="p">,</span> <span class="mf">12.4775</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8738</span><span class="p">,</span> <span class="mf">12.4807</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9005</span><span class="p">,</span> <span class="mf">12.4756</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.896</span><span class="p">,</span> <span class="mf">12.4722</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8946</span><span class="p">,</span> <span class="mf">12.5019</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8974</span><span class="p">,</span> <span class="mf">12.4682</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8821</span><span class="p">,</span> <span class="mf">12.5089</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8804</span><span class="p">,</span> <span class="mf">12.4777</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8958</span><span class="p">,</span> <span class="mf">12.514</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8857</span><span class="p">,</span> <span class="mf">12.51</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.893</span><span class="p">,</span> <span class="mf">12.4776</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8921</span><span class="p">,</span> <span class="mf">12.502</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.892</span><span class="p">,</span> <span class="mf">12.5018</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.875</span><span class="p">,</span> <span class="mf">12.4579</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9262</span><span class="p">,</span> <span class="mf">12.4638</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8827</span><span class="p">,</span> <span class="mf">12.4566</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8764</span><span class="p">,</span> <span class="mf">12.4672</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8808</span><span class="p">,</span> <span class="mf">12.5028</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9109</span><span class="p">,</span> <span class="mf">12.5012</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8794</span><span class="p">,</span> <span class="mf">12.4784</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.88</span><span class="p">,</span> <span class="mf">12.4618</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8721</span><span class="p">,</span> <span class="mf">12.4799</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8827</span><span class="p">,</span> <span class="mf">12.4865</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9023</span><span class="p">,</span> <span class="mf">12.4941</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9023</span><span class="p">,</span> <span class="mf">12.4939</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9017</span><span class="p">,</span> <span class="mf">12.5035</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9053</span><span class="p">,</span> <span class="mf">12.4998</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9038</span><span class="p">,</span> <span class="mf">12.5033</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9039</span><span class="p">,</span> <span class="mf">12.5005</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9046</span><span class="p">,</span> <span class="mf">12.5007</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8898</span><span class="p">,</span> <span class="mf">12.495</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8954</span><span class="p">,</span> <span class="mf">12.4727</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9085</span><span class="p">,</span> <span class="mf">12.4893</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9098</span><span class="p">,</span> <span class="mf">12.4911</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9097</span><span class="p">,</span> <span class="mf">12.4968</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.906</span><span class="p">,</span> <span class="mf">12.4958</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8728</span><span class="p">,</span> <span class="mf">12.4845</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.893</span><span class="p">,</span> <span class="mf">12.5012</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8724</span><span class="p">,</span> <span class="mf">12.5123</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9007</span><span class="p">,</span> <span class="mf">12.5022</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8994</span><span class="p">,</span> <span class="mf">12.4919</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8986</span><span class="p">,</span> <span class="mf">12.501</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8952</span><span class="p">,</span> <span class="mf">12.4905</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9086</span><span class="p">,</span> <span class="mf">12.4625</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9119</span><span class="p">,</span> <span class="mf">12.4564</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9128</span><span class="p">,</span> <span class="mf">12.4756</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9105</span><span class="p">,</span> <span class="mf">12.5003</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.911</span><span class="p">,</span> <span class="mf">12.5011</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8999</span><span class="p">,</span> <span class="mf">12.453</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9066</span><span class="p">,</span> <span class="mf">12.5168</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9067</span><span class="p">,</span> <span class="mf">12.5163</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9079</span><span class="p">,</span> <span class="mf">12.5167</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8771</span><span class="p">,</span> <span class="mf">12.5162</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9117</span><span class="p">,</span> <span class="mf">12.4989</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8997</span><span class="p">,</span> <span class="mf">12.484</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9037</span><span class="p">,</span> <span class="mf">12.4878</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8791</span><span class="p">,</span> <span class="mf">12.5035</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9038</span><span class="p">,</span> <span class="mf">12.4814</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8939</span><span class="p">,</span> <span class="mf">12.4882</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.909</span><span class="p">,</span> <span class="mf">12.4498</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.908</span><span class="p">,</span> <span class="mf">12.4541</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8807</span><span class="p">,</span> <span class="mf">12.5134</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9014</span><span class="p">,</span> <span class="mf">12.5017</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8944</span><span class="p">,</span> <span class="mf">12.4737</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8776</span><span class="p">,</span> <span class="mf">12.4736</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8828</span><span class="p">,</span> <span class="mf">12.5147</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8778</span><span class="p">,</span> <span class="mf">12.4739</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8739</span><span class="p">,</span> <span class="mf">12.4801</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9111</span><span class="p">,</span> <span class="mf">12.5166</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8779</span><span class="p">,</span> <span class="mf">12.5053</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.871</span><span class="p">,</span> <span class="mf">12.5157</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8777</span><span class="p">,</span> <span class="mf">12.5085</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8764</span><span class="p">,</span> <span class="mf">12.5093</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8981</span><span class="p">,</span> <span class="mf">12.5153</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9099</span><span class="p">,</span> <span class="mf">12.4522</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8976</span><span class="p">,</span> <span class="mf">12.4568</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8886</span><span class="p">,</span> <span class="mf">12.471</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9018</span><span class="p">,</span> <span class="mf">12.4751</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9031</span><span class="p">,</span> <span class="mf">12.4832</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8741</span><span class="p">,</span> <span class="mf">12.4478</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8846</span><span class="p">,</span> <span class="mf">12.4607</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.9214</span><span class="p">,</span> <span class="mf">12.5035</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8987</span><span class="p">,</span> <span class="mf">12.4773</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.8988</span><span class="p">,</span> <span class="mf">12.4773</span><span class="p">],</span> <span class="p">[</span><span class="mf">41.914</span><span class="p">,</span> <span class="mf">12.4748</span><span class="p">]]</span>
+
+<span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">41.9</span><span class="p">,</span> <span class="mf">12.5</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">HeatMap</span><span class="p">(</span><span class="n">pizzeria_coords</span><span class="p">)</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+
+<span class="n">m</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div style="width:100%;"><div style="position:relative;width:100%;height:0;padding-bottom:60%;"><span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span><iframe srcdoc="&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
+
+            &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
+            &lt;style&gt;
+                #map_03f4144894b2cc01ee335fec9dace75d {
+                    position: relative;
+                    width: 100.0vw;
+                    height: 100.0vh;
+
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            &lt;/style&gt;
+
+            &lt;style&gt;html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            &lt;/style&gt;
+
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
+
+            &lt;script&gt;
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            &lt;/script&gt;
+
+
+    &lt;script src=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium@main/folium/templates/leaflet_heat.min.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_03f4144894b2cc01ee335fec9dace75d&quot; &gt;&lt;/div&gt;
+
+&lt;/body&gt;
+&lt;script&gt;
+
+
+            var map_03f4144894b2cc01ee335fec9dace75d = L.map(
+                &quot;map_03f4144894b2cc01ee335fec9dace75d&quot;,
+                {
+                    center: [41.9, 12.5],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  &quot;zoom&quot;: 12,
+  &quot;zoomControl&quot;: true,
+  &quot;preferCanvas&quot;: false,
+}
+
+                }
+            );
+
+
+
+
+
+            var tile_layer_120f0b778491ae336459b8a6af20cbe5 = L.tileLayer(
+                &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+                {
+  &quot;minZoom&quot;: 0,
+  &quot;maxZoom&quot;: 19,
+  &quot;maxNativeZoom&quot;: 19,
+  &quot;noWrap&quot;: false,
+  &quot;attribution&quot;: &quot;\u0026copy; \u003ca href=\&quot;https://www.openstreetmap.org/copyright\&quot;\u003eOpenStreetMap\u003c/a\u003e contributors&quot;,
+  &quot;subdomains&quot;: &quot;abc&quot;,
+  &quot;detectRetina&quot;: false,
+  &quot;tms&quot;: false,
+  &quot;opacity&quot;: 1,
+}
+
+            );
+
+
+            tile_layer_120f0b778491ae336459b8a6af20cbe5.addTo(map_03f4144894b2cc01ee335fec9dace75d);
+
+
+            var heat_map_5f83ace282cb9b06f9cbc381459b32ac = L.heatLayer(
+                [[41.8883, 12.4738], [41.897, 12.5127], [41.8821, 12.4762], [41.8741, 12.5135], [41.8983, 12.4704], [41.8742, 12.5171], [41.9067, 12.4467], [41.8995, 12.4762], [41.8876, 12.4717], [41.9091, 12.4573], [41.9142, 12.4501], [41.8762, 12.517], [41.9103, 12.448], [41.8792, 12.4514], [41.9077, 12.4466], [41.9202, 12.4415], [41.9059, 12.5052], [41.8989, 12.4926], [41.8896, 12.4955], [41.9126, 12.4542], [41.8931, 12.4882], [41.9008, 12.5145], [41.8995, 12.5168], [41.8908, 12.4707], [41.9, 12.5002], [41.9036, 12.462], [41.8984, 12.4754], [41.9117, 12.4416], [41.8926, 12.5057], [41.8974, 12.5128], [41.908, 12.4584], [41.8762, 12.5059], [41.8884, 12.4705], [41.9065, 12.5009], [41.8989, 12.4988], [41.896, 12.4995], [41.9135, 12.4415], [41.9091, 12.4554], [41.8932, 12.4752], [41.8957, 12.5131], [41.8999, 12.4798], [41.8948, 12.4767], [41.9003, 12.4695], [41.9001, 12.4711], [41.9057, 12.4457], [41.9169, 12.4582], [41.8976, 12.4708], [41.8887, 12.4978], [41.9006, 12.4836], [41.91, 12.5014], [41.9084, 12.4571], [41.8756, 12.4476], [41.9013, 12.4846], [41.8737, 12.4475], [41.8734, 12.4478], [41.8738, 12.4654], [41.899, 12.4959], [41.8818, 12.4585], [41.8963, 12.5133], [41.8974, 12.4965], [41.8976, 12.496], [41.88, 12.4757], [41.8868, 12.4719], [41.9076, 12.4978], [41.9047, 12.458], [41.889, 12.4977], [41.9085, 12.4612], [41.9062, 12.4631], [41.9137, 12.4413], [41.898, 12.4719], [41.8995, 12.4542], [41.8914, 12.4686], [41.9004, 12.4665], [41.8961, 12.4779], [41.8781, 12.5073], [41.9172, 12.501], [41.8859, 12.4725], [41.8996, 12.4988], [41.8998, 12.5012], [41.9, 12.5011], [41.8956, 12.5001], [41.907, 12.4608], [41.8983, 12.5144], [41.9126, 12.4757], [41.911, 12.4665], [41.9152, 12.4748], [41.8963, 12.4941], [41.883, 12.5143], [41.9018, 12.4855], [41.8962, 12.4729], [41.9107, 12.503], [41.8743, 12.4498], [41.8814, 12.5134], [41.9065, 12.4804], [41.8919, 12.5088], [41.8805, 12.506], [41.9083, 12.4678], [41.9122, 12.4756], [41.9069, 12.5006], [41.9101, 12.502], [41.8957, 12.4931], [41.9264, 12.5156], [41.8784, 12.4781], [41.9124, 12.5013], [41.9101, 12.4966], [41.8821, 12.4766], [41.8919, 12.4686], [41.8723, 12.4786], [41.8719, 12.4793], [41.8715, 12.4797], [41.877, 12.468], [41.8803, 12.4689], [41.913, 12.5071], [41.8989, 12.5155], [41.9046, 12.5049], [41.8975, 12.4791], [41.9056, 12.4537], [41.9048, 12.4458], [41.9256, 12.4872], [41.91, 12.5015], [41.9021, 12.4623], [41.8839, 12.5089], [41.9087, 12.4882], [41.913, 12.4975], [41.9038, 12.494], [41.9172, 12.4983], [41.8982, 12.5172], [41.8947, 12.4917], [41.8818, 12.4767], [41.9074, 12.4541], [41.9085, 12.4987], [41.8721, 12.4709], [41.8799, 12.4768], [41.892, 12.4685], [41.9051, 12.4775], [41.8738, 12.4807], [41.9005, 12.4756], [41.896, 12.4722], [41.8946, 12.5019], [41.8974, 12.4682], [41.8821, 12.5089], [41.8804, 12.4777], [41.8958, 12.514], [41.8857, 12.51], [41.893, 12.4776], [41.8921, 12.502], [41.892, 12.5018], [41.875, 12.4579], [41.9262, 12.4638], [41.8827, 12.4566], [41.8764, 12.4672], [41.8808, 12.5028], [41.9109, 12.5012], [41.8794, 12.4784], [41.88, 12.4618], [41.8721, 12.4799], [41.8827, 12.4865], [41.9023, 12.4941], [41.9023, 12.4939], [41.9017, 12.5035], [41.9053, 12.4998], [41.9038, 12.5033], [41.9039, 12.5005], [41.9046, 12.5007], [41.8898, 12.495], [41.8954, 12.4727], [41.9085, 12.4893], [41.9098, 12.4911], [41.9097, 12.4968], [41.906, 12.4958], [41.8728, 12.4845], [41.893, 12.5012], [41.8724, 12.5123], [41.9007, 12.5022], [41.8994, 12.4919], [41.8986, 12.501], [41.8952, 12.4905], [41.9086, 12.4625], [41.9119, 12.4564], [41.9128, 12.4756], [41.9105, 12.5003], [41.911, 12.5011], [41.8999, 12.453], [41.9066, 12.5168], [41.9067, 12.5163], [41.9079, 12.5167], [41.8771, 12.5162], [41.9117, 12.4989], [41.8997, 12.484], [41.9037, 12.4878], [41.8791, 12.5035], [41.9038, 12.4814], [41.8939, 12.4882], [41.909, 12.4498], [41.908, 12.4541], [41.8807, 12.5134], [41.9014, 12.5017], [41.8944, 12.4737], [41.8776, 12.4736], [41.8828, 12.5147], [41.8778, 12.4739], [41.8739, 12.4801], [41.9111, 12.5166], [41.8779, 12.5053], [41.871, 12.5157], [41.8777, 12.5085], [41.8764, 12.5093], [41.8981, 12.5153], [41.9099, 12.4522], [41.8976, 12.4568], [41.8886, 12.471], [41.9018, 12.4751], [41.9031, 12.4832], [41.8741, 12.4478], [41.8846, 12.4607], [41.9214, 12.5035], [41.8987, 12.4773], [41.8988, 12.4773], [41.914, 12.4748]],
+                {
+  &quot;minOpacity&quot;: 0.5,
+  &quot;maxZoom&quot;: 18,
+  &quot;radius&quot;: 25,
+  &quot;blur&quot;: 15,
+}
+            );
+
+
+            heat_map_5f83ace282cb9b06f9cbc381459b32ac.addTo(map_03f4144894b2cc01ee335fec9dace75d);
+
+&lt;/script&gt;
+&lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
+</div>
+<p>One can also set a weight for each coordinate by passing the data as a list of <code class="docutils literal notranslate"><span class="pre">[latitude,</span> <span class="pre">longitude,</span> <span class="pre">weight]</span></code> triples. Below is an example for this case using random data. See the API reference for more options.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Generate some random data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
 
 <span class="n">m</span> <span class="o">=</span> <span class="n">folium</span><span class="o">.</span><span class="n">Map</span><span class="p">([</span><span class="mf">48.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span> <span class="n">zoom_start</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
 
@@ -573,13 +912,12 @@
 &lt;head&gt;
 
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -587,7 +925,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_7a34bb1cb82060dbff315478e0e578a7 {
+                #map_9487ef6d4defaaec7f6c3cdd8b66bb19 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -606,14 +944,218 @@
             }
             &lt;/style&gt;
 
-            &lt;style&gt;#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            &lt;/style&gt;
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
 
             &lt;script&gt;
                 L_NO_TOUCH = false;
@@ -626,14 +1168,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_7a34bb1cb82060dbff315478e0e578a7&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_9487ef6d4defaaec7f6c3cdd8b66bb19&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_7a34bb1cb82060dbff315478e0e578a7 = L.map(
-                &quot;map_7a34bb1cb82060dbff315478e0e578a7&quot;,
+            var map_9487ef6d4defaaec7f6c3cdd8b66bb19 = L.map(
+                &quot;map_9487ef6d4defaaec7f6c3cdd8b66bb19&quot;,
                 {
                     center: [48.0, 5.0],
                     crs: L.CRS.EPSG3857,
@@ -650,7 +1192,7 @@
 
 
 
-            var tile_layer_a4587a92b525e873a4d1e722e0bdf230 = L.tileLayer(
+            var tile_layer_3ab0c711da1c65ead54140af296a2cac = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -667,11 +1209,11 @@
             );
 
 
-            tile_layer_a4587a92b525e873a4d1e722e0bdf230.addTo(map_7a34bb1cb82060dbff315478e0e578a7);
+            tile_layer_3ab0c711da1c65ead54140af296a2cac.addTo(map_9487ef6d4defaaec7f6c3cdd8b66bb19);
 
 
-            var heat_map_0ebd58a35c06572cdfc1a00162e02384 = L.heatLayer(
-                [[48.439722791009494, 5.0756735023446975, 1.9718362693542375], [49.49476181482383, 5.439451077253233, -1.809999894995205], [47.21386346644512, 5.3267520270138276, 2.2597867601061132], [48.87694133619134, 4.20507168573303, 0.2833423327480259], [47.422719631835605, 7.081581013527824, 1.9795819264649182], [49.51064338000212, 6.686294926636553, 1.1968078771070598], [47.45454261258806, 4.3601670263301315, 0.7072962645836149], [46.88800106224293, 5.402509841492307, 1.2305739471886272], [46.623608111204206, 3.402599813981013, 0.640873786371624], [48.26394689320549, 4.908225659456595, 1.206854556661375], [48.23202253798568, 5.11067890521036, 0.8296045097270611], [48.88374343127229, 5.297291198947473, 2.9323002084213683], [47.660194598784074, 3.987883496091093, -1.7496651320604628], [48.58420820710087, 6.519114693191138, 0.29748057379148973], [48.288526770598814, 4.618362553183985, 2.3548136836568716], [47.39525913601222, 2.9451635704455623, 1.7142210868752756], [46.6697552480309, 3.1851554386960625, -0.001093986307706185], [48.78410873706553, 5.982906629069099, 0.5757464739029214], [49.350088369662345, 4.598085085402981, 0.610817326080721], [46.51557283825586, 4.976832765303192, -0.02080897049732955], [46.54212662861384, 7.130271451720759, -0.3101926818194074], [48.02234363687202, 5.351930061128329, 1.0860354363815803], [47.884823163035215, 4.620422093589038, 1.3011755938117822], [47.4704323138849, 7.079656807744097, 1.4543346217896613], [46.89315778314567, 4.7457417404186355, 1.7096288506102968], [47.42525276261358, 4.7610170048562335, -0.4415779362139183], [47.4892280302894, 4.498161786476691, 0.2436477930197336], [47.86658620433164, 5.7675129376871475, -0.12214974609613116], [48.75899542008896, 4.4953277024023075, 0.6825786850364186], [46.202961394080276, 5.293107759434723, -0.08948842801650048], [47.81537298677266, 5.62854186491831, 2.706481014448812], [46.18604152347025, 4.392961670171218, 1.1437368851798266], [47.80753070528962, 5.202407330044488, 0.4844487491495051], [47.345255159376315, 4.667437838389064, 1.3063752740555736], [48.45745270071732, 6.914085969882321, 1.2174460696748586], [47.48241609871654, 5.062498664134666, -0.4346732868437555], [50.180260832424736, 6.625813463103968, 0.0331767295694293], [47.01747584717003, 7.9190805197155525, 1.2407206517054086], [48.20433708808197, 6.335400698492993, 0.8592980071442793], [49.020359018653146, 5.840477646891013, 0.883533713932151], [48.464803038141014, 4.742617627616942, 1.4583847256155087], [49.57727716580829, 6.364713855532968, 1.7917149848522693], [48.333454475018954, 4.882439060494914, 1.955810531349969], [47.56481276465473, 4.6200946285545275, 1.6833556545043806], [49.75869596684264, 5.26929574059464, 2.153132105448586], [48.520837389115435, 5.957990492885771, 1.9562532606538314], [46.785847272758225, 4.412393620459052, -0.15350352790457777], [48.55734208511223, 4.81742642225343, 1.0437582699848285], [47.21367514939162, 5.737892289595181, 0.15993427190331055], [48.789218801809774, 2.943358364966521, 0.5754235959994886], [46.51527813406131, 4.6018422997277675, -0.820421596573903], [47.86100843321553, 5.2044042048532795, 1.4476021420025929], [47.89130659901441, 4.254947669451639, 2.480290047757502], [45.94835100982666, 5.901698948456135, 1.5037570830286247], [48.68060097341199, 4.85740587468883, 0.15226348148858382], [48.85965032536747, 4.409169434505867, -0.53523600569342], [47.1808579189691, 5.440960182925119, 0.024313154694433625], [49.45508477632893, 4.0417808557030535, 0.831527492110047], [50.103583299790415, 4.464472944819657, 0.7210363076002058], [48.07602217017879, 5.1385973350029746, 1.5136380818480104], [46.13533089036146, 4.9176515580771305, 1.8585707138235978], [49.338893573900464, 3.267091965170276, 1.0457981953748976], [48.26439985602736, 4.324425178774296, 0.06416415733248726], [47.58657105936966, 4.993936012889078, 0.24636300502738218], [46.55410047738562, 3.8811543343293877, 0.3510436007269767], [46.97111073560677, 3.2963793413480404, -0.5902552747190164], [48.078119657062814, 4.4599647975417875, 2.1394181224120388], [49.566562645909976, 4.260218930136899, 0.7936461731145906], [48.18710592604869, 6.851996609429373, 0.5431401385090426], [48.74929410954487, 5.3172172299411535, 0.7703129238511762], [48.15504844862959, 5.838122273115722, -0.1728717104390578], [48.31705876569517, 4.821463008281054, 0.9141745897532514], [48.99359648173987, 2.80075565332255, -0.8337767044027609], [48.24435661612327, 4.667569687672685, 1.036329470686472], [47.27930626707675, 5.594378319214535, 0.04555991515630686], [47.17776276964485, 6.236025236316584, 2.5364614958934464], [47.02844032850231, 4.873045093832944, -0.05839400125289251], [47.78677725977868, 5.56864223282957, 2.3834621104913927], [46.25048164352251, 5.484672888082852, 0.9169948738898187], [47.9538501574644, 4.499812269371584, 0.833611084224559], [48.204845717093505, 5.378060459396797, 0.3023012665245456], [48.678053226417184, 5.682902280834931, 1.154003700026096], [49.54932888528313, 3.494671098151292, 1.700862083063274], [48.54137295865499, 4.610917202051841, 0.9397496754738958], [47.29978398597592, 6.868577390852646, -0.20830715639978048], [48.8322387542793, 4.631590640054085, 0.6191603727449786], [47.67556605101513, 6.204498616250585, 1.0563045874244037], [46.99022473981142, 4.1184772470351145, -1.1637936726919764], [49.05759138117072, 3.816773959635158, 1.201409102008174], [47.96939862508704, 3.6846880156992046, -0.02586747148259083], [47.753849457456326, 6.1615027679727135, -0.9741753398881425], [48.26826539007595, 3.6453129340458026, 2.0065851737799516], [47.47124321310439, 5.212836218844379, -0.3298705266888138], [48.33343650045117, 3.9130236313975093, 3.985038036645024], [48.43449712826694, 2.7954935552890503, 0.6050613349602127], [47.911058769904066, 4.170248723244823, -0.1294279505979643], [48.6788491668325, 3.5735703012867597, 2.4191119055607695], [49.63465659418843, 6.0836299767918955, -0.3313263374826778], [47.36330027889506, 5.117048627090871, 0.9025224694673155], [47.26958626652651, 4.617051339310552, 1.958395054028482]],
+            var heat_map_ca3d235f45c9b94ae3ac7ded0c09bd8f = L.heatLayer(
+                [[48.37385660823684, 4.874689280828871, 1.0367768921974705], [49.6691730287085, 4.856754561991195, -0.42419431150771314], [47.3505002367565, 4.111571094274252, 1.6705392083620925], [49.01857020285002, 7.068340039934611, 1.9797103143396493], [49.16003737311269, 6.330345020828389, 0.5542424425674748], [47.26078963230329, 4.07642212538893, 0.5754367292153892], [48.05337779835997, 4.74607815442199, 1.8111002747856788], [47.81758097686598, 4.8605609237033045, 0.21591479615892517], [50.3794477886146, 5.229752627216575, 0.9251971078284785], [48.57931845298304, 3.214114310791193, 0.3394233978698612], [48.722102373675106, 4.152816494298305, 1.2460966112745713], [49.40415249421684, 4.438766810369862, 1.1193690795164433], [45.96527487494437, 6.833220295480255, 0.9119953656459115], [47.76731579169184, 3.948729896814894, 2.2392098693581484], [48.858175054203585, 3.005887906605219, -0.8313990144415455], [46.52598393465711, 5.591139344800553, 0.9130100954943121], [49.4285643056823, 5.143526589361095, 1.9918570997319252], [47.3157161914002, 5.215182158095631, -0.21417106439631106], [47.81292713442096, 5.346558608305474, -0.3053585548097031], [48.44070966270463, 5.492732362755451, 1.5933506511208324], [48.740204783675885, 3.5998864081773387, -0.3873218532474405], [49.157592891634096, 4.987921282673428, 1.2019465152128996], [49.20676380054032, 3.6022028110271034, -0.6774923805541482], [50.0910836127083, 6.005543559963625, 0.8863064853525288], [49.6603370036582, 6.3238049558655955, 2.0614475838565625], [46.73510456846824, 5.950220619133027, -0.3861580505700575], [47.57510771685051, 6.583761840420479, 0.8123613363561784], [46.61485196989178, 5.302674374037298, 1.142356211053315], [47.29390413177209, 6.784413461039681, -0.07517003746080775], [45.65566460056451, 3.9740997593584564, 0.7999554658008674], [47.008442254683416, 3.824656535359871, 0.8127324468906236], [47.60670540626752, 6.78323934301706, 2.2220498243006825], [48.57007962955228, 4.939123222955453, 1.2922329632797802], [49.205247652585065, 5.105197905898146, 2.4740965331039275], [48.97667730948929, 5.000779417124888, 2.9534400243817016], [47.52363185773073, 4.530763209791745, 0.8327930683297884], [47.665409466108336, 6.321320658289086, 2.2109487331783715], [48.35743461415659, 3.3637374216136644, 1.7007683545650651], [47.791374013433014, 2.5572744095509266, -0.34656353491070124], [49.81002590742573, 5.144272233798274, 2.048583777129598], [47.8689273130128, 3.291898474579602, 1.4309540887182086], [48.1995345787368, 5.2847558385820275, 1.6170288968649515], [46.37813701514056, 4.153440539171918, -0.10400755236962356], [46.63140886462581, 3.9532278753359815, 2.0456662480988586], [48.70710778495125, 5.3466235339321075, 0.4552678635746783], [48.89908039166771, 4.943710964811028, 0.23705573448922368], [47.97908865830777, 3.92017288337685, 1.3052731039780827], [48.557027382410325, 6.652454484874852, 2.3748851756708205], [46.355542290481665, 4.58219883669214, 1.3450053596169984], [48.37842651954451, 6.083160802310752, 1.5850837757260599], [46.616135788095235, 5.624656011859643, 1.1870501608244846], [47.23950071315848, 4.756746963530869, 1.4957194667429417], [46.3314047286375, 5.104434963677373, 0.47413114664069245], [48.801626340811865, 4.528730489101471, 1.4252418002698168], [47.977028978683066, 3.3384226498822644, -0.11854056608293573], [47.912415769741386, 4.920028559262539, 2.9424440540486017], [48.03020709989331, 4.321348165763352, -0.34424023743512633], [47.43758989551262, 4.682502705562584, 0.8868611165503639], [48.770210732002454, 5.810777475858433, 1.8104167672108293], [47.995489843972734, 4.3471880296188035, -0.7124874414260618], [48.54651318196178, 4.367154292695444, 2.299662173953116], [47.95547720167381, 4.464581934726647, 1.557896704984442], [47.1003265101999, 5.69726252926888, 1.7722910901672484], [47.37432232346778, 5.252135315430719, 0.8639292201549891], [48.1451851111522, 4.781745524421746, 0.9872945153006235], [48.8390178947426, 3.725324740586509, -0.04957262545177343], [46.34105226242255, 5.277180413980244, -0.09696434920066554], [46.521460322614146, 4.714644341145051, 2.9063538780507683], [47.2816163479917, 6.097111273125264, 0.506054872846058], [48.55571037214085, 3.2836063659651806, 0.7677201412660803], [45.79303674377148, 5.335870132125211, 0.6517463044829566], [47.26625377237903, 6.082384959287718, 2.9681278822706396], [47.62671952491555, 5.563329715842329, 0.954402625467104], [49.64706802243887, 4.847101341732958, 1.1607339478231486], [46.806113684816964, 5.226114508788314, 0.42915402668220637], [46.9358351427236, 5.126771562740942, 1.063797416208066], [48.22096054434005, 6.521593556688485, 0.8735075348851864], [48.799176582742454, 4.5918401965149656, 0.693887110231078], [47.715348017216, 4.703250479946197, 1.4324156437647897], [47.01096125904005, 5.69607397357362, 1.6127316452643565], [47.586326297716866, 5.019635209820059, 1.163354693189148], [48.15891398169383, 4.000207617567083, 1.2135204021851689], [48.36501225720469, 4.435204341321019, 1.057874949386442], [48.08140410224862, 3.3118526919898983, 1.879791762690993], [47.987475723792066, 5.0663176878066984, 2.5467973999557234], [47.6925566821686, 5.0628417966628, 2.318326626627443], [47.08506725805197, 5.691232529593607, -1.1685286374517059], [47.82120253757615, 5.21858422996051, 2.4193633409251216], [46.910705455940395, 5.210871553095012, 0.14106283821047272], [47.62348255714913, 3.9293525666689755, 1.4625881121702111], [46.99015059539448, 4.588947727824775, 0.5163932333526602], [46.4181910404251, 5.317047735761729, 1.738076241058498], [46.14295237686147, 4.32391997775943, 0.44646959114037], [48.38453182054238, 4.234243597051683, 0.8341945852136943], [46.981995222233756, 3.661758639610082, 0.5355796001691511], [48.74968237017894, 5.239424418831709, 0.615048990319361], [47.52015197808656, 5.7065684583642815, 1.2133411326379617], [49.09319424683499, 6.239340062601516, 0.6699271923530302], [49.090844891320955, 6.22642305872674, 1.51602116613885], [49.386442215075434, 5.533904940004753, 0.18861113660877038]],
                 {
   &quot;minOpacity&quot;: 0.5,
   &quot;maxZoom&quot;: 18,
@@ -681,7 +1223,7 @@
             );
 
 
-            heat_map_0ebd58a35c06572cdfc1a00162e02384.addTo(map_7a34bb1cb82060dbff315478e0e578a7);
+            heat_map_ca3d235f45c9b94ae3ac7ded0c09bd8f.addTo(map_9487ef6d4defaaec7f6c3cdd8b66bb19);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -723,7 +1265,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -749,8 +1291,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -758,7 +1300,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc1</div>
+Folium version 1.0.0</div>
       
         <div class="footer-item">
 
@@ -773,15 +1315,14 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
   </p>
 </div>
       
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>
@@ -793,7 +1334,7 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>

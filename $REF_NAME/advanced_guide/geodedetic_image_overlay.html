@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Geodedetic image overlay &#8212; Folium 1.0.0rc1 documentation</title>
+    <title>Geodedetic image overlay &#8212; Folium 1.0.0 documentation</title>
   
   
   
@@ -27,20 +26,20 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=924e9346" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=77c1c56c"></script>
+    <script src="../_static/documentation_options.js?v=8d563738"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -48,20 +47,22 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'advanced_guide/geodedetic_image_overlay';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0rc1';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Custom tiles" href="custom_tiles.html" />
     <link rel="prev" title="Panes and CustomPane" href="custom_panes.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc1" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -109,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -216,7 +217,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -227,15 +228,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -261,7 +262,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -270,7 +271,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -284,7 +285,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -347,15 +348,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -379,7 +380,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -398,7 +399,7 @@
 <li class="toctree-l1"><a class="reference internal" href="colormaps.html">Using colormaps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="world_copy.html">Scrolling beyond the world edge</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_panes.html">Panes and CustomPane</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Geodedetic image overlay</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Geodedetic image overlay</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_tiles.html">Custom tiles</a></li>
 <li class="toctree-l1"><a class="reference internal" href="piechart_icons.html">Piechart icons</a></li>
 <li class="toctree-l1"><a class="reference internal" href="polygons_from_list_of_points.html">Creating a polygon from a list of points</a></li>
@@ -441,7 +442,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -501,7 +502,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
 
-<span class="n">cm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="s2">&quot;cubehelix&quot;</span><span class="p">]</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="s2">"cubehelix"</span><span class="p">]</span>
 
 <span class="n">normed_data</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">data</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
 <span class="n">colored_data</span> <span class="o">=</span> <span class="n">cm</span><span class="p">(</span><span class="n">normed_data</span><span class="p">)</span>
@@ -539,13 +540,12 @@
 &lt;head&gt;
 
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -553,7 +553,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_d16d630965307915217cef0b4dd76bb7 {
+                #map_5cc9bd180af33f2fe6de35947a7be24a {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -572,14 +572,218 @@
             }
             &lt;/style&gt;
 
-            &lt;style&gt;#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            &lt;/style&gt;
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
 
             &lt;script&gt;
                 L_NO_TOUCH = false;
@@ -606,14 +810,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_d16d630965307915217cef0b4dd76bb7&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_5cc9bd180af33f2fe6de35947a7be24a&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_d16d630965307915217cef0b4dd76bb7 = L.map(
-                &quot;map_d16d630965307915217cef0b4dd76bb7&quot;,
+            var map_5cc9bd180af33f2fe6de35947a7be24a = L.map(
+                &quot;map_5cc9bd180af33f2fe6de35947a7be24a&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -630,7 +834,7 @@
 
 
 
-            var tile_layer_629ab8884eb2fccc182af032bde03ce9 = L.tileLayer(
+            var tile_layer_3d945e2822861d04a8d287904bf9e80a = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -647,10 +851,10 @@
             );
 
 
-            tile_layer_629ab8884eb2fccc182af032bde03ce9.addTo(map_d16d630965307915217cef0b4dd76bb7);
+            tile_layer_3d945e2822861d04a8d287904bf9e80a.addTo(map_5cc9bd180af33f2fe6de35947a7be24a);
 
 
-            var image_overlay_83d34538e7abce0856d08bb77e174f05 = L.imageOverlay(
+            var image_overlay_f216f37bd6fdb423888ae9e59df5d3d6 = L.imageOverlay(
                 &quot;data:image/png;base64,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&quot;,
                 [[-90.0, -180.0], [90.0, 180.0]],
                 {
@@ -659,7 +863,7 @@
             );
 
 
-            image_overlay_83d34538e7abce0856d08bb77e174f05.addTo(map_d16d630965307915217cef0b4dd76bb7);
+            image_overlay_f216f37bd6fdb423888ae9e59df5d3d6.addTo(map_5cc9bd180af33f2fe6de35947a7be24a);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -695,13 +899,12 @@
 &lt;head&gt;
 
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -709,7 +912,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_20e99f765778fd93d2a756ca04e970c5 {
+                #map_fa8da4bcc13f36b23111533aca7d201b {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -728,14 +931,218 @@
             }
             &lt;/style&gt;
 
-            &lt;style&gt;#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            &lt;/style&gt;
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
 
             &lt;script&gt;
                 L_NO_TOUCH = false;
@@ -762,14 +1169,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_20e99f765778fd93d2a756ca04e970c5&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_fa8da4bcc13f36b23111533aca7d201b&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_20e99f765778fd93d2a756ca04e970c5 = L.map(
-                &quot;map_20e99f765778fd93d2a756ca04e970c5&quot;,
+            var map_fa8da4bcc13f36b23111533aca7d201b = L.map(
+                &quot;map_fa8da4bcc13f36b23111533aca7d201b&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -786,7 +1193,7 @@
 
 
 
-            var tile_layer_77e62a5ef9af267a7787c18434995501 = L.tileLayer(
+            var tile_layer_1a596217cfeaeff1cbb149dcbd8e7082 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -803,11 +1210,11 @@
             );
 
 
-            tile_layer_77e62a5ef9af267a7787c18434995501.addTo(map_20e99f765778fd93d2a756ca04e970c5);
+            tile_layer_1a596217cfeaeff1cbb149dcbd8e7082.addTo(map_fa8da4bcc13f36b23111533aca7d201b);
 
 
-            var image_overlay_d5336d7229bb5deb13943f833a8725f2 = L.imageOverlay(
-                &quot;data:image/png;base64,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&quot;,
+            var image_overlay_e7ef8d4283e18c09152204e44f1c51b9 = L.imageOverlay(
+                &quot;data:image/png;base64,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&quot;,
                 [[-90.0, -180.0], [90.0, 180.0]],
                 {
   &quot;opacity&quot;: 0.25,
@@ -815,7 +1222,7 @@
             );
 
 
-            image_overlay_d5336d7229bb5deb13943f833a8725f2.addTo(map_20e99f765778fd93d2a756ca04e970c5);
+            image_overlay_e7ef8d4283e18c09152204e44f1c51b9.addTo(map_fa8da4bcc13f36b23111533aca7d201b);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -865,13 +1272,12 @@
 &lt;head&gt;
 
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -879,7 +1285,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_50991dbbd86df9615d9b399d771dd77c {
+                #map_9e8f167374724cd8a76b9490725fcc25 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -898,14 +1304,218 @@
             }
             &lt;/style&gt;
 
-            &lt;style&gt;#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            &lt;/style&gt;
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
 
             &lt;script&gt;
                 L_NO_TOUCH = false;
@@ -932,14 +1542,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_50991dbbd86df9615d9b399d771dd77c&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_9e8f167374724cd8a76b9490725fcc25&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_50991dbbd86df9615d9b399d771dd77c = L.map(
-                &quot;map_50991dbbd86df9615d9b399d771dd77c&quot;,
+            var map_9e8f167374724cd8a76b9490725fcc25 = L.map(
+                &quot;map_9e8f167374724cd8a76b9490725fcc25&quot;,
                 {
                     center: [0.0, 0.0],
                     crs: L.CRS.EPSG3857,
@@ -956,7 +1566,7 @@
 
 
 
-            var tile_layer_f4c97353a038ec438a6333e25d2fa151 = L.tileLayer(
+            var tile_layer_5c33dbbb8732d7f66ccae034b9978846 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -973,11 +1583,11 @@
             );
 
 
-            tile_layer_f4c97353a038ec438a6333e25d2fa151.addTo(map_50991dbbd86df9615d9b399d771dd77c);
+            tile_layer_5c33dbbb8732d7f66ccae034b9978846.addTo(map_9e8f167374724cd8a76b9490725fcc25);
 
 
-            var image_overlay_a450438350f93ea9b2d3906c3f7bc17f = L.imageOverlay(
-                &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAACRCAYAAACPHpWeAAAFeklEQVR42u2db2hVZRzHz9xa0zlF3d3cNTMzIZB0WpTDNWsV6nKDEIQoogjBCupNxe61iEgQeuOLKHqTUW8ijF6MohcRsTXb1OZ0TgKxsj+2JXO7u3dz7l/fzve3nXUz2s7kMOzhO/jx+Pye7++rfHzu2XPPfc5zPc/zoJgxBEGQBEmQBEmQBEmQFIIkSIIkSIIkSIKkECRBEiRBEqT/Z+R4OVBMH4IkSII0d5DycvIwXeTm5E7FTFpXfQRJkARp7iAtyCvE/Nz5/4iCeQVTkT8vfyqy81fXuOwjSIIUEaQlN8bAWJy/zGJR/hIU3bAYC/OKTBD8ZcGfmec4dUFN4OGqjyAJUkSQShethUXRGsQKV6F4wQosLSj9l3G2Acepo551Ux6O+ghSGEjxlVtgEd+MeMkmlC1dZwKKOdVoEAT7zHOcOuqtLvBw1EeQwkAqqahFyT07UVpeg7LbH0J8VSXisXKbZiwMpidbM/LzHKeOetax3mUfQRKkiCAtf3wbSh/dgdgjOxF7oA6lm2oQv6UKZcvuQHHhSjPhbwAz8/vMc5w66lnHepd9BCkMpPtf3oiKF+/EuhcqsOKpB1FcU2tTLV52N0oWrrYpyRUpW/aZ5zh11LOO9S77eG8l7sOBZAX2JstR5Sdueroaseo6xG/daq9TmnD5ztZet36e49RRzzrWu+wjSGEgnXj1II7uew0N9Y9hX/Ium2Ilu2uwfP0OW1jxNUsztuwzz3HqqGcd6132EaQwkNrfO4uOt9tx+o2P8UX9kzbN1jx7L2JVdXYx4xqCU5It+8xznDrqWcd6l328xmMZfPN1P9o+PI+O19/HocQ2u6LHdj1siypS5tWfLfvMc5w66lnHepd9BCkMpONdfThyvh9NzWmcfLcTzcmX8Hxy48TU9K/2ZWur7Z0wW/ZX791q49RRzzrWz9aH+cDn1Dsd1+wz238P9bP18X4c6MOZVC+af+hHS0OPvRY/SNRge/2GiUXYNn/1WVlrLfvMc5w66lnHepd9vJ7hDH69nELbH31obM3Y/2pL8hXsT2626Xfbc5W4eU+1tewzz3HqqGcd6132EaQwkAZGh3DxStqmVtP3abR+ehGdBxrwVeIZvJnYgj3JDdidWG8t+8xznDrqWcd6l30MEmmdTfei5ZeUXbBOHDqHzv2fGNnP65/A4fpd1rLPPMepo551rHfZx0uPXrYOL1A2Nc9k0Pxlyn4Fnj54xOjyYmat32ee49RRzzrWu+zj9Y4M2LT6eTCFzr5etP7mCzszaGpK49vPLuHo4S4c/+iCtewzz3HqqGcd6132EaQwkDil2OGVnK/DU5d8wwspWydw6jW2+9E22XLK+nmOU0c961jvso9BYnRPGp7LTCzCTvb04rvuPhz7/e9gn3mOU0d996SRyz5eamTQplRAvmuo30Q/+RcuFpBqEOwzz3HqAtKsd9nHlgC8gjOuNmZ0Z0WQyzYIal328YbGhsEYHLsyFRzIjkCcHdn6wMNVH290fAyM4fGRa47Aw1Ufb/zPcSimDw/6mfFHkARJkARJkARJkARJP/8BSSvqECtuvXcL8d5NdwFC3AXQ/aQQ95N0ZzLEnUnd4w5xj1ufloT4tESfu+nDyWggaS9AiL0A2lUSYleJ9ieF2J+knW7aDhgNJO2+DbH7Vvu4Q+zj1hMBemwiGkh6SinEU0p63k0PBUYDSc/g6kHlaCDpXIAQ5wLohAkdwxENJJ16o6OBBGnOIOlMNx18Fw0knTOpwzijgaSzb3VAsCDNGSSd7K7j7wVpziDpe0v05S6CJEjXEyR9f5u+BE+QBOl6gqTvudWXBQuSIAmSIAmSICkESZAESZAESZAESSFIgiRIgiRIguRu/AWXKY7yJh2MhwAAAABJRU5ErkJggg==&quot;,
+            var image_overlay_ad33d73e615c6f96fcdd845a53d9aa6d = L.imageOverlay(
+                &quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEkAAACRCAYAAACPHpWeAAAFeklEQVR42u2db2hVZRzHz9xa0zlF3d3cNTMzIZB0WpTDNWsV6nKDEIQoogjBCupNxe61iEgQeuOLKHqTUW8ijF6MohcRsTXb1OZ0TgKxsj+2JXO7u3dz7l/fzve3nXUz2s7kMOzhe+HHs+f3fH9f5cNzzj333Oc81/M8D4oZQxAESZAESZAESZAESSFIgiRIgiRIgiRICkESJEESJEH6f0aOlwPF9CFIgiRIcwcpLycP00VuTu5UzKR11UeQBEmQ5g7SgrxCzM+d/48omFcwFfnz8qciO391jcs+giRIEUFacmMMjMX5yywW5S9B0Q2LsTCvyATBPxb8zTzHqQtqAg9XfQRJkCKCVLpoLSyK1iBWuArFC1ZgaUHpv4yzDThOHfWsm/Jw1EeQwkCKr9wCi/hmxEs2oWzpOhNQzKlGgyDYZ57j1FFvdYGHoz6CJEgRQSqpqEXJPTtRWl6DstsfQnxVJeKxcjsWWRgcw2zNyM9znDrqWcd6l30EKQyk5Y9vQ+mjOxB7ZCdiD9ShdFMN4rdUoWzZHSguXGkmfAcwM7/PPMepo551rHfZR5DCQLr/5Y2oePFOrHuhAiueehDFNbU21eJld6Nk4WqbkrwiZcs+8xynjnrWsd5lH0EKA+mtxH04kKzA3mQ5qvzETU9XI1Zdh/itW+1kRhN+xmFrJzc/z3HqqGcd61328U68ehBH972GhvrHsC95l9Er2V2D5et32DUDj1masWWfeY5TRz3rWO+yjyCFgdT+3ll0vN2O0298jC/qn7RptubZexGrqrPjlNcQnJJs2Wee49RRzzrWu+zjNR7L4Juv+9H24Xl0vP4+DiW22ckqtuthu6giZZ7Y2LLPPMepo551rHfZR5DCQDre1Ycj5/vR1JzGyXc70Zx8Cc8nN05MTf9sX7a22j7ksWV/9d6tNk4d9axj/Wx9mA98Tr3Tcc0+s/3/UD9bH+/HgT6cSfWi+Yd+tDT02LH4QaIG2+s3TFxfbPOvPitrrWWfeY5TRz3rWO+yjyCFgdQznMGvl1No+6MPja0Zm/otyVewP7nZjtHbnqvEzXuqrWWfeY5TRz3rWO+yjzcwOoSLV9JGren7NFo/vYjOAw34KvEM3kxswZ7kBuxOrLeWfeY5Th31rGO9yz4GibTOpnvR8kvKTlgnDp1D5/5PjOzn9U/gcP0ua9lnnuPUUc861rvs46VHL1uHx55NzTMZNH+ZsrfA0wePGF0ep9b6feY5Th31rGO9yz5e78iATaufB1Po7OtF62++sDODpqY0vv3sEo4e7sLxjy5Yyz7zHKeOetax3mUfQQoDiVOKHZ7JeRyeuuQbXkjZWyCnXmO7H22TLaesn+c4ddSzjvUu+xgkRvek4bnMxPXFyZ5efNfdh2O//x3sM89x6qjvnjRy2cdLjQzalArIdw31m+gn/8TFAlINgn3mOU5dQJr1LvvYJQDP4IyrjRndWRHksg2CWpd9vKGxYTAGx65MBQeyIxBnR7Y+8HDVxxsdHwNjeHzkmiPwcNXHG/9zHIrpw4NeM74ESZAESZAESZAESZD0+g9IuqIOccWtz24hPrvpLkCIuwC6nxTifpLuTIa4M6l73CHucevbkhDfluh7N305GQ0krQUIsRZAq0pCrCrR+qQQ65O00i3ESjetmdTC0mggaR13iHXceiJAj01EA0lPKYV4SknPu+mhwGgg6RncEM/g6mluPfIeDSTtMKFtOKKBpF1vtDVQNJC0E5e2KxOkOYOkfSa1GWc0kLT3rTYIFqQ5g6Sd3bX9vSDNGST9bol+3EWQBOl6gqTfb9OP4AmSIF1PkPQ7t/qxYEESJEESJEESJIUgCZIgCZIgCZIgKQRJkARJkARJkNyNvwCSI1SoBAohzAAAAABJRU5ErkJggg==&quot;,
                 [[-90.0, -180.0], [90.0, 180.0]],
                 {
   &quot;opacity&quot;: 0.25,
@@ -985,7 +1595,7 @@
             );
 
 
-            image_overlay_a450438350f93ea9b2d3906c3f7bc17f.addTo(map_50991dbbd86df9615d9b399d771dd77c);
+            image_overlay_ad33d73e615c6f96fcdd845a53d9aa6d.addTo(map_9e8f167374724cd8a76b9490725fcc25);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1034,7 +1644,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1075,8 +1685,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1084,7 +1694,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc1</div>
+Folium version 1.0.0</div>
       
         <div class="footer-item">
 
@@ -1099,15 +1709,14 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
   </p>
 </div>
       
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>
@@ -1119,7 +1728,7 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>
