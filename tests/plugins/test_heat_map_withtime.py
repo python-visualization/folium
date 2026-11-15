@@ -79,3 +79,17 @@ def test_heat_map_with_time():
     """)
 
     assert normalize(tmpl.render(this=hm)) in out
+
+
+def test_heat_map_with_time_bounds():
+    data = [
+        [[50.0, 4.0], [51.0, 5.0]],
+        [[48.0, 3.0, 0.5], [52.0, 6.0]],
+        [],
+    ]
+    m = folium.Map()
+    folium.Marker([49.0, 7.0]).add_to(m)
+    hm = plugins.HeatMapWithTime(data).add_to(m)
+
+    assert hm.get_bounds() == [[48.0, 3.0], [52.0, 6.0]]
+    assert m.get_bounds() == [[48.0, 3.0], [52.0, 7.0]]
