@@ -11,7 +11,9 @@ from folium.utilities import (
     escape_double_quotes,
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
+    image_to_url,
     javascript_identifier_path_to_array_notation,
+    mercator_transform,
     normalize_bounds_type,
     parse_font_size,
     parse_options,
@@ -172,6 +174,15 @@ def test_normalize_bounds_type(bounds, expected):
     assert normalize_bounds_type(bounds) == expected
 
 
+def test_mercator_transform_keeps_integer_dtype():
+    # A uint8 image must stay uint8, otherwise write_png treats the result as
+    # float data and stretches every channel to its maximum.
+    data = np.full((4, 3, 4), (100, 50, 200, 255), dtype="uint8")
+    out = mercator_transform(data, (40, 50))
+    assert out.dtype == np.uint8
+    np.testing.assert_array_equal(out, data)
+
+
 def test_camelize():
     assert camelize("variable_name") == "variableName"
     assert camelize("variableName") == "variableName"
@@ -233,6 +244,25 @@ def test_parse_options():
 )
 def test_is_url(url):
     assert _is_url(url) is True
+
+
+@pytest.mark.parametrize(
+    "image",
+    [
+        [[0.0, 1.0], [1.0, 0.0]],
+        [[[255, 0, 0], [0, 255, 0]], [[0, 0, 255], [255, 255, 255]]],
+        ((0.0, 1.0), (1.0, 0.0)),
+    ],
+)
+def test_image_to_url_array_like(image):
+    url = image_to_url(image)
+    assert url == image_to_url(np.array(image))
+    assert url.startswith("data:image/png;base64,")
+
+
+def test_image_to_url_url():
+    url = "https://example.com/img.png"
+    assert image_to_url(url) == url
 
 
 @pytest.mark.parametrize(
@@ -342,3 +372,21 @@ expected_errors = "The font size must be expressed in rem, em, or px."
 def test_parse_font_size_invalid(value, error_message):
     with pytest.raises(ValueError, match=error_message):
         parse_font_size(value)
+
+
+def test_mercator_transform_clips_bounds_beyond_mercator_limit():
+    # Each row holds the latitude of its centre, from -89.5 (bottom) to 89.5.
+    height = 180
+    lats = np.linspace(-90, 90, height + 1)[:-1] + 0.5
+    data = np.repeat(lats[:, None], 2, axis=1)
+
+    out = mercator_transform(data, (-90, 90), origin="lower")
+
+    # The output only covers the Web Mercator range, so every output row must
+    # hold (up to interpolation, well within one 1 degree input pixel) the
+    # latitude of its own centre: rows beyond +-85.05 are dropped, not
+    # squeezed into the output.
+    # Output row centres in Web Mercator y (degrees); +-85.05 maps to +-180.
+    y = np.linspace(-180, 180, height + 1)[:-1] + 180 / height
+    expected = np.degrees(np.arctan(np.sinh(np.radians(y))))
+    np.testing.assert_allclose(out[:, 0, 0], expected, atol=0.05)

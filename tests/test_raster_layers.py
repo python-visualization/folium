@@ -4,6 +4,7 @@ Test raster_layers
 
 """
 
+import numpy as np
 import pytest
 import xyzservices
 
@@ -94,7 +95,7 @@ def test_image_overlay():
     url = (
         "data:image/png;base64,"
         "iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAYAAACddGYaAAA"
-        "AF0lEQVR42mP4z8AARFDw/z/DeiA5H4QBV60H6ABl9ZIAAAAASUVORK5CYII="
+        "AF0lEQVR42mP4z8AARFDw/z/DciC5DoQBV78H/mpWZYkAAAAASUVORK5CYII="
     )
     assert io.url == url
 
@@ -111,6 +112,16 @@ def test_image_overlay():
 
     bounds = m.get_bounds()
     assert bounds == [[0, -180], [90, 180]], bounds
+
+
+def test_image_overlay_mercator_project_keeps_uint8_colors():
+    data = np.full((4, 3, 4), (100, 50, 200, 255), dtype="uint8")
+    bounds = [[40, 0], [50, 10]]
+
+    plain = folium.raster_layers.ImageOverlay(data, bounds)
+    projected = folium.raster_layers.ImageOverlay(data, bounds, mercator_project=True)
+
+    assert projected.url == plain.url
 
 
 @pytest.mark.parametrize(

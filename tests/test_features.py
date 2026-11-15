@@ -111,6 +111,37 @@ def test_topojson_popup(popup):
     assert len(children) == 1
     assert isinstance(children[0], (folium.GeoJsonPopup, Popup))
     assert f"{topojson.get_name()}.bindPopup(" in map_.get_root().render()
+@pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
+@pytest.mark.parametrize(
+    "properties, fields",
+    [({"name": "A"}, ["name"]), (None, [])],
+    ids=["properties", "null-properties"],
+)
+def test_geojson_single_feature_detail(detail_type, properties, fields):
+    """GeoJson popup and tooltip support a single Feature, not only collections."""
+    feature = {
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [0, 0]},
+        "properties": properties,
+    }
+
+    map_ = folium.Map()
+    geojson = folium.GeoJson(feature).add_to(map_)
+    detail_type(fields=fields).add_to(geojson)
+
+    rendered = map_.get_root().render()
+    assert all(field in rendered for field in fields)
+
+
+@pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
+def test_geojson_geometry_detail_unknown_field(detail_type):
+    """A bare geometry has no properties, so any field is reported as missing."""
+    map_ = folium.Map()
+    geojson = folium.GeoJson({"type": "Point", "coordinates": [0, 0]}).add_to(map_)
+    detail_type(fields=["name"]).add_to(geojson)
+
+    with pytest.raises(AssertionError, match="The field name is not available"):
+        map_.get_root().render()
 
 
 @pytest.fixture
