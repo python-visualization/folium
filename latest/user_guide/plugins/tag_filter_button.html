@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -8,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>TagFilterButton &#8212; Folium 1.0.0rc1 documentation</title>
+    <title>TagFilterButton &#8212; Folium 1.0.0 documentation</title>
   
   
   
@@ -27,20 +26,20 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css?v=2aa19091" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=924e9346" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=77c1c56c"></script>
+    <script src="../../_static/documentation_options.js?v=8d563738"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -48,20 +47,22 @@
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide/plugins/tag_filter_button';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://python-visualization.github.io/folium/dev/_static/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0rc1';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '1.0.0';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Terminator" href="terminator.html" />
     <link rel="prev" title="SideBySideLayers" href="side_by_side_layers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.0.0rc1" />
+  <meta name="docsearch:version" content="1.0.0" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -109,7 +110,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -216,7 +217,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -227,15 +228,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -261,7 +262,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -270,7 +271,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page" aria-expanded="false" aria-controls="pst-secondary-sidebar-modal">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -284,7 +285,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -347,15 +348,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -379,7 +380,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -453,6 +454,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pattern.html">Pattern plugins</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon_encoded.html">PolygonFromEncoded</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_encoded.html">PolyLineFromEncoded</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polyline_decorator.html">PolyLineDecorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_offset.html">PolylineOffset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polyline_textpath.html">PolyLineTextPath</a></li>
 <li class="toctree-l2"><a class="reference internal" href="realtime.html">Realtime</a></li>
@@ -460,7 +462,7 @@
 <li class="toctree-l2"><a class="reference internal" href="search.html">Search</a></li>
 <li class="toctree-l2"><a class="reference internal" href="semi_circle.html">SemiCircle</a></li>
 <li class="toctree-l2"><a class="reference internal" href="side_by_side_layers.html">SideBySideLayers</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">TagFilterButton</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">TagFilterButton</a></li>
 <li class="toctree-l2"><a class="reference internal" href="terminator.html">Terminator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeline.html">Timeline and TimelineSlider</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeslider_choropleth.html">TimeSliderChoropleth</a></li>
@@ -508,7 +510,7 @@
     
     <li class="breadcrumb-item breadcrumb-home">
       <a href="../../index.html" class="nav-link" aria-label="Home">
-        <i class="fa-solid fa-home"></i>
+        <i class="fa-solid fa-house"></i>
       </a>
     </li>
     
@@ -556,7 +558,7 @@
 <span class="n">data</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span> <span class="o">+</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">48</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]))</span>
 <span class="c1"># Generate the data to segment by (levels of another pandas column in practical usage)</span>
-<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;category</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'category</span><span class="si">{}</span><span class="s1">'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)]</span>
 <span class="n">category_column</span> <span class="o">=</span> <span class="p">[</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span>
 </pre></div>
 </div>
@@ -594,13 +596,12 @@
 &lt;head&gt;
 
     &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js&quot;&gt;&lt;/script&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css&quot;/&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css&quot;/&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css&quot;/&gt;
     &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css&quot;/&gt;
@@ -608,7 +609,7 @@
             &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no&quot; /&gt;
             &lt;style&gt;
-                #map_dc96eb89a67e1b38cf5daf03365796e8 {
+                #map_7de1765bb3c65b264c2d47eeda126e52 {
                     position: relative;
                     width: 100.0vw;
                     height: 100.0vh;
@@ -627,14 +628,218 @@
             }
             &lt;/style&gt;
 
-            &lt;style&gt;#map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            &lt;/style&gt;
+            &lt;style&gt;/*
+ * Glyphicons Halflings -- the icon font used by folium&#x27;s default Awesome Markers
+ * (Icon(prefix=&quot;glyphicon&quot;)). Extracted from Bootstrap 3&#x27;s glyphicon rules only.
+ *
+ * folium previously loaded netdna&#x27;s bootstrap-glyphicons.css, which despite its
+ * name ships a full Bootstrap-3 base stylesheet (normalize reset + global `body`
+ * rules) that leaked onto the host page (GH-1820). This file provides just the
+ * @font-face and .glyphicon/.glyphicon-* rules needed for the markers, with no
+ * page-wide side effects. Font files are served from jsDelivr.
+ */
+@font-face{font-family:&#x27;Glyphicons Halflings&#x27;;src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot&#x27;);src:url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix&#x27;) format(&#x27;embedded-opentype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.woff&#x27;) format(&#x27;woff&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.ttf&#x27;) format(&#x27;truetype&#x27;),url(&#x27;https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular&#x27;) format(&#x27;svg&#x27;);}.glyphicon{position:relative;top:1px;display:inline-block;font-family:&#x27;Glyphicons Halflings&#x27;;font-style:normal;font-weight:normal;line-height:1;-webkit-font-smoothing:antialiased;}
+.glyphicon-asterisk:before{content:&quot;\2a&quot;;}
+.glyphicon-plus:before{content:&quot;\2b&quot;;}
+.glyphicon-euro:before{content:&quot;\20ac&quot;;}
+.glyphicon-minus:before{content:&quot;\2212&quot;;}
+.glyphicon-cloud:before{content:&quot;\2601&quot;;}
+.glyphicon-envelope:before{content:&quot;\2709&quot;;}
+.glyphicon-pencil:before{content:&quot;\270f&quot;;}
+.glyphicon-glass:before{content:&quot;\e001&quot;;}
+.glyphicon-music:before{content:&quot;\e002&quot;;}
+.glyphicon-search:before{content:&quot;\e003&quot;;}
+.glyphicon-heart:before{content:&quot;\e005&quot;;}
+.glyphicon-star:before{content:&quot;\e006&quot;;}
+.glyphicon-star-empty:before{content:&quot;\e007&quot;;}
+.glyphicon-user:before{content:&quot;\e008&quot;;}
+.glyphicon-film:before{content:&quot;\e009&quot;;}
+.glyphicon-th-large:before{content:&quot;\e010&quot;;}
+.glyphicon-th:before{content:&quot;\e011&quot;;}
+.glyphicon-th-list:before{content:&quot;\e012&quot;;}
+.glyphicon-ok:before{content:&quot;\e013&quot;;}
+.glyphicon-remove:before{content:&quot;\e014&quot;;}
+.glyphicon-zoom-in:before{content:&quot;\e015&quot;;}
+.glyphicon-zoom-out:before{content:&quot;\e016&quot;;}
+.glyphicon-off:before{content:&quot;\e017&quot;;}
+.glyphicon-signal:before{content:&quot;\e018&quot;;}
+.glyphicon-cog:before{content:&quot;\e019&quot;;}
+.glyphicon-trash:before{content:&quot;\e020&quot;;}
+.glyphicon-home:before{content:&quot;\e021&quot;;}
+.glyphicon-file:before{content:&quot;\e022&quot;;}
+.glyphicon-time:before{content:&quot;\e023&quot;;}
+.glyphicon-road:before{content:&quot;\e024&quot;;}
+.glyphicon-download-alt:before{content:&quot;\e025&quot;;}
+.glyphicon-download:before{content:&quot;\e026&quot;;}
+.glyphicon-upload:before{content:&quot;\e027&quot;;}
+.glyphicon-inbox:before{content:&quot;\e028&quot;;}
+.glyphicon-play-circle:before{content:&quot;\e029&quot;;}
+.glyphicon-repeat:before{content:&quot;\e030&quot;;}
+.glyphicon-refresh:before{content:&quot;\e031&quot;;}
+.glyphicon-list-alt:before{content:&quot;\e032&quot;;}
+.glyphicon-flag:before{content:&quot;\e034&quot;;}
+.glyphicon-headphones:before{content:&quot;\e035&quot;;}
+.glyphicon-volume-off:before{content:&quot;\e036&quot;;}
+.glyphicon-volume-down:before{content:&quot;\e037&quot;;}
+.glyphicon-volume-up:before{content:&quot;\e038&quot;;}
+.glyphicon-qrcode:before{content:&quot;\e039&quot;;}
+.glyphicon-barcode:before{content:&quot;\e040&quot;;}
+.glyphicon-tag:before{content:&quot;\e041&quot;;}
+.glyphicon-tags:before{content:&quot;\e042&quot;;}
+.glyphicon-book:before{content:&quot;\e043&quot;;}
+.glyphicon-print:before{content:&quot;\e045&quot;;}
+.glyphicon-font:before{content:&quot;\e047&quot;;}
+.glyphicon-bold:before{content:&quot;\e048&quot;;}
+.glyphicon-italic:before{content:&quot;\e049&quot;;}
+.glyphicon-text-height:before{content:&quot;\e050&quot;;}
+.glyphicon-text-width:before{content:&quot;\e051&quot;;}
+.glyphicon-align-left:before{content:&quot;\e052&quot;;}
+.glyphicon-align-center:before{content:&quot;\e053&quot;;}
+.glyphicon-align-right:before{content:&quot;\e054&quot;;}
+.glyphicon-align-justify:before{content:&quot;\e055&quot;;}
+.glyphicon-list:before{content:&quot;\e056&quot;;}
+.glyphicon-indent-left:before{content:&quot;\e057&quot;;}
+.glyphicon-indent-right:before{content:&quot;\e058&quot;;}
+.glyphicon-facetime-video:before{content:&quot;\e059&quot;;}
+.glyphicon-picture:before{content:&quot;\e060&quot;;}
+.glyphicon-map-marker:before{content:&quot;\e062&quot;;}
+.glyphicon-adjust:before{content:&quot;\e063&quot;;}
+.glyphicon-tint:before{content:&quot;\e064&quot;;}
+.glyphicon-edit:before{content:&quot;\e065&quot;;}
+.glyphicon-share:before{content:&quot;\e066&quot;;}
+.glyphicon-check:before{content:&quot;\e067&quot;;}
+.glyphicon-move:before{content:&quot;\e068&quot;;}
+.glyphicon-step-backward:before{content:&quot;\e069&quot;;}
+.glyphicon-fast-backward:before{content:&quot;\e070&quot;;}
+.glyphicon-backward:before{content:&quot;\e071&quot;;}
+.glyphicon-play:before{content:&quot;\e072&quot;;}
+.glyphicon-pause:before{content:&quot;\e073&quot;;}
+.glyphicon-stop:before{content:&quot;\e074&quot;;}
+.glyphicon-forward:before{content:&quot;\e075&quot;;}
+.glyphicon-fast-forward:before{content:&quot;\e076&quot;;}
+.glyphicon-step-forward:before{content:&quot;\e077&quot;;}
+.glyphicon-eject:before{content:&quot;\e078&quot;;}
+.glyphicon-chevron-left:before{content:&quot;\e079&quot;;}
+.glyphicon-chevron-right:before{content:&quot;\e080&quot;;}
+.glyphicon-plus-sign:before{content:&quot;\e081&quot;;}
+.glyphicon-minus-sign:before{content:&quot;\e082&quot;;}
+.glyphicon-remove-sign:before{content:&quot;\e083&quot;;}
+.glyphicon-ok-sign:before{content:&quot;\e084&quot;;}
+.glyphicon-question-sign:before{content:&quot;\e085&quot;;}
+.glyphicon-info-sign:before{content:&quot;\e086&quot;;}
+.glyphicon-screenshot:before{content:&quot;\e087&quot;;}
+.glyphicon-remove-circle:before{content:&quot;\e088&quot;;}
+.glyphicon-ok-circle:before{content:&quot;\e089&quot;;}
+.glyphicon-ban-circle:before{content:&quot;\e090&quot;;}
+.glyphicon-arrow-left:before{content:&quot;\e091&quot;;}
+.glyphicon-arrow-right:before{content:&quot;\e092&quot;;}
+.glyphicon-arrow-up:before{content:&quot;\e093&quot;;}
+.glyphicon-arrow-down:before{content:&quot;\e094&quot;;}
+.glyphicon-share-alt:before{content:&quot;\e095&quot;;}
+.glyphicon-resize-full:before{content:&quot;\e096&quot;;}
+.glyphicon-resize-small:before{content:&quot;\e097&quot;;}
+.glyphicon-exclamation-sign:before{content:&quot;\e101&quot;;}
+.glyphicon-gift:before{content:&quot;\e102&quot;;}
+.glyphicon-leaf:before{content:&quot;\e103&quot;;}
+.glyphicon-eye-open:before{content:&quot;\e105&quot;;}
+.glyphicon-eye-close:before{content:&quot;\e106&quot;;}
+.glyphicon-warning-sign:before{content:&quot;\e107&quot;;}
+.glyphicon-plane:before{content:&quot;\e108&quot;;}
+.glyphicon-random:before{content:&quot;\e110&quot;;}
+.glyphicon-comment:before{content:&quot;\e111&quot;;}
+.glyphicon-magnet:before{content:&quot;\e112&quot;;}
+.glyphicon-chevron-up:before{content:&quot;\e113&quot;;}
+.glyphicon-chevron-down:before{content:&quot;\e114&quot;;}
+.glyphicon-retweet:before{content:&quot;\e115&quot;;}
+.glyphicon-shopping-cart:before{content:&quot;\e116&quot;;}
+.glyphicon-folder-close:before{content:&quot;\e117&quot;;}
+.glyphicon-folder-open:before{content:&quot;\e118&quot;;}
+.glyphicon-resize-vertical:before{content:&quot;\e119&quot;;}
+.glyphicon-resize-horizontal:before{content:&quot;\e120&quot;;}
+.glyphicon-hdd:before{content:&quot;\e121&quot;;}
+.glyphicon-bullhorn:before{content:&quot;\e122&quot;;}
+.glyphicon-certificate:before{content:&quot;\e124&quot;;}
+.glyphicon-thumbs-up:before{content:&quot;\e125&quot;;}
+.glyphicon-thumbs-down:before{content:&quot;\e126&quot;;}
+.glyphicon-hand-right:before{content:&quot;\e127&quot;;}
+.glyphicon-hand-left:before{content:&quot;\e128&quot;;}
+.glyphicon-hand-up:before{content:&quot;\e129&quot;;}
+.glyphicon-hand-down:before{content:&quot;\e130&quot;;}
+.glyphicon-circle-arrow-right:before{content:&quot;\e131&quot;;}
+.glyphicon-circle-arrow-left:before{content:&quot;\e132&quot;;}
+.glyphicon-circle-arrow-up:before{content:&quot;\e133&quot;;}
+.glyphicon-circle-arrow-down:before{content:&quot;\e134&quot;;}
+.glyphicon-globe:before{content:&quot;\e135&quot;;}
+.glyphicon-tasks:before{content:&quot;\e137&quot;;}
+.glyphicon-filter:before{content:&quot;\e138&quot;;}
+.glyphicon-fullscreen:before{content:&quot;\e140&quot;;}
+.glyphicon-dashboard:before{content:&quot;\e141&quot;;}
+.glyphicon-heart-empty:before{content:&quot;\e143&quot;;}
+.glyphicon-link:before{content:&quot;\e144&quot;;}
+.glyphicon-phone:before{content:&quot;\e145&quot;;}
+.glyphicon-usd:before{content:&quot;\e148&quot;;}
+.glyphicon-gbp:before{content:&quot;\e149&quot;;}
+.glyphicon-sort:before{content:&quot;\e150&quot;;}
+.glyphicon-sort-by-alphabet:before{content:&quot;\e151&quot;;}
+.glyphicon-sort-by-alphabet-alt:before{content:&quot;\e152&quot;;}
+.glyphicon-sort-by-order:before{content:&quot;\e153&quot;;}
+.glyphicon-sort-by-order-alt:before{content:&quot;\e154&quot;;}
+.glyphicon-sort-by-attributes:before{content:&quot;\e155&quot;;}
+.glyphicon-sort-by-attributes-alt:before{content:&quot;\e156&quot;;}
+.glyphicon-unchecked:before{content:&quot;\e157&quot;;}
+.glyphicon-expand:before{content:&quot;\e158&quot;;}
+.glyphicon-collapse-down:before{content:&quot;\e159&quot;;}
+.glyphicon-collapse-up:before{content:&quot;\e160&quot;;}
+.glyphicon-log-in:before{content:&quot;\e161&quot;;}
+.glyphicon-flash:before{content:&quot;\e162&quot;;}
+.glyphicon-log-out:before{content:&quot;\e163&quot;;}
+.glyphicon-new-window:before{content:&quot;\e164&quot;;}
+.glyphicon-record:before{content:&quot;\e165&quot;;}
+.glyphicon-save:before{content:&quot;\e166&quot;;}
+.glyphicon-open:before{content:&quot;\e167&quot;;}
+.glyphicon-saved:before{content:&quot;\e168&quot;;}
+.glyphicon-import:before{content:&quot;\e169&quot;;}
+.glyphicon-export:before{content:&quot;\e170&quot;;}
+.glyphicon-send:before{content:&quot;\e171&quot;;}
+.glyphicon-floppy-disk:before{content:&quot;\e172&quot;;}
+.glyphicon-floppy-saved:before{content:&quot;\e173&quot;;}
+.glyphicon-floppy-remove:before{content:&quot;\e174&quot;;}
+.glyphicon-floppy-save:before{content:&quot;\e175&quot;;}
+.glyphicon-floppy-open:before{content:&quot;\e176&quot;;}
+.glyphicon-credit-card:before{content:&quot;\e177&quot;;}
+.glyphicon-transfer:before{content:&quot;\e178&quot;;}
+.glyphicon-cutlery:before{content:&quot;\e179&quot;;}
+.glyphicon-header:before{content:&quot;\e180&quot;;}
+.glyphicon-compressed:before{content:&quot;\e181&quot;;}
+.glyphicon-earphone:before{content:&quot;\e182&quot;;}
+.glyphicon-phone-alt:before{content:&quot;\e183&quot;;}
+.glyphicon-tower:before{content:&quot;\e184&quot;;}
+.glyphicon-stats:before{content:&quot;\e185&quot;;}
+.glyphicon-sd-video:before{content:&quot;\e186&quot;;}
+.glyphicon-hd-video:before{content:&quot;\e187&quot;;}
+.glyphicon-subtitles:before{content:&quot;\e188&quot;;}
+.glyphicon-sound-stereo:before{content:&quot;\e189&quot;;}
+.glyphicon-sound-dolby:before{content:&quot;\e190&quot;;}
+.glyphicon-sound-5-1:before{content:&quot;\e191&quot;;}
+.glyphicon-sound-6-1:before{content:&quot;\e192&quot;;}
+.glyphicon-sound-7-1:before{content:&quot;\e193&quot;;}
+.glyphicon-copyright-mark:before{content:&quot;\e194&quot;;}
+.glyphicon-registration-mark:before{content:&quot;\e195&quot;;}
+.glyphicon-cloud-download:before{content:&quot;\e197&quot;;}
+.glyphicon-cloud-upload:before{content:&quot;\e198&quot;;}
+.glyphicon-tree-conifer:before{content:&quot;\e199&quot;;}
+.glyphicon-tree-deciduous:before{content:&quot;\e200&quot;;}
+.glyphicon-briefcase:before{content:&quot;\1f4bc&quot;;}
+.glyphicon-calendar:before{content:&quot;\1f4c5&quot;;}
+.glyphicon-pushpin:before{content:&quot;\1f4cc&quot;;}
+.glyphicon-paperclip:before{content:&quot;\1f4ce&quot;;}
+.glyphicon-camera:before{content:&quot;\1f4f7&quot;;}
+.glyphicon-lock:before{content:&quot;\1f512&quot;;}
+.glyphicon-bell:before{content:&quot;\1f514&quot;;}
+.glyphicon-bookmark:before{content:&quot;\1f516&quot;;}
+.glyphicon-fire:before{content:&quot;\1f525&quot;;}
+.glyphicon-wrench:before{content:&quot;\1f527&quot;;}
+&lt;/style&gt;
 
             &lt;script&gt;
                 L_NO_TOUCH = false;
@@ -662,14 +867,14 @@
 &lt;body&gt;
 
 
-            &lt;div class=&quot;folium-map&quot; id=&quot;map_dc96eb89a67e1b38cf5daf03365796e8&quot; &gt;&lt;/div&gt;
+            &lt;div class=&quot;folium-map&quot; id=&quot;map_7de1765bb3c65b264c2d47eeda126e52&quot; &gt;&lt;/div&gt;
 
 &lt;/body&gt;
 &lt;script&gt;
 
 
-            var map_dc96eb89a67e1b38cf5daf03365796e8 = L.map(
-                &quot;map_dc96eb89a67e1b38cf5daf03365796e8&quot;,
+            var map_7de1765bb3c65b264c2d47eeda126e52 = L.map(
+                &quot;map_7de1765bb3c65b264c2d47eeda126e52&quot;,
                 {
                     center: [48.0, 5.0],
                     crs: L.CRS.EPSG3857,
@@ -686,7 +891,7 @@
 
 
 
-            var tile_layer_21d5e7b9745600a8746f410efdd34870 = L.tileLayer(
+            var tile_layer_d7beefb914d5ed1ce215fb90fb1ac536 = L.tileLayer(
                 &quot;https://tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
                 {
   &quot;minZoom&quot;: 0,
@@ -703,1010 +908,1010 @@
             );
 
 
-            tile_layer_21d5e7b9745600a8746f410efdd34870.addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            tile_layer_d7beefb914d5ed1ce215fb90fb1ac536.addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_ad8c16545d23332825d5d57d684001a6 = L.marker(
-                [48.67963730218173, 6.218245168203024],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_13dc9084323bc353fabb240ab6c30abc = L.marker(
-                [47.08919536148635, 4.77836691893012],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_9e19ff4578d4ea69b0d05c0b604b289f = L.marker(
-                [48.228137944480885, 3.4045745071457003],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_1eb126a3e5e0ab5183ef010aa12845da = L.marker(
-                [46.08037321206591, 7.3124150318821535],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_ccbe75b126f9eca800bff49ff8f7d767 = L.marker(
-                [48.012435710631934, 3.675667390183968],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_b3cd5794304c6dc232baf3826fa05e01 = L.marker(
-                [48.50884177582303, 5.771644145546969],
+            var marker_7f3c9d8bc5aa6a06996315fd790372f4 = L.marker(
+                [46.55141032542719, 4.631477609619141],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_5472faeb287a55ae4af389bd06c94b4f = L.marker(
-                [48.929997183049835, 5.115856662104083],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_3f71a7cadc1f95c7ff6c59f67a0f5db6 = L.marker(
-                [48.86721953524035, 6.1688771606192745],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_ce5937a96405dfbbbfbf63e09633d5cf = L.marker(
-                [47.31894902676756, 4.2996691265659095],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_14ee93245e86f5b978e8ff0054016515 = L.marker(
-                [47.2130755537976, 3.7631662552694896],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_9d540dbb2b39c24b6d1c789bd081537e = L.marker(
-                [47.556586200558996, 4.978472632217728],
+            var marker_91c1ad8a957aee56911757516601b635 = L.marker(
+                [50.00599648788686, 5.097249145567671],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_978ef21e436255f125ccb79f98439e77 = L.marker(
-                [48.0932619773347, 3.3470078199002655],
+            var marker_0b311c7dd1806f05dd03444eddfdf6fa = L.marker(
+                [47.84838330842194, 5.8429787785837615],
                 {
   &quot;tags&quot;: [
-&quot;category5&quot;,
+&quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_a2362d1752c0b2d802d303891d4dba35 = L.marker(
-                [48.731879325740614, 4.1595117493834115],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_d8ea76413af4086ddea732c3b296f00c = L.marker(
-                [47.97476431022304, 4.875343390345444],
+            var marker_402d0acadf85a47ae27da75ad2062c09 = L.marker(
+                [47.49135971576078, 4.991137122685037],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_194a3cd394c039cd448413914e34f07d = L.marker(
-                [46.93253039204205, 4.631179878802218],
+            var marker_8678ccd9e82fd0bb834acd9db528dcfd = L.marker(
+                [48.738488531074466, 4.816046968881748],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_adc90f36eefa3fc87d42692efc9f6679 = L.marker(
+                [46.76010802836878, 4.743938009722257],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_04508b2f64d6c3a021547534bb4c5740 = L.marker(
+                [48.32402766301958, 2.9001170497409574],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_f59cbac42c641d12b87618bfb378b5d1 = L.marker(
+                [48.11754135702755, 4.314149410305699],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_2982eca82d75929d398080e1c54bbf72 = L.marker(
+                [48.441304640676236, 5.508357744166751],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_87d87bb96e14c7e7633c6e694096a18b = L.marker(
+                [47.71597316582134, 4.521700288986292],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_138a14f5a2b0a1e0859cfa17ca01795a = L.marker(
+                [48.63664863615464, 6.723878752617168],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_7b09a6fd88df69f546b0439b321a92d6 = L.marker(
+                [47.17209941527864, 4.769314316355618],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_fb4b1fa95e0b34c945e9186038667c17 = L.marker(
+                [47.76984881384196, 4.859836182473946],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ba9f538cc94a4c5e89efbbea12e15313 = L.marker(
+                [47.750594443110465, 4.486778508870431],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_8124eba2b5a03ca1229ae97a74277f20 = L.marker(
+                [47.644008939028176, 4.560371066026645],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_c77e46c38007278a9854dd2139e7466d = L.marker(
+                [46.250887817178494, 4.246208888169699],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_84540ea0c676f8ccfbd7e2955b96cd35 = L.marker(
-                [47.888047816294424, 4.5681955072478075],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_37ef364f5aa8bb458052ae18b479138f = L.marker(
-                [48.73554523355431, 5.292783914212954],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_5ab5649cac094b829709871bee8854b1 = L.marker(
-                [47.31678523300933, 5.866617634134535],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_63f1c481bb9c2446d7374537f994f394 = L.marker(
-                [47.21348569574032, 5.715093668978506],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_2ece0e3f5f3892665cd803ffdcaaf29e = L.marker(
-                [46.457290302158654, 4.729145467541753],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_05c5a882c96c869e036b3be1894ad222 = L.marker(
-                [47.48803277392082, 4.797272083845677],
+            var marker_18cdc591a7b3185ffe1ae13e665eb3e5 = L.marker(
+                [46.798105554356745, 5.5784908454260265],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_c1743af39a4c3074c1ac26a8e765d4ea = L.marker(
-                [48.700830226565984, 4.621147728480272],
+            var marker_859306f072e010f34a2a554f50fa484a = L.marker(
+                [47.138106258972634, 7.467110295452705],
                 {
   &quot;tags&quot;: [
-&quot;category3&quot;,
+&quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_ce38af11fefae37d0f1811fc3e3eb32a = L.marker(
-                [48.811929034113454, 5.452412176125213],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_19519db1fae0446665bb7ba6b189c1a0 = L.marker(
-                [47.62585526417998, 3.6051802938146222],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_e7827441c0f6161aa084281edfce2974 = L.marker(
-                [48.91686503659965, 6.326826593584483],
+            var marker_169dbc913ef2ea97471d387df43cbdfc = L.marker(
+                [46.71479975212682, 4.794433643349568],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_6d73399808412489c8873f2037b4f922 = L.marker(
-                [46.963982335786746, 4.13797950844204],
+            var marker_eb76dea6f2a81c38246676ba6febdd44 = L.marker(
+                [49.48124397866853, 6.106412792898186],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_3d64f188b902875b2f6e68627a2355f2 = L.marker(
+                [47.10107769430838, 5.823498539761062],
                 {
   &quot;tags&quot;: [
 &quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_45b9d3f2be878c5da8bb3a16b47ec6f9 = L.marker(
-                [47.378106965341026, 5.804302506411249],
+            var marker_e602ec0d9726729e8456c54373b77e06 = L.marker(
+                [47.296018567852315, 3.7817264693890102],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_18792b046aa2631304dda6494de24207 = L.marker(
+                [48.09810853271741, 5.063432541662087],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_bf9cb8e904f6ef119ffb524c0453fbad = L.marker(
+                [48.53905612045773, 4.610909409060814],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_eed8e06c94d6b8889c405fe78ac5a529 = L.marker(
-                [48.3263098053874, 3.9194501225583487],
+            var marker_6575171ced9b4cf8f5233789685b0009 = L.marker(
+                [47.577512571507135, 6.136836192604796],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_8aa4b347f2d7c154c508bc0c56515576 = L.marker(
-                [47.08529208791056, 5.12257926567478],
+            var marker_e2bc8871d978dc798ba9129d9bf56fba = L.marker(
+                [48.533733751130015, 4.167264091606116],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_4abe814b1d2dfd1496922c4b6669e52c = L.marker(
-                [46.88286695166012, 5.060231298060141],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_d0b1340095de8b072066c9771a1fc11a = L.marker(
-                [46.763012295330796, 5.973235545998066],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_a1c4bd898990bd99a041d2eb38e78e70 = L.marker(
-                [50.06292186265374, 3.9421322883878727],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_77cf38d5deff05c294f2551e6d214d6f = L.marker(
-                [47.529144415190956, 4.40850283323166],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_858eb6e9dbb98afe92581b26f1e39fb7 = L.marker(
-                [48.16382960003968, 5.376909582146209],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_6d20893bf289b7805c565424062bfe68 = L.marker(
-                [48.11449887796675, 8.043235345171812],
+            var marker_a5e29516f7c8e68a8d05deba771f461d = L.marker(
+                [47.652422002282144, 5.183513367413848],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_87020146c3d71db8316ad4448b25c7d8 = L.marker(
-                [47.277889494633804, 3.828174455597831],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_c9923d5ffa8e0913055c3119147f57ac = L.marker(
-                [49.260584351986864, 5.3428990805361005],
+            var marker_835d6939ebd8fd9cab9fd8402fe7193e = L.marker(
+                [46.488340327464506, 5.515567031096773],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_838c44534898721c13f8d8860254fc73 = L.marker(
-                [48.322856137843466, 5.78215878216128],
+            var marker_38d3a022e397c514eeda003038e38fd2 = L.marker(
+                [48.0365194338704, 5.605363056446325],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_2ea19b2b080b2871e951dadd9452c4f0 = L.marker(
-                [46.11048023266614, 3.691633469700162],
-                {
-  &quot;tags&quot;: [
-&quot;category1&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_23c86e73aa81f9384345176af1a3684a = L.marker(
-                [49.11389259440438, 5.701534047231361],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_471b6ae7a1d77c7697016de71d9cb95a = L.marker(
-                [48.65217774423117, 3.571747592419823],
-                {
-  &quot;tags&quot;: [
-&quot;category1&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_1717787fc165a4fea31cba4711eb2876 = L.marker(
-                [47.74413819362472, 5.790231048293275],
-                {
-  &quot;tags&quot;: [
-&quot;category1&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_6464299903df8424d61f2fcab8b9805b = L.marker(
-                [48.09888244594264, 5.012342649970368],
+            var marker_b110fd202198f6fff2264a0ced10362e = L.marker(
+                [45.68609295823636, 6.077190643271848],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_b8c7c8b03421b92486ee34dcdfcb8b97 = L.marker(
-                [49.30557098426303, 7.213956338650832],
+            var marker_a47e00c596e0768e256c02e72ceab485 = L.marker(
+                [46.86919393929935, 2.884000112572318],
                 {
   &quot;tags&quot;: [
 &quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_24b0c2337b0fc792862a2fbccac8a750 = L.marker(
-                [48.7648324348908, 4.602106249746149],
+            var marker_270014d32c311064044c16acae13f294 = L.marker(
+                [49.40493153699008, 4.042724271391869],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_321ea3faa5b5f00bd8a74140231772e7 = L.marker(
-                [45.97955100637351, 6.160853900543484],
+            var marker_f8e2aeffb4f923e3f9be7706835e0221 = L.marker(
+                [47.49166101777489, 4.830748733351275],
                 {
   &quot;tags&quot;: [
-&quot;category4&quot;,
+&quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_30251d796eb47b1b67d81f6cc956ecef = L.marker(
-                [47.994109712195716, 6.119614035507188],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_90a8009bda12052f1e37c316989dfa0b = L.marker(
-                [48.29390438405912, 5.341373911620881],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_2bf21731489062c25857c45597c2819d = L.marker(
-                [49.5365484857312, 6.695936679854312],
+            var marker_9353684aa265ad4ee9d36a51c04dcf0a = L.marker(
+                [48.81367056173918, 5.861221300644571],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_84f89833a80d481d1a9739953b07c6f8 = L.marker(
-                [50.23663607712952, 3.248823924203026],
+            var marker_5957bebab543f5ff9ba60fbdf20dd4b7 = L.marker(
+                [47.87706181327858, 7.685292901919012],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_d9da7b36998446fdf8a1f45eee579bd5 = L.marker(
+                [49.010129003218275, 5.652184195400248],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_e0445ef16ad94ca078a94a0f5ff55ba1 = L.marker(
+                [48.36421916970918, 4.5730583175085515],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_291b1865c7ab6d5a888e4aef36dfbdd4 = L.marker(
-                [48.49471507657595, 3.8542135587526207],
+            var marker_35c1d35534b542e1c7f9bbc2ad951299 = L.marker(
+                [49.273943899728906, 6.2583220766421],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_dc1928cb03934636e5aa27af06500aaa = L.marker(
-                [49.156691378733015, 3.171149767662067],
+            var marker_791f55a71d4d6d339c06877df7b421da = L.marker(
+                [46.648497879224934, 8.12414801200697],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_a3f9989d30fd594822238fb4610ffb65 = L.marker(
-                [47.71027211041597, 3.621294198522813],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_570707246e93e1ab49ea67ec9917c2d2 = L.marker(
-                [47.40857418524701, 5.925577807274456],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_3ed9ad9e3ab3e43981d291d178d933c3 = L.marker(
-                [47.438214829688874, 4.546109270489115],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_9c5b0a73d4046fb627cb2ec74ff280c3 = L.marker(
-                [48.810291680514354, 5.406260231303368],
+            var marker_d343f4e115f389e3f1f86550b8cb3b8c = L.marker(
+                [48.15799178131944, 4.97678041304926],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_a14379c824b29df4a5002211f9a87b73 = L.marker(
-                [48.605653927674226, 4.48309196760662],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_7e986d36869e2ce0b59a3d5e8e14a2b1 = L.marker(
-                [45.49182420326491, 3.800066178189902],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_b09bda1a415489c1a29aef9fd7552701 = L.marker(
-                [48.52061099977424, 4.58160534118164],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_f212e07352d65aca98f02dd2ed711c16 = L.marker(
-                [46.88247897689728, 2.7075308025954747],
+            var marker_a48e128da7e48ec461cacc270f7810a1 = L.marker(
+                [49.78176666866328, 4.399209159877848],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_cbf67a2096fd7ce1cfb7e6395ae8c616 = L.marker(
-                [48.19434158495207, 4.679613706613342],
+            var marker_78b6b5a2e5a32b7a6ea8963cfec46730 = L.marker(
+                [46.252062114457694, 4.3729855243606846],
                 {
   &quot;tags&quot;: [
-&quot;category2&quot;,
+&quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_60b2850f51824f62db91755e57bb9b24 = L.marker(
-                [48.098502570609035, 2.529588947901119],
-                {
-  &quot;tags&quot;: [
-&quot;category2&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_8808f73738d8f6604d4b0e6fd4b8a4c0 = L.marker(
-                [47.692209868204635, 4.255414582185382],
+            var marker_006d1d1bc6e6d7ef3782ca6895dbae5c = L.marker(
+                [47.789631932901536, 5.08431281026342],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_5b2206b0ab4f1f8655129fff342c607b = L.marker(
-                [49.94405236830625, 5.824174576179573],
+            var marker_f2d5ae3f8329f0760d33c36f4d32e7f6 = L.marker(
+                [48.098995528831004, 6.3215953323013485],
                 {
   &quot;tags&quot;: [
-&quot;category5&quot;,
+&quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_4f4b6a72d35e1d0d218963d0b9f1628b = L.marker(
-                [48.86483777478584, 4.773311076930799],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_e9d51a31424b72227336b63adf6f0529 = L.marker(
-                [47.899061264146575, 6.652496385883054],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_316d03d1e1133ac0899180eff3a1007c = L.marker(
-                [49.15009845937135, 5.996963789255178],
+            var marker_2f7fc6746cece196cc7166e762013622 = L.marker(
+                [47.989066625981025, 6.5074107263404315],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_c05adee3c13fe8f91079cc8fb219df6b = L.marker(
-                [46.133937716403494, 8.181414201493194],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_d0960cfdc4c0fa9d8191bae71d0e70b2 = L.marker(
-                [47.42754136602976, 6.421301894166055],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_64984ec6a3453dd9c3f49fb755764071 = L.marker(
-                [48.16285826075623, 4.520650087274948],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_a1f8d159d86bea837ab5185bc23c7bf5 = L.marker(
-                [49.926406305426475, 6.069815887901625],
+            var marker_98e616109f0653e1f4f19455a8c1b167 = L.marker(
+                [47.01880536995448, 5.48115159571194],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_bc6a1f0ca99dcc5d05b352114b0d5655 = L.marker(
-                [48.30969527333763, 4.192238177526531],
-                {
-  &quot;tags&quot;: [
-&quot;category1&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_3a81003bb43708bc464c45ecc4de163b = L.marker(
-                [48.51940599879075, 5.312436345957893],
+            var marker_e5581a1991f7b21a00d0cc6bf83ff180 = L.marker(
+                [47.379696936963896, 4.904237918275399],
                 {
   &quot;tags&quot;: [
 &quot;category4&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_c5cfff5c6a13da6933875a756409f079 = L.marker(
-                [49.800244241191386, 5.543421192371948],
+            var marker_51faae92be5326f96e8ca146ea1100b4 = L.marker(
+                [47.277823240457124, 4.517407361487836],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_6c05f96425fc91877fb439aeea8a72f3 = L.marker(
+                [48.11797562451546, 4.9529053163581045],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_9571f6ba340b5b8534c7f5c01bb2d296 = L.marker(
+                [49.12068730219614, 6.769497981065283],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_c14edc47e50d8bfbe9ff979f2599c334 = L.marker(
+                [48.32617835043046, 4.844759735680728],
+                {
+  &quot;tags&quot;: [
+&quot;category1&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_13ee6ecc1ab67b7354391950095d901e = L.marker(
+                [49.48385286011149, 4.362304702254249],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_dce52ee0e7df82e7a689e5af74adda22 = L.marker(
+                [47.81765387079706, 4.938134631250053],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_18dcab029845abefea48e2ab403fe3fe = L.marker(
+                [48.0822649841522, 5.147676561983621],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_721cbc831633b3d78d98d96d5067d7b8 = L.marker(
-                [48.28723556143767, 3.936500439552498],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_58d1ac143afba227dbe9f4b8eb81b35f = L.marker(
-                [48.454319029092076, 4.880971201157314],
+            var marker_8768ecc99e91aa6ab8515f3239689c11 = L.marker(
+                [49.69154514032575, 6.4714974565530605],
                 {
   &quot;tags&quot;: [
 &quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_7ffe8e2f4cfacd9b066886627b3bae59 = L.marker(
-                [48.81754747877235, 3.870432657378443],
+            var marker_4ac41bcea34a6dbee369e159938f869b = L.marker(
+                [47.500844966619425, 4.58743603443598],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_2d94b51331816f66b598f9a2ad689c87 = L.marker(
+                [47.92084829840732, 6.898824702250345],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ea5c9511aed6c8ebe920bfa00b1192c3 = L.marker(
+                [47.990321986088624, 5.85470198091912],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_b4407256bc25a0411d416dc36002aac7 = L.marker(
+                [48.341945956421064, 4.318648009061274],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_fb413ff2824e9d20b342ca539faaf06a = L.marker(
+                [47.44637607879099, 4.320040482166937],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_b38b140b39964c79a38c805618c09370 = L.marker(
+                [48.915561248412715, 3.643238748719172],
+                {
+  &quot;tags&quot;: [
+&quot;category1&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ca6da432c9284837ff3d6ee2bacb7db1 = L.marker(
+                [47.73108782545843, 4.272496975779329],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_5473d86364d0a0aa925a2d1d6e06a649 = L.marker(
+                [47.48281200187398, 6.207536008824532],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_70e5717a41f0c319572c2c28f6777194 = L.marker(
-                [45.8618413468589, 6.490898072692103],
+            var marker_ec660bd2336f008a24b17fcc1ec600cf = L.marker(
+                [47.60419102401268, 4.829558706488545],
                 {
   &quot;tags&quot;: [
 &quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_fa4f705dcfd8afbd1367aef0f20121e8 = L.marker(
-                [48.13301629596224, 4.758214268137861],
+            var marker_b343b1a64754453934260e6b36620033 = L.marker(
+                [48.89301153853687, 5.751791685924342],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_df493f137f270243341bc7c3026bcb49 = L.marker(
-                [48.74530830557667, 4.645968967354562],
+            var marker_11f4abb196125c437d4d6890d0f85145 = L.marker(
+                [48.32873906853376, 4.869739001881981],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_fea39766964aceca6d5cfbd9d5f5622d = L.marker(
+                [48.27065916732269, 5.226212900657756],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_3e1f653446923f40d9f661808b3c4b31 = L.marker(
+                [47.93673995395059, 4.9004005068461804],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_10f7ffb84e109b22382f7322df961f3d = L.marker(
+                [49.726746254272996, 6.480797577146685],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_cda29ca1a9ca02239f5ee7755c414d08 = L.marker(
+                [48.63145948929447, 4.3638597329594395],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_20a0b938ccd7a11a71f0cae51fcea324 = L.marker(
+                [46.36895796994255, 5.263807263817991],
+                {
+  &quot;tags&quot;: [
+&quot;category5&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_9dae4cae4616311f118375fb7b82de2b = L.marker(
+                [47.608822511157044, 5.995572023166099],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_1b1d07fdb08f457c80de0d03817e38aa = L.marker(
+                [48.47122536756029, 6.232288079871726],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_55ce7914019f130a778454584213ec02 = L.marker(
+                [48.231607579863436, 4.278719595157697],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_7a5ac00b291b8e7898146cbe3b89bf1d = L.marker(
-                [48.944222240831024, 5.109373751390059],
+            var marker_a072406cca28ba9a3342a12e18f288a7 = L.marker(
+                [47.93656755045626, 6.519373509171492],
                 {
   &quot;tags&quot;: [
-&quot;category5&quot;,
+&quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_be9619bbbafce98ccb8db2fcfba43fa4 = L.marker(
-                [46.924857139303455, 5.669738914184374],
+            var marker_1f3381dd1a8a14d13f5db6db7e182771 = L.marker(
+                [48.36544896068774, 5.4670793235301005],
                 {
   &quot;tags&quot;: [
-&quot;category4&quot;,
+&quot;category2&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_441c3c665c7a7c0bdfd0fc85f1e24b12 = L.marker(
-                [48.620794004695334, 5.426963285823865],
+            var marker_65e6587d387328eb928604e39543610e = L.marker(
+                [48.74973446938441, 6.196372740057978],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_87e105d6169f299ac64e6469c63f9e3a = L.marker(
+                [46.158994005951826, 7.16702813682038],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ae6c5d1d5bcf64b01a1ac950fee08300 = L.marker(
+                [49.19007602460273, 6.238700491830564],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ae1095b0188b73cf49c0eeb3f97952bf = L.marker(
+                [48.00335804625895, 4.446935674626649],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_0a08c2381f89d8fb04d35bb1bdc6480c = L.marker(
+                [46.36164463828432, 3.5292187528137795],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_10e31df8d21b548ffca9edee855afc82 = L.marker(
-                [46.91643610065001, 5.36921529323498],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_9ebec4c19d4005c42c59775e0573ebd2 = L.marker(
-                [45.18829460899494, 4.532898462945446],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_f5b9e4bbf062662ca064f6b2075da593 = L.marker(
-                [48.30960149671809, 3.7249025353601306],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_800c8cfa33d378c157b751b8842c6539 = L.marker(
-                [50.32328996651198, 3.4302039787986],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_794f7d7888933494cd707c1e83602083 = L.marker(
-                [47.30312008395953, 5.077997890861942],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_53513888e32880d78b2c162c4dae7da4 = L.marker(
-                [48.031556313948556, 4.357184046827325],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_73f1bc46a44cc45e0e6950675a3536c2 = L.marker(
-                [48.48828880693587, 5.2833716284114525],
-                {
-  &quot;tags&quot;: [
-&quot;category5&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_e4a4fe38af406794540b1fac340223d6 = L.marker(
-                [49.04193475585982, 5.825191737565922],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_aa4726479461a27627dec94919db4973 = L.marker(
-                [47.16052629118456, 3.6286992018274447],
-                {
-  &quot;tags&quot;: [
-&quot;category4&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_ef3aa403326093316ddec9c952c20fcd = L.marker(
-                [48.06819939752977, 6.043529397168678],
+            var marker_f9d4c5d96a4bbc688f3e820a91c238f0 = L.marker(
+                [48.002883270949404, 5.549045020836448],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_8f61d8b5e2896738b6ce486c9589857d = L.marker(
-                [48.42785619723661, 5.1537985768534575],
+            var marker_1c2da7e20a72b125ad52b7de3859fb05 = L.marker(
+                [49.25340274890487, 5.181014644313949],
                 {
   &quot;tags&quot;: [
-&quot;category4&quot;,
+&quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_ec5fffea022f1644ba682ea9f121bc6e = L.marker(
-                [49.25297873365791, 6.538177556007688],
-                {
-  &quot;tags&quot;: [
-&quot;category3&quot;,
-],
-}
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
-
-
-            var marker_eb8d0fef06b1134c66327aefc07352ce = L.marker(
-                [47.25567160548831, 5.519911338243529],
+            var marker_1d5c29a4c6d6932433a3ce5aa8578158 = L.marker(
+                [47.862774770710715, 6.246188515064251],
                 {
   &quot;tags&quot;: [
 &quot;category1&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_4e9f772087ce0fab922350c141cd3d91 = L.marker(
-                [48.46947740768762, 5.7811239723175385],
+            var marker_016ab53deb8e3e59371e8b37970d1576 = L.marker(
+                [47.68073155274926, 6.080022820202247],
+                {
+  &quot;tags&quot;: [
+&quot;category1&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_fbbfc8c84f0625b18e881ce4cda91eff = L.marker(
+                [45.762359279584814, 3.884245558651574],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_5ceb9b25a4f03a4beed94cf54f9ce854 = L.marker(
+                [49.395439445596615, 3.6280511995539824],
+                {
+  &quot;tags&quot;: [
+&quot;category3&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ea52e83dba2d7c65e0551e35673401cd = L.marker(
+                [47.2369471058312, 6.453329681002193],
+                {
+  &quot;tags&quot;: [
+&quot;category1&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_a10c0a3b738052df187b0286f0845861 = L.marker(
+                [48.133221180256086, 8.47149323929292],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_0e65e51d0d42e62e219e9772fea74177 = L.marker(
+                [47.93472217456723, 4.611719476677961],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_ea9886f766ba9c82e75d64b44c88ce9e = L.marker(
+                [48.375314301597804, 5.482522756745045],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_b1e646ab7576306f41cbcd802726dd15 = L.marker(
+                [48.15882456574822, 3.6048339527890647],
+                {
+  &quot;tags&quot;: [
+&quot;category1&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_4d8e54410eee52fbd94fe29983f2a9b3 = L.marker(
+                [47.99605935436882, 7.369756761421494],
                 {
   &quot;tags&quot;: [
 &quot;category5&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_92a5271f7db76cd487c75bc2f99ad153 = L.marker(
-                [49.02906420201325, 4.612414043210056],
+            var marker_f78c198de65870a1136e6955ce85b7d9 = L.marker(
+                [48.45818798190069, 4.607941112083745],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_cb1ffaf012d5f9676d33b106f16de243 = L.marker(
+                [48.056039654343756, 5.44369099638407],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_d8ddefb0cbbdb8062a5b6e172c37d486 = L.marker(
-                [47.470611354269096, 4.549724708473743],
+            var marker_fa2d0fbdf0b513f7917eda4b0290fec5 = L.marker(
+                [45.55494737310659, 5.785509262642162],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_47c4bf9da6e44a503c87d0b9e10a5b39 = L.marker(
+                [48.68658183785459, 3.421194785897134],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var marker_537ee4ffb06dcb79525235cdc29042d2 = L.marker(
-                [47.98012387824655, 6.362577636108185],
+            var marker_343cbb81cdcdfd1672691301bb5d14d1 = L.marker(
+                [48.595772559100055, 4.873808939233646],
+                {
+  &quot;tags&quot;: [
+&quot;category2&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_7c17fee544d020b2be7944a3e2e7a084 = L.marker(
+                [48.2888238336227, 2.949950988144883],
+                {
+  &quot;tags&quot;: [
+&quot;category4&quot;,
+],
+}
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
+
+
+            var marker_b81620701d3dc4847dc8476c8eb6853d = L.marker(
+                [48.14472128928055, 5.579742500227269],
                 {
   &quot;tags&quot;: [
 &quot;category3&quot;,
 ],
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 
-            var tag_filter_button_326588970590daf018fca380bef88feb = L.control.tagFilterButton(
+            var tag_filter_button_10eb63166f3ef0bc76aae4a845d13a85 = L.control.tagFilterButton(
                 {
   &quot;data&quot;: [
 &quot;category1&quot;,
@@ -1720,7 +1925,7 @@
   &quot;filterOnEveryClick&quot;: true,
   &quot;openPopupOnHover&quot;: false,
 }
-            ).addTo(map_dc96eb89a67e1b38cf5daf03365796e8);
+            ).addTo(map_7de1765bb3c65b264c2d47eeda126e52);
 
 &lt;/script&gt;
 &lt;/html&gt;" style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe></div></div></div>
@@ -1762,7 +1967,7 @@
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1788,8 +1993,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1797,7 +2002,7 @@
     <div class="footer-items__start">
       
         <div class="footer-item"><!-- This will display the version of the docs -->
-Folium version 1.0.0rc1</div>
+Folium version 1.0.0</div>
       
         <div class="footer-item">
 
@@ -1812,15 +2017,14 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
   </p>
 </div>
       
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>
@@ -1832,7 +2036,7 @@ Folium version 1.0.0rc1</div>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.24.0.
 </p></div>
       
     </div>
