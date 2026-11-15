@@ -4,7 +4,6 @@ Wraps leaflet Polyline, Polygon, Rectangle, Circle, and CircleMarker
 """
 
 from collections.abc import Sequence
-from typing import Optional, Union
 
 from branca.element import MacroElement
 
@@ -22,7 +21,7 @@ from folium.utilities import (
 
 
 def path_options(
-    line: bool = False, radius: Optional[float] = None, **kwargs: TypePathOptions
+    line: bool = False, radius: float | None = None, **kwargs: TypePathOptions
 ):
     """
     Contains options and constants shared between vector overlays
@@ -141,8 +140,8 @@ class BaseMultiLocation(MacroElement):
     def __init__(
         self,
         locations: TypeMultiLine,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
     ):
         super().__init__()
         self.locations = validate_multi_locations(locations)
@@ -153,7 +152,7 @@ class BaseMultiLocation(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> list[list[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[float | None]]:
         """Compute the bounds of the object itself."""
         return get_bounds(self.locations)
 
@@ -233,8 +232,8 @@ class Polygon(BaseMultiLocation):
     def __init__(
         self,
         locations: TypeMultiLine,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(locations, popup=popup, tooltip=tooltip)
@@ -273,8 +272,8 @@ class Rectangle(MacroElement):
     def __init__(
         self,
         bounds: TypeLine,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__()
@@ -289,7 +288,7 @@ class Rectangle(MacroElement):
                 tooltip if isinstance(tooltip, Tooltip) else Tooltip(str(tooltip))
             )
 
-    def _get_self_bounds(self) -> list[list[Optional[float]]]:
+    def _get_self_bounds(self) -> list[list[float | None]]:
         """Compute the bounds of the object itself."""
         return get_bounds(self.locations)
 
@@ -330,10 +329,10 @@ class Circle(Marker):
 
     def __init__(
         self,
-        location: Optional[Sequence[float]] = None,
+        location: Sequence[float] | None = None,
         radius: float = 50,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
@@ -374,10 +373,10 @@ class CircleMarker(Marker):
 
     def __init__(
         self,
-        location: Optional[Sequence[float]] = None,
+        location: Sequence[float] | None = None,
         radius: float = 10,
-        popup: Union[Popup, str, None] = None,
-        tooltip: Union[Tooltip, str, None] = None,
+        popup: Popup | str | None = None,
+        tooltip: Tooltip | str | None = None,
         **kwargs: TypePathOptions,
     ):
         super().__init__(location, popup=popup, tooltip=tooltip)
