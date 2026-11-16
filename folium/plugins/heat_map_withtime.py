@@ -40,6 +40,9 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         Display the index (usually time) in the time control.
     index_steps: default 1
         Steps to take in the index dimension between animation steps.
+    start_index: int, default 0
+        Position (0-based) in `data` of the time step shown when the map opens.
+        Negative values count from the end, so -1 starts at the last time step.
     min_speed: default 0.1
         Minimum fps speed for animation.
     max_speed: default 10
@@ -144,7 +147,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
             var times = {{this.times}};
 
             {{this._parent.get_name()}}.timeDimension = L.timeDimension(
-                {times : times, currentTime: new Date(1)}
+                {times : times, currentTime: new Date({{this.start_index + 1}})}
             );
 
             var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
@@ -225,6 +228,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         auto_play=False,
         display_index=True,
         index_steps=1,
+        start_index=0,
         min_speed=0.1,
         max_speed=10,
         speed_step=0.1,
@@ -247,6 +251,12 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 "Input data and index are not of compatible lengths."
             )  # noqa
         self.times = list(range(1, len(data) + 1))
+        if data and not -len(data) <= start_index < len(data):
+            raise ValueError(
+                f"start_index must be between {-len(data)} and {len(data) - 1}, "
+                f"got {start_index}."
+            )
+        self.start_index = start_index % len(data) if data else 0
 
         # Heatmap settings.
         self.radius = radius
