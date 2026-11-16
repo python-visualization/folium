@@ -54,12 +54,31 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         Whether the Layer will be included in LayerControls.
     show: bool, default True
         Whether the layer will be shown on opening.
+    pane: str, default "overlayPane"
+        Name of the map pane the heatmap is drawn in. Use a
+        :class:`folium.map.CustomPane` with a higher ``z_index`` to draw the
+        heatmap on top of image overlays, which otherwise cover it.
 
     """
 
     _template = Template("""
         {% macro header(this, kwargs) %}
             <script>
+            var PanedHeatmapOverlay = HeatmapOverlay.extend({
+                initialize: function(config, pane) {
+                    HeatmapOverlay.prototype.initialize.call(this, config);
+                    this._paneName = pane || 'overlayPane';
+                },
+                onAdd: function(map) {
+                    HeatmapOverlay.prototype.onAdd.call(this, map);
+                    map.getPane(this._paneName).appendChild(this._el);
+                },
+                onRemove: function(map) {
+                    L.DomUtil.remove(this._el);
+                    map.off('moveend', this._reset, this);
+                }
+            });
+
             var TDHeatmap = L.TimeDimension.Layer.extend({
                 initialize: function(data, options) {
                     var heatmapCfg = {
@@ -74,7 +93,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                         defaultWeight : 1,
                     };
                     heatmapCfg = $.extend({}, heatmapCfg, options.heatmapOptions || {});
-                    var layer = new HeatmapOverlay(heatmapCfg);
+                    var layer = new PanedHeatmapOverlay(heatmapCfg, options.pane);
                     L.TimeDimension.Layer.prototype.initialize.call(this, layer, options);
                     this._currentLoadedTime = 0;
                     this._currentTimeData = {
@@ -170,7 +189,8 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 .addTo({{this._parent.get_name()}});
 
                 var {{this.get_name()}} = new TDHeatmap({{this.data}},
-                {heatmapOptions: {
+                {pane: {{this.pane|tojson}},
+                heatmapOptions: {
                         radius: {{this.radius}},
                         blur: {{this.blur}},
                         minOpacity: {{this.min_opacity}},
@@ -232,6 +252,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         overlay=True,
         control=True,
         show=True,
+        pane="overlayPane",
     ):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "HeatMap"
@@ -256,6 +277,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         self.scale_radius = "true" if scale_radius else "false"
         self.use_local_extrema = "true" if use_local_extrema else "false"
         self.gradient = gradient
+        self.pane = pane
 
         # Time dimension settings.
         self.auto_play = "true" if auto_play else "false"
