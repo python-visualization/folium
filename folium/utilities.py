@@ -186,6 +186,8 @@ def image_to_url(
     """
     if isinstance(image, str) and not _is_url(image):
         fileformat = os.path.splitext(image)[-1][1:]
+        if fileformat.lower() == "svg":
+            fileformat = "svg+xml"
         with open(image, "rb") as f:
             img = f.read()
         b64encoded = base64.b64encode(img).decode("utf-8")
