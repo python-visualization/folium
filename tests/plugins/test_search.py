@@ -18,4 +18,9 @@ def test_search_opens_popup_bound_to_geojson_group():
 
     # GeoJsonPopup is bound to the group, not to each indexed feature.
     assert normalize(f"else if ({layer.get_name()}.getPopup())") in rendered
-    assert normalize(f"e.layer.bindPopup({layer.get_name()}.getPopup()).openPopup().unbindPopup();") in rendered
+    assert (
+        normalize(
+            f"e.layer.bindPopup({layer.get_name()}.getPopup()).openPopup().unbindPopup();"
+        )
+        in rendered
+    )
