@@ -111,6 +111,8 @@ def test_topojson_popup(popup):
     assert len(children) == 1
     assert isinstance(children[0], (folium.GeoJsonPopup, Popup))
     assert f"{topojson.get_name()}.bindPopup(" in map_.get_root().render()
+
+
 @pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
 @pytest.mark.parametrize(
     "properties, fields",
