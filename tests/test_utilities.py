@@ -265,6 +265,12 @@ def test_image_to_url_url():
     assert image_to_url(url) == url
 
 
+def test_image_to_url_svg(tmp_path):
+    path = tmp_path / "icon.svg"
+    path.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
+    assert image_to_url(str(path)).startswith("data:image/svg+xml;base64,")
+
+
 @pytest.mark.parametrize(
     "text,result",
     [
