@@ -5,8 +5,8 @@ Classes for drawing maps.
 
 import warnings
 from collections import OrderedDict, defaultdict
-from collections.abc import Sequence
-from typing import TYPE_CHECKING, Union, cast
+from collections.abc import Callable, Sequence
+from typing import TYPE_CHECKING, Any, Generic, Literal, Self, TypeVar, cast
 
 from branca.element import Element, Figure, Html, MacroElement
 
@@ -18,45 +18,50 @@ from folium.utilities import (
     TypeBounds,
     TypeBoundsReturn,
     TypeJsonValue,
+    TypeJsonValueNoNone,
     escape_backticks,
     parse_options,
     remove_empty,
     validate_location,
 )
 
+_T_co = TypeVar("_T_co", covariant=True)
 
-class classproperty:
-    def __init__(self, f):
+
+class classproperty(Generic[_T_co]):
+    f: Callable[[type], _T_co]
+
+    def __init__(self, f: Callable[[type], _T_co]):
         self.f = f
 
-    def __get__(self, obj, owner):
+    def __get__(self, obj: object | None, owner: type) -> _T_co:
         return self.f(owner)
 
 
 if TYPE_CHECKING:
-    from folium.features import CustomIcon, DivIcon
+    from folium.features import DivIcon
 
 
 class Class(MacroElement):
     """The root class of the leaflet class hierarchy"""
 
-    _includes: defaultdict[str, dict] = defaultdict(dict)
+    _includes: defaultdict[type, dict[str, Any]] = defaultdict(dict)
 
     @classmethod
-    def include(cls, **kwargs):
+    def include(cls, **kwargs: Any) -> None:
         cls._includes[cls].update(**kwargs)
 
     @classproperty
-    def includes(cls):
+    def includes(cls: type["Class"]) -> dict[str, Any]:
         return cls._includes[cls]
 
     @property
-    def leaflet_class_name(self):
+    def leaflet_class_name(self) -> str:
         # TODO: I did not check all Folium classes to see if
         # this holds up. This breaks at least for CustomIcon.
         return f"L.{self._name}"
 
-    def render(self, **kwargs):
+    def render(self, **kwargs: Any) -> None:  # type: ignore[override]
         figure = self.get_root()
         assert isinstance(
             figure, Figure
@@ -86,13 +91,13 @@ class Evented(Class):
     method using python keyword arguments.
     """
 
-    def on(self, **event_map: JsCode):
+    def on(self, **event_map: JsCode) -> None:
         self._add(once=False, **event_map)
 
-    def once(self, **event_map: JsCode):
+    def once(self, **event_map: JsCode) -> None:
         self._add(once=True, **event_map)
 
-    def _add(self, once: bool, **event_map: JsCode):
+    def _add(self, once: bool, **event_map: JsCode) -> None:
         for event_type, handler in event_map.items():
             self.add_child(EventHandler(event_type, handler, once))
 
@@ -114,6 +119,12 @@ class Layer(Evented):
         Whether the layer will be shown on opening.
     """
 
+    _parent: Element
+    layer_name: str
+    overlay: bool
+    control: bool
+    show: bool
+
     def __init__(
         self,
         name: str | None = None,
@@ -127,7 +138,7 @@ class Layer(Evented):
         self.control = control
         self.show = show
 
-    def render(self, **kwargs):
+    def render(self, **kwargs: Any) -> None:  # type: ignore[override]
         if self.show:
             self.add_child(
                 ElementAddToElement(
@@ -171,6 +182,9 @@ class FeatureGroup(Layer):
             );
         {% endmacro %}
         """)
+
+    tile_name: str
+    options: dict[str, TypeJsonValueNoNone]
 
     def __init__(
         self,
@@ -222,6 +236,9 @@ class LayerGroup(Layer):
             );
         {% endmacro %}
         """)
+
+    tile_name: str
+    options: dict[str, TypeJsonValueNoNone]
 
     def __init__(
         self,
@@ -297,6 +314,12 @@ class LayerControl(MacroElement):
         {% endmacro %}
         """)
 
+    _parent: Element
+    options: dict[str, TypeJsonValueNoNone]
+    draggable: bool
+    base_layers: OrderedDict[str, str]
+    overlays: OrderedDict[str, str]
+
     def __init__(
         self,
         position: str = "topright",
@@ -311,14 +334,14 @@ class LayerControl(MacroElement):
             position=position, collapsed=collapsed, autoZIndex=autoZIndex, **kwargs
         )
         self.draggable = draggable
-        self.base_layers: OrderedDict[str, str] = OrderedDict()
-        self.overlays: OrderedDict[str, str] = OrderedDict()
+        self.base_layers = OrderedDict()
+        self.overlays = OrderedDict()
 
     def reset(self) -> None:
         self.base_layers = OrderedDict()
         self.overlays = OrderedDict()
 
-    def render(self, **kwargs):
+    def render(self, **kwargs: Any) -> None:  # type: ignore[override]
         """Renders the HTML representation of the element."""
         self.reset()
         for item in self._parent._children.values():
@@ -424,6 +447,11 @@ class Icon(MacroElement):
         "black",
     }
 
+    is_hex: bool
+    color: str
+    color_name: str
+    options: dict[str, TypeJsonValueNoNone]
+
     def __init__(
         self,
         color: str = "blue",
@@ -506,6 +534,10 @@ class Marker(MacroElement):
         {% endmacro %}
         """)
 
+    location: list[float] | None
+    options: dict[str, TypeJsonValueNoNone]
+    icon: "Icon | DivIcon | None"
+
     class SetIcon(MacroElement):
         """Set the icon of a marker after both are created."""
 
@@ -528,15 +560,16 @@ class Marker(MacroElement):
             {% endmacro %}
         """)
 
-        def __init__(
-            self, marker: "Marker", icon: Union[Icon, "CustomIcon", "DivIcon"]
-        ):
+        marker: "Marker"
+        icon: "Icon | DivIcon"
+
+        def __init__(self, marker: "Marker", icon: "Icon | DivIcon"):
             super().__init__()
             self._name = "SetIcon"
             self.marker = marker
             self.icon = icon
 
-        def render(self, **kwargs):
+        def render(self, **kwargs: Any) -> None:  # type: ignore[override]
             figure = self.get_root()
             assert isinstance(
                 figure, Figure
@@ -551,9 +584,9 @@ class Marker(MacroElement):
     def __init__(
         self,
         location: Sequence[float] | None = None,
-        popup: Union["Popup", str, None] = None,
-        tooltip: Union["Tooltip", str, None] = None,
-        icon: Union[Icon, "CustomIcon", "DivIcon"] | None = None,
+        popup: "Popup | str | None" = None,
+        tooltip: "Tooltip | str | None" = None,
+        icon: "Icon | DivIcon | None" = None,
         draggable: bool = False,
         **kwargs: TypeJsonValue,
     ):
@@ -582,7 +615,7 @@ class Marker(MacroElement):
         assert self.location is not None
         return cast(TypeBoundsReturn, [self.location, self.location])
 
-    def render(self):
+    def render(self) -> None:  # type: ignore[override]
         if self.location is None:
             raise ValueError(
                 f"{self._name} location must be assigned when added directly to map."
@@ -591,12 +624,14 @@ class Marker(MacroElement):
             self.add_child(self.SetIcon(marker=self, icon=self.icon))
         super().render()
 
-    def set_icon(self, icon):
+    def set_icon(self, icon: "Icon | DivIcon") -> None:
         """Set the icon for this Marker"""
         super().add_child(icon)
         self.icon = icon
 
-    def add_child(self, child, name=None, index=None):
+    def add_child(
+        self, child: Element, name: str | None = None, index: int | None = None
+    ) -> Self:
         import folium.features as features
 
         if isinstance(child, (Icon, features.CustomIcon, features.DivIcon)):
@@ -647,6 +682,14 @@ class Popup(MacroElement):
         {% endfor %}
     """)  # noqa
 
+    header: Element
+    html: Element
+    script: Element
+
+    show: bool
+    lazy: bool
+    options: dict[str, TypeJsonValueNoNone]
+
     def __init__(
         self,
         html: str | Element | None = None,
@@ -684,7 +727,7 @@ class Popup(MacroElement):
             **kwargs,
         )
 
-    def render(self, **kwargs):
+    def render(self, **kwargs: Any) -> None:  # type: ignore[override]
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
@@ -730,6 +773,10 @@ class Tooltip(MacroElement):
             );
         {% endmacro %}
         """)
+
+    text: str
+    options: dict[str, TypeJsonValueNoNone]
+    style: str  # only set if `style` is given and not `None` in `__init__`
 
     def __init__(
         self,
@@ -783,6 +830,9 @@ class FitBounds(MacroElement):
             );
         {% endmacro %}
         """)
+
+    bounds: TypeBounds
+    options: dict[str, TypeJsonValueNoNone]
 
     def __init__(
         self,
@@ -838,6 +888,10 @@ class FitOverlays(MacroElement):
         {% endmacro %}
     """)
 
+    method: Literal["flyToBounds", "fitBounds"]
+    fit_on_map_load: bool
+    options: dict[str, TypeJsonValueNoNone]
+
     def __init__(
         self,
         padding: int = 0,
@@ -886,6 +940,10 @@ class CustomPane(MacroElement):
             {% endif %}
         {% endmacro %}
         """)
+
+    name: str
+    z_index: int | str
+    pointer_events: bool
 
     def __init__(
         self,
