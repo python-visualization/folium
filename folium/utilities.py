@@ -413,8 +413,12 @@ def remove_empty(**kwargs: TypeJsonValue) -> dict[str, TypeJsonValueNoNone]:
 
 
 def escape_backticks(text: str) -> str:
-    """Escape backslashes and backticks so text can be used in a JS template."""
-    return text.replace("\\", "\\\\").replace("`", "\\`")
+    """Escape text so it can be placed inside a JS template literal.
+
+    Backslashes, backticks and ``${`` are escaped, so the text is kept as-is
+    instead of ending the literal or being evaluated as an interpolation.
+    """
+    return text.replace("\\", "\\\\").replace("`", "\\`").replace("${", "\\${")
 
 
 def escape_double_quotes(text: str) -> str:
