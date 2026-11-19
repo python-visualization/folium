@@ -47,11 +47,11 @@ class Search(JSCSSMixin, MacroElement):
             var {{this.layer.get_name()}}searchControl = new L.Control.Search({
                 layer: {{this.layer.get_name()}},
                 {% if this.search_label %}
-                propertyName: '{{this.search_label}}',
+                propertyName: {{ this.search_label|tojson }},
                 {% endif %}
                 collapsed: {{this.collapsed|tojson|safe}},
-                textPlaceholder: '{{this.placeholder}}',
-                position:'{{this.position}}',
+                textPlaceholder: {{ this.placeholder|tojson }},
+                position: {{ this.position|tojson }},
             {% if this.geom_type == 'Point' %}
                 initial: false,
                 {% if this.search_zoom %}
