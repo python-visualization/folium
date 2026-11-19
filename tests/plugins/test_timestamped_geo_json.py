@@ -136,7 +136,7 @@ def test_timestamped_geo_json():
             _getDisplayDateFormat: function(date){
                 var newdate = new moment(date);
                 console.log(newdate)
-                return newdate.format("{{this.date_options}}");
+                return newdate.format({{ this.date_options|tojson }});
             }
         });
         {{this._parent.get_name()}}.timeDimension = L.timeDimension(
@@ -208,3 +208,11 @@ def test_timestamped_geo_json():
 
     bounds = m.get_bounds()
     assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds
+
+
+def test_timestamped_geo_json_date_options_with_quotes():
+    m = folium.Map()
+    data = {"type": "FeatureCollection", "features": []}
+    plugins.TimestampedGeoJson(data, date_options='YYYY "Q"Q').add_to(m)
+    out = m.get_root().render()
+    assert 'newdate.format("YYYY \\"Q\\"Q");' in out

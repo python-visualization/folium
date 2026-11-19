@@ -84,7 +84,7 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
                 _getDisplayDateFormat: function(date){
                     var newdate = new moment(date);
                     console.log(newdate)
-                    return newdate.format("{{this.date_options}}");
+                    return newdate.format({{ this.date_options|tojson }});
                 }
             });
             {{this._parent.get_name()}}.timeDimension = L.timeDimension(
