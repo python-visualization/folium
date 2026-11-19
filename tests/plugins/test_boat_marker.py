@@ -26,7 +26,7 @@ def test_boat_marker():
     out = normalize(m._parent.render())
 
     # We verify that the script import is present.
-    script = '<script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/thomasbrueggemann/leaflet.boatmarker@1193728f0626ae0cc55fbbd5912893446581332f/leaflet.boatmarker.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the script part is correct.

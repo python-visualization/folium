@@ -61,13 +61,13 @@ class MousePosition(JSCSSMixin, MacroElement):
     default_js = [
         (
             "Control_MousePosition_js",
-            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.js",
+            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition@c32f1c84ec49dbf7ad599c51c8659d5e08af0f97/src/L.Control.MousePosition.min.js",
         )
     ]
     default_css = [
         (
             "Control_MousePosition_css",
-            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition/src/L.Control.MousePosition.min.css",
+            "https://cdn.jsdelivr.net/gh/ardhi/Leaflet.MousePosition@c32f1c84ec49dbf7ad599c51c8659d5e08af0f97/src/L.Control.MousePosition.min.css",
         )
     ]
 

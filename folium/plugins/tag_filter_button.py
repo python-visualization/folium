@@ -51,7 +51,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
     default_js = [
         (
             "tag-filter-button.js",
-            "https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.js",
+            "https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.5/src/leaflet-tag-filter-button.js",
         ),
         (
             "easy-button.js",
@@ -61,7 +61,7 @@ class TagFilterButton(JSCSSMixin, MacroElement):
     default_css = [
         (
             "tag-filter-button.css",
-            "https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button/src/leaflet-tag-filter-button.css",
+            "https://cdn.jsdelivr.net/npm/leaflet-tag-filter-button@0.0.5/src/leaflet-tag-filter-button.css",
         ),
         (
             "easy-button.css",
