@@ -4,6 +4,8 @@ Test raster_layers
 
 """
 
+import warnings
+
 import numpy as np
 import pytest
 import xyzservices
@@ -148,3 +150,42 @@ def test_xyzservices(tiles):
         )
         in out
     )
+
+
+@pytest.mark.parametrize(
+    "tiles", ["CartoDB Positron", xyzservices.providers.CartoDB.Positron]
+)
+def test_tile_layer_api_key(tiles):
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")  # no "API key required" warning
+        layer = folium.TileLayer(tiles, api_key="my-key")
+    assert layer.tiles == xyzservices.providers.CartoDB.Positron.build_url(
+        fill_subdomain=False, scale_factor="{r}", apikey="my-key"
+    )
+    assert layer.tiles.endswith("?key=my-key")
+    assert "api_key" not in layer.options
+    assert "apiKey" not in layer.options
+
+
+def test_tile_layer_api_key_other_placeholder_name():
+    # MapBox calls its token placeholder `accessToken`, not `apikey`.
+    layer = folium.TileLayer("MapBox", api_key="my-token")
+    assert "access_token=my-token" in layer.tiles
+
+
+def test_tile_layer_api_key_does_not_modify_provider():
+    provider = xyzservices.providers.CartoDB.Positron
+    folium.TileLayer(provider, api_key="my-key")
+    assert provider.requires_token()
+
+
+def test_tile_layer_api_key_rejects_custom_url():
+    with pytest.raises(ValueError, match="custom tile URL"):
+        folium.TileLayer(
+            "https://{s}.example.com/{z}/{x}/{y}.png", attr="x", api_key="my-key"
+        )
+
+
+def test_tile_layer_api_key_rejects_provider_without_placeholder():
+    with pytest.raises(ValueError, match="no API key placeholder"):
+        folium.TileLayer("OpenStreetMap", api_key="my-key")
