@@ -10,6 +10,7 @@ Advanced guide
   advanced_guide/colormaps
   advanced_guide/world_copy
   advanced_guide/custom_panes
+  advanced_guide/info_box
   advanced_guide/geodedetic_image_overlay
   advanced_guide/custom_tiles
   advanced_guide/piechart_icons
