@@ -287,6 +287,10 @@ def test_escape_backticks(text, result):
     assert escape_backticks(text) == result
 
 
+def test_escape_backticks_interpolate():
+    assert escape_backticks("a`b ${lat}", interpolate=True) == r"a\`b ${lat}"
+
+
 @pytest.mark.parametrize(
     "text,result",
     [

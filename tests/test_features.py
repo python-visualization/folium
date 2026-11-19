@@ -310,6 +310,13 @@ def test_geojson_from_utf8_file(tmp_path, encoding):
     assert GeoJson(str(path)).data == data
 
 
+def test_click_for_marker_keeps_lat_lng_placeholders():
+    m = Map()
+    click = ClickForMarker("<b>Lat:</b> ${lat}<br /><b>Lon:</b> ${lng}").add_to(m)
+    rendered = click._template.module.script(this=click, kwargs={})
+    assert "`<b>Lat:</b> ${lat}<br /><b>Lon:</b> ${lng}`" in rendered
+
+
 # GeoJsonMarker type validation.
 def test_geojson_marker():
     m = folium.Map([30.4, -97.5], zoom_start=10)
