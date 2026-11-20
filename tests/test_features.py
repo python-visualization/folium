@@ -467,6 +467,38 @@ def test_geojson_empty_features_with_styling():
     m.get_root().render()
 
 
+def test_geojson_style_float_feature_ids():
+    """Float feature ids are valid GeoJSON and can be used for styling."""
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "id": feature_id,
+                "properties": {},
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+            }
+            for feature_id in (1.5, 2.5, 3.5)
+        ],
+    }
+    m = Map()
+    geojson = GeoJson(
+        data,
+        style_function=lambda f: {"color": "red" if f["id"] == 1.5 else "blue"},
+        highlight_function=lambda f: {"weight": 3},
+    ).add_to(m)
+    assert geojson.feature_identifier == "feature.id"
+    rendered = m.get_root().render()
+    assert geojson.style_map == {
+        '{"color": "red"}': [1.5],
+        "default": '{"color": "blue"}',
+    }
+    assert geojson.highlight_map == {"default": '{"weight": 3}'}
+    assert "case 1.5:" in rendered
+    # The original ids are kept.
+    assert [f["id"] for f in geojson.data["features"]] == [1.5, 2.5, 3.5]
+
+
 def test_geojson_event_handler():
     """Test that event handlers are properly generated"""
     m = Map()
