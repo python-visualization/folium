@@ -73,13 +73,13 @@ class BeautifyIcon(JSCSSMixin, MacroElement):
     default_js = [
         (
             "beautify_icon_js",
-            "https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js",
+            "https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker@55e0436a7fbbfc7d72dcad722a9b3058e0459f9d/leaflet-beautify-marker-icon.min.js",
         )
     ]
     default_css = [
         (
             "beautify_icon_css",
-            "https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css",
+            "https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker@55e0436a7fbbfc7d72dcad722a9b3058e0459f9d/leaflet-beautify-marker-icon.min.css",
         )
     ]
 

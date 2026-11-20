@@ -115,7 +115,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     default_js = [
         (
             "vectorGrid",
-            "https://unpkg.com/leaflet.vectorgrid@latest/dist/Leaflet.VectorGrid.bundled.js",
+            "https://unpkg.com/leaflet.vectorgrid@1.3.0/dist/Leaflet.VectorGrid.bundled.js",
         )
     ]
 

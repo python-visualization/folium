@@ -35,11 +35,11 @@ def test_beautify_icon():
     out = normalize(m._parent.render())
 
     # We verify that the script import is present.
-    script = '<script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.js"></script>'  # noqa
+    script = '<script src="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker@55e0436a7fbbfc7d72dcad722a9b3058e0459f9d/leaflet-beautify-marker-icon.min.js"></script>'  # noqa
     assert script in out
 
     # We verify that the css import is present.
-    css = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker/leaflet-beautify-marker-icon.min.css"/>'  # noqa
+    css = '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/marslan390/BeautifyMarker@55e0436a7fbbfc7d72dcad722a9b3058e0459f9d/leaflet-beautify-marker-icon.min.css"/>'  # noqa
     assert css in out
 
     # We verify that the Beautiful Icons are rendered correctly.

@@ -48,7 +48,7 @@ class DualMap(JSCSSMixin, MacroElement):
     default_js = [
         (
             "Leaflet.Sync",
-            "https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync/L.Map.Sync.min.js",
+            "https://cdn.jsdelivr.net/gh/jieter/Leaflet.Sync@0.2.4/L.Map.Sync.min.js",
         )
     ]
 
