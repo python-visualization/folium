@@ -9,6 +9,7 @@ import warnings
 import numpy as np
 import pytest
 
+import folium
 from folium import GeoJson, Map, TileLayer
 from folium.map import Class, CustomPane, Icon, LayerControl, Marker, Popup, Tooltip
 from folium.utilities import JsCode, normalize
@@ -364,3 +365,43 @@ def test_repeated_save_produces_identical_html(tmp_path):
     html2 = path2.read_text()
     html3 = path3.read_text()
     assert html1 == html2 == html3
+
+
+@pytest.mark.parametrize(
+    "add_element, expected",
+    [
+        (
+            lambda m: folium.CircleMarker([45, 3], radius=np.int64(5)).add_to(m),
+            '"radius": 5',
+        ),
+        (
+            lambda m: folium.TileLayer(max_zoom=np.int64(18)).add_to(m),
+            '"maxZoom": 18',
+        ),
+        (
+            lambda m: folium.Marker(
+                [45, 3], popup=folium.Popup("x", max_width=np.int64(300))
+            ).add_to(m),
+            '"maxWidth": 300,',
+        ),
+        (
+            lambda m: folium.Marker(
+                [45, 3], icon=folium.DivIcon(icon_size=np.array([20, 20]))
+            ).add_to(m),
+            '"iconSize": [20,20]',
+        ),
+        (
+            lambda m: m.fit_bounds(np.array([[45.0, 3.0], [46.0, 4.0]])),
+            "fitBounds([[45.0,3.0],[46.0,4.0]]",
+        ),
+        (
+            lambda m: m.fit_bounds([[45, 3], [46, 4]], max_zoom=np.int64(5)),
+            '"maxZoom": 5',
+        ),
+    ],
+)
+def test_numpy_option_values(add_element, expected):
+    m = folium.Map()
+    add_element(m)
+    out = normalize(m.get_root().render())
+    assert expected in out
