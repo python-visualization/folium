@@ -4,7 +4,10 @@ Test TimestampedGeoJson
 
 """
 
+import json
+
 import numpy as np
+import pytest
 
 import folium
 from folium import plugins
@@ -208,3 +211,47 @@ def test_timestamped_geo_json():
 
     bounds = m.get_bounds()
     assert bounds == [[-53.0, -158.0], [50.0, 158.0]], bounds
+
+
+def test_timestamped_geo_json_escapes_script_tags():
+    payload = "</script><script>alert(1)</script>"
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+                "properties": {"times": ["2017-06-02"], "name": payload},
+            }
+        ],
+    }
+    m = folium.Map()
+    tgj = plugins.TimestampedGeoJson(data).add_to(m)
+    out = m._parent.render()
+
+    assert payload not in out
+    assert json.loads(tgj.data) == data
+
+
+@pytest.mark.parametrize("encoding", ["utf-8", "utf-8-sig"])
+def test_timestamped_geo_json_from_file_escapes_script_tags(tmp_path, encoding):
+    payload = "</script><script>alert(1)</script>"
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+                "properties": {"times": ["2017-06-02"], "name": payload},
+            }
+        ],
+    }
+    path = tmp_path / "data.geojson"
+    path.write_text(json.dumps(data), encoding=encoding)
+    m = folium.Map()
+    with open(path, encoding=encoding) as f:
+        tgj = plugins.TimestampedGeoJson(f).add_to(m)
+    out = m._parent.render()
+
+    assert payload not in out
+    assert json.loads(tgj.data) == data

@@ -560,3 +560,39 @@ def test_choropleth_get_by_key():
 
     # Test with combined string path and numerical index in key_on
     assert Choropleth._get_by_key(geojson_data, "geometry.coordinates.0.0") == [1, 2]
+
+
+VEGA_SCRIPT_PAYLOAD = "</script><script>alert(1)</script>"
+
+
+def test_vegalite_escapes_script_tags():
+    spec = {
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data": {"values": [{"a": VEGA_SCRIPT_PAYLOAD, "b": 1}]},
+        "mark": "bar",
+        "encoding": {
+            "x": {"field": "a", "type": "nominal"},
+            "y": {"field": "b", "type": "quantitative"},
+        },
+    }
+    m = Map()
+    popup = Popup().add_to(folium.Marker([0, 0]).add_to(m))
+    vegalite = folium.VegaLite(spec).add_to(popup)
+    out = m._parent.render()
+
+    assert VEGA_SCRIPT_PAYLOAD not in out
+    assert json.loads(vegalite.json) == spec
+
+
+def test_vega_escapes_script_tags():
+    spec = {
+        "data": [{"name": "table", "values": [{"x": VEGA_SCRIPT_PAYLOAD}]}],
+        "marks": [],
+    }
+    m = Map()
+    popup = Popup().add_to(folium.Marker([0, 0]).add_to(m))
+    vega = folium.Vega(spec).add_to(popup)
+    out = m._parent.render()
+
+    assert VEGA_SCRIPT_PAYLOAD not in out
+    assert json.loads(vega.json) == spec

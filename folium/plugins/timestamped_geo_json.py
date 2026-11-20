@@ -4,7 +4,7 @@ from branca.element import MacroElement
 
 from folium.elements import JSCSSMixin
 from folium.folium import Map
-from folium.template import Template
+from folium.template import Template, _to_escaped_json
 from folium.utilities import get_bounds, remove_empty
 
 
@@ -208,10 +208,13 @@ class TimestampedGeoJson(JSCSSMixin, MacroElement):
 
         if "read" in dir(data):
             self.embed = True
-            self.data = data.read()
+            content = data.read()
+            if isinstance(content, str):
+                content = content.lstrip("﻿")
+            self.data = _to_escaped_json(json.loads(content))
         elif type(data) is dict:
             self.embed = True
-            self.data = json.dumps(data)
+            self.data = _to_escaped_json(data)
         else:
             self.embed = False
             self.data = data
