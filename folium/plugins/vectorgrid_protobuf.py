@@ -104,7 +104,7 @@ class VectorGridProtobuf(JSCSSMixin, Layer):
     _template = Template("""
             {% macro script(this, kwargs) -%}
             var {{ this.get_name() }} = L.vectorGrid.protobuf(
-                '{{ this.url }}',
+                {{ this.url|tojson }},
                 {%- if this.options is defined %}
                     {{ this.options if this.options is string else this.options|tojavascript }}
                 {%- endif %}

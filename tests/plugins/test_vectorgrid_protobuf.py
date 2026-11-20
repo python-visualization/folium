@@ -107,3 +107,11 @@ def test_vectorgrid_dict_options():
             continue
 
         assert f'"{k}": {v}' in out
+
+
+def test_vectorgrid_url_with_quote():
+    m = folium.Map()
+    url = "https://example.com/{z}/{x}/{y}.pbf?name=O'Neil"
+    VectorGridProtobuf(url, "test").add_to(m)
+    out = m.get_root().render()
+    assert r'"https://example.com/{z}/{x}/{y}.pbf?name=O\u0027Neil"' in out

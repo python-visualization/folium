@@ -37,7 +37,7 @@ class FloatImage(MacroElement):
 
             {% macro html(this,kwargs) %}
             <img id="{{this.get_name()}}" alt="float_image"
-                 src="{{ this.image }}"
+                 src="{{ this.image|e }}"
                  style="z-index: 999999">
             </img>
             {% endmacro %}
