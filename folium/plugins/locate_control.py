@@ -26,6 +26,8 @@ class LocateControl(JSCSSMixin, MacroElement):
         Once user location is founded, the map will automatically centered in using user coordinates.
     **kwargs
         For possible options, see https://github.com/domoritz/leaflet-locatecontrol
+        Options can be given in snake_case or lowerCamelCase, for example
+        ``fly_to=True`` or ``flyTo=True``.
 
     Examples
     --------
@@ -47,7 +49,7 @@ class LocateControl(JSCSSMixin, MacroElement):
     _template = Template("""
         {% macro script(this, kwargs) %}
             var {{this.get_name()}} = L.control.locate(
-                {{this.options | tojson}}
+                {{this.options | tojavascript}}
             ).addTo({{this._parent.get_name()}});
             {% if this.auto_start %}
                 {{this.get_name()}}.start();
