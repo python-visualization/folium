@@ -432,3 +432,16 @@ def test_circle_marker_forwards_interactive():
     marker.add_to(m)
     rendered = normalize(m._parent.render())
     assert '"interactive": false' in rendered
+
+
+def test_zero_radius_is_kept():
+    """A radius of 0 must reach Leaflet instead of falling back to its default.
+
+    Leaflet's default radius is 10 (pixels for CircleMarker, meters for
+    Circle), so dropping a 0 drew zero-valued points as visible circles.
+    """
+    assert path_options(radius=0)["radius"] == 0
+    assert Circle(location=[0, 0], radius=0).options["radius"] == 0
+    assert CircleMarker(location=[0, 0], radius=0).options["radius"] == 0
+    # radius=None still means "don't set it", as for polygons and lines.
+    assert "radius" not in path_options(line=True, radius=None)
