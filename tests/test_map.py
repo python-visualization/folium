@@ -255,6 +255,24 @@ def test_popup_backslashes():
     assert normalize(rendered) == normalize(expected)
 
 
+@pytest.mark.parametrize("parse_html", [False, True])
+def test_popup_template_literal_interpolation(parse_html):
+    m = Map()
+    popup = Popup("price: ${price}", parse_html=parse_html).add_to(m)
+    rendered = popup._template.render(this=popup, kwargs={})
+    assert "price: \\${price}" in rendered
+    assert "price: ${price}" not in rendered
+
+
+def test_tooltip_template_literal_interpolation():
+    m = Map()
+    marker = Marker([0, 0]).add_to(m)
+    tooltip = Tooltip("price: ${price}").add_to(marker)
+    rendered = tooltip._template.module.script(this=tooltip, kwargs={})
+    assert "price: \\${price}" in rendered
+    assert "price: ${price}" not in rendered
+
+
 def test_tooltip_backslashes_and_backticks():
     m = Map()
     marker = Marker([0, 0]).add_to(m)

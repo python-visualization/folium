@@ -1852,7 +1852,8 @@ class ClickForMarker(MacroElement):
         if isinstance(popup, Element):
             popup = popup.render()
         if popup:
-            self.popup = "`" + escape_backticks(popup) + "`"  # type: ignore
+            # ${lat} and ${lng} are documented placeholders, so keep them.
+            self.popup = "`" + escape_backticks(popup, interpolate=True) + "`"  # type: ignore
         else:
             self.popup = '"Latitude: " + lat + "<br>Longitude: " + lng '
 
