@@ -90,7 +90,7 @@ class TestFolium:
             {% endif %}
             {% endif %}
             {% if bounds %}
-            {{this._parent.get_name()}}.fitBounds({{ bounds }},
+            map.fitBounds({{ bounds }},
                 {{ fit_bounds_options }}
             );
             {% endif %}
@@ -439,6 +439,7 @@ class TestFolium:
         )
 
         assert "".join(fit_bounds_rendered.split()) in "".join(out.split())
+        assert f"}})({self.m.get_name()});" in "".join(out.split())
 
     def test_fit_bounds_2(self):
         bounds = ((52.193636, -2.221575), (52.636878, -1.139759))
@@ -465,6 +466,7 @@ class TestFolium:
         )
 
         assert "".join(fit_bounds_rendered.split()) in "".join(out.split())
+        assert f"}})({self.m.get_name()});" in "".join(out.split())
 
         bounds = self.m.get_bounds()
         assert bounds == [[None, None], [None, None]], bounds
