@@ -467,6 +467,32 @@ def test_geojson_empty_features_with_styling():
     m.get_root().render()
 
 
+def test_geojson_null_properties_default_style():
+    """Without a style_function, features with null properties must not crash.
+
+    RFC 7946 allows "properties": null. The default style callback used to
+    read feature.properties.style directly, which throws in the browser.
+    """
+    m = Map()
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": None,
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+            }
+        ],
+    }
+    geojson = GeoJson(data).add_to(m)
+    rendered = m.get_root().render()
+    expected = (
+        f"{geojson.get_name()}.setStyle(function(feature) "
+        "{return (feature.properties || {}).style;});"
+    )
+    assert expected in rendered
+
+
 def test_geojson_event_handler():
     """Test that event handlers are properly generated"""
     m = Map()

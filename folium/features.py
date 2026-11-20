@@ -668,7 +668,7 @@ class GeoJson(Layer):
         {%- endif %}
 
         {%- if not this.style %}
-        {{this.get_name()}}.setStyle(function(feature) {return feature.properties.style;});
+        {{this.get_name()}}.setStyle(function(feature) {return (feature.properties || {}).style;});
         {%- endif %}
 
         {% endmacro %}

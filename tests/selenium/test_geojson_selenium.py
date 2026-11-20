@@ -36,3 +36,44 @@ def test_geojson(driver):
     assert control_label.text == "geojson"
     control_input = control_label.find_element(By.CSS_SELECTOR, value="input")
     assert control_input.get_attribute("checked") is None
+
+
+def test_geojson_null_properties(driver):
+    """A feature with "properties": null must not break the map.
+
+    RFC 7946 allows null properties. The default style callback read
+    feature.properties.style, which threw a TypeError and stopped the rest
+    of the map script, so nothing after it was drawn.
+    """
+    square = [[[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]]
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": None,
+                "geometry": {"type": "Polygon", "coordinates": square},
+            },
+            {
+                "type": "Feature",
+                "properties": {"style": {"color": "red"}},
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[[x + 20, y] for x, y in square[0]]],
+                },
+            },
+        ],
+    }
+    m = folium.Map((5, 15), zoom_start=4)
+    folium.GeoJson(data).add_to(m)
+    folium.Marker((5, 15)).add_to(m)
+
+    html = m.get_root().render()
+    with temp_html_filepath(html) as filepath:
+        driver.get_file(filepath)
+        assert driver.wait_until(".folium-map")
+        driver.verify_js_logs()
+    paths = driver.find_elements(By.CSS_SELECTOR, "path.leaflet-interactive")
+    assert len(paths) == 2
+    assert paths[1].get_attribute("stroke") == "red"
+    assert driver.find_elements(By.CSS_SELECTOR, ".leaflet-marker-icon")
