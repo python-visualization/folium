@@ -28,7 +28,7 @@ class DualMap(JSCSSMixin, MacroElement):
     Examples
     --------
     >>> # DualMap accepts the same arguments as Map:
-    >>> m = DualMap(location=(0, 0), tiles="cartodbpositron", zoom_start=5)
+    >>> m = DualMap(location=(0, 0), tiles="OpenStreetMap", zoom_start=5)
     >>> # Add the same marker to both maps:
     >>> Marker((0, 0)).add_to(m)
     >>> # The individual maps are attributes called `m1` and `m2`:

@@ -22,6 +22,29 @@ from folium.utilities import (
 )
 
 
+def _with_api_key(
+    provider: xyzservices.TileProvider, api_key: str
+) -> xyzservices.TileProvider:
+    """Return a copy of `provider` with its token placeholder set to `api_key`.
+
+    Providers name their token field differently (``apikey``, ``accessToken``,
+    ``subscriptionKey``, ...). Like ``TileProvider.requires_token``, we look for
+    the field that holds an ``"<insert your ...>"`` placeholder and is used in
+    the URL.
+    """
+    token_fields = [
+        key
+        for key, value in provider.items()
+        if isinstance(value, str) and "<insert your" in value and key in provider.url
+    ]
+    if not token_fields:
+        raise ValueError(
+            f"Tile provider {provider.name!r} has no API key placeholder to fill: "
+            "it either does not need a key or already has one."
+        )
+    return provider(**{key: api_key for key in token_fields})
+
+
 class TileLayer(Layer):
     """
     Create a tile layer to append on a Map.
@@ -34,8 +57,8 @@ class TileLayer(Layer):
         any of the following to the "tiles" keyword:
 
             - "OpenStreetMap"
-            - "CartoDB Positron"
-            - "CartoDB Voyager"
+            - "CartoDB Positron" (requires an API key, see ``api_key``)
+            - "CartoDB Voyager" (requires an API key, see ``api_key``)
 
         Explore more provider names available in ``xyzservices`` here:
         https://leaflet-extras.github.io/leaflet-providers/preview/.
@@ -43,6 +66,12 @@ class TileLayer(Layer):
         You can also pass a custom tileset by passing a
         :class:`xyzservices.TileProvider` or a Leaflet-style
         URL to the tiles parameter: ``https://{s}.yourtiles.com/{z}/{x}/{y}.png``.
+    api_key: str, optional
+        API key or access token for tile providers that require one, such as
+        CartoDB, Thunderforest or MapBox. It fills in the provider's token
+        placeholder, whatever that provider calls it (``apikey``, ``accessToken``,
+        ...). Only valid when ``tiles`` is an ``xyzservices`` provider or one of
+        its names. For a custom URL, put the key in the URL itself.
     min_zoom: int, optional, default 0
         Minimum allowed zoom level for this tile layer. Filled by xyzservices by default.
     max_zoom: int, optional, default 18
@@ -106,6 +135,7 @@ class TileLayer(Layer):
         subdomains: str = "abc",
         tms: bool = False,
         opacity: float = 1,
+        api_key: str | None = None,
         **kwargs,
     ):
         if isinstance(tiles, str):
@@ -118,6 +148,14 @@ class TileLayer(Layer):
             except ValueError:
                 # no match, likely a custom URL
                 pass
+
+        if api_key is not None:
+            if not isinstance(tiles, xyzservices.TileProvider):
+                raise ValueError(
+                    "`api_key` can only be used with an xyzservices tile provider. "
+                    "For a custom tile URL, include the key in the URL itself."
+                )
+            tiles = _with_api_key(tiles, api_key)
 
         if isinstance(tiles, xyzservices.TileProvider):
             attr = attr if attr else tiles.html_attribution  # type: ignore

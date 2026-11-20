@@ -102,6 +102,9 @@ class Map(JSCSSMixin, Evented):
     Explore more provider names available in ``xyzservices`` here:
     https://leaflet-extras.github.io/leaflet-providers/preview/.
 
+    Some providers, including CartoDB, require an API key. Pass one with
+    ``tiles=folium.TileLayer("CartoDB Positron", api_key="...")``.
+
     You can also pass a custom tileset by passing a
     :class:`xyzservices.TileProvider` or a Leaflet-style
     URL to the tiles parameter: ``https://{s}.yourtiles.com/{z}/{x}/{y}.png``.
@@ -175,7 +178,10 @@ class Map(JSCSSMixin, Evented):
     Examples
     --------
     >>> m = folium.Map(location=[45.523, -122.675], width=750, height=500)
-    >>> m = folium.Map(location=[45.523, -122.675], tiles="cartodb positron")
+    >>> m = folium.Map(
+    ...     location=[45.523, -122.675],
+    ...     tiles=folium.TileLayer("cartodb positron", api_key="your-carto-key"),
+    ... )
     >>> m = folium.Map(
     ...     location=[45.523, -122.675],
     ...     zoom_start=2,
