@@ -126,8 +126,10 @@ class Draw(JSCSSMixin, MacroElement):
                 var coords = JSON.stringify(layer.toGeoJSON());
                 {%- if this.show_geometry_on_click %}
                 layer.on('click', function() {
-                    alert(coords);
-                    console.log(coords);
+                    // Read the geometry now, so edits made after drawing show up.
+                    var geometry = JSON.stringify(layer.toGeoJSON());
+                    alert(geometry);
+                    console.log(geometry);
                 });
                 {%- endif %}
 
