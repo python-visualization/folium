@@ -185,7 +185,7 @@ class Vega(JSCSSMixin):
         """Renders the HTML representation of the element."""
         super().render(**kwargs)
 
-        self.json = json.dumps(self.data)
+        self.json = _to_escaped_json(self.data)
 
         self._parent.html.add_child(
             Element(Template("""
@@ -275,7 +275,7 @@ class VegaLite(MacroElement):
         if isinstance(self.data, str):
             self.data = json.loads(self.data)
 
-        self.json = json.dumps(self.data)
+        self.json = _to_escaped_json(self.data)
 
         # Size Parameters.
         self.width = _parse_size(
