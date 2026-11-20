@@ -63,7 +63,7 @@ class MiniMap(JSCSSMixin, MacroElement):
         {% macro script(this, kwargs) %}
             var {{ this.tile_layer.get_name() }} = L.tileLayer(
                 {{ this.tile_layer.tiles|tojson }},
-                {{ this.tile_layer.options|tojson }}
+                {{ this.tile_layer.options|tojavascript }}
             );
             var {{ this.get_name() }} = new L.Control.MiniMap(
                 {{ this.tile_layer.get_name() }},
