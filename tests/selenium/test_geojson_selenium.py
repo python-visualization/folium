@@ -36,3 +36,39 @@ def test_geojson(driver):
     assert control_label.text == "geojson"
     control_input = control_label.find_element(By.CSS_SELECTOR, value="input")
     assert control_input.get_attribute("checked") is None
+
+
+def test_geojson_on_each_feature(driver):
+    """The on_each_feature callback must run without Javascript errors.
+
+    Regression test: a missing semicolon in the GeoJson template made the
+    browser call the result of the feature-propagation IIFE with the
+    callback as argument, so every map using on_each_feature failed.
+    """
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"name": "point"},
+                "geometry": {"type": "Point", "coordinates": [0.0, 0.0]},
+            }
+        ],
+    }
+    m = folium.Map((0, 0), zoom_start=5)
+    folium.GeoJson(
+        data,
+        on_each_feature=folium.JsCode("""
+            function (feature, layer) {
+                layer.bindTooltip(feature.properties.name, {permanent: true});
+            }
+            """),
+    ).add_to(m)
+
+    html = m.get_root().render()
+    with temp_html_filepath(html) as filepath:
+        driver.get_file(filepath)
+        assert driver.wait_until(".folium-map")
+        driver.verify_js_logs()
+    tooltip = driver.wait_until(".leaflet-tooltip")
+    assert tooltip.text == "point"

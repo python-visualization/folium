@@ -590,8 +590,8 @@ class GeoJson(Layer):
                 parent.eachLayer(function (child) {
                     if (child.feature === undefined) { child.feature = feature; }
                     propagate(child);
-                })
-            })(layer)
+                });
+            })(layer);
             {%- if this.on_each_feature %}
             ({{this.on_each_feature}})(feature, layer);
             {%- endif %}
