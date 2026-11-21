@@ -88,6 +88,11 @@ class Search(JSCSSMixin, MacroElement):
                     });
                 });
             {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
+            {% if not this.layer.show %}
+            // L.Control.Search adds its layer to the map when the control is
+            // added. Remove it again so the layer starts hidden (show=False).
+            {{this.layer.get_name()}}.remove();
+            {% endif %}
 
         {% endmacro %}
         """)  # noqa
