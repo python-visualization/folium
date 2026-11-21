@@ -42,6 +42,15 @@ class Timeline(GeoJson):
         If `get_interval` is not provided, 'start' and 'end' properties are
         assumed to be present on each feature.
 
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening.
+
     Examples
     --------
     >>> from folium.plugins import Timeline, TimelineSlider
@@ -86,7 +95,6 @@ class Timeline(GeoJson):
               {{ this.data|tojson }},
               {{ this.get_name() }}_options
           );
-          {{ this.get_name() }}.addTo({{ this._parent.get_name() }});
         {% endmacro %}
     """)
 
@@ -105,9 +113,13 @@ class Timeline(GeoJson):
         self,
         data: dict | str | TextIO,
         get_interval: JsCode | None = None,
+        name: str | None = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
         **kwargs,
     ):
-        super().__init__(data)
+        super().__init__(data, name=name, overlay=overlay, control=control, show=show)
         self._name = "Timeline"
 
         if get_interval is not None:

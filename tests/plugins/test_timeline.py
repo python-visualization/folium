@@ -79,3 +79,29 @@ def test_timeline():
       """)  # noqa
     expected = normalize(tmpl.render(this=slider))
     assert expected in out
+
+
+def test_timeline_layer_options():
+    m = folium.Map()
+    data = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "properties": {"start": 1, "end": 2},
+                "geometry": {"type": "Point", "coordinates": [0, 0]},
+            }
+        ],
+    }
+    hidden = plugins.Timeline(data, name="Hidden", show=False).add_to(m)
+    shown = plugins.Timeline(data, name="Shown").add_to(m)
+    plugins.Timeline(data, name="Not in control", control=False).add_to(m)
+    layer_control = folium.LayerControl().add_to(m)
+
+    out = normalize(m._parent.render())
+
+    assert hidden.layer_name == "Hidden"
+    assert '"name"' not in out
+    assert f"{hidden.get_name()}.addTo(" not in out
+    assert out.count(f"{shown.get_name()}.addTo(") == 1
+    assert list(layer_control.overlays) == ["Hidden", "Shown"]
