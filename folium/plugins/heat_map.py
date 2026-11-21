@@ -1,3 +1,4 @@
+import math
 import warnings
 
 import numpy as np
@@ -78,11 +79,28 @@ class HeatMap(JSCSSMixin, Layer):
         super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "HeatMap"
         data = if_pandas_df_convert_to_numpy(data)
+        weights = {}
+
+        def convert_weight(value):
+            weight = float(value)
+            # Keep negative zero distinct from positive zero in the output.
+            if weight == 0.0 and math.copysign(1.0, weight) < 0:
+                return weight
+            if len(weights) < 256:
+                return weights.setdefault(weight, weight)
+            return weights.get(weight, weight)
+
         self.data = [
-            [*validate_location(line[:2]), *[float(w) for w in line[2:]]]
+            validate_location(line[:2]) + [convert_weight(w) for w in line[2:]]
             for line in data  # noqa: E999
         ]
-        if np.any(np.isnan(self.data)):
+        width = len(self.data[0]) if self.data else 0
+        if any(len(row) != width for row in self.data):
+            # Let NumPy report the original error for ragged input.
+            has_nan = np.any(np.isnan(self.data))
+        else:
+            has_nan = any(math.isnan(value) for row in self.data for value in row)
+        if has_nan:
             raise ValueError("data may not contain NaNs.")
         if kwargs.pop("max_val", None):
             warnings.warn(
