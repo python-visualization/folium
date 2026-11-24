@@ -1072,10 +1072,25 @@ class TopoJson(JSCSSMixin, Layer):
     def style_data(self) -> None:
         """Applies self.style_function to each feature of self.data."""
 
+        # Write the styles into copies of the dicts on the object path, the
+        # geometries and their properties, so the dict that was passed in is
+        # left as it was and other layers made from it don't pick them up.
+        # The arcs, which hold most of the data, are not copied.
+        *keys, last_key = self.object_path.split(".")
+        self.data = parent = dict(self.data)
+        for key in keys:
+            parent[key] = dict(parent[key])
+            parent = parent[key]
+        parent[last_key] = dict(parent[last_key])
+        if "geometries" in parent[last_key]:
+            parent[last_key]["geometries"] = [
+                dict(geometry) for geometry in parent[last_key]["geometries"]
+            ]
         for feature in self._get_geometries():
-            feature.setdefault("properties", {}).setdefault("style", {}).update(
-                self.style_function(feature)
-            )  # noqa
+            properties = dict(feature.get("properties", {}))
+            properties["style"] = dict(properties.get("style", {}))
+            feature["properties"] = properties
+            properties["style"].update(self.style_function(feature))
 
     def _get_geometries(self) -> list:
         """Return the selected TopoJSON object as a list of geometries."""
