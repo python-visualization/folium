@@ -36,6 +36,7 @@ Plugins
   plugins/side_by_side_layers
   plugins/tag_filter_button
   plugins/terminator
+  plugins/tile_layer_color_filter
   plugins/timeline
   plugins/timeslider_choropleth
   plugins/timestamped_geojson
@@ -115,6 +116,8 @@ Plugins
       - Creates a Tag Filter Button to filter elements based on different criteria.
     * - :doc:`Terminator <plugins/terminator>`
       - Overlay day and night regions on a map.
+    * - :doc:`Tile Layer Color Filter <plugins/tile_layer_color_filter>`
+      - Apply CSS color filters to the tiles of a map, for example for a dark or grayscale basemap.
     * - :doc:`Timeline <plugins/timeline>`
       - Create a timeline with a time slider for geojson data with start and end times.
     * - :doc:`Timeslider Choropleth <plugins/timeslider_choropleth>`
