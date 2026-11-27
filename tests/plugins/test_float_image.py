@@ -42,3 +42,12 @@ def test_float_image():
 
     bounds = m.get_bounds()
     assert bounds == [[None, None], [None, None]], bounds
+
+
+def test_float_image_escapes_src():
+    m = folium.Map()
+    image = 'https://example.com/a.png?x=1&y="2"'
+    plugins.FloatImage(image).add_to(m)
+    out = m.get_root().render()
+    assert 'src="https://example.com/a.png?x=1&amp;y=&#34;2&#34;"' in out
+    assert 'y="2"' not in out
