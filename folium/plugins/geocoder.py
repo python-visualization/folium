@@ -56,13 +56,13 @@ class Geocoder(JSCSSMixin, MacroElement):
     default_js = [
         (
             "Control.Geocoder.js",
-            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js",
+            "https://unpkg.com/leaflet-control-geocoder@42.0.0/dist/Control.Geocoder.js",
         )
     ]
     default_css = [
         (
             "Control.Geocoder.css",
-            "https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css",
+            "https://unpkg.com/leaflet-control-geocoder@42.0.0/dist/Control.Geocoder.css",
         )
     ]
 

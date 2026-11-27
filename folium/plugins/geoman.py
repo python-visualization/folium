@@ -75,13 +75,13 @@ class GeoMan(JSCSSMixin, MacroElement):
     default_js = [
         (
             "leaflet_geoman_js",
-            "https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js",
+            "https://unpkg.com/@geoman-io/leaflet-geoman-free@2.20.8/dist/leaflet-geoman.js",
         )
     ]
     default_css = [
         (
             "leaflet_geoman_css",
-            "https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css",
+            "https://unpkg.com/@geoman-io/leaflet-geoman-free@2.20.8/dist/leaflet-geoman.css",
         )
     ]
 

@@ -45,7 +45,7 @@ class BoatMarker(JSCSSMixin, Marker):
     default_js = [
         (
             "markerclusterjs",
-            "https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js",
+            "https://cdn.jsdelivr.net/gh/thomasbrueggemann/leaflet.boatmarker@1193728f0626ae0cc55fbbd5912893446581332f/leaflet.boatmarker.min.js",
         ),
     ]
 
