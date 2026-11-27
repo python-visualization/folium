@@ -136,6 +136,24 @@ def test_geojson_single_feature_detail(detail_type, properties, fields):
 
 
 @pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
+def test_geojson_detail_escapes_property_html(detail_type):
+    """GeoJson popup and tooltip property values are not rendered as HTML."""
+    feature = {
+        "type": "Feature",
+        "geometry": {"type": "Point", "coordinates": [0, 0]},
+        "properties": {"name": '<img src=x onerror="alert(1)">'},
+    }
+
+    map_ = folium.Map()
+    geojson = folium.GeoJson(feature).add_to(map_)
+    detail_type(fields=["name"]).add_to(geojson)
+
+    rendered = map_.get_root().render()
+    assert "escapeHTML" in rendered
+    assert "escapeHTML(handleObject(layer.feature.properties[v])" in rendered
+
+
+@pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
 def test_geojson_geometry_detail_unknown_field(detail_type):
     """A bare geometry has no properties, so any field is reported as missing."""
     map_ = folium.Map()

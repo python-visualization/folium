@@ -1149,6 +1149,10 @@ class GeoJsonDetail(MacroElement):
             return feature;
         }
     }
+    let escapeHTML = value => String(value).replace(/[&<>"']/g, char => {
+        const entities = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+        return entities[char];
+    });
     let fields = {{ this.fields | tojson | safe }};
     let aliases = {{ this.aliases | tojson | safe }};
     let table = '<table>' +
@@ -1156,9 +1160,9 @@ class GeoJsonDetail(MacroElement):
         fields.map(
         (v,i)=>
         `<tr>{% if this.labels %}
-            <th>${aliases[i]{% if this.localize %}.toLocaleString(){% endif %}}</th>
+            <th>${escapeHTML(aliases[i]{% if this.localize %}.toLocaleString(){% endif %})}</th>
             {% endif %}
-            <td>${handleObject(layer.feature.properties[v]){% if this.localize %}.toLocaleString(){% endif %}}</td>
+            <td>${escapeHTML(handleObject(layer.feature.properties[v]){% if this.localize %}.toLocaleString(){% endif %}}</td>
         </tr>`).join(''))
     +'</table>';
     div.innerHTML=table;
