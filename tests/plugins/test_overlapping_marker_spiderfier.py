@@ -6,8 +6,9 @@ Test OverlappingMarkerSpiderfier
 import numpy as np
 
 from folium.folium import Map
-from folium.map import Marker
+from folium.map import FeatureGroup, Marker
 from folium.plugins.overlapping_marker_spiderfier import OverlappingMarkerSpiderfier
+from folium.utilities import normalize
 
 
 def test_oms_js_inclusion():
@@ -113,3 +114,43 @@ def test_overlapping_marker_spiderfier_integration():
     assert (
         oms.get_name() in m._children
     ), "OverlappingMarkerSpiderfier is not correctly added to the map."
+
+
+def test_markers_found_when_added_with_add_child():
+    m = Map([45.05, 3.05], zoom_start=14)
+    markers = [Marker([45.05, 3.05]).add_to(m) for _ in range(3)]
+    oms = OverlappingMarkerSpiderfier()
+    m.add_child(oms)
+
+    out = normalize(m.get_root().render())
+
+    for marker in markers:
+        assert f"oms.addMarker({marker.get_name()});" in out
+
+
+def test_markers_added_to_group_after_plugin_are_found():
+    m = Map([45.05, 3.05], zoom_start=14)
+    group = FeatureGroup().add_to(m)
+    OverlappingMarkerSpiderfier().add_to(m)
+    marker = Marker([45.05, 3.05]).add_to(group)
+
+    out = normalize(m.get_root().render())
+
+    assert f"oms.addMarker({marker.get_name()});" in out
+
+
+def test_added_to_feature_group_uses_the_map():
+    m = Map([45.05, 3.05], zoom_start=14)
+    group = FeatureGroup().add_to(m)
+    inside = [Marker([45.05, 3.05]).add_to(group) for _ in range(2)]
+    outside = Marker([45.05, 3.05]).add_to(m)
+    OverlappingMarkerSpiderfier().add_to(group)
+
+    out = normalize(m.get_root().render())
+
+    assert f"new OverlappingMarkerSpiderfier({m.get_name()}," in out
+    assert f"{m.get_name()}.closePopup();" in out
+    assert f"new OverlappingMarkerSpiderfier({group.get_name()}," not in out
+    for marker in inside:
+        assert f"oms.addMarker({marker.get_name()});" in out
+    assert f"oms.addMarker({outside.get_name()});" not in out

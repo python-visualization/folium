@@ -1,8 +1,9 @@
 from jinja2 import Template
 
 from folium.elements import Element, JSCSSMixin, MacroElement
+from folium.folium import Map
 from folium.map import Marker
-from folium.utilities import parse_options
+from folium.utilities import get_obj_in_upper_tree, parse_options
 
 
 class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
@@ -14,7 +15,9 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
     individually accessible.
 
     Markers are automatically identified and managed by the plugin, so there is no need to add them separately.
-    Simply add the plugin to the map using `oms.add_to(map)`.
+    Simply add the plugin to the map using `oms.add_to(map)`. All markers below the
+    plugin's parent are handled, so add it to a FeatureGroup to only spiderfy the
+    markers in that group. Add the plugin after the markers it should handle.
 
     Parameters
     ----------
@@ -40,12 +43,12 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
         (function () {
             try {
                 var oms = new OverlappingMarkerSpiderfier(
-                    {{ this._parent.get_name() }},
+                    {{ this.map.get_name() }},
                     {{ this.options|tojson }}
                 );
 
                 oms.addListener('spiderfy', function() {
-                    {{ this._parent.get_name() }}.closePopup();
+                    {{ this.map.get_name() }}.closePopup();
                 });
 
                 {%- for marker in this.markers %}
@@ -82,13 +85,15 @@ class OverlappingMarkerSpiderfier(JSCSSMixin, MacroElement):
             circle_spiral_switchover=circle_spiral_switchover,
             **kwargs,
         )
+        self.map: Map | None = None
+        self.markers: list[Marker] = []
 
-    def add_to(
-        self, parent: Element, name: str | None = None, index: int | None = None
-    ) -> Element:
-        self._parent = parent
-        self.markers = self._get_all_markers(parent)
-        return super().add_to(parent, name=name, index=index)
+    def render(self, **kwargs):
+        # Look the markers up now rather than when the plugin is added, so it
+        # also works with `add_child` and with markers added to a group later.
+        self.map = get_obj_in_upper_tree(self, Map)
+        self.markers = self._get_all_markers(self._parent)
+        super().render(**kwargs)
 
     def _get_all_markers(self, element: Element) -> list:
         markers = []
