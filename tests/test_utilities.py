@@ -8,6 +8,7 @@ from folium.utilities import (
     _is_url,
     camelize,
     deep_copy,
+    escape_backticks,
     escape_double_quotes,
     get_obj_in_upper_tree,
     if_pandas_df_convert_to_numpy,
@@ -269,6 +270,25 @@ def test_image_to_url_svg(tmp_path):
     path = tmp_path / "icon.svg"
     path.write_text('<svg xmlns="http://www.w3.org/2000/svg"/>')
     assert image_to_url(str(path)).startswith("data:image/svg+xml;base64,")
+
+
+@pytest.mark.parametrize(
+    "text,result",
+    [
+        ("bla", "bla"),
+        ("a`b", r"a\`b"),
+        (r"a\b", r"a\\b"),
+        ("${x}", r"\${x}"),
+        ("$5 and {x}", "$5 and {x}"),
+        (r"\${x}", r"\\\${x}"),
+    ],
+)
+def test_escape_backticks(text, result):
+    assert escape_backticks(text) == result
+
+
+def test_escape_backticks_interpolate():
+    assert escape_backticks("a`b ${lat}", interpolate=True) == r"a\`b ${lat}"
 
 
 @pytest.mark.parametrize(
