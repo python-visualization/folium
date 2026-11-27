@@ -82,7 +82,10 @@ class TimestampedWmsTileLayers(JSCSSMixin, MacroElement):
                     updateTimeDimension: false,
                     wmsVersion: {{ layer.options['version']|tojson }},
                 }
-            ).addTo({{ this._parent.get_name() }});
+            );
+            {%- if layer.show %}
+            {{ layer.get_name() }}.addTo({{ this._parent.get_name() }});
+            {%- endif %}
             {% endfor %}
         {% endmacro %}
         """)
