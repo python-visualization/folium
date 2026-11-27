@@ -109,3 +109,30 @@ def test_draw_export_position_corners():
 def test_draw_export_position_invalid():
     with pytest.raises(ValueError, match="export_position must be one of"):
         plugins.Draw(export=True, export_position="middle")
+
+
+def test_draw_click_shows_current_geometry():
+    """The click alert reads the geometry on click, not when it was drawn.
+
+    Otherwise a shape that was edited afterwards still shows its original
+    coordinates.
+    """
+    m = folium.Map([45.0, 3.0], zoom_start=4)
+    m.add_child(plugins.Draw())
+
+    out = m._parent.render()
+
+    start = out.index("layer.on('click', function() {")
+    handler = out[start : out.index("});", start)]
+    assert "layer.toGeoJSON()" in handler
+    assert "alert(geometry);" in handler
+    assert "alert(coords)" not in out
+
+
+def test_draw_no_click_alert():
+    m = folium.Map([45.0, 3.0], zoom_start=4)
+    m.add_child(plugins.Draw(show_geometry_on_click=False))
+
+    out = normalize(m._parent.render())
+
+    assert "alert(" not in out
