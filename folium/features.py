@@ -866,7 +866,7 @@ class GeoJson(Layer):
         super().render()
 
 
-TypeStyleMapping = dict[str, str | list[str | int]]
+TypeStyleMapping = dict[str, str | list[str | int | float]]
 
 
 class GeoJsonStyleMapper:
@@ -913,8 +913,12 @@ class GeoJsonStyleMapper:
         self._set_default_key(mapping)
         return mapping
 
-    def get_feature_id(self, feature: dict) -> str | int:
-        """Return a value identifying the feature."""
+    def get_feature_id(self, feature: dict) -> str | int | float:
+        """Return a value identifying the feature.
+
+        A GeoJSON feature id can be a string or any number (RFC 7946), so
+        float ids are allowed as well.
+        """
         prefix = "feature.properties["
         if self.feature_identifier.startswith(prefix):
             key = json.loads(self.feature_identifier[len(prefix) : -1])
@@ -922,7 +926,7 @@ class GeoJsonStyleMapper:
         else:
             fields = self.feature_identifier.split(".")[1:]
             value = functools.reduce(operator.getitem, fields, feature)
-        assert isinstance(value, (str, int))
+        assert isinstance(value, (str, int, float))
         return value
 
     @staticmethod
