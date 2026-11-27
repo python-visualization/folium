@@ -777,10 +777,33 @@ class FitBounds(MacroElement):
 
     _template = Template("""
         {% macro script(this, kwargs) %}
-            {{ this._parent.get_name() }}.fitBounds(
-                {{ this.bounds|tojson }},
-                {{ this.options|tojson }}
-            );
+            (function (map) {
+                function fit() {
+                    map.fitBounds(
+                        {{ this.bounds|tojson }},
+                        {{ this.options|tojson }}
+                    );
+                }
+                fit();
+                // A map that is hidden while it loads, like a notebook cell
+                // outside the viewport or an inactive tab, has no size yet,
+                // so fitBounds zooms all the way out. Fit again once the map
+                // gets a size.
+                var container = map.getContainer();
+                if (
+                    !(container.clientWidth && container.clientHeight)
+                    && typeof ResizeObserver !== "undefined"
+                ) {
+                    var observer = new ResizeObserver(function () {
+                        if (container.clientWidth && container.clientHeight) {
+                            observer.disconnect();
+                            map.invalidateSize();
+                            fit();
+                        }
+                    });
+                    observer.observe(container);
+                }
+            })({{ this._parent.get_name() }});
         {% endmacro %}
         """)
 
