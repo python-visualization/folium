@@ -32,6 +32,7 @@ from folium.plugins.semicircle import SemiCircle
 from folium.plugins.side_by_side import SideBySideLayers
 from folium.plugins.tag_filter_button import TagFilterButton
 from folium.plugins.terminator import Terminator
+from folium.plugins.tile_layer_color_filter import TileLayerColorFilter
 from folium.plugins.time_slider_choropleth import TimeSliderChoropleth
 from folium.plugins.timeline import Timeline, TimelineSlider
 from folium.plugins.timestamped_geo_json import TimestampedGeoJson
@@ -80,6 +81,7 @@ __all__ = [
     "StripePattern",
     "TagFilterButton",
     "Terminator",
+    "TileLayerColorFilter",
     "TimeSliderChoropleth",
     "Timeline",
     "TimelineSlider",
