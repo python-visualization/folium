@@ -951,7 +951,8 @@ class TopoJson(JSCSSMixin, Layer):
         embedded in Leaflet's JavaScript.
         * If dict, then data will be converted to JSON and embedded
         in the JavaScript.
-        * If str, then data will be passed to the JavaScript as-is.
+        * If str, it can be a TopoJSON string, a URL or a path to a file.
+        The data will be loaded and embedded in the JavaScript.
 
     object_path: str
         The path of the desired object into the TopoJson structure.
@@ -981,7 +982,7 @@ class TopoJson(JSCSSMixin, Layer):
     --------
     >>> # Providing file that shall be embedded.
     >>> TopoJson(open("foo.json"), "object.myobject")
-    >>> # Providing filename that shall not be embedded.
+    >>> # Providing filename.
     >>> TopoJson("foo.json", "object.myobject")
     >>> # Providing dict.
     >>> TopoJson(json.load(open("foo.json")), "object.myobject")
@@ -1047,6 +1048,15 @@ class TopoJson(JSCSSMixin, Layer):
         elif type(data) is dict:
             self.embed = True
             self.data = data
+        elif isinstance(data, str):
+            self.embed = True
+            if data.lower().startswith(("http:", "ftp:", "https:")):
+                self.data = requests.get(data).json()
+            elif data.lstrip()[:1] == "{":
+                self.data = json.loads(data)
+            else:
+                with open(data, "rb") as f:
+                    self.data = json.load(f)
         else:
             self.embed = False
             self.data = data

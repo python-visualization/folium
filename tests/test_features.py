@@ -113,6 +113,25 @@ def test_topojson_popup(popup):
     assert f"{topojson.get_name()}.bindPopup(" in map_.get_root().render()
 
 
+@pytest.mark.parametrize("as_filename", [False, True])
+def test_topojson_from_str(as_filename):
+    """TopoJson accepts a TopoJSON string or a filename, as documented."""
+    path = os.path.join(os.path.dirname(__file__), "or_counties_topo.json")
+    if as_filename:
+        data = path
+    else:
+        with open(path) as f:
+            data = f.read()
+
+    map_ = folium.Map()
+    topojson = folium.TopoJson(data, "objects.or_counties_geo").add_to(map_)
+    map_.get_root().render()
+
+    assert isinstance(topojson.data, dict)
+    assert topojson.data["type"] == "Topology"
+    assert topojson.get_bounds() is not None
+
+
 @pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
 @pytest.mark.parametrize(
     "properties, fields",
