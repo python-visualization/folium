@@ -4,6 +4,7 @@ Test HeatMapWithTime
 """
 
 import numpy as np
+import pytest
 
 import folium
 from folium import plugins
@@ -38,7 +39,7 @@ def test_heat_map_with_time():
         var times = {{this.times}};
 
         {{this._parent.get_name()}}.timeDimension = L.timeDimension(
-            {times : times, currentTime: new Date(1)}
+            {times : times, currentTime: new Date({{this.start_index + 1}})}
         );
 
         var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
@@ -93,3 +94,21 @@ def test_heat_map_with_time_bounds():
 
     assert hm.get_bounds() == [[48.0, 3.0], [52.0, 6.0]]
     assert m.get_bounds() == [[48.0, 3.0], [52.0, 7.0]]
+
+
+@pytest.mark.parametrize("start_index, expected", [(0, 1), (5, 6), (-1, 10)])
+def test_heat_map_with_time_start_index(start_index, expected):
+    data = [[[48.0, 5.0]] for _ in range(10)]
+    m = folium.Map()
+    hm = plugins.HeatMapWithTime(data, start_index=start_index).add_to(m)
+
+    out = normalize(m._parent.render())
+    assert f"currentTime: new Date({expected})" in out
+    assert hm.start_index == expected - 1
+
+
+@pytest.mark.parametrize("start_index", [10, -11])
+def test_heat_map_with_time_start_index_out_of_range(start_index):
+    data = [[[48.0, 5.0]] for _ in range(10)]
+    with pytest.raises(ValueError, match="start_index"):
+        plugins.HeatMapWithTime(data, start_index=start_index)
