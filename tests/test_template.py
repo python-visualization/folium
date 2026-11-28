@@ -1,3 +1,7 @@
+import json
+
+import numpy as np
+import pytest
 from branca.element import Element
 
 from folium import JsCode
@@ -72,3 +76,35 @@ def test_environment_filter():
 
 def test_template_environment_class():
     assert Template.environment_class == Environment
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        (np.int64(5), 5),
+        (np.int32(-3), -3),
+        (np.float32(0.5), 0.5),
+        (np.bool_(True), True),
+        (np.array([[1, 2], [3, 4]]), [[1, 2], [3, 4]]),
+        ({"radius": np.int64(5)}, {"radius": 5}),
+    ],
+)
+def test_to_escaped_json_numpy(value, expected):
+    assert json.loads(_to_escaped_json(value)) == expected
+
+
+def test_to_escaped_json_unsupported_type():
+    with pytest.raises(TypeError, match="object is not JSON serializable"):
+        _to_escaped_json(object())
+
+
+def test_tojavascript_with_numpy_values():
+    result = tojavascript({"maxZoom": np.int64(18), "iconSize": np.array([20, 20])})
+    assert '"maxZoom": 18' in result
+    assert '"iconSize": [20, 20]' in result
+
+
+def test_tojson_filter_with_numpy_values():
+    template = Template("{{ value|tojson }}")
+    result = template.render(value={"bounds": np.array([[1, 2], [3, 4]])})
+    assert json.loads(result) == {"bounds": [[1, 2], [3, 4]]}
