@@ -4,6 +4,7 @@ Folium Features Tests
 
 """
 
+import copy
 import json
 import os
 import warnings
@@ -34,13 +35,13 @@ def test_topojson_non_collection_geometry(geometry_type):
     }
 
     map_ = folium.Map()
-    folium.TopoJson(
+    topojson = folium.TopoJson(
         topology, "objects.shape", style_function=lambda feature: style
     ).add_to(map_)
 
     map_.get_root().render()
 
-    assert topology["objects"]["shape"]["properties"]["style"] == style
+    assert topojson.data["objects"]["shape"]["properties"]["style"] == style
 
 
 def test_topojson_non_collection_geometry_without_type():
@@ -60,7 +61,42 @@ def test_topojson_non_collection_geometry_without_type():
 
     topojson.style_data()
 
-    assert topology["objects"]["shape"]["properties"]["style"] == {"color": "red"}
+    assert topojson.data["objects"]["shape"]["properties"]["style"] == {"color": "red"}
+
+
+def test_topojson_style_does_not_change_input_data():
+    """Layers made from the same dict keep their own style."""
+    topology = {
+        "type": "Topology",
+        "objects": {
+            "shapes": {
+                "type": "GeometryCollection",
+                "geometries": [
+                    {"type": "Polygon", "arcs": [[0]], "properties": {"name": "A"}}
+                ],
+            }
+        },
+        "arcs": [[[0, 0], [1, 0], [0, 1], [-1, -1]]],
+        "transform": {"scale": [1, 1], "translate": [0, 0]},
+    }
+    original = copy.deepcopy(topology)
+
+    map_ = folium.Map()
+    red = folium.TopoJson(
+        topology, "objects.shapes", style_function=lambda feature: {"fillColor": "red"}
+    ).add_to(map_)
+    blue = folium.TopoJson(
+        topology, "objects.shapes", style_function=lambda feature: {"color": "blue"}
+    ).add_to(map_)
+
+    map_.get_root().render()
+
+    def get_style(layer):
+        return layer.data["objects"]["shapes"]["geometries"][0]["properties"]["style"]
+
+    assert get_style(red) == {"fillColor": "red"}
+    assert get_style(blue) == {"color": "blue"}
+    assert topology == original
 
 
 @pytest.mark.parametrize("detail_type", [folium.GeoJsonPopup, folium.GeoJsonTooltip])
