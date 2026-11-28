@@ -4,6 +4,7 @@ Test HeatMapWithTime
 """
 
 import numpy as np
+import pytest
 
 import folium
 from folium import plugins
@@ -64,7 +65,8 @@ def test_heat_map_with_time():
             .addTo({{this._parent.get_name()}});
 
             var {{this.get_name()}} = new TDHeatmap({{this.data}},
-            {heatmapOptions: {
+            {pane: {{this.pane|tojson}},
+            heatmapOptions: {
                     radius: {{this.radius}},
                     blur: {{this.blur}},
                     minOpacity: {{this.min_opacity}},
@@ -93,3 +95,17 @@ def test_heat_map_with_time_bounds():
 
     assert hm.get_bounds() == [[48.0, 3.0], [52.0, 6.0]]
     assert m.get_bounds() == [[48.0, 3.0], [52.0, 7.0]]
+
+
+@pytest.mark.parametrize("pane", ["overlayPane", "heatmap"])
+def test_heat_map_with_time_pane(pane):
+    data = [[[48.0, 5.0]], [[48.1, 5.1]]]
+    m = folium.Map()
+    if pane != "overlayPane":
+        folium.map.CustomPane(pane, z_index=450).add_to(m)
+    hm = plugins.HeatMapWithTime(data, pane=pane).add_to(m)
+
+    out = normalize(m._parent.render())
+    assert hm.pane == pane
+    assert f'{{pane: "{pane}",heatmapOptions:' in out
+    assert "new PanedHeatmapOverlay(heatmapCfg,options.pane)" in out

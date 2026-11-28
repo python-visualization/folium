@@ -74,3 +74,19 @@ hm.add_to(m)
 
 m
 ```
+
+### Drawing on top of image overlays
+
+Image overlays cover the heatmap by default, even when the heatmap is added later. To draw the heatmap on top, put it in a custom pane with a higher `z_index`.
+
+```{code-cell} ipython3
+m = folium.Map([48.0, 5.0], zoom_start=6)
+
+folium.map.CustomPane("heatmap", z_index=450).add_to(m)
+
+hm = folium.plugins.HeatMapWithTime(data, pane="heatmap")
+
+hm.add_to(m)
+
+m
+```
