@@ -44,6 +44,14 @@ class Realtime(JSCSSMixin, FeatureGroup):
         `GeoJson`, but it can be anything that generates a javascript
         L.LayerGroup object, i.e. something that has the methods
         `addLayer` and `removeLayer`.
+    name : string, default None
+        The name of the Layer, as it will appear in LayerControls.
+    overlay : bool, default True
+        Adds the layer as an optional overlay (True) or the base layer (False).
+    control : bool, default True
+        Whether the Layer will be included in LayerControls.
+    show: bool, default True
+        Whether the layer will be shown on opening.
 
     Other keyword arguments are passed to the GeoJson layer, so you can pass
     `style`, `point_to_layer` and/or `on_each_feature`. Make sure to wrap
@@ -74,9 +82,6 @@ class Realtime(JSCSSMixin, FeatureGroup):
             {% endif -%}
                 {{ this.options | tojavascript }}
             );
-            {{ this._parent.get_name() }}.addLayer(
-                {{ this.get_name() }}._container
-            );
         {% endmacro %}
     """)
 
@@ -96,9 +101,13 @@ class Realtime(JSCSSMixin, FeatureGroup):
         update_feature: JsCode | str | None = None,
         remove_missing: bool = False,
         container: FeatureGroup | GeoJson | None = None,
+        name: str | None = None,
+        overlay: bool = True,
+        control: bool = True,
+        show: bool = True,
         **kwargs,
     ):
-        super().__init__()
+        super().__init__(name=name, overlay=overlay, control=control, show=show)
         self._name = "Realtime"
         self.src = source
 

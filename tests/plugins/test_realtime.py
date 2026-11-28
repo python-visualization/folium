@@ -61,3 +61,22 @@ def test_realtime():
     )  # noqa
 
     assert expected in out
+
+
+def test_realtime_layer_options():
+    m = folium.Map()
+    source = "https://example.com/data.geojson"
+    hidden = Realtime(source, name="Hidden", show=False).add_to(m)
+    shown = Realtime(source, name="Shown").add_to(m)
+    Realtime(source, name="Not in control", control=False).add_to(m)
+    layer_control = folium.LayerControl().add_to(m)
+
+    out = normalize(m._parent.render())
+
+    assert hidden.layer_name == "Hidden"
+    assert '"name"' not in out
+    assert '"show"' not in out
+    assert f"{hidden.get_name()}.addTo(" not in out
+    assert f"{hidden.get_name()}._container" not in out
+    assert out.count(f"{shown.get_name()}.addTo(") == 1
+    assert list(layer_control.overlays) == ["Hidden", "Shown"]
