@@ -1,7 +1,7 @@
 from folium.elements import JSCSSMixin
 from folium.map import Layer
 from folium.template import Template
-from folium.utilities import none_max, none_min
+from folium.utilities import if_pandas_df_convert_to_numpy, none_max, none_min
 
 
 class HeatMapWithTime(JSCSSMixin, Layer):
@@ -147,7 +147,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 {times : times, currentTime: new Date(1)}
             );
 
-            var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
+            var {{this._control_name}} = new L.Control.TimeDimensionCustom({{ this.index|tojson }}, {
                 autoPlay: {{this.auto_play}},
                 backwardButton: {{this.backward_button}},
                 displayDate: {{this.display_index}},
@@ -169,7 +169,7 @@ class HeatMapWithTime(JSCSSMixin, Layer):
                 })
                 .addTo({{this._parent.get_name()}});
 
-                var {{this.get_name()}} = new TDHeatmap({{this.data}},
+                var {{this.get_name()}} = new TDHeatmap({{ this.data|tojson }},
                 {heatmapOptions: {
                         radius: {{this.radius}},
                         blur: {{this.blur}},
@@ -238,9 +238,18 @@ class HeatMapWithTime(JSCSSMixin, Layer):
         self._control_name = self.get_name() + "Control"
 
         # Input data.
-        self.data = data
+        # Plain floats and strings, so that numpy and pandas input renders as JSON.
+        self.data = [
+            [
+                [float(value) for value in point]
+                for point in if_pandas_df_convert_to_numpy(frame)
+            ]
+            for frame in data
+        ]
         self.index = (
-            index if index is not None else [str(i) for i in range(1, len(data) + 1)]
+            [str(label) for label in index]
+            if index is not None
+            else [str(i) for i in range(1, len(data) + 1)]
         )
         if len(self.data) != len(self.index):
             raise ValueError(

@@ -4,6 +4,7 @@ Test HeatMapWithTime
 """
 
 import numpy as np
+import pytest
 
 import folium
 from folium import plugins
@@ -41,7 +42,7 @@ def test_heat_map_with_time():
             {times : times, currentTime: new Date(1)}
         );
 
-        var {{this._control_name}} = new L.Control.TimeDimensionCustom({{this.index}}, {
+        var {{this._control_name}} = new L.Control.TimeDimensionCustom({{ this.index|tojson }}, {
             autoPlay: {{this.auto_play}},
             backwardButton: {{this.backward_button}},
             displayDate: {{this.display_index}},
@@ -63,7 +64,7 @@ def test_heat_map_with_time():
             })
             .addTo({{this._parent.get_name()}});
 
-            var {{this.get_name()}} = new TDHeatmap({{this.data}},
+            var {{this.get_name()}} = new TDHeatmap({{ this.data|tojson }},
             {heatmapOptions: {
                     radius: {{this.radius}},
                     blur: {{this.blur}},
@@ -93,3 +94,28 @@ def test_heat_map_with_time_bounds():
 
     assert hm.get_bounds() == [[48.0, 3.0], [52.0, 6.0]]
     assert m.get_bounds() == [[48.0, 3.0], [52.0, 7.0]]
+
+
+def test_heat_map_with_time_numpy_and_pandas_input():
+    pd = pytest.importorskip("pandas")
+    data = np.array([[[48.0, 5.0], [49.0, 6.0]], [[48.5, 5.5], [49.5, 6.5]]])
+    index = pd.to_datetime(["2020-01-01", "2020-01-02"])
+    m = folium.Map()
+    hm = plugins.HeatMapWithTime(data, index=index).add_to(m)
+
+    out = normalize(m._parent.render())
+
+    expected_data = "[[[48.0,5.0],[49.0,6.0]],[[48.5,5.5],[49.5,6.5]]]"
+    assert f"new TDHeatmap({expected_data}," in out
+    expected_index = '["2020-01-01 00:00:00","2020-01-02 00:00:00"]'
+    assert f"new L.Control.TimeDimensionCustom({expected_index}," in out
+    assert hm.get_bounds() == [[48.0, 5.0], [49.5, 6.5]]
+
+    frames = [
+        pd.DataFrame({"lat": [48.0, 49.0], "lng": [5.0, 6.0], "w": [0.5, 1.0]}),
+        pd.DataFrame({"lat": [50.0], "lng": [7.0], "w": [0.2]}),
+    ]
+    hm = plugins.HeatMapWithTime(frames).add_to(m)
+    out = normalize(m._parent.render())
+    expected_data = "[[[48.0,5.0,0.5],[49.0,6.0,1.0]],[[50.0,7.0,0.2]]]"
+    assert f"new TDHeatmap({expected_data}," in out
