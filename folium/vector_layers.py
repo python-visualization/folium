@@ -85,7 +85,7 @@ def path_options(
             "smoothFactor": kwargs.pop("smoothFactor", 1.0),
             "noClip": kwargs.pop("noClip", False),
         }
-    if radius:
+    if radius is not None:
         extra_options.update({"radius": radius})
 
     color = kwargs.pop("color", "#3388ff")
