@@ -34,26 +34,23 @@ def _geojson_point():
     }
 
 
-def test_search_keeps_hidden_layer_hidden():
+def test_search_restores_layer_map_membership():
     m = folium.Map([0, 0], tiles=None)
     layer = folium.GeoJson(_geojson_point(), show=False).add_to(m)
     search = Search(layer, search_label="name").add_to(m)
     rendered = normalize(search._template.module.script(search))
 
-    # L.Control.Search adds its layer to the map, so it must be removed again.
-    add_control = normalize(
-        f"{m.get_name()}.addControl( {layer.get_name()}searchControl );"
-    )
-    remove_layer = normalize(f"{layer.get_name()}.remove();")
+    # L.Control.Search adds its layer to the map, so a layer that was not on
+    # the map before must be removed again right after the control is added.
+    name = layer.get_name()
+    was_on_map = normalize(f"var {name}WasOnMap = {m.get_name()}.hasLayer( {name} );")
+    add_control = normalize(f"{m.get_name()}.addControl( {name}searchControl );")
+    remove_layer = f"if (!{name}WasOnMap) {{{name}.remove();}}"
+    assert was_on_map in rendered
     assert add_control in rendered
     assert remove_layer in rendered
-    assert rendered.index(add_control) < rendered.index(remove_layer)
-
-
-def test_search_does_not_remove_shown_layer():
-    m = folium.Map([0, 0], tiles=None)
-    layer = folium.GeoJson(_geojson_point()).add_to(m)
-    search = Search(layer, search_label="name").add_to(m)
-    rendered = normalize(search._template.module.script(search))
-
-    assert normalize(f"{layer.get_name()}.remove();") not in rendered
+    assert (
+        rendered.index(was_on_map)
+        < rendered.index(add_control)
+        < rendered.index(remove_layer)
+    )

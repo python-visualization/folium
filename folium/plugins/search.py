@@ -87,12 +87,14 @@ class Search(JSCSSMixin, MacroElement):
                             return feature.properties.style
                     });
                 });
-            {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
-            {% if not this.layer.show %}
             // L.Control.Search adds its layer to the map when the control is
-            // added. Remove it again so the layer starts hidden (show=False).
-            {{this.layer.get_name()}}.remove();
-            {% endif %}
+            // added. Remove it again if it was not on the map before, e.g.
+            // show=False or a child of a hidden FeatureGroup.
+            var {{this.layer.get_name()}}WasOnMap = {{this._parent.get_name()}}.hasLayer( {{this.layer.get_name()}} );
+            {{this._parent.get_name()}}.addControl( {{this.layer.get_name()}}searchControl );
+            if (!{{this.layer.get_name()}}WasOnMap) {
+                {{this.layer.get_name()}}.remove();
+            }
 
         {% endmacro %}
         """)  # noqa
